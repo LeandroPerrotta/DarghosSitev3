@@ -18,7 +18,7 @@ class Account extends MySQL
 	
 		$query = $this->db->query("SELECT id FROM accounts");
 		
-		foreach($query->fetch()->id as $account)
+		foreach($query->fetchArray() as $value => $account)
 		{
 			$exist[] = $account;
 		}
