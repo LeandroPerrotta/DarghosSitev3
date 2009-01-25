@@ -9,6 +9,42 @@ class Account extends MySQL
 		$this->db = $db_tenerian;
 	}
 
+	function load($id, $fields)
+	{
+		$query = $this->db->query("SELECT id, $fields FROM accounts WHERE id = '".$id."'");
+		
+		if($query->numRows() != 0)
+		{
+			$fetch = $query->fetch();
+			$this->data['id'] = $fetch->id;	
+					
+			$e = explode(", ", $fields);
+			foreach($e as $field)
+			{
+				$this->data[$field] = $fetch->$field;
+			}
+		}
+		else
+		{
+			return false;
+		}			
+	}
+	
+	function loadByEmail($email, $fields)
+	{
+		$query = $this->db->query("SELECT id FROM accounts WHERE email = '".$email."'");
+		
+		if($query->numRows() != 0)
+		{
+			$this->load($query->fetch()->id, $fields);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	function getNumber()
 	{
 		$random = rand(100000, 9999999);

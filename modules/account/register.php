@@ -21,6 +21,10 @@ if($_POST)
 	{
 		$error = "Para jogar no ".CONFIG_SITENAME." é necessario aceitar a nossa politica de privacidade.";
 	}
+	elseif($account->loadByEmail($_POST['account_email']))
+	{
+		$error = "Este e-mail já esta em uso por outra conta em nosso banco de dados.";
+	}		
 	elseif(!$strings->validEmail($_POST['account_email']))
 	{
 		$error = "Este não é um e-mail valido.";
@@ -36,7 +40,7 @@ if($_POST)
 	else
 	{
 		$account->set("email", $_POST['account_email']);
-		$account->set("password", $password);
+		$account->set("password", $core->encrypt($password));
 		$account->set("name", $number);
 		$account->set("creation", time());
 		

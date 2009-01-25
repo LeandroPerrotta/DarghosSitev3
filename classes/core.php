@@ -39,13 +39,25 @@ class Core
 		return false;
 	}
 	
+	function encrypt($string)
+	{
+		switch(ENCRYPTION_TYPE)
+		{
+			case "md5";
+				$enc = md5($string);
+			break;	
+		}
+		
+		return $enc;
+	}
+	
 	function loadClass($class)
 	{
 		include_once "classes/".$class.".php";
 		return new $class();
 	}
 	
-	public function randKey($tamanho, $separadores, $randTypeElement = "default") 
+	function randKey($tamanho, $separadores, $randTypeElement = "default") 
 	{ 
 		$options['upper'] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		$options['lower'] = "abcdefghijklmnopqrstuvwxyz";

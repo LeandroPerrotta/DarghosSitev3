@@ -14,6 +14,8 @@
 	define(SMTP_USER, "darghos.net@noip-smtp");
 	define(SMTP_PASS, "***REMOVED***");
 	
+	define(ENCRYPTION_TYPE, "md5");
+	
 	define(EMAIL_REGISTER, 1);
 	
 	
