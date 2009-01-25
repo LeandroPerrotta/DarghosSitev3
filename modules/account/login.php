@@ -1,18 +1,19 @@
 <?
-if($post = $core->extractPost())
+$post = $core->extractPost();
+if($post)
 {
 	$account = $core->loadClass("Account");
 	
-	if((!$account->load($post[0], "password")) or ($account->get("password") != $core->encrypt($post[1])))
-	{
-		$error = "Numero da conta ou senha incorretos.";
-	}
-	else
+	if(($account->load($post[0], "password")) and ($account->get("password") == $core->encrypt($post[1])))
 	{
 		$_SESSION['login'][] = $post[0];
 		$_SESSION['login'][] = $post[1];
 		
-		$core->redirect("?ref=account.main");
+		$core->redirect("index.php?ref=account.main");	
+	}
+	else
+	{
+		$error = "Numero da conta ou senha incorretos.";
 	}
 }
 

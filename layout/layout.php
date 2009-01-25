@@ -63,7 +63,7 @@
 					<p id="urlnavigation"><? echo $patch['urlnavigation']; ?></p>
 					<div id="line1"></div>					
 					
-					<?php } include_once($module); ?>
+					<?php } echo $module; ?>
 					
 				</div>
 			</div>

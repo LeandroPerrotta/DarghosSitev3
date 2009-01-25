@@ -9,20 +9,28 @@ class Account extends MySQL
 		$this->db = $db_tenerian;
 	}
 
-	function load($id, $fields)
+	function load($id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, $fields FROM accounts WHERE id = '".$id."'");
+		if($fields)
+			$query = $this->db->query("SELECT id, $fields FROM accounts WHERE id = '".$id."'");
+		else
+			$query = $this->db->query("SELECT id FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
 			$this->data['id'] = $fetch->id;	
 					
-			$e = explode(", ", $fields);
-			foreach($e as $field)
-			{
-				$this->data[$field] = $fetch->$field;
+			if($fields)	
+			{	
+				$e = explode(", ", $fields);
+				foreach($e as $field)
+				{
+					$this->data[$field] = $fetch->$field;
+				}
 			}
+
+			return true;	
 		}
 		else
 		{
@@ -30,7 +38,7 @@ class Account extends MySQL
 		}			
 	}
 	
-	function loadByEmail($email, $fields)
+	function loadByEmail($email, $fields = null)
 	{
 		$query = $this->db->query("SELECT id FROM accounts WHERE email = '".$email."'");
 		

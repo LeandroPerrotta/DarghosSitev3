@@ -74,15 +74,14 @@ class Core
 			return false;
 	}
 	
-	function redirect($url, $delay = false) 
+	function redirect($url, $local = true, $delay = false) 
 	{		
-		echo '
-			<script type="text/javascript">
-				$(document).ready(function() {
-					setTimeout(function() { window.location = "' . $url . '"; }, ' . $delay . ');
-				});
-			</script>
-		';
+		if($local)
+			$url = "http://".$_SERVER['HTTP_HOST']."/".$url;
+			
+		echo $url;	
+	
+		header(" Location: $url");
 	}	
 	
 	function filterInputs($checkGets = false)

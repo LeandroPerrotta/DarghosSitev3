@@ -65,15 +65,15 @@ if($core->filterInputs())
 			if($patch['dir'] != "errors")
 				$patch['urlnavigation'] = "/ ".$patch['dir']." / <a href='?ref=".$patch['dir'].".".$patch['file']."'>".$patch['file']."</a>";
 				
-			$module = "modules/".$patch['dir']."/".$patch['file'].".php";
+			include("modules/".$patch['dir']."/".$patch['file'].".php");
 		}	
 		else
-			$module = "modules/errors/needlogin.php";	
+			include("modules/errors/needlogin.php");	
 	}	
 	else	
-		$module = "modules/news/last.php";
+		include("modules/news/last.php");
 }	
 else
-	$module = "modules/errors/sqlinjection.php";	
+	include("modules/errors/sqlinjection.php");	
 
 ?>
