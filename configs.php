@@ -11,8 +11,8 @@
 	
 	define(SMTP_HOST, "smtp-auth.no-ip.com");
 	define(SMTP_PORT, 587);
-	define(SMTP_PASS, "darghos.net@noip-smtp");
-	define(SMTP_USER, "***REMOVED***");
+	define(SMTP_USER, "darghos.net@noip-smtp");
+	define(SMTP_PASS, "***REMOVED***");
 	
 	define(EMAIL_REGISTER, 1);
 	

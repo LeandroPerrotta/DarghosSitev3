@@ -6,8 +6,6 @@ class Core
 		include "libs/phpmailer/class.phpmailer.php";
 		include "emails.php";
 		
-		global $emailmodel, $emailsubject, $emailvalue;
-		
 		foreach($arg as $value)
 		{
 			$emailvalue[] = $value;
