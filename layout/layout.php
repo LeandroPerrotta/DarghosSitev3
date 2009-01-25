@@ -12,64 +12,61 @@
 	
 	<body>
 		<center>
-		<div id="tudo">
-			<div id="menu">	
-				<ul id="navigation">
-					<li>
-						<p>navegação</p>
-						
-						<ul>
-							<li><a href="?ref=news.last">Últimas Notícias</a></li>
-							<li><a href="?ref=news.files">Arquivo de Notícias</a></li>
-							<li><a href="?ref=general.about">Sobre o Darghos</a></li>
-							<li><a href="?ref=general.faq">Darghos FAQ</a></li>
-							<li><a href="?ref=general.downloads">Downloads</a></li>
-						</ul>
-					</li>	
-				</ul>	
-				
-				<ul id="account">
-					<li>
-						<p>contas</p>
-						
-						<ul>
-							<li><a href="?ref=account.register">Registrar</a></li>
-							<li><a href="?ref=account.login">Login</a></li>
-							<li><a href="?ref=account.recovery">Recuperar Conta</a></li>
-							<li><a href="?ref=account.donation">Doações</a></li>							
-						</ul>
-					</li>	
-				</ul>	
+			<div id="tudo">
+				<div id="menu">	
+					<ul id="navigation">
+						<li>
+							<p>navegação</p>
+							
+							<ul>
+								<li><a href="?ref=news.last">Últimas Notícias</a></li>
+								<li><a href="?ref=news.files">Arquivo de Notícias</a></li>
+								<li><a href="?ref=general.about">Sobre o Darghos</a></li>
+								<li><a href="?ref=general.faq">Darghos FAQ</a></li>
+								<li><a href="?ref=general.downloads">Downloads</a></li>
+							</ul>
+						</li>	
+					</ul>	
+					
+					<ul id="account">
+						<li>
+							<p>contas</p>
+							
+							<ul>
+								<li><a href="?ref=account.register">Registrar</a></li>
+								<li><a href="?ref=account.login">Login</a></li>
+								<li><a href="?ref=account.recovery">Recuperar Conta</a></li>
+								<li><a href="?ref=account.donation">Doações</a></li>							
+							</ul>
+						</li>	
+					</ul>	
 
-				<ul id="community">
-					<li>
-						<p>comunidade</p>
-						
-						<ul>
-							<li><a href="?ref=community.characters">Personagem</a></li>
-							<li><a href="?ref=community.highscores">Highscores</a></li>
-							<li><a href="?ref=community.guilds">Guildas</a></li>
-							<li><a href="?ref=community.houses">Casas</a></li>
-							<li><a href="?ref=community.polls">Enquetes</a></li>
-							<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
-						</ul>
-					</li>	
-				</ul>						
-			</div>		
-			
-			<div id="content">
+					<ul id="community">
+						<li>
+							<p>comunidade</p>
+							
+							<ul>
+								<li><a href="?ref=community.characters">Personagem</a></li>
+								<li><a href="?ref=community.highscores">Highscores</a></li>
+								<li><a href="?ref=community.guilds">Guildas</a></li>
+								<li><a href="?ref=community.houses">Casas</a></li>
+								<li><a href="?ref=community.polls">Enquetes</a></li>
+								<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
+							</ul>
+						</li>	
+					</ul>						
+				</div>		
 				
-				<div id="page">
-				
+				<div id="content">
+					
 					<?php include_once($module); ?>
+					
 				</div>
-				
 			</div>
-		</div>
-		
-		<div id="footer">
-			<p>Pagina gerada em: <?php list($te, $date) = explode(" ", microtime()); echo $te - $t; ?>ms</p>
-		</div>	
+			
+			<div id="footer">
+				<p>Pagina gerada em: <?php list($te, $date) = explode(" ", microtime()); echo $te - $t; ?>ms</p>
+			</div>	
 		</center>
 	</body>
 </html>

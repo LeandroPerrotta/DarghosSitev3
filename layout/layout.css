@@ -24,7 +24,7 @@ h3{
 }
 
 p {
-	margin-top: 10px;
+	margin-top: 20px;
 }
 
 fieldset label {
@@ -55,6 +55,45 @@ input fieldset .button {
 .toggle {
 	display: none;
 }
+
+/* LAYOUT  */
+
+#content{
+	float: right;
+	width: 700px;
+	margin-top: 8px;
+}
+
+#content li{
+	margin-left: 25px;
+}
+
+#menu{
+	float: left;	
+	width: 160px;
+}
+
+#tudo{
+	width: 870px;
+	text-align: left;	
+	height: 1%;
+	overflow: hidden;
+}
+
+#footer{
+	margin-top: 5px;
+	width: 870px;
+	text-align: center;	
+	bottom: 1%;
+
+}
+
+#footer p{
+	font-size: 9px;
+	text-decoration: none;	
+}
+
+/* MISC */
 
 #error{
 	border: 2px solid #f30808;
@@ -91,24 +130,11 @@ input fieldset .button {
 	color: #447ade;
 }
 
-#content{
-	float: right;
-	width: 700px;
-}
 
-#menu{
-	float: left;	
-	width: 160px;
-}
-
-#page{
-	width: 95%;
-	height: 750px;
-	margin-top: 8px;
-	text-align: left;
-}
+/* BOXES */
 
 #navigation{
+	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -142,6 +168,7 @@ input fieldset .button {
 }
 
 #account{
+	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -176,6 +203,7 @@ input fieldset .button {
 }
 
 #community{
+	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -207,21 +235,4 @@ input fieldset .button {
 	color: #d3b803;
 	border-bottom: 1px solid #cbc9c8;
 	padding-top: 5px;
-}
-
-#tudo{
-	width: 870px;
-	height: 750px;
-	text-align: center;	
-}
-
-#footer{
-	margin-top: 5px;
-	width: 870px;
-	text-align: center;	
-}
-
-#footer p{
-	font-size: 9px;
-	text-decoration: none;	
 }

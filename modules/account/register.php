@@ -3,12 +3,16 @@
 
 <?
 if($_POST)
-{
-	include "libs/phpmailer/class.phpmailer.php";
-	
+{	
 	$account = $core->loadClass("Account");
 	$number = $account->getNumber();
-
+	$password = $core->randKey(8, 1, "lower+number");
+	
+	//argumentos para e-mail
+	$_arg = array();
+	$_arg[] = $number;
+	$_arg[] = $password;
+	
 	if(!$_POST['account_email'])
 	{
 		$error = "Você deve preencher todos os formularios corretamente.";
@@ -25,11 +29,22 @@ if($_POST)
 	{
 		$error = "Caro jogador, não existe um numero de conta disponivel. Tente novamente mais tarde.";
 	}
+	elseif(!$core->mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
+	{
+		$error = "Não foi possivel enviar o e-mail de validação de conta. Tente novamente mais tarde.";
+	}
 	else
 	{
+		$account->set("email", $_POST['account_email']);
+		$account->set("password", $password);
+		$account->set("name", $number);
+		$account->set("creation", time());
+		
+		$account->save();
+	
 		$success = "
 		<p>Parabens, sua conta foi criada com sucesso!</p>
-		<p>O numero de sua conta é: 111111.</p>
+		<p>O numero de sua conta é: ".$number.".</p>
 		<p>Sua senha e outras informações foram enviadas em uma mensagem a seu e-mail cadastrado.</p>
 		<p>Tenha um bom jogo!</p>
 		";

@@ -5,8 +5,8 @@ class MySQL
 	
 	public function connect($host, $user, $password, $database) 
 	{
-		$this->connection = @mysql_connect($host, $user, $password);
-		@mysql_select_db($database, $this->connection);				
+		$this->connection = mysql_connect($host, $user, $password);
+		mysql_select_db($database, $this->connection);				
 	}
 	
 	/*public function close() 

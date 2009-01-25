@@ -1,8 +1,18 @@
 <?
 class Core
 {
-	function mail($message, $subject, $to, $from = CONFIG_SITEEMAIL) 
+	function mail($emailid, $to, $arg, $from = CONFIG_SITEEMAIL) 
 	{
+		include "libs/phpmailer/class.phpmailer.php";
+		include "emails.php";
+		
+		global $emailmodel, $emailsubject, $emailvalue;
+		
+		foreach($arg as $value)
+		{
+			$emailvalue[] = $value;
+		}
+		
 		$mail = new PHPMailer();
 		
 		$mail->Host = SMTP_HOST;
@@ -17,8 +27,8 @@ class Core
 		$mail->From = $from;
 		$mail->FromName = CONFIG_SITENAME;
 		
-		$mail->Body = $message;
-		$mail->Subject = $subject;
+		$mail->Body = $emailmodel[$emailid];
+		$mail->Subject = $emailsubject[$emailid];
 		
 		if ($mail->Send()) 
 		{
@@ -33,5 +43,45 @@ class Core
 		include_once "classes/".$class.".php";
 		return new $class();
 	}
+	
+	public function randKey($tamanho, $separadores, $randTypeElement = "default") 
+	{ 
+		$options['upper'] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$options['lower'] = "abcdefghijklmnopqrstuvwxyz";
+		$options['number'] = "01234567890123456789";
+			
+		if($randTypeElement != "default")
+		{
+			$randTypeElement = explode("+", $randTypeElement);
+			
+			foreach($randTypeElement as $value)
+			{
+				$fullRand .= $options[$value];
+			}
+		}
+		else
+			$fullRand = $options['upper'].$options['lower'].$options['number'];
+			
+		$countChars = strlen($fullRand);
+	
+		$string = "";
+		$part = array();
+	
+		for($i = 0; $i < $separadores; $i++)
+		{
+			for($n = 0; $n < $tamanho; $n++)
+			{
+				$rand = mt_rand(1, $countChars);
+				$part[$i] .= $fullRand[$rand];	
+			}
+			
+			if($i == 0)
+				$string .= $part[$i];
+			else
+				$string .= "-".$part[$i];
+		}
+		
+		return $string;
+	}	
 }		
 ?>

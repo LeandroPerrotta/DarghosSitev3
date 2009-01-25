@@ -46,5 +46,63 @@ class Account extends MySQL
 		$this->data['id'] = $number;	
 		return $number;				
 	}
+	
+	function save()
+	{
+		$i = 0;
+	
+		$query = $this->db->query("SELECT id FROM accounts WHERE id = '".$this->data['id']."'")
+		
+		//update
+		if($query->numRows() == 1)
+		{
+			foreach($this->data as $field => $value)
+			{
+				$i++;
+				
+				if($i == count($this->data))
+				{
+					$update .= "".$field." = '".$value."'";
+				}
+				else
+				{
+					$update .= "".$field." = '".$value."', ";
+				}			
+				
+				$this->db->query("UPDATE accounts SET $update WHERE id = id = '".$this->data['id']."'");
+			}
+		}
+		//new account
+		elseif($query->numRows() == 0)
+		{
+			foreach($this->data as $field => $value)
+			{
+				$i++;
+				
+				if($i == count($this->data))
+				{
+					$insert_fields .= "".$field."";
+					$insert_values .= "'".$value."'";
+				}
+				else
+				{
+					$insert_fields .= "".$field.", ";
+					$insert_values .= "'".$value."', ";
+				}			
+			}
+
+			$this->db->query("INSERT INTO accounts ($insert_fields) values($insert_values)");			
+		}
+	}
+	
+	function set($field, $value)
+	{
+		$this->data[$field] = $value;
+	}
+	
+	function get($field)
+	{
+		return $this->data[$field];
+	}
 }
 ?>

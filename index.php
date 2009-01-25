@@ -1,10 +1,10 @@
 <?
 list($t, $date) = explode(" ", microtime());
 
+include "configs.php";
+
 include "classes/mysql.php";
 include "classes/core.php";
-
-include "configs.php";
 
 $core = new Core();
 
