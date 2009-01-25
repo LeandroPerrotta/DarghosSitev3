@@ -1,6 +1,3 @@
-<p id="urlnavigation"><? echo $patch['urlnavigation']; ?></p>
-<div id="line1"></div>
-
 <?
 if($_POST)
 {	

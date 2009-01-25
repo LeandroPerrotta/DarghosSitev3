@@ -59,7 +59,11 @@
 				
 				<div id="content">
 					
-					<?php include_once($module); ?>
+					<? if($patch['urlnavigation']){ ?>
+					<p id="urlnavigation"><? echo $patch['urlnavigation']; ?></p>
+					<div id="line1"></div>					
+					
+					<?php } include_once($module); ?>
 					
 				</div>
 			</div>

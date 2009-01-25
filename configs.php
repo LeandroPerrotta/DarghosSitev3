@@ -6,7 +6,7 @@
 	define(DB_TENERIAN_HOST, "localhost");
 	define(DB_TENERIAN_USER, "root");
 	define(DB_TENERIAN_PASS, "");
-	define(DB_TENERIAN_SCHEMA, "tenerian");
+	define(DB_TENERIAN_SCHEMA, "newot");
 	define(DB_WEBSITE_PREFIX, "wb_");
 	
 	define(SMTP_HOST, "smtp-auth.no-ip.com");

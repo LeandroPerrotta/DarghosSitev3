@@ -57,6 +57,65 @@ class Core
 		return new $class();
 	}
 	
+	function extractPost()
+	{
+		if($_POST)
+		{
+			$post = array();
+		
+			foreach($_POST as $field => $value)
+			{
+				$post[] = $value;
+			}
+			
+			return $post;
+		}		
+		else
+			return false;
+	}
+	
+	function redirect($url, $delay = false) 
+	{		
+		echo '
+			<script type="text/javascript">
+				$(document).ready(function() {
+					setTimeout(function() { window.location = "' . $url . '"; }, ' . $delay . ');
+				});
+			</script>
+		';
+	}	
+	
+	function filterInputs($checkGets = false)
+	{
+		if($_POST)
+		{
+			foreach($_POST as $post => $value)
+			{
+				if(!$this->SQLInjection($value))
+					return false;
+			}
+		}
+	
+		if($checkGets)
+		{
+			foreach($_GET as $post => $value)
+			{
+				if(!$this->SQLInjection($value))
+					return false;
+			}		
+		}
+
+		return true;	
+	}
+	
+	function SQLInjection($string)
+	{
+		if(preg_match("/(from|select|insert|delete|where|drop table|show tables|#|\*|--|\\\\)/i", $string))
+			return false;
+		else
+			return true;		
+	}
+	
 	function randKey($tamanho, $separadores, $randTypeElement = "default") 
 	{ 
 		$options['upper'] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
