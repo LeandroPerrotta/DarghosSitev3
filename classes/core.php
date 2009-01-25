@@ -4,16 +4,19 @@ class Core
 	function mail($emailid, $to, $arg, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";
-		include "emails.php";
-		
+
+		$emailvalue = array();
 		foreach($arg as $value)
 		{
 			$emailvalue[] = $value;
 		}
 		
+		include "emails.php";		
+		
 		$mail = new PHPMailer();
 		
 		$mail->Host = SMTP_HOST;
+		$mail->IsHTML(true);
 		$mail->IsSMTP();
 		$mail->Password = SMTP_PASS;
 		$mail->SMTPAuth = true;
