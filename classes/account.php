@@ -51,7 +51,7 @@ class Account extends MySQL
 	{
 		$i = 0;
 	
-		$query = $this->db->query("SELECT id FROM accounts WHERE id = '".$this->data['id']."'")
+		$query = $this->db->query("SELECT id FROM accounts WHERE id = '".$this->data['id']."'");
 		
 		//update
 		if($query->numRows() == 1)
