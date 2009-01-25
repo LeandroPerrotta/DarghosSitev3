@@ -51,12 +51,10 @@ if($_POST)
 		";
 	}
 }
-?>
 
-	<?
 if($success)	
 {
-	echo '
+	$module .=	'
 		
 	<div id="sucesso">
 		<h2>'.$success.'</h2>
@@ -68,7 +66,7 @@ else
 {
 	if($error)	
 	{
-		echo '
+		$module .=	'
 		
 		<div id="error">
 			<h2>'.$error.'</h2>
@@ -76,8 +74,9 @@ else
 		
 		';
 	}
-	?>
 
+
+$module .=	'
 	<form action="" method="post">
 		<fieldset>
 			
@@ -96,7 +95,7 @@ else
 				<input type="submit" value="Enviar" />
 			</p>
 		</fieldset>
-	</form>
-<?
+	</form>';
+
 }
 ?>	

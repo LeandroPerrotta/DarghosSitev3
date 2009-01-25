@@ -1,22 +1,5 @@
 <?
-if($post = $core->extractPost())
-{
-	$account = $core->loadClass("Account");
-	
-	if((!$account->load($post[0], "password")) or ($account->get("password") != $core->encrypt($post[1])))
-	{
-		$error = "Este numero de conta ou senha constam em nosso banco de dados.";
-	}
-	else
-	{
-		$_SESSION['login'][] = $post[0];
-		$_SESSION['login'][] = $post[1];
-		
-		$core->redirect("?ref=account.main");
-	}
-}
-?>
-
+$module .= '
 <form action="" method="post">
 	<fieldset>
 		
@@ -36,4 +19,5 @@ if($post = $core->extractPost())
 			<input type="submit" value="Login" />
 		</p>
 	</fieldset>
-</form>
+</form>';
+?>

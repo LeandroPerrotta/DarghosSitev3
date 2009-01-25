@@ -19,7 +19,7 @@ if($post)
 
 if($error)	
 {
-	echo '
+	$module .= '
 	
 	<div id="error">
 		<h2>'.$error.'</h2>
@@ -27,8 +27,8 @@ if($error)
 	
 	';
 }
-?>
 
+$module .= '
 <form action="" method="post">
 	<fieldset>
 		
@@ -48,4 +48,5 @@ if($error)
 			<input type="submit" value="Login" />
 		</p>
 	</fieldset>
-</form>
+</form>';
+?>
