@@ -6,7 +6,7 @@ while($fetch = $query->fetch())
 	$module .=	'
 	<p>'. date("d/m/y - H:i", $fetch->post_data) .' - '. date("d/m/y - H:i", $fetch->post_update) .'</p>
 	<div id="line1"></div>
-	<h3><'. $fetch->topic .'</h3>
+	<h3>'. $fetch->topic .'</h3>
 	<p>'. $fetch->post .'</p>
 	';
 

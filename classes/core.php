@@ -78,10 +78,8 @@ class Core
 	{		
 		if($local)
 			$url = "http://".$_SERVER['HTTP_HOST']."/".$url;
-			
-		echo $url;	
 	
-		header(" Location: $url");
+		header("Location: ".$url." ");
 	}	
 	
 	function filterInputs($checkGets = false)

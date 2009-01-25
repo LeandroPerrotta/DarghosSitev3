@@ -58,6 +58,8 @@ if($core->filterInputs())
 		break;	
 	}
 
+	$module = null;
+	
 	if($_GET)
 	{
 		if(($needLogin and $_SESSION['login']) or (!$needLogin))
