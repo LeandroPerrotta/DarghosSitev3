@@ -36,7 +36,7 @@ class Strings
 		
 		foreach($query->fetchArray() as $field => $value)
 		{
-			if($value == $string)
+			if(eregi($value, $string))
 				return false;
 		}
 		
