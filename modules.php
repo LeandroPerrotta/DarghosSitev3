@@ -24,7 +24,22 @@ if($core->filterInputs())
 				case "main":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;				
+				break;		
+
+				case "changepassword":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+
+				case "logout":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;	
+
+				case "characters":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;					
 
 				default:
 					$patch['dir'] = "errors";
@@ -33,6 +48,28 @@ if($core->filterInputs())
 			}
 			
 		break;
+		
+		case "character":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "create":
+					$patch['file'] = $topic;
+				break;
+				
+				case "view":
+					$patch['file'] = $topic;
+				break;					
+
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;		
 
 		case "news":
 		

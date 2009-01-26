@@ -74,10 +74,15 @@ class Core
 			return false;
 	}
 	
+	function formatDate($date)
+	{
+		return date("d/m/y - H:i", $date);
+	}
+	
 	function redirect($url, $local = true, $delay = false) 
 	{		
 		if($local)
-			$url = "http://".$_SERVER['HTTP_HOST']."/".$url;
+			$url = CONFIG_SITEEMAIL."/".$url;
 	
 		header("Location: ".$url." ");
 	}	

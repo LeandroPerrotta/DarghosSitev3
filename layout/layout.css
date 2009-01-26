@@ -60,7 +60,7 @@ input fieldset .button {
 
 #content{
 	float: right;
-	width: 700px;
+	width: 750px;
 	margin-top: 8px;
 }
 
@@ -74,7 +74,7 @@ input fieldset .button {
 }
 
 #tudo{
-	width: 870px;
+	width: 950px;
 	text-align: left;	
 	height: 1%;
 	overflow: hidden;
@@ -235,4 +235,96 @@ input fieldset .button {
 	color: #d3b803;
 	border-bottom: 1px solid #cbc9c8;
 	padding-top: 5px;
+}
+
+#characters{
+	width: 160px;
+	font: normal 10px Verdana, sans-serif;
+	text-align: left;
+	font-weight: bold;
+}
+
+#characters ul{
+	padding-left: 4px;
+	padding-top: 8px;
+} 
+
+#characters li{
+	list-style: none;
+	padding: 2px 0px 2px 0px;	
+}
+
+#characters a{
+	color: #f15353;
+	text-decoration: none;
+}
+
+#characters a:hover{
+	background-color: #e50c0c;
+	color: #FFF;
+	padding: 2px 0px 2px 0px;
+}
+
+#characters p{
+	font-size: 14px;
+	color: #e50c0c;
+	border-bottom: 1px solid #cbc9c8;
+	padding-top: 5px;
+}
+
+#mycharacters{
+	width: 160px;
+	font: normal 10px Verdana, sans-serif;
+	text-align: left;
+	font-weight: bold;
+}
+
+#mycharacters ul{
+	padding-left: 4px;
+	padding-top: 8px;
+} 
+
+#mycharacters li{
+	list-style: none;
+	padding: 2px 0px 2px 0px;	
+}
+
+#mycharacters a{
+	color: #62a8f7;
+	text-decoration: none;
+}
+
+#mycharacters a:hover{
+	background-color: #1572da;
+	color: #FFF;
+	padding: 2px 0px 2px 0px;
+}
+
+#mycharacters p{
+	font-size: 14px;
+	color: #1572da;
+	border-bottom: 1px solid #cbc9c8;
+	padding-top: 5px;
+}
+
+#charactersview{
+	font: normal 10px Verdana, sans-serif;
+	text-align: left;
+}
+
+#charactersview ul{
+	padding-left: 4px;
+	padding-top: 8px;
+} 
+
+#charactersview li{
+	list-style: none;
+	padding: 2px 0px 2px 0px;	
+}
+
+#charactersview p{
+	font-weight: bold;
+	font-size: 14px;
+	padding-top: 5px;
+	padding-bottom: 15px;
 }

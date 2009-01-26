@@ -30,23 +30,87 @@
 					
 					<ul id="account">
 						<li>
-							<p>contas</p>
-							
-							<ul>
+							<?
+							if(!$_SESSION['login'])
+							{
+								echo '
+								<p>contas</p>
+								
+								<ul>								
+								
 								<li><a href="?ref=account.register">Registrar</a></li>
-								<li><a href="?ref=account.login">Login</a></li>
+								<li><a href="?ref=account.login">Log-in</a></li>
 								<li><a href="?ref=account.recovery">Recuperar Conta</a></li>
-								<li><a href="?ref=account.donation">Doações</a></li>							
+								<li><a href="?ref=account.premium">Conta Premium</a></li>';
+							}
+							else
+							{
+								echo '
+								<p>minha conta</p>
+								
+								<ul>								
+							
+								<li><a href="?ref=account.changepassword">Mudar Senha</a></li>
+								<li><a href="?ref=account.changeemail">Mudar E-mail</a></li>
+								<li><a href="?ref=account.premium">Conta Premium</a></li>
+								<li><a href="?ref=account.logout">Log-out</a></li>';
+							}							
+							?>	
 							</ul>
 						</li>	
 					</ul>	
+					
+					<?
+					if($_SESSION['login'])
+					{
+						echo '
+						<ul id="characters">
+							<li>
+								<p>personagens</p>
+								
+								<ul>								
+								
+									<li><a href="?ref=character.create">Criar</a></li>
+									<li><a href="?ref=character.delete">Deletar</a></li>
+								
+								</ul>
+							</li>	
+						</ul>';
+						
+						$account = $core->loadClass("account");
+						$account->load($_SESSION['login'][0]);
+						
+						$list = $account->getCharacterList();
+						
+						if(is_array($list))
+						{	
+							echo '
+							<ul id="mycharacters">
+								<li>
+									<p>meus personagens</p>
+									
+									<ul>								
+									';
+										foreach($list as $value)
+										{
+											echo '<li><a href="?ref=character.view&name='.$value.'">'.$value.'</a></li>';
+										}	
+									
+									echo '</ul>
+								</li>	
+							</ul>						
+							';
+						}
+					}
+					?>	
+					
 
 					<ul id="community">
 						<li>
 							<p>comunidade</p>
 							
 							<ul>
-								<li><a href="?ref=community.characters">Personagem</a></li>
+								<li><a href="?ref=character.view">Personagem</a></li>
 								<li><a href="?ref=community.highscores">Highscores</a></li>
 								<li><a href="?ref=community.guilds">Guildas</a></li>
 								<li><a href="?ref=community.houses">Casas</a></li>

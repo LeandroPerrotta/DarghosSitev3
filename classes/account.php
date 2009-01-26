@@ -1,5 +1,5 @@
 <?
-class Account extends MySQL
+class Account
 {
 	private $db, $data = array();
 
@@ -94,6 +94,25 @@ class Account extends MySQL
 		return $number;				
 	}
 	
+	function getCharacterList()
+	{
+		$query = $this->db->query("SELECT name FROM players WHERE account_id = '".$this->data['id']."'");
+		
+		if($query->numRows() != 0)
+		{
+			$list= array();
+		
+			while($fetch = $query->fetch())
+			{
+				$list[] = $fetch->name;
+			}
+			
+			return $list;
+		}
+		else
+			return false;
+	}
+	
 	function save()
 	{
 		$i = 0;
@@ -115,9 +134,9 @@ class Account extends MySQL
 				{
 					$update .= "".$field." = '".$value."', ";
 				}			
-				
-				$this->db->query("UPDATE accounts SET $update WHERE id = id = '".$this->data['id']."'");
 			}
+			
+			$this->db->query("UPDATE accounts SET $update WHERE id = '".$this->data['id']."'");
 		}
 		//new account
 		elseif($query->numRows() == 0)

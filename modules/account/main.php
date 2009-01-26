@@ -1,23 +1,4 @@
 <?
 $module .= '
-<form action="" method="post">
-	<fieldset>
-		
-		<p>
-			<label for="account_number">Conta</label><br />
-			<input name="account_number" size="40" type="text" value="" />
-		</p>
-		
-		<p>
-			<label for="account_password">Senha</label><br />
-			<input name="account_password" size="40" type="password" value="" />
-		</p>		
-		
-		<div id="line1"></div>
-		
-		<p>
-			<input type="submit" value="Login" />
-		</p>
-	</fieldset>
-</form>';
+<p>Seja bem vindo a sua conta. Você pode efetuar muitas operações como criar um personagem, mudar sua senha ou obter a conta premium atravez do menu minha conta ao lado esquerdo.';
 ?>
