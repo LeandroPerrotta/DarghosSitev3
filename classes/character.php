@@ -107,5 +107,10 @@ class Character
 	{
 		return $this->data[$field];
 	}	
+
+	function addItem($slot, $slot_pid, $itemid, $count) 
+	{	
+		$this->db->query("INSERT INTO `player_items` VALUES ('".$this->data['id']."', '".$slot_pid."', '".$slot."', '".$itemid."', '".$count."', '', '', '0')");
+	}	
 }
 ?>

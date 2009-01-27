@@ -22,6 +22,77 @@ if($post)
 			$outfitType = 128;
 		else
 			$outfitType = 136;
+			
+		if($post[2] == "sorcerer")
+		{
+			$itemsChar = array(
+				//Inventario
+				array(SLOT_HEAD, 101, 2480, 1),
+				array(SLOT_BACKPACK, 102, 1988, 1),
+				array(SLOT_ARMOR, 103, 2464, 1),
+				array(SLOT_RIGHTHAND, 104, 2530, 1),
+				array(SLOT_LEFTHAND, 105, 2190, 1),
+				array(SLOT_LEGS, 106, 2468, 1),
+				array(SLOT_FEET, 107, 2643, 1),
+				array(SLOT_AMMO, 108, 2120, 1),
+				
+				//backpack
+				array(102, 109, 2666, 2),
+			);				
+		}
+		elseif($post[2] == "druid")
+		{
+			$itemsChar = array(
+				//Inventario
+				array(SLOT_HEAD, 101, 2480, 1),
+				array(SLOT_BACKPACK, 102, 1988, 1),
+				array(SLOT_ARMOR, 103, 2464, 1),
+				array(SLOT_RIGHTHAND, 104, 2530, 1),
+				array(SLOT_LEFTHAND, 105, 2182, 1),
+				array(SLOT_LEGS, 106, 2468, 1),
+				array(SLOT_FEET, 107, 2643, 1),
+				array(SLOT_AMMO, 108, 2120, 1),
+				
+				//backpack
+				array(102, 109, 2666, 2),
+			);						
+		}
+		elseif($post[2] == "paladin")
+		{
+			$itemsChar = array(
+				//Inventario
+				array(SLOT_HEAD, 101, 2480, 1),
+				array(SLOT_BACKPACK, 102, 1988, 1),
+				array(SLOT_ARMOR, 103, 2464, 1),
+				array(SLOT_RIGHTHAND, 104, 2530, 1),
+				array(SLOT_LEFTHAND, 105, 2389, 5),
+				array(SLOT_LEGS, 106, 2468, 1),
+				array(SLOT_FEET, 107, 2643, 1),
+				array(SLOT_AMMO, 108, 2120, 1),
+				
+				//backpack
+				array(102, 109, 2666, 2),
+			);						
+		}
+		elseif($post[2] == "knight")
+		{
+			$itemsChar = array(
+				//Inventario
+				array(SLOT_HEAD, 101, 2480, 1),
+				array(SLOT_BACKPACK, 102, 1988, 1),
+				array(SLOT_ARMOR, 103, 2464, 1),
+				array(SLOT_RIGHTHAND, 104, 2530, 1),
+				array(SLOT_LEFTHAND, 105, 2412, 1),
+				array(SLOT_LEGS, 106, 2468, 1),
+				array(SLOT_FEET, 107, 2643, 1),
+				array(SLOT_AMMO, 108, 2120, 1),
+				
+				//backpack
+				array(102, 109, 2666, 2),
+				array(102, 110, 2388, 1),
+				array(102, 111, 2398, 1),
+			);					
+		}		
 	
 		$character->set("name", $post[0]);
 		$character->set("account_id", $_SESSION['login'][0]);
@@ -35,12 +106,20 @@ if($post)
 		$character->set("healthmax", "185");
 		$character->set("mana", "35");
 		$character->set("manamax", "35");
+		$character->set("cap", "470");
 		$character->set("looktype", $outfitType);
 		$character->set("conditions", null);
 		$character->set("guildnick", "");
 		$character->set("comment", "");
 		
 		$character->save();
+	
+		$character->loadByName($post[0]);
+	
+		foreach($itemsChar as $item)
+		{
+			$character->addItem($item[0], $item[1], $item[2], $item[3]);
+		}	
 	
 		$success = "
 		<p>O personagem ".$post[0]." foi criado com sucesso!</p>

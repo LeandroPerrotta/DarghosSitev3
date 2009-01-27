@@ -18,6 +18,15 @@
 	
 	define(EMAIL_REGISTER, 1);
 	
+	define('SLOT_HEAD', 1);
+	define('SLOT_BACKPACK', 3);
+	define('SLOT_ARMOR', 4);
+	define('SLOT_RIGHTHAND', 5);
+	define('SLOT_LEFTHAND', 6);
+	define('SLOT_LEGS', 7);
+	define('SLOT_FEET', 8);
+	define('SLOT_AMMO', 10);	
+	
 	$_vocation['no-vocation'] = 0;
 	$_vocation['sorcerer'] = 1;
 	$_vocation['druid'] = 2;
