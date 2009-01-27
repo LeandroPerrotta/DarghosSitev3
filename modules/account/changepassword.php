@@ -23,7 +23,7 @@ if($post)
 	}
 	else
 	{
-		$account->set("password", $core->encrypt($post[0]));
+		$account->set("password", $strings->encrypt($post[0]));
 		$account->save();
 		
 		$_SESSION[1] = $account->get("password");

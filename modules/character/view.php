@@ -17,7 +17,7 @@ if($post or $get)
 		$lastlogin = ($character->get("lastlogin")) ? $core->formatDate($character->get("lastlogin")) : "Nunca entrou.";
 	
 		$module .= '
-		<ul id="charactersview">
+		<ul id="pagelist">
 			<p>Personagem:</p>
 			
 			<li><b>Nome:</b> '.$character->get("name").'</li>

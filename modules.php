@@ -1,7 +1,7 @@
 <?
 list($module, $topic) = explode(".", $_GET['ref']);
 
-if($core->filterInputs())
+if($strings->filterInputs())
 {
 	$needLogin = false;
 
@@ -34,12 +34,12 @@ if($core->filterInputs())
 				case "logout":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;	
+				break;		
 
-				case "characters":
+				case "premium":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;					
+				break;						
 
 				default:
 					$patch['dir'] = "errors";
@@ -71,6 +71,40 @@ if($core->filterInputs())
 			
 		break;		
 
+		case "contribute":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "order":
+					$patch['file'] = $topic;
+				break;		
+
+				case "confirm":
+					$patch['file'] = $topic;
+				break;				
+
+				case "myorders":
+					$patch['file'] = $topic;
+				break;		
+
+				case "accept":
+					$patch['file'] = $topic;
+				break;		
+
+				case "reject":
+					$patch['file'] = $topic;
+				break;						
+
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;		
+		
 		case "news":
 		
 			$patch['dir'] = $module;
@@ -113,6 +147,10 @@ if($core->filterInputs())
 		include("modules/news/last.php");
 }	
 else
+{
+	$module = null;
 	include("modules/errors/sqlinjection.php");	
+}
+	
 
 ?>

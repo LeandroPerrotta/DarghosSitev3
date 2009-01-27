@@ -163,7 +163,7 @@ $module .= '
 		
 		<p>
 			<label for="player_sex">Sexo</label><br />
-			<ul>				
+			<ul id="pagelist">				
 				<li><input type="radio" name="player_sex" value="female" /> Feminino</li>
 				<li><input type="radio" name="player_sex" value="male" /> Masculino</li>
 			</ul>	
@@ -171,7 +171,7 @@ $module .= '
 		
 		<p>
 			<label for="player_sex">Vocação</label><br />
-			<ul>				
+			<ul id="pagelist">				
 				<li><input type="radio" name="player_vocation" value="sorcerer" /> Sorcerer</li>
 				<li><input type="radio" name="player_vocation" value="druid" /> Druid</li>
 				<li><input type="radio" name="player_vocation" value="paladin" /> Paladin</li>

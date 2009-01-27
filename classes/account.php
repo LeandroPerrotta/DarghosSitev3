@@ -161,6 +161,22 @@ class Account
 		}
 	}
 	
+	function updatePremDays()
+	{
+		$daysToRemove = $this->data['lastday'] - time();
+		
+		if($daysToRemove >= $this->data['premdays'])
+		{
+			$this->data['premdays'] = 0;
+		}
+		else
+		{
+			$this->data['premdays'] -= $daysToRemove;
+		}
+		
+		$this->data['lastday'] = time();
+	}
+	
 	function set($field, $value)
 	{
 		$this->data[$field] = $value;

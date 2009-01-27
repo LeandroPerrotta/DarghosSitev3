@@ -27,6 +27,20 @@ p {
 	margin-top: 20px;
 }
 
+ul {
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+a, a:hover{
+	color: #3976f0;
+	font-weight: bold;
+}
+
+em {
+	font: italic 10px Verdana, sans-serif;
+}
+
 fieldset label {
 	display: block;
 	font-weight: bold;
@@ -103,8 +117,7 @@ input fieldset .button {
 
 #error h2{
 	text-align: center;	
-	margin-top: 4px;
-	margin-bottom: 4px;
+	margin: 12px;
 }
 
 #sucesso{
@@ -115,8 +128,7 @@ input fieldset .button {
 
 #sucesso h2{
 	text-align: center;	
-	margin-top: 4px;
-	margin-bottom: 4px;
+	margin: 12px;
 }
 
 #line1{
@@ -130,6 +142,27 @@ input fieldset .button {
 	color: #447ade;
 }
 
+#pagelist{
+	font: normal 10px Verdana, sans-serif;
+	text-align: left;
+}
+
+#pagelist ul{
+	padding-left: 4px;
+	padding-top: 8px;
+} 
+
+#pagelist li{
+	list-style: none;
+	padding: 2px 0px 2px 0px;	
+}
+
+#pagelist p{
+	font-weight: bold;
+	font-size: 14px;
+	padding-top: 5px;
+	padding-bottom: 15px;
+}
 
 /* BOXES */
 
@@ -307,24 +340,37 @@ input fieldset .button {
 	padding-top: 5px;
 }
 
-#charactersview{
+#premium{
+	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
+	font-weight: bold;
 }
 
-#charactersview ul{
+#premium ul{
 	padding-left: 4px;
 	padding-top: 8px;
 } 
 
-#charactersview li{
+#premium li{
 	list-style: none;
 	padding: 2px 0px 2px 0px;	
 }
 
-#charactersview p{
-	font-weight: bold;
+#premium a{
+	color: #72c45c;
+	text-decoration: none;
+}
+
+#premium a:hover{
+	background-color: #36951d;
+	color: #FFF;
+	padding: 2px 0px 2px 0px;
+}
+
+#premium p{
 	font-size: 14px;
+	color: #36951d;
+	border-bottom: 1px solid #cbc9c8;
 	padding-top: 5px;
-	padding-bottom: 15px;
 }

@@ -4,7 +4,7 @@
 	<head>
 		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
 		
-		<title>Darghos Website</title>
+		<title><? echo CONFIG_SITENAME; ?></title>
 		
 		<link href="layout/layout.css" media="screen" rel="stylesheet" type="text/css" />
 		
@@ -52,7 +52,6 @@
 							
 								<li><a href="?ref=account.changepassword">Mudar Senha</a></li>
 								<li><a href="?ref=account.changeemail">Mudar E-mail</a></li>
-								<li><a href="?ref=account.premium">Conta Premium</a></li>
 								<li><a href="?ref=account.logout">Log-out</a></li>';
 							}							
 							?>	
@@ -63,6 +62,21 @@
 					<?
 					if($_SESSION['login'])
 					{
+						echo '
+						<ul id="premium">
+							<li>
+								<p>conta premium</p>
+								
+								<ul>								
+								
+									<li><a href="?ref=account.premium">Conta Premium</a></li>
+									<li><a href="?ref=contribute.order">Efetuar Pedido</a></li>
+									<li><a href="?ref=contribute.myorders">Meus Pedidos</a></li>
+								
+								</ul>
+							</li>	
+						</ul>';					
+					
 						echo '
 						<ul id="characters">
 							<li>

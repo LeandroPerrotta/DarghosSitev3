@@ -9,6 +9,77 @@ class Strings
 		$this->db = $db_tenerian;
 	}
 
+	function filterInputs($checkGets = false)
+	{
+		if($_POST)
+		{
+			foreach($_POST as $post => $value)
+			{
+				if(!$this->SQLInjection($value))
+					return false;
+			}
+		}
+	
+		if($checkGets)
+		{
+			foreach($_GET as $post => $value)
+			{
+				if(!$this->SQLInjection($value))
+					return false;
+			}		
+		}
+
+		return true;	
+	}
+	
+	function SQLInjection($string)
+	{
+		if(preg_match("/(from|select|insert|delete|where|drop table|show tables|#|\*|--|\\\\)/i", $string))
+			return false;
+		else
+			return true;		
+	}
+	
+	function randKey($tamanho, $separadores, $randTypeElement = "default") 
+	{ 
+		$options['upper'] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$options['lower'] = "abcdefghijklmnopqrstuvwxyz";
+		$options['number'] = "01234567890123456789";
+			
+		if($randTypeElement != "default")
+		{
+			$randTypeElement = explode("+", $randTypeElement);
+			
+			foreach($randTypeElement as $value)
+			{
+				$fullRand .= $options[$value];
+			}
+		}
+		else
+			$fullRand = $options['upper'].$options['lower'].$options['number'];
+			
+		$countChars = strlen($fullRand);
+	
+		$string = "";
+		$part = array();
+	
+		for($i = 0; $i < $separadores; $i++)
+		{
+			for($n = 0; $n < $tamanho; $n++)
+			{
+				$rand = mt_rand(1, $countChars);
+				$part[$i] .= $fullRand[$rand];	
+			}
+			
+			if($i == 0)
+				$string .= $part[$i];
+			else
+				$string .= "-".$part[$i];
+		}
+		
+		return $string;
+	}		
+	
 	function validEmail($email) 
 	{ 
 	    $e = explode("@",$email); 
@@ -42,6 +113,18 @@ class Strings
 		
 		return true;
 	}
+	
+	function encrypt($string)
+	{
+		switch(ENCRYPTION_TYPE)
+		{
+			case "md5";
+				$enc = md5($string);
+			break;	
+		}
+		
+		return $enc;
+	}	
 	
 	function canUseName($nameString, $checkBlackList = true)
 	{

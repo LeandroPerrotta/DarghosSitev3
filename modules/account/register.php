@@ -3,7 +3,7 @@ if($_POST)
 {	
 	$account = $core->loadClass("Account");
 	$number = $account->getNumber();
-	$password = $core->randKey(8, 1, "lower+number");
+	$password = $strings->randKey(8, 1, "lower+number");
 	
 	//argumentos para e-mail
 	$_arg = array();
@@ -37,7 +37,7 @@ if($_POST)
 	else
 	{
 		$account->set("email", $_POST['account_email']);
-		$account->set("password", $core->encrypt($password));
+		$account->set("password", $strings->encrypt($password));
 		$account->set("name", $number);
 		$account->set("creation", time());
 		

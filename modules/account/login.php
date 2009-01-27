@@ -4,10 +4,10 @@ if($post)
 {
 	$account = $core->loadClass("Account");
 	
-	if(($account->load($post[0], "password")) and ($account->get("password") == $core->encrypt($post[1])))
+	if(($account->load($post[0], "password")) and ($account->get("password") == $strings->encrypt($post[1])))
 	{
 		$_SESSION['login'][] = $post[0];
-		$_SESSION['login'][] = $post[1];
+		$_SESSION['login'][] = $strings->encrypt($post[1]);
 		
 		$core->redirect("index.php?ref=account.main");	
 	}
