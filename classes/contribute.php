@@ -156,12 +156,13 @@ class Contribute extends MySQL
 	function importPayments()
 	{
 		$query = $this->db->query("SELECT * FROM siteo.payments");
+		$periodoquepode = array(30, 60, 90, 180, 360);
 		
 		while($fetch = $query->fetch())
 		{
-			if($fetch['period'] == "30" or $fetch['period'] == "60" or $fetch['period'] == "90" or $fetch['period'] == "180" or $fetch['period'] == "360")
+			if(in_array($fetch->period, $periodoquepode))
 			{
-				if(strlower($fetch->server) == "tenerian")
+				if(strtolower($fetch->server) == "tenerian")
 				{
 					global $_contribution;
 				

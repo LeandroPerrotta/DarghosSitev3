@@ -109,7 +109,7 @@ $module .= '
 			<div id="line1"></div>
 	
 			<p>
-				<label for="order_target">Destino desta Contribuição</label><br />
+				<label for="order_target">Personagem destino desta Contribuição</label><br />
 				<input name="order_target" size="40" type="text" value="" /> <br><em>(Preencha com o nome de um personagem de sua conta ou o nome do personagem um amigo caso seja um presente por exemplo.)</em>
 			</p>	
 		

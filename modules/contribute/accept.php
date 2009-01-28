@@ -19,7 +19,7 @@ if($contribute->load($_GET['id'], "id, target, period, target_account") and $con
 			$account = $core->loadClass("Account");
 			$account->load($contribute->get("target_account"), "premdays, lastday");
 			
-			$account->updatePremDays();
+			//$account->updatePremDays();
 			
 			$premdays = $account->get("premdays");
 			$lastday = $account->get("lastday");

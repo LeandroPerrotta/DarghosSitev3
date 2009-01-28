@@ -1,13 +1,13 @@
 <?
 
 	define(CONFIG_SITENAME, "Darghos Tenerian");
-	define(CONFIG_SITEEMAIL, "http://localhost/DarghosNew2.0");
+	define(CONFIG_SITEEMAIL, "http://tenerian.darghos.com.br");
 	
 	define(SERVER_ID, 1);
 
-	define(DB_TENERIAN_HOST, "localhost");
+	define(DB_TENERIAN_HOST, "localhost:3309");
 	define(DB_TENERIAN_USER, "root");
-	define(DB_TENERIAN_PASS, "");
+	define(DB_TENERIAN_PASS, "W2e8EQaR");
 	define(DB_TENERIAN_SCHEMA, "tenerian");
 	define(DB_WEBSITE_PREFIX, "wb_");
 	

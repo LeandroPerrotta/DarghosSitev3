@@ -5,7 +5,7 @@ if($post)
 	$account = $core->loadClass("Account");
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != $core->encrypt($post[2]))
+	if($account->get("password") != $strings->encrypt($post[2]))
 	{
 		$error = "Confirmação da senha atual falhou.";
 	}

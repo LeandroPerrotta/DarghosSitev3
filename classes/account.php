@@ -163,7 +163,7 @@ class Account
 	
 	function updatePremDays()
 	{
-		$daysToRemove = $this->data['lastday'] - time();
+		$daysToRemove = time() - $this->data['lastday'];
 		
 		if($daysToRemove >= $this->data['premdays'])
 		{
