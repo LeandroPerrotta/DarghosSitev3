@@ -93,7 +93,7 @@ if($strings->filterInputs())
 					$patch['file'] = $topic;
 				break;		
 
-				case "reject":
+				case "import":
 					$patch['file'] = $topic;
 				break;						
 

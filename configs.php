@@ -82,5 +82,6 @@
 	$_contribution['status'][0] = "Aguardando Pagamento.";
 	$_contribution['status'][1] = "Confirmado";
 	$_contribution['status'][2] = "Concluido";
+	$_contribution['status'][3] = "Cancelado";
 	
 ?>

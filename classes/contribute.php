@@ -153,6 +153,55 @@ class Contribute extends MySQL
 		return $this->data[$field];
 	}	
 	
+	function importPayments()
+	{
+		$query = $this->db->query("SELECT * FROM siteo.payments");
+		
+		while($fetch = $query->fetch())
+		{
+			if($fetch['period'] == "30" or $fetch['period'] == "60" or $fetch['period'] == "90" or $fetch['period'] == "180" or $fetch['period'] == "360")
+			{
+				if(strlower($fetch->server) == "tenerian")
+				{
+					global $_contribution;
+				
+					$type = ($fetch->method == 1) ? "PagSeguro" : "PayPal";
+					
+					if($fetch->status == 0) 
+						$status = 1;
+					elseif($fetch->status == 1)
+						$status = 2;
+					elseif($fetch->status == 2)
+						$status = 3;
+				
+					$this->getNewOrderNumber();
+					
+					$this->set("name", "Desconhecido");
+					$this->set("email", "Desconhecido");
+					$this->set("target", "Esta conta");
+					$this->set("type", $type);
+					$this->set("period", $fetch->period);
+					$this->set("cost", $_contribution[$type][$fetch->period]);
+					$this->set("server", SERVER_ID);
+					$this->set("generated_by", 0);
+					$this->set("generated_in", $fetch->activation);
+					$this->set("target_account", $fetch->account_id);	
+					$this->set("status", $status);	
+					$this->set("auth",  $fetch->auth);	
+					
+					$this->save();
+					
+					$this->erease();
+				}				
+			}
+		}
+	}
+	
+	function erease()
+	{
+		$this->data = array();
+	}
+	
 	function sendUrl()
 	{
 		global $_contribution;
