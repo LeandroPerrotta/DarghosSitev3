@@ -1,17 +1,20 @@
 <?
 class Core
 {
-	function mail($emailid, $to, $arg, $from = CONFIG_SITEEMAIL) 
+	function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";
 
-		$emailvalue = array();
-		foreach($arg as $value)
+		if($arg)
 		{
-			$emailvalue[] = $value;
+			$emailvalue = array();
+			foreach($arg as $value)
+			{
+				$emailvalue[] = $value;
+			}
+			
+			include "emails.php";		
 		}
-		
-		include "emails.php";		
 		
 		$mail = new PHPMailer();
 		

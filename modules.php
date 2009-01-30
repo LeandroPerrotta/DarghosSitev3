@@ -1,7 +1,21 @@
 <?
 list($module, $topic) = explode(".", $_GET['ref']);
 
-if($strings->filterInputs())
+$noInjection = false;
+
+if(!in_array($topic, $_inputsWhiteList))
+{
+	if($strings->filterInputs(true))
+	{
+		$noInjection = true;
+	}	
+}
+else
+{
+	$noInjection = true;
+}
+
+if($noInjection)
 {
 	$needLogin = false;
 
@@ -37,9 +51,24 @@ if($strings->filterInputs())
 				break;		
 
 				case "premium":
+					$patch['file'] = $topic;
+				break;		
+
+				case "changeemail":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;						
+				break;				
+
+				case "cancelchangeemail":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;	
+
+				case "changeinfos":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;					
+				
 
 				default:
 					$patch['dir'] = "errors";
@@ -56,12 +85,18 @@ if($strings->filterInputs())
 			switch($topic)
 			{
 				case "create":
+					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;
 				
 				case "view":
 					$patch['file'] = $topic;
-				break;					
+				break;			
+
+				case "edit":
+					$needLogin = true;		
+					$patch['file'] = $topic;
+				break;						
 
 				default:
 					$patch['dir'] = "errors";
@@ -78,24 +113,28 @@ if($strings->filterInputs())
 			switch($topic)
 			{
 				case "order":
+					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;		
 
 				case "confirm":
+					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;				
 
 				case "myorders":
+					$needLogin = true;
 					$patch['file'] = $topic;
 				break;		
 
 				case "accept":
+					$needLogin = true;
 					$patch['file'] = $topic;
 				break;		
 
-				case "import":
+				/*case "import":
 					$patch['file'] = $topic;
-				break;						
+				break;*/						
 
 				default:
 					$patch['dir'] = "errors";
@@ -122,6 +161,42 @@ if($strings->filterInputs())
 			}
 			
 		break;
+		
+		case "community":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "highscores":
+					$patch['file'] = $topic;
+				break;	
+
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;	
+
+		case "status":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "whoisonline":
+					$patch['file'] = $topic;
+				break;	
+
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;			
 		
 		default:
 			$patch['dir'] = "errors";

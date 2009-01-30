@@ -1,7 +1,7 @@
 <?
 class Character
 {
-	private $db, $data = array();
+	private $db, $data = array(), $skills = array();
 
 	function __construct()
 	{
@@ -36,6 +36,48 @@ class Character
 		{
 			return false;
 		}			
+	}
+	
+	function loadLastDeaths()
+	{
+		$query = $this->db->query("SELECT time, level, killed_by, is_player FROM player_deaths WHERE player_id = '".$this->data['id']."' AND time + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY time DESC");	
+		
+		if($query->numRows() != 0)
+		{	
+			$deathlist = array();
+			while($fetch = $query->fetch())
+			{	
+				$deathlist[] = array
+				(
+					"time" => $fetch->time,
+					"level" => $fetch->level,
+					"killed_by" => $fetch->killed_by,
+					"is_player" => $fetch->is_player
+				);	
+			}
+			
+			return $deathlist;
+		}	
+		else
+			return false;	
+	}
+	
+	function loadSkills()
+	{
+		$query = $this->db->query("SELECT value, skillid FROM player_skills WHERE player_id = '".$this->data['id']."'");	
+		
+		if($query->numRows() != 0)
+		{	
+			while($fetch = $query->fetch())
+			{
+				$this->skills[$fetch->skillid] = $fetch->value;	
+			}
+		}
+	}
+	
+	function getSkill($skillid)
+	{
+		return $this->skills[$skillid];
 	}
 	
 	function loadByName($player_name, $fields = null)

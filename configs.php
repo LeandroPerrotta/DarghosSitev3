@@ -1,13 +1,13 @@
 <?
 
 	define(CONFIG_SITENAME, "Darghos Tenerian");
-	define(CONFIG_SITEEMAIL, "http://tenerian.darghos.com.br");
+	define(CONFIG_SITEEMAIL, "http://localhost/DarghosNew2.0");
 	
 	define(SERVER_ID, 1);
 
-	define(DB_TENERIAN_HOST, "localhost:3309");
+	define(DB_TENERIAN_HOST, "localhost");
 	define(DB_TENERIAN_USER, "root");
-	define(DB_TENERIAN_PASS, "W2e8EQaR");
+	define(DB_TENERIAN_PASS, "");
 	define(DB_TENERIAN_SCHEMA, "tenerian");
 	define(DB_WEBSITE_PREFIX, "wb_");
 	
@@ -23,6 +23,9 @@
 	
 	define(ENCRYPTION_TYPE, "md5");
 	
+	define(DAYS_TO_CHANGE_EMAIL, 15);
+	define(SHOW_DEATHS_DAYS_AGO, 30);
+	
 	define(EMAIL_REGISTER, 1);
 	
 	define(CONTRIBUTE_EMAILADMIN, "premium@darghos.com");
@@ -37,6 +40,8 @@
 	define('SLOT_LEGS', 7);
 	define('SLOT_FEET', 8);
 	define('SLOT_AMMO', 10);		
+	
+	$_inputsWhiteList = array();
 	
 	$_vocation['no-vocation'] = 0;
 	$_vocation['sorcerer'] = 1;
@@ -60,6 +65,14 @@
 	$_townid[4] = "Thorn";
 	$_townid[5] = "Salazart";
 	$_townid[7] = "Northrend";
+	
+	$_skill['fist'] = 0;
+	$_skill['club'] = 1;
+	$_skill['sword'] = 2;
+	$_skill['axe'] = 3;
+	$_skill['distance'] = 4;
+	$_skill['shield'] = 5;
+	$_skill['fishing'] = 6;		
 	
 	$_sex['female'] = 0;
 	$_sex['male'] = 1;

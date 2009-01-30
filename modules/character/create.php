@@ -1,10 +1,14 @@
 <?
 $post = $core->extractPost();
+
+$account = $core->loadClass("Account");
+$account->load($_SESSION['login'][0], "premdays");	
+
 if($post)
 {	
 	$character = $core->loadClass("character");
 
-	if(!$post[0] or !$post[1] or !$post[2])
+	if(!$post[0] or !$post[1] or !$post[2] or !$post[3])
 	{
 		$error = "Preencha todos campos do formulario corretamente.";
 	}
@@ -94,6 +98,22 @@ if($post)
 			);					
 		}		
 	
+		foreach($_townid as $city_id => $city_name)
+		{
+			if(strtolower($city_name) == $post[3])
+				$city = $city_id;
+		}
+		
+		if($city)
+		{
+			if(($city == 2 or $city == 5 or $city == 7) and $account->get("premdays") == 0)
+			{
+				$city = 1;
+			}
+		}
+		else
+			$city = 1;
+		
 		$character->set("name", $post[0]);
 		$character->set("account_id", $_SESSION['login'][0]);
 		$character->set("group_id", 1);
@@ -107,10 +127,12 @@ if($post)
 		$character->set("mana", "35");
 		$character->set("manamax", "35");
 		$character->set("cap", "470");
+		$character->set("town_id", $city);
 		$character->set("looktype", $outfitType);
 		$character->set("conditions", null);
 		$character->set("guildnick", "");
 		$character->set("comment", "");
+		$character->set("created", time());
 		
 		$character->save();
 	
@@ -151,7 +173,7 @@ else
 		
 		';
 	}
-
+	
 $module .= '
 <form action="" method="post">
 	<fieldset>
@@ -177,7 +199,24 @@ $module .= '
 				<li><input type="radio" name="player_vocation" value="paladin" /> Paladin</li>
 				<li><input type="radio" name="player_vocation" value="knight" /> Knight</li>
 			</ul>
-		</p>			
+		</p>	
+
+		<p>
+			<label for="player_city">Residencia</label><br />
+			<ul id="pagelist">				
+				<li><input type="radio" name="player_city" value="quendor" /> Quendor</li>
+				<li><input type="radio" name="player_city" value="thorn" /> Thorn</li>';
+
+	if($account->get("premdays") != 0)
+	{
+				$module .= '
+				<li><input type="radio" name="player_city" value="aracura" /> Aracura</li>
+				<li><input type="radio" name="player_city" value="salazart" /> Salazart</li>
+				<li><input type="radio" name="player_city" value="northrend" /> Northrend</li>';
+	}			
+				
+			$module .= ' </ul>
+		</p>		
 		
 		<div id="line1"></div>
 		

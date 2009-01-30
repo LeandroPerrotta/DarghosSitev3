@@ -177,6 +177,35 @@ class Account
 		$this->data['lastday'] = time();
 	}
 	
+	function addEmailToChange($email)
+	{
+		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."emailstochange (account_id, email, date) values('{$this->data['id']}', '{$email}', '".(time() + (60 * 60 * 24 * DAYS_TO_CHANGE_EMAIL))."')");	
+	}
+	
+	function getEmailToChange()
+	{
+		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."emailstochange WHERE account_id = '{$this->data['id']}' ORDER BY id DESC");
+		
+		if($query->numRows() != 0)
+		{
+			$fetch = $query->fetch();
+			
+			$email = array(
+				"email" => "{$fetch->email}",
+				"date" => "{$fetch->date}"
+			);
+			
+			return $email;
+		}
+		else
+			return false;
+	}
+	
+	function cancelEmailToChange()
+	{
+		$this->db->query("DELETE FROM ".DB_WEBSITE_PREFIX."emailstochange WHERE account_id = '{$this->data['id']}'");
+	}
+	
 	function set($field, $value)
 	{
 		$this->data[$field] = $value;

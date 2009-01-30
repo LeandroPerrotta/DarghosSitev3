@@ -24,8 +24,11 @@ class Strings
 		{
 			foreach($_GET as $post => $value)
 			{
-				if(!$this->SQLInjection($value))
-					return false;
+				if($post != "ref")
+				{
+					if(!$this->SQLInjection($value))
+						return false;
+				}	
 			}		
 		}
 

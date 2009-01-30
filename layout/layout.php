@@ -52,6 +52,7 @@
 							
 								<li><a href="?ref=account.changepassword">Mudar Senha</a></li>
 								<li><a href="?ref=account.changeemail">Mudar E-mail</a></li>
+								<li><a href="?ref=account.changeinfos">Mudar Informações</a></li>
 								<li><a href="?ref=account.logout">Log-out</a></li>';
 							}							
 							?>	
@@ -85,6 +86,7 @@
 								<ul>								
 								
 									<li><a href="?ref=character.create">Criar</a></li>
+									<li><a href="?ref=character.edit">Editar</a></li>
 									<li><a href="?ref=character.delete">Deletar</a></li>
 								
 								</ul>
@@ -132,7 +134,17 @@
 								<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
 							</ul>
 						</li>	
-					</ul>						
+					</ul>	
+					
+					<ul id="status">
+						<li>
+							<p>status</p>
+							
+							<ul>
+								<li><a href="?ref=status.whoisonline">Who Is Online</a></li>
+							</ul>
+						</li>	
+					</ul>										
 				</div>		
 				
 				<div id="content">
