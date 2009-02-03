@@ -38,7 +38,7 @@ if($_POST)
 	{
 		$account->set("email", $_POST['account_email']);
 		$account->set("password", $strings->encrypt($password));
-		$account->set("name", $number);
+		//$account->set("name", $number);
 		$account->set("creation", time());
 		
 		$account->save();

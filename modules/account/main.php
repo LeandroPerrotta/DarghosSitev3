@@ -5,12 +5,15 @@ $account->load($_SESSION['login'][0], "password");
 $contribute = $core->loadClass("Contribute");
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
-foreach($oders as $orderId);
+if(is_array($oders))
 {
-	$contribute->load($orderId, "status");
-	
-	if($contribute->get("status") == 1)
-		$confirmed++;
+	foreach($oders as $orderId);
+	{
+		$contribute->load($orderId, "status");
+		
+		if($contribute->get("status") == 1)
+			$confirmed++;
+	}
 }
 
 
