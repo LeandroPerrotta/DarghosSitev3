@@ -23,7 +23,7 @@
 								<li><a href="?ref=news.files">Arquivo de Notícias</a></li>
 								<li><a href="?ref=general.about">Sobre o Darghos</a></li>
 								<li><a href="?ref=general.faq">Darghos FAQ</a></li>
-								<li><a href="?ref=general.downloads">Downloads</a></li>
+								<li><a href="?ref=general.howplay">Como Jogar?</a></li>
 							</ul>
 						</li>	
 					</ul>	
@@ -50,6 +50,7 @@
 								
 								<ul>								
 							
+								<li><a href="?ref=account.main">Main</a></li>
 								<li><a href="?ref=account.changepassword">Mudar Senha</a></li>
 								<li><a href="?ref=account.changeemail">Mudar E-mail</a></li>
 								<li><a href="?ref=account.changeinfos">Mudar Informações</a></li>

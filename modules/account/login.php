@@ -4,7 +4,11 @@ if($post)
 {
 	$account = $core->loadClass("Account");
 	
-	if(($account->load($post[0], "password")) and ($account->get("password") == $strings->encrypt($post[1])))
+	if(!$strings->SQLInjection($post[0]))
+	{
+		$error = "Numero da conta ou senha incorretos.";
+	}
+	elseif(($account->load($post[0], "password")) and ($account->get("password") == $strings->encrypt($post[1])))
 	{
 		$_SESSION['login'][] = $post[0];
 		$_SESSION['login'][] = $strings->encrypt($post[1]);

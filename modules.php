@@ -69,7 +69,19 @@ if($noInjection)
 					$patch['file'] = $topic;
 				break;					
 				
+				case "recovery":
+					$patch['file'] = $topic;
+				break;	
 
+				case "advanced_recovery":
+					$patch['file'] = $topic;
+				break;					
+				
+				case "secretkey":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;					
+				
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -96,7 +108,17 @@ if($noInjection)
 				case "edit":
 					$needLogin = true;		
 					$patch['file'] = $topic;
-				break;						
+				break;			
+
+				case "delete":
+					$needLogin = true;		
+					$patch['file'] = $topic;
+				break;		
+
+				case "undelete":
+					$needLogin = true;		
+					$patch['file'] = $topic;
+				break;					
 
 				default:
 					$patch['dir'] = "errors";
@@ -171,6 +193,14 @@ if($noInjection)
 				case "highscores":
 					$patch['file'] = $topic;
 				break;	
+				
+				case "lastdeaths":
+					$patch['file'] = $topic;
+				break;			
+
+				case "houses":
+					$patch['file'] = $topic;
+				break;							
 
 				default:
 					$patch['dir'] = "errors";
@@ -187,6 +217,24 @@ if($noInjection)
 			switch($topic)
 			{
 				case "whoisonline":
+					$patch['file'] = $topic;
+				break;	
+
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;			
+		
+		case "general":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "howplay":
 					$patch['file'] = $topic;
 				break;	
 

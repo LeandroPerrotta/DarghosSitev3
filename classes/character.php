@@ -62,6 +62,18 @@ class Character
 			return false;	
 	}
 	
+	function getHouse()
+	{
+		$query = $this->db->query("SELECT id FROM houses WHERE owner = '".$this->data['id']."'");
+		
+		if($query->numRows() != 0)
+		{
+			return $query->fetch()->id;
+		}
+		else
+			return false;
+	}
+	
 	function loadSkills()
 	{
 		$query = $this->db->query("SELECT value, skillid FROM player_skills WHERE player_id = '".$this->data['id']."'");	
@@ -154,5 +166,27 @@ class Character
 	{	
 		$this->db->query("INSERT INTO `player_items` VALUES ('".$this->data['id']."', '".$slot_pid."', '".$slot."', '".$itemid."', '".$count."', '', '', '0')");
 	}	
+	
+	function deletionStatus()
+	{
+		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."playerdeletion WHERE player_id = '{$this->data['id']}'");
+		
+		if($query->numRows() != 0)
+		{
+			return $query->fetch()->time;
+		}	
+		else
+			return false;
+	}
+	
+	function cancelDeletion()
+	{
+		$this->db->query("DELETE FROM ".DB_WEBSITE_PREFIX."playerdeletion WHERE player_id = '{$this->data['id']}'");
+	}
+	
+	function addToDeletion()
+	{
+		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."playerdeletion (player_id, time) values('{$this->data['id']}','".(time() + (60 * 60 * 24 * DAYS_TO_DELETE_CHARACTER))."')");
+	}		
 }
 ?>

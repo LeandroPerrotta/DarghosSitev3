@@ -17,6 +17,7 @@ if($post or $get)
 		$account = $core->loadClass("Account");
 		$account->load($character->get("account_id"), "premdays, real_name, location, url");
 		
+		$houseid = $character->getHouse();
 		$lastlogin = ($character->get("lastlogin")) ? $core->formatDate($character->get("lastlogin")) : "Nunca entrou.";
 		
 		$premium = ($account->get("premdays") != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
@@ -31,8 +32,17 @@ if($post or $get)
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
 				<th colspan='2'>Personagem</th>
-			</tr>		
+			</tr>";		
 
+			if($character->deletionStatus())
+			{		
+				$module .= "
+				<tr>
+					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem está agendado para ser deletado no dia {$core->formatDate($character->deletionStatus())}.</font></td>
+				</tr>";				
+			}
+		
+			$module .= "
 			<tr>
 				<td width='15%'><b>Nome:</b></td> <td>{$character->get("name")}</td>
 			</tr>
@@ -53,6 +63,17 @@ if($post or $get)
 				<td><b>Residencia:</b></td> <td>{$_townid[$character->get("town_id")]}</td>
 			</tr>";	
 
+			if($houseid)
+			{
+				$houses = $core->loadClass("Houses");
+				$houses->load($houseid);				
+				
+				$module .= "
+				<tr>
+					<td><b>Casa</b></td> <td>{$houses->get("name")} ({$_townid[$houses->get("townid")]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}</td>
+				</tr>";						
+			}
+			
 			if($character->get("comment"))
 			{
 				$module .= "

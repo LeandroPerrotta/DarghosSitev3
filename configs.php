@@ -1,13 +1,13 @@
 <?
 
 	define(CONFIG_SITENAME, "Darghos Tenerian");
-	define(CONFIG_SITEEMAIL, "http://tenerian.darghos.com.br");
+	define(CONFIG_SITEEMAIL, "http://localhost/DarghosNew2.0");
 	
 	define(SERVER_ID, 1);
 
-	define(DB_TENERIAN_HOST, "localhost:3309");
+	define(DB_TENERIAN_HOST, "localhost");
 	define(DB_TENERIAN_USER, "root");
-	define(DB_TENERIAN_PASS, "W2e8EQaR");
+	define(DB_TENERIAN_PASS, "");
 	define(DB_TENERIAN_SCHEMA, "tenerian");
 	define(DB_WEBSITE_PREFIX, "wb_");
 	
@@ -21,12 +21,20 @@
 	define(SMTP_USER, "darghos.net@noip-smtp");
 	define(SMTP_PASS, "***REMOVED***");
 	
+	define(DIR_DATA, "C:/Server/New 8.11/data2/");
+	define(HOUSES_FILE, "world/test-house.xml");
+	
 	define(ENCRYPTION_TYPE, "md5");
 	
 	define(DAYS_TO_CHANGE_EMAIL, 15);
+	define(DAYS_TO_DELETE_CHARACTER, 30);
 	define(SHOW_DEATHS_DAYS_AGO, 30);
 	
 	define(EMAIL_REGISTER, 1);
+	define(EMAIL_RECOVERY_ACCOUNT, 2);
+	define(EMAIL_RECOVERY_PASSWORDKEY, 3);
+	define(EMAIL_RECOVERY_BOTH, 4);
+	define(EMAIL_RECOVERY_PASSWORD, 5);
 	
 	define(CONTRIBUTE_EMAILADMIN, "premium@darghos.com");
 	define(CONTRIBUTE_PAYPALURL, "https://www.paypal.com/cgi-bin/webscr");
@@ -41,7 +49,7 @@
 	define('SLOT_FEET', 8);
 	define('SLOT_AMMO', 10);		
 	
-	$_inputsWhiteList = array();
+	$_inputsWhiteList = array("login");
 	
 	$_vocation['no-vocation'] = 0;
 	$_vocation['sorcerer'] = 1;

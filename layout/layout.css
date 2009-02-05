@@ -205,6 +205,7 @@ input fieldset .button {
 /* BOXES */
 
 #navigation{
+	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -221,13 +222,9 @@ input fieldset .button {
 	padding: 2px 0px 2px 0px;	
 }
 
-#navigation li:hover{
-	width: 145px;	
-}
-
 #navigation a{
-	color: #555555;
-	padding: 2px 0px 2px 0px;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 
@@ -263,7 +260,8 @@ input fieldset .button {
 }
 
 #account a{
-	color: #d4a069;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 
@@ -299,7 +297,8 @@ input fieldset .button {
 }
 
 #community a{
-	color: #e2ce49;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 
@@ -335,7 +334,8 @@ input fieldset .button {
 }
 
 #characters a{
-	color: #f15353;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 
@@ -371,7 +371,8 @@ input fieldset .button {
 }
 
 #mycharacters a{
-	color: #62a8f7;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 
@@ -407,7 +408,8 @@ input fieldset .button {
 }
 
 #premium a{
-	color: #72c45c;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 
@@ -443,7 +445,8 @@ input fieldset .button {
 }
 
 #status a{
-	color: #69587a;
+	font: normal 10px Verdana, sans-serif;
+	color: #7b7b7b;
 	text-decoration: none;
 }
 

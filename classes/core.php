@@ -1,6 +1,14 @@
 <?
 class Core
 {
+	private $db;
+
+	function __construct()
+	{
+		global $db_tenerian;
+		$this->db = $db_tenerian;
+	}	
+	
 	function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";
@@ -76,6 +84,30 @@ class Core
 			$url = CONFIG_SITEEMAIL."/".$url;
 	
 		header("Location: ".$url." ");
+	}	
+	
+	function getIpTries()
+	{
+		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
+		
+		if($query->numRows() != 0)
+		{
+			return $query->fetch()->tries;
+		}
+		else
+			false;
+	}
+	
+	function increaseIpTries()
+	{
+		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
+		
+		if($query->numRows() != 0)
+		{
+			$this->db->query("UPDATE ".DB_WEBSITE_PREFIX."iptries SET tries = tries + 1, last_trie = '".time()."' WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");	
+		}
+		else
+			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
 }		
 ?>

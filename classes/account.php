@@ -206,6 +206,50 @@ class Account
 		$this->db->query("DELETE FROM ".DB_WEBSITE_PREFIX."emailstochange WHERE account_id = '{$this->data['id']}'");
 	}
 	
+	function setPasswordKey($key)
+	{
+		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changepasswordkeys (account_id, password_key, time) values('{$this->data['id']}', '{$key}', '".time()."')");
+	}
+	
+	function checkChangePasswordKey($key)
+	{
+		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."changepasswordkeys WHERE password_key = '".$key."'");
+		
+		if($query->numRows() != 0)
+		{
+			$this->load($query->fetch()->account_id, "password, email");	
+			$this->db->query("DELETE FROM ".DB_WEBSITE_PREFIX."changepasswordkeys WHERE account_id = '{$this->data['id']}'");
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function getSecretKey()
+	{
+		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."secretkeys WHERE account_id = '".$this->data['id']."'");
+		
+		if($query->numRows() != 0)
+		{
+			$fetch = $query->fetch();
+			
+			$secretKey["key"] =$fetch->secret_key;
+			$secretKey["lembrete"] = $fetch->lembrete;
+			
+			return $secretKey;
+		}
+		else
+			return false;
+	}
+
+	function setSecretKey($key, $lembrete)
+	{
+		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."secretkeys (secret_key, lembrete, account_id) values('{$key}', '{$lembrete}', '{$this->data['id']}')");
+	}	
+	
 	function set($field, $value)
 	{
 		$this->data[$field] = $value;
