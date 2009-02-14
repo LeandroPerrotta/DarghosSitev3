@@ -259,5 +259,25 @@ class Account
 	{
 		return $this->data[$field];
 	}
+
+	function getBans()
+	{
+		$query = $this->db->query("SELECT * FROM `bans` WHERE (`account` = '{$this->data["id"]}')");
+		$fetch = $query->fetch();
+		
+		if($query->numRows() != 0)
+			{
+			$bans = array();
+			$bans["type"] = $fetch->type;
+			$bans["time"] = $fetch->time;
+			$bans["reason"] = $fetch->reason_id;
+			$bans["action"] = $fetch->action_id;
+			return $bans;
+			}
+		else
+			return false;
+	}
+	
+
 }
 ?>
