@@ -118,7 +118,7 @@ if($post or $get)
 				$module .= "
 				<tr>
 					<td><b>{$type}</b></td><td><font style='color: red; '>{$action} por {$reason} até o dia ".$core->formatDate($bans['time']).".</td>
-				</tr>";		
+				</tr>";
 				
 			}
 			

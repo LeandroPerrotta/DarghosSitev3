@@ -1,10 +1,18 @@
 <?
 $account = $core->loadClass("Account");
-$account->load($_SESSION['login'][0], "password");
+$account->load($_SESSION['login'][0], "password, premdays, warnings, email, creation, real_name");
 $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
 $character = $core->loadClass("Character");
+
+$premium = ($account->get("premdays") > 1) ? $account->get("premdays")." dias restantes" : "Você não possui dias de premium account";	
+$warns = ($account->get("warnings") > 1) ? "Sua conta possui".$account->get("warnings") : "Sua conta não possui warnings";	
+$email = ($account->get("email")) ?	$account->get("email") : "Sua conta não possui warnings";	
+$creation = ($account->get("creation"));	
+$lastlogin = ($account->get("lastday"));
+$realname = ($account->get("real_name")) ?	$account->get("real_name") : "Sem Nome ¬¬'";
+
 
 $contribute = $core->loadClass("Contribute");
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
@@ -31,8 +39,9 @@ if(is_array($player_list))
 	}
 }
 
-$module .= '
-<p>Seja bem vindo a sua conta. Você pode efetuar muitas operações como criar um personagem, mudar sua senha ou obter a conta premium atravez do menu minha conta ao lado esquerdo.';
+
+$module .= "
+<p>Seja bem vindo a sua conta, {$realname}. Você pode efetuar muitas operações como criar um personagem, mudar sua senha ou obter a conta premium atravez do menu minha conta ao lado esquerdo.";
 
 if(is_array($newemail = $account->getEmailToChange()))
 {
@@ -59,5 +68,29 @@ if(isset($charDel))
 		$module .= '
 		<p><font style="color: red; font-weight: bold;">Atenção:</font> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.$core->formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.';
 	}
-}
+}		
+		$module .= "
+		<p><table cellspacing='0' cellpadding='0' id='table'>
+			<tr>
+				<th colspan='2'>Informações da conta</th>
+			</tr>
+			<tr>
+				<td><font style='color: #36951d; font-weight: bold;'>Email:</td><td>{$email}</td>
+			</tr>			
+			<tr>
+				<td width='25%'><font style='color: #36951d; font-weight: bold;'>Conta premium:</td><td>{$premium}</td>
+			</tr>
+			<tr>
+				<td><font style='color: #36951d; font-weight: bold;'>Warnings:</td><td>{$warns}</td>
+			</tr>
+			<tr>
+				<td><font style='color: #36951d; font-weight: bold;'>Criada:</td><td>".$core->formatDate($creation)."</td>
+			</tr>
+			<tr>
+				<td><font style='color: #36951d; font-weight: bold;'>Ultimo login:</td><td>".$core->formatDate($lastlogin)."</td>
+			</tr>
+			</table></p>";	
+				
+
+
 ?>
