@@ -21,7 +21,7 @@ class Core
 				$emailvalue[] = $value;
 			}
 			
-			include "emails.php";		
+			include "configs/emails.php";		
 		}
 		
 		$mail = new PHPMailer();

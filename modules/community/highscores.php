@@ -42,12 +42,12 @@ $module .= '
 
 if($skill == "experience" or $skill == "maglevel")
 {
-	$query = $db_tenerian->query("SELECT id FROM players WHERE group_id < 3 ORDER BY {$skill} DESC LIMIT 100");
+	$query = $db_tenerian->query("SELECT id FROM players WHERE group_id < 3 AND lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." ORDER BY {$skill} DESC LIMIT 100");
 }
 else
 {
 	$skillid = $_skill[$skill];
-	$query = $db_tenerian->query("SELECT player.id FROM players as player, player_skills as skill WHERE player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 ORDER BY skill.value DESC LIMIT 100");
+	$query = $db_tenerian->query("SELECT player.id FROM players as player, player_skills as skill WHERE player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 AND player.lastlogin < '".(time() - (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS."))."' ORDER BY skill.value DESC LIMIT 100");
 }
 
 $character = $core->loadClass("Character");

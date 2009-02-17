@@ -19,7 +19,6 @@ if($post or $get)
 		
 		$bans = $account->getBans();
 		
-		$acc_id = ($account->get("id"));
 		$houseid = $character->getHouse();
 		$lastlogin = ($character->get("lastlogin")) ? $core->formatDate($character->get("lastlogin")) : "Nunca entrou.";
 		
@@ -107,25 +106,26 @@ if($post or $get)
 
 			<tr>
 				<td><b>Location:</b></td> <td>{$location}</td>
-			</tr>";
+			</tr>
 			
-			if (is_array($bans))
+			<tr>
+				<td><b>Website:</b></td> <td>{$url}</td>
+			</tr>			
+			";
+			
+			if(is_array($bans))
 			{	
-				$type = $bantypeid[$bans['type']];
-				$action = $banactionid[$bans['action']];
+				$type = $_bantypeid[$bans['type']];
+				$action = $_banactionid[$bans['action']];
 				$reason = $_banreasonid[$bans['reason']];
 				
 				$module .= "
 				<tr>
 					<td><b>{$type}</b></td><td><font style='color: red; '>{$action} por {$reason} até o dia ".$core->formatDate($bans['time']).".</td>
 				</tr>";
-				
 			}
 			
-			";
-			<tr>
-				<td><b>Website:</b></td> <td>{$url}</td>
-			</tr>				
+		$module .= "				
 		</table>";
 
 		if(is_array($deathlist))

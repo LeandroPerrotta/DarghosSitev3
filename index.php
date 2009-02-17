@@ -6,7 +6,7 @@ date_default_timezone_set("America/Sao_Paulo");
 
 session_start();
 
-include "configs.php";
+include "configs/index.php";
 
 include "classes/mysql.php";
 include "classes/core.php";

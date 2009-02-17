@@ -266,14 +266,15 @@ class Account
 		$fetch = $query->fetch();
 		
 		if($query->numRows() != 0)
-			{
+		{
 			$bans = array();
 			$bans["type"] = $fetch->type;
 			$bans["time"] = $fetch->time;
 			$bans["reason"] = $fetch->reason_id;
 			$bans["action"] = $fetch->action_id;
+			
 			return $bans;
-			}
+		}
 		else
 			return false;
 	}

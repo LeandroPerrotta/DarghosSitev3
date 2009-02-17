@@ -88,6 +88,7 @@
 								
 									<li><a href="?ref=character.create">Criar</a></li>
 									<li><a href="?ref=character.edit">Editar</a></li>
+									<li><a href="?ref=character.itemshop">Item Shop</a></li>
 									<li><a href="?ref=character.delete">Deletar</a></li>
 								
 								</ul>

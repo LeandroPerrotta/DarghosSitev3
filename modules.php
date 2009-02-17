@@ -80,7 +80,12 @@ if($noInjection)
 				case "secretkey":
 					$needLogin = true;	
 					$patch['file'] = $topic;
-				break;					
+				break;
+
+				case "itemshop_log":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;				
 				
 				default:
 					$patch['dir'] = "errors";
@@ -116,6 +121,11 @@ if($noInjection)
 				break;		
 
 				case "undelete":
+					$needLogin = true;		
+					$patch['file'] = $topic;
+				break;		
+
+				case "itemshop":
 					$needLogin = true;		
 					$patch['file'] = $topic;
 				break;					
