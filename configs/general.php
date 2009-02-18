@@ -42,6 +42,8 @@ $_sexid[1] = "Masculino";
 $_itemshopstatus[0] = "Aguardando log-in";
 $_itemshopstatus[1] = "Recebido";	
 
+$_contribution['emailadmin'] = (date("d", time()) <= 15) ? "premium@darghos.com" : "admin@darghos.com";
+
 $_contribution['PagSeguro']["30"] = "R$ 14.55";
 $_contribution['PagSeguro']["60"] = "R$ 25.55";
 $_contribution['PagSeguro']["90"] = "R$ 35.55";

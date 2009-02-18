@@ -233,9 +233,9 @@ class Contribute extends MySQL
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_value = str_replace(",", ".", $price[1]);			
 			
-			return '
+			$form = '
 				<form target="pagseguro" action="'.CONTRIBUTE_PAGSEGUROURL.'" method="post">
-				<input type="hidden" name="email_cobranca" value="'.CONTRIBUTE_EMAILADMIN.'">
+				<input type="hidden" name="email_cobranca" value="'.$_contribution['emailadmin'].'">
 				<input type="hidden" name="tipo" value="CP">
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="item_id_1" value="1">
@@ -246,8 +246,10 @@ class Contribute extends MySQL
 				<input type="hidden" name="ref_transacao" value="REF#'.$this->data['id'].'">
 				
 				<input type="submit" value="Finalizar" />	
-				</form>
-			';	
+				</form>			
+			';
+			
+			return $form;	
 		}		
 	}
 }

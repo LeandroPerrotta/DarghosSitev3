@@ -23,6 +23,7 @@ if($_SESSION['contribute'])
 	$contribute->set("generated_by", $_SESSION['login'][0]);
 	$contribute->set("generated_in", time());
 	$contribute->set("target_account", $target_account);
+	$contribute->set("email_vendor", $_contribution['emailadmin']);
 	
 	$contribute->save();
 

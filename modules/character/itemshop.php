@@ -118,7 +118,7 @@ if($_GET['name'])
 					';
 					
 					
-					if($fetch = $query->fetch())
+					while($fetch = $query->fetch())
 					{
 						$module .=	'
 							<tr>
