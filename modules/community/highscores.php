@@ -14,10 +14,12 @@ else
 }
 
 $module .= '
+<p> Este highscores mostra apenas personagens <b>ativos</b> no jogo (Apenas os que não estão inativos a menos de 7 dias atrás).
 <form action="" method="post">
+	
 	<fieldset>
-		
 		<p>
+		
 			<label for="skill">Tipo de Habilidade</label><br />
 			<select name="skill">
 				<option '.(($skill == "experience") ? 'selected' : null).' value="experience">Nível de Expêriencia</option>
