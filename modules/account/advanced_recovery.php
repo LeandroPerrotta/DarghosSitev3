@@ -16,11 +16,20 @@ if($_SESSION['recovery'])
 	{
 		if($post)
 		{	
+			$postSecretKey = $post[2];
+			$postEmail = $post[3];
+				
+			if($secretkey["lembrete"] == "default")
+			{
+				$postSecretKey = $post[1];
+				$postEmail = $post[2];				
+			}
+		
 			if($core->getIpTries() >= 3)
 			{
 				$error = "Está operação está bloqueada, por favor aguarde 24 horas após a ultima tentativa.";
 			}
-			elseif($post[2] != $secretkey['key'])
+			elseif($postSecretKey != $secretkey['key'])
 			{
 				$core->increaseIpTries();
 				
@@ -29,22 +38,22 @@ if($_SESSION['recovery'])
 				else
 					$error = "Você efetuou três tentativas erradas desta operação, por motivos de segurança este recurso estará bloqueado pelas proximas 24 horas.";
 			}
-			elseif($chkEmail->loadByEmail($post[3]))
+			elseif($chkEmail->loadByEmail($postEmail))
 			{
 				$error = "Este e-mail já esta em uso por outra conta em nosso banco de dados.";
 			}
-			elseif(!$strings->validEmail($post[3]))
+			elseif(!$strings->validEmail($postEmail))
 			{
 				$error = "Este não é um e-mail valido.";
 			}
 			else
 			{
-				$account->set("email", $post[3]);
+				$account->set("email", $postEmail);
 				$account->save();
 				
 				$success = "
 				<p>Caro jogador,</p>
-				<p>O e-mail registrado em sua conta foi modificado para {$post[3]} ultilizando sua chave secreta com sucesso!</p>
+				<p>O e-mail registrado em sua conta foi modificado para {$postEmail} ultilizando sua chave secreta com sucesso!</p>
 				<p>Tenha um bom jogo!</p>
 				";		
 			}

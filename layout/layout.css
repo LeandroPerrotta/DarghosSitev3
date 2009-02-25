@@ -219,10 +219,11 @@ input fieldset .button {
 
 #navigation li{
 	list-style: none;
-	padding: 2px 0px 2px 0px;	
 }
 
 #navigation a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -231,7 +232,6 @@ input fieldset .button {
 #navigation a:hover{
 	background-color: #6e6d6d;	
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #navigation p{
@@ -256,10 +256,11 @@ input fieldset .button {
 
 #account li{
 	list-style: none;
-	padding: 2px 0px 2px 0px;	
 }
 
 #account a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -268,7 +269,6 @@ input fieldset .button {
 #account a:hover{
 	background-color: #c5843f;
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #account p{
@@ -293,10 +293,11 @@ input fieldset .button {
 
 #community li{
 	list-style: none;
-	padding: 2px 0px 2px 0px;	
 }
 
 #community a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -305,7 +306,6 @@ input fieldset .button {
 #community a:hover{
 	background-color: #d3b803;
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #community p{
@@ -330,10 +330,11 @@ input fieldset .button {
 
 #characters li{
 	list-style: none;
-	padding: 2px 0px 2px 0px;	
 }
 
 #characters a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -342,7 +343,6 @@ input fieldset .button {
 #characters a:hover{
 	background-color: #e50c0c;
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #characters p{
@@ -366,11 +366,12 @@ input fieldset .button {
 } 
 
 #mycharacters li{
-	list-style: none;
-	padding: 2px 0px 2px 0px;	
+	list-style: none;	
 }
 
 #mycharacters a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -379,7 +380,6 @@ input fieldset .button {
 #mycharacters a:hover{
 	background-color: #1572da;
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #mycharacters p{
@@ -404,10 +404,11 @@ input fieldset .button {
 
 #premium li{
 	list-style: none;
-	padding: 2px 0px 2px 0px;	
 }
 
 #premium a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -416,7 +417,6 @@ input fieldset .button {
 #premium a:hover{
 	background-color: #36951d;
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #premium p{
@@ -441,10 +441,11 @@ input fieldset .button {
 
 #status li{
 	list-style: none;
-	padding: 2px 0px 2px 0px;	
 }
 
 #status a{
+	display: block;
+	padding: 4px 0px 4px 0px;
 	font: normal 10px Verdana, sans-serif;
 	color: #7b7b7b;
 	text-decoration: none;
@@ -453,7 +454,6 @@ input fieldset .button {
 #status a:hover{
 	background-color: #431177;
 	color: #FFF;
-	padding: 2px 0px 2px 0px;
 }
 
 #status p{
