@@ -2,7 +2,7 @@
 $contribute = $core->loadClass("Contribute");
 $post = $core->extractPost();
 
-if($contribute->load($_GET['id'], "id, target, period, target_account") and $contribute->get("target_account") == $_SESSION['login'][0])
+if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
 {
 	if($post)
 	{

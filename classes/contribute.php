@@ -11,7 +11,7 @@ class Contribute extends MySQL
 	
 	function getOrdersListByAccount($account_id)
 	{
-		$query = $this->db->query("SELECT id FROM orders WHERE target_account = '".$account_id."' and status < 3 ORDER BY generated_in DESC");
+		$query = $this->db->query("SELECT id FROM orders WHERE target_account = '".$account_id."' and status < 3 and server = '".SERVER_ID."' ORDER BY generated_in DESC");
 		
 		if($query->numRows() != 0)
 		{
