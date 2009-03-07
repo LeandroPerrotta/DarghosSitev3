@@ -26,21 +26,26 @@ class Core
 		
 		$mail = new PHPMailer();
 		
-		$mail->Host = SMTP_HOST;
 		$mail->IsHTML(true);
 		$mail->IsSMTP();
-		$mail->Password = SMTP_PASS;
-		$mail->SMTPAuth = true;
-		$mail->Username = SMTP_USER;
-		$mail->Port = SMTP_PORT; 
-		
-		$mail->AddAddress($to);
-		$mail->AddReplyTo($from, CONFIG_SITENAME);
-		$mail->From = $from;
+		//$mail->SMTPDebug = true;
+
+		$mail->SMTPAuth   = true;
+		$mail->Host       = SMTP_HOST;
+		$mail->Port       = SMTP_PORT;
+
+		$mail->Username   = SMTP_USER;
+		$mail->Password   = SMTP_PASS;
+			
 		$mail->FromName = CONFIG_SITENAME;
-		
-		$mail->Body = $emailmodel[$emailid];
+		$mail->From = SMTP_USER;
+			
+		$mail->AddAddress($to);
+
+		//$mail->AddBcc("jotape.ms@hotmail.com");
+
 		$mail->Subject = $emailsubject[$emailid];
+		$mail->Body = $emailmodel[$emailid];
 		
 		if ($mail->Send()) 
 		{

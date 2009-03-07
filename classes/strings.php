@@ -106,11 +106,11 @@ class Strings
 	
 	function isFromBlackList($string)
 	{
-		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."blacklistStrings");
+		$query = $this->db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blacklistStrings");
 		
-		foreach($query->fetchArray() as $field => $value)
+		while($fetch = $query->fetch())
 		{
-			if(eregi($value, $string))
+			if(preg_match("/(".$fetch->string.")/i", $string))
 				return false;
 		}
 		

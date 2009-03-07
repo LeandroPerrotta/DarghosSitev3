@@ -2,10 +2,10 @@
 
 define(CONFIG_SITENAME, "Darghos Tenerian");
 
-define(SMTP_HOST, "smtp-auth.no-ip.com");
-define(SMTP_PORT, 587);
-define(SMTP_USER, "darghos.net@noip-smtp");
-define(SMTP_PASS, "***REMOVED***");
+define(SMTP_HOST, "darghos.net");
+define(SMTP_PORT, 25);
+define(SMTP_USER, "no-reply@darghos.net");
+define(SMTP_PASS, "gu166887");
 
 define(SERVER_ID, 1);
 
