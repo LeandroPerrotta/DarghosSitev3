@@ -248,13 +248,17 @@ if($noInjection)
 					$patch['file'] = $topic;
 				break;	
 
+				case "emailmarketing":
+					$patch['file'] = $topic;
+				break;					
+				
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
 				break;					
 			}
 			
-		break;			
+		break;
 		
 		default:
 			$patch['dir'] = "errors";

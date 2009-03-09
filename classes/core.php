@@ -103,6 +103,30 @@ class Core
 			false;
 	}
 	
+	function getGlobalValue($field)
+	{
+		$query = $this->db->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
+		
+		if($query->numRows() != 0)
+		{
+			$fetch = $query->fetch();
+			
+			return $fetch->value;
+		}
+		else
+			return false;
+	}
+	
+	function setGlobalValue($field, $value)
+	{
+		$query = $this->db->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
+		
+		if($query->numRows() != 0)
+			$this->db->query("UPDATE ".DB_WEBSITE_PREFIX."global SET value = '{$value}' WHERE field = '{$field}'");
+		else
+			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."global (`field`, `value`) values('{$field}', '{$value}')");
+	}	
+	
 	function increaseIpTries()
 	{
 		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
