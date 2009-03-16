@@ -167,7 +167,7 @@ if($_GET['name'])
 		</table>
 		";
 		
-		if($_SESSION['login'] and $accountLevel <= 2)
+		if($_SESSION['login'] and $accountLevel and $accountLevel <= 2)
 		{
 			$module .= "
 				<p>
