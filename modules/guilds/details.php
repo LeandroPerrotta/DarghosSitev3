@@ -147,8 +147,6 @@ if($_GET['name'])
 						<td><a href='?ref=character.view&name=".$player_name."'>".$player_name."</a></td> <td>{$core->formatDate($invite_date)}</td>
 					</tr>	
 				";	
-	
-				$show_rank[$guild_value['rank']] = false;
 
 				if($_SESSION['login'] and in_array($player_name, $character_listByName))
 				{

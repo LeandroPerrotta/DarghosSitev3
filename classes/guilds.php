@@ -128,12 +128,13 @@ class Guilds
 		
 		if($invites_query->numRows() != 0)
 		{
-			$invites_fetch = $invites_query->fetch();
-			
-			$name_query = $this->db->query("SELECT name FROM players WHERE id = '{$invites_fetch->player_id}'");
-			$name_fetch = $name_query->fetch();
-			
-			$this->invites[$name_fetch->name] = $invites_fetch->time;
+			while($invites_fetch = $invites_query->fetch())
+			{
+				$name_query = $this->db->query("SELECT name FROM players WHERE id = '{$invites_fetch->player_id}'");
+				$name_fetch = $name_query->fetch();
+				
+				$this->invites[$name_fetch->name] = $invites_fetch->time;
+			}
 		}		
 	}
 	
