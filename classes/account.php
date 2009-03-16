@@ -334,7 +334,7 @@ class Account
 			}	
 		}
 		
-		ksort($access);
+		sort($access);
 		
 		if($guiildLoad)
 			return $access[0];
