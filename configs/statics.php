@@ -17,6 +17,8 @@ define(DAYS_TO_CHANGE_EMAIL, 15);
 define(DAYS_TO_DELETE_CHARACTER, 30);
 define(SHOW_DEATHS_DAYS_AGO, 30);
 define(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS, 7);
+define(GUILDS_FORMATION_DAYS, 5);
+define(GUILDS_VICELEADERS_NEEDED, 4);
 
 define(EMAIL_REGISTER, 1);
 define(EMAIL_RECOVERY_ACCOUNT, 2);
@@ -24,7 +26,9 @@ define(EMAIL_RECOVERY_PASSWORDKEY, 3);
 define(EMAIL_RECOVERY_BOTH, 4);
 define(EMAIL_RECOVERY_PASSWORD, 5);
 
-define(CONTRIBUTE_PAYPALEMAIL, "premium@darghos.com");
+define(GUILD_IMAGE_DIR, "files/guildImages/")
+
+define(CONTRIBUTE_PAYPALEMAIL, "premium@darghos.com")
 define(CONTRIBUTE_PAYPALURL, "https://www.paypal.com/cgi-bin/webscr");
 define(CONTRIBUTE_PAGSEGUROURL, "https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx");
 

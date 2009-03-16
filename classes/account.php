@@ -1,7 +1,7 @@
 <?
 class Account
 {
-	private $db, $data = array();
+	private $db, $data = array(), $guildLevel;
 
 	function __construct()
 	{
@@ -94,9 +94,14 @@ class Account
 		return $number;				
 	}
 	
-	function getCharacterList()
+	function getCharacterList($returnId = false)
 	{
-		$query = $this->db->query("SELECT name FROM players WHERE account_id = '".$this->data['id']."'");
+		$toReturn = "name";
+		
+		if($returnId)
+			$toReturn = "id";
+		
+		$query = $this->db->query("SELECT {$toReturn} FROM players WHERE account_id = '".$this->data['id']."'");
 		
 		if($query->numRows() != 0)
 		{
@@ -104,7 +109,7 @@ class Account
 		
 			while($fetch = $query->fetch())
 			{
-				$list[] = $fetch->name;
+				$list[] = $fetch->$toReturn;
 			}
 			
 			return $list;
@@ -278,6 +283,64 @@ class Account
 		else
 			return false;
 	}
+	
+	function isGuildHighMember()
+	{
+		$charsList = $this->getCharacterList(true); //true to get characterslist by character id
+		
+		global $core;
+		
+		foreach($charsList as $player_id)
+		{
+			$character = $core->loadClass("Character");
+			$character->load($player_id, "rank_id");
+			
+			if(!$character->loadGuild())
+			{		
+				continue;
+			}		
+					
+			if($character->getGuildInfo("rank_level") <= 2)
+			{
+				return true;
+			}	
+		}
+		
+		return false;
+	}
+	
+	function getGuildLevel($guild_name)
+	{
+		$charsList = $this->getCharacterList(true); //true to get characterslist by character id
+		
+		global $core;
+		
+		$access = array();
+		$guiildLoad = false;
+		
+		foreach($charsList as $player_id)
+		{
+			$character = $core->loadClass("Character");
+			$character->load($player_id, "rank_id");
+			
+			if(!$character->loadGuild())	
+				continue;	
+			else
+				$guiildLoad = true;		
+				
+			if($character->getGuildInfo("name") == $guild_name)
+			{
+				$access[] = $character->getGuildInfo("rank_level");
+			}	
+		}
+		
+		ksort($access);
+		
+		if($guiildLoad)
+			return $access[0];
+		else
+			return false;	
+	}	
 	
 
 }

@@ -3,7 +3,7 @@ list($module, $topic) = explode(".", $_GET['ref']);
 
 $noInjection = false;
 
-if(!in_array($topic, $_inputsWhiteList))
+if(!in_array($_GET['ref'], $_inputsWhiteList))
 {
 	if($strings->filterInputs(true))
 	{
@@ -18,6 +18,7 @@ else
 if($noInjection)
 {
 	$needLogin = false;
+	$needPremium = false;
 
 	switch($module)
 	{
@@ -210,8 +211,12 @@ if($noInjection)
 
 				case "houses":
 					$patch['file'] = $topic;
-				break;							
+				break;
 
+				case "guilds":
+					$patch['file'] = $topic;
+				break;				
+				
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -220,6 +225,69 @@ if($noInjection)
 			
 		break;	
 
+		case "guilds":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "details":
+					$patch['file'] = $topic;
+				break;
+				
+				case "create":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;		
+
+				case "edit":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;			
+
+				case "ranks":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;		
+
+				case "invite":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;	
+
+				case "acceptInvite":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;		
+
+				case "members":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;				
+
+				case "passleadership":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;				
+				
+				case "disband":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;	
+
+				case "leave":
+					$needPremium = true;
+					$patch['file'] = $topic;
+				break;				
+				
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;
+			}
+			
+		break;		
+		
 		case "status":
 		
 			$patch['dir'] = $module;
@@ -228,12 +296,12 @@ if($noInjection)
 			{
 				case "whoisonline":
 					$patch['file'] = $topic;
-				break;	
+				break;
 
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
-				break;					
+				break;
 			}
 			
 		break;			
@@ -269,16 +337,36 @@ if($noInjection)
 	$module = null;
 	
 	if($_GET)
-	{
-		if(($needLogin and $_SESSION['login']) or (!$needLogin))
+	{	
+		$_isPremium = false;
+		
+		if($_SESSION['login'])
+		{
+			$accIsPremium = $core->loadClass("Account");	
+			$accIsPremium->load($_SESSION["login"][0], "premdays");
+			
+			if($accIsPremium->get("premdays") != 0)
+			{
+				$_isPremium = true;
+			}
+		}
+		
+		
+		if(($needLogin and !$_SESSION['login']) or ($needPremium and !$_SESSION['login']))
+		{
+			include("modules/errors/needlogin.php");
+		}
+		elseif($needPremium and !$_isPremium)
+		{
+			include("modules/errors/needpremium.php");
+		}
+		else
 		{
 			if($patch['dir'] != "errors")
 				$patch['urlnavigation'] = "/ ".$patch['dir']." / <a href='?ref=".$patch['dir'].".".$patch['file']."'>".$patch['file']."</a>";
 				
-			include("modules/".$patch['dir']."/".$patch['file'].".php");
-		}	
-		else
-			include("modules/errors/needlogin.php");	
+			include("modules/".$patch['dir']."/".$patch['file'].".php");			
+		}
 	}	
 	else	
 		include("modules/news/last.php");

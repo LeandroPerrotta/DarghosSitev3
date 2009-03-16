@@ -8,12 +8,12 @@ if($post or $get)
 
 	$character = $core->loadClass("character");
 	
-	if(!$character->loadByName($name, "name, account_id, level, sex, vocation, town_id, lastlogin, comment, hide"))
+	if(!$character->loadByName($name, "name, account_id, level, sex, vocation, town_id, lastlogin, comment, hide, rank_id, guildnick"))
 	{	
 		$error = "Este personagem não existe.";
 	}
 	else
-	{	
+	{			
 		$account = $core->loadClass("Account");
 		$account->load($character->get("account_id"), "premdays, real_name, location, url");
 		
@@ -74,6 +74,14 @@ if($post or $get)
 				<tr>
 					<td><b>Casa</b></td> <td>{$houses->get("name")} ({$_townid[$houses->get("townid")]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}</td>
 				</tr>";						
+			}
+			
+			if($character->loadGuild())
+			{
+				$module .= "
+				<tr>
+					<td><b>Membro da Guild</b></td> <td>{$character->getGuildInfo("rank_name")} da <a href='?ref=guilds.details&name={$character->getGuildInfo("name")}'>{$character->getGuildInfo("name")}</a></td>
+				</tr>";					
 			}
 			
 			if($character->get("comment"))

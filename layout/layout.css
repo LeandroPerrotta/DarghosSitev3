@@ -51,6 +51,7 @@ fieldset label {
 }
 
 fieldset input {
+	background-color: #e4e2e2;	
 	border: 1px solid #000;
 	border-bottom: 1px solid #666;
 	border-right: 1px solid #666;
@@ -61,13 +62,29 @@ fieldset input {
 	width: auto;
 }
 
-input fieldset .button {
-	border: 1px solid #666;
-	border-bottom: 1px solid #000;
-	border-right: 1px solid #000;
-	margin: 0;
+.button {
+	background-color: #e4e2e2;
+	border: 1px solid #000;
+	border-bottom: 1px solid #666;
+	border-right: 1px solid #666;
+	color: #6e6d6d;
+	font: normal 11px Verdana, sans-serif;
+	margin-top: 4px;
+	padding: 6px;
 	width: auto;
+	text-decoration: none;
 }
+
+.button:hover{
+	text-decoration: none;
+	color: #6e6d6d;
+	font-weight: normal;
+	cursor: default;
+}
+
+.button:active{
+	border: 2px solid #000;
+}	
 
 /* LAYOUT  */
 

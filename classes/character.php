@@ -1,7 +1,7 @@
 <?
 class Character
 {
-	private $db, $data = array(), $skills = array();
+	private $db, $data = array(), $skills = array(), $guild = array();
 
 	function __construct()
 	{
@@ -107,7 +107,7 @@ class Character
 	
 	function save()
 	{
-		$query = $this->db->query("SELECT id FROM players WHERE name = '".$this->data['name']."'");
+		$query = $this->db->query("SELECT id FROM players WHERE name = '".$this->data['name']."' OR id = '".$this->data['id']."'");
 		
 		$i = 0;
 		
@@ -188,5 +188,80 @@ class Character
 	{
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."playerdeletion (player_id, time) values('{$this->data['id']}','".(time() + (60 * 60 * 24 * DAYS_TO_DELETE_CHARACTER))."')");
 	}		
+	
+	function loadGuild()
+	{		
+		if($this->data["rank_id"] == 0)
+			return false;
+			
+		global $core;
+		
+		$guild = $core->loadClass("Guilds");
+			
+		if($guild->loadByRank($this->data["rank_id"]))
+		{	
+			$guild->loadRanks();	
+			$ranks = $guild->getRanks();
+			
+			$this->guild["name"] = $guild->get("name");
+			$this->guild["rank_name"] = $ranks[$this->data["rank_id"]]["name"];
+			$this->guild["rank_level"] = $ranks[$this->data["rank_id"]]["level"];
+			
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	function getGuildInfo($value)
+	{
+		return $this->guild[$value];
+	}
+	
+	function wasInvitedToGuild()
+	{
+		$query = $this->db->query("SELECT guild_id FROM guild_invites WHERE player_id = '{$this->data['id']}'");
+		
+		if($query->numRows() != 0)
+		{
+			$fetch = $query->fetch();
+			
+			return $fetch->guild_id;
+		}
+		else
+			return false;
+	}	
+	
+	function inviteToGuild($guild_id)
+	{
+		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `time`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
+	}
+	
+	function acceptInvite()
+	{
+		$guild_id = $this->wasInvitedToGuild();
+		
+		if($guild_id)
+		{
+			global $core;
+			
+			$guild = $core->loadClass("Guilds");			
+			if($guild->load($guild_id))
+			{
+				$guild->loadRanks();
+				$lowerRank = $guild->getLowerRank();
+				
+				$this->set("rank_id", $lowerRank);
+				$this->set("guild_join_date", time());
+				
+				$this->removeInvite();
+			}
+		}
+	}
+	
+	function removeInvite()
+	{
+		$this->db->query("DELETE FROM guild_invites WHERE player_id = '{$this->data['id']}'");
+	}
 }
 ?>

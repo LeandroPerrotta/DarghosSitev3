@@ -55,6 +55,11 @@ class Core
 		return false;
 	}
 	
+	function loadUploadClass() 
+	{
+		include "libs/upload/upload_class.php";	
+	}	
+	
 	function loadClass($class)
 	{
 		include_once "classes/".$class.".php";

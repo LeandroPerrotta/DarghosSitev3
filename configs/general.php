@@ -1,6 +1,6 @@
 <?php
 
-$_inputsWhiteList = array("login");
+$_inputsWhiteList = array("account.login", "guilds.edit");
 
 $_vocation['no-vocation'] = 0;
 $_vocation['sorcerer'] = 1;
