@@ -256,7 +256,6 @@ if($noInjection)
 				break;	
 
 				case "acceptInvite":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 
@@ -276,7 +275,6 @@ if($noInjection)
 				break;	
 
 				case "leave":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;				
 				
