@@ -190,7 +190,7 @@ class Guilds
 		$query = $this->db->query("SELECT id FROM guild_ranks WHERE level = '{$level}' and guild_id = '{$this->data['id']}'");
 		
 		if($query->numRows() != 0)
-			$this->db->query("UPDATE guild_ranks SET name = '{$name}' WHERE level = '{$level}'");
+			$this->db->query("UPDATE guild_ranks SET name = '{$name}' WHERE level = '{$level}' and guild_id = '{$this->data['id']}'");
 		else
 			$this->db->query("INSERT INTO guild_ranks (name, level, guild_id) values('{$name}', '{$level}', '{$this->data['id']}')");
 	}
