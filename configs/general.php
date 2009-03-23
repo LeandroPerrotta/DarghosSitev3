@@ -44,17 +44,17 @@ $_itemshopstatus[1] = "Recebido";
 
 $_contribution['emailadmin'] = (date("d", time()) <= 15) ? "premium@darghos.com" : "admin@darghos.com";
 
-$_contribution['PagSeguro']["30"] = "R$ 14.55";
-$_contribution['PagSeguro']["60"] = "R$ 25.55";
-$_contribution['PagSeguro']["90"] = "R$ 35.55";
-$_contribution['PagSeguro']["180"] = "R$ 49.55";
-$_contribution['PagSeguro']["360"] = "R$ 75.55";
+$_contribution['PagSeguro']["7"] = "R$ 2.90";
+$_contribution['PagSeguro']["30"] = "R$ 8.90";
+$_contribution['PagSeguro']["60"] = "R$ 16.55";
+$_contribution['PagSeguro']["90"] = "R$ 22.90";
+$_contribution['PagSeguro']["180"] = "R$ 41.55";
 
-$_contribution['PayPal']["30"] = "USD 6.45";
-$_contribution['PayPal']["60"] = "USD 11.45";
-$_contribution['PayPal']["90"] = "USD 20.45";
-$_contribution['PayPal']["180"] = "USD 29.95";
-$_contribution['PayPal']["360"] = "USD 39.95";	
+$_contribution['PayPal']["7"] = "USD 1.90";
+$_contribution['PayPal']["30"] = "USD 5.90";
+$_contribution['PayPal']["60"] = "USD 8.55";
+$_contribution['PayPal']["90"] = "USD 13.55";
+$_contribution['PayPal']["180"] = "USD 24.90";
 
 $_contribution['status'][0] = "Aguardando Pagamento.";
 $_contribution['status'][1] = "Confirmado";

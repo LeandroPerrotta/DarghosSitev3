@@ -126,19 +126,21 @@ $module .= '
 				<label for="order_days">Periodo desta Contribuição</label><br />
 				
 				<ul id="pagelist">
-					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 14.55 / USD 6.45 </li>
-					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 25.55 / USD 11.45 </li>
-					<li><input name="order_days" type="radio" value="90"> 90 dias - <del>R$ 45.55</del> R$ 35.55 / USD 20.45 <strong>*</strong> </li>
-					<li><input name="order_days" type="radio" value="180"> 180 dias - <del>R$ 55.55</del> R$ 49.55 / USD 29.95 <strong>*</strong> </li>
-					<li><input name="order_days" type="radio" value="360"> 360 dias - <del>R$ 89.55</del> R$ 75.55 / USD 39.95 <strong>*</strong> </li>
+					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 2.90 / USD 1.90 </li>
+					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 8.90 / USD 5.90 </li>
+					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 16.55 / USD 8.55 </li>
+					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 22.90 / USD 13.55 </li>
+					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 41.55 / USD 24.90 </li>
 				</ul>	
 			</p>
 			
-			<h1>Descrição:</h1>
+			<h1>Observações:</h1>
 			<ul>
-				<li>* <em>(item com preço promocional valido até dia 30/02/2009)</em></li>
-				<li>R$ <em>(valor em reais, para contribuições por PagSeguro)</em></li>
-				<li>USD <em>(valor em dolares americanos, para contribuições por PayPal)</em></li>
+				<li>R$ <em>(valor em reais, para contribuições por PagSeguro).</em></li>
+				<li>USD <em>(valor em dolares americanos, para contribuições por PayPal).</em></li>
+				<li>Pagamentos via PagSeguro/Boleto Bancário são liberados apénas após compensar o pagamento (de 1 a 3 dias úteis).</li>
+				<li>Pagamentos via PagSeguro/Transferencia Eletronica são liberados imediatamente.</li>
+				<li><font color="red">Não efetuar depósito na conta informada no boleto, sujeito a invalidação do pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>
 			</ul>
 			
 			<div id="line1"></div>

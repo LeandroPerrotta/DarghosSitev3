@@ -26,9 +26,9 @@ define(EMAIL_RECOVERY_PASSWORDKEY, 3);
 define(EMAIL_RECOVERY_BOTH, 4);
 define(EMAIL_RECOVERY_PASSWORD, 5);
 
-define(GUILD_IMAGE_DIR, "files/guildImages/")
+define(GUILD_IMAGE_DIR, "files/guildImages/");
 
-define(CONTRIBUTE_PAYPALEMAIL, "premium@darghos.com")
+define(CONTRIBUTE_PAYPALEMAIL, "premium@darghos.com");
 define(CONTRIBUTE_PAYPALURL, "https://www.paypal.com/cgi-bin/webscr");
 define(CONTRIBUTE_PAGSEGUROURL, "https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx");
 
