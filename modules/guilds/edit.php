@@ -66,7 +66,7 @@ if($_GET['name'])
 			}						
 			else
 			{		
-				$guild->set("comment", $post[0]);
+				$guild->set("motd", $post[0]);
 				
 				if($guild_image)
 				{
@@ -130,8 +130,8 @@ if($_GET['name'])
 				    </p>			
 				    
 					<p>
-						<label for="guild_comment">Comentario</label><br />
-						<textarea name="character_comment" rows="10" wrap="physical" cols="55">'.$guild->get("comment").'</textarea>
+						<label for="guild_motd">Comentario</label><br />
+						<textarea name="guild_motd" rows="10" wrap="physical" cols="55">'.$guild->get("motd").'</textarea>
 						<em><br>Limpe para deletar.</em>
 					</p>					
 					

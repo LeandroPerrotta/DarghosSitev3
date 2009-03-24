@@ -42,7 +42,7 @@ if($_GET['name'])
 				<th colspan='3' style='text-align: center;'>Logotipo</th>
 			</tr>		
 			<tr>
-				<td><img src='".GUILD_IMAGE_DIR."{$guild->get("image")}' height='100' width='100' /></td> <td width='90%'><div style='text-align: center; font: normal 30px Verdana, sans-serif;'>{$guild->get("name")}</div>{$guild->get("comment")}</td> <td><img src='".GUILD_IMAGE_DIR."{$guild->get("image")}'/></td>
+				<td><img src='".GUILD_IMAGE_DIR."{$guild->get("image")}' height='100' width='100' /></td> <td width='90%'><div style='text-align: center; font: normal 30px Verdana, sans-serif;'>{$guild->get("name")}</div>{$guild->get("motd")}</td> <td><img src='".GUILD_IMAGE_DIR."{$guild->get("image")}'/></td>
 			</tr>
 		</table>
 		

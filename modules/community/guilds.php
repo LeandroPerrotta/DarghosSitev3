@@ -22,7 +22,7 @@ if($query->numRows() != 0)
 	{	
 		$module .= "
 		<tr>
-			<td><img src='".GUILD_IMAGE_DIR."{$fetch->image}'' height='100' width='100' /> </td> <td style='vertical-align: middle; height: 50px;'><a href='?ref=guilds.details&name={$fetch->name}'>{$fetch->name}</a><br>{$fetch->comment}</td>
+			<td><img src='".GUILD_IMAGE_DIR."{$fetch->image}'' height='100' width='100' /> </td> <td style='vertical-align: middle; height: 50px;'><a href='?ref=guilds.details&name={$fetch->name}'>{$fetch->name}</a><br>{$fetch->motd}</td>
 		</tr>";	
 	}
 }
@@ -61,7 +61,7 @@ if($query->numRows() != 0)
 	{	
 		$module .= "
 		<tr>
-			<td><img src='".GUILD_IMAGE_DIR."{$fetch->image}'' height='100' width='100' /> </td> <td style='vertical-align: middle; height: 50px;'><a href='?ref=guilds.details&name={$fetch->name}'>{$fetch->name}</a><br>{$fetch->comment}</td>
+			<td><img src='".GUILD_IMAGE_DIR."{$fetch->image}'' height='100' width='100' /> </td> <td style='vertical-align: middle; height: 50px;'><a href='?ref=guilds.details&name={$fetch->name}'>{$fetch->name}</a><br>{$fetch->motd}</td>
 		</tr>";	
 	}
 }	
