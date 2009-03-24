@@ -1,8 +1,13 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
 body{
 	background-color: #FFF;
 	color: #6e6d6d;
 	font: normal 12px Verdana, sans-serif;
-	padding: 20px;
+	padding-top: 20px;
 }
 
 h1{
@@ -105,8 +110,7 @@ fieldset input {
 	margin-bottom: 4px;
 }
 
-#menu, #menu ul, #menu li, #menu p{
-	margin: 0px;	
+#menu{	
 	float: left;	
 	width: 160px;
 	overflow: hidden;
@@ -117,6 +121,7 @@ fieldset input {
 	text-align: left;	
 	height: 1%;
 	overflow: hidden;
+	margin: 0 auto;
 }
 
 #footer{
@@ -124,6 +129,7 @@ fieldset input {
 	width: 870px;
 	text-align: center;	
 	bottom: 1%;
+	margin: 0 auto;
 
 }
 
@@ -222,7 +228,6 @@ fieldset input {
 /* BOXES */
 
 #navigation{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -259,7 +264,6 @@ fieldset input {
 }
 
 #account{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -296,7 +300,6 @@ fieldset input {
 }
 
 #community{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -333,7 +336,6 @@ fieldset input {
 }
 
 #characters{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -370,7 +372,6 @@ fieldset input {
 }
 
 #mycharacters{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -407,7 +408,6 @@ fieldset input {
 }
 
 #premium{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;
@@ -444,7 +444,6 @@ fieldset input {
 }
 
 #status{
-	width: 160px;
 	font: normal 10px Verdana, sans-serif;
 	text-align: left;
 	font-weight: bold;

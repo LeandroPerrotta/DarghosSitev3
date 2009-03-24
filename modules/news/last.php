@@ -4,9 +4,13 @@ $query = $db_tenerian->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by p
 while($fetch = $query->fetch())
 {
 	$module .=	'
-	<p>'. $core->formatDate($fetch->post_data) .'</p>
+	
 	<div id="line1"></div>
-	<h3>'. $fetch->topic .'</h3>
+	
+	<p><h3>'. $fetch->topic .'</h3> <span style="text-align: right;">'. $core->formatDate($fetch->post_data) .'</span></p>
+	
+	
+	
 	<p>'. $fetch->post .'</p>
 	';
 
