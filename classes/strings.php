@@ -15,7 +15,7 @@ class Strings
 		{
 			foreach($_POST as $post => $value)
 			{
-				if(($value != "password" and $value != "account_password") and !$this->SQLInjection($value))
+				if(($post != "password" and $post != "account_password") and !$this->SQLInjection($value))
 					return false;
 			}
 		}
