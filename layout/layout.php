@@ -133,6 +133,7 @@
 							<li><a href="?ref=community.houses">Casas</a></li>
 							<li><a href="?ref=community.polls">Enquetes</a></li>
 							<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
+							<li><a href="?ref=status.whoisonline">Quem está online?</a></li>
 						</ul>
 					</li>	
 				</ul>	
