@@ -478,3 +478,37 @@ fieldset input {
 	border-bottom: 1px solid #cbc9c8;
 	padding-bottom: 3px;
 }
+
+#links{
+	font: normal 10px Verdana, sans-serif;
+	text-align: left;
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+
+#links ul{
+	padding-left: 4px;
+	padding-top: 8px;
+} 
+
+#links li{
+	list-style: none;	
+	font-size: 14px;
+	color: #431177;
+	border-bottom: 1px solid #cbc9c8;
+	padding-bottom: 3px;	
+	padding-top: 3px;
+}
+
+#links a{
+	display: block;
+	padding: 4px 0px 4px 0px;
+	font: normal 14px Verdana, sans-serif;
+	color: #707070;
+	text-decoration: none;
+}
+
+#links a:hover{
+	background-color: #707070;
+	color: #FFF;
+}

@@ -137,13 +137,11 @@
 					</li>	
 				</ul>	
 				
-				<ul id="status">
+				<ul id="links">
 					<li>
-						<p>status</p>
-						
-						<ul>
-							<li><a href="?ref=status.whoisonline">Who Is Online</a></li>
-						</ul>
+						<li><a href="http://tenerian.darghos.com.br/">Tenerian Server</a></li>
+						<li><a href="http://elerian.darghos.com.br/">Elerian Server</a></li>
+						<li><a href="http://www.ultraxsoft.com/">UltraxSoft</a></li>
 					</li>	
 				</ul>										
 			</div>		
