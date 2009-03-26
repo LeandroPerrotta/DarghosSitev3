@@ -25,7 +25,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Proximo" />
+			<input class="button" type="submit" value="Proximo" />
 		</p>
 	</fieldset>
 </form>';

@@ -37,7 +37,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Enviar" />
+			<input class="button" type="submit" value="Enviar" />
 		</p>
 	</fieldset>
 </form>';

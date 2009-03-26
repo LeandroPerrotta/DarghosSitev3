@@ -9,24 +9,12 @@ if($_GET['name'])
 	$guild = $core->loadClass("guilds");
 	
 	if(!$guild->loadByName($_GET['name']))
-	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>Esta guilda não existe em nosso banco de dados.</h2>
-		</div>
-		
-		';			
+	{	
+		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");	
 	}
 	elseif(!$account->getGuildLevel($guild->get("name")))
 	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>Você não tem permissão para acessar está pagina.</h2>
-		</div>
-		
-		';		
+		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");		
 	}	
 	else
 	{		
@@ -70,25 +58,13 @@ if($_GET['name'])
 		
 		if($success)	
 		{
-			$module .=	'
-				
-			<div id="sucesso">
-				<h2>'.$success.'</h2>
-			</div>
-			
-			';
+			$core->sendMessageBox("Sucesso!", $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$module .=	'
-				
-				<div id="error">
-					<h2>'.$error.'</h2>
-				</div>
-				
-				';
+				$core->sendMessageBox("Erro!", $error);
 			}
 			
 			foreach($members as $member_name => $member_values)
@@ -117,7 +93,7 @@ if($_GET['name'])
 					<div id="line1"></div>
 					
 					<p>
-						<input type="submit" value="Enviar" />
+						<input class="button" type="submit" value="Enviar" />
 					</p>					
 
 				</fieldset>

@@ -36,23 +36,11 @@ if($_GET['key'])
 	
 	if($success)	
 	{
-		$module .=	'
-			
-		<div id="sucesso">
-			<h2>'.$success.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Sucesso!", $success);
 	}
 	else
 	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>'.$error.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Erro!", $error);
 	}	
 }
 else
@@ -170,25 +158,13 @@ else
 	
 	if($success)	
 	{
-		$module .=	'
-			
-		<div id="sucesso">
-			<h2>'.$success.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Sucesso!", $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			$module .=	'
-			
-			<div id="error">
-				<h2>'.$error.'</h2>
-			</div>
-			
-			';
+			$core->sendMessageBox("Erro!", $error);
 		}
 		
 	$module .= '	
@@ -228,7 +204,7 @@ else
 				<div id="line1"></div>				
 				
 				<p>
-					<input type="submit" value="Proximo" />					
+					<input class="button" type="submit" value="Proximo" />					
 				</p>
 		</fieldset>
 	</form>';

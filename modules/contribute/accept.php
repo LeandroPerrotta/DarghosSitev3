@@ -52,25 +52,13 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 
 	if($success)	
 	{
-		$module .=	'
-			
-		<div id="sucesso">
-			<h2>'.$success.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Sucesso!", $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			$module .=	'
-			
-			<div id="error">
-				<h2>'.$error.'</h2>
-			</div>
-			
-			';
+			$core->sendMessageBox("Erro!", $error);
 		}
 
 	$contrato['premium'] = "Este é um documento informativo das clausulas e regras referente ao funcionamento, deveres e limitações entre outros referente aos jogadores contribuintes com o Darghos. Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribuições.\" e assim dar continuidade ao sistema de contribuição.
@@ -133,7 +121,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Aceitar" />
+			<input class="button" type="submit" value="Aceitar" />
 		</p>
 	</fieldset>
 </form>	

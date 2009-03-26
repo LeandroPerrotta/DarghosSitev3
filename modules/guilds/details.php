@@ -5,13 +5,7 @@ if($_GET['name'])
 	
 	if(!$guild->loadByName($_GET['name']))
 	{		
-		$module .=	'
-		
-		<div id="error">
-			<h2>Esta guilda não existe em nosso banco de dados.</h2>
-		</div>
-		
-		';		
+		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
 	}
 	else
 	{
@@ -63,7 +57,7 @@ if($_GET['name'])
 		{
 			$module .= "
 				<p>
-					<a class='button' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a> <a class='button' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
+					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a> <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
 				</p>				
 			";
 		}			
@@ -106,20 +100,20 @@ if($_GET['name'])
 			
 			if($_SESSION['login'] and $accountLevel <= 2)
 			$module .= "
-					<a class='button' href='?ref=guilds.members&name={$guild->get("name")}'>Editar Membros</a>				
+					<a class='buttonstd' href='?ref=guilds.members&name={$guild->get("name")}'>Editar Membros</a>				
 			";
 				
 			if($_SESSION['login'] and $accountLevel == 1)
 			{	
 				$module .= "
-					<a class='button' href='?ref=guilds.ranks&name={$guild->get("name")}'>Editar Ranks</a> <a class='button' href='?ref=guilds.passleadership&name={$guild->get("name")}'>Passar Liderança</a>				
+					<a class='buttonstd' href='?ref=guilds.ranks&name={$guild->get("name")}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$guild->get("name")}'>Passar Liderança</a>				
 				";	
 			}
 			
 			if($_SESSION['login'] and $accountLevel > 1)
 			{	
 				$module .= "
-					<a class='button' href='?ref=guilds.leave&name={$guild->get("name")}'>Sair da Guild</a>				
+					<a class='buttonstd' href='?ref=guilds.leave&name={$guild->get("name")}'>Sair da Guild</a>				
 				";	
 			}			
 			
@@ -171,7 +165,7 @@ if($_GET['name'])
 		{
 			$module .= "
 				<p>
-					<a class='button' href='?ref=guilds.invite&name={$guild->get("name")}'>Convidar Jogador</a>
+					<a class='buttonstd' href='?ref=guilds.invite&name={$guild->get("name")}'>Convidar Jogador</a>
 				</p>				
 			";
 		}
@@ -180,7 +174,7 @@ if($_GET['name'])
 		{
 			$module .= "
 				<p>
-					<a class='button' href='?ref=guilds.acceptInvite&name={$guild->get("name")}'>Aceitar Convite</a>
+					<a class='buttonstd' href='?ref=guilds.acceptInvite&name={$guild->get("name")}'>Aceitar Convite</a>
 				</p>				
 			";			
 		}

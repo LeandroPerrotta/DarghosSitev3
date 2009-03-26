@@ -224,7 +224,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="amount" value="'.$price_value.'">
 				<input type="hidden" name="on0" value="REF#'.$this->data['id'].'">
 				
-				<input type="submit" value="Finalizar" />
+				<input class="button" type="submit" value="Finalizar" />
 				</form>
 			';	
 		}
@@ -245,7 +245,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="item_frete_1" value="000">
 				<input type="hidden" name="ref_transacao" value="REF#'.$this->data['id'].'">
 				
-				<input type="submit" value="Finalizar" />	
+				<input class="button" type="submit" value="Finalizar" />	
 				</form>			
 			';
 			

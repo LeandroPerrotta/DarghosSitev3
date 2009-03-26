@@ -143,5 +143,22 @@ class Core
 		else
 			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
+	
+	function sendMessageBox($title, $msg)
+	{
+		global $module;
+		
+		$module .= '
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+					<th>'.$title.'</th>
+				</tr>
+
+				<tr>
+					<td>'.$msg.'</td>
+				</tr>	
+			</table>		
+		';
+	}
 }		
 ?>

@@ -77,25 +77,13 @@ if($_GET['name'])
 		
 		if($success)	
 		{
-			$module .=	'
-				
-			<div id="sucesso">
-				<h2>'.$success.'</h2>
-			</div>
-			
-			';
+			$core->sendMessageBox("Sucesso!", $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$module .=	'
-				
-				<div id="error">
-					<h2>'.$error.'</h2>
-				</div>
-				
-				';
+				$core->sendMessageBox("Erro!", $error);
 			}
 		
 		$query = $db_tenerian->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
@@ -143,21 +131,15 @@ if($_GET['name'])
 					<div id="line1"></div>
 					
 					<p>
-						<input type="submit" value="Enviar" />
+						<input class="button" type="submit" value="Enviar" />
 					</p>
 				</fieldset>
 			</form>';	
 		}
 	}
 	else
-	{			
-		$module .=	'
-		
-		<div id="error">
-			<h2>Este personagem não existe ou não é de sua conta.</h2>
-		</div>
-		
-		';		
+	{		
+		$core->sendMessageBox("Erro!", "Este personagem não existe ou não é de sua conta.");	
 	}
 }
 else
@@ -191,7 +173,7 @@ if(is_array($list))
 			<div id="line1"></div>
 			
 			<p>
-				<input type="submit" value="Enviar" />
+				<input class="button" type="submit" value="Enviar" />
 			</p>
 		</fieldset>
 	</form>';

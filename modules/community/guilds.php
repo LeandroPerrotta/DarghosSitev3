@@ -3,7 +3,7 @@ $query = $db_tenerian->query("SELECT * FROM guilds WHERE status = '1' ORDER BY c
 
 $module .= "
 <p>
-	<a class='button' href='?ref=guilds.create'>Criar nova Guild</a>
+	<a class='buttonstd' href='?ref=guilds.create'>Criar nova Guild</a>
 </p>	
 	
 <p><h3>Guildas em Atividade</h3></p>	

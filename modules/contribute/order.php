@@ -64,7 +64,7 @@ if($post)
 					<div id="line1"></div>
 					
 					<p>
-						<input type="submit" value="Confirmar" />					
+						<input class="button" type="submit" value="Confirmar" />					
 					</p>
 			</fieldset>
 		</form>';		
@@ -75,13 +75,7 @@ if(!$success)
 {
 	if($error)	
 	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>'.$error.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Erro!", $error);
 	}
 	
 $module .= '	
@@ -134,7 +128,7 @@ $module .= '
 				</ul>	
 			</p>
 			
-			<h1>Observações:</h1>
+			<h3>Observações:</h3>
 			<ul>
 				<li>R$ <em>(valor em reais, para contribuições por PagSeguro).</em></li>
 				<li>USD <em>(valor em dolares americanos, para contribuições por PayPal).</em></li>
@@ -146,7 +140,7 @@ $module .= '
 			<div id="line1"></div>
 			
 			<p>
-				<input type="submit" value="Proximo" />					
+				<input class="button" type="submit" value="Proximo" />					
 			</p>
 	</fieldset>
 </form>';

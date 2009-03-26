@@ -61,25 +61,13 @@ if($_SESSION['recovery'])
 	
 		if($success)	
 		{
-			$module .=	'
-				
-			<div id="sucesso">
-				<h2>'.$success.'</h2>
-			</div>
-			
-			';
+			$core->sendMessageBox("Sucesso!", $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$module .=	'
-				
-				<div id="error">
-					<h2>'.$error.'</h2>
-				</div>
-				
-				';
+				$core->sendMessageBox("Erro!", $error);
 			}
 			
 		$module .= '	
@@ -116,7 +104,7 @@ if($_SESSION['recovery'])
 					<div id="line1"></div>				
 					
 					<p>
-						<input type="submit" value="Proximo" />					
+						<input class="button" type="submit" value="Proximo" />					
 					</p>
 			</fieldset>
 		</form>';
@@ -124,13 +112,7 @@ if($_SESSION['recovery'])
 	}
 	else
 	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>Esta conta não possui uma chave secreta configurada.</h2>
-		</div>
-		
-		';	
+		$core->sendMessageBox("Erro!", "Esta conta não possui uma chave secreta configurada.");		
 	}		
 }
 ?>

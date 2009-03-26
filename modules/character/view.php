@@ -31,7 +31,7 @@ if($post or $get)
 		$list = $account->getCharacterList();
 	
 		$module .= "
-		<table cellspacing='0' cellpadding='0' id='table'>
+		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Personagem</th>
 			</tr>";		
@@ -46,7 +46,7 @@ if($post or $get)
 		
 			$module .= "
 			<tr>
-				<td width='15%'><b>Nome:</b></td> <td>{$character->get("name")}</td>
+				<td width='25%'><b>Nome:</b></td> <td>{$character->get("name")}</td>
 			</tr>
 			
 			<tr>
@@ -99,13 +99,13 @@ if($post or $get)
 			
 		</table>
 
-		<table cellspacing='0' cellpadding='0' id='table'>
+		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Informações da Conta</th>
 			</tr>		
 
 			<tr>
-				<td width='15%'><b>Tipo de Conta:</b></td> <td>{$premium}</td>
+				<td width='25%'><b>Tipo de Conta:</b></td> <td>{$premium}</td>
 			</tr>	
 			
 			<tr>
@@ -140,7 +140,7 @@ if($post or $get)
 		{
 			$module .= "
 			
-			<table cellspacing='0' cellpadding='0' id='table'>
+			<table cellspacing='0' cellpadding='0'>
 				<tr>
 					<th>Mortes Recentes</th>
 				</tr>					
@@ -174,7 +174,7 @@ if($post or $get)
 		if($character->get("hide") == 0)
 		{
 			$module .= "
-			<table cellspacing='0' cellpadding='0' id='table'>
+			<table cellspacing='0' cellpadding='0'>
 				<tr>
 					<th colspan='3'>Outros Personagens</th>
 				</tr>					
@@ -211,13 +211,7 @@ if($post or $get)
 
 if($error)	
 {
-	$module .=	'
-	
-	<div id="error">
-		<h2>'.$error.'</h2>
-	</div>
-	
-	';
+	$core->sendMessageBox("Erro!", $error);
 }
 
 $module .= '
@@ -232,7 +226,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Enviar" />
+			<input class="button" type="submit" value="Enviar" />
 		</p>
 	</fieldset>
 </form>';

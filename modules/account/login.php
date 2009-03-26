@@ -23,13 +23,7 @@ if($post)
 
 if($error)	
 {
-	$module .= '
-	
-	<div id="error">
-		<h2>'.$error.'</h2>
-	</div>
-	
-	';
+	$core->sendMessageBox("Erro!", $error);
 }
 
 $module .= '
@@ -49,7 +43,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Login" />
+			<input class="button" type="submit" value="Login" />
 		</p>
 	</fieldset>
 </form>';

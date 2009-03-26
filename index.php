@@ -18,6 +18,8 @@ $core = new Core();
 
 $strings = $core->loadClass("Strings");
 	
+$layoutDir = "newlay/";
+
 include "modules.php";
-include "layout/layout.php";
+include "{$layoutDir}index.php";
 ?>

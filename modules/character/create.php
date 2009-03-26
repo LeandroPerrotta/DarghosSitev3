@@ -153,25 +153,13 @@ if($post)
 
 if($success)	
 {
-	$module .=	'
-		
-	<div id="sucesso">
-		<h2>'.$success.'</h2>
-	</div>
-	
-	';
+	$core->sendMessageBox("Sucesso!", $success);
 }
 else
 {
 	if($error)	
 	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>'.$error.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Erro!", $error);
 	}
 	
 $module .= '
@@ -221,7 +209,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Enviar" />
+			<input class="button" type="submit" value="Enviar" />
 		</p>
 	</fieldset>
 </form>';

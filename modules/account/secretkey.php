@@ -49,25 +49,13 @@ if($post)
 
 if($success)	
 {
-	$module .=	'
-		
-	<div id="sucesso">
-		<h2>'.$success.'</h2>
-	</div>
-	
-	';
+	$core->sendMessageBox("Sucesso!", $success);
 }
 else
 {
 	if($error)	
 	{
-		$module .=	'
-		
-		<div id="error">
-			<h2>'.$error.'</h2>
-		</div>
-		
-		';
+		$core->sendMessageBox("Erro!", $error);
 	}
 	
 $secretkey = $strings->randKey(5, 4, "number+upper");	
@@ -112,7 +100,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input type="submit" value="Proximo" />					
+			<input class="button" type="submit" value="Proximo" />					
 		</p>
 	</fieldset>
 </form>';

@@ -1,6 +1,6 @@
 <?
 $account = $core->loadClass("Account");
-$account->load($_SESSION['login'][0], "password, premdays, warnings, email, creation, real_name");
+$account->load($_SESSION['login'][0], "password, premdays, warnings, email, creation, real_name, location, url");
 $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
@@ -11,6 +11,8 @@ $warns = ($account->get("warnings") > 1) ? "Sua conta possui".$account->get("war
 $email = $account->get("email");	
 $creation = ($account->get("creation") != 0) ? $core->formatDate($account->get("creation")) : "Indisponível";	
 $realname = ($account->get("real_name")) ?	$account->get("real_name") : "<i>Sem Nome</i>";
+$location = ($account->get("location")) ?	$account->get("location") : "<i>Sem Localidade</i>";
+$url = ($account->get("url")) ?	$account->get("url") : "<i>Sem Endereço</i>";
 
 $contribute = $core->loadClass("Contribute");
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
@@ -30,10 +32,16 @@ if(is_array($player_list))
 {
 	foreach($player_list as $player)
 	{
-		$character->loadByName($player);
+		$character->loadByName($player, "name");
 		
 		if($character->deletionStatus())
 			$charDel[$player] = $character->deletionStatus();
+			
+		$charList .= "
+		<tr>
+			<td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>nenhum</td> <td><a href='?ref=character.edit&name={$character->get("name")}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->get("name")}'>Item Shop</a></td>
+		</tr>		
+		";	
 	}
 }
 
@@ -73,11 +81,11 @@ $module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>
 	
 		<tr>
-			<th colspan='2'>Informações da conta</th>
+			<th colspan='2'>Informações da Conta</th>
 		</tr>
 		
 		<tr>
-			<td width='25%'><b>Endereço de E-mail:</b></td><td>{$email}</td>
+			<td width='30%'><b>Endereço de E-mail:</b></td><td>{$email}</td>
 		</tr>
 					
 		<tr>
@@ -93,6 +101,57 @@ $module .= "
 		</tr>
 		
 	</table>
-</p>";	
+</p>
+
+<p>
+	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>
+</p>
+
+<p>
+	<table cellspacing='0' cellpadding='0' id='table'>
+	
+		<tr>
+			<th colspan='2'>Informações Personalizadas</th>
+		</tr>
+		
+		<tr>
+			<td width='30%'><b>Nome Real:</b></td><td>{$realname}</td>
+		</tr>
+					
+		<tr>
+			<td><b>Localização:</b></td><td>{$location}</td>
+		</tr>
+		
+		<tr>
+			<td><b>Website:</b></td><td>{$url}</td>
+		</tr>
+		
+	</table>
+</p>
+
+<p>
+	<a class='buttonstd' href='?ref=account.changeinfos'>Mudar Informações</a>
+</p>
+
+<p>
+	<table cellspacing='0' cellpadding='0' id='table'>
+	
+		<tr>
+			<th colspan='3'>Meus Personagens</th>
+		</tr>
+		
+		<tr>
+			<td width='30%'><b>Nome:</b></td> <td width='35%'><b>Status:</b></td> <td><b>Opções</b> </td>
+		</tr>
+					
+		$charList
+		
+	</table>
+</p>
+
+<p>
+	<a class='buttonstd' href='?ref=character.create'>Criar Personagem</a> <a class='buttonstd' href='?ref=character.delete'>Deletar Personagem</a>
+</p>
+";	
 				
 ?>
