@@ -61,7 +61,7 @@ else
 		{
 			$error = "Não existe nenhuma conta registrada neste e-mail em nosso banco de dados.";
 		}
-		elseif($post[2] != 4 and !(!$characterList or !in_array($post[0], $characterList)))
+		elseif($post[2] != 4 and !($characterList and in_array($post[0], $characterList)))
 		{
 			//echo print_r($characterList);
 			$error = "O personagem não pertence a conta do e-mail informado.";

@@ -20,14 +20,14 @@ if($query->numRows() != 0)
 		{
 			$module .= "
 			<tr>
-				<td colspan='2'><a href='#'>{$character->get("name")}</a> morreu no nivel {$fetch->level} para <a href='#'>{$killer}</a> em {$core->formatDate($fetch->time)}.</td>
+				<td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a> morreu no nivel {$fetch->level} para <a href='?ref=character.view&name={$killer}'>{$killer}</a> em {$core->formatDate($fetch->time)}.</td>
 			</tr>";		
 		}
 		else
 		{
 			$module .= "
 			<tr>
-				<td colspan='2'><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a> morreu no nivel {$fetch->level} para um {$killer} em {$core->formatDate($fetch->time)}.</td>
+				<td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a> morreu no nivel {$fetch->level} para um {$killer} em {$core->formatDate($fetch->time)}.</td>
 			</tr>";					
 		}
 	}

@@ -26,17 +26,20 @@
 								<strong>navegação</strong>
 								<ul class="always_viewable">
 									<li><a href="?ref=news.last">Últimas Notícias </a></li>
-									<li><a href="?ref=news.files">Arquivo de Notícias </a></li>
+									<li><a href="http://forum.darghos.com.br/index.php?board=1.0">Arquivo de Notícias </a></li>
 									<li><a href="?ref=general.about">Sobre o Darghos </a></li>
-									<li><a href="?ref=general.faq">Darghos FAQ </a></li>
-									<li><a href="?ref=general.howplay">Como jogar? </a></li>
+									<li><a href="http://forum.darghos.com.br/index.php?board=15.0">Darghos FAQ </a></li>										
+									<li><a href="http://forum.darghos.com.br/index.php?topic=2.new#new">Como jogar? </a></li>
+									<li><a href="http://forum.darghos.com.br/">Forum </a></li>
+									<li><a href="http://forum.darghos.com.br/index.php?board=6.0">Darghopédia </a></li>								
+									<li><a href="http://forum.darghos.com.br/index.php?board=3.0">Feedbacks </a></li>									
 								</ul>
 							</li>
 							
 							<?php if(!$_SESSION['login']){ ?>
 							<li>
 								<strong>contas</strong>
-								<ul class="always_viewable">
+								<ul class="viewable">
 									<li><a href="?ref=account.register">Registrar-se </a></li>
 									<li><a href="?ref=account.login">Log-in </a></li>
 									<li><a href="?ref=account.recovery">Recuperar Conta </a></li>
@@ -54,7 +57,7 @@
 							
 							<li>
 								<strong>conta premium</strong>
-								<ul class="always_viewable">
+								<ul>
 									<li><a href="?ref=account.premium">Conta Premium </a></li>
 									<li><a href="?ref=contribute.order">Efetuar Pedido </a></li>
 									<li><a href="?ref=contribute.myorders">Meus Pedidos </a></li>
@@ -66,16 +69,15 @@
 							
 							<li>
 								<strong>comunidade</strong>
-								<ul class="always_viewable">
+								<ul>
 									<li><a href="?ref=character.view">Personagens</a></li>
 									<li><a href="?ref=community.highscores">Highscores</a></li>
 									<li><a href="?ref=community.guilds">Guildas</a></li>
 									<li><a href="?ref=community.houses">Casas</a></li>
-									<li><a href="?ref=community.polls">Enquetes</a></li>
 									<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
 									<li><a href="?ref=status.whoisonline">Quem está Online?</a></li>
 								</ul>
-							</li>
+							</li>							
 						</ul>
 					</div>
 					

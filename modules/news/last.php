@@ -3,6 +3,6 @@ $query = $db_tenerian->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by p
 
 while($fetch = $query->fetch())
 {
-	$core->sendMessageBox("<span style='float: left;'>".$fetch->topic."</span> <span style='float: right;'>".$core->formatDate($fetch->post_data)."</span>", $fetch->post);
+	$core->sendMessageBox("<span style='float: left;'>".$fetch->topic."</span> <span style='float: right;'>".$core->formatDate($fetch->post_data)."</span>", $fetch->post."<p style='text-align: right;'><a href='{$fetch->forum_url}'>Comentar está notícia</a></p>");
 }
 ?>

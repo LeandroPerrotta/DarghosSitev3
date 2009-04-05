@@ -315,3 +315,8 @@ table tr td {
 	
 	text-align: left;	
 }
+
+table tr td strong{
+	font-weight: bold;
+	color: #d6e1e0;	
+}
