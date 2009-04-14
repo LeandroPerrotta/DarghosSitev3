@@ -16,130 +16,133 @@ if($_GET['name'])
 		$character = $core->loadClass("character");
 		$character->loadByName($_GET['name'], "name, comment, hide, online, sex, account_id");
 
-		if($account->get("password") != $strings->encrypt($_POST["account_password"]))
+		if($_POST)
 		{
-			$error = "Confirmação da senha falhou.";
-		}			
-		elseif($_POST["edit_action"] == "edit_information")
-		{			
-			if(strlen($_POST["character_comment"]) > 500)
+			if($account->get("password") != $strings->encrypt($_POST["account_password"]))
 			{
-				$error = "O campo comentario deve possuir no maximo 500 caracteres.";
+				$error = "Confirmação da senha falhou.";
+			}			
+			elseif($_POST["edit_action"] == "edit_information")
+			{			
+				if(strlen($_POST["character_comment"]) > 500)
+				{
+					$error = "O campo comentario deve possuir no maximo 500 caracteres.";
+				}
+				else
+				{		
+					$hide = ($_POST["character_hide"] == 1) ? "1" : "0";
+					$character->set("comment", $_POST["character_comment"]);
+					$character->set("hide", $hide);
+					
+					$character->save();
+					
+					$success = "
+					<p>Caro jogador,</p>
+					<p>A mudança das informações de seu personagem foi efetuada com exito!</p>
+					<p>Tenha um bom jogo!</p>
+					";
+				}
 			}
-			else
-			{		
-				$hide = ($_POST["character_hide"] == 1) ? "1" : "0";
-				$character->set("comment", $_POST["character_comment"]);
-				$character->set("hide", $hide);
+			elseif($_POST["edit_action"] == "edit_name")
+			{	
+				$account = $character->loadAccount("premdays, lastday, type");
 				
-				$character->save();
+				$newname_character = $core->loadClass("character");
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A mudança das informações de seu personagem foi efetuada com exito!</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				if(!$_POST["character_newname"])
+				{
+					$error = "Preencha todos campos do formulario corretamente.";
+				}
+				elseif($account->get("type") > 2 AND $account->get("type") < 5)
+				{
+					$error = "Esta conta não possui permissão para acessar este recurso.";
+				}				
+				elseif(!$_POST["confirm_changename"])
+				{
+					$error = "Para modificar o nome de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
+				}			
+				elseif(!$strings->canUseName($_POST["character_newname"]))
+				{
+					$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
+				}
+				elseif($newname_character->loadByName($_POST["character_newname"]))
+				{
+					$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
+				}	
+				elseif($character->get("online") != 0)
+				{
+					$error = "É nessario estar off-line no jogo para efetuar este recurso.";
+				}			
+				elseif($account->get("premdays") < PREMDAYS_TO_CHANGENAME)
+				{
+					$error = "Você não possui os ".PREMDAYS_TO_CHANGENAME." dias de conta premium necessarios para modificar o nome de seu personagem.";
+				}
+				else
+				{		
+					$character->set("name", $_POST["character_newname"]);
+					$character->save();
+					
+					//removeção dos premdays da conta do jogador
+					$newpremdays = $account->get("premdays") - PREMDAYS_TO_CHANGENAME;
+					
+					$account->set("premdays", $newpremdays);
+					$account->set("lastday", time());
+					
+					$account->save();				
+					
+					$db_tenerian->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
+					
+					$success = "
+					<p>Caro jogador,</p>
+					<p>A mudança de nome de seu personagem foi efetuada com exito!</p>
+					<p>Tenha um bom jogo!</p>
+					";
+				}			
+			}
+			elseif($_POST["edit_action"] == "edit_sex")
+			{	
+				$account = $character->loadAccount("premdays, lastday, type");	
+				
+				if(!$_POST["confirm_changesex"])
+				{
+					$error = "Para modificar o sexo de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
+				}	
+				elseif($account->get("type") > 2 AND $account->get("type") < 5)
+				{
+					$error = "Esta conta não possui permissão para acessar este recurso.";
+				}						
+				elseif($character->get("online") != 0)
+				{
+					$error = "É nessario estar off-line no jogo para efetuar este recurso.";
+				}			
+				elseif($account->get("premdays") < PREMDAYS_TO_CHANGESEX)
+				{
+					$error = "Você não possui os ".PREMDAYS_TO_CHANGESEX." dias de conta premium necessarios para modificar o sexo de seu personagem.";
+				}
+				else
+				{		
+					$sexo = $_sex[$_POST['character_sex']];
+					$character->set("sex", $sexo);
+					$character->save();
+					
+					//removeção dos premdays da conta do jogador
+					$newpremdays = $account->get("premdays") - PREMDAYS_TO_CHANGESEX;
+					
+					$account->set("premdays", $newpremdays);
+					$account->set("lastday", time());
+					
+					$account->save();		
+	
+					$db_tenerian->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('sex','{$character->get("id")}','{$sexo}','".time()."')");
+					
+					$success = "
+					<p>Caro jogador,</p>
+					<p>A mudança de sexo de seu personagem foi efetuada com exito!</p>
+					<p>Tenha um bom jogo!</p>
+					";
+				}			
 			}
 		}
-		elseif($_POST["edit_action"] == "edit_name")
-		{	
-			$account = $character->loadAccount("premdays, lastday, type");
-			
-			$newname_character = $core->loadClass("character");
-			
-			if(!$_POST["character_newname"])
-			{
-				$error = "Preencha todos campos do formulario corretamente.";
-			}
-			elseif($account->get("type") > 2 AND $account->get("type") < 5)
-			{
-				$error = "Esta conta não possui permissão para acessar este recurso.";
-			}				
-			elseif(!$_POST["confirm_changename"])
-			{
-				$error = "Para modificar o nome de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
-			}			
-			elseif(!$strings->canUseName($_POST["character_newname"]))
-			{
-				$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
-			}
-			elseif($newname_character->loadByName($_POST["character_newname"]))
-			{
-				$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
-			}	
-			elseif($character->get("online") != 0)
-			{
-				$error = "É nessario estar off-line no jogo para efetuar este recurso.";
-			}			
-			elseif($account->get("premdays") < PREMDAYS_TO_CHANGENAME)
-			{
-				$error = "Você não possui os ".PREMDAYS_TO_CHANGENAME." dias de conta premium necessarios para modificar o nome de seu personagem.";
-			}
-			else
-			{		
-				$character->set("name", $_POST["character_newname"]);
-				$character->save();
-				
-				//removeção dos premdays da conta do jogador
-				$newpremdays = $account->get("premdays") - PREMDAYS_TO_CHANGENAME;
-				
-				$account->set("premdays", $newpremdays);
-				$account->set("lastday", time());
-				
-				$account->save();				
-				
-				$db_tenerian->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
-				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A mudança de nome de seu personagem foi efetuada com exito!</p>
-				<p>Tenha um bom jogo!</p>
-				";
-			}			
-		}
-		elseif($_POST["edit_action"] == "edit_sex")
-		{	
-			$account = $character->loadAccount("premdays, lastday, type");	
-			
-			if(!$_POST["confirm_changesex"])
-			{
-				$error = "Para modificar o sexo de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
-			}	
-			elseif($account->get("type") > 2 AND $account->get("type") < 5)
-			{
-				$error = "Esta conta não possui permissão para acessar este recurso.";
-			}						
-			elseif($character->get("online") != 0)
-			{
-				$error = "É nessario estar off-line no jogo para efetuar este recurso.";
-			}			
-			elseif($account->get("premdays") < PREMDAYS_TO_CHANGESEX)
-			{
-				$error = "Você não possui os ".PREMDAYS_TO_CHANGESEX." dias de conta premium necessarios para modificar o sexo de seu personagem.";
-			}
-			else
-			{		
-				$sexo = $_sex[$_POST['character_sex']];
-				$character->set("sex", $sexo);
-				$character->save();
-				
-				//removeção dos premdays da conta do jogador
-				$newpremdays = $account->get("premdays") - PREMDAYS_TO_CHANGESEX;
-				
-				$account->set("premdays", $newpremdays);
-				$account->set("lastday", time());
-				
-				$account->save();		
-
-				$db_tenerian->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('sex','{$character->get("id")}','{$sexo}','".time()."')");
-				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A mudança de sexo de seu personagem foi efetuada com exito!</p>
-				<p>Tenha um bom jogo!</p>
-				";
-			}			
-		}		
 		
 		if($success)	
 		{
