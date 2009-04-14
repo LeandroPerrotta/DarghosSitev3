@@ -280,7 +280,7 @@ class Character
 	
 	function loadOldNames()
 	{
-		$query = $this->db->query("SELECT value, time FROM ".DB_WEBSITE_PREFIX."changelog WHERE type = 'name' ORDER BY time DESC");
+		$query = $this->db->query("SELECT value, time FROM ".DB_WEBSITE_PREFIX."changelog WHERE type = 'name' and player_id = '{$this->data["id"]}' ORDER BY time DESC");
 		$names = array();
 		
 		if($query->numRows() != 0)
