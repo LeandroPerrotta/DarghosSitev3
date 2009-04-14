@@ -29,6 +29,7 @@ if($post or $get)
 		
 		$deathlist = $character->loadLastDeaths();
 		$list = $account->getCharacterList();
+		$oldnames = $character->loadOldNames();
 	
 		$module .= "
 		<table cellspacing='0' cellpadding='0'>
@@ -47,8 +48,27 @@ if($post or $get)
 			$module .= "
 			<tr>
 				<td width='25%'><b>Nome:</b></td> <td>{$character->get("name")}</td>
-			</tr>
+			</tr>";
 			
+			if($oldnames)
+			{		
+				foreach($oldnames as $name => $time)
+				{
+					$i++;
+						
+					$oldnames_string .= $name;
+
+					if($i != count($oldnames))
+						$oldnames_string .= ", ";		
+				}
+				
+				$module .= "
+				<tr>
+					<td width='25%'><b>Nomes Antigos:</b></td> <td>{$oldnames_string}</td>
+				</tr>";				
+			}			
+			
+			$module .= "
 			<tr>
 				<td><b>Level:</b></td> <td>{$character->get("level")}</td>
 			</tr>	

@@ -32,14 +32,53 @@ if(is_array($player_list))
 {
 	foreach($player_list as $player)
 	{
-		$character->loadByName($player, "name");
+		$character->loadByName($player, "name, hide");
+		
+		$charStatus = array();
 		
 		if($character->deletionStatus())
-			$charDel[$player] = $character->deletionStatus();
+		{
+			$charStatus[] = "<font color='red'>será deletado em: {$core->formatDate($character->deletionStatus())}</font>";
+		}
+		
+		if($character->get("hide") == 1)
+		{
+			$charStatus[] = "escondido";
+		}
+		
+		if(count($charStatus) != 0)
+		{
+			$i = 0;
+			foreach($charStatus as $status)
+			{
+				$i++;
+				
+				$statusString .= $status;
+				
+				if($i < count($charStatus))
+					$statusString .= ", ";
+			}
+		}
+		else
+			$statusString = "nenhum";
+			
 			
 		$charList .= "
 		<tr>
-			<td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>nenhum</td> <td><a href='?ref=character.edit&name={$character->get("name")}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->get("name")}'>Item Shop</a></td>
+			<td>
+				<a style='float: left' href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a> <span class='tooglePlus'></span>
+				<br />
+				<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>
+					<table cellspacing='0' cellpadding='0'>
+						<tr>
+							<td width='20%'><b>Status</b></td> <td>{$statusString}</td>
+						</tr>
+						<tr>	
+							<td><b>Ações</b></td> <td><a href='?ref=character.edit&name={$character->get("name")}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->get("name")}'>Item Shop</a></td>
+						</tr>
+					</table>
+				</div>
+			</td>
 		</tr>		
 		";	
 	}
@@ -52,19 +91,19 @@ $module .= "
 if(is_array($newemail = $account->getEmailToChange()))
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.$core->formatDate($newemail['date']).'. Você pode cancelar está mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.';
+	<p><font style="color: red; font-weight: bold;">Atenção:</font> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.$core->formatDate($newemail['date']).'. Você pode cancelar está mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
 }
 
 if($confirmed and $confirmed >= 1)
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, um pedido efetuado por sua conta foi confirmado com sucesso! Você já pode aceitar este pagamento ou visualizar maiores informações deste pedindo na categoria Conta Premium, na seção Meus Pedidos. Tenha um bom jogo!';
+	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, um pedido efetuado por sua conta foi confirmado com sucesso! Você já pode aceitar este pagamento ou visualizar maiores informações deste pedindo na categoria Conta Premium, na seção Meus Pedidos. Tenha um bom jogo!</p>';
 }
 
 if(!$secretkey)
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.';
+	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
 }
 
 if(isset($charDel))
@@ -72,7 +111,7 @@ if(isset($charDel))
 	foreach($charDel as $name => $deletion)
 	{
 		$module .= '
-		<p><font style="color: red; font-weight: bold;">Atenção:</font> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.$core->formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.';
+		<p><font style="color: red; font-weight: bold;">Atenção:</font> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.$core->formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
 	}
 }		
 
@@ -134,14 +173,10 @@ $module .= "
 </p>
 
 <p>
-	<table cellspacing='0' cellpadding='0' id='table'>
+	<table cellspacing='0' cellpadding='0' class='dropdowntable'>
 	
 		<tr>
 			<th colspan='3'>Meus Personagens</th>
-		</tr>
-		
-		<tr>
-			<td width='30%'><b>Nome:</b></td> <td width='35%'><b>Status:</b></td> <td><b>Opções</b> </td>
 		</tr>
 					
 		$charList

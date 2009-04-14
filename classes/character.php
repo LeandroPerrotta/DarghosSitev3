@@ -263,5 +263,37 @@ class Character
 	{
 		$this->db->query("DELETE FROM guild_invites WHERE player_id = '{$this->data['id']}'");
 	}
+	
+	function loadAccount($fields = null)
+	{
+		global $core;
+		
+		$account = $core->loadClass("Account");
+		
+		if($fields)
+			$account->load($this->data["account_id"], $fields);
+		else
+			$account->load($this->data["account_id"]);	
+			
+		return $account;	
+	}
+	
+	function loadOldNames()
+	{
+		$query = $this->db->query("SELECT value, time FROM ".DB_WEBSITE_PREFIX."changelog WHERE type = 'name' ORDER BY time DESC");
+		$names = array();
+		
+		if($query->numRows() != 0)
+		{
+			while($fetch = $query->fetch())
+			{
+				$names[$fetch->value] = $fetch->time;
+			}
+			
+			return $names;
+		}
+		else
+			return false;
+	}
 }
 ?>

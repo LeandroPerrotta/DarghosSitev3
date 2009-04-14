@@ -8,6 +8,7 @@
 		
 		<link href="<?php echo $layoutDir; ?>style.css" media="screen" rel="stylesheet" type="text/css" />
 		
+		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>lists.js" type="text/javascript"></script>
 	</head>
@@ -23,7 +24,7 @@
 					<div id="left">
 						<ul>
 							<li>
-								<strong>navegação</strong>
+								<div><strong>Navegação</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=news.last">Últimas Notícias </a></li>
 									<li><a href="http://forum.darghos.com.br/index.php?board=1.0">Arquivo de Notícias </a></li>
@@ -37,9 +38,28 @@
 							</li>
 							
 							<?php if(!$_SESSION['login']){ ?>
+							<?php 
+								$menudropdown['accounts']['status'] = null;
+								$menudropdown['accounts']['button'] = "tooglePlus";
+							
+								if($_COOKIE['menudropdown_accounts'])
+								{ 
+									if($_COOKIE['menudropdown_accounts'] == "true")
+									{ 
+										$menudropdown['accounts']['status'] = "class='viewable'"; 
+										$menudropdown['accounts']['button'] = "toogleMinus";
+									}
+									elseif($_COOKIE['menudropdown_accounts'] == "false")
+									{
+										$menudropdown['accounts']['status'] = null;
+										$menudropdown['accounts']['button'] = "tooglePlus";
+									}	
+								} 
+							?>
+														
 							<li>
-								<strong>contas</strong>
-								<ul class="viewable">
+								<div name="accounts"><strong>Contas</strong> <span class="<?php echo $menudropdown['accounts']['button']; ?>"></span></div>
+								<ul <?php echo $menudropdown['accounts']['status']; ?>>
 									<li><a href="?ref=account.register">Registrar-se </a></li>
 									<li><a href="?ref=account.login">Log-in </a></li>
 									<li><a href="?ref=account.recovery">Recuperar Conta </a></li>
@@ -48,16 +68,35 @@
 							</li>
 							<?php } else { ?>
 							<li>
-								<strong>minha conta</strong>
+								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=account.main">Main </a></li>
 									<li><a href="?ref=account.logout">Log-out </a></li>
 								</ul>
 							</li>
 							
+							
+							<?php 
+								$menudropdown['contribute']['status'] = null;
+								$menudropdown['contribute']['button'] = "tooglePlus";
+							
+								if($_COOKIE['menudropdown_contribute'])
+								{ 
+									if($_COOKIE['menudropdown_contribute'] == "true")
+									{ 
+										$menudropdown['contribute']['status'] = "class='viewable'"; 
+										$menudropdown['contribute']['button'] = "toogleMinus";
+									}
+									elseif($_COOKIE['menudropdown_contribute'] == "false")
+									{
+										$menudropdown['contribute']['status'] = null;
+										$menudropdown['contribute']['button'] = "tooglePlus";
+									}	
+								} 
+							?>							
 							<li>
-								<strong>conta premium</strong>
-								<ul>
+								<div name="contribute"><strong>Conta Premium</strong> <span class="<?php echo $menudropdown['contribute']['button']; ?>"></span></div>
+								<ul <?php echo $menudropdown['contribute']['status']; ?>>
 									<li><a href="?ref=account.premium">Conta Premium </a></li>
 									<li><a href="?ref=contribute.order">Efetuar Pedido </a></li>
 									<li><a href="?ref=contribute.myorders">Meus Pedidos </a></li>
@@ -66,10 +105,28 @@
 							</li>			
 																									
 							<?php } ?>
+				
+							<?php 
+								$menudropdown['community']['status'] = "class='viewable'";
+								$menudropdown['community']['button'] = "toogleMinus";
 							
+								if($_COOKIE['menudropdown_community'])
+								{ 
+									if($_COOKIE['menudropdown_community'] == "true")
+									{ 
+										$menudropdown['community']['status'] = "class='viewable'"; 
+										$menudropdown['community']['button'] = "toogleMinus";
+									}
+									elseif($_COOKIE['menudropdown_community'] == "false")
+									{
+										$menudropdown['community']['status'] = null;
+										$menudropdown['community']['button'] = "tooglePlus";
+									}	
+								} 
+							?>							
 							<li>
-								<strong>comunidade</strong>
-								<ul>
+								<div name="community"><strong>Comunidade</strong> <span class="<?php echo $menudropdown['community']['button']; ?>" ></span></div> 
+								<ul <?php echo $menudropdown['community']['status']; ?>>
 									<li><a href="?ref=character.view">Personagens</a></li>
 									<li><a href="?ref=community.highscores">Highscores</a></li>
 									<li><a href="?ref=community.guilds">Guildas</a></li>

@@ -42,7 +42,7 @@ if($_GET['name'])
 			{
 				$error = "Você não possui os {$itemshop_list->get("cost")} dias de conta premium necessarios para obter este item.";
 			}
-			elseif($account->get("type") > 1 AND $account->get("type") < 5)
+			elseif($account->get("type") > 2 AND $account->get("type") < 5)
 			{
 				$error = "Esta conta não possui permissão para acessar este recurso.";
 			}			
