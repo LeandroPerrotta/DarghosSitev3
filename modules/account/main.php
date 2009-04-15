@@ -34,6 +34,9 @@ if(is_array($player_list))
 	{
 		$character->loadByName($player, "name, hide");
 		
+		unset($charStatus);
+		unset($statusString);
+		
 		$charStatus = array();
 		
 		if($character->deletionStatus())
@@ -55,7 +58,7 @@ if(is_array($player_list))
 				
 				$statusString .= $status;
 				
-				if($i < count($charStatus))
+				if($i != count($charStatus))
 					$statusString .= ", ";
 			}
 		}
