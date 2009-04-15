@@ -36,12 +36,15 @@ if(is_array($player_list))
 		
 		unset($charStatus);
 		unset($statusString);
+		unset($charOptions);
 		
 		$charStatus = array();
+		$charOptions = "<a href='?ref=character.edit&name={$character->get("name")}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->get("name")}'>Item Shop</a>";
 		
 		if($character->deletionStatus())
 		{
 			$charStatus[] = "<font color='red'>será deletado em: {$core->formatDate($character->deletionStatus())}</font>";
+			$charOptions .= " - <a href='?ref=character.undelete&name={$character->get("name")}'>Cancelar Exclusão</a>";
 		}
 		
 		if($character->get("hide") == 1)
@@ -77,7 +80,7 @@ if(is_array($player_list))
 							<td width='20%'><b>Status</b></td> <td>{$statusString}</td>
 						</tr>
 						<tr>	
-							<td><b>Ações</b></td> <td><a href='?ref=character.edit&name={$character->get("name")}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->get("name")}'>Item Shop</a></td>
+							<td><b>Ações</b></td> <td>{$charOptions}</td>
 						</tr>
 					</table>
 				</div>
