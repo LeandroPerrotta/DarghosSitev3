@@ -1,0 +1,34 @@
+Legenda{
+	-	Parado/Não Iniciado
+	/	Em andamento
+	*	Concluido
+	
+	||	Topico com Sub-Topicos
+}
+
+0.1
+{
+	*.*
+}
+
+0.2
+{
+	* Reformular funções de carregamento de registros do banco de dados das classes
+	* Reformular modulos que tiverem funções de classes alteradas	
+	* Reformular forma de tratamento de FORMS anti sql-injection
+	
+	|| Melhorias de Versatilidade
+	{
+		* Cidades personalizadas para a criação de personagens
+		* Revisão nos textos com o SERVERNAME
+	}
+	
+	|| Modificações para a migração do gameserver (tfs 0.3.x)
+	{
+		* Implementar classes e modulos de accounts para sistema de Account Names (register, login, lostInterface)
+		* Implementar sistema de configuração de name para accounts antigas
+		* Implementar classes e modulos de accounts e players para sistema de Bans (character view, accountmain)
+		* Implementar classes e modulos de players para novo sistema de Player Deaths (character view, lastdeaths)	
+	}
+}	
+	
