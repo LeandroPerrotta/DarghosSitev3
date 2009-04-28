@@ -83,7 +83,7 @@ if($post or $get)
 			</tr>	
 
 			<tr>
-				<td><b>Residencia:</b></td> <td>{$_townid[$character->get("town_id")]}</td>
+				<td><b>Residencia:</b></td> <td>{$_townid[$character->get("town_id")]["name"]}</td>
 			</tr>";	
 
 			if($houseid)

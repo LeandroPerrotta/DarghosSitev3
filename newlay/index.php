@@ -7,6 +7,7 @@
 		<title><? echo CONFIG_SITENAME; ?></title>
 		
 		<link href="<?php echo $layoutDir; ?>style.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="default.css" media="screen" rel="stylesheet" type="text/css" />
 		
 		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
