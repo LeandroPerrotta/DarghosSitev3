@@ -7,6 +7,7 @@ define('HOUSES_FILE', "world/test-house.xml");
 define('MONSTERS_FILE', "monster/monsters.xml");
 
 define('CONFIG_SITENAME', "Darghos Tenerian");
+define('CONFIG_OWNERNAME', "Equipe UltraxSoft");
 
 /*	Configurações SMTP	 */
 define('SMTP_HOST', "darghos.net");
@@ -21,10 +22,22 @@ define('STORAGE_ID_ITEMSHOP', 8987);
 
 define('ENCRYPTION_TYPE', "md5");
 
+/* ID PARA IDENTIFICAÇÃO DAS PAGINAS DE TEXTO ARMAZENADAS NO BANCO DE DADOS */
+define('DBPAGES_HOWPLAY', 1);
+define('DBPAGES_ABOUT', 2);
+define('DBPAGES_PREMIUMFEATURES', 3);
+
 define('DAYS_TO_CHANGE_EMAIL', 15); //Dias de espera necessarios para uma mudança de e-mail agendada
 define('DAYS_TO_DELETE_CHARACTER', 30); //Dias de espera necessarios para deletar um personagem da conta
 define('SHOW_DEATHS_DAYS_AGO', 30); //Limite de mortes dias atráz que serão exibidas
-define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 0); //Possibilidade de ignorar personagens no rank que não entraram no jogo a X dias
+define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 1); //Possibilidade de ignorar personagens no rank que não entraram no jogo a X dias
+define('HIDE_FORUMLINKS', 1); //Esconde os links ligados a forums, como o Comentar nas noticias.
+define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
+/*
+define('SHOW_PREMIUMFEATURES', 1); //Exibi as opções de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)
+
+define('USE_VALIDATIONBYEMAIL', 1); //Ativa validação por email para modulos como criação de personagem e recuperação de contas e etc (0 = hide, 1 = show) IMPORTANTE: ATIVAÇÃO REQUER SERVIDOR SMTP CONFIGURADO
+*/
 
 // Constantes para Guildas
 define('GUILDS_FORMATION_DAYS', 5); //Limite de dias para guildas serem formadas

@@ -9,6 +9,12 @@ class Core
 		$this->db = $db_tenerian;
 	}	
 	
+	function FCKEditor($instance)
+	{
+		include "libs/fckeditor/fckeditor.php";
+		return new FCKeditor($instance);
+	}
+	
 	function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";

@@ -1,3 +1,9 @@
+CREATE TABLE `wb_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content` TEXT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
 CREATE TABLE `wb_blackliststrings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `string` varchar(255) NOT NULL,

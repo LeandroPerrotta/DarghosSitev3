@@ -39,6 +39,8 @@ class Tools
 			case 22: return "Revelação de conteudo não permitido"; break;	
 			default: "Desconhecido"; break;
 		}
+		
+		return true;
 	}
 }
 ?>

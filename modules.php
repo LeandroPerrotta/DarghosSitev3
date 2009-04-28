@@ -86,8 +86,11 @@ else
 				break;
 
 				case "itemshop_log":
-					$needLogin = true;	
-					$patch['file'] = $topic;
+					if(SHOW_SHOPFEATURES != 0)
+					{
+						$needLogin = true;	
+						$patch['file'] = $topic;					
+					}		
 				break;	
 
 				case "setname":
@@ -134,10 +137,13 @@ else
 				break;		
 
 				case "itemshop":
-					$needLogin = true;		
-					$patch['file'] = $topic;
-				break;					
-
+					if(SHOW_SHOPFEATURES != 0)
+					{
+						$needLogin = true;		
+						$patch['file'] = $topic;
+					}	
+				break;				
+	
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -318,6 +324,10 @@ else
 			switch($topic)
 			{
 				case "howplay":
+					$patch['file'] = $topic;
+				break;	
+				
+				case "about":
 					$patch['file'] = $topic;
 				break;	
 

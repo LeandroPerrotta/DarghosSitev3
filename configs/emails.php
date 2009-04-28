@@ -3,7 +3,7 @@ $emailmodel[1] = "
 <html>
 <body>		
 <p>Prezado jogador,</p>
-<p>A sua conta no Darghos foi criada com sucesso! Memorize as informações acesso a sua conta abaixo:</p>
+<p>A sua conta no ".CONFIG_SITENAME." foi criada com sucesso! Memorize as informações acesso a sua conta abaixo:</p>
 
 <p>
 	Nome da Conta: <b>".$emailvalue[0]."</b>.<br>
@@ -14,8 +14,8 @@ $emailmodel[1] = "
 
 <p>Para acessar sua conta clique <a href='".CONFIG_SITEEMAIL."/index.php?ref=account.login'><b>aqui</b></a>.</p>
 
-<p>Nos vemos no Darghos!<br>
-Equipe UltraxSoft.</p>
+<p>Nos vemos no ".CONFIG_SITENAME."!<br>
+".CONFIG_OWNERNAME.".</p>
 </body>
 </html>
 ";
@@ -32,8 +32,8 @@ $emailmodel[2] = "
 
 <p>Para acessar sua conta clique <a href='".CONFIG_SITEEMAIL."/index.php?ref=account.login'><b>aqui</b></a>.</p>
 
-<p>Nos vemos no Darghos!<br>
-Equipe UltraxSoft.</p>
+<p>Nos vemos no ".CONFIG_SITENAME."!<br>
+".CONFIG_OWNERNAME.".</p>
 </body>
 </html>
 ";
@@ -48,8 +48,8 @@ $emailmodel[3] = "
 	<a href='".CONFIG_SITEEMAIL."?ref=account.recovery&key=".$emailvalue[0]."'>".CONFIG_SITEEMAIL."/index.php?ref=account.recovery&key=".$emailvalue[0]."</a><br>
 </p>
 
-<p>Nos vemos no Darghos!<br>
-Equipe UltraxSoft.</p>
+<p>Nos vemos no ".CONFIG_SITENAME."!<br>
+".CONFIG_OWNERNAME.".</p>
 </body>
 </html>
 ";
@@ -65,8 +65,8 @@ $emailmodel[4] = "
 	<a href='".CONFIG_SITEEMAIL."?ref=account.recovery&key=".$emailvalue[1]."'>".CONFIG_SITEEMAIL."/index.php?ref=account.recovery&key=".$emailvalue[1]."</a><br>
 </p>
 
-<p>Nos vemos no Darghos!<br>
-Equipe UltraxSoft.</p>
+<p>Nos vemos no ".CONFIG_SITENAME."!<br>
+".CONFIG_OWNERNAME.".</p>
 </body>
 </html>
 ";
@@ -83,8 +83,8 @@ $emailmodel[5] = "
 
 <p>Para acessar sua conta clique <a href='".CONFIG_SITEEMAIL."/index.php?ref=account.login'><b>aqui</b></a>.</p>
 
-<p>Nos vemos no Darghos!<br>
-Equipe UltraxSoft.</p>
+<p>Nos vemos no ".CONFIG_SITENAME."!<br>
+".CONFIG_OWNERNAME.".</p>
 </body>
 </html>
 ";

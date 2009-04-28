@@ -17,6 +17,8 @@ Legenda{
 	* Reformular modulos que tiverem funções de classes alteradas	
 	* Reformular forma de tratamento de FORMS anti sql-injection
 	* Arquivos de configuração statics e unstatics unificados em definitions.php
+	* Mover Paginas de Instruções e Textos para o banco de dados
+	- Adicionar a opção de capturar as informações de configuração do servidor diretamente do Config.lua na pasta do Servidor
 	
 	|| Melhorias de Portatibilidade
 	{
@@ -24,9 +26,11 @@ Legenda{
 		* Revisão nos textos com o SERVERNAME
 		* Possibilidade de desativar a ignoração de personagens inactivos no highscores (setar 0)
 		* Criado Default.css independente do Layout, com atributos para Tabelas, Botoes e Formularios Universais
-		- Possibilidade de desativar os Forum Links
+		* Possibilidade de desativar os Forum Links
 		- Possibilidade de desativar o sistema de Validação por E-mail
 		- Possibilidade de desativar as animações Jquery
+		* Possibilidade de desativar o sistema de Item Shop
+		- Possibilidade de desativar o sistema de Conta Premium
 	}
 	
 	|| Modificações para a migração do gameserver (tfs 0.3.x)

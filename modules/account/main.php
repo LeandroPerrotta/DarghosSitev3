@@ -41,7 +41,12 @@ if(is_array($player_list))
 		unset($charOptions);
 		
 		$charStatus = array();
-		$charOptions = "<a href='?ref=character.edit&name={$character->getName()}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
+		$charOptions = "<a href='?ref=character.edit&name={$character->getName()}'>Editar</a>";
+		
+		if(SHOW_SHOPFEATURES == 1)
+		{
+			$charOptions .= " - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
+		}
 		
 		if($character->deletionStatus())
 		{

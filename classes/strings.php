@@ -98,6 +98,8 @@ class Strings
 	            return true; 
 	        } 
 	    } 
+	    
+    	return false;
 	}
 	
 	function isFromBlackList($string)
@@ -168,7 +170,7 @@ class Strings
 	
 		for($a = 0; $a != count($palavras); $a++)
 		{	
-			foreach(count_chars($palavras[$a], 1) as $letra => $quantidade)
+			foreach(count_chars($palavras[$a], 1) as $quantidade)
 			{
 				if($quantidade > 4)
 					return false;				
