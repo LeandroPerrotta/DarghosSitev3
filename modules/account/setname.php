@@ -13,7 +13,7 @@ if($post)
 	{
 		$error = "O nome de sua conta deve possuir entre 5 e 25 caracteres.";
 	}	
-	elseif($account->getName() == $account->getId())
+	elseif($account->getName() == $_POST['account_name'])
 	{
 		$error = "O nome de sua conta deve ser diferente do seu antigo numero.";
 	}
