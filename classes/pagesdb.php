@@ -5,8 +5,8 @@ class PagesDB
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}
 	
 	function load($id)

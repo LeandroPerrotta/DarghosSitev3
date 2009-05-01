@@ -5,8 +5,8 @@ class Bans
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}	
 	
 	function isBannished($account_id)

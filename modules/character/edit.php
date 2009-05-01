@@ -92,7 +92,7 @@ if($_GET['name'])
 						
 						$account->save();				
 						
-						$db_tenerian->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
+						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
 						
 						$success = "
 						<p>Caro jogador,</p>
@@ -138,7 +138,7 @@ if($_GET['name'])
 						
 						$account->save();		
 		
-						$db_tenerian->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('sex','{$character->get("id")}','{$sexo}','".time()."')");
+						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('sex','{$character->get("id")}','{$sexo}','".time()."')");
 						
 						$success = "
 						<p>Caro jogador,</p>

@@ -20,7 +20,7 @@ if($_GET['name'])
 		if($post)
 		{
 			$itemshop_list = $core->loadClass("itemshop_list");
-			$query = $db_tenerian->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
+			$query = $db->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
 			
 			if($account->get("password") != $strings->encrypt($post[1]))
 			{
@@ -57,7 +57,7 @@ if($_GET['name'])
 				
 				$itemshop->save();
 				
-				$db_tenerian->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db_tenerian->lastInsertId()}')");
+				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db->lastInsertId()}')");
 				
 				$newpremdays = $account->get("premdays") - $itemshop_list->get("cost");
 				
@@ -86,7 +86,7 @@ if($_GET['name'])
 				$core->sendMessageBox("Erro!", $error);
 			}
 		
-		$query = $db_tenerian->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
+		$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
 			
 		$module .=	'
 			<form action="" method="post">

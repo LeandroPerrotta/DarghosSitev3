@@ -1,5 +1,5 @@
 <?php
-$query = $db_tenerian->query("SELECT * FROM houses");
+$query = $db->query("SELECT * FROM houses");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>

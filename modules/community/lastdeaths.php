@@ -1,5 +1,5 @@
 <?php
-$query = $db_tenerian->query("SELECT * FROM player_deaths WHERE time > ".(time() - (60 * 60 * 2))." ORDER BY time DESC");
+$query = $db->query("SELECT * FROM player_deaths WHERE time > ".(time() - (60 * 60 * 2))." ORDER BY time DESC");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>

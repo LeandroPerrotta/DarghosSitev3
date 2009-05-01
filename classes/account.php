@@ -22,8 +22,8 @@ class Account
 	
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}
 	
 	/* proposito: despeja um numero de conta do banco de dados ao objeto pelo seu id

@@ -1,5 +1,5 @@
 <?php
-$query = $db_tenerian->query("SELECT id FROM players WHERE online = '1' ORDER BY name");
+$query = $db->query("SELECT id FROM players WHERE online = '1' ORDER BY name");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>

@@ -5,8 +5,8 @@ class Monsters
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 		
 		if(file_exists(DIR_DATA.MONSTERS_FILE))
 			$this->element = simplexml_load_file(DIR_DATA.MONSTERS_FILE);

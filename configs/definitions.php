@@ -1,5 +1,7 @@
 <?php
 
+define('MANUTENTION', 1);
+
 define('CONFIG_SITEEMAIL', "http://localhost/DarghosNew2.0");
 
 define('DIR_DATA', "C:/Server/server/data/");
@@ -16,6 +18,7 @@ define('SMTP_USER', "no-reply@darghos.net");
 define('SMTP_PASS', "gu166887");
 
 define('SERVER_ID', 1);
+define('USEREMOTECONNECTIONS', 0);
 
 /* Entrega de item comprados no ItemShop é feita via Lua Scripts, baseado no StorageID do jogador */
 define('STORAGE_ID_ITEMSHOP', 8987);

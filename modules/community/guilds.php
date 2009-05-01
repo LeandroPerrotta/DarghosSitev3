@@ -1,5 +1,5 @@
 <?php
-$query = $db_tenerian->query("SELECT * FROM guilds WHERE status = '1' ORDER BY creationdata");	
+$query = $db->query("SELECT * FROM guilds WHERE status = '1' ORDER BY creationdata");	
 
 $module .= "
 <p>
@@ -42,7 +42,7 @@ $module .= "
 </table>";
 
 unset($query);
-$query = $db_tenerian->query("SELECT * FROM guilds WHERE status = '0' ORDER BY creationdata");	
+$query = $db->query("SELECT * FROM guilds WHERE status = '0' ORDER BY creationdata");	
 
 $module .= "
 <p><h3>Guildas em Formação</h3></p>	

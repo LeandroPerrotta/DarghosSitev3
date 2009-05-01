@@ -5,8 +5,8 @@ class Strings
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}
 
 	function filterInputs($checkGets = false)

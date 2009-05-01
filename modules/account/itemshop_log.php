@@ -9,7 +9,7 @@ $module .= "
 		</tr>
 ";		
 
-$query = $db_tenerian->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop WHERE account_id = '{$_SESSION['login'][0]}' ORDER BY time DESC");
+$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop WHERE account_id = '{$_SESSION['login'][0]}' ORDER BY time DESC");
 
 if($query->numRows() != 0)
 {
