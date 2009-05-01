@@ -30,6 +30,11 @@ else
 	
 	$core = new Core();
 	
+	if("http://".$_SERVER["HTTP_HOST"] != CONFIG_SITEEMAIL)
+	{
+		$core->redirect(CONFIG_SITEEMAIL, false); 
+	}	
+	
 	$strings = $core->loadClass("Strings");
 	$tools = $core->loadClass("tools");
 	

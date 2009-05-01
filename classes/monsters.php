@@ -18,7 +18,7 @@ class Monsters
 	{
 		foreach($this->element->monster as $monster)
 		{
-			if($monster['name'] == $name)
+			if(strtolower($monster['name']) == strtolower($name))
 			{
 				$this->data['file'] = $monster['file'];
 				return true;
