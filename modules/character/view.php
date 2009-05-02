@@ -93,7 +93,7 @@ if($post or $get)
 				
 				$module .= "
 				<tr>
-					<td><b>Casa</b></td> <td>{$houses->get("name")} ({$_townid[$houses->get("townid")]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}</td>
+					<td><b>Casa</b></td> <td>{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}</td>
 				</tr>";						
 			}
 			
@@ -236,7 +236,7 @@ if($post or $get)
 				
 				$module .= "
 					<tr>
-						<td witdh='20%'>{$time}</td> <td>{$death}</td>
+						<td witdh='10%'>{$time}</td> <td>{$death}</td>
 					</tr>					
 				";	
 			}

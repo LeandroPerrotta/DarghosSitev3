@@ -18,7 +18,7 @@ if($query->numRows() != 0)
 				
 		$time = $core->formatDate($fetch->time);
 		
-		$death = "{$deathPlayer->getName()} foi morto no nivel {$values['level']} por ";
+		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$fetch->level} por ";
 		
 		if($fetch->killed_by == "field item")
 		{
@@ -26,9 +26,9 @@ if($query->numRows() != 0)
 		}	
 		elseif($monsters->load($fetch->killed_by))
 		{
-			$death .= "um ".$fetch->altkilled_by;
+			$death .= "um ".$fetch->killed_by;
 		}	
-		elseif(is_int($fetch->killed_by))
+		elseif(is_numeric($fetch->killed_by))
 		{
 			$Killer = $core->loadClass("character");	
 			$Killer->load($fetch->killed_by);
@@ -50,7 +50,7 @@ if($query->numRows() != 0)
 			{
 				$death .= " e um ".$fetch->altkilled_by;
 			}
-			elseif(is_int($fetch->altkilled_by))	
+			elseif(is_numeric($fetch->altkilled_by))	
 			{
 				$altKiller = $core->loadClass("character");	
 				$altKiller->load($fetch->altkilled_by);

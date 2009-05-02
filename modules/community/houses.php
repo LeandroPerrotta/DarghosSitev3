@@ -26,7 +26,7 @@ while($fetch = $query->fetch())
 	{
 		$module .= "
 		<tr>
-			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]}</td> <td><font style='color: green; font-weight: bold;'>Vazia</font></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
+			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]["name"]}</td> <td><font style='color: green; font-weight: bold;'>Vazia</font></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
 		</tr>";		
 	}	
 	else
