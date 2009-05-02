@@ -190,20 +190,46 @@ if($post or $get)
 				$death = "Morto no Nivel {$values['level']} por ";
 				
 				if($values['killed_by'] == "field item")
+				{
 					$death .= "um campo de dano";
+				}	
 				elseif($monsters->load($values['killed_by']))
+				{
 					$death .= "um ".$values['killed_by'];
+				}	
+				elseif(is_int($values['killed_by']))
+				{
+					$Killer = $core->loadClass("character");	
+					$Killer->load($values['killed_by']);
+					
+					$death .= "<a href='?ref=character.view&name={$Killer->getName()}'>{$Killer->getName()}</a>";
+				}
 				else
+				{
 					$death .= "<a href='?ref=character.view&name={$values['killed_by']}'>{$values['killed_by']}</a>";
+				}	
 					
 				if($values['altkilled_by'])	
 				{
 					if($values['altkilled_by'] == "field item")
-						$death .= "e um campo de dano";					
+					{
+						$death .= "e um campo de dano";		
+					}				
 					elseif($monsters->load($values['altkilled_by']))
+					{
 						$death .= " e um ".$values['altkilled_by'];
+					}
+					elseif(is_int($values['altkilled_by']))	
+					{
+						$altKiller = $core->loadClass("character");	
+						$altKiller->load($values['killed_by']);
+						
+						$death .= " e por <a href='?ref=character.view&name={$altKiller->getName()}'>{$altKiller->getName()}</a>";			
+					}
 					else
+					{
 						$death .= " e por <a href='?ref=character.view&name={$values['altkilled_by']}'>{$values['altkilled_by']}</a>";		
+					}	
 				}	
 
 				$death .= ".";
@@ -235,7 +261,7 @@ if($post or $get)
 				
 				if($character_list->get("hide") == 0)
 				{
-					$character_status = ($character_list->get("online") == 1) ? "<font style='color: green; font-weight: bold;'>On-line</font>" : "<font style='color: red; font-weight: bold;'>Off-line</font>";
+					$character_status = ($character_list->getOnline() == 1) ? "<font style='color: green; font-weight: bold;'>On-line</font>" : "<font style='color: red; font-weight: bold;'>Off-line</font>";
 					
 					$module .= "
 						<tr>

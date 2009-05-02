@@ -36,7 +36,7 @@ while($fetch = $query->fetch())
 		
 		$module .= "
 		<tr>
-			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]}</td> <td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
+			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]["name"]}</td> <td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
 		</tr>";			
 	}
 }

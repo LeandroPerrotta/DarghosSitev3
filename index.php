@@ -29,10 +29,20 @@ else
 	$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);
 	
 	$core = new Core();
-	
-	if("http://".$_SERVER["HTTP_HOST"] != CONFIG_SITEEMAIL)
-	{
-		$core->redirect(CONFIG_SITEEMAIL, false); 
+		
+	if(defined('SITE_ROOT_DIR'))
+	{	
+		if("http://".$_SERVER["HTTP_HOST"].SITE_ROOT_DIR != CONFIG_SITEEMAIL)
+		{
+			$core->redirect(CONFIG_SITEEMAIL, false); 
+		}	
+	}
+	else
+	{		
+		if("http://".$_SERVER["HTTP_HOST"] != CONFIG_SITEEMAIL)
+		{
+			$core->redirect(CONFIG_SITEEMAIL, false); 
+		}		
 	}	
 	
 	$strings = $core->loadClass("Strings");

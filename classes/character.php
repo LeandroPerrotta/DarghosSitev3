@@ -240,6 +240,7 @@ class Character
 			case "sex":					return $this->getSex();					break;
 			case "rank_id":				return $this->getRankId();				break;
 			case "guildnick":			return $this->getGuildNick();			break;
+			case "online":				return $this->getOnline();				break;
 			case "description":			return $this->getDescription();			break;
 			case "comment":				return $this->getDescription();			break;
 			case "guild_join_date":		return $this->getGuildJoinDate();		break;
@@ -310,6 +311,11 @@ class Character
 	function getGuildNick()
 	{
 		return $this->data['guildnick'];
+	}
+	
+	function getOnline()
+	{
+		return $this->data['online'];
 	}
 	
 	function getDescription()
