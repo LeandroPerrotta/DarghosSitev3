@@ -6,7 +6,10 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 {
 	if($post)
 	{
-		if($post[0] != $_SESSION['login'][0] or $strings->encrypt($post[1]) != $_SESSION['login'][1])
+		$chkAccount = $core->loadClass("Account");
+		$chkAccount->load($_SESSION['login'][0]);		
+		
+		if($post[0] != $chkAccount->getName() or $strings->encrypt($post[1]) != $_SESSION['login'][1])
 		{
 			$error = "A confirmação do numero da conta ou senha estão invalidos.";
 		}
@@ -100,8 +103,8 @@ $module .= '
 		</ul>	
 	
 		<p>
-			<label for="account_number">Conta</label><br />
-			<input name="account_number" size="40" type="password" value="" />
+			<label for="account_name">Nome da Conta</label><br />
+			<input name="account_name" size="40" type="password" value="" />
 		</p>
 		
 		<p>

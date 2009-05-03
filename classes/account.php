@@ -34,6 +34,7 @@ class Account
 	 */
 	function load($id, $fields = null)
 	{
+		global $strings;
 		$query = $this->db->query("SELECT id, name, password, premdays, lastday, email, `key`, blocked, warnings, group_id, url, location, real_name, creation FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
@@ -41,7 +42,7 @@ class Account
 			$fetch = $query->fetch();
 			
 			$this->data['id'] = $fetch->id;				
-			$this->data['name'] = $fetch->name;	
+			$this->data['name'] = $strings->SQLInjection($fetch->name);	
 			$this->data['password'] = $fetch->password;	
 			$this->data['premdays'] = $fetch->premdays;	
 			$this->data['lastday'] = $fetch->lastday;	

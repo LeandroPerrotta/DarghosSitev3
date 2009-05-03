@@ -57,8 +57,13 @@ if($_GET['name'])
 				
 				$itemshop->save();
 				
-				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db->lastInsertId()}')");
+				$storage_query = $db->query("SELECT `key` FROM `player_storage` WHERE `player_id` = '{$character->getId()}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
 				
+				if($storage_query->numRows() == 0)
+					$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db->lastInsertId()}')");
+				else
+					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
+					
 				$newpremdays = $account->get("premdays") - $itemshop_list->get("cost");
 				
 				$account->set("premdays", $newpremdays);
