@@ -29,8 +29,6 @@ else
 	$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);
 	
 	$core = new Core();
-		
-	echo $core->formatDate(1240321126);
 	
 	if(defined('SITE_ROOT_DIR'))
 	{	

@@ -1,5 +1,5 @@
 <?php
-$query = $db->query("SELECT * FROM player_deaths WHERE time > ".(time() - (60 * 60 * 2))." ORDER BY time DESC");
+$query = $db->query("SELECT id FROM player_deaths WHERE date > ".(time() - (60 * 60 * 4))." ORDER BY date DESC");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
@@ -11,55 +11,41 @@ if($query->numRows() != 0)
 {
 	while($fetch = $query->fetch())
 	{
+		$deaths = $core->loadClass("Deaths");
+		
+		$death_values = $deaths->load($fetch->id);
+		
 		$deathPlayer = $core->loadClass("character");
 		$deathPlayer->load($fetch->player_id, "name");		
-		
-		$monsters = $core->loadClass("monsters");
 				
-		$time = $core->formatDate($fetch->time);
+		$date = $core->formatDate($fetch->date);
 		
-		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$fetch->level} por ";
+		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
 		
-		if($fetch->killed_by == "field item")
+		if($death_values['killer_is_env'] == 1)
 		{
-			$death .= "um campo de dano";
+			$death .= "um ".$death_values['killed_by'];
 		}	
-		elseif($monsters->load($fetch->killed_by))
-		{
-			$death .= "um ".$fetch->killed_by;
-		}	
-		elseif(is_numeric($fetch->killed_by))
+		else
 		{
 			$Killer = $core->loadClass("character");	
-			$Killer->load($fetch->killed_by);
+			$Killer->load($death_values['killed_by']);
 			
 			$death .= "<a href='?ref=character.view&name={$Killer->getName()}'>{$Killer->getName()}</a>";
 		}
-		else
-		{
-			$death .= "<a href='?ref=character.view&name={$fetch->killed_by}'>{$fetch->killed_by}</a>";
-		}	
 			
-		if($fetch->altkilled_by)	
-		{
-			if($fetch->altkilled_by == "field item")
+		if($death_values['alt_killed_by'])	
+		{			
+			if($death_values['alt_killer_is_env'] == 1)
 			{
-				$death .= "e um campo de dano";		
-			}				
-			elseif($monsters->load($fetch->altkilled_by))
-			{
-				$death .= " e um ".$fetch->altkilled_by;
-			}
-			elseif(is_numeric($fetch->altkilled_by))	
-			{
-				$altKiller = $core->loadClass("character");	
-				$altKiller->load($fetch->altkilled_by);
-				
-				$death .= " e por <a href='?ref=character.view&name={$altKiller->getName()}'>{$altKiller->getName()}</a>";			
+				$death .= "um ".$death_values['altkilled_by'];
 			}
 			else
 			{
-				$death .= " e por <a href='?ref=character.view&name={$fetch->altkilled_by}'>{$fetch->altkilled_by}</a>";		
+				$altKiller = $core->loadClass("character");	
+				$altKiller->load($death_values['altkilled_by']);
+				
+				$death .= " e por <a href='?ref=character.view&name={$altKiller->getName()}'>{$altKiller->getName()}</a>";			
 			}	
 		}	
 
@@ -67,7 +53,7 @@ if($query->numRows() != 0)
 		
 		$module .= "
 			<tr>
-				<td witdh='20%'>{$time}</td> <td>{$death}</td>
+				<td witdh='20%'>{$date}</td> <td>{$death}</td>
 			</tr>					
 		";			
 	}

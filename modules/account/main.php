@@ -6,7 +6,7 @@ $secretkey = $account->getSecretKey();
 $player_list = $account->getCharacterList();
 $character = $core->loadClass("Character");
 
-$premium = ($account->getPremDays() > 1) ? $account->getPremDays()." dias restantes" : "Você não possui dias de conta premium.";	
+$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes" : "Você não possui dias de conta premium.";	
 $warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
 $email = $account->getEmail();	
 $creation = ($account->getCreation() != 0) ? $core->formatDate($account->getCreation()) : "Indisponível";	

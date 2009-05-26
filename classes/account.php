@@ -7,8 +7,7 @@ class Account
 /*		'id' => '',
 		'name' => '',
 		'password' => '',
-		'premdays' => '',
-		'lastday' => '',
+		'premend' => '',
 		'email' => '',
 		'key' => '',
 		'blocked' => '',
@@ -35,7 +34,7 @@ class Account
 	function load($id, $fields = null)
 	{
 		global $strings;
-		$query = $this->db->query("SELECT id, name, password, premdays, lastday, email, `key`, blocked, warnings, group_id, url, location, real_name, creation FROM accounts WHERE id = '".$id."'");		
+		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -44,8 +43,7 @@ class Account
 			$this->data['id'] = $fetch->id;				
 			$this->data['name'] = $strings->SQLInjection($fetch->name);	
 			$this->data['password'] = $fetch->password;	
-			$this->data['premdays'] = $fetch->premdays;	
-			$this->data['lastday'] = $fetch->lastday;	
+			$this->data['premend'] = $fetch->premend;	
 			$this->data['email'] = $fetch->email;	
 			$this->data['key'] = $fetch->key;	
 			$this->data['blocked'] = $fetch->blocked;	
@@ -205,7 +203,11 @@ class Account
 
 	function getPremDays()
 	{
-		return $this->data['premdays'];
+		$leftDays = $this->data["premend"] - time();
+		
+		$leftDays = ($leftDays > 0) ? floor($leftDays / 86400) : 0;
+		
+		return $leftDays;
 	}		
 			
 	function getLastDay()

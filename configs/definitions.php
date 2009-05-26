@@ -1,11 +1,12 @@
 <?php
 
-define('MANUTENTION', 1);
+define('MANUTENTION', 0);
 
 define('CONFIG_SITEEMAIL', "http://localhost/DarghosNew2.0");
+define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NÃO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
-define('DIR_DATA', "C:/Server/server/data/");
-define('HOUSES_FILE', "world/test-house.xml");
+define('DIR_DATA', "C:/Server/darghos8.41/data/");
+define('HOUSES_FILE', "world/-house.xml");
 define('MONSTERS_FILE', "monster/monsters.xml");
 
 define('CONFIG_SITENAME', "Darghos Tenerian");
@@ -18,7 +19,7 @@ define('SMTP_USER', "no-reply@darghos.net");
 define('SMTP_PASS', "gu166887");
 
 define('SERVER_ID', 1);
-define('USEREMOTECONNECTIONS', 0);
+define('USEREMOTECONNECTIONS', 1);
 
 /* Entrega de item comprados no ItemShop é feita via Lua Scripts, baseado no StorageID do jogador */
 define('STORAGE_ID_ITEMSHOP', 8987);

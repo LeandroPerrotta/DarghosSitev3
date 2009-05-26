@@ -17,18 +17,20 @@ if($post or $get)
 		$account = $core->loadClass("Account");
 		$account->load($character->get("account_id"), "premdays, real_name, location, url");
 		
+		$deaths = $core->loadClass("Deaths");
+		
 		//$bans = $account->getBans();
 		$bans = $core->loadClass('bans');
 		
 		$houseid = $character->getHouse();
 		$lastlogin = ($character->get("lastlogin")) ? $core->formatDate($character->get("lastlogin")) : "Nunca entrou.";
 		
-		$premium = ($account->get("premdays") != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
+		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
 		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "não configurado";
 		$location = ($account->get("location") != "") ? $account->get("location") : "não configurado";
 		$url = ($account->get("url") != "") ? $account->get("url") : "não configurado";
 		
-		$deathlist = $character->loadLastDeaths();
+		$deathlist = $deaths->getDeathListOfPlayer($character->getId());
 		$list = $account->getCharacterList();
 		$oldnames = $character->loadOldNames();
 	
@@ -181,55 +183,39 @@ if($post or $get)
 				</tr>					
 			";
 			
-			foreach($deathlist as $i => $values)
+			foreach($deathlist as $death_id)
 			{
-				$monsters = $core->loadClass("monsters");
+				$death_values = $deaths->load($death_id);
 				
-				$time = $core->formatDate($values['time']);
+				$date = $core->formatDate($death_values['date']);
 				
-				$death = "Morto no Nivel {$values['level']} por ";
+				$death = "Morto no Nivel {$death_values['level']} por ";
 				
-				if($values['killed_by'] == "field item")
+				if($death_values['killer_is_env'] == 1)
 				{
-					$death .= "um campo de dano";
+					$death .= "um ".$death_values['killed_by'];
 				}	
-				elseif($monsters->load($values['killed_by']))
-				{
-					$death .= "um ".$values['killed_by'];
-				}	
-				elseif(is_int($values['killed_by']))
-				{
-					$Killer = $core->loadClass("character");	
-					$Killer->load($values['killed_by']);
-					
-					$death .= "<a href='?ref=character.view&name={$Killer->getName()}'>{$Killer->getName()}</a>";
-				}
 				else
 				{
-					$death .= "<a href='?ref=character.view&name={$values['killed_by']}'>{$values['killed_by']}</a>";
+					$Killer = $core->loadClass("character");	
+					$Killer->load($death_values['killed_by']);
+					
+					$death .= "<a href='?ref=character.view&name={$Killer->getName()}'>{$Killer->getName()}</a>";
 				}	
 					
 				if($values['altkilled_by'])	
-				{
-					if($values['altkilled_by'] == "field item")
+				{		
+					if($death_values['alt_killer_is_env'] == 1)
 					{
-						$death .= "e um campo de dano";		
-					}				
-					elseif($monsters->load($values['altkilled_by']))
-					{
-						$death .= " e um ".$values['altkilled_by'];
-					}
-					elseif(is_int($values['altkilled_by']))	
-					{
-						$altKiller = $core->loadClass("character");	
-						$altKiller->load($values['killed_by']);
-						
-						$death .= " e por <a href='?ref=character.view&name={$altKiller->getName()}'>{$altKiller->getName()}</a>";			
+						$death .= " e um ".$death_values['altkilled_by'];
 					}
 					else
 					{
-						$death .= " e por <a href='?ref=character.view&name={$values['altkilled_by']}'>{$values['altkilled_by']}</a>";		
-					}	
+						$altKiller = $core->loadClass("character");	
+						$altKiller->load($death_values['alt_killed_by']);
+						
+						$death .= " e por <a href='?ref=character.view&name={$altKiller->getName()}'>{$altKiller->getName()}</a>";			
+					}
 				}	
 
 				$death .= ".";

@@ -19,10 +19,18 @@ class MySQL
 		$query = mysql_query($queryStr, $this->connection);
 		
 		if(!$query)
-			echo mysql_error($this->connection)."<br>";		
+		{
+			echo mysql_error($this->connection)."<br>";
+			return false;		
+		}	
 		else
 			return new Query($query, $this->connection);
 	}
+	
+	public function ExecQuery($queryStr) 
+	{
+		return mysql_query($queryStr, $this->connection);
+	}	
 	
 	public function lastInsertId() 
 	{
@@ -63,6 +71,16 @@ class Query
 	public function fetchArray() 
 	{
 		return mysql_fetch_array($this->queryResource);
+	}
+	
+	public function pointerRow($rownumber)
+	{
+		return mysql_data_seek($this->queryResource, $rownumber);
+	}
+	
+	public function getData()
+	{
+		return mysql_fetch_assoc($this->queryResource);
 	}
 }
 ?>

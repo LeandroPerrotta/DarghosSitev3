@@ -1,3 +1,11 @@
+CREATE TABLE `player_deaths` (
+	`player_id` int(10) unsigned NOT NULL,
+	`level` int(10) unsigned NOT NULL,
+	`date` int(10) unsigned NOT NULL,
+	`lasthit_killer` varchar(255) NOT NULL,
+	`mostdamage_killer` varchar(255) NOT NULL
+) ENGINE=InnoDB;
+
 CREATE TABLE `wb_pages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content` TEXT NULL,
@@ -93,16 +101,24 @@ CREATE TABLE `wb_secretkeys` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-ALTER TABLE `accounts` ADD `real_name` VARCHAR(255) AFTER `group_id`;
-ALTER TABLE `accounts` ADD `location` VARCHAR(255) AFTER `group_id`;
-ALTER TABLE `accounts` ADD `url` VARCHAR(255) AFTER `group_id`;
+CREATE TABLE `guild_invites` (
+  `player_id` int(10) unsigned NOT NULL,
+  `guild_id` varchar(255) NOT NULL,
+  `date` varchar(255) NOT NULL
+) ENGINE=InnoDB;
+
+ALTER TABLE `accounts` ADD `real_name` VARCHAR(255) AFTER `warnings`;
+ALTER TABLE `accounts` ADD `location` VARCHAR(255) AFTER `real_name`;
+ALTER TABLE `accounts` ADD `url` VARCHAR(255) AFTER `location`;
 ALTER TABLE `accounts` ADD `creation` INTEGER NOT NULL DEFAULT 0 AFTER `url`;
+ALTER TABLE `guilds` ADD `motd` VARCHAR(255) NOT NULL AFTER `creationdata`;
 ALTER TABLE `guilds` ADD `image` VARCHAR(255) NOT NULL AFTER `motd`;
-ALTER TABLE `guilds` ADD `status` INT(10) NOT NULL DEFAULT 0 AFTER `motd`;
-ALTER TABLE `guilds` ADD `formationTime` INT(10) NOT NULL DEFAULT 0 AFTER `motd`;
-ALTER TABLE `guild_invites` ADD `invitedIn` INT(10) NOT NULL DEFAULT 0 AFTER `guild_id`;
-ALTER TABLE `players` CHANGE `description` `description` TEXT;
+ALTER TABLE `guilds` ADD `status` INT(10) NOT NULL DEFAULT 0 AFTER `image`;
+ALTER TABLE `guilds` ADD `formationTime` INT(10) NOT NULL DEFAULT 0 AFTER `status`;
+ALTER TABLE `players` ADD `description` VARCHAR(255) NOT NULL AFTER `stamina`;
 ALTER TABLE `players` ADD `hidden` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `created` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `guild_join_date` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 
+MOV BYTE PTR DS:[EDX+2],3
+EDX+1

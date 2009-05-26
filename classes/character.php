@@ -13,7 +13,7 @@ class Character
 	
 	function load($player_id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, world_id, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, redskull, redskulltime, rank_id, guildnick, lastlogout, blessings, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, premend, online, marriage, promotion, deleted, description, guild_join_date, created, hidden	FROM players WHERE id = '".$player_id."'");		
+		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, redskull, redskulltime, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden FROM players WHERE id = '".$player_id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -21,7 +21,6 @@ class Character
 			
 			$this->data['id'] = $fetch->id;				
 			$this->data['name'] = $fetch->name;
-			$this->data['world_id'] = $fetch->world_id;
 			$this->data['group_id'] = $fetch->group_id;
 			$this->data['account_id'] = $fetch->account_id;
 			$this->data['level'] = $fetch->level;
@@ -55,7 +54,6 @@ class Character
 			$this->data['rank_id'] = $fetch->rank_id;
 			$this->data['guildnick'] = $fetch->guildnick;
 			$this->data['lastlogout'] = $fetch->lastlogout;
-			$this->data['blessings'] = $fetch->blessings;
 			$this->data['balance'] = $fetch->balance;
 			$this->data['stamina'] = $fetch->stamina;
 			$this->data['direction'] = $fetch->direction;
@@ -63,11 +61,6 @@ class Character
 			$this->data['loss_mana'] = $fetch->loss_mana;
 			$this->data['loss_skills'] = $fetch->loss_skills;
 			$this->data['loss_items'] = $fetch->loss_items;
-			$this->data['premend'] = $fetch->premend;
-			$this->data['online'] = $fetch->online;
-			$this->data['marriage'] = $fetch->marriage;
-			$this->data['promotion'] = $fetch->promotion;
-			$this->data['deleted'] = $fetch->deleted;
 			$this->data['description'] = $fetch->description;
 			$this->data['guild_join_date'] = $fetch->guild_join_date;
 			$this->data['created'] = $fetch->created;
@@ -342,19 +335,45 @@ class Character
 	
 	function loadLastDeaths()
 	{
-		$query = $this->db->query("SELECT time, level, killed_by, altkilled_by FROM player_deaths WHERE player_id = '".$this->data['id']."' AND time + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY time DESC");	
+		$query = $this->db->query("SELECT id, player_id, date, level FROM player_deaths WHERE player_id = '".$this->data['id']."' AND date + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY date DESC");	
 		
 		if($query->numRows() != 0)
 		{	
 			$deathlist = array();
-			while($fetch = $query->fetch())
-			{				
+			while($death_fetch = $query->fetch())
+			{		
+				$_killer = NULL;
+				$_altkiller = NULL;
+				
+				$killers_query = $this->db->query("SELECT id, death_id, lasthit FROM killers WHERE death_id = '{$death_fetch->id}'");
+				while($killers_fetch = $killers_query->fetch())
+				{
+					$player_killers_query = $this->db->query("SELECT kill_id, player_id WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
+					if($player_killers_query->numRows() != 0)
+					{
+						if($killers_fetch->lasthit == 1)
+							$_killer = $player_killers_query->fetch()->player_id;
+						else
+							$_altkiller = $player_killers_query->fetch()->player_id;
+					}
+					
+					$env_killers_query = $this->db->query("SELECT kill_id, name FROM environment_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
+					if($env_killers_query->numRows() != 0)
+					{
+						if($killers_fetch->lasthit == 1)
+							$_killer = $env_killers_query->fetch()->name;
+						else
+							$_altkiller = $env_killers_query->fetch()->name;
+					}
+					
+				}
+				
 				$deathlist[] = array
 				(
-					"time" => $fetch->time,
-					"level" => $fetch->level,
-					"killed_by" => $fetch->killed_by,
-					"altkilled_by" => $fetch->altkilled_by
+					"time" => $death_fetch->date,
+					"level" => $death_fetch->level,
+					"killed_by" => $_killer,
+					"altkilled_by" => $_altkiller
 				);	
 			}
 			
