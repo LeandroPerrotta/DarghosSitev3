@@ -23,13 +23,13 @@ class Deaths
 			$_killer = "";
 			$_altkiller = "";
 				
-			$killers_query = $this->db->query("SELECT id, death_id, lasthit FROM killers WHERE death_id = '{$death_fetch->id}'");
+			$killers_query = $this->db->query("SELECT id, death_id, final_hit FROM killers WHERE death_id = '{$death_fetch->id}'");
 			while($killers_fetch = $killers_query->fetch())
 			{
 				$player_killers_query = $this->db->query("SELECT kill_id, player_id FROM player_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
 				if($player_killers_query->numRows() != 0)
 				{
-					if($killers_fetch->lasthit == 1)
+					if($killers_fetch->final_hit == 1)
 						$_killer = $player_killers_query->fetch()->player_id;
 					else
 						$_altkiller = $player_killers_query->fetch()->player_id;
@@ -38,7 +38,7 @@ class Deaths
 				$env_killers_query = $this->db->query("SELECT kill_id, name FROM environment_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
 				if($env_killers_query->numRows() != 0)
 				{
-					if($killers_fetch->lasthit == 1)
+					if($killers_fetch->final_hit == 1)
 					{
 						$_killer = $env_killers_query->fetch()->name;
 						$killerIsEnv = 1;
