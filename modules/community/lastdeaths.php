@@ -1,5 +1,5 @@
 <?php
-$query = $db->query("SELECT id FROM player_deaths WHERE date > ".(time() - (60 * 60 * 4))." ORDER BY date DESC");
+$query = $db->query("SELECT id, player_id FROM player_deaths WHERE date > ".(time() - (60 * 60 * 4))." ORDER BY date DESC");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
