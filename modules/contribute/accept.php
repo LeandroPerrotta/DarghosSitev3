@@ -20,23 +20,21 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 		else
 		{
 			$account = $core->loadClass("Account");
-			$account->load($contribute->get("target_account"), "premdays, lastday");
+			$account->load($contribute->get("target_account"));
 			
-			//$account->updatePremDays();
+			$daysnow = $account->getPremDays();
 			
-			$premdays = $account->get("premdays");
-			$lastday = $account->get("lastday");
-			
-			if($premdays == 0)
+			if($daysnow == 0)
 			{
-				$account->set("premdays", $contribute->get("period"));
+				$daysnew = time() + (60 * 60 * 24 * $contribute->get("period"));
+				$account->setPremDays($daysnew);
 			}
 			else
 			{
-				$account->set("premdays", $premdays + $contribute->get("period"));
+				$daysnew = time() + (60 * 60 * 24 * ($contribute->get("period") + $daysnow));	
+				$account->setPremDays($daysnew);
 			}
 			
-			$account->set("lastday", time());
 			$account->save();
 			
 			$contribute->set("status", 2);

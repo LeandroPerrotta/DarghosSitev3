@@ -392,12 +392,7 @@ class Account
 	
 	function setPremDays($premdays)
 	{
-		$this->data['premdays'] = $premdays;
-	}
-	
-	function setLastDay($lastday)
-	{
-		$this->data['lastday'] = $lastday;
+		$this->data['premend'] = $premdays;
 	}
 	
 	function setEmail($email)
