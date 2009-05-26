@@ -18,7 +18,7 @@ if($query->numRows() != 0)
 		$deathPlayer = $core->loadClass("character");
 		$deathPlayer->load($fetch->player_id, "name");		
 				
-		$date = $core->formatDate($fetch->date);
+		$date = $core->formatDate($death_values['date']);
 		
 		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
 		
