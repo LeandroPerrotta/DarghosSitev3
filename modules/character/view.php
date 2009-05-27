@@ -222,7 +222,7 @@ if($post or $get)
 				
 				$module .= "
 					<tr>
-						<td width='30%'>{$date}</td> <td>{$death}</td>
+						<td width='25%'>{$date}</td> <td>{$death}</td>
 					</tr>					
 				";	
 			}

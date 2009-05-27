@@ -37,7 +37,7 @@ else
 	$module .= "
 </table>";	
 	
-	if(is_array($who->getPlayers()))
+	if($status->getOnlinePlayers() > 0)
 	{
 		$module .= "
 		<table cellspacing='0' cellpadding='0' id='table'>

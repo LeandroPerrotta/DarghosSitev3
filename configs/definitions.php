@@ -2,10 +2,10 @@
 
 define('MANUTENTION', 0);
 
-define('CONFIG_SITEEMAIL', "http://localhost/DarghosNew2.0");
-define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NÃO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+define('CONFIG_SITEEMAIL', "http://tenerian.darghos.com.br:8090");
+#define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NÃO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
-define('DIR_DATA', "C:/Server/darghos8.41/data/");
+define('DIR_DATA', "C:/testserver/data/");
 define('HOUSES_FILE', "world/-house.xml");
 define('MONSTERS_FILE', "monster/monsters.xml");
 
@@ -20,7 +20,7 @@ define('SMTP_PASS', "gu166887");
 
 /* CONFIGURAÇÔES PARA STATUS */
 define('STATUS_ADDRESS', 'tenerian.darghos.com.br');
-define('STATUS_PORT', 7373);
+define('STATUS_PORT', 7272);
 
 define('SERVER_ID', 1);
 define('USEREMOTECONNECTIONS', 1);

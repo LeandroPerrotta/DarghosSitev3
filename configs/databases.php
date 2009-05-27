@@ -1,10 +1,10 @@
 <?php
 
 /* DADOS DE ACESSO PARA OS CONECTORES LOCAIS */ 
-define('DB_HOST', "localhost");
+define('DB_HOST', "localhost:3309");
 define('DB_USER', "root");
-define('DB_PASS', "");
-define('DB_SCHEMA', "otserv");
+define('DB_PASS', "FtRVTnRmx");
+define('DB_SCHEMA', "testserver");
 define('DB_WEBSITE_PREFIX', "wb_");
 
 /* DADOS DE ACESSO PARA O CONECTOR REMOTO (ESTAS CONFIGURAÇÕES NÃO SERÃO USADAS EM 99% DOS CASOS)*/ 

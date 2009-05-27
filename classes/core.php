@@ -20,13 +20,16 @@ class Core
 		// includes POT main file
 		include_once('classes/POT/OTS.php');
 		
+		list($ip, $port) = explode(":", DB_HOST);
+		
 		// database configuration - can be simply moved to external file, eg. config.php
 		$config = array(
 		    'driver' => POT::DB_MYSQL,
-		    'host' => 'localhost',
-		    'user' => 'root',
-		    'password' => '',
-		    'database' => 'otserv'
+		    'host' => $ip,
+		    'port' => $port,
+		    'user' => DB_USER,
+		    'password' => DB_PASS,
+		    'database' => DB_SCHEMA
 		);
 		
 		// creates POT instance (or get existing one)
