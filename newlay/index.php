@@ -135,7 +135,53 @@
 									<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
 									<li><a href="?ref=status.whoisonline">Quem está Online?</a></li>
 								</ul>
-							</li>							
+							</li>	
+							
+							<?php 
+							$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
+							$status = $info->info(OTS_ServerStatus::REQUEST_BASIC_SERVER_INFO | OTS_ServerStatus::REQUEST_OWNER_SERVER_INFO | OTS_ServerStatus::REQUEST_MISC_SERVER_INFO | OTS_ServerStatus::REQUEST_PLAYERS_INFO | OTS_ServerStatus::REQUEST_MAP_INFO);
+							?>
+							
+							<li>
+								<div><strong>Server Status</strong></div>
+								<ul class="always_viewable" >
+									<li>	
+										<div>								
+											<p>
+												<?php 
+												if(!$status)
+												{
+													echo "
+													<em>Status:</em> <font color='#ec0404'><b>offline</b></font>
+													";
+												}
+												else
+												{
+													$seconds = $status->getUptime() % 60;
+													$uptime = floor($status->getUptime() / 60);
+											
+													$minutes = $uptime % 60;
+													$uptime = floor($uptime / 60);
+											
+													$hours = $uptime % 24;
+													$uptime = floor($uptime / 24);
+											
+													$days = $uptime % 365;
+													
+													$uptime = ($days >= 1) ? "{$days}d {$hours}h {$minutes}m" : "{$hours}h {$minutes}m";
+													
+													echo "
+													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
+													<em>Players:</em> {$status->getOnlinePlayers()}<br />
+													<em>Uptime:</em> {$uptime}
+													";	
+												}
+												?>
+											</p>
+										</div>	
+									</li>						
+								</ul>
+							</li>													
 						</ul>
 					</div>
 					

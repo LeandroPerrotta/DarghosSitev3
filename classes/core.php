@@ -15,6 +15,26 @@ class Core
 		return new FCKeditor($instance);
 	}
 	
+	function InitPOT()
+	{
+		// includes POT main file
+		include_once('classes/POT/OTS.php');
+		
+		// database configuration - can be simply moved to external file, eg. config.php
+		$config = array(
+		    'driver' => POT::DB_MYSQL,
+		    'host' => 'localhost',
+		    'user' => 'root',
+		    'password' => '',
+		    'database' => 'otserv'
+		);
+		
+		// creates POT instance (or get existing one)
+		// dont use POT::getInstance() anymore
+		POT::connect(null, $config);
+		// could be: POT::connect(POT::DB_MYSQL, $config);		
+	}
+	
 	function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";

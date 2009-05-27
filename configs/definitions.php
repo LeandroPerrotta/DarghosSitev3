@@ -18,6 +18,10 @@ define('SMTP_PORT', 25);
 define('SMTP_USER', "no-reply@darghos.net");
 define('SMTP_PASS', "gu166887");
 
+/* CONFIGURAÇÔES PARA STATUS */
+define('STATUS_ADDRESS', 'tenerian.darghos.com.br');
+define('STATUS_PORT', 7373);
+
 define('SERVER_ID', 1);
 define('USEREMOTECONNECTIONS', 1);
 

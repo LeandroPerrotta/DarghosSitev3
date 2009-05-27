@@ -30,6 +30,8 @@ else
 	
 	$core = new Core();
 	
+	$core->InitPOT();
+	
 	if(defined('SITE_ROOT_DIR'))
 	{	
 		if("http://".$_SERVER["HTTP_HOST"].SITE_ROOT_DIR != CONFIG_SITEEMAIL)
