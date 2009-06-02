@@ -37,7 +37,7 @@ if($_POST)
 		$guild->set("name", $post[0]);
 		$guild->set("ownerid", $character->get("id"));
 		$guild->set("image", "default_logo.gif");
-		$guild->set("creation", time());
+		$guild->set("creationdata", time());
 		$guild->set("formationTime", time() + 60 * 60 * 24 * GUILDS_FORMATION_DAYS);
 		
 		$guild->save();

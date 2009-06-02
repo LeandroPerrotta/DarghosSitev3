@@ -124,7 +124,7 @@ class Guilds
 	
 	function loadInvitesList()
 	{
-		$invites_query = $this->db->query("SELECT player_id, invitedIn FROM guild_invites WHERE guild_id = '{$this->data['id']}'");
+		$invites_query = $this->db->query("SELECT player_id, date FROM guild_invites WHERE guild_id = '{$this->data['id']}'");
 		
 		if($invites_query->numRows() != 0)
 		{
@@ -133,7 +133,7 @@ class Guilds
 				$name_query = $this->db->query("SELECT name FROM players WHERE id = '{$invites_fetch->player_id}'");
 				$name_fetch = $name_query->fetch();
 				
-				$this->invites[$name_fetch->name] = $invites_fetch->invitedIn;
+				$this->invites[$name_fetch->name] = $invites_fetch->date;
 			}
 		}		
 	}

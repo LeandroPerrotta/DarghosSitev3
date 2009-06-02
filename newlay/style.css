@@ -151,6 +151,7 @@ ul li {
 
 #left ul li div {
 	background: #333 url(images/item.jpg) repeat-x;
+	height: 15px;
 }
 
 #left td strong {
@@ -159,6 +160,7 @@ ul li {
 
 #left li ul li div {
 	background: #333 url(images/subitem.jpg) repeat;
+	height: auto;
 }
 
 #left ul li div p {

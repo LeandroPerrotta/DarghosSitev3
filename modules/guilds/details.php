@@ -49,7 +49,7 @@ if($_GET['name'])
 			</tr>
 			
 			<tr>
-				<td>Está guilda foi criada em <b>".$core->formatDate($guild->get("creation"))."</b>.</td>
+				<td>Está guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
 			</tr>			
 		</table>";				
 
