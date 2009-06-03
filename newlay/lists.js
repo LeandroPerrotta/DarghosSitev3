@@ -58,24 +58,23 @@ $(document).ready(function() {
 	});	
 	
 	//PINGTEST
-	var time = new Date();	
-	
 	init();
 	if(xmlhttp == null)
 	{
 		alert("Este navegador não suporta tecnologia Ajax.");
 	}	
 	
-	var _send = time.getTime();
-	xmlhttp.open("GET", "ajax/ping.php&value=" + _send, true);
+	var _send = new Date();	
+	xmlhttp.open("GET", "ajax/ping.php?value=" + _send.getTime(), true);
 	
 	xmlhttp.onreadystatechange = function()
 	{
 		if(xmlhttp.readystate == 4)
 		{	
-			var _receive = time.getTime();
-			var _elapsedTime = _send - _receive;
-			$("span[class=ping]").replaceWith(_elapsedTime);
+			//$("span[class=ping]").replaceWith(xmlhttp.responseText);
+			var _receive = new Date();
+			var _elapsedTime = (_receive.getTime() - _send.getTime()) / 2;
+			$("span[class=ping]").replaceWith(_elapsedTime + " ms");
 		}	
 	}	
 	

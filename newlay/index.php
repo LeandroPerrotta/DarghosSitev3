@@ -179,7 +179,7 @@
 													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
 													<em>Players:</em> {$status->getOnlinePlayers()}<br />
 													<em>Uptime:</em> {$uptime}<br />
-													<em>Ping:</em> <span class='ping'>100</span>
+													<em>Ping:</em> <span class='ping'>aguarde...</span>
 													";	
 												}
 												?>
