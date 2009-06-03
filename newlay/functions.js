@@ -23,26 +23,6 @@ function init()
 		xmlhttp = new XMLHttpRequest();
 	}	
 }
-
-function transmitGet(page)
-{
-	if(xmlhttp == null)
-	{
-		alert("Este navegador não suporta tecnologia Ajax.");
-	}	
-	
-	var response;	
-	
-	xmlhttp.open("GET", "ajax.php?" + page, true);
-	xmlhttp.onreadystatechange = function()
-	{
-		if(xmlhttp.readystate == 4 && xmlhttp.status == 200)
-			response = xmlhttp.responseText;
-	}
-	
-	xmlhttp.send(null);
-	return response;
-}
 	
 //COOKIES
 function createCookie(name,value,days) 
@@ -95,4 +75,47 @@ function setMenuCookie(menu)
 		else
 			createCookie("menudropdown_" + menu, "true", 7);
 	}
+}
+
+function sendPing()
+{
+	var pings = new Array(), time = new Date();	
+	
+	pings[0] = 0;
+	pings[1] = 0;
+	pings[2] = 0;
+	
+	var pingavg = 0;
+	var x;
+	
+	for(x in pings)
+	{			
+		var ping;
+		
+		init();
+		if(xmlhttp == null)
+		{
+			alert("Este navegador não suporta tecnologia Ajax.");
+		}	
+		
+		xmlhttp.onreadystatechange = function()
+		{
+			if(xmlhttp.readystate == 4)
+			{	
+				//ping = xmlhttp.responseText;		
+				//alert(xmlhttp.responseText);	
+				//document.getElementById("ping").innerHTML = xmlhttp.responseText;
+				$("span").empty();
+				$("span[class=ping]").replaceWith(xmlhttp.responseText);
+			}	
+		}
+		
+		xmlhttp.open("GET", "ajax.php?script=ping&value=" + time.getTime(), true);
+		xmlhttp.send(null);		
+		
+		pingavg = pingavg + ping;
+	}
+	
+	pingavg = pingavg / 3;
+	//document.write("Ping médio: " + pingavg);
 }

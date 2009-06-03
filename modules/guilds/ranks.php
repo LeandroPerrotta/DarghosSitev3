@@ -19,7 +19,7 @@ if($_GET['name'])
 	else
 	{		
 		$guild->loadRanks();
-		$ranks = $guild->getRanks();			
+		$ranks = $guild->getRanks();
 		
 		$post = $core->extractPost();
 		if($post)

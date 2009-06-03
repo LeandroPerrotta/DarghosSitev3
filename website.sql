@@ -101,6 +101,12 @@ CREATE TABLE `wb_secretkeys` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE `wb_pingtest` (
+  `latency` int(10) unsigned NOT NULL,
+  `ip_address` varchar(255) NOT NULL,
+  `date` varchar(255) NOT NULL
+) ENGINE=InnoDB;
+
 CREATE TABLE `guild_invites` (
   `player_id` int(10) unsigned NOT NULL,
   `guild_id` varchar(255) NOT NULL,

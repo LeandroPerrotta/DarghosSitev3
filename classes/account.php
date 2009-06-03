@@ -45,10 +45,8 @@ class Account
 			$this->data['password'] = $fetch->password;	
 			$this->data['premend'] = $fetch->premend;	
 			$this->data['email'] = $fetch->email;	
-			$this->data['key'] = $fetch->key;	
 			$this->data['blocked'] = $fetch->blocked;	
 			$this->data['warnings'] = $fetch->warnings;	
-			$this->data['group_id'] = $fetch->group_id;	
 			$this->data['url'] = $fetch->url;	
 			$this->data['location'] = $fetch->location;	
 			$this->data['real_name'] = $fetch->real_name;	

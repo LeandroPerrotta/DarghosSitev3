@@ -56,4 +56,28 @@ $(document).ready(function() {
 		$("fieldset div[class='autoaction']").nextAll("div[title='" + valueSelected + "']").slideDown();
 		
 	});	
+	
+	//PINGTEST
+	var pings = time = new Date();	
+	
+	init();
+	if(xmlhttp == null)
+	{
+		alert("Este navegador não suporta tecnologia Ajax.");
+	}	
+	
+	xmlhttp.onreadystatechange = function()
+	{
+		if(xmlhttp.readystate == 4)
+		{	
+			//ping = xmlhttp.responseText;		
+			//alert(xmlhttp.responseText);	
+			//document.getElementById("ping").innerHTML = xmlhttp.responseText;
+			$("span[class=ping]").replaceWith(xmlhttp.responseText);
+
+		}	
+	}	
+	
+	xmlhttp.open("GET", "ajax.php?script=ping&value=" + time.getTime(), true);
+	xmlhttp.send(null);			
 });

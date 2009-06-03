@@ -9,12 +9,17 @@
 		<link href="<?php echo $layoutDir; ?>style.css" media="screen" rel="stylesheet" type="text/css" />
 		<link href="default.css" media="screen" rel="stylesheet" type="text/css" />
 		
-		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
+		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>lists.js" type="text/javascript"></script>
+	
 	</head>
 	
 	<body>
+		<script>
+		//sendPing();
+		</script>	
+	
 		<div id="wrapper">
 			<div id="wrapper_b">
 				<h1><span><? echo CONFIG_SITENAME; ?></span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
@@ -173,7 +178,8 @@
 													echo "
 													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
 													<em>Players:</em> {$status->getOnlinePlayers()}<br />
-													<em>Uptime:</em> {$uptime}
+													<em>Uptime:</em> {$uptime}<br />
+													<em>Ping:</em> <span class='ping'>100</span>
 													";	
 												}
 												?>
