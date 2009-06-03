@@ -58,7 +58,7 @@ $(document).ready(function() {
 	});	
 	
 	//PINGTEST
-	var pings = time = new Date();	
+	var time = new Date();	
 	
 	init();
 	if(xmlhttp == null)
@@ -66,18 +66,18 @@ $(document).ready(function() {
 		alert("Este navegador não suporta tecnologia Ajax.");
 	}	
 	
+	var _send = time.getTime();
+	xmlhttp.open("GET", "ajax/ping.php&value=" + _send, true);
+	
 	xmlhttp.onreadystatechange = function()
 	{
 		if(xmlhttp.readystate == 4)
 		{	
-			//ping = xmlhttp.responseText;		
-			//alert(xmlhttp.responseText);	
-			//document.getElementById("ping").innerHTML = xmlhttp.responseText;
-			$("span[class=ping]").replaceWith(xmlhttp.responseText);
-
+			var _receive = time.getTime();
+			var _elapsedTime = _send - _receive;
+			$("span[class=ping]").replaceWith(_elapsedTime);
 		}	
 	}	
 	
-	xmlhttp.open("GET", "ajax.php?script=ping&value=" + time.getTime(), true);
 	xmlhttp.send(null);			
 });
