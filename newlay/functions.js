@@ -20,7 +20,14 @@ function init()
 	
 	if(!xmlhttp && typeof XMLHttpRequest != "undefined")
 	{
-		xmlhttp = new XMLHttpRequest();
+        try
+        {
+            xmlhttp = new XMLHttpRequest();
+        }
+        catch (e)
+        {
+            xmlhttp = false;
+        }
 	}	
 }
 	

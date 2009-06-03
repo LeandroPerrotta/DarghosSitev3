@@ -66,17 +66,17 @@ $(document).ready(function() {
 	
 	var _send = new Date();	
 	xmlhttp.open("GET", "ajax/ping.php?value=" + _send.getTime(), true);
+	xmlhttp.send(null);	
 	
 	xmlhttp.onreadystatechange = function()
 	{
-		if(xmlhttp.readystate == 4)
+		if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
 		{	
-			//$("span[class=ping]").replaceWith(xmlhttp.responseText);
 			var _receive = new Date();
 			var _elapsedTime = (_receive.getTime() - _send.getTime()) / 2;
 			$("span[class=ping]").replaceWith(_elapsedTime + " ms");
-		}	
+		}		
 	}	
 	
-	xmlhttp.send(null);			
+	
 });
