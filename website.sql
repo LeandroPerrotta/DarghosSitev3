@@ -102,7 +102,7 @@ CREATE TABLE `wb_secretkeys` (
 ) ENGINE=InnoDB;
 
 CREATE TABLE `wb_pingtest` (
-  `latency` int(10) unsigned NOT NULL,
+  `latency` varchar(255) unsigned NOT NULL,
   `ip_address` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL
 ) ENGINE=InnoDB;
@@ -125,6 +125,3 @@ ALTER TABLE `players` ADD `description` VARCHAR(255) NOT NULL AFTER `stamina`;
 ALTER TABLE `players` ADD `hidden` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `created` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `guild_join_date` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
-
-MOV BYTE PTR DS:[EDX+2],3
-EDX+1

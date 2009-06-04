@@ -1,5 +1,6 @@
-var xmlhttp = false;
-	
+xmlhttp = false;
+avgPing = 0;
+
 function init()
 {
 	try
@@ -22,11 +23,11 @@ function init()
 	{
         try
         {
-            xmlhttp = new XMLHttpRequest();
+        	xmlhttp = new XMLHttpRequest();
         }
         catch (e)
         {
-            xmlhttp = false;
+        	xmlhttp = false;
         }
 	}	
 }
@@ -84,45 +85,51 @@ function setMenuCookie(menu)
 	}
 }
 
-function sendPing()
+function pingTest()
+{	
+	init();
+	
+	if(xmlhttp == null)
+	{
+		alert("Este navegador não suporta tecnologia Ajax.");
+	}	
+			
+	for(i = 0; i < 3; i++)
+	{
+		var  _send = new Date();	
+		xmlhttp.open("GET", "ajax/ping.php?value=" + _send.getTime(), false);	
+		xmlhttp.send(null);
+		
+		if(xmlhttp.responseText == _send.getTime())
+		{	
+			//alert("lol");
+			
+			var _receive = new Date();
+			var _elapsedTime = (_receive.getTime() - _send.getTime()) / 2;			
+			
+			avgPing += _elapsedTime;
+		}						
+	}	
+	
+	avgPing = Math.ceil(avgPing / 3);	
+	
+	return avgPing;
+}
+
+function sendPingResult()
 {
-	var pings = new Array(), time = new Date();	
+	init();
 	
-	pings[0] = 0;
-	pings[1] = 0;
-	pings[2] = 0;
+	if(xmlhttp == null)
+	{
+		alert("Este navegador não suporta tecnologia Ajax.");
+	}	
 	
-	var pingavg = 0;
-	var x;
+	xmlhttp.open("GET", "ajax/ping.php?value=log&pingavg=" + avgPing, false);	
+	xmlhttp.send(null);	
 	
-	for(x in pings)
-	{			
-		var ping;
-		
-		init();
-		if(xmlhttp == null)
-		{
-			alert("Este navegador não suporta tecnologia Ajax.");
-		}	
-		
-		xmlhttp.onreadystatechange = function()
-		{
-			if(xmlhttp.readystate == 4)
-			{	
-				//ping = xmlhttp.responseText;		
-				//alert(xmlhttp.responseText);	
-				//document.getElementById("ping").innerHTML = xmlhttp.responseText;
-				$("span").empty();
-				$("span[class=ping]").replaceWith(xmlhttp.responseText);
-			}	
-		}
-		
-		xmlhttp.open("GET", "ajax.php?script=ping&value=" + time.getTime(), true);
-		xmlhttp.send(null);		
-		
-		pingavg = pingavg + ping;
-	}
-	
-	pingavg = pingavg / 3;
-	//document.write("Ping médio: " + pingavg);
+	if(xmlhttp.responseText != "log")
+	{	
+		alert("Falha ao enviar relatório de ping.");
+	}	
 }
