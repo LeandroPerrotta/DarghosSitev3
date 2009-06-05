@@ -13,7 +13,7 @@ class Character
 	
 	function load($player_id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, redskull, redskulltime, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden FROM players WHERE id = '".$player_id."'");		
+		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, redskull, redskulltime, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden FROM players WHERE id = '".$player_id."'");		
 		
 		if($query->numRows() != 0)
 		{
