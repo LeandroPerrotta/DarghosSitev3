@@ -60,5 +60,4 @@ $(document).ready(function() {
 	//PINGTEST
 	var pingAvg = pingTest();
 	$("span[class=ping]").replaceWith(pingAvg + " ms");	
-	sendPingResult();
 });

@@ -9,7 +9,10 @@ if($_GET['value'] == "log")
 	
 	$query = $db->query("INSERT INTO wb_pingtest VALUES ('{$_GET['pingavg']}', '{$_SERVER['REMOTE_ADDR']}', '".time()."')");
 	
-	echo $_GET['value'];
+	if(!$query)
+		echo "mysql_error";
+	else
+		echo $_GET['value'];
 }
 else
 {
