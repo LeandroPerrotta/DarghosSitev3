@@ -75,15 +75,15 @@ $module .= "
 while($fetch = $query->fetch())
 {
 	$n++;	
-	$character->load($fetch->id, "name, level, vocation, experience, maglevel");
+	$character->load($fetch->id);
 	
 	if($skill == "experience")
 	{
-		$skill_value = $character->get("level");
+		$skill_value = $character->getLevel();
 	}
 	elseif($skill == "maglevel")
 	{
-		$skill_value = $character->get("maglevel");
+		$skill_value = $character->getMagLevel();
 	}
 	else
 	{
@@ -93,7 +93,7 @@ while($fetch = $query->fetch())
 	
 	$module .= "
 		<tr>
-			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$_vocationid[$character->get("vocation")]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->get("experience"))."</td>" : null)."
+			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a></td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
 		</tr>
 	";
 }
