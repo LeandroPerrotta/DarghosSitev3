@@ -206,5 +206,8 @@
 				<p id="footer">&copy; 2006~2009 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p>
 			</div>
 		</div>
+		
+		<script src="<?php echo $layoutDir; ?>ext.js" type="text/javascript"></script>
+		<script src="<?php echo $layoutDir; ?>ping.js" type="text/javascript"></script>		
 	</body>
 </html>

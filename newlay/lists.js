@@ -55,9 +55,5 @@ $(document).ready(function() {
 		$("fieldset div[class='autoaction']").nextAll('div[title!="' + valueSelected + '"]').hide();
 		$("fieldset div[class='autoaction']").nextAll("div[title='" + valueSelected + "']").slideDown();
 		
-	});	
-	
-	//PINGTEST
-	var pingAvg = pingTest();
-	$("span[class=ping]").replaceWith(pingAvg + " ms");	
+	});		
 });
