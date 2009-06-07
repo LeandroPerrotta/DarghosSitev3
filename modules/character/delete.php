@@ -47,7 +47,7 @@ else
 	}
 
 $module .=	'
-	<form action="" method="post">
+	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
 			
 			<p>Selecione abaixo qual personagem de sua conta você deseja agendar uma exclusão. Este agendamento leva 30 dias e pode ser cancelado a qualquer momento dentro deste periodo. Note que após passado o periodo de 30 dias é impossivel cancelar a exclusão, recuperar o personagem ou qualquer um de seus pertences.</p>		

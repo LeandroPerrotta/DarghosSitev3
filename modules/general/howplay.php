@@ -23,7 +23,7 @@ if($_SESSION['login'])
 			$pageDb->load(DBPAGES_HOWPLAY);
 		}		
 		
-		$module .= "<br><form action='' method='post'>";
+		$module .= "<br><form action='{$_SERVER['REQUEST_URI']}' method='post'>";
 		
 		$FCKEditor = $core->FCKEditor("Page");
 		

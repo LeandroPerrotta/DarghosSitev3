@@ -22,6 +22,8 @@ if($_GET['name'])
 			$itemshop_list = $core->loadClass("itemshop_list");
 			$query = $db->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
 			
+			$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
+			
 			if($account->get("password") != $strings->encrypt($post[1]))
 			{
 				$error = "Confirmação da senha falhou.";
@@ -30,7 +32,7 @@ if($_GET['name'])
 			{
 				$error = "Você deve efetuar um login no jogo para receber o item de sua ultima compra antes de efetuar uma nova compra.";
 			}
-			elseif($character->get("online") != 0)		
+			elseif($info->playerStatus($character->getName()))		
 			{
 				$error = "É nessario estar off-line no jogo para efetuar a compra de um item.";
 			}			
@@ -38,7 +40,7 @@ if($_GET['name'])
 			{
 				$error = "Este item não existe.";
 			}
-			elseif($itemshop_list->get("cost") > $account->get("premdays"))
+			elseif($itemshop_list->get("cost") > $account->getPremDays())
 			{
 				$error = "Você não possui os {$itemshop_list->get("cost")} dias de conta premium necessarios para obter este item.";
 			}
@@ -64,10 +66,7 @@ if($_GET['name'])
 				else
 					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
 					
-				$newpremdays = $account->get("premdays") - $itemshop_list->get("cost");
-				
-				$account->set("premdays", $newpremdays);
-				$account->set("lastday", time());
+				$account->updatePremDays($itemshop_list->get("cost"), false /* false to decrement days */);
 				
 				$account->save();
 				
@@ -94,7 +93,7 @@ if($_GET['name'])
 		$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
 			
 		$module .=	'
-			<form action="" method="post">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset>
 
 					<p>
@@ -151,7 +150,7 @@ else
 {
 
 $module .=	'
-	<form action="" method="post">
+	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
 			
 			<p>

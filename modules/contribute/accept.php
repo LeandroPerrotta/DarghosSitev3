@@ -22,18 +22,7 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 			$account = $core->loadClass("Account");
 			$account->load($contribute->get("target_account"));
 			
-			$daysnow = $account->getPremDays();
-			
-			if($daysnow == 0)
-			{
-				$daysnew = time() + (60 * 60 * 24 * $contribute->get("period"));
-				$account->setPremDays($daysnew);
-			}
-			else
-			{
-				$daysnew = time() + (60 * 60 * 24 * ($contribute->get("period") + $daysnow));	
-				$account->setPremDays($daysnew);
-			}
+			$account->updatePremDays($contribute->get("period"));
 			
 			$account->save();
 			
@@ -90,7 +79,7 @@ IMPORTANTE: Após aceitar o serviço, receber e começar a desfrutar dos beneficio 
 A mudança deste documento pode ser efetuada sem aviso, ou prévio aviso, cabendo a você se manter atualizado às regras e ao contrato.";
 
 $module .= '
-<form action="" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 	
 		<ul id="charactersview">

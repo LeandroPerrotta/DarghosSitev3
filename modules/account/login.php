@@ -1,4 +1,5 @@
 <?
+//echo ;
 $post = $core->extractPost();
 if($post)
 {
@@ -23,7 +24,7 @@ if($error)
 }
 
 $module .= '
-<form action="" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
 		<p>

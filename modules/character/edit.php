@@ -18,6 +18,8 @@ if($_GET['name'])
 
 		if($_POST)
 		{
+			$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
+			
 			if($account->get("password") != $strings->encrypt($_POST["account_password"]))
 			{
 				$error = "Confirmação da senha falhou.";
@@ -54,11 +56,7 @@ if($_GET['name'])
 					if(!$_POST["character_newname"])
 					{
 						$error = "Preencha todos campos do formulario corretamente.";
-					}
-					elseif($account->get("type") > 2 AND $account->get("type") < 5)
-					{
-						$error = "Esta conta não possui permissão para acessar este recurso.";
-					}				
+					}			
 					elseif(!$_POST["confirm_changename"])
 					{
 						$error = "Para modificar o nome de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
@@ -71,11 +69,11 @@ if($_GET['name'])
 					{
 						$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
 					}	
-					elseif($character->get("online") != 0)
+					elseif($info->playerStatus($character->getName()))	
 					{
 						$error = "É nessario estar off-line no jogo para efetuar este recurso.";
 					}			
-					elseif($account->get("premdays") < PREMDAYS_TO_CHANGENAME)
+					elseif($account->getPremDays() < PREMDAYS_TO_CHANGENAME)
 					{
 						$error = "Você não possui os ".PREMDAYS_TO_CHANGENAME." dias de conta premium necessarios para modificar o nome de seu personagem.";
 					}
@@ -83,13 +81,9 @@ if($_GET['name'])
 					{		
 						$character->set("name", $_POST["character_newname"]);
 						$character->save();
-						
+								
 						//removeção dos premdays da conta do jogador
-						$newpremdays = $account->get("premdays") - PREMDAYS_TO_CHANGENAME;
-						
-						$account->set("premdays", $newpremdays);
-						$account->set("lastday", time());
-						
+						$account->updatePremDays(PREMDAYS_TO_CHANGENAME, false /* false to decrement days */);						
 						$account->save();				
 						
 						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
@@ -116,11 +110,11 @@ if($_GET['name'])
 					{
 						$error = "Esta conta não possui permissão para acessar este recurso.";
 					}						
-					elseif($character->get("online") != 0)
+					elseif($info->playerStatus($character->getName()))
 					{
 						$error = "É nessario estar off-line no jogo para efetuar este recurso.";
 					}			
-					elseif($account->get("premdays") < PREMDAYS_TO_CHANGESEX)
+					elseif($account->getPremDays() < PREMDAYS_TO_CHANGESEX)
 					{
 						$error = "Você não possui os ".PREMDAYS_TO_CHANGESEX." dias de conta premium necessarios para modificar o sexo de seu personagem.";
 					}
@@ -131,10 +125,7 @@ if($_GET['name'])
 						$character->save();
 						
 						//removeção dos premdays da conta do jogador
-						$newpremdays = $account->get("premdays") - PREMDAYS_TO_CHANGESEX;
-						
-						$account->set("premdays", $newpremdays);
-						$account->set("lastday", time());
+						$account->updatePremDays(PREMDAYS_TO_CHANGESEX, false /* false to decrement days */);	
 						
 						$account->save();		
 		
@@ -172,7 +163,7 @@ if($_GET['name'])
 			}
 			
 			$module .=	'
-			<form action="" method="post">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset>
 					
 					<p>
@@ -268,7 +259,7 @@ else
 {
 
 $module .=	'
-	<form action="" method="post">
+	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
 			
 			<p>

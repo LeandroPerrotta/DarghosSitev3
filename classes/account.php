@@ -134,10 +134,6 @@ class Account
 				return $this->getPremDays();
 			break;	
 			
-			case "lastday":
-				return $this->getLastDay();
-			break;	
-			
 			case "email":
 				return $this->getEmail();
 			break;	
@@ -206,12 +202,7 @@ class Account
 		$leftDays = ($leftDays > 0) ? floor($leftDays / 86400) : 0;
 		
 		return $leftDays;
-	}		
-			
-	function getLastDay()
-	{
-		return $this->data['lastday'];
-	}		
+	}			
 
 	function getEmail()
 	{
@@ -319,11 +310,7 @@ class Account
 			
 			case "premdays":
 				return $this->setPremDays($value);
-			break;	
-			
-			case "lastday":
-				return $this->setLastDay($value);
-			break;	
+			break;		
 			
 			case "email":
 				return $this->setEmail($value);
@@ -503,20 +490,39 @@ class Account
 	 * argumentos:
 	 * 		n/a
 	 */		
-	function updatePremDays()
+	function updatePremDays($premdays, $increment = true)
 	{
-		$daysToRemove = time() - $this->data['lastday'];
-		
-		if($daysToRemove >= $this->data['premdays'])
+		if($increment)
 		{
-			$this->data['premdays'] = 0;
+			$daysnow = $this->getPremDays();
+			
+			if($daysnow == 0)
+			{
+				$daysnew = time() + (60 * 60 * 24 * $premdays);
+				$this->setPremDays($daysnew);
+			}
+			else
+			{
+				$daysnew = time() + (60 * 60 * 24 * ($premdays + $daysnow));	
+				$this->setPremDays($daysnew);
+			}
 		}
 		else
 		{
-			$this->data['premdays'] -= $daysToRemove;
+			$daysnow = $this->getPremDays();
+			
+			if($daysnow == 0)
+			{
+				return false;
+			}
+			else
+			{
+				$daysnew = $this->data["premend"] - (60 * 60 * 24 * $premdays);	
+				$this->setPremDays($daysnew);
+			}			
 		}
 		
-		$this->data['lastday'] = time();
+		return true;
 	}
 	
 	

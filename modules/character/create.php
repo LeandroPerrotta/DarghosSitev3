@@ -106,7 +106,7 @@ if($post)
 		
 		if($city)
 		{
-			if(($city == 2 or $city == 5 or $city == 7) and $account->get("premdays") == 0)
+			if(($city == 2 or $city == 5 or $city == 7) and $account->getPremDays() == 0)
 			{
 				$city = 1;
 			}
@@ -160,7 +160,7 @@ else
 	}
 	
 $module .= '
-<form action="" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
 		<p>
@@ -189,7 +189,7 @@ $module .= '
 				{
 					if($values['canCreate'] == 1)
 					{
-						if($values['premium'] == 1 and $account->get("premdays") != 0)
+						if($values['premium'] == 1 and $account->getPremDays() != 0)
 							$module .= '<input type="radio" name="player_city" value="'.$values['name'].'" /> '.$values['name'].'<br>';
 						elseif($values['premium'] == 0)
 							$module .= '<input type="radio" name="player_city" value="'.$values['name'].'" /> '.$values['name'].'<br>';	

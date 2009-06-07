@@ -79,7 +79,7 @@ if(!$success)
 	}
 	
 $module .= '	
-	<form action="" method="post">
+	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>			
 			
 			<p><h3>Formulário de Pedido de Contribuição</h3></p>

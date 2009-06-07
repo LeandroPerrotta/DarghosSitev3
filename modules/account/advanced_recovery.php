@@ -65,7 +65,7 @@ if($_SESSION['recovery'])
 			}
 			
 		$module .= '	
-			<form action="" method="post">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset>			
 			
 					<p>

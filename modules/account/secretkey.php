@@ -61,7 +61,7 @@ else
 $secretkey = $strings->randKey(5, 4, "number+upper");	
 	
 $module .= '	
-<form action="" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>			
 		<p>Atravez deste painel você pode configurar a chave secreta de sua conta, ultilizada em situações criticas para recuperar sua conta. Ela pode ser uma chave de alta segurança definida pelo sistema (memorize-a), ou então uma chave definida por você mesmo, com direito a um lembrete para uso posterior.</p>
 		
