@@ -23,8 +23,8 @@ $_townid = array(
 	2 => array("name" => "Aracura", 	"canCreate" => 1, 		"premium" => 1),
 	3 => array("name" => "Rookgaard", 	"canCreate" => 0, 		"premium" => 0),
 	4 => array("name" => "Thorn", 		"canCreate" => 1, 		"premium" => 0),
-	5 => array("name" => "Salazart", 	"canCreate" => 1, 		"premium" => 0),
-	7 => array("name" => "Northrend", 	"canCreate" => 1, 		"premium" => 0)
+	5 => array("name" => "Salazart", 	"canCreate" => 1, 		"premium" => 1),
+	7 => array("name" => "Northrend", 	"canCreate" => 1, 		"premium" => 1)
 );
 
 $_skill['fist'] = 0;

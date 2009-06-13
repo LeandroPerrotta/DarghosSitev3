@@ -546,7 +546,7 @@ class Character
 	
 	function inviteToGuild($guild_id)
 	{
-		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `invitedIn`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
+		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `date`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
 	}
 	
 	function acceptInvite()

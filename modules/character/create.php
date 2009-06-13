@@ -27,86 +27,18 @@ if($post)
 		else
 			$outfitType = 136;
 			
-		if($post[2] == "sorcerer")
+		foreach($_townid as $city_id => $values)
 		{
-			$itemsChar = array(
-				//Inventario
-				array(SLOT_HEAD, 101, 2480, 1),
-				array(SLOT_BACKPACK, 102, 1988, 1),
-				array(SLOT_ARMOR, 103, 2464, 1),
-				array(SLOT_RIGHTHAND, 104, 2530, 1),
-				array(SLOT_LEFTHAND, 105, 2190, 1),
-				array(SLOT_LEGS, 106, 2468, 1),
-				array(SLOT_FEET, 107, 2643, 1),
-				array(SLOT_AMMO, 108, 2120, 1),
-				
-				//backpack
-				array(102, 109, 2666, 2),
-			);				
-		}
-		elseif($post[2] == "druid")
-		{
-			$itemsChar = array(
-				//Inventario
-				array(SLOT_HEAD, 101, 2480, 1),
-				array(SLOT_BACKPACK, 102, 1988, 1),
-				array(SLOT_ARMOR, 103, 2464, 1),
-				array(SLOT_RIGHTHAND, 104, 2530, 1),
-				array(SLOT_LEFTHAND, 105, 2182, 1),
-				array(SLOT_LEGS, 106, 2468, 1),
-				array(SLOT_FEET, 107, 2643, 1),
-				array(SLOT_AMMO, 108, 2120, 1),
-				
-				//backpack
-				array(102, 109, 2666, 2),
-			);						
-		}
-		elseif($post[2] == "paladin")
-		{
-			$itemsChar = array(
-				//Inventario
-				array(SLOT_HEAD, 101, 2480, 1),
-				array(SLOT_BACKPACK, 102, 1988, 1),
-				array(SLOT_ARMOR, 103, 2464, 1),
-				array(SLOT_RIGHTHAND, 104, 2530, 1),
-				array(SLOT_LEFTHAND, 105, 2389, 5),
-				array(SLOT_LEGS, 106, 2468, 1),
-				array(SLOT_FEET, 107, 2643, 1),
-				array(SLOT_AMMO, 108, 2120, 1),
-				
-				//backpack
-				array(102, 109, 2666, 2),
-			);						
-		}
-		elseif($post[2] == "knight")
-		{
-			$itemsChar = array(
-				//Inventario
-				array(SLOT_HEAD, 101, 2480, 1),
-				array(SLOT_BACKPACK, 102, 1988, 1),
-				array(SLOT_ARMOR, 103, 2464, 1),
-				array(SLOT_RIGHTHAND, 104, 2530, 1),
-				array(SLOT_LEFTHAND, 105, 2412, 1),
-				array(SLOT_LEGS, 106, 2468, 1),
-				array(SLOT_FEET, 107, 2643, 1),
-				array(SLOT_AMMO, 108, 2120, 1),
-				
-				//backpack
-				array(102, 109, 2666, 2),
-				array(102, 110, 2388, 1),
-				array(102, 111, 2398, 1),
-			);					
-		}		
-	
-		foreach($_townid as $city_id => $city_name)
-		{
-			if(strtolower($city_name) == $post[3])
+			if(strtolower($values["name"]) == $post[3])
+			{
 				$city = $city_id;
+				$cityPremium = ($values["premium"] == 0) ? false : true;
+			}	
 		}
 		
 		if($city)
 		{
-			if(($city == 2 or $city == 5 or $city == 7) and $account->getPremDays() == 0)
+			if($cityPremium and $account->getPremDays() == 0)
 			{
 				$city = 1;
 			}
@@ -134,11 +66,6 @@ if($post)
 		$character->setCreation(time());
 		
 		$character->save();
-	
-		foreach($itemsChar as $item)
-		{
-			$character->addItem($item[0], $item[1], $item[2], $item[3]);
-		}	
 	
 		$success = "
 		<p>O personagem ".$post[0]." foi criado com sucesso!</p>
