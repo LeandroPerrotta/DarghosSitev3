@@ -29,7 +29,7 @@ if($post)
 			
 		foreach($_townid as $city_id => $values)
 		{
-			if(strtolower($values["name"]) == $post[3])
+			if($values["name"] == $post[3])
 			{
 				$city = $city_id;
 				$cityPremium = ($values["premium"] == 0) ? false : true;

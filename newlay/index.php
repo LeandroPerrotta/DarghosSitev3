@@ -33,13 +33,10 @@
 								<div><strong>Navegação</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=news.last">Últimas Notícias </a></li>
-									<li><a href="http://forum.darghos.com.br/index.php?board=1.0">Arquivo de Notícias </a></li>
 									<li><a href="?ref=general.about">Sobre o Darghos </a></li>
-									<li><a href="http://forum.darghos.com.br/index.php?board=15.0">Darghos FAQ </a></li>										
-									<li><a href="http://forum.darghos.com.br/index.php?topic=2.new#new">Como jogar? </a></li>
-									<li><a href="http://forum.darghos.com.br/">Forum </a></li>
-									<li><a href="http://forum.darghos.com.br/index.php?board=6.0">Darghopédia </a></li>								
-									<li><a href="http://forum.darghos.com.br/index.php?board=3.0">Feedbacks </a></li>									
+									<li><a href="?ref=general.faq">Darghos FAQ </a></li>										
+									<li><a href="?ref=general.howplay">Como jogar? </a></li>
+									<li><a href="?ref=darghopedia.main">Darghopédia </a></li>																	
 								</ul>
 							</li>
 							
@@ -177,6 +174,8 @@
 													
 													echo "
 													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
+													<em>IP:</em> ".STATUS_ADDRESS."<br />
+													<em>Port:</em> ".STATUS_PORT."<br />
 													<em>Players:</em> {$status->getOnlinePlayers()}<br />
 													<em>Uptime:</em> {$uptime}<br />
 													<em>Ping:</em> <span class='ping'>aguarde...</span>
@@ -209,5 +208,15 @@
 		
 		<script src="<?php echo $layoutDir; ?>ext.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>ping.js" type="text/javascript"></script>		
+		
+		<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+		try {
+		var pageTracker = _gat._getTracker("UA-9316795-1");
+		pageTracker._trackPageview();
+		} catch(err) {}</script>		
 	</body>
 </html>

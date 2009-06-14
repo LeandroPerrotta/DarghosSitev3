@@ -35,7 +35,7 @@ function pong()
 function runPing()
 {
 	pingTrie++;
-	var ip_address = "64.32.4.157";
+	var ip_address = "darghos.com.br";
 	
     var proxy = new Ext.data.ScriptTagProxy({url:'http://'+ip_address+'/pong.js', timeout: 6000});
   
