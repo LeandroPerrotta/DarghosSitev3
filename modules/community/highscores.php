@@ -91,9 +91,11 @@ while($fetch = $query->fetch())
 		$skill_value = $character->getSkill($skillid);
 	}
 	
+	$online = ($character->getOnline() == 1) ? "[<span class='online'>Online</font>]" : "";
+	
 	$module .= "
 		<tr>
-			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a></td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
+			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> $online</td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
 		</tr>
 	";
 }

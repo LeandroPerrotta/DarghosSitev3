@@ -97,6 +97,16 @@ else
 					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;					
+
+				case "premiumtest":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;					
+
+				case "importElerian":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";

@@ -1,9 +1,6 @@
-CREATE TABLE `player_deaths` (
-	`player_id` int(10) unsigned NOT NULL,
-	`level` int(10) unsigned NOT NULL,
-	`date` int(10) unsigned NOT NULL,
-	`lasthit_killer` varchar(255) NOT NULL,
-	`mostdamage_killer` varchar(255) NOT NULL
+CREATE TABLE `wb_premiumtest` (
+  `account_id` int(10) unsigned NOT NULL,
+  `date` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE `wb_pages` (

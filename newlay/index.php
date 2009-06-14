@@ -74,6 +74,8 @@
 								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=account.main">Main </a></li>
+									<li><a href="?ref=account.premiumtest">Free Premium </a></li>
+									<li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li>
 									<li><a href="?ref=account.logout">Log-out </a></li>
 								</ul>
 							</li>

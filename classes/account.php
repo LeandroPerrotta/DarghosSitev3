@@ -755,6 +755,35 @@ class Account
 			return false;	
 	}	
 	
-
+	function checkPremiumTest()
+	{
+		$query = $this->db->query("SELECT date FROM ".DB_WEBSITE_PREFIX."premiumtest WHERE account_id = '".$this->data["id"]."'");
+		
+		if($query->numRows() == 1)
+		{
+			return $query->fetch()->date;
+		}
+		elseif($query->numRows() == 0)
+		{
+			return false;
+		}
+		else
+		{
+			die("Premtest rows must be 0 or 1.");
+		}	
+	}
+	
+	function activePremiumTest()
+	{
+		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."premiumtest VALUES ('{$this->data["id"]}', '".time()."')");
+		
+		if($this->getPremDays() == 0)
+		{
+			$this->updatePremDays(PREMTEST_DAYS);
+		}
+		
+		$this->save();
+		
+	}
 }
 ?>
