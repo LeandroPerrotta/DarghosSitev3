@@ -138,10 +138,6 @@ class Account
 				return $this->getEmail();
 			break;	
 			
-			case "key":
-				return $this->getKey();
-			break;	
-			
 			case "blocked":
 				return $this->getBlocked();
 			break;	
@@ -208,11 +204,6 @@ class Account
 	{
 		return $this->data['email'];
 	}		
-	
-	function getKey()
-	{
-		return $this->data['key'];
-	}	
 
 	function getBlocked()
 	{
@@ -226,7 +217,27 @@ class Account
 
 	function getGroup()
 	{
-		return $this->data['group_id'];
+		$characters = $this->getCharacterList(true);
+		
+		$highGroup = 1;
+		
+		if(is_array($characters))
+		{
+			foreach($characters as $cid)
+			{
+				global $core;
+				
+				$character = $core->loadClass("character");
+				$character->load($cid);
+				
+				if($character->getGroup() > $highGroup)
+				{
+					$highGroup = $character->getGroup();
+				}
+			}
+		}
+		
+		return $highGroup;
 	}
 
 	function getLocation()

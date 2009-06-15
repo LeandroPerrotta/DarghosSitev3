@@ -91,7 +91,7 @@ while($fetch = $query->fetch())
 		$skill_value = $character->getSkill($skillid);
 	}
 	
-	$online = ($character->getOnline() == 1) ? "[<span class='online'>Online</font>]" : "";
+	$online = ($character->getOnline() == 1) ? "[<span class='online'>Online</span>]" : "";
 	
 	$module .= "
 		<tr>
