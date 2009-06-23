@@ -1,10 +1,10 @@
 CREATE TABLE `wb_fastnews` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `author` varchar(45) NOT NULL DEFAULT '0',
-  `post` varchar(255) DEFAULT NULL,
+  `post` text,
   `post_data` int(10) unsigned NOT NULL DEFAULT '0',
-  `post_update` int(10) unsigned NOT NULL
-  PRIMARY KEY (`id`),
+  `post_update` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `wb_premiumtest` (

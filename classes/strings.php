@@ -104,7 +104,7 @@ class Strings
 	
 	function isFromBlackList($string)
 	{
-		$query = $this->db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blacklistStrings");
+		$query = $this->db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blackliststrings");
 		
 		while($fetch = $query->fetch())
 		{
