@@ -4,7 +4,7 @@ CREATE TABLE `wb_fastnews` (
   `post` varchar(255) DEFAULT NULL,
   `post_data` int(10) unsigned NOT NULL DEFAULT '0',
   `post_update` int(10) unsigned NOT NULL
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
 ) ENGINE=InnoDB;
 
 CREATE TABLE `wb_premiumtest` (

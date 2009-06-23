@@ -408,7 +408,7 @@ else
 		{
 			include("modules/errors/needpremium.php");
 		}
-		elseif($_groupId < $needMinGroup or !$_SESSION['login'])
+		elseif($_groupId < $needMinGroup)
 		{
 			include("modules/errors/notfound.php");
 		}	
