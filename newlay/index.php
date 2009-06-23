@@ -107,8 +107,22 @@
 									<li><a href="?ref=contribute.myorders">Meus Pedidos </a></li>
 									<li><a href="?ref=account.itemshop_log">Historico Item Shop </a></li>
 								</ul>
-							</li>			
-																									
+							</li>		
+							
+								<?php 
+								$account = $core->loadClass("account");
+								if($account->load($_SESSION["login"][0]) AND $account->getGroup() >= 5) 
+								{
+								?>
+								
+								<li>
+									<div><strong>Admin Panel</strong></div>
+									<ul class="always_viewable" >
+										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
+									</ul>
+								</li>								
+								
+								<?php } ?>																		
 							<?php } ?>
 				
 							<?php 

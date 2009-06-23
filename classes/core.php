@@ -18,7 +18,7 @@ class Core
 	function InitPOT()
 	{
 		// includes POT main file
-		include_once('classes/POT/OTS.php');
+		include_once('classes/pot/OTS.php');
 		
 		list($ip, $port) = explode(":", DB_HOST);
 		

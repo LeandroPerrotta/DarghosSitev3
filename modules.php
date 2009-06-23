@@ -353,6 +353,26 @@ else
 			
 		break;
 		
+		case "adv":
+		
+			$patch['dir'] = $module;
+			$needLogin = true;
+			
+			switch($topic)
+			{
+				case "fastnews":
+					$patch['file'] = $topic;
+					$needMinGroup = 5;			
+				break;					
+				
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;		
+		
 		default:
 			$patch['dir'] = "errors";
 			$patch['file'] = "notfound";
@@ -364,16 +384,19 @@ else
 	if($_GET)
 	{	
 		$_isPremium = false;
+		$_groupId = 1;
 		
 		if($_SESSION['login'])
 		{
-			$accIsPremium = $core->loadClass("Account");	
-			$accIsPremium->load($_SESSION["login"][0], "premdays");
+			$checkAccount = $core->loadClass("Account");	
+			$checkAccount->load($_SESSION["login"][0], "premdays");
 			
-			if($accIsPremium->get("premdays") != 0)
+			if($checkAccount->get("premdays") != 0)
 			{
 				$_isPremium = true;
 			}
+			
+			$_groupId = $checkAccount->getGroup();
 		}
 		
 		
@@ -385,6 +408,10 @@ else
 		{
 			include("modules/errors/needpremium.php");
 		}
+		elseif($_groupId < $needMinGroup or !$_SESSION['login'])
+		{
+			include("modules/errors/notfound.php");
+		}	
 		else
 		{
 			if($patch['dir'] != "errors")

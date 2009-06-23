@@ -47,7 +47,7 @@ else
 		}		
 	}	
 	
-	$strings = $core->loadClass("Strings");
+	$strings = $core->loadClass("strings");
 	$tools = $core->loadClass("tools");
 	
 	include "modules.php";
