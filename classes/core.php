@@ -91,7 +91,7 @@ class Core
 	
 	function loadClass($class)
 	{
-		include_once "classes/".$class.".php";
+		include_once "classes/".strtolower($class).".php";
 		return new $class();
 	}
 	
