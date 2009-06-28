@@ -22,8 +22,6 @@ if($_GET['name'])
 			$itemshop_list = $core->loadClass("itemshop_list");
 			$query = $db->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
 			
-			$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
-			
 			if($account->get("password") != $strings->encrypt($post[1]))
 			{
 				$error = "Confirmação da senha falhou.";
@@ -32,7 +30,7 @@ if($_GET['name'])
 			{
 				$error = "Você deve efetuar um login no jogo para receber o item de sua ultima compra antes de efetuar uma nova compra.";
 			}
-			elseif($info->playerStatus($character->getName()))		
+			elseif($character->getOnline() == 1)		
 			{
 				$error = "É nessario estar off-line no jogo para efetuar a compra de um item.";
 			}			

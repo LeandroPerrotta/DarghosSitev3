@@ -17,9 +17,7 @@ if($_GET['name'])
 		$character->loadByName($_GET['name'], "name, comment, hide, online, sex, account_id");
 
 		if($_POST)
-		{
-			$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
-			
+		{			
 			if($account->get("password") != $strings->encrypt($_POST["account_password"]))
 			{
 				$error = "Confirmação da senha falhou.";
@@ -69,7 +67,7 @@ if($_GET['name'])
 					{
 						$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
 					}	
-					elseif($info->playerStatus($character->getName()))	
+					elseif($character->getOnline() == 1)	
 					{
 						$error = "É nessario estar off-line no jogo para efetuar este recurso.";
 					}			
@@ -110,7 +108,7 @@ if($_GET['name'])
 					{
 						$error = "Esta conta não possui permissão para acessar este recurso.";
 					}						
-					elseif($info->playerStatus($character->getName()))
+					elseif($character->getOnline() == 1)
 					{
 						$error = "É nessario estar off-line no jogo para efetuar este recurso.";
 					}			
