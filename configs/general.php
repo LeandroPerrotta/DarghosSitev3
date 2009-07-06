@@ -24,7 +24,7 @@ $_townid = array(
 	3 => array("name" => "Rookgaard", 			"canCreate" => 0, 		"premium" => 0),
 	4 => array("name" => "Thorn", 				"canCreate" => 0, 		"premium" => 0),
 	5 => array("name" => "Salazart", 			"canCreate" => 0, 		"premium" => 1),
-	5 => array("name" => "Island of Peace", 	"canCreate" => 1, 		"premium" => 0),
+	6 => array("name" => "Island of Peace", 	"canCreate" => 1, 		"premium" => 0),
 	7 => array("name" => "Northrend", 			"canCreate" => 0, 		"premium" => 1)
 );
 
