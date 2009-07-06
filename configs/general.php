@@ -19,12 +19,13 @@ $_vocationid[7] = "Royal Paladin";
 $_vocationid[8] = "Elite Knight";	
 
 $_townid = array(
-	1 => array("name" => "Quendor", 	"canCreate" => 1, 		"premium" => 0),
-	2 => array("name" => "Aracura", 	"canCreate" => 1, 		"premium" => 1),
-	3 => array("name" => "Rookgaard", 	"canCreate" => 0, 		"premium" => 0),
-	4 => array("name" => "Thorn", 		"canCreate" => 1, 		"premium" => 0),
-	5 => array("name" => "Salazart", 	"canCreate" => 1, 		"premium" => 1),
-	7 => array("name" => "Northrend", 	"canCreate" => 1, 		"premium" => 1)
+	1 => array("name" => "Quendor", 			"canCreate" => 0, 		"premium" => 0),
+	2 => array("name" => "Aracura", 			"canCreate" => 0, 		"premium" => 1),
+	3 => array("name" => "Rookgaard", 			"canCreate" => 0, 		"premium" => 0),
+	4 => array("name" => "Thorn", 				"canCreate" => 0, 		"premium" => 0),
+	5 => array("name" => "Salazart", 			"canCreate" => 0, 		"premium" => 1),
+	5 => array("name" => "Island of Peace", 	"canCreate" => 1, 		"premium" => 0),
+	7 => array("name" => "Northrend", 			"canCreate" => 0, 		"premium" => 1)
 );
 
 $_skill['fist'] = 0;

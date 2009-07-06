@@ -8,7 +8,7 @@ if($post)
 {	
 	$character = $core->loadClass("character");
 
-	if(!$post[0] or !$post[1] or !$post[2] or !$post[3])
+	if(!$post[0] or !$post[1] or !$post[2])
 	{
 		$error = "Preencha todos campos do formulario corretamente.";
 	}
@@ -26,25 +26,6 @@ if($post)
 			$outfitType = 128;
 		else
 			$outfitType = 136;
-			
-		foreach($_townid as $city_id => $values)
-		{
-			if($values["name"] == $post[3])
-			{
-				$city = $city_id;
-				$cityPremium = ($values["premium"] == 0) ? false : true;
-			}	
-		}
-		
-		if($city)
-		{
-			if($cityPremium and $account->getPremDays() == 0)
-			{
-				$city = 1;
-			}
-		}
-		else
-			$city = 1;
 		
 		$character->setName($post[0]);
 		$character->setAccountId($_SESSION['login'][0]);
@@ -57,7 +38,7 @@ if($post)
 		$character->setHealth(185);
 		$character->setMana(35);
 		$character->setCap(470);
-		$character->setTownId($city);
+		$character->setTownId(6);
 		$character->setLookType($outfitType);
 		$character->setConditions(null);
 		$character->setGuildNick("");
@@ -69,7 +50,8 @@ if($post)
 	
 		$success = "
 		<p>O personagem ".$post[0]." foi criado com sucesso!</p>
-		<p>Para iniciar o jogo basta baixar o nosso cliente na seção de Downloads!</p>
+		<p>Para começar a jogar clique <a href='?ref=general.howplay'>aqui</a> e siga as instruções.</p>
+		<p>A sua aventura se inicia em Island of Peace, esta ilha funciona como um aprendizado com vários tipos de criaturas, NPCs, quests, academia de treino e muito mais, alem que não é possivel atacar outros jogadores. Quando você atingir o nivel 60 estará preparado para sair da ilha usando o Barco e explorar aos outros continentes do Darghos. É importante informar que você pode sair a qualquer momento da ilha independente do nivel, porem, uma vez fora, é impossivel retornar a ilha.</p>
 		<p>Tenha uma boa jornada!</p>
 		";
 	}
@@ -107,24 +89,7 @@ $module .= '
 				<input type="radio" name="player_vocation" value="druid" /> Druid<br>
 				<input type="radio" name="player_vocation" value="paladin" /> Paladin<br>
 				<input type="radio" name="player_vocation" value="knight" /> Knight<br>
-		</p>	
-
-		<p>
-			<label for="player_city">Residencia</label><br />';
-
-				foreach($_townid as $city_id => $values)
-				{
-					if($values['canCreate'] == 1)
-					{
-						if($values['premium'] == 1 and $account->getPremDays() != 0)
-							$module .= '<input type="radio" name="player_city" value="'.$values['name'].'" /> '.$values['name'].'<br>';
-						elseif($values['premium'] == 0)
-							$module .= '<input type="radio" name="player_city" value="'.$values['name'].'" /> '.$values['name'].'<br>';	
-					}	
-				}			
-				
-			$module .= '
-		</p>		
+		</p>			
 		
 		<div id="line1"></div>
 		
