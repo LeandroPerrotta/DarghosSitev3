@@ -272,6 +272,11 @@ class Character
 		return $this->data['level'];
 	}
 	
+	function getMagicLevel()
+	{
+		return $this->data['maglevel'];
+	}	
+	
 	function getVocation()
 	{
 		return $this->data['vocation'];
@@ -331,6 +336,11 @@ class Character
 	{
 		return $this->data['hidden'];
 	}
+	
+	function getLastLogin()
+	{
+		return $this->data['lastlogin'];
+	}	
 
 
 	

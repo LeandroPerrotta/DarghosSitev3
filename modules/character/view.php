@@ -23,7 +23,7 @@ if($post or $get)
 		$bans = $core->loadClass('bans');
 		
 		$houseid = $character->getHouse();
-		$lastlogin = ($character->get("lastlogin")) ? $core->formatDate($character->get("lastlogin")) : "Nunca entrou.";
+		$lastlogin = ($character->getLastLogin()) ? $core->formatDate($character->getLastLogin()) : "Nunca entrou.";
 		
 		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
 		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "não configurado";
@@ -50,7 +50,7 @@ if($post or $get)
 		
 			$module .= "
 			<tr>
-				<td width='25%'><b>Nome:</b></td> <td>{$character->get("name")}</td>
+				<td width='25%'><b>Nome:</b></td> <td>{$character->getName()}</td>
 			</tr>";
 			
 			if($oldnames)
@@ -73,19 +73,23 @@ if($post or $get)
 			
 			$module .= "
 			<tr>
-				<td><b>Level:</b></td> <td>{$character->get("level")}</td>
+				<td><b>Level:</b></td> <td>{$character->getLevel()}</td>
+			</tr>	
+			
+			<tr>
+				<td><b>Magic Level:</b></td> <td>{$character->getMagicLevel()}</td>
+			</tr>			
+
+			<tr>
+				<td><b>Sexo:</b></td> <td>{$_sexid[$character->getSex()]}</td>
 			</tr>	
 
 			<tr>
-				<td><b>Sexo:</b></td> <td>{$_sexid[$character->get("sex")]}</td>
+				<td><b>Vocação:</b></td> <td>{$_vocationid[$character->getVocation()]}</td>
 			</tr>	
 
 			<tr>
-				<td><b>Vocação:</b></td> <td>{$_vocationid[$character->get("vocation")]}</td>
-			</tr>	
-
-			<tr>
-				<td><b>Residencia:</b></td> <td>{$_townid[$character->get("town_id")]["name"]}</td>
+				<td><b>Residencia:</b></td> <td>{$_townid[$character->getTownId()]["name"]}</td>
 			</tr>";	
 
 			if($houseid)
@@ -93,9 +97,18 @@ if($post or $get)
 				$houses = $core->loadClass("Houses");
 				$houses->load($houseid);				
 				
+				if($houses->get("warnings") == 0)
+				{
+					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}.";
+				}
+				else
+				{
+					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) está com pagamento atrazado ({$houses->get("warnings")}º aviso).";
+				}
+				
 				$module .= "
 				<tr>
-					<td><b>Casa</b></td> <td>{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}</td>
+					<td><b>Casa</b></td><td>{$housemsg}</td>
 				</tr>";						
 			}
 			
@@ -111,7 +124,7 @@ if($post or $get)
 			{
 				$module .= "
 				<tr>
-					<td><b>Comentario</b></td> <td>".nl2br(strip_tags($character->get("comment")))."</td>
+					<td><b>Comentario</b></td> <td>".nl2br(strip_tags($character->getDescription()))."</td>
 				</tr>";					
 			}
 			
@@ -251,7 +264,7 @@ if($post or $get)
 					
 					$module .= "
 						<tr>
-							<td width='25%'>{$character_list->get("name")}</td> <td width='10%'>{$character_list->get("level")}</td> <td>{$character_status}</td>
+							<td width='25%'>{$character->getName()}</td> <td width='10%'>{$character->getLevel()}</td> <td>{$character_status}</td>
 						</tr>					
 					";						
 				}				

@@ -33,6 +33,7 @@ class Houses
 		{
 			$this->data['owner'] = $fetch->owner;
 			$this->data['paid'] = $fetch->paid;
+			$this->data['warnings'] = $fetch->warnings;
 		}
 	}
 	
