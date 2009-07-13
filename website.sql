@@ -1,3 +1,16 @@
+CREATE TABLE `wb_tutortest_questions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `question` varchar(255) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `wb_tutortest_answers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT, 	
+  `question_id` int(10) unsigned NOT NULL,
+  `answer` varchar(255) NOT NULL DEFAULT '0',
+  `correct` int(10) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB;
+
 CREATE TABLE `wb_fastnews` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `author` varchar(45) NOT NULL DEFAULT '0',
@@ -131,3 +144,4 @@ ALTER TABLE `players` ADD `description` VARCHAR(255) NOT NULL AFTER `stamina`;
 ALTER TABLE `players` ADD `hidden` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `created` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `guild_join_date` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
+ALTER TABLE `players` ADD `spoofed` INT(10) NOT NULL DEFAULT 0 AFTER `guild_join_date`;
