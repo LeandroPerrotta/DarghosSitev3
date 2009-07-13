@@ -264,7 +264,7 @@ if($post or $get)
 					
 					$module .= "
 						<tr>
-							<td width='25%'>{$character->getName()}</td> <td width='10%'>{$character->getLevel()}</td> <td>{$character_status}</td>
+							<td width='25%'>{$character_list->getName()}</td> <td width='10%'>{$character_list->getLevel()}</td> <td>{$character_status}</td>
 						</tr>					
 					";						
 				}				
