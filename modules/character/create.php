@@ -20,6 +20,10 @@ if($post)
 	{
 		$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
 	}
+	elseif(count($account->getCharacterList()) == 10)
+	{
+		$error = "So é permitido criar 10 personagens por conta.";
+	}
 	else
 	{
 		if($post[1] == "male")
