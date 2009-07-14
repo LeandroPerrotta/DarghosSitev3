@@ -9,9 +9,9 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 		$chkAccount = $core->loadClass("Account");
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		if($post[0] != $chkAccount->getName() or $strings->encrypt($post[1]) != $_SESSION['login'][1])
+		if($strings->encrypt($post[1]) != $_SESSION['login'][1])
 		{
-			$error = "A confirmação do numero da conta ou senha estão invalidos.";
+			$error = "A confirmação da senha está invalida.";
 		}
 		elseif($post[2] != "1")
 		{
@@ -88,11 +88,6 @@ $module .= '
 			<li><b>Periodo: </b> Contribuição de '.$contribute->get("period").' dias de Conta Premium.</li>
 			
 		</ul>	
-	
-		<p>
-			<label for="account_name">Nome da Conta</label><br />
-			<input name="account_name" size="40" type="password" value="" />
-		</p>
 		
 		<p>
 			<label for="account_password">Senha</label><br />
