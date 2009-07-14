@@ -9,11 +9,11 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 		$chkAccount = $core->loadClass("Account");
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		if($strings->encrypt($post[1]) != $_SESSION['login'][1])
+		if($strings->encrypt($post[0]) != $_SESSION['login'][1])
 		{
 			$error = "A confirmação da senha está invalida.";
 		}
-		elseif($post[2] != "1")
+		elseif($post[1] != "1")
 		{
 			$error = "Para aceitar uma contribuição é necessario estar de acordo com todas clausulas e termos de nosso contrato de serviço.";
 		}
