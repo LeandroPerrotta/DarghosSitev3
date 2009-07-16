@@ -13,7 +13,7 @@ class Character
 	
 	function load($player_id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, redskull, redskulltime, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden, online FROM players WHERE id = '".$player_id."'");		
+		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden, online, skull_time FROM players WHERE id = '".$player_id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -49,8 +49,7 @@ class Character
 			$this->data['lastlogin'] = $fetch->lastlogin;
 			$this->data['lastip'] = $fetch->lastip;
 			$this->data['save'] = $fetch->save;
-			$this->data['redskull'] = $fetch->redskull;
-			$this->data['redskulltime'] = $fetch->redskulltime;
+			$this->data['skull_type'] = $fetch->skull_type;
 			$this->data['rank_id'] = $fetch->rank_id;
 			$this->data['guildnick'] = $fetch->guildnick;
 			$this->data['lastlogout'] = $fetch->lastlogout;
@@ -66,6 +65,7 @@ class Character
 			$this->data['created'] = $fetch->created;
 			$this->data['hidden'] = $fetch->hidden;
 			$this->data['online'] = $fetch->online;
+			$this->data['skull_time'] = $fetch->skull_time;
 
 			return true;	
 		}

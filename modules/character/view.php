@@ -244,6 +244,56 @@ if($post or $get)
 			</table>";		
 		}
 		
+		if($_SESSION['login'] and $account->getId() == $_SESSION['login'][0])
+		{
+			$kills = $deaths->getKillsOfPlayer($character->getId());
+
+			if(is_array($kills))
+			{
+				$module .= "
+				
+				<table cellspacing='0' cellpadding='0'>
+					<tr>
+						<th colspan='3'>Assassinatos Recentes</th>
+					</tr>					
+				";				
+				
+				foreach($kills as $kill)
+				{
+					$killed = $core->loadClass("character");
+					$killed->load($kill["killed"]);
+					
+					$date = $core->formatDate($kill['date']);
+					$isInjust = ($kill["injust"] == 1) ? "<font color='#ec0404'><b>injustificada</b></font>" : "<font color='#00ff00'><b>justificada</b></font>";
+					
+					$module .= "
+						<tr>
+							<td width='25%'>{$date}</td> <td width='50%'>Matou <a href='?ref=character.view&name={$killed->getName()}'>{$killed->getName()}</a> no level {$kill["level"]}.</td> <td>{$isInjust}</td>
+						</tr>					
+					";					
+				}
+				
+				$module .= "
+				</table>";						
+			}
+			else
+			{
+				$module .= "
+				
+				<table cellspacing='0' cellpadding='0'>
+					<tr>
+						<th colspan='3'>Assassinatos Recentes</th>
+					</tr>
+
+					<tr>
+						<td>Você não matou nenhum personagem recentemente.</td>
+					</tr>					
+					
+				</table>	
+				";					
+			}
+		}
+		
 		if($character->get("hide") == 0)
 		{
 			$module .= "

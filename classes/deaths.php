@@ -87,5 +87,23 @@ class Deaths
 			return false;
 	}
 
+	function getKillsOfPlayer($player_id)
+	{
+		$query = $this->db->query("SELECT player_deaths.player_id, player_deaths.level, player_deaths.date, player_killers.unjustified FROM player_deaths, killers, player_killers WHERE player_killers.player_id = '{$player_id}' AND killers.id = player_killers.kill_id AND player_deaths.id = killers.death_id AND player_deaths.date > ".(time() - (60 * 60 * 24 * 60))." ORDER BY player_deaths.date DESC");
+		
+		if($query->numRows() != 0)
+		{
+			$kills = array();
+			
+			while($fetch = $query->fetch())
+			{
+				$kills[] = array("killed" => $fetch->player_id, "date" => $fetch->date, "level" => $fetch->level, "injust" => $fetch->injustified);
+			}
+			
+			return $kills;
+		}
+		else
+			return false;		
+	}
 }
 ?>
