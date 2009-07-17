@@ -426,11 +426,13 @@ class Account
 	
 	function setUrl($url)
 	{
+		global $strings;
 		$this->data['url'] = $strings->SQLInjection($url);
 	}
 	
 	function setRealName($real_name)
 	{
+		global $strings;
 		$this->data['real_name'] = $strings->SQLInjection($real_name);
 	}
 	
