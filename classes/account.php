@@ -47,9 +47,9 @@ class Account
 			$this->data['email'] = $fetch->email;	
 			$this->data['blocked'] = $fetch->blocked;	
 			$this->data['warnings'] = $fetch->warnings;	
-			$this->data['url'] = $fetch->url;	
-			$this->data['location'] = $fetch->location;	
-			$this->data['real_name'] = $fetch->real_name;	
+			$this->data['url'] = $strings->SQLInjection($fetch->url);	
+			$this->data['location'] = $strings->SQLInjection($fetch->location);	
+			$this->data['real_name'] = $strings->SQLInjection($fetch->real_name);	
 			$this->data['creation'] = $fetch->creation;	
 			
 			return true;	
