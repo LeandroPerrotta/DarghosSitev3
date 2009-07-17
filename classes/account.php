@@ -33,7 +33,6 @@ class Account
 	 */
 	function load($id, $fields = null)
 	{
-		global $strings;
 		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
@@ -41,15 +40,15 @@ class Account
 			$fetch = $query->fetch();
 			
 			$this->data['id'] = $fetch->id;				
-			$this->data['name'] = $strings->SQLInjection($fetch->name);	
+			$this->data['name'] = stripslashes($fetch->name);	
 			$this->data['password'] = $fetch->password;	
 			$this->data['premend'] = $fetch->premend;	
 			$this->data['email'] = $fetch->email;	
 			$this->data['blocked'] = $fetch->blocked;	
 			$this->data['warnings'] = $fetch->warnings;	
-			$this->data['url'] = $strings->SQLInjection($fetch->url);	
-			$this->data['location'] = $strings->SQLInjection($fetch->location);	
-			$this->data['real_name'] = $strings->SQLInjection($fetch->real_name);	
+			$this->data['url'] = stripslashes($fetch->url);	
+			$this->data['location'] = stripslashes($fetch->location);	
+			$this->data['real_name'] = stripslashes($fetch->real_name);	
 			$this->data['creation'] = $fetch->creation;	
 			
 			return true;	
@@ -378,7 +377,8 @@ class Account
 	
 	function setName($name)
 	{
-		$this->data['name'] = $name;
+		global $strings;
+		$this->data['name'] = $strings->SQLInjection($name);
 	}
 	
 	function setPassword($password)
@@ -393,7 +393,8 @@ class Account
 	
 	function setEmail($email)
 	{
-		$this->data['email'] = $email;
+		global $strings;
+		$this->data['email'] = $strings->SQLInjection($email);
 	}
 	
 	
@@ -419,17 +420,18 @@ class Account
 	
 	function setLocation($location)
 	{
-		$this->data['location'] = $location;
+		global $strings;
+		$this->data['location'] =  $strings->SQLInjection($location);
 	}
 	
 	function setUrl($url)
 	{
-		$this->data['url'] = $url;
+		$this->data['url'] = $strings->SQLInjection($url);
 	}
 	
 	function setRealName($real_name)
 	{
-		$this->data['real_name'] = $real_name;
+		$this->data['real_name'] = $strings->SQLInjection($real_name);
 	}
 	
 	function setCreation($creation)
