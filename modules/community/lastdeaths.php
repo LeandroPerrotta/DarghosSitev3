@@ -31,13 +31,13 @@ if($query->numRows() != 0)
 
 				if($k > 1)
 				{
-					if(count($death_values['killers']) != 2)
+					if(count($death_values['killers']) > 2)
 					{
-						if($k < count($death_values['killers']) - 1)
+						if($k < count($death_values['killers']))
 						{
 							$death .= ", ";
 						}
-						elseif($k == count($death_values['killers']) - 1)
+						elseif($k == count($death_values['killers']))
 						{
 							if($killer["isEnv"] == 1)
 							{			
