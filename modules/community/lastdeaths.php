@@ -81,7 +81,7 @@ if($query->numRows() != 0)
 		
 		$module .= "
 			<tr>
-				<td witdh='20%'>{$date}</td> <td>{$death}</td>
+				<td witdh='30%'>{$date}</td> <td>{$death}</td>
 			</tr>					
 		";			
 	}
