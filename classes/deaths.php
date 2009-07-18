@@ -17,38 +17,44 @@ class Deaths
 		{
 			$death_fetch = $query->fetch();
 			
-			$killerIsEnv = 0;
-			$altKillerIsEnv = 0;
-			
-			$_killer = "";
-			$_altkiller = "";
+			$_killers = array();
+			$_monsters = array();
 				
 			$killers_query = $this->db->query("SELECT id, death_id, final_hit FROM killers WHERE death_id = '{$death_fetch->id}'");
 			while($killers_fetch = $killers_query->fetch())
 			{
+				$_isLastDamager = 0;
+				$_isEnv = 1;
+				
 				$player_killers_query = $this->db->query("SELECT kill_id, player_id FROM player_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
 				if($player_killers_query->numRows() != 0)
 				{
+					$_isEnv = 0;
+					$_damager = $player_killers_query->fetch()->player_id;
+					
 					if($killers_fetch->final_hit == 1)
-						$_killer = $player_killers_query->fetch()->player_id;
-					else
-						$_altkiller = $player_killers_query->fetch()->player_id;
+						$_isLastDamager = 1;		
 				}
 				
 				$env_killers_query = $this->db->query("SELECT kill_id, name FROM environment_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
-				if($env_killers_query->numRows() != 0)
+				if($_isEnv && $env_killers_query->numRows() != 0)
 				{
+					$_damager = $env_killers_query->fetch()->name;
+					
 					if($killers_fetch->final_hit == 1)
-					{
-						$_killer = $env_killers_query->fetch()->name;
-						$killerIsEnv = 1;
-					}	
+						$_isLastDamager = 1;
+
+					if(in_array($_damager, $_monsters))	
+						continue;
 					else
-					{
-						$_altkiller = $env_killers_query->fetch()->name;
-						$altKillerIsEnv = 1;
-					}	
+						$_monsters[] = $_damager;					
 				}
+				
+				$_killers[] = array(
+					"killer" => $_damager,
+					"isEnv" => $_isEnv,
+					"isLastDamager" => $_isLastDamager,
+				);
 				
 			}
 			
@@ -56,10 +62,7 @@ class Deaths
 			(
 				"date" => $death_fetch->date,
 				"level" => $death_fetch->level,
-				"killed_by" => $_killer,
-				"killer_is_env" => $killerIsEnv,
-				"altkilled_by" => $_altkiller,
-				"alt_killer_is_env" => $altKillerIsEnv
+				"killers" => $_killers
 			);	
 			
 			return $deathlist;			

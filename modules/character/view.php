@@ -202,34 +202,56 @@ if($post or $get)
 				
 				$date = $core->formatDate($death_values['date']);
 				
-				$death = "Morto no Nivel {$death_values['level']} por ";
+				$death = "Morto no Nivel {$death_values['level']} por um(a) ";
 				
-				if($death_values['killer_is_env'] == 1)
+				if(count($death_values['killers']) != 0)
 				{
-					$death .= "um ".$death_values['killed_by'];
-				}	
-				else
-				{
-					$Killer = $core->loadClass("character");	
-					$Killer->load($death_values['killed_by']);
-					
-					$death .= "<a href='?ref=character.view&name={$Killer->getName()}'>{$Killer->getName()}</a>";
-				}	
-					
-				if($values['altkilled_by'])	
-				{		
-					if($death_values['alt_killer_is_env'] == 1)
+					$k = 0;
+					foreach($death_values['killers'] as $killer)
 					{
-						$death .= " e um ".$death_values['altkilled_by'];
-					}
-					else
-					{
-						$altKiller = $core->loadClass("character");	
-						$altKiller->load($death_values['alt_killed_by']);
+						$k++;
 						
-						$death .= " e por <a href='?ref=character.view&name={$altKiller->getName()}'>{$altKiller->getName()}</a>";			
+						if($killer["isEnv"] == 1)
+						{
+							$explodeKiller = explode(" ", $killer['killer'], 2);
+							
+							$death .= "".$explodeKiller[1];
+						}
+						else
+						{
+							$_killer = $core->loadClass("character");	
+							$_killer->load($killer['killer']);	
+
+							$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
+						}
+						
+						if(count($death_values['killers']) != 2)
+						{
+							if($k < count($death_values['killers']) - 1)
+							{
+								$death .= ", ";
+							}
+							elseif($k == count($death_values['killers']) - 1)
+							{
+								if($killer["isEnv"] == 1)
+								{			
+									$death .= " e por um(a) ";
+								}	
+								else	
+									$death .= " e por ";
+							}
+						}
+						elseif(count($death_values['killers']) == 2 && $k == 1)
+						{
+							if($killer["isEnv"] == 1)
+							{			
+								$death .= " e por um(a) ";
+							}	
+							else	
+								$death .= " e por ";
+						}
 					}
-				}	
+				}
 
 				$death .= ".";
 				
