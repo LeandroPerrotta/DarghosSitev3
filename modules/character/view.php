@@ -210,6 +210,35 @@ if($post or $get)
 					foreach($death_values['killers'] as $killer)
 					{
 						$k++;
+
+						if($k > 1)
+						{
+							if(count($death_values['killers']) != 2)
+							{
+								if($k < count($death_values['killers']) - 1)
+								{
+									$death .= ", ";
+								}
+								elseif($k == count($death_values['killers']) - 1)
+								{
+									if($killer["isEnv"] == 1)
+									{			
+										$death .= " e por um(a) ";
+									}	
+									else	
+										$death .= " e por ";
+								}
+							}
+							else
+							{
+								if($killer["isEnv"] == 1)
+								{			
+									$death .= " e por um(a) ";
+								}	
+								else	
+									$death .= " e por ";
+							}	
+						}		
 						
 						if($killer["isEnv"] == 1)
 						{
@@ -226,32 +255,6 @@ if($post or $get)
 							$_killer->load($killer['killer']);	
 
 							$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
-						}
-						
-						if(count($death_values['killers']) != 2)
-						{
-							if($k < count($death_values['killers']) - 1)
-							{
-								$death .= ", ";
-							}
-							elseif($k == count($death_values['killers']) - 1)
-							{
-								if($killer["isEnv"] == 1)
-								{			
-									$death .= " e por um(a) ";
-								}	
-								else	
-									$death .= " e por ";
-							}
-						}
-						elseif(count($death_values['killers']) == 2 && $k == 1)
-						{
-							if($killer["isEnv"] == 1)
-							{			
-								$death .= " e por um(a) ";
-							}	
-							else	
-								$death .= " e por ";
 						}
 					}
 				}
