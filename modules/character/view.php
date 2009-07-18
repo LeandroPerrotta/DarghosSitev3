@@ -202,7 +202,7 @@ if($post or $get)
 				
 				$date = $core->formatDate($death_values['date']);
 				
-				$death = "Morto no Nivel {$death_values['level']} por um(a) ";
+				$death = "Morto no Nivel {$death_values['level']} por ";
 				
 				if(count($death_values['killers']) != 0)
 				{
@@ -213,6 +213,9 @@ if($post or $get)
 						
 						if($killer["isEnv"] == 1)
 						{
+							if($k == 1)
+								$death .= "um(a) ";
+							
 							$explodeKiller = explode(" ", $killer['killer'], 2);
 							
 							$death .= "".$explodeKiller[1];
