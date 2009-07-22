@@ -200,7 +200,7 @@ if($account->getName() == $account->getId())
 	else
 	{
 		$module .= "
-		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a> <a class='buttonstd' href='?ref=account.tutortest'>Tutor Test</a>";	
+		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a> <!-- <a class='buttonstd' href='?ref=account.tutortest'>Tutor Test</a> -->";	
 	}
 }
 else

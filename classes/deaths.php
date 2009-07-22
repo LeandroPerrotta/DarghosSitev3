@@ -100,7 +100,7 @@ class Deaths
 			
 			while($fetch = $query->fetch())
 			{
-				$kills[] = array("killed" => $fetch->player_id, "date" => $fetch->date, "level" => $fetch->level, "injust" => $fetch->injustified);
+				$kills[] = array("killed" => $fetch->player_id, "date" => $fetch->date, "level" => $fetch->level, "injust" => $fetch->unjustified);
 			}
 			
 			return $kills;
