@@ -13,31 +13,31 @@ if($_POST)
 	
 	if(!$_POST['account_email'] or !$_POST['account_name'])
 	{
-		$error = "Você deve preencher todos os formularios corretamente.";
+		$error = $boxMessage['INCOMPLETE_FORM'];
 	}
 	elseif(!$_POST['account_privacypolicy'])
 	{
-		$error = "Para jogar no ".CONFIG_SITENAME." é necessario aceitar a nossa politica de privacidade.";
+		$error = $boxMessage['NEED_ACCEPT_PRIVACY_POLICY'];
 	}
 	elseif(strlen($_POST['account_name']) < 5 or strlen($_POST['account_name']) > 25)
 	{
-		$error = "O nome de sua conta deve possuir entre 5 e 25 caracteres.";
+		$error = $boxMessage['ACCOUNT_NAME_INCORRECT_SIZE'];
 	}
 	elseif($account->loadByEmail($_POST['account_email']))
 	{
-		$error = "Este e-mail já esta em uso por outra conta em nosso banco de dados.";
+		$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
 	}		
 	elseif($account->loadByName($_POST['account_name']))
 	{
-		$error = "Este nome já esta em uso por outra conta em nosso banco de dados.";
+		$error = $boxMessage['ACCOUNT_NAME_ALREADY_IN_USE'];
 	}			
 	elseif(!$strings->validEmail($_POST['account_email']))
 	{
-		$error = "Este não é um e-mail valido.";
+		$error = $boxMessage['INVALID_EMAIL'];
 	}	
 	elseif(!$core->mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
 	{
-		$error = "Não foi possivel enviar o e-mail de validação de conta. Tente novamente mais tarde.";
+		$error = $boxMessage['FAIL_SEND_EMAIL'];
 	}
 	else
 	{
@@ -48,23 +48,19 @@ if($_POST)
 		
 		$account->save();
 	
-		$success = "
-		<p>Parabens, sua conta foi criada com sucesso!</p>
-		<p>Sua senha e outras informações foram enviadas em uma mensagem a seu e-mail cadastrado.</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = $boxMessage['SUCCESS.REGISTER'];
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	$core->sendMessageBox($boxMessage['SUCCESS'], $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		$core->sendMessageBox($boxMessage['ERROR'], $error);
 	}
 
 
@@ -73,23 +69,23 @@ $module .=	'
 		<fieldset>
 			
 			<p>
-				<label for="account_email">Endereço de e-mail</label><br />
+				<label for="account_email">'.$pages["ACCOUNT.REGISTER.EMAIL_ADDRESS"].'</label><br />
 				<input id="account_email" name="account_email" size="40" type="text" value="" />
 			</p>
 			
 			<p>
-				<label for="account_email">Nome da Conta</label><br />
+				<label for="account_email">'.$pages["ACCOUNT.REGISTER.ACCOUNT_NAME"].'</label><br />
 				<input id="account_email" name="account_name" size="40" type="text" value="" />
 			</p>			
 				
 			<p>
-				<input name="account_privacypolicy" id="account_privacypolicy" type="checkbox" value="1" /> Eu concordo com esta política de privacidade.
+				<input name="account_privacypolicy" id="account_privacypolicy" type="checkbox" value="1" /> '.$pages["ACCOUNT.REGISTER.PRIVACY_POLICY_ACCEPT"].'
 			</p>
 			
 			<div id="line1"></div>
 			
 			<p>
-				<input class="button" type="submit" value="Enviar" />
+				<input class="button" type="submit" value="'.$buttons['SUBMIT'].'" />
 			</p>
 		</fieldset>
 	</form>';

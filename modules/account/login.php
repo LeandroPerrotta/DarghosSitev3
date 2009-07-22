@@ -14,13 +14,13 @@ if($post)
 	}
 	else
 	{
-		$error = "Numero da conta ou senha incorretos.";
+		$error = $boxMessage['INCORRECT_ACCOUNT_NAME_OR_PASSWORD'];
 	}
 }
 
 if($error)	
 {
-	$core->sendMessageBox("Erro!", $error);
+	$core->sendMessageBox($boxMessage['ERROR'], $error);
 }
 
 $module .= '
@@ -28,19 +28,19 @@ $module .= '
 	<fieldset>
 		
 		<p>
-			<label for="account_name">Conta</label><br />
+			<label for="account_name">'.$pages["ACCOUNT.LOGIN.ACCOUNT_NAME"].'</label><br />
 			<input name="account_name" size="40" type="password" value="" />
 		</p>
 		
 		<p>
-			<label for="account_password">Senha</label><br />
+			<label for="account_password">'.$pages["ACCOUNT.LOGIN.PASSWORD"].'</label><br />
 			<input name="account_password" size="40" type="password" value="" />
 		</p>		
 		
 		<div id="line1"></div>
 		
 		<p>
-			<input class="button" type="submit" value="Login" />
+			<input class="button" type="submit" value="'.$buttons['LOGIN'].'" />
 		</p>
 	</fieldset>
 </form>';

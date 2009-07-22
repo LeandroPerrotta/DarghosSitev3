@@ -7,7 +7,7 @@ if($_GET['key'])
 	
 	if(!$account->checkChangePasswordKey($_GET['key']))
 	{
-		$error = "Chave de recuperação inexistente.";
+		$error = $boxMessage['CHANGE_PASSWORD_KEY_NOT_FOUND'];
 	}
 	else
 	{
@@ -19,7 +19,7 @@ if($_GET['key'])
 		
 		if(!$core->mail(EMAIL_RECOVERY_PASSWORD, $account->getEmail(), $_arg))
 		{
-			$error = "Não foi possivel enviar o e-mail de validação de conta. Tente novamente mais tarde.";
+			$error = $boxMessage['FAIL_SEND_EMAIL'];
 		}		
 		else	
 		{		
@@ -60,16 +60,16 @@ else
 		
 		if($_POST['recovery_information'] != 4 and (!$_POST['recovery_name'] or !$_POST['recovery_email']))
 		{
-			$error = "Preencha todos campos do formulario corretamente.";
+			$error = $boxMessage['INCOMPLETE_FORM'];
 		}	
 		elseif($_POST['recovery_information'] != 4 and !$loadEmail)
 		{
-			$error = "Não existe nenhuma conta registrada neste e-mail em nosso banco de dados.";
+			$error = $boxMessage['NONE_ACCOUNT_FOR_THIS_EMAIL'];
 		}
 		elseif($_POST['recovery_information'] != 4 and !in_array($_POST['recovery_name'], $characterList))
 		{
 			//echo print_r($characterList);
-			$error = "O personagem não pertence a conta do e-mail informado.";
+			$error = $boxMessage['CHARACTER_NOT_FROM_EMAIL'];
 		}
 		else
 		{		
@@ -82,15 +82,11 @@ else
 				
 				if(!$core->mail(EMAIL_RECOVERY_ACCOUNT, $account->getEmail(), $_arg))
 				{
-					$error = "Não foi possivel enviar o e-mail de validação de conta. Tente novamente mais tarde.";
+					$error = $boxMessage['FAIL_SEND_EMAIL'];
 				}		
 				else	
 				{				
-					$success = "
-					<p>Caro jogador, o número de sua conta foi enviado ao seu e-mail com sucesso!</p>
-					<p>Este e-mail tem um prazo de até 24 horas para chegar, porem geralmente chega dentro de alguns instantes.</p>
-					<p>Tenha um bom jogo!</p>
-					";				
+					$success = $boxMessage['SUCCESS.ACCOUNT_NAME_SENDED'];		
 				}
 			}
 			/* RECUPERAÇÃO DA SENHA DA CONTA */
@@ -104,17 +100,13 @@ else
 				
 				if(!$core->mail(EMAIL_RECOVERY_PASSWORDKEY, $account->getEmail(), $_arg))
 				{
-					$error = "Não foi possivel enviar o e-mail de validação de conta. Tente novamente mais tarde.";
+					$error = $boxMessage['FAIL_SEND_EMAIL'];
 				}		
 				else	
 				{
 					$account->setPasswordKey($key);
 					
-					$success = "
-					<p>Caro jogador, uma mensagem foi enviada ao seu e-mail com as informações necessarias para você gerar uma nova senha para sua conta!</p>
-					<p>Este e-mail tem um prazo de até 24 horas para chegar, porem geralmente chega dentro de alguns instantes.</p>
-					<p>Tenha um bom jogo!</p>
-					";				
+					$success = $boxMessage['SUCCESS.PASSWORD_SENDED'];			
 				}			
 			}
 			/* RECUPERAÇÃO DO NUMERO E SENHA DA CONTA */
@@ -129,28 +121,24 @@ else
 				
 				if(!$core->mail(EMAIL_RECOVERY_BOTH, $account->getEmail(), $_arg))
 				{
-					$error = "Não foi possivel enviar o e-mail de validação de conta. Tente novamente mais tarde.";
+					$error = $boxMessage['FAIL_SEND_EMAIL'];
 				}		
 				else	
 				{
 					$account->setPasswordKey($key);
 					
-					$success = "
-					<p>Caro jogador, uma mensagem foi enviada ao seu e-mail com o número de sua conta e as informações necessarias para você gerar uma nova senha para sua conta!</p>
-					<p>Este e-mail tem um prazo de até 24 horas para chegar, porem geralmente chega dentro de alguns instantes.</p>
-					<p>Tenha um bom jogo!</p>
-					";				
+					$success = $boxMessage['SUCCESS.BOTH_SENDED'];		
 				}			
 			}	
 			elseif($_POST['recovery_information'] == 4)
 			{
 				if(!$_POST['recovery_name'])
 				{
-					$error = "Para efetuar esta operação é necessario informar ao menos o nome de um personagem da conta que deseja recuperar.";
+					$error = $boxMessage['CHARACTER_NAME_NEEDED'];
 				}					
 				elseif(!$character->loadByName($_POST['recovery_name']))
 				{
-					$error = "Este personagem não existe em nosso banco de dados.";
+					$error = $boxMessage['CHARACTER_NOT_FOUND'];
 				}
 				else
 				{
@@ -177,39 +165,39 @@ else
 			<fieldset>			
 		
 				<p>
-					<label for="recovery_name">Nome do Personagem</label><br />
-					<input name="recovery_name" size="40" type="text" value="" /> <br><em>(preencha com o nome de um personagem da conta em que você quer recuperar)</em>
+					<label for="recovery_name">'.$pages["ACCOUNT.RECOVERY.CHARACTER_NAME"].'</label><br />
+					<input name="recovery_name" size="40" type="text" value="" /> <br><em>'.$pages["ACCOUNT.RECOVERY.CHARACTER_NAME_INFO"].'</em>
 				</p>		
 				
 				<p>
-					<label for="recovery_email">E-mail da Conta</label><br />
-					<input name="recovery_email" size="40" type="text" value="" /> <br><em>(preencha com o e-mail registrado na conta de seu personagem)</em>
+					<label for="recovery_email">'.$pages["ACCOUNT.RECOVERY.EMAIL"].'</label><br />
+					<input name="recovery_email" size="40" type="text" value="" /> <br><em>'.$pages["ACCOUNT.RECOVERY.EMAIL_INFO"].'</em>
 				</p>				
 				
 				<p>
-					<label for="order_days">Dado a se Recuperar</label><br />
+					<label for="order_days">'.$pages["ACCOUNT.RECOVERY.DATA_TO_RECOVERY"].'</label><br />
 					
 					<ul id="pagelist">
-						<li><input name="recovery_information" type="radio" value="1"> Eu quero receber o nome de minha conta em meu e-mail. </li>
-						<li><input name="recovery_information" type="radio" value="2"> Eu quero receber uma nova senha para minha conta em meu e-mail. </li>
-						<li><input name="recovery_information" type="radio" value="3"> Eu quero receber o nome e uma nova senha para minha conta em meu e-mail. </li>
+						<li><input name="recovery_information" type="radio" value="1"> '.$pages["ACCOUNT.RECOVERY.RECOVERY_ACCOUNT_NAME"].'</li>
+						<li><input name="recovery_information" type="radio" value="2"> '.$pages["ACCOUNT.RECOVERY.RECOVERY_PASSWORD"].'</li>
+						<li><input name="recovery_information" type="radio" value="3"> '.$pages["ACCOUNT.RECOVERY.RECOVERY_BOTH"].'</li>
 					</ul>	
 				</p>
 				
 				<div id="line1"></div>
 				
 				<p>
-					<label for="order_days">Recuperação Avançada com minha Chave Secreta</label><br />
+					<label for="order_days">'.$pages["ACCOUNT.RECOVERY.ADVANCED_RECOVERY"].'</label><br />
 					
 					<ul id="pagelist">
-						<li><input name="recovery_information" type="radio" value="4"> Eu não consegui recuperar minha conta com as informações acima e desejo recupera-la usando a minha chave secreta. </li>
+						<li><input name="recovery_information" type="radio" value="4"> '.$pages["ACCOUNT.RECOVERY.USE_ADVANCED_RECOVERY"].'</li>
 					</ul>	
 				</p>
 				
 				<div id="line1"></div>				
 				
 				<p>
-					<input class="button" type="submit" value="Proximo" />					
+					<input class="button" type="submit" value="'.$buttons['SUBMIT'].'" />					
 				</p>
 		</fieldset>
 	</form>';

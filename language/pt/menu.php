@@ -1,0 +1,32 @@
+<?php
+$menu['NAVIGATION'] = "Navegação";
+$menu['LAST_NEWS'] = "Últimas Notícias";
+$menu['ABOUT'] = "Sobre o ".CONFIG_SITENAME."";
+$menu['FAQ'] = "".CONFIG_SITENAME." FAQ";
+$menu['HOW_PLAY'] = "Como Jogar?";
+$menu['LIBRARY'] = "Darghopédia";
+
+$menu['ACCOUNTS'] = "Contas";
+$menu['ACCOUNT.REGISTER'] = "Registrar-se";
+$menu['ACCOUNT.LOGIN'] = "Log-in";
+$menu['ACCOUNT.RECOVERY'] = "Recuperar Conta";
+$menu['ACCOUNT.PREMIUM'] = "Conta Premium";
+$menu['ACCOUNT.MAIN'] = "Principal";
+$menu['ACCOUNT.PREMIUM_TEST'] = "Teste de Conta Premium";
+$menu['ACCOUNT.LOGOUT'] = "Log-out";
+
+$menu['PREMIUMS'] = "Conta Premium";
+$menu['PREMIUM.ORDER'] = "Obter Conta Premium";
+$menu['PREMIUM.MY_ORDERS'] = "Meus Pedidos";
+$menu['PREMIUM.LOG_ITEMSHOP'] = "Historico do Item Shop";
+
+$menu['COMMUNITY'] = "Comunidade";
+$menu['COMMUNITY.CHARACTERS'] = "Personagens";
+$menu['COMMUNITY.HIGHSCORES'] = "Highscores";
+$menu['COMMUNITY.GUILDS'] = "Guildas";
+$menu['COMMUNITY.HOUSES'] = "Casas";
+$menu['COMMUNITY.LAST_DEATHS'] = "Últimas Mortes";
+
+$menu['STATUS'] = "Server Status";
+$menu['STATUS.WHO_IS_ONLINE'] = "Quem está Online?";
+?>

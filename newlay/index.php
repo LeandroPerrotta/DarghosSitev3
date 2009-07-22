@@ -30,13 +30,13 @@
 					<div id="left">
 						<ul>
 							<li>
-								<div><strong>Navegação</strong></div>
+								<div><strong><? echo $menu['NAVIGATION']; ?></strong></div>
 								<ul class="always_viewable">
-									<li><a href="?ref=news.last">Últimas Notícias </a></li>
-									<li><a href="?ref=general.about">Sobre o Darghos </a></li>
-									<li><a href="?ref=general.faq">Darghos FAQ </a></li>										
-									<li><a href="?ref=general.howplay">Como jogar? </a></li>
-									<li><a href="?ref=darghopedia.main">Darghopédia </a></li>																	
+									<li><a href="?ref=news.last"><? echo $menu['LAST_NEWS']; ?></a></li>
+									<li><a href="?ref=general.about"><? echo $menu['ABOUT']; ?></a></li>
+									<li><a href="?ref=general.faq"><? echo $menu['FAQ']; ?></a></li>										
+									<li><a href="?ref=general.howplay"><? echo $menu['HOW_PLAY']; ?></a></li>
+									<li><a href="?ref=darghopedia.main"><? echo $menu['LIBRARY']; ?></a></li>																	
 								</ul>
 							</li>
 							
@@ -61,22 +61,22 @@
 							?>
 														
 							<li>
-								<div name="accounts"><strong>Contas</strong> <span class="<?php echo $menudropdown['accounts']['button']; ?>"></span></div>
+								<div name="accounts"><strong><? echo $menu['ACCOUNTS']; ?></strong> <span class="<?php echo $menudropdown['accounts']['button']; ?>"></span></div>
 								<ul <?php echo $menudropdown['accounts']['status']; ?>>
-									<li><a href="?ref=account.register">Registrar-se </a></li>
-									<li><a href="?ref=account.login">Log-in </a></li>
-									<li><a href="?ref=account.recovery">Recuperar Conta </a></li>
-									<li><a href="?ref=account.premium">Conta Premium </a></li>
+									<li><a href="?ref=account.register"><? echo $menu['ACCOUNT.REGISTER']; ?></a></li>
+									<li><a href="?ref=account.login"><? echo $menu['ACCOUNT.LOGIN']; ?></a></li>
+									<li><a href="?ref=account.recovery"><? echo $menu['ACCOUNT.RECOVERY']; ?></a></li>
+									<li><a href="?ref=account.premium"><? echo $menu['ACCOUNT.PREMIUM']; ?></a></li>
 								</ul>
 							</li>
 							<?php } else { ?>
 							<li>
 								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
-									<li><a href="?ref=account.main">Main </a></li>
-									<li><a href="?ref=account.premiumtest">Free Premium </a></li>
+									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>
+									<li><a href="?ref=account.premiumtest"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
 									<li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li>
-									<li><a href="?ref=account.logout">Log-out </a></li>
+									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>
 								</ul>
 							</li>
 							
@@ -100,12 +100,12 @@
 								} 
 							?>							
 							<li>
-								<div name="contribute"><strong>Conta Premium</strong> <span class="<?php echo $menudropdown['contribute']['button']; ?>"></span></div>
+								<div name="contribute"><strong><? echo $menu['PREMIUMS']; ?></strong> <span class="<?php echo $menudropdown['contribute']['button']; ?>"></span></div>
 								<ul <?php echo $menudropdown['contribute']['status']; ?>>
-									<li><a href="?ref=account.premium">Conta Premium </a></li>
-									<li><a href="?ref=contribute.order">Efetuar Pedido </a></li>
-									<li><a href="?ref=contribute.myorders">Meus Pedidos </a></li>
-									<li><a href="?ref=account.itemshop_log">Historico Item Shop </a></li>
+									<li><a href="?ref=account.premium"><? echo $menu['ACCOUNT.PREMIUM']; ?></a></li>
+									<li><a href="?ref=contribute.order"><? echo $menu['PREMIUM.ORDER']; ?></a></li>
+									<li><a href="?ref=contribute.myorders"><? echo $menu['PREMIUM.MY_ORDERS']; ?></a></li>
+									<li><a href="?ref=account.itemshop_log"><? echo $menu['PREMIUM.LOG_ITEMSHOP']; ?></a></li>
 								</ul>
 							</li>		
 							
@@ -119,6 +119,7 @@
 									<div><strong>Admin Panel</strong></div>
 									<ul class="always_viewable" >
 										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
+										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li>
 									</ul>
 								</li>								
 								
@@ -144,14 +145,14 @@
 								} 
 							?>							
 							<li>
-								<div name="community"><strong>Comunidade</strong> <span class="<?php echo $menudropdown['community']['button']; ?>" ></span></div> 
+								<div name="community"><strong><? echo $menu['COMMUNITY']; ?></strong> <span class="<?php echo $menudropdown['community']['button']; ?>" ></span></div> 
 								<ul <?php echo $menudropdown['community']['status']; ?>>
-									<li><a href="?ref=character.view">Personagens</a></li>
-									<li><a href="?ref=community.highscores">Highscores</a></li>
-									<li><a href="?ref=community.guilds">Guildas</a></li>
-									<li><a href="?ref=community.houses">Casas</a></li>
-									<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
-									<li><a href="?ref=status.whoisonline">Quem está Online?</a></li>
+									<li><a href="?ref=character.view"><? echo $menu['COMMUNITY.CHARACTERS']; ?></a></li>
+									<li><a href="?ref=community.highscores"><? echo $menu['COMMUNITY.HIGHSCORES']; ?></a></li>
+									<li><a href="?ref=community.guilds"><? echo $menu['COMMUNITY.GUILDS']; ?></a></li>
+									<li><a href="?ref=community.houses"><? echo $menu['COMMUNITY.HOUSES']; ?></a></li>
+									<li><a href="?ref=community.lastdeaths"><? echo $menu['COMMUNITY.LAST_DEATHS']; ?></a></li>
+									<li><a href="?ref=status.whoisonline"><? echo $menu['STATUS.WHO_IS_ONLINE']; ?></a></li>
 								</ul>
 							</li>	
 							

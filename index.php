@@ -7,6 +7,15 @@ date_default_timezone_set("America/Sao_Paulo");
 session_start();
 
 include "configs/index.php";
+
+if(GLOBAL_LANGUAGE == "pt")
+{
+	include("language/pt/menu.php");
+	include("language/pt/pages.php");
+	include("language/pt/buttons.php");
+	include("language/pt/messageBox.php");
+}
+
 $layoutDir = "newlay/";
 
 if(MANUTENTION == 1)
@@ -21,7 +30,7 @@ if(MANUTENTION == 1)
 	include "{$layoutDir}indexsimple.php";
 }
 else
-{	
+{		
 	include "classes/mysql.php";
 	include "classes/core.php";
 	

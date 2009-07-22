@@ -192,8 +192,16 @@ $module .= "
 			
 if($account->getName() == $account->getId())
 {
-	$module .= "
-	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a>";	
+	if($account->getPremDays() == 0)
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a>";	
+	}
+	else
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a> <a class='buttonstd' href='?ref=account.tutortest'>Tutor Test</a>";	
+	}
 }
 else
 {			
