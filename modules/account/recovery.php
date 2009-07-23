@@ -26,21 +26,17 @@ if($_GET['key'])
 			$account->setPassword($strings->encrypt($password));
 			$account->save();
 			
-			$success = "
-			<p>Caro jogador, a nova senha de sua conta foi enviada ao seu e-mail com sucesso!</p>
-			<p>Este e-mail tem um prazo de até 24 horas para chegar, porem geralmente chega dentro de alguns instantes.</p>
-			<p>Tenha um bom jogo!</p>
-			";				
+			$success = $boxMessage['SUCCESS.RECOVERY_PASSWORD'];				
 		}	
 	}
 	
 	if($success)	
 	{
-		$core->sendMessageBox("Sucesso!", $success);
+		$core->sendMessageBox($boxMessage['SUCCESS'], $success);
 	}
 	else
 	{
-		$core->sendMessageBox("Erro!", $error);
+		$core->sendMessageBox($boxMessage['ERROR'], $error);
 	}	
 }
 else
