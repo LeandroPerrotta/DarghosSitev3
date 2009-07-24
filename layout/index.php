@@ -7,6 +7,7 @@
 		<title><? echo CONFIG_SITENAME; ?></title>
 		
 		<link href="layout/layout.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="layout/default.css" media="screen" rel="stylesheet" type="text/css" />
 		
 	</head>
 	
@@ -136,15 +137,7 @@
 							<li><a href="?ref=status.whoisonline">Quem está online?</a></li>
 						</ul>
 					</li>	
-				</ul>	
-				
-				<ul id="links">
-					<li>
-						<li><a href="http://tenerian.darghos.com.br/">Tenerian Server</a></li>
-						<li><a href="http://elerian.darghos.com.br/">Elerian Server</a></li>
-						<li><a href="http://www.ultraxsoft.com/">UltraxSoft</a></li>
-					</li>	
-				</ul>										
+				</ul>									
 			</div>		
 			
 			<div id="content">
