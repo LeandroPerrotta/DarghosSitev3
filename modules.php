@@ -363,7 +363,12 @@ else
 				case "fastnews":
 					$patch['file'] = $topic;
 					$needMinGroup = 5;			
-				break;					
+				break;			
+
+				case "tutortest":
+					$patch['file'] = $topic;
+					$needMinGroup = 5;			
+				break;				
 				
 				default:
 					$patch['dir'] = "errors";

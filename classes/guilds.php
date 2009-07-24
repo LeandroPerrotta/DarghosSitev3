@@ -76,16 +76,20 @@ class Guilds
 	
 	function load($id)
 	{
-		$query = $this->db->query("SELECT * FROM guilds WHERE id = '{$id}'");
+		$query = $this->db->query("SELECT id, name, ownerid, creationdata, motd, image, status, formationTime  FROM guilds WHERE id = '{$id}'");
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
 			
-			foreach($fetch as $field => $value)
-			{
-				$this->data[$field] = $value;
-			}
+			$this->data["id"] = $fetch->id;
+			$this->data["name"] = $fetch->name;
+			$this->data["ownerid"] = $fetch->ownerid;
+			$this->data["creationdata"] = $fetch->creationdata;
+			$this->data["motd"] = addslashes($fetch->motd);
+			$this->data["image"] = $fetch->image;
+			$this->data["status"] = $fetch->status;
+			$this->data["formationTime"] = $fetch->formationTime;
 			
 			return true;
 		}
@@ -182,6 +186,11 @@ class Guilds
 	
 	function set($field, $value)
 	{
+		global $strings;
+		
+		if($field == "motd")
+			$value = $strings->SQLInjection($field);
+		
 		$this->data[$field] = $value;
 	}
 	

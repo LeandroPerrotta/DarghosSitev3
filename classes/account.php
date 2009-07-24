@@ -40,15 +40,15 @@ class Account
 			$fetch = $query->fetch();
 			
 			$this->data['id'] = $fetch->id;				
-			$this->data['name'] = stripslashes($fetch->name);	
+			$this->data['name'] = addslashes($fetch->name);	
 			$this->data['password'] = $fetch->password;	
 			$this->data['premend'] = $fetch->premend;	
 			$this->data['email'] = $fetch->email;	
 			$this->data['blocked'] = $fetch->blocked;	
 			$this->data['warnings'] = $fetch->warnings;	
-			$this->data['url'] = stripslashes($fetch->url);	
-			$this->data['location'] = stripslashes($fetch->location);	
-			$this->data['real_name'] = stripslashes($fetch->real_name);	
+			$this->data['url'] = addslashes($fetch->url);	
+			$this->data['location'] = addslashes($fetch->location);	
+			$this->data['real_name'] = addslashes($fetch->real_name);	
 			$this->data['creation'] = $fetch->creation;	
 			
 			return true;	

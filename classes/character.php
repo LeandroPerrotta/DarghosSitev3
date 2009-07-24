@@ -60,7 +60,7 @@ class Character
 			$this->data['loss_mana'] = $fetch->loss_mana;
 			$this->data['loss_skills'] = $fetch->loss_skills;
 			$this->data['loss_items'] = $fetch->loss_items;
-			$this->data['description'] = $fetch->description;
+			$this->data['description'] = addslashes($fetch->description);
 			$this->data['guild_join_date'] = $fetch->guild_join_date;
 			$this->data['created'] = $fetch->created;
 			$this->data['hidden'] = $fetch->hidden;
@@ -194,12 +194,14 @@ class Character
 	
 	function setGuildNick($value)
 	{
-		$this->data['guildnick'] = $value;
+		global $strings;
+		$this->data['guildnick'] = $strings->SQLInjection($value);
 	}
 	
 	function setDescription($value)
 	{
-		$this->data['description'] = $value;
+		global $strings;
+		$this->data['description'] = $strings->SQLInjection($value);
 	}
 	
 	function setGuildJoinDate($value)
