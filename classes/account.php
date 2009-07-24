@@ -182,7 +182,7 @@ class Account
 
 	function getName()
 	{
-		return $this->data['name'];
+		return stripslashes($this->data['name']);
 	}	
 	
 	function getPassword()
@@ -241,17 +241,17 @@ class Account
 
 	function getLocation()
 	{
-		return $this->data['location'];
+		return stripslashes($this->data['location']);
 	}
 
 	function getUrl()
 	{
-		return $this->data['url'];
+		return stripslashes($this->data['url']);
 	}
 
 	function getRealName()
 	{
-		return $this->data['real_name'];
+		return stripslashes($this->data['real_name']);
 	}
 			
 	function getCreation()

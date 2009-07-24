@@ -179,9 +179,14 @@ class Guilds
 		return $this->invites;
 	}		
 	
-	function get($value)
+	function get($field)
 	{
-		return $this->data[$value];
+		if($field == "motd")
+		{
+			return stripslashes($this->data["motd"]);
+		}
+		else	
+			return $this->data[$field];
 	}
 	
 	function set($field, $value)

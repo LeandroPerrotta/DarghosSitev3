@@ -311,7 +311,7 @@ class Character
 	
 	function getGuildNick()
 	{
-		return $this->data['guildnick'];
+		return stripslashes($this->data['guildnick']);
 	}
 	
 	function getOnline()
@@ -321,7 +321,7 @@ class Character
 	
 	function getDescription()
 	{
-		return $this->data['description'];
+		return stripslashes($this->data['description']);
 	}
 	
 	function getGuildJoinDate()
