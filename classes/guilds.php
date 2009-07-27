@@ -194,7 +194,7 @@ class Guilds
 		global $strings;
 		
 		if($field == "motd")
-			$value = $strings->SQLInjection($field);
+			$value = $strings->SQLInjection($value);
 		
 		$this->data[$field] = $value;
 	}
