@@ -2,49 +2,52 @@
 
 define('MANUTENTION', 0);
 
-define('CONFIG_SITEEMAIL', "http://tenerian.darghos.com.br:8090");
-#define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NÃO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+define('CONFIG_SITEEMAIL', "http://www.darghos.com.br");
+#define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
-define('DIR_DATA', "C:/testserver/data/");
+define('DIR_DATA', "c:/server/darghos/data/");
 define('HOUSES_FILE', "world/-house.xml");
 define('MONSTERS_FILE', "monster/monsters.xml");
 
-define('CONFIG_SITENAME', "Darghos Tenerian");
+define('GLOBAL_LANGUAGE', "pt");
+
+define('CONFIG_SITENAME', "Darghos Server");
 define('CONFIG_OWNERNAME', "Equipe UltraxSoft");
 
-/*	Configurações SMTP	 */
-define('SMTP_HOST', "darghos.net");
-define('SMTP_PORT', 25);
-define('SMTP_USER', "no-reply@darghos.net");
-define('SMTP_PASS', "gu166887");
+/*	Configuraes SMTP	 */
+define('SMTP_HOST', "smtp-auth.no-ip.com");
+define('SMTP_PORT', 3325);
+define('SMTP_USER', "darghos.net@noip-smtp");
+define('SMTP_PASS', "***REMOVED***");
 
-/* CONFIGURAÇÔES PARA STATUS */
-define('STATUS_ADDRESS', 'tenerian.darghos.com.br');
-define('STATUS_PORT', 7272);
+/* CONFIGURAES PARA STATUS */
+define('STATUS_ADDRESS', 'darghos.com.br');
+define('STATUS_PORT', 7171);
 
 define('SERVER_ID', 1);
 define('USEREMOTECONNECTIONS', 1);
 
-/* Entrega de item comprados no ItemShop é feita via Lua Scripts, baseado no StorageID do jogador */
+/* Entrega de item comprados no ItemShop  feita via Lua Scripts, baseado no StorageID do jogador */
 define('STORAGE_ID_ITEMSHOP', 8987);
 
 define('ENCRYPTION_TYPE', "md5");
 
-/* ID PARA IDENTIFICAÇÃO DAS PAGINAS DE TEXTO ARMAZENADAS NO BANCO DE DADOS */
+/* ID PARA IDENTIFICAO DAS PAGINAS DE TEXTO ARMAZENADAS NO BANCO DE DADOS */
 define('DBPAGES_HOWPLAY', 1);
 define('DBPAGES_ABOUT', 2);
 define('DBPAGES_PREMIUMFEATURES', 3);
 
-define('DAYS_TO_CHANGE_EMAIL', 15); //Dias de espera necessarios para uma mudança de e-mail agendada
+define('PREMTEST_DAYS', 10); //Dias que os jogadores podero receber de PremTest, para quem atingir level 100 e nunca ter possuido uma premium account.
+define('DAYS_TO_CHANGE_EMAIL', 15); //Dias de espera necessarios para uma mudana de e-mail agendada
 define('DAYS_TO_DELETE_CHARACTER', 30); //Dias de espera necessarios para deletar um personagem da conta
-define('SHOW_DEATHS_DAYS_AGO', 30); //Limite de mortes dias atráz que serão exibidas
-define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 1); //Possibilidade de ignorar personagens no rank que não entraram no jogo a X dias
-define('HIDE_FORUMLINKS', 1); //Esconde os links ligados a forums, como o Comentar nas noticias.
+define('SHOW_DEATHS_DAYS_AGO', 30); //Limite de mortes dias atrz que sero exibidas
+define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 0); //Possibilidade de ignorar personagens no rank que no entraram no jogo a X dias
+define('HIDE_FORUMLINKS', 0); //Esconde os links ligados a forums, como o Comentar nas noticias.
 define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
 /*
-define('SHOW_PREMIUMFEATURES', 1); //Exibi as opções de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)
+define('SHOW_PREMIUMFEATURES', 1); //Exibi as opes de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)
 
-define('USE_VALIDATIONBYEMAIL', 1); //Ativa validação por email para modulos como criação de personagem e recuperação de contas e etc (0 = hide, 1 = show) IMPORTANTE: ATIVAÇÃO REQUER SERVIDOR SMTP CONFIGURADO
+define('USE_VALIDATIONBYEMAIL', 1); //Ativa validao por email para modulos como criao de personagem e recuperao de contas e etc (0 = hide, 1 = show) IMPORTANTE: ATIVAO REQUER SERVIDOR SMTP CONFIGURADO
 */
 
 // Constantes para Guildas

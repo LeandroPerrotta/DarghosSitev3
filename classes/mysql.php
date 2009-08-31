@@ -9,10 +9,10 @@ class MySQL
 		mysql_select_db($database, $this->connection);				
 	}
 	
-	/*public function close() 
+	public function close() 
 	{
-		@mysql_close();			
-	}*/	
+		@mysql_close($connection);			
+	}	
 	
 	public function query($queryStr) 
 	{

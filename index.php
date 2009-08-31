@@ -1,4 +1,7 @@
 <?
+ini_set("display_errors", 0 );
+error_reporting(0); 
+
 list($t, $date) = explode(" ", microtime());
 
 setlocale(LC_ALL, "pt_BR");
@@ -22,8 +25,7 @@ if(MANUTENTION == 1)
 {
 	$module .= "
 	<p>
-	<h3>Todos os nossos servidores estão desligados para o Principal Game Update. Previsão para o retorno: 18:00 UTC (Horário de Brasília).</h3><br>
-	Enquanto aguarda não deixe de visitar nosso <a href='http://forum.darghos.com.br/'>Forum</a>, único serviço que ficará até a volta depois do Update.
+	<h3>Estamos desligados para manutenção critica. Voltaremos em breve.</h3>
 	</p>
 	";
 	
@@ -34,12 +36,19 @@ else
 	include "classes/mysql.php";
 	include "classes/core.php";
 	
-	$db = new MySQL();
-	$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);
-	
 	$core = new Core();
 	
-	$core->InitPOT();
+	try
+	{
+		$db = new MySQL();
+		$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);	
+	
+		$core->InitPOT();
+	}
+	catch (Exception $e)
+	{
+		echo "Impossivel se conectar ao banco de dados.";
+	}
 	
 	if(defined('SITE_ROOT_DIR'))
 	{	
@@ -61,5 +70,7 @@ else
 	
 	include "modules.php";
 	include "{$layoutDir}index.php";
+	
+	$db->close();
 }
 ?>

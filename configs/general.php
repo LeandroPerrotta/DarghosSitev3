@@ -70,7 +70,7 @@ $_banactionid[2] = "Banido";
 $_banactionid[3] = "Nome denunciado + Banido";
 $_banactionid[4] = "Aviso final com banimento";
 $_banactionid[5] = "Nome denunciado com Banido com Aviso final";
-$_banactionid[6] = "Relatório declarado";
+$_banactionid[6] = "Relatrio declarado";
 $_banactionid[7] = "Deletado";
 
 $_bantypeid[1] = "IP banido";
