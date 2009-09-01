@@ -60,11 +60,8 @@ if($_GET['name'])
 			<tr>
 				<td>Está guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
 			</tr>
-
-			<tr>
-				<td>".(($guild->isOnWar()) ? "Esta guilda <b>está em modo de guerra</b> desde <b>".$core->formatDate($guild->getWarStart())."</b>." : "Esta guild <b>não está em modo de guerra</b>.")."</td>
-			</tr>
-								
+	
+							
 		</table>";				
 
 		if($_SESSION['login'] and $accountLevel == 1)
@@ -82,7 +79,7 @@ if($_GET['name'])
 				<p>
 					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a>
 				    <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
-				    {$button}
+				    
 				</p>				
 			";
 			
