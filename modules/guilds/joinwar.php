@@ -30,7 +30,7 @@ if($_GET['name'])
 			{
 				$error = "Confirmação da senha falhou.";
 			}		
-			elseif(count($members) < 1)
+			elseif(count($members) < 8)
 			{
 				$error = "A sua guild precisa ter no minimo 8 membros ativos, para entrar em modo de guerra.";				
 			}
