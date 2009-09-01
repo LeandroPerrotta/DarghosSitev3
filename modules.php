@@ -299,8 +299,16 @@ else
 
 				case "leave":
 					$patch['file'] = $topic;
-				break;				
+				break;		
 				
+				case "joinwar":
+					$patch['file'] = $topic;
+				break;		
+				
+				case "leavewar":
+					$patch['file'] = $topic;
+				break;
+								
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";

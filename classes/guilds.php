@@ -249,5 +249,37 @@ class Guilds
 
 		return $lastRank;
 	}
+	
+	function joinWar()
+	{
+		$timeNow = time();
+		$this->db->query("INSERT INTO war_system (id, guild_id, start_date) values(0,'{$this->data['id']}','{$timeNow}')");		
+	}
+	
+	function isOnWar()
+	{
+		$query = $this->db->query("SELECT * FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		if($query->numRows() != 0)
+			return true;
+		else 
+			return false;
+	}
+	
+	function leaveWar()
+	{
+		$this->db->query("DELETE FROM war_system WHERE guild_id = {$this->data['id']}");
+	}
+	
+	function getWarStart()
+	{
+		$query = $this->db->query("SELECT `start_date` FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		$result = $query->fetch();
+		
+		$date = $result->start_date;
+		
+		return $date;
+	}
 }
 ?>
