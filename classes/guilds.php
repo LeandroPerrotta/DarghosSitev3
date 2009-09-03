@@ -177,7 +177,7 @@ class Guilds
 	function getInvites()
 	{
 		return $this->invites;
-	}		
+	}
 	
 	function get($field)
 	{
@@ -253,18 +253,10 @@ class Guilds
 	function joinWar()
 	{
 		$timeNow = time();
-		$this->db->query("INSERT INTO war_system (id, guild_id, start_date) values(0,'{$this->data['id']}','{$timeNow}')");		
+		$endTime = time()+ (30 * 24 * 60 * 60);
+		$this->db->query("INSERT INTO war_system (id, guild_id, start_date, end_date) values(0,'{$this->data['id']}','{$timeNow}','{$endTime}')");		
 	}
 	
-	function isOnWar()
-	{
-		$query = $this->db->query("SELECT * FROM war_system WHERE guild_id = {$this->data['id']}");
-		
-		if($query->numRows() != 0)
-			return true;
-		else 
-			return false;
-	}
 	
 	function leaveWar()
 	{
@@ -280,6 +272,34 @@ class Guilds
 		$date = $result->start_date;
 		
 		return $date;
+	}
+	
+	function getWarEnd()
+	{
+		$query = $this->db->query("SELECT `end_date` FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		$result = $query->fetch();
+		
+		$date = $result->end_date;
+		
+		return $date;
+	}	
+	
+	function isOnWar()
+	{
+		$query = $this->db->query("SELECT * FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		$timeNow = time();
+		
+		if($query->numRows() != 0)
+			if($this->getWarEnd() > $timeNow)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 	}
 }
 ?>

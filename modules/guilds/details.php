@@ -32,11 +32,11 @@ if($_GET['name'])
 		
 		if($guild->isOnWar())
 		{
-			$str = "<td>Está guilda <b>esta em modo de guerra</b> desde <b>".$core->formatDate($guild->getWarStart())."</b>.</td>";
+			$str = "<td>Esta guilda <b>esta em modo de guerra!</b> <p>Desde <i>".$core->formatDate($guild->getWarStart())."</i> até <i>".$core->formatDate($guild->getWarEnd())."</i></td>";
 		}
 		else 
 		{
-			$str = "<td>Está guilda <b>não esta em modo de guerra</b>.";			
+			$str = "<td>Esta guilda <b>não esta em modo de guerra</b>.";			
 		}
 		
 		$module .=	"
@@ -58,9 +58,15 @@ if($_GET['name'])
 			</tr>
 			
 			<tr>
-				<td>Está guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
+				<td>Esta guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
 			</tr>
-	
+			
+			<tr>
+				<th>Modo de guerra</th>
+			</tr>
+			<tr>
+			{$str}
+			</tr>
 							
 		</table>";				
 
@@ -79,7 +85,7 @@ if($_GET['name'])
 				<p>
 					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a>
 				    <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
-				    
+				    {$button}
 				</p>				
 			";
 			

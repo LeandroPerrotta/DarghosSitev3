@@ -239,7 +239,7 @@ else
 				case "guilds":
 					$patch['file'] = $topic;
 				break;				
-				
+								
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";

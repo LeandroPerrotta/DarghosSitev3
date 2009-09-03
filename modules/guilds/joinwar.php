@@ -71,6 +71,7 @@ if($_GET['name'])
 							<li>Durante o periodo em que a mesma estiver neste modo, qualquer assasinato cometido ou sofrido, por jogadores de guildas diferentes, mas que estão em modo de guerra, será <b>justificado</b>.</li>					
 							<li>O level minimo, para um membro de uma guilda participar do modo de guerra, é 130. Sendo assim, qualquer jogador com o level menor que este, mesmo estando na guilda, irá ter seus assassinatos injustificados.</li>
 							<li>O modo de guerra não possui limite de mortes e assassinatos.</li>
+							<li>Após aceitar e entrar no modo de guerra, durante 30 dias, nenhum membro poderá sair da guilda, e a guilda não poderá ser desmanchada.</li>
 						</ul>
 					</p>
 			

@@ -29,7 +29,11 @@ if($_GET['name'])
 			if($account->get("password") != $strings->encrypt($post[0]))
 			{
 				$error = "Confirmação da senha falhou.";
-			}		
+			}
+			elseif($guild->isOnWar())
+			{
+				$error = "Sua guild está em modo de guerra, só será possivel sair do mesmo, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
+			}
 			else
 			{				
 				$guild->leaveWar();
