@@ -87,6 +87,10 @@ if($_GET['name'])
 						{
 							$canNotDemote = true;						
 						}			
+						elseif ($guild->isOnWar())
+						{
+							$isWar = true;
+						}
 						else
 						{
 							$character->loadByName($_POST["guild_member"], "name, rank_id, guildnick, guild_join_date");
@@ -137,6 +141,10 @@ if($_GET['name'])
 			{
 				$error = "O membro em questão já é Lider ou Vice-Lider em outra guild.";					
 			}
+			elseif($isWar)
+			{
+				$error = "Sua guilda está em war, você só poderá sair da mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";				
+			}		
 			else
 			{						
 				$success = "
