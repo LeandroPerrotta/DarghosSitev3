@@ -9,15 +9,22 @@
 	
 	$ticket  = $core->loadClass("Tickets");
 	$string  = $core->loadClass("Strings");
+	$get 	 = $_GET["state"];
 	
-	$query = $db->query("SELECT id FROM wb_tickets WHERE closed = 0 AND last_update = 1 ORDER by send_date DESC");
-	
-
+	if($get == "closeds")
+	{
+		$query = $db->query("SELECT id FROM wb_tickets WHERE closed = 1 ORDER by send_date DESC");
+		$central = "<p><a href='?ref=tickets.super_list&state=opens'>Ver tickets Abertos</a><p>Tickets fechados.</p>";
+	}
+	else 
+	{
+		$query = $db->query("SELECT id FROM wb_tickets WHERE closed = 0 AND last_update = 1 ORDER by send_date DESC");
+		$central = "<p><a href='?ref=tickets.super_list&state=closeds'>Ver tickets Fechados</a></p><p>Tickets aguardando resposta. Use um português adequado para responder o mesmo.</p>";
+	}
 	$module .=	"
+		
+	{$central}
 
-		<p>
-			Tickets aguardando resposta. Use um português adequado para responder o mesmo.
-		</p>
 	";
 
 
