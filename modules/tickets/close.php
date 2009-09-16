@@ -14,26 +14,27 @@
 	
 	$ticket->load($_GET["id"]);
 	
-	if($query->numRows() == 0)
-	{
-		$error = "Pagina não encontrada.";
+	if($account->getGroup > 4){
+		if($query->numRows() == 0)
+		{
+			$error = "Pagina não encontrada.";
+		}
+		else
+		{
+			$_account 	= $account->getId();
+			$_player	= $account->getHighCharacter();
+			 
+			$ticket->changeState($view, 1);
+			
+			$success = "O Ticket {$ticket->getTitle()} foi fechado com sucesso! <p>Atenciosamente,<br>Equipe Ultraxsoft. </p></ br><a href='?ref=tickets.view&id={$view}'>Voltar</a>";
+		}
+
+
+		if($success)	
+		{
+			$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+
+		}
 	}
-	else
-	{
-		$_account 	= $account->getId();
-		$_player	= $account->getHighCharacter();
-		 
-		$ticket->changeState($view, 1);
-		
-		$success = "O Ticket {$ticket->getTitle()} foi fechado com sucesso! <p>Atenciosamente,<br>Equipe Ultraxsoft. </p></ br><a href='?ref=tickets.view&id={$view}'>Voltar</a>";
-	}
-
-
-	if($success)	
-	{
-		$core->sendMessageBox($boxMessage['SUCCESS'], $success);
-
-	}
-
 	
 ?>	
