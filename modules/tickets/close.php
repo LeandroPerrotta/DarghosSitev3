@@ -14,7 +14,7 @@
 	
 	$ticket->load($_GET["id"]);
 	
-	if($account->getGroup > 4){
+	if($account->getGroup() > 4){
 		if($query->numRows() == 0)
 		{
 			$error = "Pagina não encontrada.";
