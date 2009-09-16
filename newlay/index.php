@@ -77,6 +77,8 @@
 									<li><a href="?ref=account.premiumtest"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
 									<li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li>
 									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>
+									<li><a href="?ref=tickets.send">Enviar Ticket</a></li>
+									<li><a href="?ref=tickets.tickets">Meus Tickets</a></li>				
 								</ul>
 							</li>
 							
@@ -120,6 +122,7 @@
 									<ul class="always_viewable" >
 										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
 										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li>
+										<li><a href="?ref=tickets.super_list">Ticket System</a></li>	
 									</ul>
 								</li>								
 								

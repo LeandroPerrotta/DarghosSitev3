@@ -800,5 +800,20 @@ class Account
 		$this->save();
 		
 	}
+	
+	function getHighCharacter()
+	{
+		$query = $this->db->query("SELECT name FROM players WHERE account_id = '{$this->data[id]}' LIMIT 1");
+		
+		if($query->numRows() != 0)
+		{
+			$result = $query->fetch();
+			return $result->name;
+		}
+		
+		return false;
+			
+		
+	}
 }
 ?>

@@ -334,6 +334,55 @@ else
 			}
 			
 		break;			
+
+		case "tickets":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "send":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+
+				case "tickets":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "view":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "close":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+
+				case "open":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "super_view":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+				
+				case "super_list":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+				
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;
+			}
+			
+		break;
 		
 		case "general":
 		

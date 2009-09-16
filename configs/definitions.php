@@ -2,8 +2,8 @@
 
 define('MANUTENTION', 0);
 
-define('CONFIG_SITEEMAIL', "http://www.darghos.com.br");
-#define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+define('CONFIG_SITEEMAIL', "localhost:8090");
+define('SITE_ROOT_DIR', "darghos_site"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
 define('DIR_DATA', "c:/server/darghos/data/");
 define('HOUSES_FILE', "world/-house.xml");
