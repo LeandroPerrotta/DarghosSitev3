@@ -10,7 +10,7 @@
 	$ticket  = $core->loadClass("Tickets");
 	$string  = $core->loadClass("Strings");
 
-	$query = $db->query("SELECT * FROM wb_tickets WHERE account = '{$account->getId()}' AND id = '{$_GET["id"]}' ORDER by send_date DESC");
+	$query = $db->query("SELECT * FROM wb_tickets WHERE id = '{$_GET["id"]}' ORDER by send_date DESC");
 	
 	$ticket->load($_GET["id"]);
 	
