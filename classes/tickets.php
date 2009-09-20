@@ -11,7 +11,7 @@ class Tickets
 	
 	function load($id)
 	{
-		$query = $this->db->query("SELECT id, player, account, title, question, send_date, type, closed, last_update FROM wb_tickets WHERE id = $id");
+		$query = $this->db->query("SELECT id, player, account, title, question, send_date, type, closed, last_update, fixed FROM wb_tickets WHERE id = $id");
 		
 		if($query->numRows() != 0)
 		{
@@ -26,6 +26,7 @@ class Tickets
 			$this->data["type"] = $fetch->type;
 			$this->data["closed"] = $fetch->closed;
 			$this->data["last_update"] = $fetch->last_update;
+			$this->data["fixed"] = $fetch->fixed;
 									
 			return true;
 		}
@@ -51,10 +52,10 @@ class Tickets
 		}
 	}
 	
-	function sendNew($id, $player, $account, $title, $question, $send_date, $type, $closed, $last_update)
+	function sendNew($id, $player, $account, $title, $question, $send_date, $type, $closed, $last_update, $fixed)
 	{
 		
-		$this->db->query("INSERT INTO wb_tickets values ('{$id}', '{$player}', '{$account}', '{$title}', '{$question}', '{$send_date}', '{$type}', '{$closed}', '{$last_update}')");
+		$this->db->query("INSERT INTO wb_tickets values ('{$id}', '{$player}', '{$account}', '{$title}', '{$question}', '{$send_date}', '{$type}', '{$closed}', '{$last_update}', '{$fixed}')");
 
 	}
 	
@@ -107,6 +108,11 @@ class Tickets
 	{
 		return $this->responses;
 	}
+	
+	function isFixed()
+	{
+		return $this->data['fixed'];
+	}
 
 	function sendAnotherReply($id, $ticket_id, $text, $author, $send_date)
 	{
@@ -126,6 +132,11 @@ class Tickets
 	function killReply($id)
 	{
 		$this->db->query("DELETE FROM wb_tickets_answers WHERE id = '{$id}'");
+	}
+	
+	function changeFixed($id, $fixed)
+	{
+		$this->db->query("UPDATE wb_tickets SET `fixed` = {$fixed} WHERE id = {$id}");
 	}
 	
 }

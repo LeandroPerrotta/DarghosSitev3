@@ -7,7 +7,9 @@ $list = $account->getCharacterList();
 if($_POST)
 {	
 	$guild = $core->loadClass("guilds");
-	
+	$character = $core->loadClass("Character");
+	$character->loadByName($post[1], "rank_id, guild_join_date");
+		
 	$post = $core->extractPost();
 	if(!in_array($post[1], $list))
 	{
@@ -28,11 +30,13 @@ if($_POST)
 	elseif(!$strings->canUseName($post[0]))
 	{
 		$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
-	}	
+	}
+	elseif($character->loadGuild())
+	{
+		$error = "Seu personagem ja possui guild, é nescessario sair da mesma para criar outra.";
+	}
 	else
 	{
-		$character = $core->loadClass("Character");
-		$character->loadByName($post[1], "rank_id, guild_join_date");
 		
 		$guild->set("name", $post[0]);
 		$guild->set("ownerid", $character->get("id"));
