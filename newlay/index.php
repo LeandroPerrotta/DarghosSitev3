@@ -76,12 +76,37 @@
 									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>
 									<li><a href="?ref=account.premiumtest"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
 									<li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li>
-									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>
-									<li><a href="?ref=tickets.send">Enviar Ticket</a></li>
-									<li><a href="?ref=tickets.tickets">Meus Tickets</a></li>				
+									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>			
 								</ul>
 							</li>
 							
+
+						<?php 
+								$menudropdown['support']['status'] = null;
+								$menudropdown['support']['button'] = "tooglePlus";
+							
+								if($_COOKIE['menudropdown_support'])
+								{ 
+									if($_COOKIE['menudropdown_support'] == "true")
+									{ 
+										$menudropdown['support']['status'] = "class='viewable'"; 
+										$menudropdown['support']['button'] = "toogleMinus";
+									}
+									elseif($_COOKIE['menudropdown_support'] == "false")
+									{
+										$menudropdown['support']['status'] = null;
+										$menudropdown['support']['button'] = "tooglePlus";
+									}	
+								} 
+							?>							
+							<li>
+								<div name="support"><strong><? echo $menu['SUPPORT']; ?></strong> <span class="<?php echo $menudropdown['support']['button']; ?>"></span></div>
+								<ul <?php echo $menudropdown['support']['status']; ?>>
+									<li><a href="?ref=tickets.send"><? echo $menu['SUPPORT.OPEN_TICKET']; ?></a></li>
+									<li><a href="?ref=tickets.tickets"><? echo $menu['SUPPORT.MY_TICKETS']; ?></a></li>
+								</ul>
+							</li>		
+		
 							
 							<?php 
 								$menudropdown['contribute']['status'] = null;

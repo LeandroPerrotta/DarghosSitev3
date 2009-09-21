@@ -15,6 +15,10 @@ $menu['ACCOUNT.MAIN'] = "Principal";
 $menu['ACCOUNT.PREMIUM_TEST'] = "Teste de Conta Premium";
 $menu['ACCOUNT.LOGOUT'] = "Log-out";
 
+$menu['SUPPORT'] = "Suporte";
+$menu['SUPPORT.OPEN_TICKET'] = "Abrir Ticket";
+$menu['SUPPORT.MY_TICKETS'] = "Meus Tickets";
+
 $menu['PREMIUMS'] = "Conta Premium";
 $menu['PREMIUM.ORDER'] = "Obter Conta Premium";
 $menu['PREMIUM.MY_ORDERS'] = "Meus Pedidos";
