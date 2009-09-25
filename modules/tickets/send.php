@@ -21,7 +21,7 @@ if($_POST)
 		$_main		= $string->SQLInjection($_POST['ticket_main']);
 		$_type		= $_POST['type'];
 				 
-		$ticket->sendNew(0,$_player,$_account,$_title,$_main, time(), $_type, 0, 1);
+		$ticket->sendNew(0,$_player,$_account,$_title,$_main, time(), $_type, 0, 1, 0);
 		
 		$success = "Seu ticket foi enviado com sucesso, visite a pagina Meus Tickets, para visualisar as respostas e o andamento dos mesmos. <p>Atenciosamente,<br>Equipe Ultraxsoft. </p>";
 	}
