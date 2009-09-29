@@ -36,13 +36,12 @@ else
 	include "classes/mysql.php";
 	include "classes/core.php";
 	
-	$core = new Core();
-	
 	try
 	{
 		$db = new MySQL();
 		$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);	
 	
+		$core = new Core();
 		$core->InitPOT();
 	}
 	catch (Exception $e)
