@@ -11,14 +11,14 @@ class Tickets
 	
 	function load($id)
 	{
-		$query = $this->db->query("SELECT id, player, account, title, question, send_date, type, closed, last_update, fixed FROM wb_tickets WHERE id = $id");
+		$query = $this->db->query("SELECT id, player_id, account, title, question, send_date, type, closed, last_update, fixed, attachment FROM wb_tickets WHERE id = $id");
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
 			
 			$this->data["id"] = $fetch->id;
-			$this->data["player"] = $fetch->player;
+			$this->data["player_id"] = $fetch->player_id;
 			$this->data["account"] = $fetch->account;
 			$this->data["title"] = $fetch->title;
 			$this->data["question"] = $fetch->question;
@@ -27,6 +27,7 @@ class Tickets
 			$this->data["closed"] = $fetch->closed;
 			$this->data["last_update"] = $fetch->last_update;
 			$this->data["fixed"] = $fetch->fixed;
+			$this->data["attachment"] = $fetch->attachment;
 									
 			return true;
 		}
@@ -39,7 +40,7 @@ class Tickets
 	
 	function loadResponses($id)
 	{
-		$query = $this->db->query("SELECT id, ticket_id, text, by_name, send_date FROM wb_tickets_answers WHERE ticket_id = $id ORDER by send_date ASC");
+		$query = $this->db->query("SELECT id, ticket_id, text, by_name, send_date FROM wb_tickets_answers WHERE ticket_id = '".$id."' ORDER by send_date ASC");
 			
 		while($fetch = $query->fetch())
 		{
@@ -52,10 +53,10 @@ class Tickets
 		}
 	}
 	
-	function sendNew($id, $player, $account, $title, $question, $send_date, $type, $closed, $last_update, $fixed)
+	function sendNew($id, $player_id, $account, $title, $question, $send_date, $type, $closed, $last_update, $fixed, $attachment = "")
 	{
 		
-		$this->db->query("INSERT INTO wb_tickets values ('{$id}', '{$player}', '{$account}', '{$title}', '{$question}', '{$send_date}', '{$type}', '{$closed}', '{$last_update}', '{$fixed}')");
+		$this->db->query("INSERT INTO wb_tickets values ('{$id}', '{$player_id}', '{$account}', '{$title}', '{$question}', '{$send_date}', '{$type}', '{$closed}', '{$last_update}', '{$fixed}', '{$attachment}')");
 
 	}
 	
@@ -64,9 +65,9 @@ class Tickets
 		return $this->data['id'];
 	}
 	
-	function getPlayer()
+	function getPlayerId()
 	{
-		return $this->data['player'];
+		return $this->data['player_id'];
 	}
 	
 	function getAccount()
@@ -102,6 +103,11 @@ class Tickets
 	function getLastUpdate()
 	{
 		return $this->data["last_update"];
+	}
+	
+	function getAttachment()
+	{
+		return $this->data["attachment"];
 	}
 	
 	function getResponsesText()

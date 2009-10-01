@@ -42,5 +42,27 @@ class Tools
 		
 		return true;
 	}
+	
+	static function GetTicketTypeName($ticketType)
+	{
+		$ticketName = "";
+		
+		switch($ticketType)
+		{
+			case 1:
+				$ticketName = "Website";
+				break;
+				
+			case 2:
+				$ticketName = "Jogo";
+				break;
+
+			case 3:
+				$ticketName = "Premium";
+				break;	
+		}
+		
+		return $ticketName;
+	}
 }
 ?>

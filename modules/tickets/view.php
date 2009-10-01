@@ -63,6 +63,9 @@
 			</p>
 		";
 		
+		$ticketTypeName = Tools::GetTicketTypeName($ticket->getType());
+		$ticketAttachment = ($ticket->getAttachment() ? $ticket->getAttachment() : "Nenhum");			
+			
 		$module .= "
 		<table cellspacing='0' cellpadding='0' id='table' width='100%'>
 			
@@ -75,11 +78,19 @@
 			</tr>	
 			
 			<tr>
+				<td width='15%'><b>Tipo</b></td> <td>{$ticketTypeName}</td>
+			</tr>		
+
+			<tr>
+				<td width='15%'><b>Refêrencia</b></td> <td>{$ticketAttachment}</td>
+			</tr>					
+			
+			<tr>
 				<td width='15%'><b>Enviado:</b></td><td width='85%'>{$core->formatDate($ticket->getSendDate())}</td>
 			</tr>
 			
 			<tr height='50px'>
-				<td width='15%'><b>Conteúdo</b></td> <td>{$ticket->getQuestion()}</td>
+				<td width='15%'><b>Conteúdo</b></td> <td>".nl2br(stripslashes($ticket->getQuestion()))."</td>
 			</tr>
 			
 			<tr>
@@ -105,7 +116,7 @@
 				</tr>
 				
 				<tr>
-					<td height='50px'>{$fetch->text} </td>
+					<td height='50px'>".nl2br(stripslashes($fetch->text))." </td>
 				</tr>
 			";
 		}

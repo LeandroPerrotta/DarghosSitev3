@@ -1,6 +1,6 @@
 CREATE TABLE `darghos`.`wb_tickets` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `player` VARCHAR(45) NOT NULL,
+  `player_id` INTEGER UNSIGNED NOT NULL,
   `account` VARCHAR(45) NOT NULL,
   `title` VARCHAR(255) NOT NULL,
   `question` VARCHAR(255) NOT NULL,
@@ -9,13 +9,14 @@ CREATE TABLE `darghos`.`wb_tickets` (
   `closed` VARCHAR(45) NOT NULL, 
   `last_update` VARCHAR(45) NOT NULL,
   `fixed` INTEGER UNSIGNED NOT NULL,
+  `attachment` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 )
 ENGINE = InnoDB;
 
-CREATE TABLE `darghos`.`wb_ticket_answers` (
+CREATE TABLE `darghos`.`wb_tickets_answers` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ticked_id` VARCHAR(45) NOT NULL,
+  `ticket_id` VARCHAR(45) NOT NULL,
   `text` TEXT NOT NULL,
   `by_name` VARCHAR(45) NOT NULL,
   `send_date` VARCHAR(45) NOT NULL,

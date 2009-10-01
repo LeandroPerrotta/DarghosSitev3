@@ -32,9 +32,12 @@ class Strings
 	
 	function SQLInjection($string)
 	{
-	    $string = get_magic_quotes_gpc() ? stripslashes($string) : $string;
+		//$string = nl2br($string);
+	    //$string = get_magic_quotes_gpc() ? stripslashes($string) : $string;
+	    
+		$string = !get_magic_quotes_gpc() ? addslashes($string) : $string;
 	 
-	    $string = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($string) : mysql_escape_string($string);
+	    //$string = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($string) : mysql_escape_string($string);
 	 
 	    return $string;		
 	}

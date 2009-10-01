@@ -1,4 +1,6 @@
 <?php
+$menu = array();
+
 $menu['NAVIGATION'] = "Navegação";
 $menu['LAST_NEWS'] = "Últimas Notícias";
 $menu['ABOUT'] = "Sobre o ".CONFIG_SITENAME."";

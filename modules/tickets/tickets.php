@@ -32,18 +32,7 @@ while($fetch = $query->fetch())
 	$ticket = $core->loadClass("Tickets");
 	$ticket->load($fetch->id);
 	
-	if($ticket->getType() == 1)
-	{
-		$type = "Website";	
-	}
-	elseif($ticket->getType() == 2)
-	{
-		$type = "Jogo";
-	}
-	else
-	{
-		$type = "Premium";
-	}	
+	$type = Tools::GetTicketTypeName($ticket->getType());;	
 	
 	if($ticket->getClosed() != 0)
 	{

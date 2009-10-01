@@ -124,7 +124,7 @@ if($post or $get)
 			{
 				$module .= "
 				<tr>
-					<td><b>Comentario</b></td> <td>".nl2br(strip_tags($character->getDescription()))."</td>
+					<td><b>Comentario</b></td> <td>".nl2br(stripslashes($character->getDescription()))."</td>
 				</tr>";					
 			}
 			

@@ -801,14 +801,18 @@ class Account
 		
 	}
 	
-	function getHighCharacter()
+	function getHighCharacter($returnId = false)
 	{
-		$query = $this->db->query("SELECT name FROM players WHERE account_id = '{$this->data[id]}' LIMIT 1");
+		$query = $this->db->query("SELECT id, name FROM players WHERE account_id = '{$this->data[id]}' LIMIT 1");
 		
 		if($query->numRows() != 0)
 		{
 			$result = $query->fetch();
-			return $result->name;
+			
+			if(!$returnId)
+				return $result->name;
+			else
+				return $result->id;	
 		}
 		
 		return false;
