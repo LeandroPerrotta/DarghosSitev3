@@ -3,6 +3,9 @@ $post = $core->extractPost();
 if($post)
 {	
 	$character = $core->loadClass("character");
+	
+	$_paymentMethods = array("PagSeguro", "PayPal");
+	$_paymentPeriods = array(7, 30, 60, 90, 180);
 
 	if(!$post[0] or !$post[1] or !$post[2] or !$post[3] or !$post[4])
 	{
@@ -11,6 +14,10 @@ if($post)
 	elseif(!$character->loadByName($post[2]))
 	{
 		$error = "Este personagem não existe em nosso banco de dados.";
+	}
+	elseif(!in_array($_POST["order_type"], $_paymentMethods) or !in_array($_POST["order_days"], $_paymentPeriods))
+	{
+		$error = "Erro desconhecido, log reportado ao administrador.";
 	}
 	else
 	{
