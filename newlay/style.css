@@ -83,6 +83,11 @@ ul li {
 	color: #999;
 }
 
+.topBanner{
+	top: 25px;
+	width: 581px;
+}
+
 #left {
 	border-right: 1px solid #000;
 	background: #333 url(images/metal_bar.jpg) -3px bottom repeat-y;
