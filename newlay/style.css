@@ -22,10 +22,10 @@ body {
 }	
 
 h1 {
-	background: #333 url(images/header.jpg) no-repeat;
+	/*background: #333 url(images/header.jpg) no-repeat;*/
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
-	height: 120px;
+	height: 90px;
 }
 
 h1 span {
@@ -84,7 +84,7 @@ ul li {
 }
 
 .topBanner{
-	margin-top: 25px;
+	margin-top: 15px;
 	width: 581px;
 }
 
@@ -184,6 +184,7 @@ ul li {
 
 #right div {
 	padding: 0 10px 10px 10px;
+	margin-top: 5px;
 }
 
 #right div.last {

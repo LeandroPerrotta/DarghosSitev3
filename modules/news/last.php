@@ -28,17 +28,15 @@ while($fetch = $query->fetch())
 }
 
 $module .= "
-<p>
-	<table cellspacing='0' cellpadding='0' class='fastnews'>
+<table cellspacing='0' cellpadding='0' class='fastnews'>
+
+	<tr>
+		<th colspan='3'>Notícias Rápidas</th>
+	</tr>
+				
+	{$fastnews}
 	
-		<tr>
-			<th colspan='3'>Notícias Rápidas</th>
-		</tr>
-					
-		{$fastnews}
-		
-	</table>
-</p>";
+</table>";
 
 $query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by post_data DESC LIMIT 3");
 

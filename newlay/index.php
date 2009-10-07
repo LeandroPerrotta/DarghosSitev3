@@ -22,7 +22,27 @@
 	
 		<div id="wrapper">
 			<div id="wrapper_b">
-				<h1><span><? echo CONFIG_SITENAME; ?></span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
+				<h1>
+	
+				<center>
+					<script type="text/javascript"><!--
+					google_ad_client = "pub-1678394806564868";
+					/* 728x90, criado 06/10/09 */
+					google_ad_slot = "5194707898";
+					google_ad_width = 728;
+					google_ad_height = 90;
+					//-->
+					</script>
+					<script type="text/javascript"
+					src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+					</script>
+				</center>
+	
+				<span>
+				
+	
+				
+				</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
 				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de Conta Premium! Confira!</marquee></p>
 				
@@ -39,7 +59,32 @@
 									<li><a href="?ref=darghopedia.main"><? echo $menu['LIBRARY']; ?></a></li>																	
 								</ul>
 							</li>
-							
+						
+							<li>
+								<!-- <div><strong>Anúncios</strong></div> -->
+								<ul class="always_viewable" >
+									<li>	
+										<div>								
+											<p>
+												<center>
+													<script type="text/javascript"><!--
+													google_ad_client = "pub-1678394806564868";
+													/* 160x600, criado 05/10/09 */
+													google_ad_slot = "8853292703";
+													google_ad_width = 160;
+													google_ad_height = 600;
+													//-->
+													</script>
+													<script type="text/javascript"
+													src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+													</script>
+												</center>
+											</p>
+										</div>	
+									</li>						
+								</ul>
+							</li>	
+						
 							<?php if(!$_SESSION['login']){ ?>
 							<?php 
 								$menudropdown['accounts']['status'] = null;
@@ -80,7 +125,7 @@
 								</ul>
 							</li>
 							
-
+							
 						<?php 
 								$menudropdown['support']['status'] = null;
 								$menudropdown['support']['button'] = "tooglePlus";
@@ -241,7 +286,7 @@
 						<h2><? echo $patch['urlnavigation']; ?></h2>			
 						<?php } ?>
 						
-						<div class="topBanner">
+						<div>	
 							<center>
 								<script type="text/javascript"><!--
 								google_ad_client = "pub-1678394806564868";
@@ -255,9 +300,7 @@
 								src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 								</script>		
 							</center>	
-						</div>	
-						
-						<div>
+							
 							<? echo $module; ?>
 						</div>
 					</div>

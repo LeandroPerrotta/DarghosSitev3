@@ -1,6 +1,6 @@
 <?
-//ini_set("display_errors", 0 );
-//error_reporting(0); 
+ini_set("display_errors", 0 );
+error_reporting(0); 
 
 list($t, $date) = explode(" ", microtime());
 
@@ -25,7 +25,7 @@ if(MANUTENTION == 1)
 {
 	$module .= "
 	<p>
-	<h3>Estamos desligados para manutenção critica. Voltaremos em breve.</h3>
+	<h3>Estamos desligados para manutenção do servidor. Voltaremos em breve.</h3>
 	</p>
 	";
 	
