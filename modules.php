@@ -106,7 +106,12 @@ else
 				case "importElerian":
 					$needLogin = true;	
 					$patch['file'] = $topic;
-				break;					
+				break;		
+
+				case "prize":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;				
 				
 				default:
 					$patch['dir'] = "errors";

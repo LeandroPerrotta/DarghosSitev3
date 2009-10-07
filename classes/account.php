@@ -33,7 +33,7 @@ class Account
 	 */
 	function load($id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation FROM accounts WHERE id = '".$id."'");		
+		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, canSeeAdPage FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -50,6 +50,7 @@ class Account
 			$this->data['location'] = addslashes($fetch->location);	
 			$this->data['real_name'] = addslashes($fetch->real_name);	
 			$this->data['creation'] = $fetch->creation;	
+			$this->data['canSeeAdPage'] = $fetch->canSeeAdPage;	
 			
 			return true;	
 		}
@@ -257,7 +258,24 @@ class Account
 	function getCreation()
 	{
 		return $this->data['creation'];
-	}		
+	}	
+
+	function canSeeAdPage()
+	{
+		if($this->data['canSeeAdPage'] == 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}	
+	
+	function setCanSeeNotAdPage()
+	{
+		$this->data['canSeeAdPage'] = 0;
+	}
 	
 	
 	
@@ -797,8 +815,19 @@ class Account
 			$this->updatePremDays(PREMTEST_DAYS);
 		}
 		
-		$this->save();
+		$this->save();		
+	}
+	
+	function activePremiumPrize()
+	{
+		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."adpage VALUES ('{$this->data["id"]}', '".time()."', '".$_SERVER['REMOTE_ADDR']."')");
+	
+		$this->updatePremDays(1);
+		$this->data["canSeeAdPage"] = 0;
 		
+		setcookie ("bk", false);
+		
+		$this->save();
 	}
 	
 	function getHighCharacter($returnId = false)
