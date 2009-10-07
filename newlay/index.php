@@ -24,27 +24,25 @@
 			<div id="wrapper_b">
 				<h1>
 	
-				<center>
-					<script type="text/javascript"><!--
-					google_ad_client = "pub-1678394806564868";
-					/* 728x90, criado 06/10/09 */
-					google_ad_slot = "5194707898";
-					google_ad_width = 728;
-					google_ad_height = 90;
-					//-->
-					</script>
-					<script type="text/javascript"
-					src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-					</script>
-				</center>
-	
-				<span>
+				<div style="margin-top: 120px;">
 				
-	
+					<center>
+						<script type="text/javascript"><!--
+						google_ad_client = "pub-1678394806564868";
+						/* 728x90, criado 06/10/09 */
+						google_ad_slot = "5194707898";
+						google_ad_width = 728;
+						google_ad_height = 90;
+						//-->
+						</script>
+						<script type="text/javascript"
+						src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+						</script>
+					</center>	
 				
-				</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
+				</div></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
-				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de Conta Premium! Confira!</marquee></p>
+				<!-- <p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de Conta Premium! Confira!</marquee></p> -->
 				
 				<div id="content_wrapper">
 					<div id="left">
@@ -286,21 +284,7 @@
 						<h2><? echo $patch['urlnavigation']; ?></h2>			
 						<?php } ?>
 						
-						<div>	
-							<center>
-								<script type="text/javascript"><!--
-								google_ad_client = "pub-1678394806564868";
-								/* 468x60, criado 05/10/09 */
-								google_ad_slot = "9820027335";
-								google_ad_width = 468;
-								google_ad_height = 60;
-								//-->
-								</script>
-								<script type="text/javascript"
-								src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-								</script>		
-							</center>	
-							
+						<div>								
 							<? echo $module; ?>
 						</div>
 					</div>

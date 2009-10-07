@@ -22,14 +22,10 @@ body {
 }	
 
 h1 {
-	/*background: #333 url(images/header.jpg) no-repeat;*/
+	background: #565656 url(images/header.jpg) no-repeat;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
-	height: 90px;
-}
-
-h1 span {
-	display: none;
+	height: 210px;
 }
 
 h2 {
