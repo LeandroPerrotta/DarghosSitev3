@@ -49,7 +49,7 @@ if($account->canSeeAdPage())
 			}
 		</script>
 				
-		<p>Para receber uma conta premium gratuita basta clicar em qualquer um dos anúncios superior ou lateral, aguarde a pagina do anúncio ser carregada e então aperte o Voltar para retornar ao site do Darghos e você recebera o premio. Obrigado.</p>	
+		<img src="'.$layoutDir.'images/premprize.png" border="0"/>	
 		';	
 	}
 }

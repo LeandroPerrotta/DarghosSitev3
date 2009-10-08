@@ -108,12 +108,19 @@
 									<li><a href="?ref=account.premium"><? echo $menu['ACCOUNT.PREMIUM']; ?></a></li>
 								</ul>
 							</li>
-							<?php } else { ?>
+							<?php } else { 
+							$account = $core->loadClass("account"); 
+							$account->load($_SESSION["login"][0]);
+							?>
 							<li>
 								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>
+									<?php if ($account->canSeeAdPage()) { ?>
+									<li><a href="?ref=account.prize"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
+									<?php } else { ?>
 									<li><a href="?ref=account.premiumtest"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
+									<?php } ?>
 									<li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li>
 									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>			
 								</ul>
@@ -176,8 +183,7 @@
 							</li>		
 							
 								<?php 
-								$account = $core->loadClass("account");
-								if($account->load($_SESSION["login"][0]) AND $account->getGroup() >= 5) 
+								if($account->getGroup() >= 5) 
 								{
 								?>
 								
@@ -187,6 +193,7 @@
 										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
 										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li>
 										<li><a href="?ref=tickets.super_list">Ticket System</a></li>	
+										<li><a href="?ref=adv.addprize">Permitir AdPage</a></li>	
 									</ul>
 								</li>								
 								

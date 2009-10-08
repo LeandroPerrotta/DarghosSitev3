@@ -277,6 +277,11 @@ class Account
 		$this->data['canSeeAdPage'] = 0;
 	}
 	
+	function setCanSeeAdPage()
+	{
+		$this->data['canSeeAdPage'] = 1;
+	}
+	
 	
 	
 	/* proposito: retorna uma array com os personagens pertecentes a account carregada (por nome ou id)
