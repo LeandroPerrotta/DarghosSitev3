@@ -343,6 +343,21 @@ class Character
 	{
 		return $this->data['lastlogin'];
 	}	
+	
+	function getPosX()
+	{
+		return $this->data['posx'];
+	}
+	
+	function getPosY()
+	{
+		return $this->data['posy'];
+	}
+
+	function getPosZ()
+	{
+		return $this->data['posz'];
+	}
 
 
 	

@@ -3,7 +3,7 @@ $post = $core->extractPost();
 $get = $_GET['name'];
 
 if($post or $get)
-{	
+{		
 	$name = ($post) ? $post[0] : $get;
 
 	$character = $core->loadClass("character");
@@ -14,7 +14,7 @@ if($post or $get)
 	}
 	else
 	{			
-		$account = $core->loadClass("Account");
+		$account = new Account();
 		$account->load($character->get("account_id"), "premdays, real_name, location, url");
 		
 		$deaths = $core->loadClass("Deaths");
@@ -133,8 +133,63 @@ if($post or $get)
 				<td><b>Último Login:</b></td> <td>{$lastlogin}</td>
 			</tr>	
 			
-		</table>
+		</table>";
 
+		$_gmAcc = new Account();
+		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login']) and $_gmAcc->getGroup() >= 5)
+		{
+			$contribute = new Contribute();
+			$oders = $contribute->getOrdersListByAccount($account->getId());
+			
+			$alreadyIsPremium = false;
+			$numberOfPremiums = 0;
+			
+			if(is_array($oders))
+			{	
+				foreach($oders as $orderId)
+				{
+					$contribute->load($orderId, "id, name, target, type, period, cost, generated_in, status");
+					
+					if($contribute->get("status") == 1 OR $contribute->get("status") == 2)
+					{
+						$numberOfPremiums++;
+						$alreadyIsPremium = true;
+					}
+				}
+			}	
+
+			$alreadyIsPremiumHTML = ($alreadyIsPremium) ? "Sim" : "Não";
+			
+			if($alreadyIsPremium)
+			{
+				$alreadyIsPremiumHTML .= " ({$numberOfPremiums}x)";
+			}
+			
+			$module .= "
+			<table cellspacing='0' cellpadding='0'>
+				<tr>
+					<th colspan='2'>Informações Avançadas</th>
+				</tr>
+				<tr>
+					<td><b>Numero da Conta</b></td><td>{$account->getId()}</td>
+				</tr>	
+				<tr>
+					<td><b>Nome da Conta</b></td><td>{$account->getName()}</td>
+				</tr>							
+				<tr>
+					<td><b>Dias de Premium</b></td><td>{$account->getPremDays()}</td>
+				</tr>			
+				<tr>
+					<td><b>Alguma vez Premium?</b></td><td>{$alreadyIsPremiumHTML}</td>
+				</tr>		
+				<tr>
+					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
+				</tr>
+			</table>														
+				";			
+		}
+		
+		$module .= "
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Informações da Conta</th>

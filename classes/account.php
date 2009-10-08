@@ -33,7 +33,7 @@ class Account
 	 */
 	function load($id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, canSeeAdPage FROM accounts WHERE id = '".$id."'");		
+		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, canSeeAdPage, lastAdPage FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -51,6 +51,7 @@ class Account
 			$this->data['real_name'] = addslashes($fetch->real_name);	
 			$this->data['creation'] = $fetch->creation;	
 			$this->data['canSeeAdPage'] = $fetch->canSeeAdPage;	
+			$this->data['lastAdPage'] = $fetch->lastAdPage;
 			
 			return true;	
 		}
@@ -260,6 +261,11 @@ class Account
 		return $this->data['creation'];
 	}	
 
+	function getLastAdPage()
+	{
+		return $this->data['lastAdPage'];
+	}
+	
 	function canSeeAdPage()
 	{
 		if($this->data['canSeeAdPage'] == 1)
@@ -271,6 +277,18 @@ class Account
 			return false;
 		}
 	}	
+	
+	function canClickAdPage()
+	{
+		if(($this->data['lastAdPage'] + 60 * 60 * 24) < time())
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}		
+	}
 	
 	function setCanSeeNotAdPage()
 	{
@@ -828,7 +846,7 @@ class Account
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."adpage VALUES ('{$this->data["id"]}', '".time()."', '".$_SERVER['REMOTE_ADDR']."')");
 	
 		$this->updatePremDays(2);
-		$this->data["canSeeAdPage"] = 0;
+		$this->data["lastAdPage"] = time();
 		
 		setcookie ("bk", false);
 		
