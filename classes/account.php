@@ -195,7 +195,7 @@ class Account
 	{
 		$leftDays = $this->data["premend"] - time();
 		
-		$leftDays = ($leftDays > 0) ? floor($leftDays / 86400) : 0;
+		$leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
 		
 		return $leftDays;
 	}			
