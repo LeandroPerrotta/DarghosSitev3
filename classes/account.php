@@ -822,7 +822,7 @@ class Account
 	{
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."adpage VALUES ('{$this->data["id"]}', '".time()."', '".$_SERVER['REMOTE_ADDR']."')");
 	
-		$this->updatePremDays(1);
+		$this->updatePremDays(2);
 		$this->data["canSeeAdPage"] = 0;
 		
 		setcookie ("bk", false);
