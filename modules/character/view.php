@@ -1,4 +1,6 @@
 <?
+include_once("classes/account.php");
+
 $post = $core->extractPost();
 $get = $_GET['name'];
 
@@ -136,8 +138,9 @@ if($post or $get)
 		</table>";
 
 		$_gmAcc = new Account();
-		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login']) and $_gmAcc->getGroup() >= 5)
+		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= 5)
 		{
+			include_once("classes/contribute.php");
 			$contribute = new Contribute();
 			$oders = $contribute->getOrdersListByAccount($account->getId());
 			
@@ -159,6 +162,7 @@ if($post or $get)
 			}	
 
 			$alreadyIsPremiumHTML = ($alreadyIsPremium) ? "Sim" : "Não";
+			$isAnClicker = ($account->canSeeAdPage()) ? "Sim" : "Não";
 			
 			if($alreadyIsPremium)
 			{
@@ -171,7 +175,7 @@ if($post or $get)
 					<th colspan='2'>Informações Avançadas</th>
 				</tr>
 				<tr>
-					<td><b>Numero da Conta</b></td><td>{$account->getId()}</td>
+					<td width='25%'><b>Numero da Conta</b></td><td>{$account->getId()}</td>
 				</tr>	
 				<tr>
 					<td><b>Nome da Conta</b></td><td>{$account->getName()}</td>
@@ -182,6 +186,9 @@ if($post or $get)
 				<tr>
 					<td><b>Alguma vez Premium?</b></td><td>{$alreadyIsPremiumHTML}</td>
 				</tr>		
+				<tr>
+					<td><b>É um ad clicker?</b></td><td>{$isAnClicker}</td>
+				</tr>				
 				<tr>
 					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
 				</tr>

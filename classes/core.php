@@ -2,6 +2,7 @@
 class Core
 {
 	private $db;
+	private $alreadyShowBanner = false;
 
 	function __construct()
 	{
@@ -175,7 +176,7 @@ class Core
 			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
 	
-	function sendMessageBox($title, $msg)
+	function sendMessageBox($title, $msg, $adbanner = false)
 	{
 		global $module;
 		
@@ -183,11 +184,56 @@ class Core
 			<table cellspacing="0" cellpadding="0">
 				<tr>
 					<th>'.$title.'</th>
-				</tr>
-
+				</tr>';		
+		
+		if(!$adbanner)
+		{
+			$module .= '
 				<tr>
 					<td>'.$msg.'</td>
-				</tr>	
+				</tr>';
+		}
+		elseif($adbanner)
+		{
+			$showBannerChance = rand(0, 100000);
+		
+			if(!$this->alreadyShowBanner and $showBannerChance < 20000)
+			{
+				$this->alreadyShowBanner = true;
+			
+				$module .= '
+					<tr>
+						<td>									
+							<div style="float: right; width: 300px; top: 10px;">
+								<script type="text/javascript"><!--
+								google_ad_client = "pub-1678394806564868";
+								/* 300x250, criado 09/10/09 */
+								google_ad_slot = "7656234698";
+								google_ad_width = 300;
+								google_ad_height = 250;
+								//-->
+								</script>
+								<script type="text/javascript"
+								src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+								</script>						
+							</div>
+							
+							'.$msg.'							
+						</td>
+					</tr>';	
+			}	
+			else
+			{
+				$module .= '
+					<tr>
+						<td>'.$msg.'</td>
+					</tr>';			
+			}			
+		}
+		
+
+
+		$module .= '
 			</table>		
 		';
 	}
