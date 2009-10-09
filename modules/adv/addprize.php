@@ -30,30 +30,27 @@ if($_POST)
 if($success)	
 {
 	$core->sendMessageBox("Sucesso!", $success);
-}
-else
+}	
+elseif($error)	
 {
-	if($error)	
-	{
-		$core->sendMessageBox("Erro!", $error);
-	}
-	
-	$module .=	'
-	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-		<fieldset>			
-			
-			<p>
-				<label for="addprize_character">Nome do Personagem</label><br />
-				<input id="addprize_character" name="addprize_character" size="40" type="text" value="" />
-			</p>	
-
-			<div id="line1"></div>
-			
-			<p>
-				<input class="button" type="submit" value="Enviar" />
-			</p>			
-
-		</fieldset>
-	</form>';	
+	$core->sendMessageBox("Erro!", $error);
 }
+
+$module .=	'
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+	<fieldset>			
+		
+		<p>
+			<label for="addprize_character">Nome do Personagem</label><br />
+			<input id="addprize_character" name="addprize_character" size="40" type="text" value="" />
+		</p>	
+
+		<div id="line1"></div>
+		
+		<p>
+			<input class="button" type="submit" value="Enviar" />
+		</p>			
+
+	</fieldset>
+</form>';	
 ?>
