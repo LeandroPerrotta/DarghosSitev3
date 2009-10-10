@@ -33,7 +33,7 @@ class Account
 	 */
 	function load($id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, canSeeAdPage, lastAdPage FROM accounts WHERE id = '".$id."'");		
+		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, lastAdClick FROM accounts WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -50,8 +50,7 @@ class Account
 			$this->data['location'] = addslashes($fetch->location);	
 			$this->data['real_name'] = addslashes($fetch->real_name);	
 			$this->data['creation'] = $fetch->creation;	
-			$this->data['canSeeAdPage'] = $fetch->canSeeAdPage;	
-			$this->data['lastAdPage'] = $fetch->lastAdPage;
+			$this->data['lastAdClick'] = $fetch->lastAdClick;
 			
 			return true;	
 		}
@@ -261,26 +260,14 @@ class Account
 		return $this->data['creation'];
 	}	
 
-	function getLastAdPage()
+	function getLastAdClick()
 	{
-		return $this->data['lastAdPage'];
-	}
-	
-	function canSeeAdPage()
-	{
-		if($this->data['canSeeAdPage'] == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return $this->data['lastAdClick'];
 	}	
 	
 	function canClickAdPage()
 	{
-		if(($this->data['lastAdPage'] + 60 * 60 * 24) < time())
+		if(($this->data['lastAdClick'] + 60 * 60 * 24) < time())
 		{
 			return true;
 		}
@@ -288,16 +275,6 @@ class Account
 		{
 			return false;
 		}		
-	}
-	
-	function setCanSeeNotAdPage()
-	{
-		$this->data['canSeeAdPage'] = 0;
-	}
-	
-	function setCanSeeAdPage()
-	{
-		$this->data['canSeeAdPage'] = 1;
 	}
 	
 	
@@ -845,12 +822,12 @@ class Account
 	{
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."adpage VALUES ('{$this->data["id"]}', '".time()."', '".$_SERVER['REMOTE_ADDR']."')");
 	
-		if($this->getLastAdPage() == 0)
+		if($this->getLastAdClick() == 0)
 			$this->updatePremDays(2);
 		else	
 			$this->updatePremDays(1);
 			
-		$this->data["lastAdPage"] = time();
+		$this->data["lastAdClick"] = time();
 		
 		setcookie ("bk", false);
 		
@@ -859,7 +836,7 @@ class Account
 	
 	function getHighCharacter($returnId = false)
 	{
-		$query = $this->db->query("SELECT id, name FROM players WHERE account_id = '{$this->data[id]}' LIMIT 1");
+		$query = $this->db->query("SELECT id, name FROM players WHERE account_id = '{$this->data[id]}' ORDER BY level DESC LIMIT 1");
 		
 		if($query->numRows() != 0)
 		{
@@ -871,9 +848,20 @@ class Account
 				return $result->id;	
 		}
 		
-		return false;
-			
-		
+		return false;	
 	}
+	
+	function getCharMinLevel()
+	{
+		$query = $this->db->query("SELECT level FROM players WHERE account_id = '{$this->data[id]}' ORDER BY level ASC LIMIT 1");
+		
+		if($query->numRows() != 0)
+		{
+			$result = $query->fetch();
+			return $result->level;
+		}
+		
+		return false;	
+	}	
 }
 ?>

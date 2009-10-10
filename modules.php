@@ -460,7 +460,8 @@ else
 		
 		if($_SESSION['login'])
 		{
-			$checkAccount = $core->loadClass("Account");	
+			include_once('classes/account.php');
+			$checkAccount = new Account;	
 			$checkAccount->load($_SESSION["login"][0], "premdays");
 			
 			if($checkAccount->get("premdays") != 0)
@@ -469,6 +470,7 @@ else
 			}
 			
 			$_groupId = $checkAccount->getGroup();
+			$_minLevel = $checkAccount->getCharMinLevel();
 		}
 		
 		
@@ -484,6 +486,16 @@ else
 		{
 			include("modules/errors/notfound.php");
 		}	
+		elseif($_SESSION['login'] and $core->getHour() >= CLICKS_STARTHOUR_1 and $core->getHour() <= CLICKS_ENDHOUR_1 and $_minLevel >= 50 and $checkAccount->canClickAdPage() and ($core->getLastAdClick() + CLICKS_INTERVAL_1) < time())
+		{
+			$_SESSION["to_page"] = $_GET['ref'];
+			
+			include("modules/ad.php");
+		}
+		elseif($_SESSION["to_page"])
+		{
+			include("modules/ad.php");
+		}
 		else
 		{
 			if($patch['dir'] != "errors")

@@ -120,7 +120,12 @@ class Core
 		return date("d/m/y - H:i", $date);
 	}
 	
-	function redirect($url, $local = true, $delay = false) 
+	function getHour()
+	{
+		return date("H", time());
+	}
+	
+	function redirect($url, $local = true/*, $delay = false*/) 
 	{		
 		if($local)
 			$url = CONFIG_SITEEMAIL."/".$url;
@@ -137,7 +142,7 @@ class Core
 			return $query->fetch()->tries;
 		}
 		else
-			false;
+			return false;
 	}
 	
 	function getGlobalValue($field)
@@ -175,6 +180,15 @@ class Core
 		else
 			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
+	
+	function getLastAdClick()
+	{
+		$query = $this->db->query("SELECT date FROM ".DB_WEBSITE_PREFIX."adpage ORDER BY date DESC LIMIT 1");
+		
+		$fetch = $query->fetch();
+		
+		return $fetch->date;
+	}
 	
 	function sendMessageBox($title, $msg, $adbanner = false)
 	{

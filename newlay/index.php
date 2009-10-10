@@ -109,19 +109,13 @@
 								</ul>
 							</li>
 							<?php } else { 
-							$account = $core->loadClass("account"); 
-							$account->load($_SESSION["login"][0]);
 							?>
 							<li>
 								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>
-									<?php if ($account->canSeeAdPage()) { ?>
-									<li><a href="?ref=account.prize"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
-									<?php } else { ?>
 									<li><a href="?ref=account.premiumtest"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
-									<?php } ?>
-									<li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li>
+									<!--  <li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li> -->
 									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>			
 								</ul>
 							</li>
