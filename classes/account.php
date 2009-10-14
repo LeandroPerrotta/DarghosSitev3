@@ -853,7 +853,7 @@ class Account
 	
 	function getCharMinLevel()
 	{
-		$query = $this->db->query("SELECT level FROM players WHERE account_id = '{$this->data[id]}' ORDER BY level ASC LIMIT 1");
+		$query = $this->db->query("SELECT level FROM players WHERE account_id = '{$this->data[id]}' ORDER BY level DESC LIMIT 1");
 		
 		if($query->numRows() != 0)
 		{

@@ -109,6 +109,9 @@
 								</ul>
 							</li>
 							<?php } else { 
+							include_once('classes/account.php');
+							$account = new Account();
+							$account->load($_SESSION["login"][0]);
 							?>
 							<li>
 								<div><strong>Minha Conta</strong></div>

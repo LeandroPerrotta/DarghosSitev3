@@ -162,7 +162,6 @@ if($post or $get)
 			}	
 
 			$alreadyIsPremiumHTML = ($alreadyIsPremium) ? "Sim" : "Não";
-			$isAnClicker = ($account->canSeeAdPage()) ? "Sim" : "Não";
 			
 			if($alreadyIsPremium)
 			{
@@ -185,10 +184,7 @@ if($post or $get)
 				</tr>			
 				<tr>
 					<td><b>Alguma vez Premium?</b></td><td>{$alreadyIsPremiumHTML}</td>
-				</tr>		
-				<tr>
-					<td><b>É um ad clicker?</b></td><td>{$isAnClicker}</td>
-				</tr>				
+				</tr>					
 				<tr>
 					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
 				</tr>
