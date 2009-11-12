@@ -2,8 +2,8 @@
 
 define('MANUTENTION', 0);
 
-define('CONFIG_SITEEMAIL', "localhost:8090");
-define('SITE_ROOT_DIR', "darghos_site"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+define('CONFIG_SITEEMAIL', "http://www.darghos.com.br");
+#define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
 define('DIR_DATA', "c:/server/darghos/data/");
 define('HOUSES_FILE', "world/-house.xml");
@@ -13,6 +13,11 @@ define('GLOBAL_LANGUAGE', "pt");
 
 define('CONFIG_SITENAME', "Darghos Server");
 define('CONFIG_OWNERNAME', "Equipe UltraxSoft");
+
+/* Clicks AD */
+define('CLICKS_INTERVAL_1', 60 * 60);
+define('CLICKS_STARTHOUR_1', 12);
+define('CLICKS_ENDHOUR_1', 23);
 
 /*	Configuraes SMTP	 */
 define('SMTP_HOST', "smtp-auth.no-ip.com");

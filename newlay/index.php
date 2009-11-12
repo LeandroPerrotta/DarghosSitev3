@@ -18,27 +18,9 @@
 	
 		<div id="wrapper">
 			<div id="wrapper_b">
-				<h1>
-	
-				<div style="margin-top: 120px;">
+				<h1><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
-					<center>
-						<script type="text/javascript"><!--
-						google_ad_client = "pub-1678394806564868";
-						/* 728x90, criado 06/10/09 */
-						google_ad_slot = "5194707898";
-						google_ad_width = 728;
-						google_ad_height = 90;
-						//-->
-						</script>
-						<script type="text/javascript"
-						src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-						</script>
-					</center>	
-				
-				</div></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
-				
-				<!-- <p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de Conta Premium! Confira!</marquee></p> -->
+				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de premium account</marquee></p>
 				
 				<div id="content_wrapper">
 					<div id="left">

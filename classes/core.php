@@ -190,7 +190,7 @@ class Core
 		return $fetch->date;
 	}
 	
-	function sendMessageBox($title, $msg, $adbanner = false)
+	function sendMessageBox($title, $msg, $adbanner = false, $showbannerChanceFactor = 50000)
 	{
 		global $module;
 		
@@ -211,7 +211,7 @@ class Core
 		{
 			$showBannerChance = rand(0, 100000);
 		
-			if(!$this->alreadyShowBanner and $showBannerChance < 20000)
+			if(!$this->alreadyShowBanner and $showBannerChance < $showbannerChanceFactor)
 			{
 				$this->alreadyShowBanner = true;
 			

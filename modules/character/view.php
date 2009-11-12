@@ -330,7 +330,9 @@ if($post or $get)
 			</table>";		
 		}
 		
-		if($_SESSION['login'] and $account->getId() == $_SESSION['login'][0])
+		$_gmAcc = new Account();
+		
+		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= 5)))
 		{
 			$kills = $deaths->getKillsOfPlayer($character->getId());
 

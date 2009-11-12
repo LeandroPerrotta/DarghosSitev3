@@ -47,9 +47,10 @@ else
 			}
 		}
 	</script>
-			
-	<p><h3>Parabens!</h3></p>
+		
+	';	
 	
+	$clickText = '
 	<p>Certamente você não esperava estar vendo está pagina, porém certamente você não sabia que possuia uma tremenda <b>SORTE</b>!</p>
 	<p>Você foi <b>escolhido</b>, entre dezenas de outros usuarios que estão navegando logados em suas contas neste instante, para participar de um sistema que garante um <b>otimo premio</b> extra para você jogador do Darghos!</p>
 	<p>Porem para você receber o premio você precisa fazer uma tarefa que envolve nada mais que <b>2 cliques</b>, isso mesmo, apénas dois cliques!!</p>
@@ -58,7 +59,9 @@ else
 	
 	<p>Atenção, leia até o final!</p>
 	
-	<p>Está vendo os Anúncios que temos na parte superior do site e lateral esquerda? É bem simples, você deve apénas acessar qualquer um dos Anúncios que mais lhe interessar, após carregar a pagina do Anúnciante você deve apénas usar o botão de Voltar de seu Navegador para retornar a esta pagina e terá recebido seu premio, facil não? <b>Está esperando o que?! Sorte assim não acontece toda hora!</b></p>
-	';	
+	<p>Está vendo os Anúncios que temos na parte superior do site e lateral esquerda? É bem simples, você deve apénas acessar qualquer um dos Anúncios que mais lhe interessar, após carregar a pagina do Anúnciante você deve apénas usar o botão de Voltar de seu Navegador para retornar a esta pagina e terá recebido seu premio, facil não? <b>Está esperando o que?! Sorte assim não acontece toda hora!</b></p>	
+	';
+	
+	$core->sendMessageBox("Parabens!", $clickText, true, 100000); 
 }
 ?>

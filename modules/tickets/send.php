@@ -1,4 +1,11 @@
 <?
+$module .=	"
+
+	<p>
+		Caro jogador, o sistema de Tickets foi momentaneamente desativado para que seja efetuadas algumas melhorias no sistema, tais melhorarias permitirão a equipe responder todos tickets de forma mais rápida e eficaz. Caso você tenha algum problema com relação a Conta Premium, Bugs, etc você ainda pode nos contactar atravez dos nossos emails: <b>premium@darghos.com</b> (para assuntos relacionados a premium) e <b>suporte@darghos.com</b> (para assuntos gerais). Obrigado pela sua compreensão.
+	</p>
+";
+/*
 include("classes/contribute.php");
 
 $account = $core->loadClass("Account");
@@ -141,5 +148,5 @@ $module .=	'
 		</fieldset>
 	</form>';
 
-}
+}*/
 ?>	

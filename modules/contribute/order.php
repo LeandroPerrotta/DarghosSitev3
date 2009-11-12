@@ -4,7 +4,7 @@ if($post)
 {	
 	$character = $core->loadClass("character");
 	
-	$_paymentMethods = array("PagSeguro", "PayPal");
+	$_paymentMethods = array("PagSeguro");
 	$_paymentPeriods = array(7, 30, 60, 90, 180);
 
 	if(!$post[0] or !$post[1] or !$post[2] or !$post[3] or !$post[4])
@@ -118,8 +118,7 @@ $module .= '
 				<label for="order_target">Forma de Pagamento desta Contribuição</label><br />
 				
 				<ul id="pagelist">
-					<li><input name="order_type" type="radio" value="PagSeguro"> PagSeguro <em>(recomendado para pagamentos nacionais como boleto e transferencia eletronica)</em></li>
-					<li><input name="order_type" type="radio" value="PayPal"> PayPal <em>(recomendado para pagamentos internacionais como cartão de credito internacional)</em></li>
+					<li><input name="order_type" type="radio" checked="checked" value="PagSeguro"> PagSeguro <em>(recomendado para pagamentos nacionais como boleto e transferencia eletronica)</em></li>
 				</ul>	
 			</p>
 			
@@ -127,11 +126,11 @@ $module .= '
 				<label for="order_days">Periodo desta Contribuição</label><br />
 				
 				<ul id="pagelist">
-					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 2.90 / USD 1.90 </li>
-					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 8.90 / USD 5.90 </li>
-					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 16.55 / USD 8.55 </li>
-					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 22.90 / USD 13.55 </li>
-					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 41.55 / USD 24.90 </li>
+					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 2.90 </li>
+					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 8.90 </li>
+					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 16.55 </li>
+					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 22.90 </li>
+					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 41.55 </li>
 				</ul>	
 			</p>
 			

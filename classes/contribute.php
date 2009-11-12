@@ -215,7 +215,7 @@ class Contribute extends MySQL
 	{
 		global $_contribution;
 	
-		if($this->data['type'] == "PayPal")
+		/*if($this->data['type'] == "PayPal")
 		{
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_coin = $price[0];
@@ -236,7 +236,8 @@ class Contribute extends MySQL
 				</form>
 			';	
 		}
-		elseif($this->data['type'] == "PagSeguro")
+		elseif($this->data['type'] == "PagSeguro")*/
+		if($this->data['type'] == "PagSeguro")
 		{
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_value = str_replace(",", ".", $price[1]);			
@@ -247,11 +248,10 @@ class Contribute extends MySQL
 				<input type="hidden" name="tipo" value="CP">
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium.">
+				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium. (ref: '.$this->data['id'].')">
 				<input type="hidden" name="item_quant_1" value="1">
 				<input type="hidden" name="item_valor_1" value="'.$price_value.'">
 				<input type="hidden" name="item_frete_1" value="000">
-				<input type="hidden" name="ref_transacao" value="REF#'.$this->data['id'].'">
 				
 				<input class="button" type="submit" value="Finalizar" />	
 				</form>			

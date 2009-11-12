@@ -487,7 +487,7 @@ else
 		{
 			include("modules/errors/notfound.php");
 		}	
-		elseif($_SESSION['login'] and $core->getHour() >= CLICKS_STARTHOUR_1 and $core->getHour() <= CLICKS_ENDHOUR_1 and  $_maxCharLevel >= 50 and $checkAccount->canClickAdPage() and ($core->getLastAdClick() + CLICKS_INTERVAL_1) < time() and $ClickPageRandom < 20000)
+		elseif($_SESSION['login'] and /*$core->getHour() >= CLICKS_STARTHOUR_1 and $core->getHour() <= CLICKS_ENDHOUR_1 and*/  $_maxCharLevel >= 50 and $checkAccount->canClickAdPage() and ($core->getLastAdClick() + CLICKS_INTERVAL_1) < time() and $ClickPageRandom < 20000)
 		{
 			$_SESSION["to_page"] = $_GET['ref'];
 			
