@@ -60,26 +60,19 @@ if($_GET['name'])
 			<tr>
 				<td>Esta guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
 			</tr>
-			
-			<tr>
-				<th>Modo de guerra</th>
-			</tr>
-			<tr>
-			{$str}
-			</tr>
-							
+										
 		</table>";				
 
 		if($_SESSION['login'] and $accountLevel == 1)
 		{
-			if($guild->isOnWar())
+			/*if($guild->isOnWar())
 			{
 				$button = "<a class='buttonstd' href='?ref=guilds.leavewar&name={$guild->get("name")}'>Desativar modo de Guerra</a>";
 			}
 			else 
 			{
 				$button = "<a class='buttonstd' href='?ref=guilds.joinwar&name={$guild->get("name")}'>Ativar modo de Guerra</a>";				
-			}
+			} */
 			
 			$module .= "
 				<p>
