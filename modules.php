@@ -305,14 +305,14 @@ else
 				case "leave":
 					$patch['file'] = $topic;
 				break;		
-				
+				/*
 				case "joinwar":
 					$patch['file'] = $topic;
 				break;		
 				
 				case "leavewar":
 					$patch['file'] = $topic;
-				break;
+				break;*/
 								
 				default:
 					$patch['dir'] = "errors";
