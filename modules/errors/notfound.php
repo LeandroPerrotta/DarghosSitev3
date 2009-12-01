@@ -1,0 +1,3 @@
+<?
+$core->sendMessageBox("Erro!", "Está pagina não existe ou está em fase de construção.");
+?>
