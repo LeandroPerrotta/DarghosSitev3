@@ -97,7 +97,7 @@ class Strings
 	            return false; 
 	        } 
 			elseif($ip != $e[1]) 
-			{ 
+			{
 	            return true; 
 	        } 
 	    } 

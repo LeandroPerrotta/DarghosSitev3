@@ -20,7 +20,7 @@
 			<div id="wrapper_b">
 				<h1><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
-				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de premium account</marquee></p>
+				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de conta premium! Confira!</marquee></p>
 				
 				<div id="content_wrapper">
 					<div id="left">
@@ -35,31 +35,6 @@
 									<li><a href="?ref=darghopedia.main"><? echo $menu['LIBRARY']; ?></a></li>																	
 								</ul>
 							</li>
-						
-							<li>
-								<!-- <div><strong>Anúncios</strong></div> -->
-								<ul class="always_viewable" >
-									<li>	
-										<div>								
-											<p>
-												<center>
-													<script type="text/javascript"><!--
-													google_ad_client = "pub-1678394806564868";
-													/* 160x600, criado 05/10/09 */
-													google_ad_slot = "8853292703";
-													google_ad_width = 160;
-													google_ad_height = 600;
-													//-->
-													</script>
-													<script type="text/javascript"
-													src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-													</script>
-												</center>
-											</p>
-										</div>	
-									</li>						
-								</ul>
-							</li>	
 						
 							<?php if(!$_SESSION['login']){ ?>
 							<?php 
@@ -244,7 +219,7 @@
 													
 													echo "
 													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
-													<em>IP:</em> ".STATUS_ADDRESS."<br />
+													<em>IP:</em> darghos.com.br<br />
 													<em>Port:</em> ".STATUS_PORT."<br />
 													<em>Players:</em> {$status->getOnlinePlayers()}<br />
 													<em>Uptime:</em> {$uptime}<br />
@@ -272,7 +247,7 @@
 					</div>
 				</div>
 				
-				<p id="footer">&copy; 2006~2009 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p>
+				<p id="footer">&copy; 2006~2010 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p>
 			</div>
 		</div>
 		

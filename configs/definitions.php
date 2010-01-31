@@ -5,7 +5,7 @@ define('MANUTENTION', 0);
 define('CONFIG_SITEEMAIL', "http://www.darghos.com.br");
 #define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
-define('DIR_DATA', "c:/server/darghos/data/");
+define('DIR_DATA', "/home/leandro/darghos/data/");
 define('HOUSES_FILE', "world/-house.xml");
 define('MONSTERS_FILE', "monster/monsters.xml");
 
@@ -14,11 +14,6 @@ define('GLOBAL_LANGUAGE', "pt");
 define('CONFIG_SITENAME', "Darghos Server");
 define('CONFIG_OWNERNAME', "Equipe UltraxSoft");
 
-/* Clicks AD */
-define('CLICKS_INTERVAL_1', 60 * 60);
-define('CLICKS_STARTHOUR_1', 12);
-define('CLICKS_ENDHOUR_1', 23);
-
 /*	Configuraes SMTP	 */
 define('SMTP_HOST', "smtp-auth.no-ip.com");
 define('SMTP_PORT', 3325);
@@ -26,11 +21,11 @@ define('SMTP_USER', "darghos.net@noip-smtp");
 define('SMTP_PASS', "***REMOVED***");
 
 /* CONFIGURAES PARA STATUS */
-define('STATUS_ADDRESS', 'darghos.com.br');
+define('STATUS_ADDRESS', '127.0.0.1');
 define('STATUS_PORT', 7171);
 
 define('SERVER_ID', 1);
-define('USEREMOTECONNECTIONS', 1);
+define('USEREMOTECONNECTIONS', 0);
 
 /* Entrega de item comprados no ItemShop  feita via Lua Scripts, baseado no StorageID do jogador */
 define('STORAGE_ID_ITEMSHOP', 8987);
@@ -51,9 +46,10 @@ define('HIDE_FORUMLINKS', 0); //Esconde os links ligados a forums, como o Coment
 define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
 /*
 define('SHOW_PREMIUMFEATURES', 1); //Exibi as opes de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)
-
-define('USE_VALIDATIONBYEMAIL', 1); //Ativa validao por email para modulos como criao de personagem e recuperao de contas e etc (0 = hide, 1 = show) IMPORTANTE: ATIVAO REQUER SERVIDOR SMTP CONFIGURADO
 */
+
+//Ativa validacão por email para modulos como criao de personagem e recuperação de contas entre outros IMPORTANTE: ATIVAO REQUER SERVIDOR SMTP CONFIGURADO
+define('USE_EMAILVALIDATION', true); 
 
 // Constantes para Guildas
 define('GUILDS_FORMATION_DAYS', 5); //Limite de dias para guildas serem formadas

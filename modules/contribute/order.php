@@ -5,7 +5,7 @@ if($post)
 	$character = $core->loadClass("character");
 	
 	$_paymentMethods = array("PagSeguro");
-	$_paymentPeriods = array(7, 30, 60, 90, 180);
+	$_paymentPeriods = array(7, 30, 60, 90, 180, 360);
 
 	if(!$post[0] or !$post[1] or !$post[2] or !$post[3] or !$post[4])
 	{
@@ -126,21 +126,20 @@ $module .= '
 				<label for="order_days">Periodo desta Contribuição</label><br />
 				
 				<ul id="pagelist">
-					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 2.90 </li>
-					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 8.90 </li>
-					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 16.55 </li>
-					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 22.90 </li>
-					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 41.55 </li>
+					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 4.50 (R$ 0.64/dia)</li>
+					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 12.90 (R$ 0.43/dia)</li>
+					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 24.50 (R$ 0.41/dia)</li>
+					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 34.90 (R$ 0.41/dia)</li>
+					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 64.90 (R$ 0.39/dia)</li>
+					<li><input name="order_days" type="radio" value="360"> 360 dias - R$ 119.90 (R$ 0.33/dia)</li>
 				</ul>	
 			</p>
 			
-			<h3>Observações:</h3>
+			<h3>Observações IMPORTANTES:</h3>
 			<ul>
-				<li>R$ <em>(valor em reais, para contribuições por PagSeguro).</em></li>
-				<li>USD <em>(valor em dolares americanos, para contribuições por PayPal).</em></li>
 				<li>Pagamentos via PagSeguro/Boleto Bancário são liberados apénas após compensar o pagamento (de 1 a 3 dias úteis).</li>
-				<li>Pagamentos via PagSeguro/Transferencia Eletronica são liberados imediatamente.</li>
-				<li><font color="red">Não efetuar depósito na conta informada no boleto, sujeito a invalidação do pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>
+				<li>Pagamentos via PagSeguro/Transferencia Eletronica são liberados em um prazo de 6 horas.</li>
+				<li><font color="red">Não efetuar depósito na conta informada no boleto, isto invalida o pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>
 			</ul>
 			
 			<div id="line1"></div>

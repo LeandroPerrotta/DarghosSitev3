@@ -25,7 +25,7 @@ if(MANUTENTION == 1)
 {
 	$module .= "
 	<p>
-	<h3>Estamos desligados para manutenção de rotina no servidor. Voltaremos em algumas horas.</h3>
+	<h3>Voltaremos em breve.</h3>
 	</p>
 	";
 	

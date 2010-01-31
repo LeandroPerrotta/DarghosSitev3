@@ -2,6 +2,7 @@
 if($_GET['name'])
 {
 	$guild = $core->loadClass("guilds");
+	$jogador = $core->loadClass("character");
 	
 	if(!$guild->loadByName($_GET['name']))
 	{		
@@ -101,11 +102,14 @@ if($_GET['name'])
 				
 		foreach($members as $player_name => $guild_value)
 		{
+			$jogador->loadByName($playe_name);
+			
+			$online = ($jogador->getOnline() == 1) ? "[<span class='online'>Online</span>]" : "";
 			
 			$module .= "
 				<tr>
 					<td width='25%'><b>".(($show_rank[$guild_value['rank']]) ? $guild_value['rank'] : "&nbsp")."</b></td> 
-					<td><a href='?ref=character.view&name=".$player_name."'>".$player_name."</a> ".(($guild_value['nick']) ? "(<i>{$guild_value['nick']}</i>)" : null)."</i></td> 
+					<td><a href='?ref=character.view&name=".$player_name."'>".$player_name." </a> ".(($guild_value['nick']) ? "(<i>{$guild_value['nick']}</i>)" : null)."</i></td> 
 					<td>{$core->formatDate($guild_value['joinDate'])}</td>
 				</tr>	
 			";	

@@ -190,7 +190,7 @@ class Core
 		return $fetch->date;
 	}
 	
-	function sendMessageBox($title, $msg, $adbanner = false, $showbannerChanceFactor = 50000)
+	function sendMessageBox($title, $msg)
 	{
 		global $module;
 		
@@ -198,56 +198,10 @@ class Core
 			<table cellspacing="0" cellpadding="0">
 				<tr>
 					<th>'.$title.'</th>
-				</tr>';		
-		
-		if(!$adbanner)
-		{
-			$module .= '
+				</tr>	
 				<tr>
 					<td>'.$msg.'</td>
-				</tr>';
-		}
-		elseif($adbanner)
-		{
-			$showBannerChance = rand(0, 100000);
-		
-			if(!$this->alreadyShowBanner and $showBannerChance < $showbannerChanceFactor)
-			{
-				$this->alreadyShowBanner = true;
-			
-				$module .= '
-					<tr>
-						<td>									
-							<div style="float: right; width: 300px; top: 10px;">
-								<script type="text/javascript"><!--
-								google_ad_client = "pub-1678394806564868";
-								/* 300x250, criado 09/10/09 */
-								google_ad_slot = "7656234698";
-								google_ad_width = 300;
-								google_ad_height = 250;
-								//-->
-								</script>
-								<script type="text/javascript"
-								src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-								</script>						
-							</div>
-							
-							'.$msg.'							
-						</td>
-					</tr>';	
-			}	
-			else
-			{
-				$module .= '
-					<tr>
-						<td>'.$msg.'</td>
-					</tr>';			
-			}			
-		}
-		
-
-
-		$module .= '
+				</tr>		
 			</table>		
 		';
 	}

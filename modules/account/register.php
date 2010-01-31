@@ -35,7 +35,7 @@ if($_POST)
 	{
 		$error = $boxMessage['INVALID_EMAIL'];
 	}	
-	elseif(!$core->mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
+	elseif((USE_EMAILVALIDATION) and !$core->mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
 	{
 		$error = $boxMessage['FAIL_SEND_EMAIL'];
 	}
@@ -48,7 +48,14 @@ if($_POST)
 		
 		$account->save();
 	
-		$success = $boxMessage['SUCCESS.REGISTER'];
+		$success = "<p>Parabens, sua conta foi criada com sucesso!</p>";
+	
+		if(USE_EMAILVALIDATION)
+			$success .= "<p>Sua senha e outras informações foram enviadas em uma mensagem a seu e-mail cadastrado.</p>";
+		else
+			$success .= "<p>Sua senha é <font size='5'><b>$password</b></font>.</p>";
+		
+		$success .= "<p>Tenha um bom jogo!</p>";
 	}
 }
 

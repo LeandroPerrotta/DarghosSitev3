@@ -23,6 +23,8 @@ CREATE TABLE `darghos`.`wb_tickets_answers` (
   PRIMARY KEY (`id`)
 )
 
+test
+
 ALTER TABLE `darghos`.`wb_tickets` ADD COLUMN `fixed` INTEGER UNSIGNED NOT NULL AFTER `last_update`;
 ALTER TABLE `darghos`.`wb_tickets_answers` MODIFY COLUMN `text` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
 , ROW_FORMAT = DYNAMIC;
