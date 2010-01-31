@@ -129,8 +129,8 @@ $module .= '
 					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 4.50 (R$ 0.64/dia)</li>
 					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 12.90 (R$ 0.43/dia)</li>
 					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 24.50 (R$ 0.41/dia)</li>
-					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 34.90 (R$ 0.41/dia)</li>
-					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 64.90 (R$ 0.39/dia)</li>
+					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 34.90 (R$ 0.39/dia)</li>
+					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 64.90 (R$ 0.36/dia)</li>
 					<li><input name="order_days" type="radio" value="360"> 360 dias - R$ 119.90 (R$ 0.33/dia)</li>
 				</ul>	
 			</p>
