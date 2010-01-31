@@ -473,8 +473,6 @@ else
 			$_maxCharLevel = $checkAccount->getCharMinLevel();
 		}
 		
-		$ClickPageRandom = rand(0, 100000);
-		
 		if(($needLogin and !$_SESSION['login']) or ($needPremium and !$_SESSION['login']))
 		{
 			include("modules/errors/needlogin.php");
@@ -487,16 +485,6 @@ else
 		{
 			include("modules/errors/notfound.php");
 		}	
-		elseif($_SESSION['login'] and /*$core->getHour() >= CLICKS_STARTHOUR_1 and $core->getHour() <= CLICKS_ENDHOUR_1 and*/  $_maxCharLevel >= 50 and $checkAccount->canClickAdPage() and ($core->getLastAdClick() + CLICKS_INTERVAL_1) < time() and $ClickPageRandom < 500)
-		{
-			$_SESSION["to_page"] = $_GET['ref'];
-			
-			include("modules/ad.php");
-		}
-		elseif($_SESSION["to_page"])
-		{
-			include("modules/ad.php");
-		}
 		else
 		{
 			if($patch['dir'] != "errors")
