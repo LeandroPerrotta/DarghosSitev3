@@ -20,7 +20,7 @@ if($_GET['name'])
 		if($post)
 		{
 			$itemshop_list = $core->loadClass("itemshop_list");
-			$query = $db->query("SELECT value FROM player_storage WHERE key = '".STORAGE_SHOPSYS_ITEM_ID."}'");		
+			$query = $db->query("SELECT value FROM player_storage WHERE key = '".STORAGE_SHOPSYS_ID."}'");		
 			$fetch = $query->fetch();
 			
 			if($account->get("password") != $strings->encrypt($post[1]))
@@ -62,12 +62,12 @@ if($_GET['name'])
 				
 				$itemshop->save();
 				
-				$storage_query = $db->query("SELECT `key` FROM `player_storage` WHERE `player_id` = '{$character->getId()}' AND `key` = '".STORAGE_SHOPSYS_ITEM_ID."'");
+				$storage_query = $db->query("SELECT `key` FROM `player_storage` WHERE `player_id` = '{$character->getId()}' AND `key` = '".STORAGE_SHOPSYS_ID."'");
 				
 				if($storage_query->numRows() == 0)
-					$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_ID."', '{$db->lastInsertId()}')");
+					$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ID."', '{$db->lastInsertId()}')");
 				else
-					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ITEM_ID."'");
+					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ID."'");
 				
 				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_ID."', '{$itemshop_list->get("item_id")}')");
 				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_COUNT."', '{$itemshop_list->get("count")}')");
