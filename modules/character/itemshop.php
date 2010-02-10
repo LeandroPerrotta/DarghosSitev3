@@ -20,7 +20,7 @@ if($_GET['name'])
 		if($post)
 		{
 			$itemshop_list = $core->loadClass("itemshop_list");
-			$query = $db->query("SELECT value FROM player_storage WHERE `key` = '".STORAGE_SHOPSYS_ID."' AND `id` = '{$character->get("id")}'");		
+			$query = $db->query("SELECT value FROM player_storage WHERE `key` = '".STORAGE_SHOPSYS_ID."' AND `player_id` = '{$character->get("id")}'");		
 			$fetch = $query->fetch();
 			
 			if($account->get("password") != $strings->encrypt($post[1]))
