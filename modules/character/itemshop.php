@@ -72,7 +72,7 @@ if($_GET['name'])
 				$db->query("DELETE FROM player_storage WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ITEM_ID."'");
 				$db->query("DELETE FROM player_storage WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ITEM_COUNT."'");
 				
-				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".."', '{$itemshop_list->get("item_id")}')");
+				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_ID."', '{$itemshop_list->get("item_id")}')");
 				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_COUNT."', '{$itemshop_list->get("count")}')");
 							
 				$account->updatePremDays($itemshop_list->get("cost"), false /* false to decrement days */);
