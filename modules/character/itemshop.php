@@ -31,7 +31,7 @@ if($_GET['name'])
 			{
 				$error = "Ouve um problema com a sua ultima compra que impede uma nova compra, por favor, entre em contato com um Gamemaster.";
 			}		
-			elseif($query->numRows() != 0 && $fetch->value != 0)
+			elseif($query->numRows() != 0 && $fetch->value > 0)
 			{
 				$error = "Você deve receber no jogo sua antiga compra em nosso item shop antes de efetuar uma nova compra.";
 			}			
@@ -69,7 +69,10 @@ if($_GET['name'])
 				else
 					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ID."'");
 				
-				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_ID."', '{$itemshop_list->get("item_id")}')");
+				$db->query("DELETE FROM player_storage WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ITEM_ID."'");
+				$db->query("DELETE FROM player_storage WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ITEM_COUNT."'");
+				
+				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".."', '{$itemshop_list->get("item_id")}')");
 				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_COUNT."', '{$itemshop_list->get("count")}')");
 							
 				$account->updatePremDays($itemshop_list->get("cost"), false /* false to decrement days */);
