@@ -28,7 +28,9 @@ define('SERVER_ID', 1);
 define('USEREMOTECONNECTIONS', 0);
 
 /* Entrega de item comprados no ItemShop  feita via Lua Scripts, baseado no StorageID do jogador */
-define('STORAGE_ID_ITEMSHOP', 8987);
+define('STORAGE_SHOPSYS_ITEM_ID', 8985);
+define('STORAGE_SHOPSYS_ITEM_COUNT', 8986);
+define('STORAGE_SHOPSYS_ID', 8987);
 
 define('ENCRYPTION_TYPE', "md5");
 

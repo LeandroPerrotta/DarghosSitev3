@@ -21,7 +21,7 @@ if($query->numRows() != 0)
 		$itemshop_list = $core->loadClass("itemshop_list");
 		$itemshop_list->load($fetch->itemlist_id);		
 		
-		$status = $_itemshopstatus[$fetch->received];
+		//$status = $_itemshopstatus[$fetch->received];
 		
 		$module .= "
 		<tr>

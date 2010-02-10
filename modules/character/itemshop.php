@@ -20,16 +20,21 @@ if($_GET['name'])
 		if($post)
 		{
 			$itemshop_list = $core->loadClass("itemshop_list");
-			$query = $db->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
+			$query = $db->query("SELECT value FROM player_storage WHERE key = '".STORAGE_SHOPSYS_ITEM_ID."}'");		
+			$fetch = $query->fetch();
 			
 			if($account->get("password") != $strings->encrypt($post[1]))
 			{
 				$error = "Confirmação da senha falhou.";
 			}	
-			elseif($query->numRows() != 0)
+			elseif($query->numRows() != 0 && $fetch->value == 0)
 			{
-				$error = "Você deve efetuar um login no jogo para receber o item de sua ultima compra antes de efetuar uma nova compra.";
-			}
+				$error = "Ouve um problema com a sua ultima compra que impede uma nova compra, por favor, entre em contato com um Gamemaster.";
+			}		
+			elseif($query->numRows() != 0 && $fetch->value != 0)
+			{
+				$error = "Você deve receber no jogo sua antiga compra em nosso item shop antes de efetuar uma nova compra.";
+			}			
 			elseif($character->getOnline() == 1)		
 			{
 				$error = "É nessario estar off-line no jogo para efetuar a compra de um item.";
@@ -57,13 +62,16 @@ if($_GET['name'])
 				
 				$itemshop->save();
 				
-				$storage_query = $db->query("SELECT `key` FROM `player_storage` WHERE `player_id` = '{$character->getId()}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
+				$storage_query = $db->query("SELECT `key` FROM `player_storage` WHERE `player_id` = '{$character->getId()}' AND `key` = '".STORAGE_SHOPSYS_ITEM_ID."'");
 				
 				if($storage_query->numRows() == 0)
-					$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db->lastInsertId()}')");
+					$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_ID."', '{$db->lastInsertId()}')");
 				else
-					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
-					
+					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_SHOPSYS_ITEM_ID."'");
+				
+				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_ID."', '{$itemshop_list->get("item_id")}')");
+				$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_SHOPSYS_ITEM_COUNT."', '{$itemshop_list->get("count")}')");
+							
 				$account->updatePremDays($itemshop_list->get("cost"), false /* false to decrement days */);
 				
 				$account->save();
