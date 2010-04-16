@@ -1,3 +1,3 @@
 <?
-$core->sendMessageBox("Erro!", "Para visualizar esta pagina é necessario possuir uma Conta Premium. Adquira já a sua!");
+Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_NEED_PREMIUM));
 ?>

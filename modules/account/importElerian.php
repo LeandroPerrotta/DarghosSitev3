@@ -2,7 +2,7 @@
 $db_elerian = new MySQL();
 $db_elerian->connect("localhost", "other", "***REMOVED***", "eleriannew");
 
-$post = $core->extractPost();
+$post = Core::extractPost();
 
 if($_SESSION['loginElerian'])
 {
@@ -16,7 +16,7 @@ if($_SESSION['loginElerian'])
 
 		if($leftDays > 0)
 		{
-			$account = $core->loadClass("account");
+			$account = new Account();
 			$account->load($_SESSION["login"][0]);
 			
 			$account->updatePremDays($leftDays);		
@@ -24,7 +24,7 @@ if($_SESSION['loginElerian'])
 			
 			$db_elerian->query("UPDATE accounts SET premend = '0' WHERE id = '{$_SESSION['loginElerian'][0]}'");
 			
-			$core->sendMessageBox("Sucesso!", "A sua conta recebeu {$leftDays} dias de Conta Premium importado de sua antiga conta de Elerian!");
+			Core::sendMessageBox("Sucesso!", "A sua conta recebeu {$leftDays} dias de Conta Premium importado de sua antiga conta de Elerian!");
 		}
 	}
 	elseif($_GET["action"] == "importOrder")
@@ -35,12 +35,12 @@ if($_SESSION['loginElerian'])
 		
 		$db_contr->query("UPDATE orders SET target_account = '{$_SESSION["login"][0]}', server = '1' WHERE md5(id) = '{$orderId}'");
 	
-		$core->sendMessageBox("Sucesso!", "O seu antigo pedido de Elerian foi transferido para esta conta com sucesso!");
+		Core::sendMessageBox("Sucesso!", "O seu antigo pedido de Elerian foi transferido para esta conta com sucesso!");
 	}
 	elseif($_GET["action"] == "logout")
 	{
 		unset($_SESSION['loginElerian']);
-		$core->redirect("?ref=account.importElerian");
+		Core::redirect("?ref=account.importElerian");
 	}	
 	else
 	{
@@ -60,7 +60,7 @@ if($_SESSION['loginElerian'])
 		else
 		{
 			$module .= "
-				<p>A sua conta {$acc_fetch->name} em Elerian não possuia Conta Premium.</p>
+				<p>A sua conta {$acc_fetch->name} em Elerian nï¿½o possuia Conta Premium.</p>
 			";			
 		}
 		
@@ -78,14 +78,14 @@ if($_SESSION['loginElerian'])
 			while($fetch = $query_contr->fetch())
 			{
 				$module .= "
-					<p>Pedido {$fetch->id} em {$core->formatDate($fetch->generated_in)} para {$fetch->period} dias. <a href='?ref=account.importElerian&action=importOrder&id=".md5($fetch->id)."'>Transferir pedido</a>.</p>
+					<p>Pedido {$fetch->id} em {Core::formatDate($fetch->generated_in)} para {$fetch->period} dias. <a href='?ref=account.importElerian&action=importOrder&id=".md5($fetch->id)."'>Transferir pedido</a>.</p>
 				";			
 			}
 		}
 		else
 		{
 			$module .= "
-				<p>A sua conta {$query->fetch()->name} em Elerian não possui nenhum pedido pendente a aceitação.</p>
+				<p>A sua conta {$query->fetch()->name} em Elerian nï¿½o possui nenhum pedido pendente a aceitaï¿½ï¿½o.</p>
 			";			
 		}	
 
@@ -96,37 +96,37 @@ else
 {
 	if($post)
 	{
-		$query = $db_elerian->query("SELECT id, password, premend FROM accounts WHERE name = '{$strings->SQLInjection($_POST['elerian_account'])}'");	
+		$query = $db_elerian->query("SELECT id, password, premend FROM accounts WHERE name = '".Strings::SQLInjection($_POST['elerian_account'])."'");	
 		$fetch = $query->fetch();
 		
 		if($query->numRows() == 0)
 		{
-			$error = "Esta conta não existia em Elerian ou a senha está incorreta.";
+			$error = "Esta conta nï¿½o existia em Elerian ou a senha estï¿½ incorreta.";
 		}
-		elseif($fetch->password != $strings->encrypt($_POST['elerian_password']))
+		elseif($fetch->password != Strings::encrypt($_POST['elerian_password']))
 		{
-			$error = "Esta conta não existia em Elerian ou a senha está incorreta.";
+			$error = "Esta conta nï¿½o existia em Elerian ou a senha estï¿½ incorreta.";
 		}			
 		else
 		{								
 			$_SESSION['loginElerian'][0] = $fetch->id;
 			$_SESSION['loginElerian'][1] = $fetch->password;
 			
-			$core->redirect("?ref=account.importElerian");
+			Core::redirect("?ref=account.importElerian");
 		}
 	}
 	
 
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox("Erro!", $error);
 	}
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
-		<p>Com este recurso você poderá importar sua Conta Premium em andamento de Elerian para esta conta no novo Darghos. Ou ainda importar um pedido pendente de aceitação. Abaixo preencha os campos com o seu antigo login de Elerian para que o sistema rastreie as operações possiveis para sua conta.</p>	
+		<p>Com este recurso vocï¿½ poderï¿½ importar sua Conta Premium em andamento de Elerian para esta conta no novo Darghos. Ou ainda importar um pedido pendente de aceitaï¿½ï¿½o. Abaixo preencha os campos com o seu antigo login de Elerian para que o sistema rastreie as operaï¿½ï¿½es possiveis para sua conta.</p>	
 		
 		<p>
 			<label for="elerian_account">Elerian Numero/Nome da Conta</label><br />

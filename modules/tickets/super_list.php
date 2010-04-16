@@ -1,14 +1,13 @@
 <?
 	include("classes/tickets.php");	
 
-	$core->extractPost();
+	Core::extractPost();
 	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 
 	if($account->getGroup() >= 4){
 	
-		$string  = $core->loadClass("Strings");
 		$get 	 = $_GET["state"];
 		
 		if($get == "closeds")
@@ -19,7 +18,7 @@
 		else 
 		{
 			$query = $db->query("SELECT id FROM wb_tickets WHERE closed = 0 ORDER by send_date DESC");
-			$central = "<p><a href='?ref=tickets.super_list&state=closeds'>Ver tickets Fechados</a></p><p>Tickets aguardando resposta. Use um português adequado para responder o mesmo.</p>";
+			$central = "<p><a href='?ref=tickets.super_list&state=closeds'>Ver tickets Fechados</a></p><p>Tickets aguardando resposta. Use um portuguï¿½s adequado para responder o mesmo.</p>";
 		}
 		$module .=	"
 			
@@ -63,7 +62,7 @@
 				$player->load($player_id);
 				$player_name = $player->getName();
 			}
-			//não há um personagem, então usamos o personagem com nivel mais alto da conta
+			//nï¿½o hï¿½ um personagem, entï¿½o usamos o personagem com nivel mais alto da conta
 			else
 			{
 				$_ticketAccount = new Account();
@@ -76,7 +75,7 @@
 			
 			$module .= "
 				<tr>
-					<td class='name'>{$url}</td><td>{$core->formatDate($ticket->getSendDate())}</td><td>$type</td><td>{$player_name}</td>
+					<td class='name'>{$url}</td><td>{Core::formatDate($ticket->getSendDate())}</td><td>$type</td><td>{$player_name}</td>
 				</tr>
 			";
 		}

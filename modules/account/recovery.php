@@ -1,50 +1,50 @@
 <?php
-$post = $core->extractPost();
+$post = Core::extractPost();
 
 if($_GET['key'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	
 	if(!$account->checkChangePasswordKey($_GET['key']))
 	{
-		$error = $boxMessage['CHANGE_PASSWORD_KEY_NOT_FOUND'];
+		$error = Lang::Message(LMSG_RECOVERY_WRONG_KEY);
 	}
 	else
 	{
-		$password = $strings->randKey(8, 1, "lower+number");
+		$password = Strings::randKey(8, 1, "lower+number");
 
 		//argumentos para e-mail
 		$_arg = array();
 		$_arg[] = $password;		
 		
-		if(!$core->mail(EMAIL_RECOVERY_PASSWORD, $account->getEmail(), $_arg))
+		if(!Core::mail(EMAIL_RECOVERY_PASSWORD, $account->getEmail(), $_arg))
 		{
-			$error = $boxMessage['FAIL_SEND_EMAIL'];
+			$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 		}		
 		else	
 		{		
-			$account->setPassword($strings->encrypt($password));
+			$account->setPassword(Strings::encrypt($password));
 			$account->save();
 			
-			$success = $boxMessage['SUCCESS.RECOVERY_PASSWORD'];				
+			$success = Lang::Message(LMSG_RECOVERY_NEWPASS_SEND);				
 		}	
 	}
 	
 	if($success)	
 	{
-		$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+		Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 	}
 	else
 	{
-		$core->sendMessageBox($boxMessage['ERROR'], $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}	
 }
 else
 {
 	if($post)
 	{	
-		$account = $core->loadClass("Account");
-		$character = $core->loadClass("Character");
+		$account = new Account();
+		$character = new Character();
 		
 		$loadEmail = $account->loadByEmail($_POST['recovery_email']);
 		$characterList = $account->getCharacterList();
@@ -56,90 +56,89 @@ else
 		
 		if($_POST['recovery_information'] != 4 and (!$_POST['recovery_name'] or !$_POST['recovery_email']))
 		{
-			$error = $boxMessage['INCOMPLETE_FORM'];
+			$error = Lang::Message(LMSG_FILL_FORM);
 		}	
 		elseif($_POST['recovery_information'] != 4 and !$loadEmail)
 		{
-			$error = $boxMessage['NONE_ACCOUNT_FOR_THIS_EMAIL'];
+			$error = Lang::Message(LMSG_RECOVERY_UNKNOWN_EMAIL);
 		}
 		elseif($_POST['recovery_information'] != 4 and !in_array($_POST['recovery_name'], $characterList))
 		{
-			//echo print_r($characterList);
-			$error = $boxMessage['CHARACTER_NOT_FROM_EMAIL'];
+			$error = Lang::Message(LMSG_RECOVERY_UNKNOWN_CHARACTER);
 		}
 		else
 		{		
-			/* RECUPERAÇÃO DO NUMERO DA CONTA */
+			/* RECUPERAÃ‡ÃƒO DO NUMERO DA CONTA */
 			if($_POST['recovery_information'] == 1)
 			{
 				//argumentos para e-mail
 				$_arg = array();
 				$_arg[] = $account->getName();
 				
-				if(!$core->mail(EMAIL_RECOVERY_ACCOUNT, $account->getEmail(), $_arg))
+				if(!Core::mail(EMAIL_RECOVERY_ACCOUNT, $account->getEmail(), $_arg))
 				{
-					$error = $boxMessage['FAIL_SEND_EMAIL'];
+					$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 				}		
 				else	
 				{				
-					$success = $boxMessage['SUCCESS.ACCOUNT_NAME_SENDED'];		
+					$success = Lang::Message(LMSG_RECOVERY_ACCOUNT_NAME_SEND);		
 				}
 			}
-			/* RECUPERAÇÃO DA SENHA DA CONTA */
+			/* RECUPERAÃ‡ÃƒO DA SENHA DA CONTA */
 			elseif($_POST['recovery_information'] == 2)
 			{
-				$key = $strings->randKey(8, 1, "number");
+				$key = Strings::randKey(8, 1, "number");
 				
 				//argumentos para e-mail
 				$_arg = array();
 				$_arg[] = $key;			
 				
-				if(!$core->mail(EMAIL_RECOVERY_PASSWORDKEY, $account->getEmail(), $_arg))
+				if(!Core::mail(EMAIL_RECOVERY_PASSWORDKEY, $account->getEmail(), $_arg))
 				{
-					$error = $boxMessage['FAIL_SEND_EMAIL'];
+					$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 				}		
 				else	
 				{
 					$account->setPasswordKey($key);
 					
-					$success = $boxMessage['SUCCESS.PASSWORD_SENDED'];			
+					$success = Lang::Message(LMSG_RECOVERY_PASSWORD_SEND);			
 				}			
 			}
-			/* RECUPERAÇÃO DO NUMERO E SENHA DA CONTA */
+			/* RECUPERAÃ‡ÃƒO DO NUMERO E SENHA DA CONTA */
 			elseif($_POST['recovery_information'] == 3)
 			{
-				$key = $strings->randKey(8, 1, "number");
+				$key = Strings::randKey(8, 1, "number");
 				
 				//argumentos para e-mail
 				$_arg = array();
 				$_arg[] = $account->getName();
 				$_arg[] = $key;			
 				
-				if(!$core->mail(EMAIL_RECOVERY_BOTH, $account->getEmail(), $_arg))
+				if(!Core::mail(EMAIL_RECOVERY_BOTH, $account->getEmail(), $_arg))
 				{
-					$error = $boxMessage['FAIL_SEND_EMAIL'];
+					$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 				}		
 				else	
 				{
 					$account->setPasswordKey($key);
 					
-					$success = $boxMessage['SUCCESS.BOTH_SENDED'];		
+					$success = Lang::Message(LMSG_RECOVERY_BOTH_SEND);		
 				}			
 			}	
 			elseif($_POST['recovery_information'] == 4)
 			{
 				if(!$_POST['recovery_name'])
 				{
-					$error = $boxMessage['CHARACTER_NAME_NEEDED'];
+					$error = Lang::Message(LMSG_RECOVERY_FILL_CHARACTER_NAME);
 				}					
 				elseif(!$character->loadByName($_POST['recovery_name']))
 				{
-					$error = $boxMessage['CHARACTER_NOT_FOUND'];
+					$error = Lang::Message(LMSG_CHARACTER_WRONG);
 				}
 				else
 				{
 					$_SESSION['recovery'][] = $_POST['recovery_name'];
-					$core->redirect("index.php?ref=account.advanced_recovery");	
+					Core::redirect("index.php?ref=account.advanced_recovery");	
 				}		
 			}
 		}
@@ -147,13 +146,13 @@ else
 	
 	if($success)	
 	{
-		$core->sendMessageBox("Sucesso!", $success);
+		Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			$core->sendMessageBox("Erro!", $error);
+			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 		}
 		
 	$module .= '	

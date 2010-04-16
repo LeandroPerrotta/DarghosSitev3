@@ -2,18 +2,17 @@
 	
 	include("classes/tickets.php");
 
-	$core->extractPost();
+	Core::extractPost();
 	$view = $_GET["id"];
 	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	$account_id = $account->getId();
 
 	if($account->getGroup() >= 4)
 	{			
 		$ticket  = new Tickets();
-		$string  = $core->loadClass("Strings");
-		
+				
 		if(!$_POST['another_ticket'])
 		{
 			
@@ -22,7 +21,7 @@
 		{
 			$_account 	= $account->getId();
 			$_player	= $account->getHighCharacter();
-			$_main		= $string->SQLInjection($_POST['another_ticket']);
+			$_main		= Strings::SQLInjection($_POST['another_ticket']);
 			
 			$character 	= new Character();
 			$character->loadByName($_player);
@@ -41,12 +40,12 @@
 			$ticket->sendAnotherReply(0, $view, $_main, $_name, time());
 			$ticket->setUpdate($view, $is_new);
 			
-			$success = "Você enviou uma resposta ao ticket {$ticket->getTitle()}.";
+			$success = "Vocï¿½ enviou uma resposta ao ticket {$ticket->getTitle()}.";
 		}
 	
 		if($success)	
 		{
-			$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+			Core::sendMessageBox($boxMessage['SUCCESS'], $success);
 	
 		}
 		
@@ -70,7 +69,7 @@
 					
 				$module .= "
 					<p align='center'> 
-						<font color='red'>Atenção:</font> Você está no modo de visualização para membros de suporte, você poderá responder o ticket. Por favor use um português Não-Slash nas respostas.
+						<font color='red'>Atenï¿½ï¿½o:</font> Vocï¿½ estï¿½ no modo de visualizaï¿½ï¿½o para membros de suporte, vocï¿½ poderï¿½ responder o ticket. Por favor use um portuguï¿½s Nï¿½o-Slash nas respostas.
 					</p>
 					<p align='center'> 
 						<a href='?ref=tickets.super_view&id={$view}'>Atualizar Ticket</a> | {$str}
@@ -97,15 +96,15 @@
 					</tr>		
 
 					<tr>
-						<td width='15%'><b>Refêrencia</b></td> <td>{$ticketAttachment}</td>
+						<td width='15%'><b>Refï¿½rencia</b></td> <td>{$ticketAttachment}</td>
 					</tr>						
 					
 					<tr>
-						<td width='15%'><b>Enviado:</b></td><td width='85%'>{$core->formatDate($ticket->getSendDate())}</td>
+						<td width='15%'><b>Enviado:</b></td><td width='85%'>{Core::formatDate($ticket->getSendDate())}</td>
 					</tr>
 					
 					<tr height='50px'>
-						<td width='15%'><b>Conteúdo</b></td> <td>".nl2br(stripslashes($ticket->getQuestion()))."</td>
+						<td width='15%'><b>Conteï¿½do</b></td> <td>".nl2br(stripslashes($ticket->getQuestion()))."</td>
 					</tr>
 					
 					<tr>
@@ -125,7 +124,7 @@
 				{		
 					$module .= "
 						<tr>
-							<th> Enviado em  {$core->formatDate($fetch->send_date)} por: {$fetch->by_name} [<a href='?ref=tickets.super_view&kill_reply={$fetch->id}'>Excluir</a>]</th>
+							<th> Enviado em  {Core::formatDate($fetch->send_date)} por: {$fetch->by_name} [<a href='?ref=tickets.super_view&kill_reply={$fetch->id}'>Excluir</a>]</th>
 						</tr>
 						
 						<tr>
@@ -161,7 +160,7 @@
 			}
 			else 
 			{
-				$core->sendMessageBox("Erro", "Pagina não encontrada.");
+				Core::sendMessageBox("Erro", "Pagina nï¿½o encontrada.");
 			}
 		}
 	
@@ -170,7 +169,7 @@
 			$id2 = $_GET["kill_reply"];
 			
 			$ticket->killReply($id2);
-			$core->redirect("index.php?ref=tickets.super_view&id={$view}");	
+			Core::redirect("index.php?ref=tickets.super_view&id={$view}");	
 			
 		}	
 	}

@@ -1,16 +1,13 @@
 <?
 	
-	$core->extractPost();
+	Core::extractPost();
 	$view = $_GET["id"];
 	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	$account_id = $account->getId();
 	
-	$ticket  = $core->loadClass("Tickets");
-	$string  = $core->loadClass("Strings");
-
-	
+	$ticket  = new Tickets();	
 	
 	$query = $db->query("SELECT * FROM wb_tickets WHERE account = '{$account->getId()}' AND id = '{$_GET["id"]}' ORDER by send_date DESC");
 	
@@ -24,8 +21,8 @@
 	{
 		$_account 	= $account->getId();
 		$_player	= $account->getHighCharacter();
-		$_main		= $string->SQLInjection($_POST['another_ticket']);
-		$character 	= $core->loadClass("Character");
+		$_main		= Strings::SQLInjection($_POST['another_ticket']);
+		$character 	= new Character();
 		$character->loadByName($_player);
 		
 		if($character->getGroup() >= 4)
@@ -42,13 +39,13 @@
 		$ticket->sendAnotherReply(0, $view, $_main, $_name, time());
 		$ticket->setUpdate($view, $is_new);
 		
-		$success = "Você adicionou uma nova menssagem ao ticket, aguarde algum membro de suporte responder o mesmo. <p>Atenciosamente,<br>Equipe Ultraxsoft. </p>";
+		$success = "Vocï¿½ adicionou uma nova menssagem ao ticket, aguarde algum membro de suporte responder o mesmo. <p>Atenciosamente,<br>Equipe Ultraxsoft. </p>";
 	}
 
 
 	if($success)	
 	{
-		$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+		Core::sendMessageBox($boxMessage['SUCCESS'], $success);
 
 	}
 	
@@ -82,15 +79,15 @@
 			</tr>		
 
 			<tr>
-				<td width='15%'><b>Refêrencia</b></td> <td>{$ticketAttachment}</td>
+				<td width='15%'><b>Refï¿½rencia</b></td> <td>{$ticketAttachment}</td>
 			</tr>					
 			
 			<tr>
-				<td width='15%'><b>Enviado:</b></td><td width='85%'>{$core->formatDate($ticket->getSendDate())}</td>
+				<td width='15%'><b>Enviado:</b></td><td width='85%'>{Core::formatDate($ticket->getSendDate())}</td>
 			</tr>
 			
 			<tr height='50px'>
-				<td width='15%'><b>Conteúdo</b></td> <td>".nl2br(stripslashes($ticket->getQuestion()))."</td>
+				<td width='15%'><b>Conteï¿½do</b></td> <td>".nl2br(stripslashes($ticket->getQuestion()))."</td>
 			</tr>
 			
 			<tr>
@@ -112,7 +109,7 @@
 			
 			$module .= "
 				<tr>
-					<th> Enviado em  {$core->formatDate($fetch->send_date)} por: {$fetch->by_name}</th>
+					<th> Enviado em  {Core::formatDate($fetch->send_date)} por: {$fetch->by_name}</th>
 				</tr>
 				
 				<tr>
@@ -148,7 +145,7 @@
 	}
 	else 
 	{
-		$core->sendMessageBox("Erro", "Pagina não encontrada.");
+		Core::sendMessageBox("Erro", "Pagina nï¿½o encontrada.");
 	}
 	
 	

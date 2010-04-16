@@ -3,14 +3,14 @@ $emailmodel[1] = "
 <html>
 <body>		
 <p>Prezado jogador,</p>
-<p>A sua conta no ".CONFIG_SITENAME." foi criada com sucesso! Memorize as informações acesso a sua conta abaixo:</p>
+<p>A sua conta no ".CONFIG_SITENAME." foi criada com sucesso! Memorize as informaÃ§Ãµes acesso a sua conta abaixo:</p>
 
 <p>
 	Nome da Conta: <b>".$emailvalue[0]."</b>.<br>
 	Chave de Acesso: <b>".$emailvalue[1]."</b>.
 </p>
 
-<p>Para você criar seu personagem basta acessar nosso website e acessar sua conta.</p>
+<p>Para vocÃª criar seu personagem basta acessar nosso website e acessar sua conta.</p>
 
 <p>Para acessar sua conta clique <a href='".CONFIG_SITEEMAIL."/index.php?ref=account.login'><b>aqui</b></a>.</p>
 
@@ -24,7 +24,7 @@ $emailmodel[2] = "
 <html>
 <body>		
 <p>Prezado jogador,</p>
-<p>O nome de sua conta foi recuperado com sucesso! Por favor, memorize o nome de sua conta para sua segurança.</p>
+<p>O nome de sua conta foi recuperado com sucesso! Por favor, memorize o nome de sua conta para sua seguranÃ§a.</p>
 
 <p>
 	Nome da Conta: <b>".$emailvalue[0]."</b>.<br>
@@ -58,7 +58,7 @@ $emailmodel[4] = "
 <html>
 <body>		
 <p>Prezado jogador,</p>
-<p>O nome de sua conta foi recuperado com sucesso! Por favor, memorize este nome para segurança de sua conta. Clique no link abaixo para receber o e-mail com a sua nova senha.</p>
+<p>O nome de sua conta foi recuperado com sucesso! Por favor, memorize este nome para seguranÃ§a de sua conta. Clique no link abaixo para receber o e-mail com a sua nova senha.</p>
 
 <p>
 	Nome da Conta: <b>".$emailvalue[0]."</b>.<br>
@@ -90,8 +90,8 @@ $emailmodel[5] = "
 ";
 
 $emailsubject[1] = "Conta criada com sucesso!";
-$emailsubject[2] = "Recuperação do nome de sua Conta!";
-$emailsubject[3] = "Recuperação da senha de sua Conta!";
-$emailsubject[4] = "Recuperação do nome e senha de sua Conta!";
-$emailsubject[5] = "Recuperação da senha de sua Conta!";
+$emailsubject[2] = "RecuperaÃ§Ã£o do nome de sua Conta!";
+$emailsubject[3] = "RecuperaÃ§Ã£o da senha de sua Conta!";
+$emailsubject[4] = "RecuperaÃ§Ã£o do nome e senha de sua Conta!";
+$emailsubject[5] = "RecuperaÃ§Ã£o da senha de sua Conta!";
 ?>

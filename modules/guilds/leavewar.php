@@ -1,24 +1,24 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{	
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");		
+		Core::sendMessageBox("Erro!", "Esta guilda nï¿½o existe em nosso banco de dados.");		
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 1)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");	
+		Core::sendMessageBox("Erro!", "Vocï¿½ nï¿½o tem permissï¿½o para acessar estï¿½ pagina.");	
 	}	
 	else
 	{		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{			
 			$guild->loadRanks();
@@ -26,13 +26,13 @@ if($_GET['name'])
 			
 			$members = $guild->getMembersList();
 			
-			if($account->get("password") != $strings->encrypt($post[0]))
+			if($account->get("password") != Strings::encrypt($post[0]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = "Confirmaï¿½ï¿½o da senha falhou.";
 			}
 			elseif($guild->isOnWar())
 			{
-				$error = "Sua guild está em modo de guerra, só será possivel sair do mesmo, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
+				$error = "Sua guild estï¿½ em modo de guerra, sï¿½ serï¿½ possivel sair do mesmo, no dia <b>".Core::formatDate($guild->getWarEnd())."</b>.";
 			}
 			else
 			{				
@@ -40,7 +40,7 @@ if($_GET['name'])
 				
 				$success = "
 				<p>Caro jogador,</p>
-				<p>A guilda {$_GET['name']} foi retirada do modo de guerra com sucesso. Agora sua guilda é pacifica, e terá todos assassinatos injustificados.</p>
+				<p>A guilda {$_GET['name']} foi retirada do modo de guerra com sucesso. Agora sua guilda ï¿½ pacifica, e terï¿½ todos assassinatos injustificados.</p>
 				<p>Tenha um bom jogo!</p>
 				";
 			}
@@ -48,13 +48,13 @@ if($_GET['name'])
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox("Sucesso!", $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox("Erro!", $error);
 			}
 			
 		$module .=	'
@@ -62,7 +62,7 @@ if($_GET['name'])
 				<fieldset>
 
 					<p>
-						Você está optando por tirar sua guilda do modo de guerra. Se você tiver certeza dessa decisão, confirme sua senha abaixo.
+						Vocï¿½ estï¿½ optando por tirar sua guilda do modo de guerra. Se vocï¿½ tiver certeza dessa decisï¿½o, confirme sua senha abaixo.
 									
 					</p>	
 			

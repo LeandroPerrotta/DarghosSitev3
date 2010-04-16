@@ -2,18 +2,17 @@
 	$module .=	"
 
 		<p>
-			Caro jogador, o sistema de Tickets foi momentaneamente desativado para que seja efetuadas algumas melhorias no sistema, tais melhorarias permitirão a equipe responder todos tickets de forma mais rápida e eficaz. Caso você tenha algum problema com relação a Conta Premium, Bugs, etc você ainda pode nos contactar atravez dos nossos emails: <b>premium@darghos.com</b> (para assuntos relacionados a premium) e <b>suporte@darghos.com</b> (para assuntos gerais). Obrigado pela sua compreensão.
+			Caro jogador, o sistema de Tickets foi momentaneamente desativado para que seja efetuadas algumas melhorias no sistema, tais melhorarias permitirï¿½o a equipe responder todos tickets de forma mais rï¿½pida e eficaz. Caso vocï¿½ tenha algum problema com relaï¿½ï¿½o a Conta Premium, Bugs, etc vocï¿½ ainda pode nos contactar atravez dos nossos emails: <b>premium@darghos.com</b> (para assuntos relacionados a premium) e <b>suporte@darghos.com</b> (para assuntos gerais). Obrigado pela sua compreensï¿½o.
 		</p>
 	";
 
 	/*
-	$core->extractPost();
+	Core::extractPost();
 	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$ticket  = $core->loadClass("Tickets");
-	$string  = $core->loadClass("Strings");
+	$ticket  = new Tickets();
 	
 	$query = $db->query("SELECT id FROM wb_tickets WHERE account = '{$account->getId()}' ORDER by send_date DESC");
 	
@@ -21,7 +20,7 @@
 	$module .=	"
 
 		<p>
-			Abaixo você poderá visualizar o andamento de seus tickets. Lembre-se de que qualquer atitude inaceitável dentro dos tickets, pode resultar em um alerta em sua conta, ou ate mesmo o banimento da mesma.
+			Abaixo vocï¿½ poderï¿½ visualizar o andamento de seus tickets. Lembre-se de que qualquer atitude inaceitï¿½vel dentro dos tickets, pode resultar em um alerta em sua conta, ou ate mesmo o banimento da mesma.
 		</p>
 	";
 
@@ -36,7 +35,7 @@
 	
 while($fetch = $query->fetch())
 {
-	$ticket = $core->loadClass("Tickets");
+	$ticket = new Tickets();
 	$ticket->load($fetch->id);
 	
 	$type = Tools::GetTicketTypeName($ticket->getType());;	
@@ -62,7 +61,7 @@ while($fetch = $query->fetch())
 	
 	$module .= "
 		<tr>
-			<td class='name'><a href='?ref=tickets.view&id={$ticket->getID()}'>{$titulo}</a></td><td>{$core->formatDate($ticket->getSendDate())}</td><td>$type</td><td>$state</td>
+			<td class='name'><a href='?ref=tickets.view&id={$ticket->getID()}'>{$titulo}</a></td><td>{Core::formatDate($ticket->getSendDate())}</td><td>$type</td><td>$state</td>
 		</tr>
 	";
 }

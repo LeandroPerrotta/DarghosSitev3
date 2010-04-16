@@ -1,21 +1,21 @@
 <?
 class Strings
 {
-	private $db;
-
-	function __construct()
+	private static $db;
+	
+	static function Init()
 	{
 		global $db;
-		$this->db = $db;
+		self::$db = $db;
 	}
-
-	function filterInputs($checkGets = false)
+	
+	static function filterInputs($checkGets = false)
 	{
 		if($_POST)
 		{
 			foreach($_POST as $post => $value)
 			{
-				$_POST[$post] = $this->SQLInjection($value);
+				$_POST[$post] = self::SQLInjection($value);
 			}
 		}
 	
@@ -23,14 +23,14 @@ class Strings
 		{
 			foreach($_GET as $get => $value)
 			{
-				$_GET[$get] = $this->SQLInjection($value);	
+				$_GET[$get] = self::SQLInjection($value);	
 			}		
 		}
 
 		return true;	
 	}
 	
-	function SQLInjection($string)
+	static function SQLInjection($string)
 	{
 		//$string = nl2br($string);
 	    //$string = get_magic_quotes_gpc() ? stripslashes($string) : $string;
@@ -42,7 +42,7 @@ class Strings
 	    return $string;		
 	}
 	
-	function randKey($tamanho, $separadores, $randTypeElement = "default") 
+	static function randKey($tamanho, $separadores, $randTypeElement = "default") 
 	{ 
 		$options['upper'] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		$options['lower'] = "abcdefghijklmnopqrstuvwxyz";
@@ -82,7 +82,7 @@ class Strings
 		return $string;
 	}		
 	
-	function validEmail($email) 
+	static function validEmail($email) 
 	{ 
 	    $e = explode("@",$email); 
 	    if(count($e) <= 1) 
@@ -105,9 +105,9 @@ class Strings
     	return false;
 	}
 	
-	function isFromBlackList($string)
+	static function isFromBlackList($string)
 	{
-		$query = $this->db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blackliststrings");
+		$query = self::$db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blackliststrings");
 		
 		while($fetch = $query->fetch())
 		{
@@ -118,7 +118,7 @@ class Strings
 		return true;
 	}
 	
-	function encrypt($string)
+	static function encrypt($string)
 	{
 		switch(ENCRYPTION_TYPE)
 		{
@@ -130,14 +130,14 @@ class Strings
 		return $enc;
 	}	
 	
-	function canUseName($nameString, $checkBlackList = true)
+	static function canUseName($nameString, $checkBlackList = true)
 	{
 		if(trim($nameString) != $nameString)
 			return false;	
 		
 		$palavras = explode(" ", $nameString);
 		
-		if($checkBlackList and !$this->isFromBlackList($nameString))
+		if($checkBlackList and !self::isFromBlackList($nameString))
 			return false;
 		
 		if(count($palavras) > 3)

@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 		
 		<title><? echo CONFIG_SITENAME; ?></title>
 		
@@ -14,7 +14,7 @@
 	<body>
 		<div id="wrapper">
 			<div id="wrapper_b">
-				<h1><span><? echo CONFIG_SITENAME; ?></span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
+				<h1><span><? echo CONFIG_SITENAME; ?></span></h1> <!-- tudo que ficar dentro de <span> serï¿½ escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
 				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de Conta Premium! Confira!</marquee></p>
 				
@@ -22,7 +22,7 @@
 					<div id="left">
 						<ul>
 							<li>
-								<div><strong>Navegação</strong></div>
+								<div><strong>NavegaÃ§Ã£o</strong></div>
 							</li>
 							
 														
@@ -38,7 +38,7 @@
 					
 					<div id="right">
 					
-						<h2>Manutenção</h2>			
+						<h2>ManutenÃ§Ã£o</h2>			
 						
 						<div>
 							<? echo $module; ?>

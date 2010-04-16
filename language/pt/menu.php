@@ -1,12 +1,12 @@
 <?php
-$menu = array();
+global $menu;
 
-$menu['NAVIGATION'] = "Navegação";
-$menu['LAST_NEWS'] = "Últimas Notícias";
+$menu['NAVIGATION'] = "NavegaÃ§Ã£o";
+$menu['LAST_NEWS'] = "Ãšltimas NotÃ­cias";
 $menu['ABOUT'] = "Sobre o ".CONFIG_SITENAME."";
 $menu['FAQ'] = "".CONFIG_SITENAME." FAQ";
 $menu['HOW_PLAY'] = "Como Jogar?";
-$menu['LIBRARY'] = "Darghopédia";
+$menu['LIBRARY'] = "DarghopÃ©dia";
 
 $menu['ACCOUNTS'] = "Contas";
 $menu['ACCOUNT.REGISTER'] = "Registrar-se";
@@ -31,8 +31,8 @@ $menu['COMMUNITY.CHARACTERS'] = "Personagens";
 $menu['COMMUNITY.HIGHSCORES'] = "Highscores";
 $menu['COMMUNITY.GUILDS'] = "Guildas";
 $menu['COMMUNITY.HOUSES'] = "Casas";
-$menu['COMMUNITY.LAST_DEATHS'] = "Últimas Mortes";
+$menu['COMMUNITY.LAST_DEATHS'] = "Ãšltimas Mortes";
 
 $menu['STATUS'] = "Server Status";
-$menu['STATUS.WHO_IS_ONLINE'] = "Quem está Online?";
+$menu['STATUS.WHO_IS_ONLINE'] = "Quem estÃ¡ Online?";
 ?>

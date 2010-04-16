@@ -1,10 +1,10 @@
 <?php
 if(isset($_POST['character_name']))
 {
-	$core->redirect("?ref=character.itemshop&name={$_POST['character_name']}");
+	Core::redirect("?ref=character.itemshop&name={$_POST['character_name']}");
 }
 
-$account = $core->loadClass("Account");
+$account = new Account();
 $account->load($_SESSION['login'][0], "password, premdays, lastday, type");
 
 $list = $account->getCharacterList();
@@ -13,47 +13,47 @@ if($_GET['name'])
 {
 	if(in_array($_GET['name'], $list))
 	{
-		$character = $core->loadClass("character");
+		$character = new Character();
 		$character->loadByName($_GET['name'], "name, online");
 		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{
-			$itemshop_list = $core->loadClass("itemshop_list");
+			$itemshop_list = new ItemShop_List();
 			$query = $db->query("SELECT value FROM player_storage WHERE `key` = '".STORAGE_SHOPSYS_ID."' AND `player_id` = '{$character->get("id")}'");		
 			$fetch = $query->fetch();
 			
-			if($account->get("password") != $strings->encrypt($post[1]))
+			if($account->get("password") != Strings::encrypt($post[1]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
 			elseif($query->numRows() != 0 && $fetch->value == 0)
 			{
-				$error = "Ouve um problema com a sua ultima compra que impede uma nova compra, por favor, entre em contato com um Gamemaster.";
+				$error = Lang::Message(LMSG_REPORT);
 			}		
 			elseif($query->numRows() != 0 && $fetch->value > 0)
 			{
-				$error = "Você deve receber no jogo sua antiga compra em nosso item shop antes de efetuar uma nova compra.";
+				$error = Lang::Message(LMSG_ITEMSHOP_OLD_PURCHASE);
 			}			
 			elseif($character->getOnline() == 1)		
 			{
-				$error = "É nessario estar off-line no jogo para efetuar a compra de um item.";
+				$error = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
 			}			
 			elseif(!$itemshop_list->load($post[0]))		
 			{
-				$error = "Este item não existe.";
+				$error = Lang::Message(LMSG_REPORT);
 			}
 			elseif($itemshop_list->get("cost") > $account->getPremDays())
 			{
-				$error = "Você não possui os {$itemshop_list->get("cost")} dias de conta premium necessarios para obter este item.";
+				$error = Lang::Message(LMSG_ITEMSHOP_COST, $itemshop_list->get("cost"));
 			}
 			elseif($account->get("type") > 2 AND $account->get("type") < 5)
 			{
-				$error = "Esta conta não possui permissão para acessar este recurso.";
+				$error = Lang::Message(LMSG_REPORT);
 			}			
 			else
 			{
-				$itemshop = $core->loadClass("itemshop");
+				$itemshop = new ItemShop();
 				
 				$itemshop->set("player_id", $character->get("id"));
 				$itemshop->set("itemlist_id", $itemshop_list->get("id"));
@@ -79,24 +79,19 @@ if($_GET['name'])
 				
 				$account->save();
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A compra de {$itemshop_list->get("count")}x {$itemshop_list->get("name")} por {$itemshop_list->get("cost")} dias de sua conta premium foi efetuada com sucesso!</p>
-				<p>O seu item estará em sua backpack principal no proximo log-in.</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				$success = Lang::Message(LMSG_ITEMSHOP_PURCHASE_SUCCESS, $itemshop_list->get("count"), $itemshop_list->get("name"), $itemshop_list->get("cost"));
 			}					
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 		
 		$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
@@ -106,7 +101,7 @@ if($_GET['name'])
 				<fieldset>
 
 					<p>
-						Seja bem vindo ao '.CONFIG_SITENAME.' Item Shop. Aqui você pode obter um item no jogo em troca de dias de sua conta premium. Após concluir a compra o item será criado na sua backpack principal no proximo log-in dentro do jogo, em um processo completamente automatico. Tenha um bom jogo!
+						Seja bem vindo ao '.CONFIG_SITENAME.' Item Shop. Aqui vocÃª pode obter um item no jogo em troca de dias de sua conta premium. ApÃ³s concluir a compra o item serÃ¡ criado na sua backpack principal no proximo log-in dentro do jogo, em um processo completamente automatico. Tenha um bom jogo!
 					</p>				
 				
 					<p>
@@ -118,7 +113,7 @@ if($_GET['name'])
 					
 					<table cellspacing="0" cellpadding="0" id="table">
 						<tr>
-							<th width="3%">&nbsp </th> <th width="3%">&nbsp </th> <th width="30%">Item </th> <th width="45%">Descrição </th> <th>Preço </th>
+							<th width="3%">&nbsp </th> <th width="3%">&nbsp </th> <th width="30%">Item </th> <th width="45%">DescriÃ§Ã£o </th> <th>PreÃ§o </th>
 						</tr>					
 					';
 					
@@ -152,7 +147,7 @@ if($_GET['name'])
 	}
 	else
 	{		
-		$core->sendMessageBox("Erro!", "Este personagem não existe ou não é de sua conta.");	
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT));
 	}
 }
 else

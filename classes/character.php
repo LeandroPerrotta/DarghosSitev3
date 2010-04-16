@@ -194,14 +194,12 @@ class Character
 	
 	function setGuildNick($value)
 	{
-		global $strings;
-		$this->data['guildnick'] = $strings->SQLInjection($value);
+		$this->data['guildnick'] = Strings::SQLInjection($value);
 	}
 	
 	function setDescription($value)
 	{
-		global $strings;
-		$this->data['description'] = $strings->SQLInjection($value);
+		$this->data['description'] = Strings::SQLInjection($value);
 	}
 	
 	function setGuildJoinDate($value)
@@ -476,7 +474,7 @@ class Character
 			
 			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");		
 		}
-		//criação de novos personagens!!
+		//create new character!!
 		else
 		{
 			foreach($this->data as $field => $value)
@@ -533,10 +531,8 @@ class Character
 	{		
 		if($this->data["rank_id"] == 0)
 			return false;
-			
-		global $core;
 		
-		$guild = $core->loadClass("Guilds");
+		$guild = new Guilds();
 			
 		if($guild->loadByRank($this->data["rank_id"]))
 		{	
@@ -583,9 +579,7 @@ class Character
 		
 		if($guild_id)
 		{
-			global $core;
-			
-			$guild = $core->loadClass("Guilds");			
+			$guild = new Guilds();			
 			if($guild->load($guild_id))
 			{
 				$guild->loadRanks();
@@ -605,10 +599,8 @@ class Character
 	}
 	
 	function loadAccount($fields = null)
-	{
-		global $core;
-		
-		$account = $core->loadClass("Account");
+	{		
+		$account = new Guilds();
 		
 		if($fields)
 			$account->load($this->data["account_id"], $fields);

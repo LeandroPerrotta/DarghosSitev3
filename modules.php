@@ -5,7 +5,7 @@ list($module, $topic) = explode(".", $_GET['ref']);
 
 if(!in_array($_GET['ref'], $_inputsWhiteList))
 {
-	if($strings->filterInputs(true))
+	if(Strings::filterInputs(true))
 	{
 		$noInjection = true;
 	}	
@@ -17,7 +17,7 @@ else
 
 /*if($noInjection)
 {*/
-	$strings->filterInputs(true);
+	Strings::filterInputs(true);
 
 	$needLogin = false;
 	$needPremium = false;

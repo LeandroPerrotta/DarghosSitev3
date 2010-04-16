@@ -1,43 +1,43 @@
 <?
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != $strings->encrypt($post[1]))
+	if($account->get("password") != Strings::encrypt($post[1]))
 	{
-		$error = $boxMessage['CONFIRMATION_PASSWORD_FAIL'];
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
 	elseif($account->loadByEmail($post[0]))
 	{
-		$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
+		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 	}			
-	elseif(!$strings->validEmail($post[0]))
+	elseif(!Strings::validEmail($post[0]))
 	{
-		$error = $boxMessage['INVALID_EMAIL'];
+		$error = Lang::Message(LMSG_WRONG_EMAIL);
 	}
 	elseif(is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = $boxMessage['ACCOUNT_ALREADY_HAVE_CHANGE_EMAIL_REQUEST'];
+		$error = Lang::Message(LMSG_CHANGEEMAIL_ALREADY_HAVE_REQUEST);
 	}
 	else
 	{		
 		$account->addEmailToChange($post[0]);
 		$newemail = $account->getEmailToChange();
-		$success = $boxMessage['SUCCESS.CHANGE_EMAIL'];
+		$success = Lang::Message(LMSG_CHANGEEMAIL_SCHEDULED);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .= '

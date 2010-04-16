@@ -1,14 +1,13 @@
 <?
 	
-	$core->extractPost();
+	Core::extractPost();
 	$view = $_GET["id"];
 	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	$account_id = $account->getId();
 	
-	$ticket  = $core->loadClass("Tickets");
-	$string  = $core->loadClass("Strings");
+	$ticket  = new Tickets();
 
 	$query = $db->query("SELECT * FROM wb_tickets WHERE id = '{$_GET["id"]}' ORDER by send_date DESC");
 	
@@ -17,7 +16,7 @@
 	if($account->getGroup() > 4){
 		if($query->numRows() == 0)
 		{
-			$error = "Pagina não encontrada.";
+			$error = "Pagina nï¿½o encontrada.";
 		}
 		else
 		{
@@ -32,7 +31,7 @@
 
 		if($success)	
 		{
-			$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+			Core::sendMessageBox($boxMessage['SUCCESS'], $success);
 
 		}
 	}

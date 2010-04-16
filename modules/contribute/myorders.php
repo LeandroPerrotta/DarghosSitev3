@@ -1,5 +1,5 @@
 <?
-$contribute = $core->loadClass("Contribute");
+$contribute = new Contribute();
 
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
@@ -27,16 +27,16 @@ if(is_array($oders))
 							<td><b>Personagem</b></td> <td>{$contribute->get("target")}</td>
 						</tr>	
 						<tr>
-							<td><b>Forma de Contribuição</b></td> <td>{$contribute->get("type")}</td>
+							<td><b>Forma de ContribuiÃ§Ã£o</b></td> <td>{$contribute->get("type")}</td>
 						</tr>	
 						<tr>
-							<td><b>Periodo</b></td> <td> Contribuição de {$contribute->get("period")} dias de Conta Premium.</td>
+							<td><b>Periodo</b></td> <td> ContribuiÃ§Ã£o de {$contribute->get("period")} dias de Conta Premium.</td>
 						</tr>
 						<tr>
 							<td><b>Custo</b></td> <td> {$contribute->get("cost")}</td>
 						</tr>	
 						<tr>
-							<td><b>Pedido Gerado em</b></td> <td> {$core->formatDate($contribute->get("generated_in"))}</td>
+							<td><b>Pedido Gerado em</b></td> <td> ".Core::formatDate($contribute->get("generated_in"))."</td>
 						</tr>																									
 						<tr>	
 							<td><b>Estado Atual</b></td> <td> {$status}</td>
@@ -53,7 +53,7 @@ if(is_array($oders))
 		<table cellspacing='0' cellpadding='0' class='dropdowntable'>
 		
 			<tr>
-				<th colspan='3'>Minhas Contribuições</th>
+				<th colspan='3'>Minhas ContribuiÃ§Ãµes</th>
 			</tr>
 						
 			$orderList
@@ -64,6 +64,6 @@ if(is_array($oders))
 }	
 else
 {
-	$module .= 'Não existe nenhum pedido gerado por sua conta.';
+	Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_ACCOUNT_HAS_NO_ORDERS));
 }
 ?>

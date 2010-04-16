@@ -2,23 +2,22 @@
 $module .=	"
 
 	<p>
-		Caro jogador, o sistema de Tickets foi momentaneamente desativado para que seja efetuadas algumas melhorias no sistema, tais melhorarias permitirão a equipe responder todos tickets de forma mais rápida e eficaz. Caso você tenha algum problema com relação a Conta Premium, Bugs, etc você ainda pode nos contactar atravez dos nossos emails: <b>premium@darghos.com</b> (para assuntos relacionados a premium) e <b>suporte@darghos.com</b> (para assuntos gerais). Obrigado pela sua compreensão.
+		Caro jogador, o sistema de Tickets foi momentaneamente desativado para que seja efetuadas algumas melhorias no sistema, tais melhorarias permitirï¿½o a equipe responder todos tickets de forma mais rï¿½pida e eficaz. Caso vocï¿½ tenha algum problema com relaï¿½ï¿½o a Conta Premium, Bugs, etc vocï¿½ ainda pode nos contactar atravez dos nossos emails: <b>premium@darghos.com</b> (para assuntos relacionados a premium) e <b>suporte@darghos.com</b> (para assuntos gerais). Obrigado pela sua compreensï¿½o.
 	</p>
 ";
 /*
 include("classes/contribute.php");
 
-$account = $core->loadClass("Account");
+$account = new Account();
 $account->load($_SESSION['login'][0]);
 
 $list = $account->getCharacterList();
 
 if($_POST)
 {	
-	$core->extractPost();
+	Core::extractPost();
 	
-	$ticket  = $core->loadClass("Tickets");
-	$string  = $core->loadClass("Strings");
+	$ticket  = new Tickets();
 	
 	if(!$_POST['ticket_title'] or !$_POST['ticket_main'])
 	{
@@ -27,7 +26,7 @@ if($_POST)
 	else
 	{
 		$_account 	= $account->getId();
-		$player = $core->loadClass("Character");
+		$player = new Character();
 		
 		if($_POST['type'] != 2)
 		{
@@ -39,8 +38,8 @@ if($_POST)
 			$_player	= $player->getId();	
 		}
 			
-		$_title		= $string->SQLInjection($_POST['ticket_title']);
-		$_main		= $string->SQLInjection($_POST['ticket_main']);
+		$_title		= Strings::SQLInjection($_POST['ticket_title']);
+		$_main		= Strings::SQLInjection($_POST['ticket_main']);
 		$_type		= $_POST['type'];
 
 		if($_POST['ticket_attachment'])
@@ -54,13 +53,13 @@ if($_POST)
 
 if($success)	
 {
-	$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+	Core::sendMessageBox($boxMessage['SUCCESS'], $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox($boxMessage['ERROR'], $error);
+		Core::sendMessageBox($boxMessage['ERROR'], $error);
 	}
 
 
@@ -81,7 +80,7 @@ else
 		{
 			$contribute->load($orderId, "id, name, target, type, period, cost, generated_in, status");	
 			
-			$ordersList .= "<option value='{$contribute->get("id")}'>{$contribute->get("id")} de {$contribute->get("cost")} em {$core->formatDate($contribute->get("generated_in"))}</option>";
+			$ordersList .= "<option value='{$contribute->get("id")}'>{$contribute->get("id")} de {$contribute->get("cost")} em {Core::formatDate($contribute->get("generated_in"))}</option>";
 		}
 	}
 	
@@ -123,7 +122,7 @@ $module .=	'
 				<p>
 					<label for="ticket_attachment">Imagem de Acompanhamento</label><br />
 					<input name="ticket_attachment" size="40" type="text" value="" />
-					<br /><em>Se possivel, para facilitar e agilizar a solução de seu ticket tire um print screen da tela na qual apresenta o problema e o coloque em um serviço de hospedagem de imagens (por exemplo o Imageshack: http://imageshack.us/). Após isso, cole o link fornecido pelo serviço para acessar a imagem neste campo e nós poderemos ver com maior clareza o problema.</em>
+					<br /><em>Se possivel, para facilitar e agilizar a soluï¿½ï¿½o de seu ticket tire um print screen da tela na qual apresenta o problema e o coloque em um serviï¿½o de hospedagem de imagens (por exemplo o Imageshack: http://imageshack.us/). Apï¿½s isso, cole o link fornecido pelo serviï¿½o para acessar a imagem neste campo e nï¿½s poderemos ver com maior clareza o problema.</em>
 				</p>	
 			
 			</div>		

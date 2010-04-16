@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 		
 		<title><? echo CONFIG_SITENAME; ?></title>
 		
@@ -18,7 +18,7 @@
 	
 		<div id="wrapper">
 			<div id="wrapper_b">
-				<h1><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
+				<h1><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> serÃ¡ escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
 				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de conta premium! Confira!</marquee></p>
 				
@@ -40,7 +40,7 @@
 							<?php 
 								$menudropdown['accounts']['status'] = null;
 								$menudropdown['accounts']['button'] = "tooglePlus";
-							
+								
 								if($_COOKIE['menudropdown_accounts'])
 								{ 
 									if($_COOKIE['menudropdown_accounts'] == "true")
@@ -144,8 +144,8 @@
 								<li>
 									<div><strong>Admin Panel</strong></div>
 									<ul class="always_viewable" >
-										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
-										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li>
+										<li><a href="?ref=adv.fastnews">Noticia RÃ¡pida </a></li>
+										<li><a href="?ref=adv.tutortest">QuestÃµes Tutortest </a></li>
 										<li><a href="?ref=tickets.super_list">Ticket System</a></li>	
 										<li><a href="?ref=adv.addprize">Permitir AdPage</a></li>	
 									</ul>

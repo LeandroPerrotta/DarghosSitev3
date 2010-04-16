@@ -1,13 +1,13 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	$character_listByName = $account->getCharacterList();	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 		
 	if(!$guild->loadByName($_GET['name']))
 	{
@@ -36,32 +36,32 @@ if($_GET['name'])
 	
 	if(!$guildLoad)
 	{
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");	
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND));	
 	}
 	elseif(!$validInvites)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");		
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));		
 	}	
 	else
 	{		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{			
-			if($account->get("password") != $strings->encrypt($post[2]))
+			if($account->get("password") != Strings::encrypt($post[2]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
 			elseif(!in_array($post[0], $character_listByName))
 			{				
-				$error = "Este personagem não percente a sua conta.";
+				$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			}	
 			elseif(!in_array($post[0], $guild_invites))
 			{				
-				$error = "Este personagem não está convidado para esta guilda.";
+				$error = Lang::Message(LMSG_GUILD_CHARACTER_NOT_INVITED);
 			}											
 			else
 			{		
-				$character = $core->loadClass("Character");
+				$character = new Character();
 				$character->loadByName($post[0], "name, rank_id, guild_join_date");
 				
 				if($post[1] == "accept")		
@@ -69,34 +69,26 @@ if($_GET['name'])
 					$character->acceptInvite();
 					$character->save();
 					
-					$success = "
-					<p>Caro jogador,</p>
-					<p>O personagem {$post[0]} bandeou-se para a guild {$guild->get("name")}!</p>
-					<p>Tenha um bom jogo!</p>
-					";
+					$success = Lang::Message(LMSG_GUILD_JOIN, $post[0], $guild->get("name"));
 				}
 				elseif($post[1] == "reject")
 				{
 					$character->removeInvite();
 					
-					$success = "
-					<p>Caro jogador,</p>
-					<p>O personagem {$post[0]} recusou bandear-se para a guild {$guild->get("name")}!</p>
-					<p>Tenha um bom jogo!</p>
-					";					
+					$success = Lang::Message(LMSG_GUILD_JOIN_REJECT, $guild->get("name"), $post[0]);			
 				}
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);		
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);		
 			}
 			
 			$module .=	'
@@ -109,7 +101,7 @@ if($_GET['name'])
 					</p>	
 
 					<p>
-						<label for="invite_action">Ação</label><br />
+						<label for="invite_action">AÃ§Ã£o</label><br />
 						<ul id="pagelist">
 							<li><input checked="checked" name="invite_action" type="radio" value="accept"> Aceitar Convite </li>
 							<li><input name="invite_action" type="radio" value="reject"> Rejeitar Convite </li>

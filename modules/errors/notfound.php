@@ -1,3 +1,3 @@
 <?
-$core->sendMessageBox("Erro!", "Está pagina não existe ou está em fase de construção.");
+Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_PAGE_NOT_FOUND));
 ?>

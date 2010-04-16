@@ -1,10 +1,10 @@
 <?
 if($_POST)
 {	
-	$core->extractPost();
+	Core::extractPost();
 	
-	$account = $core->loadClass("Account");
-	$password = $strings->randKey(8, 1, "lower+number");
+	$account = new Account();
+	$password = Strings::randKey(8, 1, "lower+number");
 	
 	//argumentos para e-mail
 	$_arg = array();
@@ -13,61 +13,59 @@ if($_POST)
 	
 	if(!$_POST['account_email'] or !$_POST['account_name'])
 	{
-		$error = $boxMessage['INCOMPLETE_FORM'];
+		$error = Lang::Message(LMSG_FILL_FORM);
 	}
 	elseif(!$_POST['account_privacypolicy'])
 	{
-		$error = $boxMessage['NEED_ACCEPT_PRIVACY_POLICY'];
+		$error = Lang::Message(LMSG_PRIVACY_POLICY);
 	}
 	elseif(strlen($_POST['account_name']) < 5 or strlen($_POST['account_name']) > 25)
 	{
-		$error = $boxMessage['ACCOUNT_NAME_INCORRECT_SIZE'];
+		$error = Lang::Message(LMSG_ACCOUNT_NAME_WRONG_SIZE);
 	}
 	elseif($account->loadByEmail($_POST['account_email']))
 	{
-		$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
+		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 	}		
 	elseif($account->loadByName($_POST['account_name']))
 	{
-		$error = $boxMessage['ACCOUNT_NAME_ALREADY_IN_USE'];
+		$error = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
 	}			
-	elseif(!$strings->validEmail($_POST['account_email']))
+	elseif(!Strings::validEmail($_POST['account_email']))
 	{
-		$error = $boxMessage['INVALID_EMAIL'];
+		$error = Lang::Message(LMSG_WRONG_EMAIL);
 	}	
-	elseif((USE_EMAILVALIDATION) and !$core->mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
+	elseif((USE_EMAILVALIDATION) and !Core::mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
 	{
-		$error = $boxMessage['FAIL_SEND_EMAIL'];
+		$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 	}
 	else
 	{
 		$account->setEmail($_POST['account_email']);
-		$account->setPassword($strings->encrypt($password));
+		$account->setPassword(Strings::encrypt($password));
 		$account->setName($_POST['account_name']);
 		$account->setCreation(time());
 		
 		$account->save();
 	
-		$success = "<p>Parabens, sua conta foi criada com sucesso!</p>";
+		$success = Lang::Message(LMSG_ACCOUNT_REGISTERED);
 	
 		if(USE_EMAILVALIDATION)
-			$success .= "<p>Sua senha e outras informações foram enviadas em uma mensagem a seu e-mail cadastrado.</p>";
+			$success .= Lang::Message(LMSG_ACCOUNT_INFOS_SEND);
 		else
-			$success .= "<p>Sua senha é <font size='5'><b>$password</b></font>.</p>";
-		
-		$success .= "<p>Tenha um bom jogo!</p>";
+			$success .= Lang::Message(LMSG_ACCOUNT_PASSWORD_IS, $password);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox($boxMessage['ERROR'], $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 

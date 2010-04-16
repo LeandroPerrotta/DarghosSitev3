@@ -1,17 +1,17 @@
 <?
-$account = $core->loadClass("Account");
+$account = new Account();
 $account->load($_SESSION['login'][0], "password, real_name, location, url");
 
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	if($account->get("password") != $strings->encrypt($post[3]))
+	if($account->get("password") != Strings::encrypt($post[3]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}			
 	elseif(strlen($post[0]) > 25 or strlen($post[1]) > 25 or strlen($post[2]) > 50)
 	{
-		$error = "Os campos Nome Real e Localidade devem possuir no maximo 25 caracteres enquanto Website deve conter no maximo 50 caracteres.";
+		$error = Lang::Message(LMSG_CHANGEINFOS_WRONG_SIZE);
 	}
 	else
 	{		
@@ -21,23 +21,19 @@ if($post)
 		
 		$account->save();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A mudança das informações de sua conta foram efetuadas com sucesso!</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = Lang::Message(LMSG_CHANGEINFOS_SUCCESS);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .= '

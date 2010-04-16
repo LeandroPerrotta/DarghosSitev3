@@ -9,7 +9,7 @@ if($_POST)
 	}
 	elseif(!$player->loadByName($_POST["addprize_character"]))
 	{
-		$error = "Este personagem não existe.";
+		$error = "Este personagem nï¿½o existe.";
 	}
 	else
 	{
@@ -29,11 +29,11 @@ if($_POST)
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox("Sucesso!", $success);
 }	
 elseif($error)	
 {
-	$core->sendMessageBox("Erro!", $error);
+	Core::sendMessageBox("Erro!", $error);
 }
 
 $module .=	'

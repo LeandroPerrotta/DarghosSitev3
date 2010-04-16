@@ -1,36 +1,36 @@
 <?
 include_once("classes/account.php");
 
-$post = $core->extractPost();
+$post = Core::extractPost();
 $get = $_GET['name'];
 
 if($post or $get)
 {		
 	$name = ($post) ? $post[0] : $get;
 
-	$character = $core->loadClass("character");
+	$character = new Account();
 	
 	if(!$character->loadByName($name, "name, account_id, level, sex, vocation, town_id, lastlogin, comment, hide, rank_id, guildnick"))
 	{	
-		$error = "O personagem <b>".stripcslashes($name)."</b> não existe.";
+		$error = Lang::Message(LMSG_CHARACTER_WRONG);
 	}
 	else
 	{			
 		$account = new Account();
 		$account->load($character->get("account_id"), "premdays, real_name, location, url");
 		
-		$deaths = $core->loadClass("Deaths");
+		$deaths = new Deaths();
 		
 		//$bans = $account->getBans();
-		$bans = $core->loadClass('bans');
+		$bans = new Bans();
 		
 		$houseid = $character->getHouse();
-		$lastlogin = ($character->getLastLogin()) ? $core->formatDate($character->getLastLogin()) : "Nunca entrou.";
+		$lastlogin = ($character->getLastLogin()) ? Core::formatDate($character->getLastLogin()) : "Nunca entrou.";
 		
 		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
-		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "não configurado";
-		$location = ($account->get("location") != "") ? $account->get("location") : "não configurado";
-		$url = ($account->get("url") != "") ? $account->get("url") : "não configurado";
+		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "nÃ£o configurado";
+		$location = ($account->get("location") != "") ? $account->get("location") : "nÃ£o configurado";
+		$url = ($account->get("url") != "") ? $account->get("url") : "nÃ£o configurado";
 		
 		$deathlist = $deaths->getDeathListOfPlayer($character->getId());
 		$list = $account->getCharacterList();
@@ -46,7 +46,7 @@ if($post or $get)
 			{		
 				$module .= "
 				<tr>
-					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem está agendado para ser deletado no dia {$core->formatDate($character->deletionStatus())}.</font></td>
+					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia {Core::formatDate($character->deletionStatus())}.</font></td>
 				</tr>";				
 			}
 		
@@ -87,7 +87,7 @@ if($post or $get)
 			</tr>	
 
 			<tr>
-				<td><b>Vocação:</b></td> <td>{$_vocationid[$character->getVocation()]}</td>
+				<td><b>VocaÃ§Ã£o:</b></td> <td>{$_vocationid[$character->getVocation()]}</td>
 			</tr>	
 
 			<tr>
@@ -96,16 +96,16 @@ if($post or $get)
 
 			if($houseid)
 			{
-				$houses = $core->loadClass("Houses");
+				$houses = new Houses();
 				$houses->load($houseid);				
 				
 				if($houses->get("warnings") == 0)
 				{
-					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) com pagamento no dia  {$core->formatDate($houses->get("paid"))}.";
+					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) com pagamento no dia  ".Core::formatDate($houses->get("paid")).".";
 				}
 				else
 				{
-					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) está com pagamento atrazado ({$houses->get("warnings")}º aviso).";
+					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) estÃ¡ com {$houses->get("warnings")} pagamento(s) atrazado(s).";
 				}
 				
 				$module .= "
@@ -132,7 +132,7 @@ if($post or $get)
 			
 			$module .= "
 			<tr>
-				<td><b>Último Login:</b></td> <td>{$lastlogin}</td>
+				<td><b>Ãšltimo Login:</b></td> <td>{$lastlogin}</td>
 			</tr>	
 			
 		</table>";
@@ -161,7 +161,7 @@ if($post or $get)
 				}
 			}	
 
-			$alreadyIsPremiumHTML = ($alreadyIsPremium) ? "Sim" : "Não";
+			$alreadyIsPremiumHTML = ($alreadyIsPremium) ? "Sim" : "NÃ£o";
 			
 			if($alreadyIsPremium)
 			{
@@ -171,7 +171,7 @@ if($post or $get)
 			$module .= "
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
-					<th colspan='2'>Informações Avançadas</th>
+					<th colspan='2'>InformaÃ§Ãµes AvanÃ§adas</th>
 				</tr>
 				<tr>
 					<td width='25%'><b>Numero da Conta</b></td><td>{$account->getId()}</td>
@@ -186,7 +186,7 @@ if($post or $get)
 					<td><b>Alguma vez Premium?</b></td><td>{$alreadyIsPremiumHTML}</td>
 				</tr>					
 				<tr>
-					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
+					<td><b>PosiÃ§Ã£o</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
 				</tr>
 			</table>														
 				";			
@@ -195,7 +195,7 @@ if($post or $get)
 		$module .= "
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
-				<th colspan='2'>Informações da Conta</th>
+				<th colspan='2'>InformaÃ§Ã£es da Conta</th>
 			</tr>";
 			
 			if($bans->isBannished($account->getId()))
@@ -208,20 +208,20 @@ if($post or $get)
 					
 					if($ban['type'] == 3)
 					{
-						$banstring .= "Banido por: <b>{$tools->getBanReason($ban['reason'])}</b><br>
-								   	   Duração: Até {$core->formatDate($ban['expires'])}.";
+						$banstring .= "Banido por: <b>".Tools::getBanReason($ban['reason'])."</b><br>
+								   	   DuraÃ§Ã£o: AtÃ© ".Core::formatDate($ban['expires']).".";
 					}
 					elseif($ban['type'] == 5)	
 					{
-						$banstring .= "Deletado por: <b>{$tools->getBanReason($ban['reason'])}</b><br>
-								   	   Duração: permanentemente.";		
+						$banstring .= "Deletado por: <b>".Tools::getBanReason($ban['reason'])."</b><br>
+								   	   DuraÃ§Ã£o: permanentemente.";		
 					}			   	   				   	   
 								   
 					$banstring .= "</font>";
 					
 					$module .= "
 					<tr>
-						<td width='25%'><b>Punição:</b></td> <td>{$banstring}</td>
+						<td width='25%'><b>PuniÃ§Ã£o:</b></td> <td>{$banstring}</td>
 					</tr>";			
 				}
 			}
@@ -258,7 +258,7 @@ if($post or $get)
 			{
 				$death_values = $deaths->load($death_id);
 				
-				$date = $core->formatDate($death_values['date']);
+				$date = Core::formatDate($death_values['date']);
 				
 				$death = "Morto no Nivel {$death_values['level']} por ";
 				
@@ -309,7 +309,7 @@ if($post or $get)
 						}
 						else
 						{
-							$_killer = $core->loadClass("character");	
+							$_killer = new Character();	
 							$_killer->load($killer['killer']);	
 
 							$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
@@ -348,10 +348,10 @@ if($post or $get)
 				
 				foreach($kills as $kill)
 				{
-					$killed = $core->loadClass("character");
+					$killed = new Character();
 					$killed->load($kill["killed"]);
 					
-					$date = $core->formatDate($kill['date']);
+					$date = Core::formatDate($kill['date']);
 					$isInjust = ($kill["injust"] == 1) ? "<font color='#ec0404'><b>injustificada</b></font>" : "<font color='#00ff00'><b>justificada</b></font>";
 					
 					$module .= "
@@ -374,7 +374,7 @@ if($post or $get)
 					</tr>
 
 					<tr>
-						<td>Você não matou nenhum personagem recentemente.</td>
+						<td>VocÃª nÃ£o matou nenhum personagem recentemente.</td>
 					</tr>					
 					
 				</table>	
@@ -393,7 +393,7 @@ if($post or $get)
 			
 			foreach($list as $player_name)
 			{
-				$character_list = $core->loadClass("character");
+				$character_list = new Character();
 				$character_list->loadByName($player_name, "name, level, online, hide");
 				
 				if($character_list->get("hide") == 0)
@@ -422,7 +422,7 @@ if($post or $get)
 
 if($error)	
 {
-	$core->sendMessageBox("Erro!", $error);
+	Core::sendMessageBox("Erro!", $error);
 }
 
 $module .= '

@@ -1,46 +1,46 @@
 <?
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != $strings->encrypt($post[2]))
+	if($account->get("password") != Strings::encrypt($post[2]))
 	{
-		$error = $boxMessage['CURRENT_PASSWORD_FAIL'];
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
 	elseif($post[0] != $post[1])
 	{
-		$error = $boxMessage['NEW_PASSWORD_FAIL'];
+		$error = Lang::Message(LMSG_CHANGEPASS_WRONG_NEWPASS_CONFIRM);
 	}
 	elseif($post[0] == $post[2])
 	{
-		$error = $boxMessage['NEW_AND_CURRENT_PASSWORD_CAN_NOT_SAME'];
+		$error = Lang::Message(LMSG_CHANGEPASS_SAME_PASSWORD);
 	}
 	elseif(strlen($post[0]) < 6 or strlen($post[0]) > 20)
 	{
-		$error = $boxMessage['NEW_PASSWORD_INCORRECT_LENGHT'];
+		$error = Lang::Message(LMSG_CHANGEPASS_WRONG_NEWPASS_LENGHT);
 	}
 	else
 	{
-		$account->set("password", $strings->encrypt($post[0]));
+		$account->set("password", Strings::encrypt($post[0]));
 		$account->save();
 		
 		$_SESSION[1] = $account->get("password");
 		
-		$success = $boxMessage['SUCCESS.PASSWORD_CHANGED'];
+		$success = Lang::Message(LMSG_ACCOUNT_PASSWORD_CHANGED);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .= '

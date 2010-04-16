@@ -7,7 +7,7 @@ $module .= "
 		<th>Lista de Casas</th>
 	</tr>
 	<tr>
-		<td>Atualmente nós temos {$query->numRows()} casas em nosso servidor.</td>
+		<td>Atualmente nÃ³s temos {$query->numRows()} casas em nosso servidor.</td>
 	</tr>
 </table>";		
 
@@ -19,7 +19,7 @@ $module .= "
 
 while($fetch = $query->fetch())
 {
-	$houses = $core->loadClass("Houses");
+	$houses = new Houses();
 	$houses->load($fetch->id);
 	
 	if($houses->get("owner") == 0)
@@ -31,7 +31,7 @@ while($fetch = $query->fetch())
 	}	
 	else
 	{
-		$character = $core->loadClass("Character");
+		$character = new Character();
 		$character->load($houses->get("owner"), "name");		
 		
 		$module .= "

@@ -1,28 +1,28 @@
 <?
-$post = $core->extractPost();
+$post = Core::extractPost();
 
-$account = $core->loadClass("Account");
+$account = new Account();
 $account->load($_SESSION['login'][0], "premdays");	
 
 if($post)
 {	
-	$character = $core->loadClass("character");
+	$character = new Character();
 
 	if(!$post[0] or !$post[1] or !$post[2])
 	{
-		$error = "Preencha todos campos do formulario corretamente.";
+		$error = Lang::Message(LMSG_FILL_FORM);
 	}
-	elseif(!$strings->canUseName($post[0]))
+	elseif(!Strings::canUseName($post[0]))
 	{
-		$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
+		$error = Lang::Message(LMSG_WRONG_NAME);
 	}
 	elseif($character->loadByName($post[0]))
 	{
-		$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
+		$error = Lang::Message(LMSG_CHARACTER_NAME_ALREADY_USED);
 	}
 	elseif(count($account->getCharacterList()) == 10)
 	{
-		$error = "So é permitido criar 10 personagens por conta.";
+		$error = Lang::Message(LMSG_ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS);
 	}
 	else
 	{
@@ -52,24 +52,19 @@ if($post)
 		
 		$character->save();
 	
-		$success = "
-		<p>O personagem ".$post[0]." foi criado com sucesso!</p>
-		<p>Para começar a jogar clique <a href='?ref=general.howplay'>aqui</a> e siga as instruções.</p>
-		<p>A sua aventura se inicia em Island of Peace, esta ilha funciona como um aprendizado com vários tipos de criaturas, NPCs, quests, academia de treino e muito mais, alem que não é possivel atacar outros jogadores. Quando você atingir o nivel 60 estará preparado para sair da ilha usando o Barco e explorar aos outros continentes do Darghos. É importante informar que você pode sair a qualquer momento da ilha independente do nivel, porem, uma vez fora, é impossivel retornar a ilha.</p>
-		<p>Tenha uma boa jornada!</p>
-		";
+		$success = Lang::Message(LMSG_CHARACTER_CREATED, $post[0]);
 	}
-}
+} 
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 	
 $module .= '
@@ -88,7 +83,7 @@ $module .= '
 		</p>		
 		
 		<p>
-			<label for="player_sex">Vocação</label><br />			
+			<label for="player_sex">VocaÃ§Ã£o</label><br />			
 				<input type="radio" name="player_vocation" value="sorcerer" /> Sorcerer<br>
 				<input type="radio" name="player_vocation" value="druid" /> Druid<br>
 				<input type="radio" name="player_vocation" value="paladin" /> Paladin<br>

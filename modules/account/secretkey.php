@@ -1,69 +1,61 @@
 <?php
-$post = $core->extractPost();
+$post = Core::extractPost();
 
 if($post)
 {	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != $strings->encrypt($post[0]))
+	if($account->get("password") != Strings::encrypt($post[0]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_EMAIL);
 	}	
 	elseif($account->getSecretKey())
 	{
-		$error = "Esta conta já possui uma chave secreta configurada.";	
+		$error = Lang::Message(LMSG_SECRETKEY_ALREADY_EXISTS);	
 	}
 	elseif($post[2] == 1)
 	{
 		$account->setSecretKey($post[1], "default");
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A chave secreta {$post[1]} foi configurada com sucesso em sua conta!</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = Lang::Message(LMSG_SECRETKEY_SUCCESS, $post[1]);
 	}	
 	elseif($post[2] == 2)
 	{
 		if(!$post[3] or !$post[4])
 		{
-			$error = "Preencha todos campos do formulario corretamente.";
+			$error = Lang::Message(LMSG_FILL_FORM);
 		}	
 		elseif(strlen($post[3]) < 10 or strlen($post[3]) > 50 or strlen($post[4]) < 5 or strlen($post[4]) > 25)		
 		{
-			$error = "A sua chave secreta deve possuir entre 10 e 50 caracteres e seu lembrete entre 5 e 25 caracteres.";
+			$error = Lang::Message(LMSG_SECRETKEY_WRONG_SIZE);
 		}
 		else
 		{
 			$account->setSecretKey($post[3], $post[4]);
 			
-			$success = "
-			<p>Caro jogador,</p>
-			<p>A sua chave secreta {$post[3]} com o lembrete {$post[4]} foi configurada com sucesso em sua conta!</p>
-			<p>Tenha um bom jogo!</p>
-			";			
+			$success = Lang::Message(LMSG_SECRETKEY_CUSTOM_SUCCESS, $post[3], $post[4]);			
 		}
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 	
-$secretkey = $strings->randKey(5, 4, "number+upper");	
+$secretkey = Strings::randKey(5, 4, "number+upper");	
 	
 $module .= '	
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>			
-		<p>Atravez deste painel você pode configurar a chave secreta de sua conta, ultilizada em situações criticas para recuperar sua conta. Ela pode ser uma chave de alta segurança definida pelo sistema (memorize-a), ou então uma chave definida por você mesmo, com direito a um lembrete para uso posterior.</p>
+		<p>Atravez deste painel vocÃª pode configurar a chave secreta de sua conta, ultilizada em situaÃ§Ãµes criticas para recuperar sua conta. Ela pode ser uma chave de alta seguranÃ§a definida pelo sistema (memorize-a), ou entÃ£o uma chave definida por vocÃª mesmo, com direito a um lembrete para uso posterior.</p>
 		
 		<p>
 			<label for="recovery_character">Senha da Conta</label><br />
@@ -73,7 +65,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<label for="recovery_character">Chave de Recuperação</label><br />
+			<label for="recovery_character">Chave de RecuperaÃ§Ã£o</label><br />
 			<input readonly="readonly" name="recovery_keysystem" size="40" type="text" value="'.$secretkey.'" />
 		</p>		
 		
@@ -84,11 +76,11 @@ $module .= '
 		<div id="line1"></div>
 
 		<p>
-			<input name="recovery_usekey" type="radio" value="2"> Eu desejo configurar uma chave secreta de minha prefêrencia. 
+			<input name="recovery_usekey" type="radio" value="2"> Eu desejo configurar uma chave secreta de minha preferÃªncia. 
 		</p>			
 		
 		<p>
-			<label for="recovery_character">Chave de Recuperação</label><br />
+			<label for="recovery_character">Chave de RecuperaÃ§Ã£o</label><br />
 			<input name="recovery_key" size="40" type="text" value="" />
 		</p>			
 

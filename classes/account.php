@@ -25,12 +25,6 @@ class Account
 		$this->db = $db;
 	}
 	
-	/* proposito: despeja um numero de conta do banco de dados ao objeto pelo seu id
-	 * uso: $objeto->load(id, fields[opcional])
-	 * argumentos:
-	 * 		id 					-> 	id da conta
-	 * 		fields[opcional] 	-> 	campos a serem carregados (se não definido todos campos serão carregados)
-	 */
 	function load($id, $fields = null)
 	{
 		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, lastAdClick FROM accounts WHERE id = '".$id."'");		
@@ -60,14 +54,6 @@ class Account
 		}			
 	}
 	
-	
-	
-	/* proposito: linka um load atravez de um account email
-	 * uso: $objeto->loadByEmail(email, fields[opcional])
-	 * argumentos:
-	 * 		email 				-> 	email da conta
-	 * 		fields[opcional] 	-> 	campos a serem carregados (se não definido todos campos serão carregados)
-	 */	
 	function loadByEmail($email, $fields = null)
 	{
 		$query = $this->db->query("SELECT id FROM accounts WHERE email = '".$email."'");
@@ -83,14 +69,6 @@ class Account
 		}
 	}
 
-	
-	
-	/* proposito: linka um load atravez de um account name
-	 * uso: $objeto->loadByName(name, fields[opcional])
-	 * argumentos:
-	 * 		name 				-> 	name da conta
-	 * 		fields[opcional] 	-> 	campos a serem carregados (se não definido todos campos serão carregados)
-	 */
 	function loadByName($name, $fields = null)
 	{
 		$query = $this->db->query("SELECT id FROM accounts WHERE name = '".$name."'");
@@ -106,14 +84,6 @@ class Account
 		}
 	}		
 
-	
-	
-	/* proposito: linka um get atravez de um field
-	 * uso: $objeto->get(string field)
-	 * argumentos:
-	 * 		field 				-> 	field a ser carregado
-	 * observações: ESTA FUNÇÃO ESTÁ DESCONTINUADA
-	 */
 	function get($field)
 	{
 		switch($field)
@@ -168,14 +138,6 @@ class Account
 		}
 	}	
 	
-	/* proposito: grupo de gets para obter determinado valor de um field
-	 * uso: 
-	 * 		$objeto->get´ValueName`()
-	 * exemplo:
-	 * 		$objeto->getId(), getPassword()
-	 * argumentos:
-	 * 		n/a
-	 */
 	function getId()
 	{
 		return $this->data['id'];
@@ -224,10 +186,8 @@ class Account
 		if(is_array($characters))
 		{
 			foreach($characters as $cid)
-			{
-				global $core;
-				
-				$character = $core->loadClass("character");
+			{				
+				$character = new Character();
 				$character->load($cid);
 				
 				if($character->getGroup() > $highGroup)
@@ -277,16 +237,6 @@ class Account
 		}		
 	}
 	
-	
-	
-	/* proposito: retorna uma array com os personagens pertecentes a account carregada (por nome ou id)
-	 * uso: 
-	 * 		$objeto->getCharacterList(returnid[opcional])
-	 * exemplo:
-	 * 		$objeto->getCharacterList()
-	 * argumentos:
-	 * 		returnid 			-> 	switch para o valor retornado, entre o nome (false) e id (true) do jogador, valor padrão é false (retorna o nome do jogador)
-	 */	
 	function getCharacterList($returnId = false)
 	{
 		$toReturn = "name";
@@ -311,15 +261,6 @@ class Account
 			return false;
 	}
 	
-	
-	
-	/* proposito: linka um set atravez de um field
-	 * uso: $objeto->set(field, value)
-	 * argumentos:
-	 * 		field 				-> 	campo a ser alterado
-	 * 		value			 	-> 	novo valor do campo
-	 * observações: ESTA FUNÇÃO ESTÁ DESCONTINUADA
-	 */	
 	function set($field, $value)
 	{
 		switch($field)
@@ -377,17 +318,7 @@ class Account
 			break;				
 		}
 	}	
-
 	
-
-	/* proposito: grupo de sets para modificar os dados da account instanciada
-	 * uso: 
-	 * 		$objeto->set´fieldName`(value)
-	 * exemplo:
-	 * 		$objeto->setId(1), setPassword("123456")
-	 * argumentos:
-	 * 		n/a
-	 */	
 	function setId($id)
 	{
 		$this->data['id'] = $id;
@@ -395,8 +326,7 @@ class Account
 	
 	function setName($name)
 	{
-		global $strings;
-		$this->data['name'] = $strings->SQLInjection($name);
+		$this->data['name'] = Strings::SQLInjection($name);
 	}
 	
 	function setPassword($password)
@@ -411,8 +341,7 @@ class Account
 	
 	function setEmail($email)
 	{
-		global $strings;
-		$this->data['email'] = $strings->SQLInjection($email);
+		$this->data['email'] = Strings::SQLInjection($email);
 	}
 	
 	
@@ -438,37 +367,24 @@ class Account
 	
 	function setLocation($location)
 	{
-		global $strings;
-		$this->data['location'] =  $strings->SQLInjection($location);
+		$this->data['location'] =  Strings::SQLInjection($location);
 	}
 	
 	function setUrl($url)
 	{
-		global $strings;
-		$this->data['url'] = $strings->SQLInjection($url);
+		$this->data['url'] = Strings::SQLInjection($url);
 	}
 	
 	function setRealName($real_name)
 	{
-		global $strings;
-		$this->data['real_name'] = $strings->SQLInjection($real_name);
+		$this->data['real_name'] = Strings::SQLInjection($real_name);
 	}
 	
 	function setCreation($creation)
 	{
 		$this->data['creation'] = $creation;
 	}	
-
 	
-	
-	/* proposito: salva ou cria uma account no bando de dados
-	 * uso: 
-	 * 		$objeto->save()
-	 * argumentos:
-	 * 		n/a
-	 * observações:
-	 * 		se o campo id estiver vazio é criado uma nova conta, caso contrario o registro é atualizado
-	 */		
 	function save()
 	{
 		$i = 0;
@@ -514,15 +430,7 @@ class Account
 			$this->db->query("INSERT INTO accounts ($insert_fields) values($insert_values)");			
 		}
 	}
-	
-	
-	
-	/* proposito: atualiza a condição de premium da conta, baseado na ultima atualização (lastday)
-	 * uso: 
-	 * 		$objeto->updatePremDays()
-	 * argumentos:
-	 * 		n/a
-	 */		
+		
 	function updatePremDays($premdays, $increment = true)
 	{
 		if($increment)
@@ -557,28 +465,12 @@ class Account
 		
 		return true;
 	}
-	
-	
-	
-	/* proposito: insere um novo e-mail a lista de contas com e-mail a modificar
-	 * uso: 
-	 * 		$objeto->addEmailToChange(email)
-	 * argumentos:
-	 * 		email		=>	novo e-mail que será adicionado a conta
-	 */		
+		
 	function addEmailToChange($email)
 	{
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."emailstochange (account_id, email, date) values('{$this->data['id']}', '{$email}', '".(time() + (60 * 60 * 24 * DAYS_TO_CHANGE_EMAIL))."')");	
 	}
 	
-	
-	
-	/* proposito: obtem uma array com as mudanças de e-mails agendadas para a conta, caso não hajá nenhuma mudança agendada retorna false
-	 * uso: 
-	 * 		$objeto->getEmailToChange()
-	 * argumentos:
-	 * 		n/a
-	 */	
 	function getEmailToChange()
 	{
 		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."emailstochange WHERE account_id = '{$this->data['id']}' ORDER BY id DESC");
@@ -598,39 +490,16 @@ class Account
 			return false;
 	}
 	
-	
-	
-	/* proposito: cancela todas mudanças de e-mail agendada a conta
-	 * uso: 
-	 * 		$objeto->cancelEmailToChange()
-	 * argumentos:
-	 * 		n/a
-	 */	
 	function cancelEmailToChange()
 	{
 		$this->db->query("DELETE FROM ".DB_WEBSITE_PREFIX."emailstochange WHERE account_id = '{$this->data['id']}'");
 	}
-	
-	
-	/* proposito: insere uma nova chave de mudança de password a conta (chave de confirmação enviada ao e-mail do jogador no ato de gerar nova senha pelo Lost Interface)
-	 * uso: 
-	 * 		$objeto->setPasswordKey(key)
-	 * argumentos:
-	 * 		key			=>	nova chave de confirmação de mudança
-	 */		
+		
 	function setPasswordKey($key)
 	{
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changepasswordkeys (account_id, password_key, time) values('{$this->data['id']}', '{$key}', '".time()."')");
 	}
 	
-	
-
-	/* proposito: carrega uma conta pelo numero da chave de mudança de password, se a chave não existir retorna false
-	 * uso: 
-	 * 		$objeto->checkChangePasswordKey(key)
-	 * argumentos:
-	 * 		key			=>	chave de confirmação de mudança
-	 */	
 	function checkChangePasswordKey($key)
 	{
 		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."changepasswordkeys WHERE password_key = '".$key."'");
@@ -648,14 +517,6 @@ class Account
 		}
 	}
 	
-	
-	
-	/* proposito: retorna uma array contendo a chave secreta da conta e seu lembrete, se a conta não possui uma é retornado false
-	 * uso: 
-	 * 		$objeto->getSecretKey(key)
-	 * argumentos:
-	 * 		n/a
-	 */	
 	function getSecretKey()
 	{
 		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."secretkeys WHERE account_id = '".$this->data['id']."'");
@@ -673,28 +534,11 @@ class Account
 			return false;
 	}
 
-	
-	
-	/* proposito: configura uma nova chave secreta e lembrete para sua conta
-	 * uso: 
-	 * 		$objeto->setSecretKey(key, lembrete)
-	 * argumentos:
-	 * 		key			=>	nova chave para recuperação avançada da conta
-	 * 		lembrete	=>	lembrete da chave, se for uma chave gerada pelo sistema este deve ser vazio
-	 */		
 	function setSecretKey($key, $lembrete)
 	{
 		$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."secretkeys (secret_key, lembrete, account_id) values('{$key}', '{$lembrete}', '{$this->data['id']}')");
 	}	
 	
-	
-	
-	/* proposito: retorna uma array contendo o status de banimento da conta, se a mesma não estiver banida é retornado false
-	 * uso: 
-	 * 		$objeto->getBans()
-	 * argumentos:
-	 * 		n/a
-	 */	
 	function getBans()
 	{
 		/*$query = $this->db->query("SELECT * FROM `bans` WHERE (`account` = '{$this->data["id"]}')");
@@ -714,23 +558,13 @@ class Account
 			return false;
 	}
 	
-	
-	
-	/* proposito: retorna true caso a conta possua algum personagem lider ou vice leader, false caso contrario
-	 * uso: 
-	 * 		$objeto->isGuildHighMember()
-	 * argumentos:
-	 * 		n/a
-	 */	
 	function isGuildHighMember()
 	{
 		$charsList = $this->getCharacterList(true); //true to get characterslist by character id
 		
-		global $core;
-		
 		foreach($charsList as $player_id)
 		{
-			$character = $core->loadClass("Character");
+			$character = new Character();
 			$character->load($player_id, "rank_id");
 			
 			if(!$character->loadGuild())
@@ -746,27 +580,17 @@ class Account
 		
 		return false;
 	}
-
 	
-	
-	/* proposito: verifica se de cada personagem da conta é membro com a guild desejada, se verdadeiro retorna o maior rank entre os personagens, se nenhum personagem estiver na guild é retornado false
-	 * uso: 
-	 * 		$objeto->getGuildLevel(guild_name)
-	 * argumentos:
-	 * 		guild_name		=>	nome da guild desejada para verificação
-	 */		
 	function getGuildLevel($guild_name)
 	{
 		$charsList = $this->getCharacterList(true); //true to get characterslist by character id
-		
-		global $core;
 		
 		$access = array();
 		$guildLoad = false;
 		
 		foreach($charsList as $player_id)
 		{
-			$character = $core->loadClass("Character");
+			$character = new Character();
 			$character->load($player_id, "rank_id");
 			
 			if(!$character->loadGuild())	

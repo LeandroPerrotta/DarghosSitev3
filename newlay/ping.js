@@ -113,7 +113,7 @@ function sendPingResult()
 	
 	if(xmlhttp == null)
 	{
-		alert("Este navegador n„o suporta tecnologia Ajax.");
+		alert("Este navegador n√£o suporta tecnologia Ajax.");
 	}	
 	
 	xmlhttp.open("GET", "ajax/ping.php?value=log&pingavg=" + minPing, false);	
@@ -121,11 +121,11 @@ function sendPingResult()
 	
 	if(xmlhttp.responseText == "mysql_error")
 	{	
-		alert("Falha ao enviar relatÛrio de ping: Mysql.");
+		alert("Falha ao enviar relat√≥rio de ping: Mysql.");
 	}	
 	else if(xmlhttp.responseText != "log" && xmlhttp.responseText != "mysql_error")
 	{
-		alert("Falha ao enviar relatÛrio de ping: Desconhecido.");
+		alert("Falha ao enviar relat√≥rio de ping: Desconhecido.");
 	}
 }
 

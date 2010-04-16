@@ -11,7 +11,7 @@ class Monsters
 		if(file_exists(DIR_DATA.MONSTERS_FILE))
 			$this->element = simplexml_load_file(DIR_DATA.MONSTERS_FILE);
 		else
-			die("Banco de dados de monstros n„o encontrado.");	
+			die("Banco de dados de monstros n√£o localizado.");	
 	}
 
 	function load($name)

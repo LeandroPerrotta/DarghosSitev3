@@ -1,56 +1,52 @@
 <?php
-$post = $core->extractPost();
+$post = Core::extractPost();
 
-$account = $core->loadClass("Account");
+$account = new Account();
 $account->load($_SESSION['login'][0], "password");
 
 $list = $account->getCharacterList();
 
 if($post)
 {
-	$character = $core->loadClass("Character");
+	$character = new Character();
 	$character->loadByName($post[0]);
 	
-	if($account->get("password") != $strings->encrypt($post[1]))
+	if($account->get("password") != Strings::encrypt($post[1]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}	
 	elseif($character->deletionStatus())
 	{
-		$error = "Este personagem já está agendado para ser deletado em sua conta.";
+		$error = Lang::Message(LMSG_CHARACTER_ALREADY_TO_DELETE);
 	}
 	elseif(!in_array($post[0], $list))
 	{	
-		$error = "Este personagem não pertence a sua conta.";
+		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
 	else
 	{
 		$character->addToDeletion();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>Foi agendado com sucesso a exclusão de seu personagem {$post[0]} para o dia {$core->formatDate($character->deletionStatus())}!</p>
-		<p>Tenha um bom jogo!</p>
-		";		
+		$success = Lang::Message(LMSG_CHARACTER_DELETION_SCHEDULED, $post[0], Core::formatDate($character->deletionStatus()));	
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .=	'
 	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
 			
-			<p>Selecione abaixo qual personagem de sua conta você deseja agendar uma exclusão. Este agendamento leva 30 dias e pode ser cancelado a qualquer momento dentro deste periodo. Note que após passado o periodo de 30 dias é impossivel cancelar a exclusão, recuperar o personagem ou qualquer um de seus pertences.</p>		
+			<p>Selecione abaixo qual personagem de sua conta vocÃª deseja agendar uma exclusÃ£o. Este agendamento leva 30 dias e pode ser cancelado a qualquer momento dentro deste periodo. Note que apÃ³s passado o periodo de 30 dias Ã© impossivel cancelar a exclusÃ£o, recuperar o personagem ou qualquer um de seus pertences.</p>		
 		
 			<p>
 				<label for="account_email">Personagem</label><br />

@@ -4,21 +4,21 @@ $query = $db->query("SELECT id, player_id FROM player_deaths WHERE date > '".(ti
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
 	<tr>
-		<th colspan='2'>Últimas Mortes</th>
+		<th colspan='2'>Ãšltimas Mortes</th>
 	</tr>";		
 
 if($query->numRows() != 0)
 {
 	while($fetch = $query->fetch())
 	{
-		$deaths = $core->loadClass("Deaths");
+		$deaths = new Deaths();
 		
 		$death_values = $deaths->load($fetch->id);
 		
-		$deathPlayer = $core->loadClass("character");
+		$deathPlayer = new Character();
 		$deathPlayer->load($fetch->player_id, "name");		
 				
-		$date = $core->formatDate($death_values['date']);
+		$date = Core::formatDate($death_values['date']);
 		
 		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
 		
@@ -69,7 +69,7 @@ if($query->numRows() != 0)
 				}
 				else
 				{
-					$_killer = $core->loadClass("character");	
+					$_killer = new Character();	
 					$_killer->load($killer['killer']);	
 
 					$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
@@ -90,7 +90,7 @@ else
 {
 	$module .= "
 	<tr>
-		<td colspan='2'>Não foi registrada nenhuma morte no servidor nas últimas 2 horas.</td>
+		<td colspan='2'>NÃ£o foi registrada nenhuma morte no servidor nas Ãºltimas 2 horas.</td>
 	</tr>";		
 }
 

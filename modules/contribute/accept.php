@@ -1,25 +1,25 @@
 <?
-$contribute = $core->loadClass("Contribute");
-$post = $core->extractPost();
+$contribute = new Contribute();
+$post = Core::extractPost();
 
-if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
+if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
 {
 	if($post)
 	{
-		$chkAccount = $core->loadClass("Account");
+		$chkAccount = new Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		if($strings->encrypt($post[0]) != $_SESSION['login'][1])
+		if(Strings::encrypt($post[0]) != $_SESSION['login'][1])
 		{
-			$error = "A confirmaÁ„o da senha est· invalida.";
+			$error = Lang::Message(LMSG_WRONG_PASSWORD);
 		}
 		elseif($post[1] != "1")
 		{
-			$error = "Para aceitar uma contribuiÁ„o È necessario estar de acordo com todas clausulas e termos de nosso contrato de serviÁo.";
+			$error = Lang::Message(LMSG_CONTR_TERMS);
 		}
 		else
 		{
-			$account = $core->loadClass("Account");
+			$account = new Account();
 			$account->load($contribute->get("target_account"));
 			
 			$account->updatePremDays($contribute->get("period"));
@@ -30,53 +30,47 @@ if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, t
 			$contribute->set("lastupdate_in", time());
 			$contribute->save();
 		
-			$success = "
-			<p>Caro jogador,</p>
-			<p>A sua contribuiÁ„o foi ativada com sucesso!</p>
-			<p>Agora sua conta j· possui status de Contra Premium, o que lhe permitir· muitas novas possibilidades dentro do ".CONFIG_SITENAME."!</p>
-			<p>AgradeÁemos a preferencia e obrigado por contribuir conosco!</p>
-			<p>Tenha um bom jogo!<br>Equipe UltraxSoft.</p>
-			";
+			$success = Lang::Message(LMSG_CONTR_ACTIVATED, CONFIG_SITENAME);
 		}
 	}
 
 	if($success)	
 	{
-		$core->sendMessageBox("Sucesso!", $success);
+		Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			$core->sendMessageBox("Erro!", $error);
+			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 		}
 
-	$contrato['premium'] = "Este È um documento informativo das clausulas e regras referente ao funcionamento, deveres e limitaÁıes entre outros referente aos jogadores contribuintes com o ".CONFIG_SITENAME.". Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribuiÁıes.\" e assim dar continuidade ao sistema de contribuiÁ„o.
+	$contrato['premium'] = "Este √© um documento informativo das clausulas e regras referente ao funcionamento, deveres e limita√ß√µes entre outros referente aos jogadores contribuintes com o ".CONFIG_SITENAME.". Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribui√ß√µes.\" e assim dar continuidade ao sistema de contribui√ß√£o.
 
 1. A estabilidade e mantimento do servidor no ar.
-ï A UltraxSoft e(ou) ".CONFIG_SITENAME." n„o tem a obrigaÁ„o de manter o servidor sempre ligado, podendo o mesmo ser desligado a qualquer momento e por qualquer motivo, sem prÈvio aviso, devoluÁ„o de quantias em dinheiro ou danos morais.
+- A UltraxSoft e(ou) ".CONFIG_SITENAME." n√£o tem a obriga√ß√£o de manter o servidor sempre ligado, podendo o mesmo ser desligado a qualquer momento e por qualquer motivo, sem pr√©vio aviso, devolu√ß√£o de quantias em dinheiro ou danos morais.
 
 2. Conectividade.
-ï A UltraxSoft e(ou) ".CONFIG_SITENAME." n„o s„o respons·veis por qualquer problema de conectividade entre o jogador e o \"game-server\", tanto por parte do jogador, provedor de internet ou \"datacenter\" (empresa que hospeda o nosso game-server).
+- A UltraxSoft e(ou) ".CONFIG_SITENAME." n√£o s√£o respons√°veis por qualquer problema de conectividade entre o jogador e o \"game-server\", tanto por parte do jogador, provedor de internet ou \"datacenter\" (empresa que hospeda o nosso game-server).
 
-3. Seguir regras sem exceÁıes.
-ï Caso vocÍ contribua com o serviÁo vocÍ estar· sujeito a todas as regras do jogo, n„o possuindo nenhum direito ou vantagem extra dentro ou fora do jogo.
+3. Seguir regras sem exce√ß√µes.
+- Caso voc√™ contribua com o servi√ßo voc√™ estar√° sujeito a todas as regras do jogo, n√£o possuindo nenhum direito ou vantagem extra dentro ou fora do jogo.
 
-4. Vantagens da contribuiÁ„o.
-ï Caso vocÍ contribua com o serviÁo, cabe a nÛs decidirmos sobre as vantagens recebidas, podendo as mesmas serem retiradas a qualquer momento sem prÈvio aviso nem devoluÁ„o em dinheiro.
+4. Vantagens da contribui√ß√£o.
+- Caso voc√™ contribua com o servi√ßo, cabe a n√≥s decidirmos sobre as vantagens recebidas, podendo as mesmas serem retiradas a qualquer momento sem pr√©vio aviso nem devolu√ß√£o em dinheiro.
 
 5. Direitos autorais.
-ï O ".CONFIG_SITENAME." n„o apÛia a modificaÁ„o de \"softwares\" sem autorizaÁ„o dos fabricantes, e n„o cobre nenhum tipo de dano a seu computador que os programas podem causar.
+- O ".CONFIG_SITENAME." n√£o ap√≥ia a modifica√ß√µes de \"softwares\" sem autoriza√ß√£o dos fabricantes ou desenvolvedores, e n√£o cobre nenhum tipo de dano a seu computador que os programas podem causar.
 
 6. Recompensas dentro do jogo.
-ï Perdas de itens, contas, ou caracterÌsticas de personagens somente ser„o devolvidos se o problema foi de causa interna em nossos \"game-servers\" e em forma de ponto de restauraÁ„o (aÁ„o que efetua uma volta no tempo todo o servidor para um momento ou dia aonde a problem·tica n„o havia acontecido), e somente caso a UltraxSoft assim julgue necess·rio, perdas causadas por qualqueis outras causas (como problemas de conex„o, desastres naturais, cuidados n„o eficientes com a sua conta (Hacking), entre outros) n„o s„o recompensados de maneira alguma.
+- Perdas de itens, contas, ou caracter√≠sticas de personagens somente ser√£o devolvidos se o problema foi de causa interna em nossos \"game-servers\" e em forma de ponto de restaura√ß√£o (efetuamos uma volta no tempo todo o servidor para um momento ou dia aonde a problem√°tica n√£o havia acontecido), e somente caso a UltraxSoft assim julgue necess√°rio, perdas causadas por qualqueis outras causas (como problemas de conex√£o, desastres naturais, cuidados n√£o eficientes com a sua conta (Hacking), entre outros) n√£o s√£o recompensados de maneira alguma.
 
-7. DevoluÁıes e troca de destino de contribuiÁıes.
-ï A devoluÁ„o do dinheiro, ou mudanÁa da conta na qual o contribuinte ir· receber os benefÌcios, sÛ È ocorrida enquanto o contribuinte n„o aceita a liberaÁ„o do serviÁo. Caso algum dos recursos seja solicitado pelo contribuinte, a mudanÁa de conta para contribuiÁ„o tem um prazo de 5 a 30 dias apÛs solicitada para ser concluÌda e a devoluÁ„o do dinheiro em um prazo de 30 a 90 dias apÛs solicitado. 
+7. Devolu√ß√µes e troca de destino de contribui√ß√µes.
+- A devolu√ß√£o do dinheiro, ou mudan√ßa da conta na qual o contribuinte ir√° receber os benef√©cios, s√≥ √© permitida enquanto o contribuinte n√£o aceita a libera√ß√£o do servi√ßo. Caso algum dos recursos seja solicitado pelo contribuinte, a mudan√ßaa de conta para contribui√ß√£o tem um prazo de 5 a 30 dias ap√≥s solicitada para ser conclu√≠da e a devolu√ß√£o do dinheiro em um prazo de 30 a 90 dias ap√≥s solicitado. 
 
-IMPORTANTE: ApÛs aceitar o serviÁo, receber e comeÁar a desfrutar dos beneficio em sua conta os recursos de mudanÁa de conta e devoluÁ„o do dinheiro n„o s„o mais possÌveis em hipÛtese alguma.
+IMPORTANTE: Ap√≥s aceitar o servi√ßo, receber e come√ßar a desfrutar dos beneficio em sua conta os recursos de mudan√ßa de conta e devolu√ß√£o do dinheiro n√£o s√£o mais poss√≠veis em hip√≥tese alguma.
 
-A mudanÁa deste documento pode ser efetuada sem aviso, ou prÈvio aviso, cabendo a vocÍ se manter atualizado ‡s regras e ao contrato.";
+A mudan√ßa deste documento pode ser efetuada sem aviso, ou pr√©vio aviso, cabendo a voc√™ se manter atualizado as regras e ao contrato.";
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
@@ -85,7 +79,7 @@ $module .= '
 		<ul id="charactersview">
 			<p>Pedido Numero: '.$contribute->get("id").'</p>
 			<li><b>Personagem: </b> '.$contribute->get("target").'.</li>
-			<li><b>Periodo: </b> ContribuiÁ„o de '.$contribute->get("period").' dias de Conta Premium.</li>
+			<li><b>Periodo: </b> Contribui√ß√µes de '.$contribute->get("period").' dias de Conta Premium.</li>
 			
 		</ul>	
 		
@@ -95,12 +89,12 @@ $module .= '
 		</p>		
 		
 		<p>
-			<label for="accept_terms">Clausulas e Termos de aceitaÁ„o de ContribuiÁıes</label><br />
+			<label for="accept_terms">Clausulas e Termos de aceita√ß√£o de Contribui√ß√µes</label><br />
 			<textarea rows="10" wrap="physical" cols="55" readonly="true">'.$contrato['premium'].'</textarea>
 		</p>	
 
 		<p>
-			<input name="accept_terms" type="checkbox" value="1" /> Eu aceito com as clausulas e termos de contrato de contribuiÁıes do '.CONFIG_SITENAME.'.
+			<input name="accept_terms" type="checkbox" value="1" /> Eu aceito com as clausulas e termos de contrato de contribui√ß√µes do '.CONFIG_SITENAME.'.
 		</p>			
 		
 		<div id="line1"></div>

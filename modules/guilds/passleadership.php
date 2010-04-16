@@ -1,20 +1,20 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 1)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
 	}	
 	else
 	{		
@@ -23,24 +23,23 @@ if($_GET['name'])
 		
 		$members = $guild->getMembersList();		
 		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{						
 			$ranks = $guild->getRanks();
-			$members = $guild->getMembersList();
 			
 			foreach($members as $member_name => $member_values)
 			{
 				$members_list[] = $member_name;
 			}
 			
-			if($account->get("password") != $strings->encrypt($post[1]))
+			if($account->get("password") != Strings::encrypt($post[1]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}		
 			elseif(!in_array($post[0], $members_list))
 			{
-				$error = "Falha fatal.";				
+				$error = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $post[0], $_GET['name']);			
 			}
 			else
 			{			
@@ -56,13 +55,13 @@ if($_GET['name'])
 						$vice_id = $rank_id;
 				}
 				
-				$newLeader_char = $core->loadClass("Character");
+				$newLeader_char = new Character();
 				$newLeader_char->loadByName($post[0], "name, rank_id");
 				$newLeader_char->set("rank_id", $leader_id);
 				$newLeader_id = $newLeader_char->get("id");
 				$newLeader_char->save();
 				
-				$oldLeader_char = $core->loadClass("Character");
+				$oldLeader_char = new Character();
 				$oldLeader_char->load($guild->get("ownerid"), "name, rank_id");
 				$oldLeader_char->set("rank_id", $vice_id);
 				$oldLeader_name = $oldLeader_char->get("name");
@@ -71,23 +70,19 @@ if($_GET['name'])
 				$guild->set("ownerid", $newLeader_id);
 				$guild->save();
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A guilda {$_GET['name']} teve a liderança transferida de {$oldLeader_name} para {$post[0]} com sucesso!</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				$success = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $oldLeader_name, $post[0]);
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 			
 			$vices = 0;
@@ -132,7 +127,7 @@ if($_GET['name'])
 				{
 					$module .=	'
 					<p>
-						É necessario possuir ao menos 1 vice lider disponivel para que seja possivel a  transferencia a liderança de uma guilda.
+						Ã‰ necessario possuir ao menos 1 vice lider disponivel para que seja possivel a  transferencia a lideranÃ§a de uma guilda.
 					</p>	
 					';			
 				}

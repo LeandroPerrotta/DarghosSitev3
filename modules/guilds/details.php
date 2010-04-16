@@ -1,12 +1,12 @@
 <?php
 if($_GET['name'])
 {
-	$guild = $core->loadClass("guilds");
-	$jogador = $core->loadClass("character");
+	$guild = new Guilds();
+	$jogador = new Character();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{		
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));
 	}
 	else
 	{
@@ -14,7 +14,7 @@ if($_GET['name'])
 		
 		if($_SESSION['login'])
 		{
-			$account = $core->loadClass("Account");
+			$account = new Account();
 			$account->load($_SESSION['login'][0], "password");
 			
 			$character_list = $account->getCharacterList(true);
@@ -31,15 +31,6 @@ if($_GET['name'])
 		$invites = $guild->getInvites();
 		$ranks = $guild->getRanks();
 		
-		if($guild->isOnWar())
-		{
-			$str = "<td>Esta guilda <b>esta em modo de guerra!</b> <p>Desde <i>".$core->formatDate($guild->getWarStart())."</i> até <i>".$core->formatDate($guild->getWarEnd())."</i></td>";
-		}
-		else 
-		{
-			$str = "<td>Esta guilda <b>não esta em modo de guerra</b>.";			
-		}
-		
 		$module .=	"
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
@@ -52,14 +43,14 @@ if($_GET['name'])
 		
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
-				<th>Informações da Guilda</th>
+				<th>InformaÃ§Ãµes da Guilda</th>
 			</tr>
 			<tr>
-				<td>".(($guild->get("status") == 1) ? "Esta guilda está em <b>atividade</b>." : "Esta guilda está em processo de formação e será disbandada se não possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> até <b>".$core->formatDate($guild->get("formationTime"))."</b>.")."</td>
+				<td>".(($guild->get("status") == 1) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formaÃ§Ã£o e serÃ¡ disbandada se nÃ£o possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> atÃ© <b>".Core::formatDate($guild->get("formationTime"))."</b>.")."</td>
 			</tr>
 			
 			<tr>
-				<td>Esta guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
+				<td>Esta guilda foi criada em <b>".Core::formatDate($guild->get("creationdata"))."</b>.</td>
 			</tr>
 										
 		</table>";				
@@ -77,7 +68,7 @@ if($_GET['name'])
 			
 			$module .= "
 				<p>
-					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a>
+					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar DescriÃ§Ãµes</a>
 				    <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
 				    {$button}
 				</p>				
@@ -91,7 +82,7 @@ if($_GET['name'])
 		
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
-				<th>Posição</th> <th>Nome e Titulo</th> <th>Membro Desde</th>
+				<th>PosiÃ§Ã£o</th> <th>Nome e Titulo</th> <th>Membro Desde</th>
 			</tr>		
 		";			
 				
@@ -110,7 +101,7 @@ if($_GET['name'])
 				<tr>
 					<td width='25%'><b>".(($show_rank[$guild_value['rank']]) ? $guild_value['rank'] : "&nbsp")."</b></td> 
 					<td><a href='?ref=character.view&name=".$player_name."'>".$player_name." </a> ".(($guild_value['nick']) ? "(<i>{$guild_value['nick']}</i>)" : null)."</i></td> 
-					<td>{$core->formatDate($guild_value['joinDate'])}</td>
+					<td>".Core::formatDate($guild_value['joinDate'])."</td>
 				</tr>	
 			";	
 
@@ -132,7 +123,7 @@ if($_GET['name'])
 			if($_SESSION['login'] and $accountLevel == 1)
 			{	
 				$module .= "
-					<a class='buttonstd' href='?ref=guilds.ranks&name={$guild->get("name")}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$guild->get("name")}'>Passar Liderança</a>				
+					<a class='buttonstd' href='?ref=guilds.ranks&name={$guild->get("name")}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$guild->get("name")}'>Passar LideranÃ§a</a>				
 				";	
 			}
 			
@@ -164,7 +155,7 @@ if($_GET['name'])
 				
 				$module .= "
 					<tr>
-						<td><a href='?ref=character.view&name=".$player_name."'>".$player_name."</a></td> <td>{$core->formatDate($invite_date)}</td>
+						<td><a href='?ref=character.view&name=".$player_name."'>".$player_name."</a></td> <td>{Core::formatDate($invite_date)}</td>
 					</tr>	
 				";	
 
@@ -178,7 +169,7 @@ if($_GET['name'])
 		{
 			$module .= "
 				<tr>
-					<td>Nenhum personagem está convidado para esta guilda.</td> <td>&nbsp;</td>
+					<td>Nenhum personagem estÃ¡ convidado para esta guilda.</td> <td>&nbsp;</td>
 				</tr>	
 			";				
 		}

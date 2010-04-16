@@ -1,8 +1,8 @@
 <?
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
 	$charsList = $account->getCharacterList(true);
@@ -16,7 +16,7 @@ if($post)
 		{
 			foreach($charsList as $charId)
 			{
-				$character = $core->loadClass("Character");
+				$character = new Character();
 				$character->load($charId);
 				
 				if($character->getLevel() >= 100)
@@ -26,7 +26,7 @@ if($post)
 			}
 		}
 		
-		$contribute = $core->loadClass("Contribute");
+		$contribute = new Contribute();
 		$oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 		$havePremiums = 0;
 		
@@ -44,21 +44,21 @@ if($post)
 		}
 	}
 	
-	if($account->getPassword() != $strings->encrypt($_POST['account_password']))
+	if($account->getPassword() != Strings::encrypt($_POST['account_password']))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = "Confirmaï¿½ï¿½o da senha falhou.";
 	}
 	elseif($premtest)
 	{
-		$error = "A sua conta já recebeu este beneficio no dia {$core->formatDate($premtest)}. Somente é permitido receber este beneficio uma vez por conta.";
+		$error = "A sua conta jï¿½ recebeu este beneficio no dia {Core::formatDate($premtest)}. Somente ï¿½ permitido receber este beneficio uma vez por conta.";
 	}	
 	elseif($havePremiums != 0)
 	{
-		$error = "Você já obteve uma Conta Premium da forma tradicional. Este recurso só está disponivel a jogadores que jamais possuiram uma Conta Premium.";
+		$error = "Vocï¿½ jï¿½ obteve uma Conta Premium da forma tradicional. Este recurso sï¿½ estï¿½ disponivel a jogadores que jamais possuiram uma Conta Premium.";
 	}
 	elseif($charsLevel100 == 0)
 	{
-		$error = "Para receber este recurso é necessario que você tenha atingido o level 100 em algum dos personagens de sua conta.";
+		$error = "Para receber este recurso ï¿½ necessario que vocï¿½ tenha atingido o level 100 em algum dos personagens de sua conta.";
 	}			
 	else
 	{		
@@ -66,7 +66,7 @@ if($post)
 		
 		$success = "
 		<p>Caro jogador,</p>
-		<p>A sua conta recebeu o beneficio de Premium Test com sucesso! Agora você possui ".PREMTEST_DAYS." gratuitos para conhecer o Darghos a vontade!</p>
+		<p>A sua conta recebeu o beneficio de Premium Test com sucesso! Agora vocï¿½ possui ".PREMTEST_DAYS." gratuitos para conhecer o Darghos a vontade!</p>
 		<p>Tenha um bom jogo!</p>
 		";
 	}
@@ -74,20 +74,20 @@ if($post)
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox("Sucesso!", $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox("Erro!", $error);
 	}
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
-		<p>Este é um recurso especial que permite que você, que tenha um personagem level 100 ou superior e nunca tenha obtido uma Conta Premium receba '.PREMTEST_DAYS.' dias premium totalmente gratuitos para que você possa conhecer o Darghos. Confirme sua senha abaixo para receber o beneficio.</p>	
+		<p>Este ï¿½ um recurso especial que permite que vocï¿½, que tenha um personagem level 100 ou superior e nunca tenha obtido uma Conta Premium receba '.PREMTEST_DAYS.' dias premium totalmente gratuitos para que vocï¿½ possa conhecer o Darghos. Confirme sua senha abaixo para receber o beneficio.</p>	
 		
 		<p>
 			<label for="account_password">Senha</label><br />

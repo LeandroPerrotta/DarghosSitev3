@@ -1,7 +1,7 @@
 <?
 if(isset($_POST['skill']))
 {
-	($_POST['show_onlyPeacers'] == 1) ? $core->redirect("?ref=community.highscores&skill={$_POST['skill']}&filter=1") : $core->redirect("?ref=community.highscores&skill={$_POST['skill']}");
+	($_POST['show_onlyPeacers'] == 1) ? Core::redirect("?ref=community.highscores&skill={$_POST['skill']}&filter=1") : Core::redirect("?ref=community.highscores&skill={$_POST['skill']}");
 }
 
 if(isset($_GET['skill']))
@@ -22,7 +22,7 @@ else
 if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
 {
 	$module .= '
-	<p> Este highscores mostra apenas personagens <b>ativos</b> no jogo (Apenas os que n„o est„o inativos a menos de 7 dias atr·s).
+	<p> Este highscores mostra apenas personagens <b>ativos</b> no jogo (Apenas os que n√£o est√£o inativos a menos de 7 dias atr√°s).
 	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
 }
 
@@ -32,21 +32,21 @@ $module .= '
 		<p>		
 			<label for="skill">Tipo de Habilidade</label><br />
 			<select name="skill">
-				<option '.(($skill == "experience") ? 'selected' : null).' value="experience">NÌvel de ExpÍriencia</option>
-				<option '.(($skill == "maglevel") ? 'selected' : null).' value="maglevel">NÌvel M·gico</option>
+				<option '.(($skill == "experience") ? 'selected' : null).' value="experience">N√≠vel de Experi√™ncia</option>
+				<option '.(($skill == "maglevel") ? 'selected' : null).' value="maglevel">N√≠vel M√°gico</option>
 				<option '.(($skill == "sword") ? 'selected' : null).' value="sword">Batalha com Espada</option>
 				<option '.(($skill == "axe") ? 'selected' : null).' value="axe">Batalha com Machado</option>
 				<option '.(($skill == "club") ? 'selected' : null).' value="club">Batalha com Martelo</option>
-				<option '.(($skill == "fist") ? 'selected' : null).' value="fist">Batalha com M„os</option>
+				<option '.(($skill == "fist") ? 'selected' : null).' value="fist">Batalha com M√£os</option>
 				<option '.(($skill == "shield") ? 'selected' : null).' value="shield">Habilidade com Escudo</option>
-				<option '.(($skill == "distance") ? 'selected' : null).' value="distance">Pontaria ‡ Distancia</option>
+				<option '.(($skill == "distance") ? 'selected' : null).' value="distance">Pontaria √† Distancia</option>
 				<option '.(($skill == "fishing") ? 'selected' : null).' value="fishing">Habilidade de Pesca</option>
 			</select>
 		</p>	
 
 		<p>		
 			<label for="filter">Filtros</label><br />
-			<input '.((isset($filter) ? 'checked="checked"' : null)).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apÈnas personagens em Island of Peace.
+			<input '.((isset($filter) ? 'checked="checked"' : null)).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir ap√©nas personagens em Island of Peace.
 		</p>		
 		
 		<div id="line1"></div>
@@ -73,12 +73,12 @@ else
 		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 ORDER BY skill.value DESC LIMIT 100");
 }
 
-$character = $core->loadClass("Character");
+$character = new Character();
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
 	<tr>
-		<th width='5%'>&nbsp;</th> <th width='50%'>Nome</th> <th>VocaÁ„o</th> <th>NÌvel</th> ".(($skill == "experience") ? "<th>Pontos</th>" : null)."
+		<th width='5%'>&nbsp;</th> <th width='50%'>Nome</th> <th>Voca√ß√£o</th> <th>N√≠vel</th> ".(($skill == "experience") ? "<th>Pontos</th>" : null)."
 	</tr>	
 ";
 

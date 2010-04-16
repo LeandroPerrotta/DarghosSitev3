@@ -1,14 +1,14 @@
 <?php
 if($_SESSION['recovery'])
 {
-	$post = $core->extractPost();
+	$post = Core::extractPost();
 	
-	$character = $core->loadClass("Character");
+	$character = new Character();
 	$character->loadByName($_SESSION['recovery'][0], "account_id"); 
 	
-	$chkEmail = $core->loadClass("Account");
+	$chkEmail = new Account();
 	
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($character->get("account_id"), "password, email");
 	$secretkey = $account->getSecretKey();
 	
@@ -19,45 +19,45 @@ if($_SESSION['recovery'])
 			$postSecretKey = $_POST['recovery_secretkey'];
 			$postEmail = $_POST['recovery_email'];
 		
-			if($core->getIpTries() >= 3)
+			if(Core::getIpTries() >= 3)
 			{
-				$error = $boxMessage['OPERATION_BLOCKED_STATE'] ;
+				$error = Lang::Message(LMSG_OPERATION_ARE_BLOCKED);
 			}
 			elseif($postSecretKey != $secretkey['key'])
 			{
-				$core->increaseIpTries();
+				Core::increaseIpTries();
 				
-				if($core->getIpTries() < 3)
-					$error = $boxMessage['INCORRECT_SECRET_KEY'];
+				if(Core::getIpTries() < 3)
+					$error = Lang::Message(LMSG_RECOVERY_WRONG_SECRET_KEY);
 				else
-					$error = $boxMessage['MANY_ATTEMPS_OPERATION_BLOCKED'];
+					$error = Lang::Message(LMSG_OPERATION_HAS_BLOCKED);
 			}
 			elseif($chkEmail->loadByEmail($postEmail))
 			{
-				$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
+				$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 			}
-			elseif(!$strings->validEmail($postEmail))
+			elseif(!Strings::validEmail($postEmail))
 			{
-				$error = $boxMessage['INVALID_EMAIL'];
+				$error = Lang::Message(LMSG_WRONG_EMAIL);
 			}
 			else
 			{
 				$account->setEmail($postEmail);
 				$account->save();
 				
-				$success = $boxMessage['SUCCESS.CHANGE_EMAIL_USING_RECOVERY_KEY'];	
+				$success = Lang::Message(LMSG_RECOVERY_EMAIL_CHANGED);	
 			}
 		}
 	
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 			
 		$module .= '	
@@ -102,7 +102,7 @@ if($_SESSION['recovery'])
 	}
 	else
 	{
-		$core->sendMessageBox("Erro!", $boxMessage['ACCOUNT_NOT_HAVE_SECRET_KEY']);		
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_RECOVERY_DISABLED));		
 	}		
 }
 ?>

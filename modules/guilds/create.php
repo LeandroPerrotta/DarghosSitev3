@@ -1,38 +1,38 @@
 <?
-$account = $core->loadClass("Account");
+$account = new Account();
 $account->load($_SESSION["login"][0], "password");
 
 $list = $account->getCharacterList();
 
 if($_POST)
 {	
-	$guild = $core->loadClass("guilds");
-	$character = $core->loadClass("Character");
+	$guild = new Guilds();
+	$character = new Character();
 	$character->loadByName($_POST["guild_owner"], "rank_id, guild_join_date");
 		
 	if(!in_array($_POST["guild_owner"], $list))
 	{
-		$error = "Este personagem não pertence a sua conta.";
+		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
-	elseif($account->get("password") != $strings->encrypt($_POST["account_password"]))
+	elseif($account->get("password") != Strings::encrypt($_POST["account_password"]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}	
 	elseif($guild->loadByName($_POST["guild_name"]))
 	{
-		$error = "Já existe uma guilda em nosso banco de dados registrada com este nome.";
+		$error = Lang::Message(LMSG_GUILD_NAME_ALREADY_USED);
 	}	
 	elseif($account->isGuildHighMember())
 	{
-		$error = "Só é permitido possuir 1 lider ou vice-lider por conta.";
+		$error = Lang::Message(LMSG_GUILD_ONLY_ONE_VICE_PER_ACCOUNT);
 	}	
-	elseif(!$strings->canUseName($_POST["guild_name"]))
+	elseif(!Strings::canUseName($_POST["guild_name"]))
 	{
-		$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
+		$error = Lang::Message(LMSG_WRONG_NAME);
 	}
 	elseif($character->loadGuild())
 	{
-		$error = "Seu personagem ja possui guild, é nescessario sair da mesma para criar outra.";
+		$error = Lang::Message(LMSG_CHARACTER_ALREADY_MEMBER_GUILD);
 	}
 	else
 	{
@@ -63,23 +63,19 @@ if($_POST)
 		$character->set("rank_id", $leader_id);
 		$character->save();
 		
-		$success = "
-		<p>A guilda ".$_POST["guild_name"]." foi criada com sucesso!</p>
-		<p>Inicialmente a sua guilda está em estagio de formação, e você deve nomear ao minimo ".GUILDS_VICELEADERS_NEEDED." vice-lideres em ".GUILDS_FORMATION_DAYS." dias para que sua guilda seja formada! Caso contrario a guilda será automaticamente desbandada.</p>
-		<p>Tenha uma boa jornada!</p>
-		";
+		$success = Lang::Message(LMSG_GUILD_CREATED, $_POST["guild_name"], GUILDS_VICELEADERS_NEEDED, GUILDS_FORMATION_DAYS);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {	
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 

@@ -1,16 +1,16 @@
 <?
 if($_SESSION['contribute'])
 {
-	$contribute = $core->loadClass("Contribute");
+	$contribute = new Contribute();
 	$orderNumber = $contribute->getNewOrderNumber();
 	
-	$character = $core->loadClass("Character");
+	$character = new Character();
 	$character->loadByName($_SESSION['contribute'][2], "account_id");
 	$target_account = $character->get("account_id");
 	
 	if(!$orderNumber)
 	{
-		$error = "Ouve uma falha ao obter um numero para seu pedido. Por favor tente novamente, se o problema persistir aguarde algumas horas.";
+		$error = Lang::Message(LMSG_CONTR_ORDER_NUMBER_DUPLICATED);
 	}
 	
 	$contribute->set("name", $_SESSION['contribute'][0]);
@@ -27,20 +27,7 @@ if($_SESSION['contribute'])
 	
 	$contribute->save();
 
-	$module .= '	
-		<fieldset>			
-			
-			<p><h3>Pedido Gerado com sucesso!</h3></p>
-			
-			<p>Caro jogador, o seu pedido foi gerado com sucesso! Anote abaixo o numero de seu pedido para consulta ou qualquer eventual problema.</p>
-			<p>Clicando no botão Finalizar abaixo você será direcionado ao site do '.$_SESSION['contribute'][3].' aonde você irá terminar o processo efetuando o pagamento de sua contribuição.</p>
-			
-			<p>Numero do Pedido de sua Contribuição: <h3>'.$orderNumber.'</h3></p>
-			
-			<p>
-				'.$contribute->sendUrl().'				
-			</p>
-		</fieldset>';	
+	$module = Lang::Message(LMSG_CONTR_ORDER_CREATED, $_SESSION['contribute'][3], $orderNumber, $contribute->sendUrl());
 		
 	unset($_SESSION['contribute']);
 }

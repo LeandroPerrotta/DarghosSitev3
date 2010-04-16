@@ -14,7 +14,7 @@ if($query->numRows() != 0)
 {
 	$module .= "
 	<tr>
-		<th width='3%'>&nbsp </th> <th width='25%'>Descrição</th>
+		<th width='3%'>&nbsp </th> <th width='25%'>DescriÃ§Ã£o</th>
 	</tr>	
 	";
 	
@@ -30,11 +30,11 @@ else
 {
 		$module .= "
 		<tr>
-			<th width='25%'>Descrição</th>
+			<th width='25%'>DescriÃ§Ã£o</th>
 		</tr>			
 		
 		<tr>
-			<td>Não existe nenhuma guilda ativa neste momento.</td>
+			<td>NÃ£o existe nenhuma guilda ativa neste momento.</td>
 		</tr>";		
 }
 
@@ -45,7 +45,7 @@ unset($query);
 $query = $db->query("SELECT * FROM guilds WHERE status = '0' ORDER BY creationdata");	
 
 $module .= "
-<p><h3>Guildas em Formação</h3></p>	
+<p><h3>Guildas em FormaÃ§Ã£o</h3></p>	
 
 <table cellspacing='0' cellpadding='0' id='table'>";
 
@@ -53,7 +53,7 @@ if($query->numRows() != 0)
 {
 	$module .= "
 	<tr>
-		<th width='3%'>&nbsp </th> <th width='25%'>Descrição</th>
+		<th width='3%'>&nbsp </th> <th width='25%'>DescriÃ§Ã£o</th>
 	</tr>	
 	";	
 	
@@ -69,11 +69,11 @@ else
 {
 		$module .= "
 		<tr>
-			<th width='25%'>Descrição</th>
+			<th width='25%'>DescriÃ§Ã£o</th>
 		</tr>		
 		
 		<tr colspan='2'>
-			<td>Não existe nenhuma guilda em formação neste momento.</td>
+			<td>NÃ£o existe nenhuma guilda em formaÃ§Ã£o neste momento.</td>
 		</tr>";		
 }
 

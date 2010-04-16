@@ -1,27 +1,31 @@
 <?
 class Core
 {
-	private $db;
 	private $alreadyShowBanner = false;
-
-	function __construct()
-	{
-		global $db;
-		$this->db = $db;
-	}	
 	
-	function FCKEditor($instance)
+	static function FCKEditor($instance)
 	{
 		include "libs/fckeditor/fckeditor.php";
 		return new FCKeditor($instance);
 	}
 	
-	function InitPOT()
+	static function InitPOT()
 	{
 		// includes POT main file
 		include_once('classes/pot/OTS.php');
 		
-		list($ip, $port) = explode(":", DB_HOST);
+		$array = explode(":", DB_HOST);
+		
+		if(count($array) == 2)
+		{
+			$ip = $array[0];
+			$port = $array[1];
+		}
+		else
+		{
+			$ip = DB_HOST;
+			$port = 3306;
+		}
 		
 		// database configuration - can be simply moved to external file, eg. config.php
 		$config = array(
@@ -39,7 +43,7 @@ class Core
 		// could be: POT::connect(POT::DB_MYSQL, $config);		
 	}
 	
-	function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
+	static function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";
 
@@ -85,21 +89,34 @@ class Core
 		return false;
 	}
 	
-	function loadUploadClass() 
+	static function loadUploadClass() 
 	{
 		include "libs/upload/upload_class.php";	
 	}	
 	
-	function loadClass($class)
+	static function loadClass($class)
 	{
 		include_once "classes/".strtolower($class).".php";
 		return new $class();
 	}
 	
-	function extractPost()
+	static function InitLanguage()
 	{
-		$strings = $this->loadClass("strings");
-		
+		if(GLOBAL_LANGUAGE == "pt")
+		{	
+			include "language/pt/menu.php";
+			include "language/pt/pages.php";
+			include "language/pt/buttons.php";
+			include "language/pt/Messages.php";
+			
+			include "classes/Lang.php";
+			
+			Lang_Messages::Load();
+		}		
+	}
+	
+	static function extractPost()
+	{		
 		if($_POST)
 		{
 			$post = array();
@@ -115,17 +132,17 @@ class Core
 			return false;
 	}
 	
-	function formatDate($date)
+	static function formatDate($date)
 	{
 		return date("d/m/y - H:i", $date);
 	}
 	
-	function getHour()
+	static function getHour()
 	{
 		return date("H", time());
 	}
 	
-	function redirect($url, $local = true/*, $delay = false*/) 
+	static function redirect($url, $local = true/*, $delay = false*/) 
 	{		
 		if($local)
 			$url = CONFIG_SITEEMAIL."/".$url;
@@ -133,7 +150,7 @@ class Core
 		header("Location: ".$url." ");
 	}	
 	
-	function getIpTries()
+	static function getIpTries()
 	{
 		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
 		
@@ -145,7 +162,7 @@ class Core
 			return false;
 	}
 	
-	function getGlobalValue($field)
+	static function getGlobalValue($field)
 	{
 		$query = $this->db->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
 		
@@ -159,7 +176,7 @@ class Core
 			return false;
 	}
 	
-	function setGlobalValue($field, $value)
+	static function setGlobalValue($field, $value)
 	{
 		$query = $this->db->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
 		
@@ -169,7 +186,7 @@ class Core
 			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."global (`field`, `value`) values('{$field}', '{$value}')");
 	}	
 	
-	function increaseIpTries()
+	static function increaseIpTries()
 	{
 		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
 		
@@ -181,7 +198,7 @@ class Core
 			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
 	
-	function getLastAdClick()
+	static function getLastAdClick()
 	{
 		$query = $this->db->query("SELECT date FROM ".DB_WEBSITE_PREFIX."adpage ORDER BY date DESC LIMIT 1");
 		
@@ -190,7 +207,7 @@ class Core
 		return $fetch->date;
 	}
 	
-	function sendMessageBox($title, $msg)
+	static function sendMessageBox($title, $msg)
 	{
 		global $module;
 		

@@ -1,32 +1,32 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 1)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
 	}	
 	else
 	{		
 		$guild->loadRanks();
 		$ranks = $guild->getRanks();
 		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{
 			$haveLongRank = 0;
 			$ranklist = array();
-			$$rankToRemove = array();
+			$rankToRemove = array();
 			$isFirstNull = false;
 			$orderOut = false;
 			
@@ -61,21 +61,21 @@ if($_GET['name'])
 				}
 			}			
 			
-			if($account->get("password") != $strings->encrypt($post[6]))
+			if($account->get("password") != Strings::encrypt($post[6]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}			
 			elseif($orderOut)
 			{
-				$error = "Os ranks estão em sequencia fora de ordem.";	
+				$error = Lang::Message(LMSG_GUILD_RANK_WRONG_ORDER);	
 			}			
 			elseif($haveLongRank != 0)
 			{
-				$error = "Os ranks devem possuir no maximo 35 caracteres.";	
+				$error = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);	
 			}
 			elseif(count($ranklist) < 3)
 			{
-				$error = "É obrigatorio existir ao menos 3 ranks em sua guild.";	
+				$error = Lang::Message(LMSG_GUILD_RANK_MIMINUM_NEEDED);	
 			}			
 			else
 			{		
@@ -94,28 +94,24 @@ if($_GET['name'])
 						$guild->setRank($rankname, $ranklvl);
 					}					
 					
-					$success = "
-					<p>Caro jogador,</p>
-					<p>As alterações nos Ranks de sua guild foi efetuado com sucesso!</p>
-					<p>Tenha um bom jogo!</p>
-					";
+					$success = Lang::Message(LMSG_GUILD_RANKS_EDITED);
 				}
 				else
 				{
-					$error = "Um ou mais ranks removidos de sua guilda está em uso por um ou mais membros. Só é permitido remover um ranks que nenhum membro está a ultilizar.";	
+					$error = Lang::Message(LMSG_GUILD_RANK_IN_USE);	
 				}
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 				
 			$rank_n = 0;

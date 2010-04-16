@@ -190,11 +190,9 @@ class Guilds
 	}
 	
 	function set($field, $value)
-	{
-		global $strings;
-		
+	{		
 		if($field == "motd")
-			$value = $strings->SQLInjection($value);
+			$value = Strings::SQLInjection($value);
 		
 		$this->data[$field] = $value;
 	}

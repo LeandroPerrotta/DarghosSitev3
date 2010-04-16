@@ -1,20 +1,20 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList();	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{	
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");	
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 2)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");		
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));		
 	}	
 	else
 	{						
@@ -24,11 +24,11 @@ if($_GET['name'])
 		$members = $guild->getMembersList();
 		$ranks = $guild->getRanks();		
 		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{			
 			$canEditMember = true;
-			$character = $core->loadClass("Character");
+			$character = new Character();
 			
 			if($members[$_POST["guild_member"]]['level'] <= $account->getGuildLevel($guild->get("name")))
 				$canEditMember = false;
@@ -43,7 +43,7 @@ if($_GET['name'])
 					if($_POST["guild_action"] == "setRank")
 					{		
 						$character->loadByName($_POST["guild_member"], "account_id, name, rank_id");
-						$accountMember = $core->loadClass("Account");
+						$accountMember = new Account();
 						$accountMember->load($character->get("account_id"), "premdays");
 						
 						if($account->getGuildLevel($guild->get("name")) == 2 and $account->getGuildLevel($guild->get("name")) <=  $ranks[$_POST["member_rank"]]["level"])
@@ -105,65 +105,53 @@ if($_GET['name'])
 			else
 				$memberInexistente = true;
 		
-			if($account->get("password") != $strings->encrypt($post[4]))
+			if($account->get("password") != Strings::encrypt($post[4]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
 			elseif($memberInexistente)		
 			{
-				$error = "Este personagem não é membro desta guild.";						
+				$error = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);						
 			}			
 			elseif($rankOnlyToPremium)		
 			{
-				$error = "Somente membros com uma Conta Premium podem ser promovidos a este Rank.";						
+				$error = Lang::Message(LMSG_GUILD_RANK_ONLY_PREMIUM);						
 			}				
 			elseif(!$canEditMember)
 			{
-				$error = "Apénas Lideres de Guildas podem modificar Vice-Lideres.";
+				$error = Lang::Message(LMSG_GUILD_PERMISSION);
 			}			
 			elseif($titleIsLong)
 			{
-				$error = "O titulos do membro deve possuir entre 3 e 15 caracteres.";
+				$error = Lang::Message(LMSG_GUILD_TITLE_SIZE);
 			}		
 			elseif($canNotPromove)		
 			{
-				$error = "Você não pode promover membros para este rank.";						
+				$error = Lang::Message(LMSG_GUILD_PERMISSION);						
 			}
 			elseif($canNotDemote)		
 			{
-				$error = "Esta ação não pode ser efetuada para este membro.";						
+				$error = Lang::Message(LMSG_GUILD_PERMISSION);						
 			}	
-			elseif($rankOnlyToPremium)		
-			{
-				$error = "Somente membros com uma Conta Premium podem ser promovidos a este Rank.";						
-			}		
 			elseif($alreadyIsHighMember)
 			{
-				$error = "O membro em questão já é Lider ou Vice-Lider em outra guild.";					
-			}
-			elseif($isWar)
-			{
-				$error = "Sua guilda está em war, você só poderá sair da mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";				
-			}		
+				$error = Lang::Message(LMSG_GUILD_ACCOUNT_ALREADY_IS_HIGH_RANK);					
+			}	
 			else
 			{						
-				$success = "
-				<p>Caro jogador,</p>
-				<p>O membro {$post[0]} foi modificado na guilda com sucesso!</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				$success = Lang::Message(LMSG_GUILD_MEMBER_EDITED, $post[0]);
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 		
 		$lowerRank = $guild->getLowerRank();
@@ -191,12 +179,12 @@ if($_GET['name'])
 					</p>					
 					
 					<p>
-						<label for="guild_action">Ações</label><br />
+						<label for="guild_action">OperaÃ§Ãµes:</label><br />
 						
 						<ul id="pagelist">
 							<li><input name="guild_action" type="radio" value="setRank"> Configurar rank para <select name="member_rank">'.$option_ranks.'</select></li>
 							<li><input name="guild_action" type="radio" value="setTitle"> Configurar titulo para <input name="member_nick" size="25" type="text" value="" /></li>
-							<li><input name="guild_action" type="radio" value="exclude"> Dispençar da Guilda </li>
+							<li><input name="guild_action" type="radio" value="exclude"> DispenÃ§ar da Guilda </li>
 						</ul>	
 					</p>					
 					

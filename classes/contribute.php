@@ -79,8 +79,7 @@ class Contribute extends MySQL
 			}
 		}
 
-		global $strings;
-		$orderNumber = $strings->randKey(6, 3, "upper+number");
+		$orderNumber = Strings::randKey(6, 3, "upper+number");
 		$success = false;
 		
 		for($i = 0; $i < 10; $i++)
@@ -91,7 +90,7 @@ class Contribute extends MySQL
 				break;
 			}	
 				
-			$orderNumber = $strings->randKey(12, 1, "upper+number");
+			$orderNumber = Strings::randKey(12, 1, "upper+number");
 		}
 		
 		if($success)
@@ -228,7 +227,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="no_shipping" value="0">
 				<input type="hidden" name="no_note" value="1">
 				<input type="hidden" name="currency_code" value="'.$price_coin.'">
-				<input type="hidden" name="item_name" value="Contribuição para '.$this->data['period'].' dias de Conta Premium.">
+				<input type="hidden" name="item_name" value="ContribuiÃ§Ã£o para '.$this->data['period'].' dias de Conta Premium.">
 				<input type="hidden" name="amount" value="'.$price_value.'">
 				<input type="hidden" name="on0" value="REF#'.$this->data['id'].'">
 				
@@ -248,7 +247,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="tipo" value="CP">
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium. (ref: '.$this->data['id'].')">
+				<input type="hidden" name="item_descr_1" value="ContribuiÃ§Ã£o para '.$this->data['period'].' dias de Conta Premium. (ref: '.$this->data['id'].')">
 				<input type="hidden" name="item_quant_1" value="1">
 				<input type="hidden" name="item_valor_1" value="'.$price_value.'">
 				<input type="hidden" name="item_frete_1" value="000">

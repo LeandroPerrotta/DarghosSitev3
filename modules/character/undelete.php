@@ -1,49 +1,45 @@
 <?php
-$post = $core->extractPost();
+$post = Core::extractPost();
 
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$list = $account->getCharacterList();	
 	
-	$character = $core->loadClass("Character");
+	$character = new Character();
 	$character->loadByName($post[0]);
 	
-	if($account->get("password") != $strings->encrypt($post[1]))
+	if($account->get("password") != Strings::encrypt($post[1]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}	
 	elseif(!$character->deletionStatus())
 	{
-		$error = "Este personagem não está agendado para ser excluido.";
+		$error = Lang::Message(LMSG_CHARACTER_NOT_TO_DELETION);
 	}
 	elseif(!in_array($post[0], $list))
 	{	
-		$error = "Este personagem não pertence a sua conta.";
+		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
 	else
 	{
 		$character->cancelDeletion();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A exclusão do seu personagem {$post[0]} foi cancelada!</p>
-		<p>Tenha um bom jogo!</p>
-		";		
+		$success = Lang::Message(LMSG_CHARACTER_NO_MORE_DELETED, $post[0]);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .=	'

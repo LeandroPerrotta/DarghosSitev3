@@ -1,24 +1,24 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{	
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");		
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));		
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 1)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");	
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));	
 	}	
 	else
 	{		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{			
 			$guild->loadRanks();
@@ -26,39 +26,31 @@ if($_GET['name'])
 			
 			$members = $guild->getMembersList();
 			
-			if($account->get("password") != $strings->encrypt($post[0]))
+			if($account->get("password") != Strings::encrypt($post[0]))
 			{
-				$error = "Confirmação da senha falhou.";
-			}	
-			elseif ($guild->isOnWar())
-			{
-				$error = "Sua guilda está em war, você só poderá desmanchar a mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
 			elseif(count($members) > 1)
 			{
-				$error = "A sua guild ainda possui membros ativos, por favor expulse todos membros primeiramente antes de ultilizar esta função.";				
+				$error = Lang::Message(LMSG_GUILD_NEED_NO_MEMBERS_DISBAND);			
 			}
 			else
 			{				
 				$guild->disband();
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A guilda {$_GET['name']} foi desmanchada com sucesso e não existe mais em ".CONFIG_SITENAME.".</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				$success = Lang::Message(LMSG_GUILD_DISBANDED, $_GET['name']);
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 			
 		$module .=	'
@@ -66,7 +58,7 @@ if($_GET['name'])
 				<fieldset>
 
 					<p>
-						Para desmanchar sua guild é necessario não possuir nenhum membro em atividade, expulsando todos membros da guild, exepto o proprio dono.			
+						Para desmanchar sua guild Ã©  necessario nÃ£o possuir nenhum membro em atividade, expulsando todos membros da guilda, exepto o proprio lÃ­der.			
 					</p>	
 			
 					<p>

@@ -1,39 +1,35 @@
 <?
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != $strings->encrypt($post[0]))
+	if($account->getPassword() != Strings::encrypt($post[0]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}		
 	elseif(!is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = "Está conta não possui nenhuma mudança de email a ser cancelada.";
+		$error = Lang::Message(LMSG_CHANGEEMAIL_NOTHING);
 	}
 	else
 	{		
 		$account->cancelEmailToChange();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>As mudanças de e-mail agendadas para sua conta foram canceladas com exito! Nenhuma mudança de e-mail ocorrera em sua conta.</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = Lang::Message(LMSG_CHANGEEMAIL_CANCELED);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .= '

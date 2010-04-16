@@ -25,14 +25,14 @@ else
 	
 	if($query->numRows() == 0)
 	{
-		$playersonmsg = "Infelizmente ninguem está conectado em nosso servidor neste momento.";
+		$playersonmsg = "Infelizmente ninguem estÃ¡ conectado em nosso servidor neste momento.";
 	}	
 	else	
 	{		
 		if($query->numRows() == 1)
-			$playersonmsg = "Nós temos 1 jogador conectado em nosso servidor.";
+			$playersonmsg = "NÃ³s temos 1 jogador conectado em nosso servidor.";
 		else	
-			$playersonmsg = "Nós temos {$query->numRows()} jogadores conectados em nosso servidor.";				
+			$playersonmsg = "NÃ³s temos {$query->numRows()} jogadores conectados em nosso servidor.";				
 	}
 	
 	$module .= "
@@ -48,7 +48,7 @@ else
 		$module .= "
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
-				<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th>
+				<th width='35%'>Nome</th> <th width='25%'>VocaÃ§Ã£o</th> <th>NÃ­vel</th>
 			</tr>
 			";			
 		

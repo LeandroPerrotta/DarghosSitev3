@@ -1,48 +1,44 @@
 <?
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != $strings->encrypt($_POST['account_password']))
+	if($account->getPassword() != Strings::encrypt($_POST['account_password']))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
 	elseif(strlen($_POST['account_name']) < 5 or strlen($_POST['account_name']) > 25)
 	{
-		$error = "O nome de sua conta deve possuir entre 5 e 25 caracteres.";
+		$error = Lang::Message(LMSG_ACCOUNT_NAME_WRONG_SIZE);
 	}	
 	elseif($account->getName() == $_POST['account_name'])
 	{
-		$error = "O nome de sua conta deve ser diferente do seu antigo numero.";
+		$error = Lang::Message(LMSG_ACCOUNT_SETNAME_SAME_ID);
 	}
 	elseif($account->loadByName($_POST['account_name']))
 	{
-		$error = "Este nome já esta em uso por outra conta em nosso banco de dados.";
+		$error = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
 	}			
 	else
 	{		
 		$account->setName($_POST['account_name']);
 		$account->save();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A sua conta agora possui um Nome configurado corretamente!</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = Lang::Message(LMSG_ACCOUNT_SETNAME_SUCCESS);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 
 $module .= '

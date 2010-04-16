@@ -15,24 +15,24 @@ if($query->numRows() != 0)
 {
 	while($fetch = $query->fetch())
 	{
-		$character = $core->loadClass("character");
+		$character = new Character();
 		$character->load($fetch->player_id, "name");
 		
-		$itemshop_list = $core->loadClass("itemshop_list");
+		$itemshop_list = new ItemShop_List();
 		$itemshop_list->load($fetch->itemlist_id);		
 		
 		//$status = $_itemshopstatus[$fetch->received];
 		
 		$module .= "
 		<tr>
-			<td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$itemshop_list->get("count")}x {$itemshop_list->get("name")}</td> <td>{$core->formatDate($fetch->time)}</td> <td>{$itemshop_list->get("cost")} dias</td> <td>$status</td>
+			<td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$itemshop_list->get("count")}x {$itemshop_list->get("name")}</td> <td>{Core::formatDate($fetch->time)}</td> <td>{$itemshop_list->get("cost")} dias</td> <td>$status</td>
 		</tr>";			
 	}
 }
 else
 	$module .= "
 		<tr>
-			<td colspan='5'>Você ainda não comprou nada em nosso Item Shop.</td>
+			<td colspan='5'>VocÃª ainda nÃ£o comprou nada em nosso Item Shop.</td>
 		</tr>";
 
 $module .= "

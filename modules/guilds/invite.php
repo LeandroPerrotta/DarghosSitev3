@@ -1,24 +1,24 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 2)
 	{	
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
 	}	
 	else
 	{		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{
 			$invites_list = explode(";", $post[0]);
@@ -34,7 +34,7 @@ if($_GET['name'])
 				
 				foreach($invites_list as $player_name)
 				{
-					$character = $core->loadClass("Character");
+					$character = new Character();
 					
 					if(!$character->loadByName($player_name, "name, rank_id"))
 					{
@@ -51,13 +51,13 @@ if($_GET['name'])
 				}
 			}
 			
-			if($account->get("password") != $strings->encrypt($post[1]))
+			if($account->get("password") != Strings::encrypt($post[1]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
 			elseif($invites_limit)
 			{				
-				$error = "Somente é permitido enviar 20 convites por vez.";
+				$error = Lang::Message(LMSG_GUILD_INVITE_LIMIT);
 			}					
 			elseif(count($wasGuild) != 0)
 			{
@@ -66,7 +66,7 @@ if($_GET['name'])
 					$wasGuild_list .= $name."<br>";
 				}
 				
-				$error = "Os seguintes personagens já são membros de uma guild e não podem ser convidados a sua guild:<br> {$wasGuild_list}";
+				$error = Lang::Message(LMSG_GUILD_INVITE_ALREADY_MEMBER, $wasGuild_list);
 			}
 			elseif(count($wasInvited) != 0)
 			{
@@ -75,7 +75,7 @@ if($_GET['name'])
 					$wasInvited_list .= $name."<br>";
 				}
 				
-				$error = "Os seguintes personagens já estão convidados para outra guild e não podem ser convidados a sua guild:<br> {$wasInvited_list}";
+				$error = Lang::Message(LMSG_GUILD_INVITE_ALREADY_INVITED, $wasInvited_list);
 			}		
 			elseif(count($dontExists) != 0)
 			{
@@ -84,35 +84,31 @@ if($_GET['name'])
 					$dontExists_list .= $name."<br>";
 				}
 				
-				$error = "Os seguintes personagens não existem em nosso banco de dados:<br> {$dontExists_list}";
+				$error = Lang::Message(LMSG_GUILD_INVITE_CHARACTER_NOT_FOUNDS, $dontExists_list);
 			}					
 			else
 			{		
 				foreach($invites_list as $player_name)
 				{
-					$character = $core->loadClass("Character");
+					$character = new Character();
 					
 					$character->loadByName($player_name, "name, rank_id");
 					$character->inviteToGuild($guild->get("id"));
 				}				
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>Todos jogadores da lista foram convidados para sua guilda com sucesso!</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				$success = Lang::Message(LMSG_GUILD_INVITEDS);
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 		
 		$module .=	'
@@ -122,7 +118,7 @@ if($_GET['name'])
 					<p>
 						<label for="guild_invites">Personagem(s)</label><br />
 						<textarea name="guild_invites" rows="10" wrap="physical" cols="55"></textarea>
-						<em><br><b>Instruções:</b> Lista de personagens a serem convidados a sua guild, ultilize um ; (ponto e virgula) para separar cada personagem. (ex: Slash;Fawkes;Baracs)</em>
+						<em><br><b>InstruÃ§Ãµes:</b> Lista de personagens a serem convidados a sua guild, ultilize um ; (ponto e virgula) para separar cada personagem. (ex: Slash;Fawkes;Baracs)</em>
 					</p>					
 					
 					<p>

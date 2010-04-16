@@ -1,26 +1,26 @@
 <?
 //echo ;
-$post = $core->extractPost();
+$post = Core::extractPost();
 if($post)
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	
-	if(($account->loadByName($post[0], "password")) and ($account->getPassword() == $strings->encrypt($post[1])))
+	if(($account->loadByName($post[0], "password")) and ($account->getPassword() == Strings::encrypt($post[1])))
 	{
 		$_SESSION['login'][] = $account->getId();
-		$_SESSION['login'][] = $strings->encrypt($post[1]);
+		$_SESSION['login'][] = Strings::encrypt($post[1]);
 		
-		$core->redirect("index.php?ref=account.main");	
+		Core::redirect("index.php?ref=account.main");	
 	}
 	else
 	{
-		$error = $boxMessage['INCORRECT_ACCOUNT_NAME_OR_PASSWORD'];
+		$error = Lang::Message(LMSG_FAIL_LOGIN);
 	}
 }
 
 if($error)	
 {
-	$core->sendMessageBox($boxMessage['ERROR'], $error);
+	Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 }
 
 $module .= '

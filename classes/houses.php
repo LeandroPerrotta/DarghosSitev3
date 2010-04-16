@@ -11,7 +11,7 @@ class Houses
 		if(file_exists(DIR_DATA.HOUSES_FILE))
 			$this->element = simplexml_load_file(DIR_DATA.HOUSES_FILE);
 		else
-			die("Banco de dados de casas n„o encontrado.");	
+			die("Banco de dados de casas n√£o localizado.");	
 	}
 
 	function load($id)

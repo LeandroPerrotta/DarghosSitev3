@@ -16,11 +16,11 @@
 			<div id="menu">	
 				<ul id="navigation">
 					<li>
-						<p>navegação</p>
+						<p>navegaÃ§Ã£o</p>
 						
 						<ul>
-							<li><a href="?ref=news.last">Últimas Notícias</a></li>
-							<li><a href="?ref=news.files">Arquivo de Notícias</a></li>
+							<li><a href="?ref=news.last">Ultimas NotÃ­cias</a></li>
+							<li><a href="?ref=news.files">Arquivo de NotÃ­cias</a></li>
 							<li><a href="?ref=general.about">Sobre o Darghos</a></li>
 							<li><a href="?ref=general.faq">Darghos FAQ</a></li>
 							<li><a href="?ref=general.howplay">Como Jogar?</a></li>
@@ -53,7 +53,7 @@
 							<li><a href="?ref=account.main">Main</a></li>
 							<li><a href="?ref=account.changepassword">Mudar Senha</a></li>
 							<li><a href="?ref=account.changeemail">Mudar E-mail</a></li>
-							<li><a href="?ref=account.changeinfos">Mudar Informações</a></li>
+							<li><a href="?ref=account.changeinfos">Mudar InformaÃ§Ãµes</a></li>
 							<li><a href="?ref=account.logout">Log-out</a></li>';
 						}							
 						?>	
@@ -95,7 +95,7 @@
 						</li>	
 					</ul>';
 					
-					$account = $core->loadClass("account");
+					$account = new Account();
 					$account->load($_SESSION['login'][0]);
 					
 					$list = $account->getCharacterList();
@@ -133,8 +133,8 @@
 							<li><a href="?ref=community.guilds">Guildas</a></li>
 							<li><a href="?ref=community.houses">Casas</a></li>
 							<li><a href="?ref=community.polls">Enquetes</a></li>
-							<li><a href="?ref=community.lastdeaths">Últimas Mortes</a></li>
-							<li><a href="?ref=status.whoisonline">Quem está online?</a></li>
+							<li><a href="?ref=community.lastdeaths">Ãšltimas Mortes</a></li>
+							<li><a href="?ref=status.whoisonline">Quem estÃ¡ online?</a></li>
 						</ul>
 					</li>	
 				</ul>									

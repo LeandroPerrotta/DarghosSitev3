@@ -1,24 +1,24 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList(true);	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{	
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");		
+		Core::sendMessageBox("Erro!", "Esta guilda nï¿½o existe em nosso banco de dados.");		
 	}
 	elseif($account->getGuildLevel($guild->get("name")) > 1)
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");	
+		Core::sendMessageBox("Erro!", "Vocï¿½ nï¿½o tem permissï¿½o para acessar estï¿½ pagina.");	
 	}	
 	else
 	{		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{			
 			$guild->loadRanks();
@@ -26,9 +26,9 @@ if($_GET['name'])
 			
 			$members = $guild->getMembersList();
 			
-			if($account->get("password") != $strings->encrypt($post[0]))
+			if($account->get("password") != Strings::encrypt($post[0]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = "Confirmaï¿½ï¿½o da senha falhou.";
 			}		
 			elseif(count($members) < 8)
 			{
@@ -40,7 +40,7 @@ if($_GET['name'])
 				
 				$success = "
 				<p>Caro jogador,</p>
-				<p>A guilda {$_GET['name']} agora está em modo de guerra. Tome cuidado, pois você e toda a guilda, estão vulneráveis a ataques e assassinatos justificados por qualquer outra guilda em modo de guerra.</p>
+				<p>A guilda {$_GET['name']} agora estï¿½ em modo de guerra. Tome cuidado, pois vocï¿½ e toda a guilda, estï¿½o vulnerï¿½veis a ataques e assassinatos justificados por qualquer outra guilda em modo de guerra.</p>
 				<p>Tenha um bom jogo!</p>
 				";
 			}
@@ -48,13 +48,13 @@ if($_GET['name'])
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox("Sucesso!", $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox("Erro!", $error);
 			}
 			
 		$module .=	'
@@ -62,16 +62,16 @@ if($_GET['name'])
 				<fieldset>
 
 					<p>
-						Você está optando por colocar sua guilda inteira em modo de guerra.
+						Vocï¿½ estï¿½ optando por colocar sua guilda inteira em modo de guerra.
 									
 					</p>	
 					
 					<p>
 						<ul>
-							<li>Durante o periodo em que a mesma estiver neste modo, qualquer assasinato cometido ou sofrido, por jogadores de guildas diferentes, mas que estão em modo de guerra, será <b>justificado</b>.</li>					
-							<li>O level minimo, para um membro de uma guilda participar do modo de guerra, é 130. Sendo assim, qualquer jogador com o level menor que este, mesmo estando na guilda, irá ter seus assassinatos injustificados.</li>
-							<li>O modo de guerra não possui limite de mortes e assassinatos.</li>
-							<li>Após aceitar e entrar no modo de guerra, durante 30 dias, nenhum membro poderá sair da guilda, e a guilda não poderá ser desmanchada.</li>
+							<li>Durante o periodo em que a mesma estiver neste modo, qualquer assasinato cometido ou sofrido, por jogadores de guildas diferentes, mas que estï¿½o em modo de guerra, serï¿½ <b>justificado</b>.</li>					
+							<li>O level minimo, para um membro de uma guilda participar do modo de guerra, ï¿½ 130. Sendo assim, qualquer jogador com o level menor que este, mesmo estando na guilda, irï¿½ ter seus assassinatos injustificados.</li>
+							<li>O modo de guerra nï¿½o possui limite de mortes e assassinatos.</li>
+							<li>Apï¿½s aceitar e entrar no modo de guerra, durante 30 dias, nenhum membro poderï¿½ sair da guilda, e a guilda nï¿½o poderï¿½ ser desmanchada.</li>
 						</ul>
 					</p>
 			

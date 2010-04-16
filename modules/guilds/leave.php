@@ -1,20 +1,20 @@
 <?php
 if($_GET['name'])
 {
-	$account = $core->loadClass("Account");
+	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
 	$character_list = $account->getCharacterList();	
 	
-	$guild = $core->loadClass("guilds");
+	$guild = new Guilds();
 	
 	if(!$guild->loadByName($_GET['name']))
 	{	
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");	
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
 	elseif(!$account->getGuildLevel($guild->get("name")))
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");		
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));		
 	}	
 	else
 	{		
@@ -23,7 +23,7 @@ if($_GET['name'])
 		
 		$members = $guild->getMembersList();		
 		
-		$post = $core->extractPost();
+		$post = Core::extractPost();
 		if($post)
 		{									
 			foreach($members as $member_name => $member_values)
@@ -31,44 +31,37 @@ if($_GET['name'])
 				$members_list[] = $member_name;
 			}
 			
-			if($account->get("password") != $strings->encrypt($post[1]))
+			if($account->get("password") != Strings::encrypt($post[1]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}
-			elseif ($guild->isOnWar())
-			{
-				$error = "Sua guilda está em war, você só poderá sair da mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
-			}
+			//caso o personagem nÃ£o for da guild?? e se ele for membro normal?? acho que Ã© isso... nao sei kkkkkk
 			elseif(!in_array($post[0], $members_list) or $members[$post[0]]['level'] == 1)
 			{
-				$error = "Falha fatal.";				
+				$error = Lang::Message(LMSG_REPORT);				
 			}
 			else
 			{						
-				$character = $core->loadClass("Character");
+				$character = new Character();
 				$character->loadByName($post[0], "name, rank_id, guildnick, guild_join_date");
 				$character->set("rank_id", 0);
 				$character->set("guildnick", "");
 				$character->set("guild_join_date", 0);
 				$character->save();
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>O personagem {$post[0]} não mais pertence a guilda {$_GET['name']}.</p>
-				<p>Tenha um bom jogo!</p>
-				";
+				$success = Lang::Message(LMSG_GUILD_LEAVE, $post[0], $_GET['name']);
 			}
 		}
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 			}
 			
 			foreach($members as $member_name => $member_values)
