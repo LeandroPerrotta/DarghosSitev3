@@ -1,14 +1,9 @@
 <?
-include_once("classes/account.php");
-
-$post = Core::extractPost();
-$get = $_GET['name'];
-
-if($post or $get)
+if($_POST or $_GET)
 {		
-	$name = ($post) ? $post[0] : $get;
+	$name = ($_POST) ? $_POST["player_name"] : $_GET['name'];
 
-	$character = new Account();
+	$character = new Character();
 	
 	if(!$character->loadByName($name, "name, account_id, level, sex, vocation, town_id, lastlogin, comment, hide, rank_id, guildnick"))
 	{	
