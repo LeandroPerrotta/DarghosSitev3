@@ -2,7 +2,7 @@
 if($_POST)
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{

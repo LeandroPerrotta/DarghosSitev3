@@ -2,7 +2,7 @@
 if($_GET['name'])
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList();	
 	
@@ -41,9 +41,9 @@ if($_GET['name'])
 				{
 					if($_POST["guild_action"] == "setRank")
 					{		
-						$character->loadByName($_POST["guild_member"], "account_id, name, rank_id");
+						$character->loadByName($_POST["guild_member"]);
 						$accountMember = new Account();
-						$accountMember->load($character->get("account_id"), "premdays");
+						$accountMember->load($character->get("account_id"));
 						
 						if($account->getGuildLevel($guild->get("name")) == 2 and $account->getGuildLevel($guild->get("name")) <=  $ranks[$_POST["member_rank"]]["level"])
 						{
@@ -75,7 +75,7 @@ if($_GET['name'])
 						}
 						else
 						{
-							$character->loadByName($_POST["guild_member"], "name, guildnick");
+							$character->loadByName($_POST["guild_member"]);
 							$character->set("guildnick", $_POST["member_nick"]);
 							$character->save();
 						}
@@ -92,7 +92,7 @@ if($_GET['name'])
 						}
 						else
 						{
-							$character->loadByName($_POST["guild_member"], "name, rank_id, guildnick, guild_join_date");
+							$character->loadByName($_POST["guild_member"]);
 							$character->set("guildnick", "");		
 							$character->set("rank_id", 0);
 							$character->set("guild_join_date", 0);

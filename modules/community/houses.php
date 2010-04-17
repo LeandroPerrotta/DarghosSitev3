@@ -32,7 +32,7 @@ while($fetch = $query->fetch())
 	else
 	{
 		$character = new Character();
-		$character->load($houses->get("owner"), "name");		
+		$character->load($houses->get("owner"));		
 		
 		$module .= "
 		<tr>

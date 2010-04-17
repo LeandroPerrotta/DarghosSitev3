@@ -1,7 +1,7 @@
 <?
 class Core
 {
-	private $alreadyShowBanner = false;
+	static public $DB;
 	
 	static function FCKEditor($instance)
 	{

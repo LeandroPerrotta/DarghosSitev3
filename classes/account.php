@@ -54,13 +54,13 @@ class Account
 		}			
 	}
 	
-	function loadByEmail($email, $fields = null)
+	function loadByEmail($email)
 	{
 		$query = $this->db->query("SELECT id FROM accounts WHERE email = '".$email."'");
 		
 		if($query->numRows() != 0)
 		{
-			$this->load($query->fetch()->id, $fields);
+			$this->load($query->fetch()->id);
 			return true;
 		}
 		else
@@ -69,13 +69,13 @@ class Account
 		}
 	}
 
-	function loadByName($name, $fields = null)
+	function loadByName($name)
 	{
 		$query = $this->db->query("SELECT id FROM accounts WHERE name = '".$name."'");
 		
 		if($query->numRows() != 0)
 		{
-			$this->load($query->fetch()->id, $fields);
+			$this->load($query->fetch()->id);
 			return true;
 		}
 		else
@@ -506,7 +506,7 @@ class Account
 		
 		if($query->numRows() != 0)
 		{
-			$this->load($query->fetch()->account_id, "password, email");	
+			$this->load($query->fetch()->account_id);	
 			$this->db->query("DELETE FROM ".DB_WEBSITE_PREFIX."changepasswordkeys WHERE account_id = '{$this->data['id']}'");
 			
 			return true;

@@ -2,7 +2,7 @@
 if($_GET['name'])
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList(true);	
 	

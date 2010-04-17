@@ -5,14 +5,14 @@ if($_POST or $_GET)
 
 	$character = new Character();
 	
-	if(!$character->loadByName($name, "name, account_id, level, sex, vocation, town_id, lastlogin, comment, hide, rank_id, guildnick"))
+	if(!$character->loadByName($name))
 	{	
 		$error = Lang::Message(LMSG_CHARACTER_WRONG);
 	}
 	else
 	{			
 		$account = new Account();
-		$account->load($character->get("account_id"), "premdays, real_name, location, url");
+		$account->load($character->get("account_id"));
 		
 		$deaths = new Deaths();
 		
@@ -389,7 +389,7 @@ if($_POST or $_GET)
 			foreach($list as $player_name)
 			{
 				$character_list = new Character();
-				$character_list->loadByName($player_name, "name, level, online, hide");
+				$character_list->loadByName($player_name);
 				
 				if($character_list->get("hide") == 0)
 				{

@@ -1,6 +1,6 @@
 <?
 $account = new Account();
-$account->load($_SESSION['login'][0], "password, real_name, location, url");
+$account->load($_SESSION['login'][0]);
 
 if($_POST)
 {

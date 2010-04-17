@@ -2,7 +2,7 @@
 if($_GET['name'])
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList(true);	
 	$character_listByName = $account->getCharacterList();	
@@ -61,7 +61,7 @@ if($_GET['name'])
 			else
 			{		
 				$character = new Character();
-				$character->loadByName($_POST["character_name"], "name, rank_id, guild_join_date");
+				$character->loadByName($_POST["character_name"]);
 				
 				if($_POST["invite_action"] == "accept")		
 				{			

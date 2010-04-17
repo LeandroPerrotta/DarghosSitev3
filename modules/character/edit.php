@@ -5,7 +5,7 @@ if(isset($_POST['character_name']))
 }
 
 $account = new Account();
-$account->load($_SESSION['login'][0], "password");
+$account->load($_SESSION['login'][0]);
 
 $list = $account->getCharacterList();
 
@@ -14,7 +14,7 @@ if($_GET['name'])
 	if(in_array($_GET['name'], $list))
 	{
 		$character = new Character();
-		$character->loadByName($_GET['name'], "name, comment, hide, online, sex, account_id");
+		$character->loadByName($_GET['name']);
 
 		if($_POST)
 		{			
@@ -43,7 +43,7 @@ if($_GET['name'])
 			{	
 				if(SHOW_SHOPFEATURES != 0)
 				{
-					$account = $character->loadAccount("premdays, lastday, type");
+					$account = $character->loadAccount();
 					
 					$newname_character = new Character();
 					
@@ -92,7 +92,7 @@ if($_GET['name'])
 			{	
 				if(SHOW_SHOPFEATURES != 0)
 				{				
-					$account = $character->loadAccount("premdays, lastday, type");	
+					$account = $character->loadAccount();	
 					
 					if(!$_POST["confirm_changesex"])
 					{

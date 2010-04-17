@@ -2,7 +2,7 @@
 if($_GET['name'])
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList();	
 	
@@ -42,7 +42,7 @@ if($_GET['name'])
 			else
 			{						
 				$character = new Character();
-				$character->loadByName($_POST["member_candidate"], "name, rank_id, guildnick, guild_join_date");
+				$character->loadByName($_POST["member_candidate"]);
 				$character->set("rank_id", 0);
 				$character->set("guildnick", "");
 				$character->set("guild_join_date", 0);

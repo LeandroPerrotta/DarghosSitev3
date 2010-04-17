@@ -5,7 +5,7 @@ if(isset($_POST['character_name']))
 }
 
 $account = new Account();
-$account->load($_SESSION['login'][0], "password, premdays, lastday, type");
+$account->load($_SESSION['login'][0]);
 
 $list = $account->getCharacterList();
 
@@ -14,7 +14,7 @@ if($_GET['name'])
 	if(in_array($_GET['name'], $list))
 	{
 		$character = new Character();
-		$character->loadByName($_GET['name'], "name, online");
+		$character->loadByName($_GET['name']);
 		
 		if($_POST)
 		{

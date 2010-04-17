@@ -2,12 +2,12 @@
 if($_SESSION['recovery'])
 {	
 	$character = new Character();
-	$character->loadByName($_SESSION['recovery'][0], "account_id"); 
+	$character->loadByName($_SESSION['recovery'][0]); 
 	
 	$chkEmail = new Account();
 	
 	$account = new Account();
-	$account->load($character->get("account_id"), "password, email");
+	$account->load($character->get("account_id"));
 	$secretkey = $account->getSecretKey();
 	
 	if($secretkey)

@@ -2,7 +2,7 @@
 if($_POST)
 {	
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "premdays");		
+	$account->load($_SESSION['login'][0]);		
 	
 	$character = new Character();
 

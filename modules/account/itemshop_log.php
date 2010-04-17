@@ -16,7 +16,7 @@ if($query->numRows() != 0)
 	while($fetch = $query->fetch())
 	{
 		$character = new Character();
-		$character->load($fetch->player_id, "name");
+		$character->load($fetch->player_id);
 		
 		$itemshop_list = new ItemShop_List();
 		$itemshop_list->load($fetch->itemlist_id);		

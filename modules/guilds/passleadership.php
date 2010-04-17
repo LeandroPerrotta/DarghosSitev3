@@ -2,7 +2,7 @@
 if($_GET['name'])
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList(true);	
 	
@@ -55,13 +55,13 @@ if($_GET['name'])
 				}
 				
 				$newLeader_char = new Character();
-				$newLeader_char->loadByName($_POST["member_candidate"], "name, rank_id");
+				$newLeader_char->loadByName($_POST["member_candidate"]);
 				$newLeader_char->set("rank_id", $leader_id);
 				$newLeader_id = $newLeader_char->get("id");
 				$newLeader_char->save();
 				
 				$oldLeader_char = new Character();
-				$oldLeader_char->load($guild->get("ownerid"), "name, rank_id");
+				$oldLeader_char->load($guild->get("ownerid"));
 				$oldLeader_char->set("rank_id", $vice_id);
 				$oldLeader_name = $oldLeader_char->get("name");
 				$oldLeader_char->save();

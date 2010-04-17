@@ -1,6 +1,6 @@
 <?
 $account = new Account();
-$account->load($_SESSION["login"][0], "password");
+$account->load($_SESSION["login"][0]);
 
 $list = $account->getCharacterList();
 
@@ -8,7 +8,7 @@ if($_POST)
 {	
 	$guild = new Guilds();
 	$character = new Character();
-	$character->loadByName($_POST["guild_owner"], "rank_id, guild_join_date");
+	$character->loadByName($_POST["guild_owner"]);
 		
 	if(!in_array($_POST["guild_owner"], $list))
 	{

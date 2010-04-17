@@ -462,7 +462,7 @@ else
 		{
 			include_once('classes/account.php');
 			$checkAccount = new Account;	
-			$checkAccount->load($_SESSION["login"][0], "premdays");
+			$checkAccount->load($_SESSION["login"][0]);
 			
 			if($checkAccount->get("premdays") != 0)
 			{

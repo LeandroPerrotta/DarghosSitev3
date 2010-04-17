@@ -47,6 +47,8 @@ else
 	{
 		$db = new MySQL();
 		$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);	
+		
+		Core::$DB = $db;
 	
 		Core::InitPOT();
 	}

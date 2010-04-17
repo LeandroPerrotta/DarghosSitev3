@@ -16,7 +16,7 @@ if($query->numRows() != 0)
 		$death_values = $deaths->load($fetch->id);
 		
 		$deathPlayer = new Character();
-		$deathPlayer->load($fetch->player_id, "name");		
+		$deathPlayer->load($fetch->player_id);		
 				
 		$date = Core::formatDate($death_values['date']);
 		

@@ -15,7 +15,7 @@ if($_GET['name'])
 		if($_SESSION['login'])
 		{
 			$account = new Account();
-			$account->load($_SESSION['login'][0], "password");
+			$account->load($_SESSION['login'][0]);
 			
 			$character_list = $account->getCharacterList(true);
 			$character_listByName = $account->getCharacterList();

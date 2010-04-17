@@ -2,7 +2,7 @@
 if($_GET['name'])
 {
 	$account = new Account();
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList(true);	
 	
@@ -35,7 +35,7 @@ if($_GET['name'])
 				{
 					$character = new Character();
 					
-					if(!$character->loadByName($player_name, "name, rank_id"))
+					if(!$character->loadByName($player_name))
 					{
 						$dontExists[] = $player_name;	
 					}	
@@ -91,7 +91,7 @@ if($_GET['name'])
 				{
 					$character = new Character();
 					
-					$character->loadByName($player_name, "name, rank_id");
+					$character->loadByName($player_name);
 					$character->inviteToGuild($guild->get("id"));
 				}				
 				

@@ -11,7 +11,7 @@ class Character
 
 	
 	
-	function load($player_id, $fields = null)
+	function load($player_id)
 	{
 		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden, online, skull_time FROM players WHERE id = '".$player_id."'");		
 		
@@ -439,13 +439,13 @@ class Character
 		return $this->skills[$skillid];
 	}
 	
-	function loadByName($player_name, $fields = null)
+	function loadByName($player_name)
 	{
 		$query = $this->db->query("SELECT id FROM players WHERE name = '".$player_name."'");
 		
 		if($query->numRows() != 0)
 		{
-			$this->load($query->fetch()->id, $fields);
+			$this->load($query->fetch()->id);
 			return true;
 		}
 		else
@@ -598,14 +598,10 @@ class Character
 		$this->db->query("DELETE FROM guild_invites WHERE player_id = '{$this->data['id']}'");
 	}
 	
-	function loadAccount($fields = null)
+	function loadAccount()
 	{		
-		$account = new Guilds();
-		
-		if($fields)
-			$account->load($this->data["account_id"], $fields);
-		else
-			$account->load($this->data["account_id"]);	
+		$account = new Account();
+		$account->load($this->data["account_id"]);	
 			
 		return $account;	
 	}

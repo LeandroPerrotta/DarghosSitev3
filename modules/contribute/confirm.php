@@ -5,7 +5,7 @@ if($_SESSION['contribute'])
 	$orderNumber = $contribute->getNewOrderNumber();
 	
 	$character = new Character();
-	$character->loadByName($_SESSION['contribute'][2], "account_id");
+	$character->loadByName($_SESSION['contribute'][2]);
 	$target_account = $character->get("account_id");
 	
 	if(!$orderNumber)
