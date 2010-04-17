@@ -1,11 +1,10 @@
 <?
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != Strings::encrypt($post[0]))
+	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}		

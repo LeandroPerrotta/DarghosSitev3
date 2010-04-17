@@ -1,6 +1,83 @@
 <?
+class t_Sex
+{
+	private $_sex;
+	private $_sex_names = array(
+		0 => "female",
+		1 => "male"
+	);
+	
+	function t_Sex($sex = null)
+	{
+		if($sex)	
+			$this->Set($sex);
+	}
+	
+	function Set($sex)
+	{
+		$this->_sex = $sex;
+	}
+	
+	function SetByName($name)
+	{
+		$this->_sex = array_search($name, $this->_sex_names);
+	}
+	
+	function Get()
+	{
+		return $this->_sex;
+	}
+	
+	function GetByName()
+	{
+		return $this->_sex_names[$this->_sex];
+	}	
+}
+
+class t_Vocation
+{
+	private $_vocation_id;
+	private $_vocation_names = array(
+		0 => "Sorcerer",
+		1 => "Druid",
+		2 => "Paladin",
+		3 => "Knight",
+		4 => "Master Sorcerer",
+		5 => "Elder Druid",
+		6 => "Royal Paladin",
+		7 => "Elite Knight"
+	);
+	
+	function t_Vocation($vocation_id = null)
+	{
+		if($vocation_id)
+			$this->Set($vocation_id);
+	}
+	
+	function Set($vocation_id)
+	{
+		$this->_vocation_id = $vocation_id;
+	}
+	
+	function SetByName($name)
+	{
+		$this->_vocation_id = array_search($name, $this->_vocation_names);
+	}
+	
+	function Get()
+	{
+		return $this->_vocation_id;
+	}
+	
+	function GetByName()
+	{
+		return $this->_vocation_names[$this->_vocation_id];
+	}
+}
+
+
 class Tools
-{	
+{		
 	function getBanReason($reason_id)
 	{
 		switch($reason_id)

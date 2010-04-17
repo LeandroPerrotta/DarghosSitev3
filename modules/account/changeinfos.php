@@ -2,22 +2,21 @@
 $account = new Account();
 $account->load($_SESSION['login'][0], "password, real_name, location, url");
 
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {
-	if($account->get("password") != Strings::encrypt($post[3]))
+	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}			
-	elseif(strlen($post[0]) > 25 or strlen($post[1]) > 25 or strlen($post[2]) > 50)
+	elseif(strlen($_POST["account_realname"]) > 25 or strlen($_POST["account_location"]) > 25 or strlen($_POST["account_url"]) > 50)
 	{
 		$error = Lang::Message(LMSG_CHANGEINFOS_WRONG_SIZE);
 	}
 	else
 	{		
-		$account->set("real_name", $post[0]);
-		$account->set("location", $post[1]);
-		$account->set("url", $post[2]);
+		$account->setRealName($_POST["account_realname"]);
+		$account->setLocation($_POST["account_location"]);
+		$account->setUrl($_POST["account_url"]);
 		
 		$account->save();
 		

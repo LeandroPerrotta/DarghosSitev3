@@ -87,13 +87,9 @@ class Core
 		}
 		
 		return false;
-	}
-	
-	static function loadUploadClass() 
-	{
-		include "libs/upload/upload_class.php";	
 	}	
 	
+	/* DEPRECATED FUNCTION */
 	static function loadClass($class)
 	{
 		include_once "classes/".strtolower($class).".php";
@@ -115,6 +111,7 @@ class Core
 		}		
 	}
 	
+	/* DEPRECATED FUNCTION */
 	static function extractPost()
 	{		
 		if($_POST)

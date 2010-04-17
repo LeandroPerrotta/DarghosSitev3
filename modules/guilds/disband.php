@@ -18,15 +18,14 @@ if($_GET['name'])
 	}	
 	else
 	{		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{			
 			$guild->loadRanks();
 			$guild->loadMembersList();
 			
 			$members = $guild->getMembersList();
 			
-			if($account->get("password") != Strings::encrypt($post[0]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	

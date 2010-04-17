@@ -24,8 +24,7 @@ if($_GET['name'])
 		$members = $guild->getMembersList();
 		$ranks = $guild->getRanks();		
 		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{			
 			$canEditMember = true;
 			$character = new Character();
@@ -105,7 +104,7 @@ if($_GET['name'])
 			else
 				$memberInexistente = true;
 		
-			if($account->get("password") != Strings::encrypt($post[4]))
+			if($account->get("password") != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
@@ -139,7 +138,7 @@ if($_GET['name'])
 			}	
 			else
 			{						
-				$success = Lang::Message(LMSG_GUILD_MEMBER_EDITED, $post[0]);
+				$success = Lang::Message(LMSG_GUILD_MEMBER_EDITED, $_POST["guild_member"]);
 			}
 		}
 		

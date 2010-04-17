@@ -1,12 +1,10 @@
 <?php
-$post = Core::extractPost();
-
-if($post)
+if($_POST)
 {	
 	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != Strings::encrypt($post[0]))
+	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_EMAIL);
 	}	
@@ -14,27 +12,27 @@ if($post)
 	{
 		$error = Lang::Message(LMSG_SECRETKEY_ALREADY_EXISTS);	
 	}
-	elseif($post[2] == 1)
+	elseif($_POST["recovery_usekey"] == 1)
 	{
-		$account->setSecretKey($post[1], "default");
+		$account->setSecretKey($_POST["recovery_keysystem"], "default");
 		
-		$success = Lang::Message(LMSG_SECRETKEY_SUCCESS, $post[1]);
+		$success = Lang::Message(LMSG_SECRETKEY_SUCCESS, $_POST["recovery_keysystem"]);
 	}	
-	elseif($post[2] == 2)
+	elseif($_POST["recovery_usekey"] == 2)
 	{
-		if(!$post[3] or !$post[4])
+		if(!$_POST["recovery_key"] or !$_POST["recovery_lembrete"])
 		{
 			$error = Lang::Message(LMSG_FILL_FORM);
 		}	
-		elseif(strlen($post[3]) < 10 or strlen($post[3]) > 50 or strlen($post[4]) < 5 or strlen($post[4]) > 25)		
+		elseif(strlen($_POST["recovery_key"]) < 10 or strlen($_POST["recovery_key"]) > 50 or strlen($_POST["recovery_lembrete"]) < 5 or strlen($_POST["recovery_lembrete"]) > 25)		
 		{
 			$error = Lang::Message(LMSG_SECRETKEY_WRONG_SIZE);
 		}
 		else
 		{
-			$account->setSecretKey($post[3], $post[4]);
+			$account->setSecretKey($_POST["recovery_key"], $_POST["recovery_lembrete"]);
 			
-			$success = Lang::Message(LMSG_SECRETKEY_CUSTOM_SUCCESS, $post[3], $post[4]);			
+			$success = Lang::Message(LMSG_SECRETKEY_CUSTOM_SUCCESS, $_POST["recovery_key"], $_POST["recovery_lembrete"]);			
 		}
 	}
 }
@@ -58,8 +56,8 @@ $module .= '
 		<p>Atravez deste painel você pode configurar a chave secreta de sua conta, ultilizada em situações criticas para recuperar sua conta. Ela pode ser uma chave de alta segurança definida pelo sistema (memorize-a), ou então uma chave definida por você mesmo, com direito a um lembrete para uso posterior.</p>
 		
 		<p>
-			<label for="recovery_character">Senha da Conta</label><br />
-			<input name="recovery_password" size="40" type="password" value="" />
+			<label for="account_password">Senha da Conta</label><br />
+			<input name="account_password" size="40" type="password" value="" />
 		</p>		
 		
 		<div id="line1"></div>
@@ -80,12 +78,12 @@ $module .= '
 		</p>			
 		
 		<p>
-			<label for="recovery_character">Chave de Recuperação</label><br />
+			<label for="recovery_key">Chave de Recuperação</label><br />
 			<input name="recovery_key" size="40" type="text" value="" />
 		</p>			
 
 		<p>
-			<label for="recovery_character">Lembrete</label><br />
+			<label for="recovery_lembrete">Lembrete</label><br />
 			<input name="recovery_lembrete" size="40" type="text" value="" />
 		</p>					
 		

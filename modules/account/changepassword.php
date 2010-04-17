@@ -1,32 +1,31 @@
 <?
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {
 	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != Strings::encrypt($post[2]))
+	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
-	elseif($post[0] != $post[1])
+	elseif($_POST["account_newpassword"] != $_POST["account_confirmation"])
 	{
 		$error = Lang::Message(LMSG_CHANGEPASS_WRONG_NEWPASS_CONFIRM);
 	}
-	elseif($post[0] == $post[2])
+	elseif($_POST["account_newpassword"] == $_POST["account_password"])
 	{
 		$error = Lang::Message(LMSG_CHANGEPASS_SAME_PASSWORD);
 	}
-	elseif(strlen($post[0]) < 6 or strlen($post[0]) > 20)
+	elseif(strlen($_POST["account_newpassword"]) < 6 or strlen($_POST["account_newpassword"]) > 20)
 	{
 		$error = Lang::Message(LMSG_CHANGEPASS_WRONG_NEWPASS_LENGHT);
 	}
 	else
 	{
-		$account->set("password", Strings::encrypt($post[0]));
+		$account->setPassword(Strings::encrypt($_POST["account_newpassword"]));
 		$account->save();
 		
-		$_SESSION[1] = $account->get("password");
+		$_SESSION["login"][0] = $account->getPassword();
 		
 		$success = Lang::Message(LMSG_ACCOUNT_PASSWORD_CHANGED);
 	}

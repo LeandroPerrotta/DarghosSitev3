@@ -1,21 +1,26 @@
 <?
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {	
 	$character = new Character();
 	
 	$_paymentMethods = array("PagSeguro");
 	$_paymentPeriods = array(7, 30, 60, 90, 180, 360);
+	
+	$form_OrderName = $_POST["order_name"];
+	$form_OrderMail = $_POST["order_email"];
+	$form_OrderTarget = $_POST["order_target"];
+	$form_OrderType = $_POST["order_type"];
+	$form_OrderDays = $_POST["order_days"];
 
-	if(!$post[0] or !$post[1] or !$post[2] or !$post[3] or !$post[4])
+	if(!$form_OrderName or !$form_OrderMail or !$form_OrderTarget or !$form_OrderType or !$form_OrderDays)
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
 	}
-	elseif(!$character->loadByName($post[2]))
+	elseif(!$character->loadByName($form_OrderTarget))
 	{
 		$error = Lang::Message(LMSG_CHARACTER_WRONG);
 	}
-	elseif(!in_array($_POST["order_type"], $_paymentMethods) or !in_array($_POST["order_days"], $_paymentPeriods))
+	elseif(!in_array($form_OrderType, $_paymentMethods) or !in_array($form_OrderDays, $_paymentPeriods))
 	{
 		$error = Lang::Message(LMSG_REPORT);
 	}
@@ -34,19 +39,19 @@ if($post)
 					
 					<p><h3>Confirmação do Pedido</h3></p>
 					
-					<p>Analize abaixo se todos dados foram preenchidos corretamente, e se assim for clique no botão Confirmar e você será criado o seu pedido e você será direcionado a uma pagina para anotar o numero de seu pedido e ir ao site do '.$post[3].' para concluir a sua contribuição.</p>
+					<p>Analize abaixo se todos dados foram preenchidos corretamente, e se assim for clique no botão Confirmar e você será criado o seu pedido e você será direcionado a uma pagina para anotar o numero de seu pedido e ir ao site do '.$form_OrderType.' para concluir a sua contribuição.</p>
 				
 					<p><h3>Informações Pessoais</h3></p>
 					<div id="line1"></div>
 			
 					<p>
 						<label for="order_name">Nome</label><br />
-						'.$post[0].'.
+						'.$form_OrderName.'.
 					</p>	
 
 					<p>
 						<label for="order_email">E-mail para Contato</label><br />
-						'.$post[1].'.
+						'.$form_OrderMail.'.
 					</p>				
 			
 					<p><h3>Informações da Contribuição</h3></p>
@@ -54,18 +59,18 @@ if($post)
 			
 					<p>
 						<label for="order_target">Personagem Destino desta Contribuição</label><br />
-						'.$post[2].'
+						'.$form_OrderTarget.'
 					</p>	
 				
 					<p>
 						<label for="order_target">Forma de Pagamento desta Contribuição</label><br />
-						'.$post[3].'.
+						'.$form_OrderType.'.
 					</p>
 					
 					<p>
 						<label for="order_days">Periodo e valor desta Contribuição</label><br />
 						
-						'.$post[4].' dias por '.$_contribution[$post[3]][$post[4]].'.
+						'.$form_OrderDays.' dias por '.$_contribution[$form_OrderType][$form_OrderDays].'.
 					</p>
 					
 					<div id="line1"></div>
@@ -82,7 +87,7 @@ if(!$success)
 {
 	if($error)	
 	{
-		Core::sendMessageBox("Erro!", $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
 	}
 	
 $module .= '	
@@ -115,7 +120,7 @@ $module .= '
 			</p>	
 		
 			<p>
-				<label for="order_target">Forma de Pagamento desta Contribuição</label><br />
+				<label for="order_type">Forma de Pagamento desta Contribuição</label><br />
 				
 				<ul id="pagelist">
 					<li><input name="order_type" type="radio" checked="checked" value="PagSeguro"> PagSeguro <em>(recomendado para pagamentos nacionais como boleto e transferencia eletronica)</em></li>

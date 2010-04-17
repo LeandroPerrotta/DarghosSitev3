@@ -23,33 +23,32 @@ if($_GET['name'])
 		
 		$members = $guild->getMembersList();		
 		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{									
 			foreach($members as $member_name => $member_values)
 			{
 				$members_list[] = $member_name;
 			}
 			
-			if($account->get("password") != Strings::encrypt($post[1]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}
 			//caso o personagem não for da guild?? e se ele for membro normal?? acho que é isso... nao sei kkkkkk
-			elseif(!in_array($post[0], $members_list) or $members[$post[0]]['level'] == 1)
+			elseif(!in_array($_POST["member_candidate"], $members_list) or $members[$_POST["member_candidate"]]['level'] == 1)
 			{
 				$error = Lang::Message(LMSG_REPORT);				
 			}
 			else
 			{						
 				$character = new Character();
-				$character->loadByName($post[0], "name, rank_id, guildnick, guild_join_date");
+				$character->loadByName($_POST["member_candidate"], "name, rank_id, guildnick, guild_join_date");
 				$character->set("rank_id", 0);
 				$character->set("guildnick", "");
 				$character->set("guild_join_date", 0);
 				$character->save();
 				
-				$success = Lang::Message(LMSG_GUILD_LEAVE, $post[0], $_GET['name']);
+				$success = Lang::Message(LMSG_GUILD_LEAVE, $_POST["member_candidate"], $_GET['name']);
 			}
 		}
 		

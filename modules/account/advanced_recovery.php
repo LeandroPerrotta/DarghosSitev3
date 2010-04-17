@@ -1,8 +1,6 @@
 <?php
 if($_SESSION['recovery'])
-{
-	$post = Core::extractPost();
-	
+{	
 	$character = new Character();
 	$character->loadByName($_SESSION['recovery'][0], "account_id"); 
 	
@@ -14,7 +12,7 @@ if($_SESSION['recovery'])
 	
 	if($secretkey)
 	{
-		if($post)
+		if($_POST)
 		{	
 			$postSecretKey = $_POST['recovery_secretkey'];
 			$postEmail = $_POST['recovery_email'];

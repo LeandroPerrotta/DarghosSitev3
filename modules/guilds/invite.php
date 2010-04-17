@@ -18,10 +18,9 @@ if($_GET['name'])
 	}	
 	else
 	{		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{
-			$invites_list = explode(";", $post[0]);
+			$invites_list = explode(";", $_POST["guild_invites"]);
 			$invites_limit = true;
 			
 			$dontExists = array();
@@ -51,7 +50,7 @@ if($_GET['name'])
 				}
 			}
 			
-			if($account->get("password") != Strings::encrypt($post[1]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	

@@ -1,6 +1,5 @@
 <?
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);

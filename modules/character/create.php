@@ -1,22 +1,20 @@
 <?
-$post = Core::extractPost();
-
-$account = new Account();
-$account->load($_SESSION['login'][0], "premdays");	
-
-if($post)
+if($_POST)
 {	
+	$account = new Account();
+	$account->load($_SESSION['login'][0], "premdays");		
+	
 	$character = new Character();
 
-	if(!$post[0] or !$post[1] or !$post[2])
+	if(!$_POST["player_name"] or !$_POST["player_vocation"] or !$_POST["player_sex"])
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
 	}
-	elseif(!Strings::canUseName($post[0]))
+	elseif(!Strings::canUseName($_POST["player_name"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_NAME);
 	}
-	elseif($character->loadByName($post[0]))
+	elseif($character->loadByName($_POST["player_name"]))
 	{
 		$error = Lang::Message(LMSG_CHARACTER_NAME_ALREADY_USED);
 	}
@@ -26,16 +24,22 @@ if($post)
 	}
 	else
 	{
-		if($post[1] == "male")
+		$vocation = new t_Vocation();
+		$vocation->SetByName($_POST["player_vocation"]);
+		
+		$sex = new t_Sex();
+		$sex->SetByName($_POST["player_sex"]);		
+		
+		if($sex->GetByName() == "male")
 			$outfitType = 128;
 		else
 			$outfitType = 136;
-		
-		$character->setName($post[0]);
+			
+		$character->setName($_POST["player_name"]);
 		$character->setAccountId($_SESSION['login'][0]);
 		$character->setGroup(1);
-		$character->setSex($_sex[$post[1]]);
-		$character->setVocation($_vocation[$post[2]]);
+		$character->setSex($sex->Get());
+		$character->setVocation($vocation->Get());
 		$character->setExperience(4200);
 		$character->setLevel(8);
 		$character->setMagLevel(0);
@@ -52,7 +56,7 @@ if($post)
 		
 		$character->save();
 	
-		$success = Lang::Message(LMSG_CHARACTER_CREATED, $post[0]);
+		$success = Lang::Message(LMSG_CHARACTER_CREATED, $_POST["player_name"]);
 	}
 } 
 
@@ -83,7 +87,7 @@ $module .= '
 		</p>		
 		
 		<p>
-			<label for="player_sex">Vocação</label><br />			
+			<label for="player_vocation">Vocação</label><br />			
 				<input type="radio" name="player_vocation" value="sorcerer" /> Sorcerer<br>
 				<input type="radio" name="player_vocation" value="druid" /> Druid<br>
 				<input type="radio" name="player_vocation" value="paladin" /> Paladin<br>

@@ -23,8 +23,7 @@ if($_GET['name'])
 		
 		$members = $guild->getMembersList();		
 		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{						
 			$ranks = $guild->getRanks();
 			
@@ -33,13 +32,13 @@ if($_GET['name'])
 				$members_list[] = $member_name;
 			}
 			
-			if($account->get("password") != Strings::encrypt($post[1]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}		
-			elseif(!in_array($post[0], $members_list))
+			elseif(!in_array($_POST["member_candidate"], $members_list))
 			{
-				$error = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $post[0], $_GET['name']);			
+				$error = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["member_candidate"], $_GET['name']);			
 			}
 			else
 			{			
@@ -56,7 +55,7 @@ if($_GET['name'])
 				}
 				
 				$newLeader_char = new Character();
-				$newLeader_char->loadByName($post[0], "name, rank_id");
+				$newLeader_char->loadByName($_POST["member_candidate"], "name, rank_id");
 				$newLeader_char->set("rank_id", $leader_id);
 				$newLeader_id = $newLeader_char->get("id");
 				$newLeader_char->save();
@@ -70,7 +69,7 @@ if($_GET['name'])
 				$guild->set("ownerid", $newLeader_id);
 				$guild->save();
 				
-				$success = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $oldLeader_name, $post[0]);
+				$success = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $oldLeader_name, $_POST["member_candidate"]);
 			}
 		}
 		

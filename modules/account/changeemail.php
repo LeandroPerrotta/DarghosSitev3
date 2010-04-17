@@ -1,19 +1,18 @@
 <?
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {
 	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
 	
-	if($account->get("password") != Strings::encrypt($post[1]))
+	if($account->get("password") != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
-	elseif($account->loadByEmail($post[0]))
+	elseif($account->loadByEmail($_POST["account_newemail"]))
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 	}			
-	elseif(!Strings::validEmail($post[0]))
+	elseif(!Strings::validEmail($_POST["account_newemail"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_EMAIL);
 	}
@@ -23,7 +22,7 @@ if($post)
 	}
 	else
 	{		
-		$account->addEmailToChange($post[0]);
+		$account->addEmailToChange($_POST["account_newemail"]);
 		$newemail = $account->getEmailToChange();
 		$success = Lang::Message(LMSG_CHANGEEMAIL_SCHEDULED);
 	}

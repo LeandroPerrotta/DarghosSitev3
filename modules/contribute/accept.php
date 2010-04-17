@@ -1,19 +1,18 @@
 <?
 $contribute = new Contribute();
-$post = Core::extractPost();
 
 if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
 {
-	if($post)
+	if($_POST)
 	{
 		$chkAccount = new Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		if(Strings::encrypt($post[0]) != $_SESSION['login'][1])
+		if(Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
 			$error = Lang::Message(LMSG_WRONG_PASSWORD);
 		}
-		elseif($post[1] != "1")
+		elseif($_POST["accept_terms"] != "1")
 		{
 			$error = Lang::Message(LMSG_CONTR_TERMS);
 		}

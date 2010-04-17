@@ -2,7 +2,6 @@
 	
 	include("classes/tickets.php");
 
-	Core::extractPost();
 	$view = $_GET["id"];
 	
 	$account = new Account();

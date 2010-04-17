@@ -18,8 +18,7 @@ if($_GET['name'])
 	}	
 	else
 	{		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{
 			$guild_image = isset($_FILES['guild_image']) ? $_FILES['guild_image'] : false;
 			
@@ -28,11 +27,11 @@ if($_GET['name'])
 				$image_infos = getimagesize($guild_image["tmp_name"]);
 			}
 			
-			if($account->get("password") != Strings::encrypt($post[1]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}			
-			elseif(strlen($post[0]) > 500)
+			elseif(strlen($_POST["guild_motd"]) > 500)
 			{
 				$error = Lang::Message(LMSG_GUILD_COMMENT_SIZE);
 			}
@@ -54,7 +53,7 @@ if($_GET['name'])
 			}						
 			else
 			{		
-				$guild->set("motd", $post[0]);
+				$guild->set("motd", $_POST["guild_motd"]);
 				
 				if($guild_image)
 				{

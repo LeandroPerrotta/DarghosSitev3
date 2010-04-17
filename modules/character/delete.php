@@ -1,17 +1,15 @@
 <?php
-$post = Core::extractPost();
-
 $account = new Account();
 $account->load($_SESSION['login'][0], "password");
 
 $list = $account->getCharacterList();
 
-if($post)
+if($_POST)
 {
 	$character = new Character();
-	$character->loadByName($post[0]);
+	$character->loadByName($_POST["player_name"]);
 	
-	if($account->get("password") != Strings::encrypt($post[1]))
+	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}	
@@ -19,7 +17,7 @@ if($post)
 	{
 		$error = Lang::Message(LMSG_CHARACTER_ALREADY_TO_DELETE);
 	}
-	elseif(!in_array($post[0], $list))
+	elseif(!in_array($_POST["player_name"], $list))
 	{	
 		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
@@ -27,7 +25,7 @@ if($post)
 	{
 		$character->addToDeletion();
 		
-		$success = Lang::Message(LMSG_CHARACTER_DELETION_SCHEDULED, $post[0], Core::formatDate($character->deletionStatus()));	
+		$success = Lang::Message(LMSG_CHARACTER_DELETION_SCHEDULED, $_POST["player_name"], Core::formatDate($character->deletionStatus()));	
 	}
 }
 
@@ -50,7 +48,7 @@ $module .=	'
 		
 			<p>
 				<label for="account_email">Personagem</label><br />
-				<select name="character_name">
+				<select name="player_name">
 					';
 
 if(is_array($list))

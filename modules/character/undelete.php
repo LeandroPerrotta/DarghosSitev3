@@ -1,7 +1,5 @@
 <?php
-$post = Core::extractPost();
-
-if($post)
+if($_POST)
 {
 	$account = new Account();
 	$account->load($_SESSION['login'][0], "password");
@@ -9,9 +7,9 @@ if($post)
 	$list = $account->getCharacterList();	
 	
 	$character = new Character();
-	$character->loadByName($post[0]);
+	$character->loadByName($_POST["player_name"]);
 	
-	if($account->get("password") != Strings::encrypt($post[1]))
+	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}	
@@ -19,7 +17,7 @@ if($post)
 	{
 		$error = Lang::Message(LMSG_CHARACTER_NOT_TO_DELETION);
 	}
-	elseif(!in_array($post[0], $list))
+	elseif(!in_array($_POST["player_name"], $list))
 	{	
 		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
@@ -27,7 +25,7 @@ if($post)
 	{
 		$character->cancelDeletion();
 		
-		$success = Lang::Message(LMSG_CHARACTER_NO_MORE_DELETED, $post[0]);
+		$success = Lang::Message(LMSG_CHARACTER_NO_MORE_DELETED, $_POST["player_name"]);
 	}
 }
 
@@ -48,7 +46,7 @@ $module .=	'
 
 			<p>
 				<label for="character_name">Personagem</label><br />
-				<input readonly="readonly" name="character_name" size="40" type="text" value="'.$_GET['name'].'" />
+				<input readonly="readonly" name="player_name" size="40" type="text" value="'.$_GET['name'].'" />
 			</p>		
 		
 			<p>

@@ -1,6 +1,4 @@
 <?php
-$post = Core::extractPost();
-
 if($_GET['key'])
 {
 	$account = new Account();
@@ -41,18 +39,13 @@ if($_GET['key'])
 }
 else
 {
-	if($post)
+	if($_POST)
 	{	
 		$account = new Account();
 		$character = new Character();
 		
 		$loadEmail = $account->loadByEmail($_POST['recovery_email']);
 		$characterList = $account->getCharacterList();
-		
-		if(!is_array($characterList))
-		{
-			$characterList[] = "";
-		}
 		
 		if($_POST['recovery_information'] != 4 and (!$_POST['recovery_name'] or !$_POST['recovery_email']))
 		{

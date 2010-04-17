@@ -44,38 +44,37 @@ if($_GET['name'])
 	}	
 	else
 	{		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{			
-			if($account->get("password") != Strings::encrypt($post[2]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
-			elseif(!in_array($post[0], $character_listByName))
+			elseif(!in_array($_POST["character_name"], $character_listByName))
 			{				
 				$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			}	
-			elseif(!in_array($post[0], $guild_invites))
+			elseif(!in_array($_POST["character_name"], $guild_invites))
 			{				
 				$error = Lang::Message(LMSG_GUILD_CHARACTER_NOT_INVITED);
 			}											
 			else
 			{		
 				$character = new Character();
-				$character->loadByName($post[0], "name, rank_id, guild_join_date");
+				$character->loadByName($_POST["character_name"], "name, rank_id, guild_join_date");
 				
-				if($post[1] == "accept")		
+				if($_POST["invite_action"] == "accept")		
 				{			
 					$character->acceptInvite();
 					$character->save();
 					
-					$success = Lang::Message(LMSG_GUILD_JOIN, $post[0], $guild->get("name"));
+					$success = Lang::Message(LMSG_GUILD_JOIN, $_POST["character_name"], $guild->get("name"));
 				}
-				elseif($post[1] == "reject")
+				elseif($_POST["invite_action"] == "reject")
 				{
 					$character->removeInvite();
 					
-					$success = Lang::Message(LMSG_GUILD_JOIN_REJECT, $guild->get("name"), $post[0]);			
+					$success = Lang::Message(LMSG_GUILD_JOIN_REJECT, $guild->get("name"), $_POST["character_name"]);			
 				}
 			}
 		}

@@ -16,14 +16,13 @@ if($_GET['name'])
 		$character = new Character();
 		$character->loadByName($_GET['name'], "name, online");
 		
-		$post = Core::extractPost();
-		if($post)
+		if($_POST)
 		{
 			$itemshop_list = new ItemShop_List();
 			$query = $db->query("SELECT value FROM player_storage WHERE `key` = '".STORAGE_SHOPSYS_ID."' AND `player_id` = '{$character->get("id")}'");		
 			$fetch = $query->fetch();
 			
-			if($account->get("password") != Strings::encrypt($post[1]))
+			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}	
@@ -39,7 +38,7 @@ if($_GET['name'])
 			{
 				$error = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
 			}			
-			elseif(!$itemshop_list->load($post[0]))		
+			elseif(!$itemshop_list->load($_POST["itemshop_id"]))		
 			{
 				$error = Lang::Message(LMSG_REPORT);
 			}
@@ -163,7 +162,7 @@ $module .=	'
 		
 			<p>
 				<label for="account_email">Personagem</label><br />
-				<select name="character_name">
+				<select name="player_name">
 					';
 
 if(is_array($list))

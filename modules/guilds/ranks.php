@@ -20,9 +20,8 @@ if($_GET['name'])
 	{		
 		$guild->loadRanks();
 		$ranks = $guild->getRanks();
-		
-		$post = Core::extractPost();
-		if($post)
+
+		if($_POST)
 		{
 			$haveLongRank = 0;
 			$ranklist = array();
@@ -61,7 +60,7 @@ if($_GET['name'])
 				}
 			}			
 			
-			if($account->get("password") != Strings::encrypt($post[6]))
+			if($account->get("password") != Strings::encrypt($_POST["account_password"]))
 			{
 				$error = Lang::Message(LMSG_WRONG_PASSWORD);
 			}			

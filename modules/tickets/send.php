@@ -14,9 +14,7 @@ $account->load($_SESSION['login'][0]);
 $list = $account->getCharacterList();
 
 if($_POST)
-{	
-	Core::extractPost();
-	
+{		
 	$ticket  = new Tickets();
 	
 	if(!$_POST['ticket_title'] or !$_POST['ticket_main'])

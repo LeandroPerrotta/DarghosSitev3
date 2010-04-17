@@ -1,8 +1,6 @@
 <?
 if($_POST)
-{	
-	Core::extractPost();
-	
+{		
 	$account = new Account();
 	$password = Strings::randKey(8, 1, "lower+number");
 	

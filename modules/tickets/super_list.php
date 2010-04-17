@@ -1,7 +1,5 @@
 <?
 	include("classes/tickets.php");	
-
-	Core::extractPost();
 	
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);

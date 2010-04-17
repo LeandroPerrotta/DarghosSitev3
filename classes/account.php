@@ -246,19 +246,19 @@ class Account
 		
 		$query = $this->db->query("SELECT {$toReturn} FROM players WHERE account_id = '".$this->data['id']."'");
 		
-		if($query->numRows() != 0)
-		{
-			$list= array();
+		$list= array();
 		
+		if($query->numRows() != 0)
+		{		
 			while($fetch = $query->fetch())
 			{
 				$list[] = $fetch->$toReturn;
 			}
 			
-			return $list;
+			
 		}
-		else
-			return false;
+
+		return $list;
 	}
 	
 	function set($field, $value)

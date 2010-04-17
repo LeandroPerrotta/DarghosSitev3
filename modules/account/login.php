@@ -1,14 +1,12 @@
 <?
-//echo ;
-$post = Core::extractPost();
-if($post)
+if($_POST)
 {
 	$account = new Account();
 	
-	if(($account->loadByName($post[0], "password")) and ($account->getPassword() == Strings::encrypt($post[1])))
+	if(($account->loadByName($_POST["account_name"])) and ($account->getPassword() == Strings::encrypt($_POST["account_password"])))
 	{
 		$_SESSION['login'][] = $account->getId();
-		$_SESSION['login'][] = Strings::encrypt($post[1]);
+		$_SESSION['login'][] = Strings::encrypt($_POST["account_password"]);
 		
 		Core::redirect("index.php?ref=account.main");	
 	}
