@@ -28,7 +28,7 @@ if($_POST)
 	{
 		$success = true;
 		
-		foreach($post as $value)
+		foreach($_POST as $value)
 		{
 			$_SESSION['contribute'][] = $value;
 		}
