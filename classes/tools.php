@@ -38,14 +38,15 @@ class t_Vocation
 {
 	private $_vocation_id;
 	private $_vocation_names = array(
-		0 => "Sorcerer",
-		1 => "Druid",
-		2 => "Paladin",
-		3 => "Knight",
-		4 => "Master Sorcerer",
-		5 => "Elder Druid",
-		6 => "Royal Paladin",
-		7 => "Elite Knight"
+		0 => "No-Vocation",
+		1 => "Sorcerer",
+		2 => "Druid",
+		3 => "Paladin",
+		4 => "Knight",
+		5 => "Master Sorcerer",
+		6 => "Elder Druid",
+		7 => "Royal Paladin",
+		8 => "Elite Knight"
 	);
 	
 	function t_Vocation($vocation_id = null)
