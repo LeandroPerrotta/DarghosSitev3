@@ -38,7 +38,7 @@ class t_Vocation
 {
 	private $_vocation_id;
 	private $_vocation_names = array(
-		0 => "No-Vocation",
+		0 => "None",
 		1 => "Sorcerer",
 		2 => "Druid",
 		3 => "Paladin",

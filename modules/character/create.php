@@ -88,10 +88,10 @@ $module .= '
 		
 		<p>
 			<label for="player_vocation">Vocação</label><br />			
-				<input type="radio" name="player_vocation" value="sorcerer" /> Sorcerer<br>
-				<input type="radio" name="player_vocation" value="druid" /> Druid<br>
-				<input type="radio" name="player_vocation" value="paladin" /> Paladin<br>
-				<input type="radio" name="player_vocation" value="knight" /> Knight<br>
+				<input type="radio" name="player_vocation" value="Sorcerer" /> Sorcerer<br>
+				<input type="radio" name="player_vocation" value="Druid" /> Druid<br>
+				<input type="radio" name="player_vocation" value="Paladin" /> Paladin<br>
+				<input type="radio" name="player_vocation" value="Knight" /> Knight<br>
 		</p>			
 		
 		<div id="line1"></div>
