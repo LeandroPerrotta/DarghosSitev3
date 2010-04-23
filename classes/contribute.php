@@ -246,6 +246,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="email_cobranca" value="'.$_contribution['emailadmin'].'">
 				<input type="hidden" name="tipo" value="CP">
 				<input type="hidden" name="moeda" value="BRL">
+				<input type="hidden" name="ref_transacao" value="'.$this->data['id'].'">
 				<input type="hidden" name="item_id_1" value="1">
 				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium. (ref: '.$this->data['id'].')">
 				<input type="hidden" name="item_quant_1" value="1">

@@ -149,7 +149,7 @@ class Core
 	
 	static function getIpTries()
 	{
-		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
+		$query = self::$DB->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -161,7 +161,7 @@ class Core
 	
 	static function getGlobalValue($field)
 	{
-		$query = $this->db->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
+		$query = self::$DB->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
 		
 		if($query->numRows() != 0)
 		{
@@ -175,29 +175,29 @@ class Core
 	
 	static function setGlobalValue($field, $value)
 	{
-		$query = $this->db->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
+		$query = self::$DB->query("SELECT value FROM ".DB_WEBSITE_PREFIX."global WHERE field = '{$field}'");
 		
 		if($query->numRows() != 0)
-			$this->db->query("UPDATE ".DB_WEBSITE_PREFIX."global SET value = '{$value}' WHERE field = '{$field}'");
+			self::$DB->query("UPDATE ".DB_WEBSITE_PREFIX."global SET value = '{$value}' WHERE field = '{$field}'");
 		else
-			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."global (`field`, `value`) values('{$field}', '{$value}')");
+			self::$DB->query("INSERT INTO ".DB_WEBSITE_PREFIX."global (`field`, `value`) values('{$field}', '{$value}')");
 	}	
 	
 	static function increaseIpTries()
 	{
-		$query = $this->db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
+		$query = self::$DB->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
 		
 		if($query->numRows() != 0)
 		{
-			$this->db->query("UPDATE ".DB_WEBSITE_PREFIX."iptries SET tries = tries + 1, last_trie = '".time()."' WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");	
+			self::$DB->query("UPDATE ".DB_WEBSITE_PREFIX."iptries SET tries = tries + 1, last_trie = '".time()."' WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");	
 		}
 		else
-			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
+			self::$DB->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
 	
 	static function getLastAdClick()
 	{
-		$query = $this->db->query("SELECT date FROM ".DB_WEBSITE_PREFIX."adpage ORDER BY date DESC LIMIT 1");
+		$query = self::$DB->query("SELECT date FROM ".DB_WEBSITE_PREFIX."adpage ORDER BY date DESC LIMIT 1");
 		
 		$fetch = $query->fetch();
 		
