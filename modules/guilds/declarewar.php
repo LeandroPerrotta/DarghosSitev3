@@ -113,6 +113,8 @@ class View
 			return false;
 		}
 		
+		$this->guildList = Guilds::ActivedGuildsList();
+		
 		if(!$this->guildList)
 		{
 			$this->_message = Lang::Message(LMSG_GUILD_WAR_NO_HAVE_OPPONENTS);
@@ -128,36 +130,37 @@ class View
 		{
 			return;
 		}
-		
-		$this->guildList = Guilds::ActivedGuildsList();
-		
-		$this->_waropponent = new HTML_SelectBox();
-		$this->_waropponent->SetName("war_opponent");
-		
-		$first = true;
-		
-		foreach($this->guildList as $guild)
-		{
-			if($guild->GetName() == $_GET["name"])
-				continue;
-			
-			if($first)
-			{
-				$index = $this->_waropponent->AddOption($guild->GetName());
-				$this->_waropponent->SelectedIndex(0);
-			}
-			else
-				$this->_waropponent->AddOption($guild->GetName());
-				
-			$first = false;	
-		}			
 
 		if(!$this->Prepare())
 		{
 			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
 			return false;
 		}
-
+		
+		$this->_waropponent = new HTML_SelectBox();
+		$this->_waropponent->SetName("war_opponent");
+		
+		$first = true;
+		
+		if($this->guildList)
+		{
+			foreach($this->guildList as $guild)
+			{
+				if($guild->GetName() == $_GET["name"])
+					continue;
+				
+				if($first)
+				{
+					$index = $this->_waropponent->AddOption($guild->GetName());
+					$this->_waropponent->SelectedIndex(0);
+				}
+				else
+					$this->_waropponent->AddOption($guild->GetName());
+					
+				$first = false;	
+			}			
+		}		
+		
 		$this->_warfraglimit = new HTML_Input();
 		$this->_warfraglimit->SetName("war_frag_limit");
 		$this->_warfraglimit->SetSize(10);
