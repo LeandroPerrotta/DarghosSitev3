@@ -49,8 +49,6 @@ if($_POST)
 		$character->setTownId(6);
 		$character->setLookType($outfitType);
 		$character->setConditions(null);
-		$character->setGuildNick("");
-		$character->setRankId(0);
 		$character->setDescription("");
 		$character->setCreation(time());
 		
