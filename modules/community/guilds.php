@@ -95,7 +95,7 @@ $_warsTable->AddDataRow("Guerras em andamento");
 
 $warsStarted = Guild_War::ListStartedWars();
 
-if(count($warsStarted) != 0)
+if($warsStarted)
 {
 	$style = "font-weight: bold;";
 	

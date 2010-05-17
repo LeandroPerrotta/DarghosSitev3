@@ -93,7 +93,7 @@ class View
 		$guild = new Guilds();
 		$guild->Load($guild_id);	
 
-		if($this->guild->OnWar())
+		if($guild->OnWar())
 		{
 			$this->_message = Lang::Message(LMSG_GUILD_IS_ON_WAR, $_GET['name']);
 			return false;			
