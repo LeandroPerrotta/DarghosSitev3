@@ -638,6 +638,14 @@ class Guilds
 	function Delete()
 	{
 		$this->EreaseInvites();
+
+		Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->_ownerid}'");
+		
+		foreach($this->Ranks as $rank)
+		{
+			$rank->Delete();
+		}
+		
 		Core::$DB->query("DELETE FROM `guilds` WHERE `id` = '{$this->_id}'");
 	}	
 	
