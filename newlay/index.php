@@ -32,6 +32,7 @@
 									<li><a href="?ref=general.about"><? echo $menu['ABOUT']; ?></a></li>
 									<li><a href="?ref=general.faq"><? echo $menu['FAQ']; ?></a></li>										
 									<li><a href="?ref=general.howplay"><? echo $menu['HOW_PLAY']; ?></a></li>
+									<li><a href="?ref=general.fansites"><? echo $menu['FANSITES']; ?></a></li>																	
 									<li><a href="?ref=darghopedia.main"><? echo $menu['LIBRARY']; ?></a></li>																	
 								</ul>
 							</li>

@@ -4,7 +4,6 @@ $account->load($_SESSION['login'][0]);
 $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
-$character = new Character();
 
 $premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes" : "Você não possui dias de conta premium.";	
 $warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
@@ -19,6 +18,9 @@ $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
 $bans = new Bans();
 
+$invitesList = "";
+
+$confirmed = 0;
 if(is_array($oders))
 {
 	foreach($oders as $orderId);
@@ -34,11 +36,26 @@ if(is_array($player_list))
 {
 	foreach($player_list as $player)
 	{
+		$character = new Character();
 		$character->loadByName($player);
 		
 		unset($charStatus);
 		unset($statusString);
 		unset($charOptions);
+		
+		$invite = $character->getInvite();
+		
+		if($invite)
+		{
+			list($guild_id, $invite_date) = $invite;
+			
+			$guild = new Guilds();
+			$guild->Load($guild_id);
+			
+			$invitesList .= "
+				<p><font style='font-weight: bold;'>Convite de Guild:</font> O seu personagem {$character->getName()} foi convidado em ".Core::formatDate($invite_date)." para se tornar membro da guilda {$guild->GetName()}! Clique <a href='?ref=guilds.invitereply&name={$character->getName()}'>aqui</a> para responder este convite. Obs: Esta mensagem desaparecerá automaticamente quando o convite for respondido.</p>
+			";
+		}
 		
 		$charStatus = array();
 		$charOptions = "<a href='?ref=character.edit&name={$character->getName()}'>Editar</a>";
@@ -121,6 +138,11 @@ if(!$secretkey)
 {
 	$module .= '
 	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
+}
+
+if($invitesList)
+{
+	$module .= $invitesList;
 }
 
 if(isset($charDel))

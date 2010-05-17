@@ -1,100 +1,83 @@
 <?php
 if($_GET['name'])
 {
+	$result = false;
+	$message = "";	
+
+	function proccessPost(&$message, Account $account, Guilds $guild)
+	{
+		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		{
+			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			return false;
+		}			
+
+		$member = $guild->SearchMemberByName($_POST["member_candidate"]);
+		
+		if(!$member)
+		{
+			$message = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
+			return false;			
+		}
+		
+		if($member->GetGuildLevel() != GUILD_RANK_VICE)
+		{
+			$message = Lang::Message(LMSG_GUILD_PERMISSION);
+			return false;
+		}
+		
+		$leader_rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER);
+		$vice_rank = $guild->SearchRankByLevel(GUILD_RANK_VICE);
+		
+		$member->setGuildRankId($leader_rank->GetId());
+		$member->save();
+		
+		$old_owner = new Character();
+		$old_owner->load($guild->GetOwnerId());
+		$old_owner->setGuildRankId($vice_rank->GetId());
+		$old_owner->save();
+		
+		$message = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $old_owner->getName(), $_POST["member_candidate"]);
+		return true;
+	}
+	
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$character_list = $account->getCharacterList(true);	
-	
 	$guild = new Guilds();
 	
-	if(!$guild->loadByName($_GET['name']))
+	if(!$guild->LoadByName($_GET['name']))
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif($account->getGuildLevel($guild->get("name")) > 1)
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
 	}	
 	else
 	{		
-		$guild->loadRanks();
-		$guild->loadMembersList();
-		
-		$members = $guild->getMembersList();		
-		
 		if($_POST)
-		{						
-			$ranks = $guild->getRanks();
-			
-			foreach($members as $member_name => $member_values)
-			{
-				$members_list[] = $member_name;
-			}
-			
-			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
-			{
-				$error = Lang::Message(LMSG_WRONG_PASSWORD);
-			}		
-			elseif(!in_array($_POST["member_candidate"], $members_list))
-			{
-				$error = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["member_candidate"], $_GET['name']);			
-			}
-			else
-			{			
-				$leader_id = 0;
-				$vice_id = 0;
-				
-				foreach($ranks as $rank_id => $rank_values)
-				{
-					if($rank_values['level'] == 1)
-						$leader_id = $rank_id;
-						
-					if($rank_values['level'] == 2)
-						$vice_id = $rank_id;
-				}
-				
-				$newLeader_char = new Character();
-				$newLeader_char->loadByName($_POST["member_candidate"]);
-				$newLeader_char->set("rank_id", $leader_id);
-				$newLeader_id = $newLeader_char->get("id");
-				$newLeader_char->save();
-				
-				$oldLeader_char = new Character();
-				$oldLeader_char->load($guild->get("ownerid"));
-				$oldLeader_char->set("rank_id", $vice_id);
-				$oldLeader_name = $oldLeader_char->get("name");
-				$oldLeader_char->save();
-				
-				$guild->set("ownerid", $newLeader_id);
-				$guild->save();
-				
-				$success = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $oldLeader_name, $_POST["member_candidate"]);
-			}
-		}
-		
-		if($success)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
+		}
+			
+		if($result)	
+		{
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
 		}
 		else
 		{
-			if($error)	
+			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
-			}
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+			}			
+						
+			$vices = $guild->SearchRankByLevel(GUILD_RANK_VICE);
 			
-			$vices = 0;
-			
-			foreach($members as $member_name => $member_values)
+			foreach($vices->Members as $member)
 			{
-				if($member_values['level'] == 2)
-				{
-					$options .= "<option value='{$member_name}'>{$member_name}</option>";
-					$vices++;
-				}
-			}
-			
+				$options .= "<option value='{$member->getName()}'>{$member->getName()}</option>";
+			}			
 			
 			$module .=	'
 			<form action="" method="post">
@@ -102,37 +85,37 @@ if($_GET['name'])
 
 			';
 
-				if($vices > 0)
-				{
-					$module .=	'
-					<p>
-						<label for="member_candidate">Membros Cadidatos</label><br />		
-						<select name="member_candidate">'.$options.'</select>
-					</p>	
-
-					<p>
-						<label for="account_password">Senha</label><br />
-						<input name="account_password" size="40" type="password" value="" />
-					</p>						
-					
-					<div id="line1"></div>
-					
-					<p>
-						<input class="button" type="submit" value="Enviar" />
-					</p>					
-					';
-				}
-				else
-				{
-					$module .=	'
-					<p>
-						É necessario possuir ao menos 1 vice lider disponivel para que seja possivel a  transferencia a liderança de uma guilda.
-					</p>	
-					';			
-				}
-				
+			if(count($vices->Members) != 0)
+			{
 				$module .=	'
-				</fieldset>
+				<p>
+					<label for="member_candidate">Membros Cadidatos</label><br />		
+					<select name="member_candidate">'.$options.'</select>
+				</p>	
+
+				<p>
+					<label for="account_password">Senha</label><br />
+					<input name="account_password" size="40" type="password" value="" />
+				</p>						
+				
+				<div id="line1"></div>
+				
+				<p>
+					<input class="button" type="submit" value="Enviar" />
+				</p>					
+				';
+			}
+			else
+			{
+				$module .=	'
+				<p>
+					É necessario possuir ao menos 1 vice lider disponivel para que seja possivel a  transferencia a liderança de uma guilda.
+				</p>	
+				';			
+			}
+			
+			$module .=	'
+			</fieldset>
 			</form>';	
 		}	
 	}

@@ -1,6 +1,8 @@
 <?
-ini_set("display_errors", 0 );
-error_reporting(0); 
+ini_set("display_errors", 3 );
+//ini_set("memory_limit", "64M");
+error_reporting(3); 
+
 
 list($t, $date) = explode(" ", microtime());
 
@@ -30,7 +32,7 @@ else
 	
 	include "classes/account.php";
 	include "classes/character.php";
-	include "classes/guilds.php";
+	include "classes/Guilds.php";
 	include "classes/houses.php";
 	include "classes/deaths.php";
 	include "classes/contribute.php";
@@ -42,6 +44,10 @@ else
 	include "classes/strings.php";
 	include "classes/tickets.php";
 	include "classes/monsters.php";
+	
+	include "classes/HTML_Table.php";
+	include "classes/HTML_SelectBox.php";
+	include "classes/HTML_Input.php";
 	
 	try
 	{

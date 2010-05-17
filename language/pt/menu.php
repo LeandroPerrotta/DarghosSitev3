@@ -6,6 +6,7 @@ $menu['LAST_NEWS'] = "Últimas Notícias";
 $menu['ABOUT'] = "Sobre o ".CONFIG_SITENAME."";
 $menu['FAQ'] = "".CONFIG_SITENAME." FAQ";
 $menu['HOW_PLAY'] = "Como Jogar?";
+$menu['FANSITES'] = "Fansites";
 $menu['LIBRARY'] = "Darghopédia";
 
 $menu['ACCOUNTS'] = "Contas";

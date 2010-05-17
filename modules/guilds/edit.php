@@ -1,18 +1,87 @@
 <?php
 if($_GET['name'])
 {
+	$result = false;
+	$message = "";	
+
+	function proccessPost(&$message, Account $account, Guilds $guild)
+	{
+		$guild_image = isset($_FILES['guild_image']) ? $_FILES['guild_image'] : false;
+		
+		if($guild_image["name"])
+		{
+			$image_infos = getimagesize($guild_image["tmp_name"]);
+		}
+		
+		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		{
+			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			return false;
+		}			
+		
+		if(strlen($_POST["guild_motd"]) > 500)
+		{
+			$message = Lang::Message(LMSG_GUILD_COMMENT_SIZE);
+			return false;
+		}
+		
+		if($guild_image["name"] and $guild_image["size"] > 100000)
+		{
+			$message = Lang::Message(LMSG_GUILD_LOGO_SIZE);
+			return false;
+		}
+		
+		if($guild_image["name"] and !$image_infos)
+		{
+			$message = Lang::Message(LMSG_GUILD_FILE_WRONG);
+			return false;
+		}
+		
+		if($guild_image["name"] and ($image_infos[0] != 100 or $image_infos[1] != 100))
+		{
+			$message = Lang::Message(LMSG_GUILD_LOGO_DIMENSION_WRONG);
+			return false;
+		}
+			
+		if($guild_image["name"] and $image_infos[2] > 3)
+		{
+			$message = Lang::Message(LMSG_GUILD_LOGO_EXTENSION_WRONG);
+			return false;
+		}						
+
+		
+		$guild->SetMotd($_POST["guild_motd"]);
+		
+		if($guild_image)
+		{
+			$extension = null;
+			preg_match("/\.(gif|jpg|jpeg|png){1}$/i", $guild_image["name"], $extension);
+			
+			$name = Strings::randKey(10, 1, "lower+number").$extension[0];
+			$file = GUILD_IMAGE_DIR.$name;
+			
+			if(move_uploaded_file($guild_image["tmp_name"], $file))
+			{
+				$guild->SetImage($name);
+			}		
+		}
+		
+		$guild->Save();
+		
+		$message = Lang::Message(LMSG_GUILD_DESC_CHANGED);		
+		return true;
+	}
+	
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$character_list = $account->getCharacterList(true);	
-	
 	$guild = new Guilds();
 	
-	if(!$guild->loadByName($_GET['name']))
+	if(!$guild->LoadByName($_GET['name']))
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));
 	}
-	elseif($account->getGuildLevel($guild->get("name")) > 1)
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));	
 	}	
@@ -20,73 +89,21 @@ if($_GET['name'])
 	{		
 		if($_POST)
 		{
-			$guild_image = isset($_FILES['guild_image']) ? $_FILES['guild_image'] : false;
-			
-			if($guild_image["name"])
-			{
-				$image_infos = getimagesize($guild_image["tmp_name"]);
-			}
-			
-			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
-			{
-				$error = Lang::Message(LMSG_WRONG_PASSWORD);
-			}			
-			elseif(strlen($_POST["guild_motd"]) > 500)
-			{
-				$error = Lang::Message(LMSG_GUILD_COMMENT_SIZE);
-			}
-			elseif($guild_image["name"] and $guild_image["size"] > 100000)
-			{
-				$error = Lang::Message(LMSG_GUILD_LOGO_SIZE);
-			}
-			elseif($guild_image["name"] and !$image_infos)
-			{
-				$error = Lang::Message(LMSG_GUILD_FILE_WRONG);
-			}
-			elseif($guild_image["name"] and ($image_infos[0] != 100 or $image_infos[1] != 100))
-			{
-				$error = Lang::Message(LMSG_GUILD_LOGO_DIMENSION_WRONG);
-			}	
-			elseif($guild_image["name"] and $image_infos[2] > 3)
-			{
-				$error = Lang::Message(LMSG_GUILD_LOGO_EXTENSION_WRONG);
-			}						
-			else
-			{		
-				$guild->set("motd", $_POST["guild_motd"]);
-				
-				if($guild_image)
-				{
-					$extension = null;
-					preg_match("/\.(gif|jpg|jpeg|png){1}$/i", $guild_image["name"], $extension);
-					
-					$name = Strings::randKey(10, 1, "lower+number").$extension[0];
-					$file = GUILD_IMAGE_DIR.$name;
-					
-					if(move_uploaded_file($guild_image["tmp_name"], $file))
-					{
-						$guild->set("image", $name);
-					}		
-				}
-				
-				$guild->save();
-				
-				$success = Lang::Message(LMSG_GUILD_DESC_CHANGED);
-			}
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
 		}
-		
-		if($success)	
+			
+		if($result)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
 		}
 		else
 		{
-			if($error)	
+			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
 			}
 			
-		$module .=	'
+			$module .=	'
 			<form action="" method="post" ENCTYPE="multipart/form-data">
 				<fieldset>
 
@@ -102,7 +119,7 @@ if($_GET['name'])
 				    
 					<p>
 						<label for="guild_motd">Comentario</label><br />
-						<textarea name="guild_motd" rows="10" wrap="physical" cols="55">'.$guild->get("motd").'</textarea>
+						<textarea name="guild_motd" rows="10" wrap="physical" cols="55">'.$guild->GetMotd().'</textarea>
 						<em><br>Limpe para deletar.</em>
 					</p>					
 					

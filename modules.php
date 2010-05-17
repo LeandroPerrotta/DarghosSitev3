@@ -283,7 +283,7 @@ else
 					$patch['file'] = $topic;
 				break;	
 
-				case "acceptInvite":
+				case "invitereply":
 					$patch['file'] = $topic;
 				break;		
 
@@ -304,15 +304,19 @@ else
 
 				case "leave":
 					$patch['file'] = $topic;
-				break;		
-				/*
-				case "joinwar":
+				break;	
+					
+				case "declarewar":
 					$patch['file'] = $topic;
 				break;		
 				
-				case "leavewar":
+				case "replywar":
 					$patch['file'] = $topic;
-				break;*/
+				break;
+				
+				case "wardetail":
+					$patch['file'] = $topic;
+				break;
 								
 				default:
 					$patch['dir'] = "errors";
@@ -406,6 +410,10 @@ else
 				case "emailmarketing":
 					$patch['file'] = $topic;
 				break;					
+
+				case "fansites":
+					$patch['file'] = $topic;
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";
@@ -470,7 +478,6 @@ else
 			}
 			
 			$_groupId = $checkAccount->getGroup();
-			$_maxCharLevel = $checkAccount->getCharMinLevel();
 		}
 		
 		if(($needLogin and !$_SESSION['login']) or ($needPremium and !$_SESSION['login']))

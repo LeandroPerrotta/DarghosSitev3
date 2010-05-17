@@ -8,6 +8,7 @@ class Lang_Messages
 		self::$messages[LMSG_ERROR] = "Erro!";
 		self::$messages[LMSG_SUCCESS] = "Sucesso!";
 		self::$messages[LMSG_FILL_FORM] = "Preencha todos os campos corretamente!";
+		self::$messages[LMSG_FILL_NUMERIC_FIELDS] = "Alguns campos deste formulario devem ser preenchidos apenas com caracteres numericos!";
 		self::$messages[LMSG_PRIVACY_POLICY] = "Para jogar em nosso servidor é necessario concordar com nossa politica de privacidade.";
 		self::$messages[LMSG_WRONG_EMAIL] = "O endereço de e-mail informado é incorreto ou invalido.";
 		self::$messages[LMSG_WRONG_PASSWORD] = "A senha informada está incorreta.";
@@ -49,7 +50,7 @@ class Lang_Messages
 		self::$messages[LMSG_PAGE_NOT_FOUND] = "Esta pagina não existe ou está em processo de construção.";
 		self::$messages[LMSG_SQL_INJECTION] = "Detectada tentativa de inserção de codigo malicioso não autorizado. A tentativa ilegal do USER_IP: @v1@ foi reportado aos Administradores para investigação.";
 		self::$messages[LMSG_GUILD_NOT_FOUND] = "A guilda @v1@ não existe. Verifique e tente novamente.";
-		self::$messages[LMSG_GUILD_CHARACTER_NOT_INVITED] = "Este personagem não está invitado para esta guilda.";
+		self::$messages[LMSG_GUILD_CHARACTER_NOT_INVITED] = "O personagem @v1@ não está convidado para nenhuma guilda.";
 		self::$messages[LMSG_GUILD_NAME_ALREADY_USED] = "O nome @v1@ já está sendo usado por outra guilda. Escolha outro nome.";
 		self::$messages[LMSG_GUILD_ONLY_ONE_VICE_PER_ACCOUNT] = "Somente é permitido possuir um lider ou vice-lider por conta.";
 		self::$messages[LMSG_CHARACTER_ALREADY_MEMBER_GUILD] = "Este personagem já é membro de uma guild. Para criar uma nova guilda é necessario primeiro deixar a guilda atual.";
@@ -79,6 +80,16 @@ class Lang_Messages
 		self::$messages[LMSG_GUILD_RANK_WRONG_SIZE] = "Os ranks devem possuir no maximo 35 caracteres.";
 		self::$messages[LMSG_GUILD_RANK_MIMINUM_NEEDED] = "É necessario existir ao menos 3 ranks para sua guilda.";
 		self::$messages[LMSG_GUILD_RANK_IN_USE] = "Um ou mais ranks que foram removidos de sua guild estão em uso (possuem membros). Para remover um rank é necessario que o mesmo não possua nenhum membro.";
+		self::$messages[LMSG_GUILD_CANNOT_LEAVE] = "Você não pode abandonar a guilda @v1@ pois este personagem é o lider. Caso queira encerrar a guilda use a opção Desmanchar.";
+		self::$messages[LMSG_GUILD_WAR_NO_HAVE_OPPONENTS] = "Não existe nenhuma guilda formada em nosso servidor portanto é impossivel iniciar uma guerra.";
+		self::$messages[LMSG_GUILD_NEED_TO_BE_FORMED] = "Para efetuar esta operação em sua guilda é necessario que esta já esteja formada.";
+		self::$messages[LMSG_GUILD_WAR_WRONG_FRAG_LIMIT] = "O limite de frags de uma guerra deve ser de 10 a 1000.";
+		self::$messages[LMSG_GUILD_WAR_WRONG_END_DATE] = "O limite de tempo de uma guerra deve ser entre 7 e 360 dias.";
+		self::$messages[LMSG_GUILD_WAR_WRONG_FEE] = "O pagamento da guilda derrotada ou rendida deve ser entre 0 e 100000000 gold coins .";
+		self::$messages[LMSG_GUILD_WAR_WRONG_COMMENT_LENGTH] = "O comentario de declaração de guerra não deve exceder 500 caracteres.";
+		self::$messages[LMSG_GUILD_WAR_REJECTED] = "A declaração de guerra da guilda @v1@ foi rejeitada com sucesso. Sua guilda não entrará mais nesta guerra.";
+		self::$messages[LMSG_GUILD_IS_ON_WAR] = "A guilda @v1@ esta em guerra com outra(s) guildas, portanto, certas operações na guilda não estão disponiveis, como abandonar guilda, convidar novos membros, aceitar convites, remover membros. Tente novamente quando a guerra estiver encerrada.";
+		self::$messages[LMSG_GUILD_WAR_ALREADY] = "A sua guilda já declarou ou está em guerra contra a guilda @v1@. Você poderá declarar guerra contra esta guilda quando a guerra atual estiver terminada.";
 	
 		self::$messages[LMSG_ACCOUNT_REGISTERED] = "
 			<p>Parabens, sua conta foi criada com sucesso!</p>
@@ -279,7 +290,7 @@ class Lang_Messages
 			
 		self::$messages[LMSG_GUILD_MEMBER_EDITED] = "
 			<p>Caro jogador,</p>
-			<p>O personagem membro @v1@ da guild foi modificado com sucesso!</p>
+			<p>O membro @v1@ da guild @v2@ foi modificado com sucesso!</p>
 			<p>Tenha um bom jogo!</p>
 		";				
 			
@@ -293,6 +304,35 @@ class Lang_Messages
 			<p>Caro jogador,</p>
 			<p>As alterações nos ranks de sua guild foi efetuado com sucesso!</p>
 			<p>Tenha um bom jogo!</p>
+		";				
+			
+		self::$messages[LMSG_GUILD_WAR_DECLARED] = "
+			<p>Caro jogador,</p>
+			<p>A declaração de guerra de sua guilda @v1@ a guilda inimiga @v2@ foi efetuado com sucesso!</p>
+			<p>Os termos da guerra são:</p>
+			<p>
+				Limite de mortes: @v3@<br>
+				Limite de tempo: @v4@<br>
+				Nosso pagamento por rendição ou derrota: @v5@<br>
+				Pagamento de nosso oponente por rendição ou derrota: @v6@
+			</p>
+			<p>O lider da guilda oponente irá analisar a proposta de guerra e poderá aceitar-la, rejeita-la ou fazer uma contra proposta alterando os termos. Se esta proposta não for finalizada em 7 dias ela será automaticamente cancelada.</p>
+			<p>Tenha um bom jogo!</p>
+		";
+		
+		self::$messages[LMSG_GUILD_WAR_ACCEPTED] = "
+			<p>Caro jogador,</p>
+			<p>A sua guilda @v1@ aceitou a declaração de guerra da guilda @v2@ com sucesso sob os termos acordados!</p>
+			<p>No proximo server save será sera reservado de sua conta do banco o preço da rendição acordado, assim como do lider da guilda oponente.</p>
+			<p>A guerra sera encerrada dentro dos termos acordados ou ainda pode ser declarada uma rendição pelo painel de guerras de sua guilda.</p>
+			<p>Desejamos uma boa sorte a sua guilda nesta guerra e um bom jogo!</p>
+		";				
+		
+		self::$messages[LMSG_GUILD_WAR_NEGOTIATE_SEND] = "
+			<p>Caro jogador,</p>
+			<p>Uma nova proposta foi enviada ao lider da outra guilda para ele analisar, ele poderá aceita-la, rejeitar-la ou ainda enviar uma nova proposta de volta a você.</p>
+			<p>Caso a proposta seja aceita a guerra será iniciada no proximo server save, caso os gold coins de rendição possam ser reservados das contas de banco de cada um dos lideres das duas guildas.</p>
+			<p>Desejamos uma boa sorte a sua guilda nesta guerra e um bom jogo!</p>
 		";				
 	}
 }

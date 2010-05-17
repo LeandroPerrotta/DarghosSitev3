@@ -1,55 +1,58 @@
 <?php
 if($_GET['name'])
 {
+	$result = false;
+	$message = "";		
+	
+	function proccessPost(&$message, Account $account, Guilds $guild)
+	{		
+		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		{
+			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			return false;
+		}	
+		
+		if($guild->MembersCount() > 1)
+		{
+			$message = Lang::Message(LMSG_GUILD_NEED_NO_MEMBERS_DISBAND);			
+			return false;
+		}
+					
+		$guild->Delete();
+		
+		$message = Lang::Message(LMSG_GUILD_DISBANDED, $_GET['name']);	
+		return true;
+	}
+	
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$character_list = $account->getCharacterList(true);	
-	
 	$guild = new Guilds();
-	
-	if(!$guild->loadByName($_GET['name']))
+
+	if(!$guild->LoadByName($_GET['name']))
 	{	
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));		
 	}
-	elseif($account->getGuildLevel($guild->get("name")) > 1)
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));	
 	}	
 	else
 	{		
 		if($_POST)
-		{			
-			$guild->loadRanks();
-			$guild->loadMembersList();
-			
-			$members = $guild->getMembersList();
-			
-			if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
-			{
-				$error = Lang::Message(LMSG_WRONG_PASSWORD);
-			}	
-			elseif(count($members) > 1)
-			{
-				$error = Lang::Message(LMSG_GUILD_NEED_NO_MEMBERS_DISBAND);			
-			}
-			else
-			{				
-				$guild->disband();
-				
-				$success = Lang::Message(LMSG_GUILD_DISBANDED, $_GET['name']);
-			}
-		}
-		
-		if($success)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
+		}
+			
+		if($result)	
+		{
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
 		}
 		else
 		{
-			if($error)	
+			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
 			}
 			
 		$module .=	'

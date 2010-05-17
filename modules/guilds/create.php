@@ -1,84 +1,106 @@
 <?
-$account = new Account();
-$account->load($_SESSION["login"][0]);
+$result = false;
+$message = "";
 
-$list = $account->getCharacterList();
-
-if($_POST)
-{	
+function proccessPost(&$message)
+{
+	$account = new Account();
+	$account->load($_SESSION["login"][0]);
+	
+	if(Strings::encrypt($_POST["account_password"]) != $account->getPassword())
+	{
+		$message = Lang::Message(LMSG_WRONG_PASSWORD);	
+		return false;
+	}
+	
+	if(!in_array($_POST["guild_owner"], $account->getCharacterList()))
+	{
+		$message = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);	
+		return false;
+	}
+	
 	$guild = new Guilds();
+	
+	if($guild->LoadByName($_POST["guild_name"]))
+	{
+		$message = Lang::Message(LMSG_GUILD_NAME_ALREADY_USED, $_POST["guild_name"]);
+		return false;
+	}
+	
+	if($account->getGuildLevel() >= GUILD_RANK_VICE)
+	{
+		$message = Lang::Message(LMSG_GUILD_ONLY_ONE_VICE_PER_ACCOUNT);
+		return false;
+	}
+	
+	if(!Strings::canUseName($_POST["guild_name"]))
+	{
+		$message = Lang::Message(LMSG_WRONG_NAME);
+		return false;
+	}
+	
 	$character = new Character();
 	$character->loadByName($_POST["guild_owner"]);
-		
-	if(!in_array($_POST["guild_owner"], $list))
+
+	if($character->LoadGuild())
 	{
-		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
+		$message = Lang::Message(LMSG_CHARACTER_ALREADY_MEMBER_GUILD);
+		return false;
 	}
-	elseif($account->get("password") != Strings::encrypt($_POST["account_password"]))
+	
+	$guild->SetName($_POST["guild_name"]);
+	$guild->SetOwnerId($character->getId());
+	$guild->SetCreationDate(time());
+	$guild->SetMotd("Aqui está a descrição da guilda {$_POST["guild_name"]}!");
+	$guild->SetStatus(GUILD_STATUS_IN_FORMATION);
+	$guild->SetFormationTime(time() + 60 * 60 * 24 * GUILDS_FORMATION_DAYS);
+	$guild->SetImage(GUILD_DEFAULT_IMAGE);
+	
+	$guild->Save();
+	
+	$member_rank_id = 0;
+	
+	//default ranks (member, vice and leader) are created automaticaly by MySQL Triggers
+	//we need search in ranks the rank_id of the leader of guild
+	$rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER); 
+	
+	if($rank)
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
-	}	
-	elseif($guild->loadByName($_POST["guild_name"]))
-	{
-		$error = Lang::Message(LMSG_GUILD_NAME_ALREADY_USED);
-	}	
-	elseif($account->isGuildHighMember())
-	{
-		$error = Lang::Message(LMSG_GUILD_ONLY_ONE_VICE_PER_ACCOUNT);
-	}	
-	elseif(!Strings::canUseName($_POST["guild_name"]))
-	{
-		$error = Lang::Message(LMSG_WRONG_NAME);
+		$member_rank_id = $rank->GetId();
 	}
-	elseif($character->loadGuild())
-	{
-		$error = Lang::Message(LMSG_CHARACTER_ALREADY_MEMBER_GUILD);
-	}
-	else
-	{
-		
-		$guild->set("name", $_POST["guild_name"]);
-		$guild->set("ownerid", $character->get("id"));
-		$guild->set("motd", "");
-		$guild->set("image", "default_logo.gif");
-		$guild->set("creationdata", time());
-		$guild->set("formationTime", time() + 60 * 60 * 24 * GUILDS_FORMATION_DAYS);
-		
-		$guild->save();
-		
-		$guild->setRank("Lider", 1);
-		$guild->setRank("Vice-Lider", 2);
-		$guild->setRank("Membro", 3);
-		
-		$guild->loadRanks();
-		$ranks = $guild->getRanks();
-		
-		foreach($ranks as $rank_id => $values)
-		{
-			if($values['level'] == 1)
-				$leader_id = $rank_id;
-		}
-		
-		$character->set("guild_join_date", time());
-		$character->set("rank_id", $leader_id);
-		$character->save();
-		
-		$success = Lang::Message(LMSG_GUILD_CREATED, $_POST["guild_name"], GUILDS_VICELEADERS_NEEDED, GUILDS_FORMATION_DAYS);
-	}
+	
+	$character->setGuildRankId($member_rank_id);
+	$character->setGuildNick("");
+	$character->setGuildJoinIn(time());
+	
+	$character->save();
+	
+	$message = Lang::Message(LMSG_GUILD_CREATED, $_POST["guild_name"], GUILDS_VICELEADERS_NEEDED, GUILDS_FORMATION_DAYS);
+	
+	return true;
 }
 
-if($success)	
+if($_POST)
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	$result = (proccessPost($message)) ? true : false;
+}
+
+if($result)	
+{
+	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
 }
 else
 {	
-	if($error)	
+	if($_POST)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
 	}
 
-
+	$account = new Account();
+	$account->load($_SESSION["login"][0]);
+	
+	$char_list = $account->getCharacterList();
+	
 $module .=	'
 	<form action="" method="post">
 		<fieldset>
@@ -93,11 +115,11 @@ $module .=	'
 				<select name="guild_owner">
 					';
 
-				if(is_array($list))
+				if(is_array($char_list))
 				{	
-					foreach($list as $pid)
+					foreach($char_list as $player_name)
 					{
-						$module .=	'<option value="'.$pid.'">'.$pid.'</option>';
+						$module .=	'<option value="'.$player_name.'">'.$player_name.'</option>';
 					}
 				}
 

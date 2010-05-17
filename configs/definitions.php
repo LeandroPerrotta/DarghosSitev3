@@ -2,8 +2,8 @@
 
 define('MANUTENTION', 0);
 
-define('CONFIG_SITEEMAIL', "http://www.darghos.com.br");
-#define('SITE_ROOT_DIR', "/DarghosNew2.0"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+define('CONFIG_SITEEMAIL', "http://localhost:8090");
+define('SITE_ROOT_DIR', "/darghos_site"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
 
 define('DIR_DATA', "/home/leandro/darghos/data/");
 define('HOUSES_FILE', "world/-house.xml");
@@ -50,7 +50,7 @@ define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Chan
 define('SHOW_PREMIUMFEATURES', 1); //Exibi as opes de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)
 */
 
-//Ativa validac„o por email para modulos como criao de personagem e recuperaÁ„o de contas entre outros IMPORTANTE: ATIVAO REQUER SERVIDOR SMTP CONFIGURADO
+//Ativa a valida√ß√£o por email para modulos como criao de personagem e recupera√ß√£o de contas entre outros IMPORTANTE: ATIVAO REQUER SERVIDOR SMTP CONFIGURADO
 define('USE_EMAILVALIDATION', true); 
 
 // Constantes para Guildas

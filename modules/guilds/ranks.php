@@ -1,142 +1,260 @@
 <?php
 if($_GET['name'])
-{
+{	
+	$result = false;
+	$message = "";	
+	
+	function proccessPost(&$message, Account $account, Guilds $guild)
+	{			
+		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		{
+			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			return false;
+		}		
+		
+		//faremos as verificações primarias de todos os ranks do formulario
+		
+		if(!$_POST["leader"] || !$_POST["vice"] || !$_POST["member_1"])
+		{
+			$message = Lang::Message(LMSG_GUILD_RANK_MIMINUM_NEEDED);
+			return false;
+		}		
+		
+		if(strlen($_POST["leader"]) > 35 || strlen($_POST["vice"]) > 35 || strlen($_POST["member_1"]) > 35 )
+		{
+			$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+			return false;
+		}
+		
+		$rank_opt_3 = $guild->SearchRankByLevel(GUILD_RANK_MEMBER_OPT_3);
+		if($_POST["member_2"])
+		{
+			if(strlen($_POST["member_2"]) > 35)
+			{
+				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+				return false;			
+			}
+			
+			if(!$rank_opt_3)
+			{
+				$rank_opt_3 = new Guild_Rank();
+				$rank_opt_3->SetGuildId($guild->GetId());			
+			}			
+			
+			$rank_opt_3->SetName($_POST["member_2"]);
+			$rank_opt_3->SetLevel(GUILD_RANK_MEMBER_OPT_3);
+		}
+		else
+		{			
+			if($rank_opt_3)
+			{
+				if($rank_opt_3->MemberCount() > 0)
+				{
+					$message = Lang::Message(LMSG_GUILD_RANK_IN_USE);
+					return false;
+				}
+				
+				$guild->AddRankToDelete($rank_opt_3);
+			}		
+		}
+		
+		$rank_opt_2 = $guild->SearchRankByLevel(GUILD_RANK_MEMBER_OPT_2);
+		if($_POST["member_3"])
+		{
+			if(strlen($_POST["member_3"]) > 35)
+			{
+				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+				return false;					
+			}
+			
+			if(!$_POST["member_2"])
+			{
+				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_ORDER);
+				return false;					
+			}
+			
+			if(!$rank_opt_2)
+			{
+				$rank_opt_2 = new Guild_Rank();
+				$rank_opt_2->SetGuildId($guild->GetId());			
+			}			
+			
+			$rank_opt_2->SetName($_POST["member_3"]);
+			$rank_opt_2->SetLevel(GUILD_RANK_MEMBER_OPT_2);
+		}
+		else
+		{
+			if($rank_opt_2)
+			{
+				if($rank_opt_2->MemberCount() > 0)
+				{
+					$message = Lang::Message(LMSG_GUILD_RANK_IN_USE);
+					return false;
+				}
+				
+				$guild->AddRankToDelete($rank_opt_2);
+			}			
+		}
+		
+		$rank_opt_1 = $guild->SearchRankByLevel(GUILD_RANK_MEMBER_OPT_1);
+		if($_POST["member_4"])
+		{
+			if(strlen($_POST["member_4"]) > 35)
+			{
+				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+				return false;					
+			}
+			
+			if(!$_POST["member_2"] || !$_POST["member_3"])
+			{
+				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_ORDER);
+				return false;					
+			}
+			
+			if(!$rank_opt_1)
+			{
+				$rank_opt_1 = new Guild_Rank();
+				$rank_opt_1->SetGuildId($guild->GetId());			
+			}
+			
+			$rank_opt_1->SetName($_POST["member_4"]);
+			$rank_opt_1->SetLevel(GUILD_RANK_MEMBER_OPT_1);				
+		}
+		else
+		{		
+			if($rank_opt_1)
+			{
+				if($rank_opt_1->MemberCount() > 0)
+				{
+					$message = Lang::Message(LMSG_GUILD_RANK_IN_USE);
+					return false;
+				}
+				
+				$guild->AddRankToDelete($rank_opt_1);
+			}			
+		}
+		
+		//tudo verificado aqui, iniciando as operações
+		
+		//deletamos os ranks marcados para serem deletados (que não foram preenchidos)
+		$guild->DeleteRanks();
+		
+		//alteramos os nomes dos ranks primarios
+		$rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER);
+		$rank->SetName($_POST["leader"]);
+		$rank->Save();
+		
+		$rank = $guild->SearchRankByLevel(GUILD_RANK_VICE);
+		$rank->SetName($_POST["vice"]);	
+		$rank->Save();	
+		
+		$rank = $guild->SearchRankByLevel(GUILD_RANK_MEMBER);
+		$rank->SetName($_POST["member_1"]);	
+		$rank->Save();
+
+		if($_POST["member_2"])
+			$rank_opt_3->Save();
+		
+		if($_POST["member_3"])
+			$rank_opt_2->Save();
+		
+		if($_POST["member_4"])
+			$rank_opt_1->Save();
+		
+		$message = Lang::Message(LMSG_GUILD_RANKS_EDITED);
+		return true;	
+	}
+	
+	
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$character_list = $account->getCharacterList(true);	
-	
 	$guild = new Guilds();
 	
-	if(!$guild->loadByName($_GET['name']))
+	if(!$guild->LoadByName($_GET['name']))
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif($account->getGuildLevel($guild->get("name")) > 1)
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
 	}	
 	else
 	{		
-		$guild->loadRanks();
-		$ranks = $guild->getRanks();
-
 		if($_POST)
 		{
-			$haveLongRank = 0;
-			$ranklist = array();
-			$rankToRemove = array();
-			$isFirstNull = false;
-			$orderOut = false;
-			
-			foreach($_POST as $field => $value)
-			{
-				if($field != "account_password")
-				{
-					if(strlen($value) > 35)
-					{
-						$haveLongRank++;
-					}
-					
-					$separator = explode("_", $field);
-					
-					if($value)
-					{
-						if($isFirstNull)
-						{
-							$orderOut = true;
-							break;
-						}	
-							
-						$ranklist[$separator[1]] = $value;	
-					}			
-					else		
-					{
-						if(count($rankToRemove) == 0)
-							$isFirstNull = true;
-							
-						$rankToRemove[] = $separator[1];	
-					}	
-				}
-			}			
-			
-			if($account->get("password") != Strings::encrypt($_POST["account_password"]))
-			{
-				$error = Lang::Message(LMSG_WRONG_PASSWORD);
-			}			
-			elseif($orderOut)
-			{
-				$error = Lang::Message(LMSG_GUILD_RANK_WRONG_ORDER);	
-			}			
-			elseif($haveLongRank != 0)
-			{
-				$error = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);	
-			}
-			elseif(count($ranklist) < 3)
-			{
-				$error = Lang::Message(LMSG_GUILD_RANK_MIMINUM_NEEDED);	
-			}			
-			else
-			{		
-				$rankHaveCharacter = 0;
-				
-				foreach($rankToRemove as $ranklvl)
-				{
-					if($guild->ereaseRank($ranklvl) == 1)
-						$rankHaveCharacter++;	
-				}				
-				
-				if($rankHaveCharacter == 0)
-				{
-					foreach($ranklist as $ranklvl => $rankname)
-					{
-						$guild->setRank($rankname, $ranklvl);
-					}					
-					
-					$success = Lang::Message(LMSG_GUILD_RANKS_EDITED);
-				}
-				else
-				{
-					$error = Lang::Message(LMSG_GUILD_RANK_IN_USE);	
-				}
-			}
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
 		}
-		
-		if($success)	
+			
+		if($result)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
 		}
 		else
 		{
-			if($error)	
+			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
 			}
 				
+			$rank_pos = 3;
 			$rank_n = 0;
-				
-			foreach($ranks as $rank_id => $values)
-			{
+			$member_n = 0;
+			
+			//pegamos os ranks existentes na guilda e montamos o view
+			foreach($guild->Ranks as $rank)
+			{				
 				$rank_n++;
+				
+				$readOnly = "";
+				
+				if($rank_pos == 3)
+				{
+					$rank_name = "leader";
+					$rank_pos--;
+					
+					if($memberLevel == GUILD_RANK_VICE)
+						$readOnly = "readonly='readonly'";
+				}
+				elseif($rank_pos == 2)
+				{
+					$rank_name = "vice";
+					$rank_pos--;
+					
+					if($memberLevel == GUILD_RANK_VICE)
+						$readOnly = "readonly='readonly'";				
+				}
+				elseif($rank_pos == 1)
+				{
+					$member_n++;
+					
+					$rank_name = "member_{$member_n}";
+				}	
 				
 				$ranks_show .= "
 					<p>
-						{$rank_n} <input name='rank_{$rank_n}' size='40' type='text' value='{$values['name']}' />
+						{$rank_n} <input name='{$rank_name}' {$readOnly} size='40' type='text' value='{$rank->GetName()}' />
 					</p>				
 				";
 			}
 			
+			//verificamos se sobra slots (há um limite de 6 ranks por guilda)
 			$rank_dif = 6 - $rank_n;
 			
 			if($rank_dif > 0)
 			{
+				//há sobra de slots, então preenchemos os novos views vazio para o jogador preencher (se ele quiser)
 				for($i = 0; $i < $rank_dif; $i++)
 				{		
 					$rank_n++;
 					
+					$member_n++;
+					
+					$rank_name = "member_{$member_n}";					
+					
 					$ranks_show .= "
 						<p>
-							{$rank_n} <input name='rank_{$rank_n}' size='40' type='text' value='' />
+							{$rank_n} <input name='{$rank_name}' size='40' type='text' value='' />
 						</p>				
 					";
 				}				
@@ -146,7 +264,7 @@ if($_GET['name'])
 			<form action="" method="post">
 				<fieldset>			
 					
-					'.$ranks_show.'
+					'.$ranks_show.'					
 					
 					<p>
 						<label for="account_password">Senha</label><br />
@@ -162,6 +280,5 @@ if($_GET['name'])
 			</form>';	
 		}	
 	}
-
-}		
+}	
 ?>

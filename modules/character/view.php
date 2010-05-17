@@ -109,11 +109,11 @@ if($_POST or $_GET)
 				</tr>";						
 			}
 			
-			if($character->loadGuild())
+			if($character->LoadGuild())
 			{
 				$module .= "
 				<tr>
-					<td><b>Membro da Guild</b></td> <td>{$character->getGuildInfo("rank_name")} da <a href='?ref=guilds.details&name={$character->getGuildInfo("name")}'>{$character->getGuildInfo("name")}</a></td>
+					<td><b>Membro da Guild</b></td> <td>{$character->GetGuildRank()} da <a href='?ref=guilds.details&name={$character->GetGuildName()}'>{$character->GetGuildName()}</a></td>
 				</tr>";					
 			}
 			

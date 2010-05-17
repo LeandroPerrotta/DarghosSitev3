@@ -1,7 +1,10 @@
 <?
+define("ACCOUNT_CHARACTERLIST_BY_ID", true);
+define("ACCOUNT_CHARACTERLIST_BY_NAME", false);
+
 class Account
 {
-	private $db, $guildLevel; 
+	private $db; 
 	
 	private $data = array(
 /*		'id' => '',
@@ -237,11 +240,11 @@ class Account
 		}		
 	}
 	
-	function getCharacterList($returnId = false)
+	function getCharacterList($returnValue = ACCOUNT_CHARACTERLIST_BY_NAME)
 	{
 		$toReturn = "name";
 		
-		if($returnId)
+		if($returnValue)
 			$toReturn = "id";
 		
 		$query = $this->db->query("SELECT {$toReturn} FROM players WHERE account_id = '".$this->data['id']."'");
@@ -253,12 +256,31 @@ class Account
 			while($fetch = $query->fetch())
 			{
 				$list[] = $fetch->$toReturn;
-			}
-			
-			
+			}			
 		}
 
 		return $list;
+	}
+	
+	function getGuildLevel()
+	{
+		$char_list = $this->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
+		$guild_level = 0;
+		
+		foreach($char_list as $player_id)
+		{
+			$character = new Character();
+			
+			$character->load($player_id);
+			
+			if(!$character->LoadGuild())
+				continue;
+				
+			if($character->GetGuildLevel() > $guild_level)
+				$guild_level = $character->GetGuildLevel();
+		}
+		
+		return $guild_level;
 	}
 	
 	function set($field, $value)
@@ -558,60 +580,6 @@ class Account
 			return false;
 	}
 	
-	function isGuildHighMember()
-	{
-		$charsList = $this->getCharacterList(true); //true to get characterslist by character id
-		
-		foreach($charsList as $player_id)
-		{
-			$character = new Character();
-			$character->load($player_id, "rank_id");
-			
-			if(!$character->loadGuild())
-			{		
-				continue;
-			}		
-					
-			if($character->getGuildInfo("rank_level") <= 2)
-			{
-				return true;
-			}	
-		}
-		
-		return false;
-	}
-	
-	function getGuildLevel($guild_name)
-	{
-		$charsList = $this->getCharacterList(true); //true to get characterslist by character id
-		
-		$access = array();
-		$guildLoad = false;
-		
-		foreach($charsList as $player_id)
-		{
-			$character = new Character();
-			$character->load($player_id, "rank_id");
-			
-			if(!$character->loadGuild())	
-				continue;	
-			else
-				$guildLoad = true;		
-				
-			if($character->getGuildInfo("name") == $guild_name)
-			{
-				$access[] = $character->getGuildInfo("rank_level");
-			}	
-		}
-		
-		sort($access);
-		
-		if($guildLoad)
-			return $access[0];
-		else
-			return false;	
-	}	
-	
 	function checkPremiumTest()
 	{
 		$query = $this->db->query("SELECT date FROM ".DB_WEBSITE_PREFIX."premiumtest WHERE account_id = '".$this->data["id"]."'");
@@ -687,5 +655,15 @@ class Account
 		
 		return false;	
 	}	
+	
+	function checkPlayerInvite($player_id)
+	{
+		$character_list = $this->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
+		
+		if(in_array($player_id, $character_list))
+			return true;
+			
+		return false;	
+	}
 }
 ?>

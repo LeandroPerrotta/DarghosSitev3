@@ -1,6 +1,102 @@
 <?php
 if($_GET['name'])
 {
+	$result = false;
+	$message = "";		
+	
+	function proccessPost(&$message, Account $account, Guilds $guild)
+	{
+		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		{
+			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			return false;
+		}			
+		
+		$memberLevel = Guilds::GetAccountLevel($account, $guild->GetId());
+		$character = $guild->SearchMemberByName($_POST["guild_member"]);
+		
+		if(!$character)
+		{
+			$message = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
+			return false;
+		}
+		
+		$character->LoadGuild();
+		
+		if($character->GetGuildLevel() < GUILD_RANK_LEADER)
+		{
+			if($character->GetGuildLevel() >= $memberLevel)
+			{
+				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				return false;
+			}
+		}
+		else
+		{
+			if($memberLevel != GUILD_RANK_LEADER)
+			{
+				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				return false;				
+			}
+		}
+		
+		if($_POST["guild_action"] == "setRank")
+		{
+			if($character->GetGuildLevel() == GUILD_RANK_LEADER)
+			{
+				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				return false;
+			}
+			
+			$selectedRank = $guild->SearchRankByName($_POST["member_rank"]);
+			
+			if(!$selectedRank || $selectedRank->GetLevel() == GUILD_RANK_LEADER)
+			{
+				$message = Lang::Message(LMSG_REPORT);
+				return false;
+			}
+			
+			if($selectedRank->GetLevel() == GUILD_RANK_VICE && !$character->isPremium())
+			{
+				$message = Lang::Message(LMSG_GUILD_RANK_ONLY_PREMIUM);
+				return false;				
+			}
+
+			if($selectedRank->GetLevel() == GUILD_RANK_VICE && $character->loadAccount()->getGuildLevel() >= GUILD_RANK_VICE)
+			{
+				$message = Lang::Message(LMSG_GUILD_ACCOUNT_ALREADY_IS_HIGH_RANK);
+				return false;
+			}			
+			
+			$character->setGuildRankId($selectedRank->GetId());
+		}
+		elseif($_POST["guild_action"] == "setNick")
+		{
+			if(strlen($_POST["member_nick"]) < 3 or strlen($_POST["member_nick"]) > 15)
+			{
+				$message = Lang::Message(LMSG_GUILD_TITLE_SIZE);
+				return false;
+			}
+			
+			$character->setGuildNick($_POST["member_nick"]);
+		}
+		elseif($_POST["guild_action"] == "exclude")
+		{
+			if($character->GetGuildLevel() == GUILD_RANK_LEADER)
+			{
+				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				return false;
+			}
+			
+			$character->setGuildRankId( null );
+		}
+		
+		$character->save();	
+		$message = Lang::Message(LMSG_GUILD_MEMBER_EDITED, $_POST["guild_member"], $_GET['name']);
+		
+		return true;
+	}	
+	
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
@@ -8,167 +104,48 @@ if($_GET['name'])
 	
 	$guild = new Guilds();
 	
-	if(!$guild->loadByName($_GET['name']))
+	if(!$guild->LoadByName($_GET['name']))
 	{	
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif($account->getGuildLevel($guild->get("name")) > 2)
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
 	{
 		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));		
 	}	
 	else
-	{						
-		$guild->loadRanks();
-		$guild->loadMembersList();
-		
-		$members = $guild->getMembersList();
-		$ranks = $guild->getRanks();		
-		
+	{								
 		if($_POST)
-		{			
-			$canEditMember = true;
-			$character = new Character();
-			
-			if($members[$_POST["guild_member"]]['level'] <= $account->getGuildLevel($guild->get("name")))
-				$canEditMember = false;
-			
-			if(in_array($_POST["guild_member"], $character_list))
-				$canEditMember = true;		
-
-			if($members[$_POST["guild_member"]])
-			{			
-				if($canEditMember)
-				{
-					if($_POST["guild_action"] == "setRank")
-					{		
-						$character->loadByName($_POST["guild_member"]);
-						$accountMember = new Account();
-						$accountMember->load($character->get("account_id"));
-						
-						if($account->getGuildLevel($guild->get("name")) == 2 and $account->getGuildLevel($guild->get("name")) <=  $ranks[$_POST["member_rank"]]["level"])
-						{
-							$canNotPromove = true;		
-						}
-						elseif($members[$_POST["guild_member"]]['level'] == 1)
-						{
-							$canNotDemote = true;						
-						}
-						elseif($ranks[$_POST["member_rank"]]["level"] == 2 and $accountMember->get("premdays") == 0)
-						{
-							$rankOnlyToPremium = true;	
-						}
-						elseif($ranks[$_POST["member_rank"]]["level"] == 2 and $accountMember->isGuildHighMember())
-						{
-							$alreadyIsHighMember = true;	
-						}
-						else
-						{
-							$character->set("rank_id", $_POST["member_rank"]);
-							$character->save();										
-						}
-					}
-					elseif($_POST["guild_action"] == "setTitle")
-					{
-						if(strlen($_POST["member_nick"]) < 3 or strlen($_POST["member_nick"]) > 15)
-						{
-							$titleIsLong = true;
-						}
-						else
-						{
-							$character->loadByName($_POST["guild_member"]);
-							$character->set("guildnick", $_POST["member_nick"]);
-							$character->save();
-						}
-					}
-					elseif($_POST["guild_action"] == "exclude")
-					{						
-						if($members[$_POST["guild_member"]]['level'] == 1)
-						{
-							$canNotDemote = true;						
-						}			
-						elseif ($guild->isOnWar())
-						{
-							$isWar = true;
-						}
-						else
-						{
-							$character->loadByName($_POST["guild_member"]);
-							$character->set("guildnick", "");		
-							$character->set("rank_id", 0);
-							$character->set("guild_join_date", 0);
-							$character->save();
-						}
-					}
-				}
-			}	
-			else
-				$memberInexistente = true;
-		
-			if($account->get("password") != Strings::encrypt($_POST["account_password"]))
-			{
-				$error = Lang::Message(LMSG_WRONG_PASSWORD);
-			}	
-			elseif($memberInexistente)		
-			{
-				$error = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);						
-			}			
-			elseif($rankOnlyToPremium)		
-			{
-				$error = Lang::Message(LMSG_GUILD_RANK_ONLY_PREMIUM);						
-			}				
-			elseif(!$canEditMember)
-			{
-				$error = Lang::Message(LMSG_GUILD_PERMISSION);
-			}			
-			elseif($titleIsLong)
-			{
-				$error = Lang::Message(LMSG_GUILD_TITLE_SIZE);
-			}		
-			elseif($canNotPromove)		
-			{
-				$error = Lang::Message(LMSG_GUILD_PERMISSION);						
-			}
-			elseif($canNotDemote)		
-			{
-				$error = Lang::Message(LMSG_GUILD_PERMISSION);						
-			}	
-			elseif($alreadyIsHighMember)
-			{
-				$error = Lang::Message(LMSG_GUILD_ACCOUNT_ALREADY_IS_HIGH_RANK);					
-			}	
-			else
-			{						
-				$success = Lang::Message(LMSG_GUILD_MEMBER_EDITED, $_POST["guild_member"]);
-			}
-		}
-		
-		if($success)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
+		}
+			
+		if($result)	
+		{
+			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
 		}
 		else
 		{
-			if($error)	
+			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
-			}
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+			}		
 		
-		$lowerRank = $guild->getLowerRank();
-		
-		foreach($members as $player_name => $member_values)
-		{			
-			$options .= "<option value='{$player_name}'>{$player_name} ({$member_values['rank']})</option>";
-		}
-		
-		foreach($ranks as $rank_id => $rank_values)
-		{
-			if($rank_values['level'] >= 2)
-			{
-				$option_ranks .= "<option ".(($lowerRank == $rank_id) ? "selected='selected'" : "")." value='{$rank_id}'>{$rank_values['level']}: {$rank_values['name']}</option>";
-			}	
-		}
+			$lowerRank = $guild->SearchRankByLowest();
 			
-		$module .=	'
+			foreach($guild->Ranks as $rank)
+			{
+				if($rank->GetLevel() != GUILD_RANK_LEADER)
+				{
+					$option_ranks .= "<option ".(($rank->GetId() == $lowerRank->GetId()) ? "selected='selected'" : "")." value='{$rank->GetName()}'>{$rank->GetName()}</option>";
+				}	
+				
+				foreach($rank->Members as $member)
+				{
+					$options .= "<option value='{$member->getName()}'>{$member->getName()} ({$rank->GetName()})</option>";
+				}
+			}
+			
+			$module .=	'
 			<form action="" method="post">
 				<fieldset>
 					
@@ -181,8 +158,8 @@ if($_GET['name'])
 						<label for="guild_action">Operações:</label><br />
 						
 						<ul id="pagelist">
-							<li><input name="guild_action" type="radio" value="setRank"> Configurar rank para <select name="member_rank">'.$option_ranks.'</select></li>
-							<li><input name="guild_action" type="radio" value="setTitle"> Configurar titulo para <input name="member_nick" size="25" type="text" value="" /></li>
+							<li><input name="guild_action" type="radio" value="setRank" checked="checked"> Configurar rank para <select name="member_rank">'.$option_ranks.'</select></li>
+							<li><input name="guild_action" type="radio" value="setNick"> Configurar titulo para <input name="member_nick" size="25" type="text" value="" /></li>
 							<li><input name="guild_action" type="radio" value="exclude"> Dispençar da Guilda </li>
 						</ul>	
 					</p>					
