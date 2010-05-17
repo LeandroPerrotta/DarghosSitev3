@@ -279,6 +279,7 @@ class Lang_Messages
 		self::$messages[LMSG_GUILD_INVITEDS] = "
 			<p>Caro jogador,</p>
 			<p>Todos jogadores da lista foram convidados para sua guilda com sucesso!</p>
+			<p>O seu convite estará na pagina principal da conta do jogador aonde ele deve aceitar ou rejeitar o convite!</p>
 			<p>Tenha um bom jogo!</p>
 		";				
 			
