@@ -182,9 +182,11 @@ class View
 			{
 				list($character, $date) = $invite;
 				
+				$cancelInvite = ($this->memberLevel == GUILD_RANK_LEADER) ? " [<a href='?ref=guilds.invite&name={$character->getName()}&c=t'>Cancelar convite</a>]" : "";
+				
 				$guildPage .= "
 					<tr>
-						<td><a href='?ref=character.view&name='{$character->getName()}'>{$character->getName()}</a></td> <td>".Core::formatDate($date)."</td>
+						<td><a href='?ref=character.view&name='{$character->getName()}'>{$character->getName()}</a> {$cancelInvite}</td> <td>".Core::formatDate($date)."</td>
 					</tr>	
 				";	
 			}	
@@ -287,7 +289,7 @@ class View
 					
 				$warPage .= "
 				<tr>
-					<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td>
+					<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
 				</tr>";				
 			}
 		}

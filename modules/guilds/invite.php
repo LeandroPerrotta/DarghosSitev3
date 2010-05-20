@@ -8,12 +8,17 @@ class View
 	private $_message;	
 
 	//custom variables
-	private $loggedAcc, $guild;	
+	private $cancel = false, $loggedAcc, $guild;	
 	
 	function View()
 	{
 		if(!$_GET['name'])
 			return false;
+			
+		if($_GET["c"] && $_GET["c"] == "t")
+		{
+			$this->cancel = true;			
+		}
 			
 		if(!$this->Prepare())
 		{
@@ -22,8 +27,17 @@ class View
 		}
 		
 		$this->_invites = new HTML_Input();
-		$this->_invites->SetName("invites_list");
-		$this->_invites->IsTextArea();		
+		$this->_invites->SetName("invites_list");	
+		
+		if($this->cancel)
+		{
+			$this->_invites->SetValue($_GET['name']);
+			$this->_invites->IsNotWritable();
+		}
+		else
+		{
+			$this->_invites->IsTextArea();	
+		}
 			
 		$this->_password = new HTML_Input();
 		$this->_password->SetName("account_password");
@@ -42,7 +56,11 @@ class View
 			}
 		}
 		
-		$this->Draw();
+		if($this->cancel)
+			$this->ShowCancel();
+		else
+			$this->Draw();
+			
 		return true;		
 	}
 	
@@ -51,15 +69,45 @@ class View
 		$this->loggedAcc = new Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$this->guild = new Guilds();		
+		$this->guild = new Guilds();
 		
-		if(!$this->guild->LoadByName($_GET['name']))
+		if($this->cancel)
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']);
-			return false;
+			$character = new Character();
+			$character->loadByName($_GET['name']);
+			
+			$invite = $character->getInvite();
+			
+			if(!$invite)
+			{
+				$this->_message = Lang::Message(LMSG_REPORT);
+				return false;				
+			}
+			
+			list($guild_id, $date) = $invite;
+			
+			if(!$this->guild->Load($guild_id))
+			{
+				$this->_message = Lang::Message(LMSG_REPORT);
+				return false;
+			}			
+		}
+		else
+		{
+			if(!$this->guild->LoadByName($_GET['name']))
+			{
+				$this->_message = Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']);
+				return false;
+			}			
 		}
 		
-		if(Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) < GUILD_RANK_VICE)
+		if(!$this->cancel && Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) < GUILD_RANK_VICE)
+		{
+			$this->_message = Lang::Message(LMSG_REPORT);
+			return false;
+		}	
+		
+		if($this->cancel && Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
 		{
 			$this->_message = Lang::Message(LMSG_REPORT);
 			return false;
@@ -74,8 +122,32 @@ class View
 		return true;
 	}
 	
+	function PostCancel()
+	{
+		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		{
+			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			return false;
+		}	
+
+		$character = new Character();
+		$character->loadByName($_GET['name']);
+		$character->removeInvite();
+		
+		$this->_message = Lang::Message(LMSG_GUILD_INVITE_CANCEL, $character->getName());
+		return true;		
+	}
+	
 	function Post()
 	{
+		if($this->cancel)
+		{
+			if($this->PostCancel())
+				return true;
+
+			return false;	
+		}
+		
 		$invites_list = explode(";", $this->_invites->GetPost());
 		$invites_limit = true;
 		
@@ -110,7 +182,7 @@ class View
 		{
 			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
 			return false;
-		}	
+		}
 		
 		if($invites_limit)
 		{				
@@ -163,6 +235,33 @@ class View
 
 		return true;
 	}
+	
+	function ShowCancel()
+	{
+		global $module;
+		
+		$module .= "
+		<form action='' method='post'>
+			<fieldset>
+				
+				<p>
+					<label for='guild_invites'>Cancelar convite de</label><br />
+					{$this->_invites->Draw()}
+				</p>					
+				
+				<p>
+					<label for='account_password'>Senha</label><br />
+					{$this->_password->Draw()}
+				</p>						
+				
+				<p id='line'></p>
+				
+				<p>
+					<input class='button' type='submit' value='Enviar' />
+				</p>
+			</fieldset>
+		</form>";		
+	}	
 	
 	function Draw()
 	{

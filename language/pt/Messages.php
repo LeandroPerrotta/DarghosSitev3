@@ -71,6 +71,7 @@ class Lang_Messages
 		self::$messages[LMSG_GUILD_INVITE_ALREADY_MEMBER] = "Os seguintes personagens já são membros de outras guildas e não podem ser invitados: @v1@";
 		self::$messages[LMSG_GUILD_INVITE_ALREADY_INVITED] = "Os seguintes personagens já estão convidados para uma guilda e não podem ser invitados: @v1@";
 		self::$messages[LMSG_GUILD_INVITE_CHARACTER_NOT_FOUNDS] = "Os seguintes personagens não existem em nosso banco de dados e não podem ser invitados: @v1@";
+		self::$messages[LMSG_GUILD_INVITE_CANCEL] = "O convite para o personagem @v1@ se juntar a sua guilda foi cancelado com sucesso!";
 		self::$messages[LMSG_GUILD_IS_NOT_MEMBER] = "O personagem @v1@ não faz parte da guilda @v2@ e portanto esta operação não pode ser efetuada.";
 		self::$messages[LMSG_GUILD_RANK_ONLY_PREMIUM] = "Apenas personagens com uma conta premium podem ser promovidos para este nível.";
 		self::$messages[LMSG_GUILD_PERMISSION] = "Você não possui permissão sulficiente para efetuar esta operação. Você deve solicitar isto a um membro com rank superior ao seu.";

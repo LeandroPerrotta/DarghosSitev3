@@ -122,6 +122,7 @@ define("LMSG_GUILD_WAR_REJECTED", 119);
 define("LMSG_GUILD_WAR_NEGOTIATE_SEND", 120);
 define("LMSG_GUILD_IS_ON_WAR", 121);
 define("LMSG_GUILD_WAR_ALREADY", 122);
+define("LMSG_GUILD_INVITE_CANCEL", 123);
 
 class Lang extends Lang_Messages{
 	
