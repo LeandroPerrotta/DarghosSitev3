@@ -436,7 +436,7 @@ class Guild_Rank
 
 class Guilds
 {
-	private $_id, $_name, $_ownerid, $_creationdate, $_motd, $_image, $_status, $_formationTime;
+	private $_id, $_name, $_ownerid, $_creationdate, $_motd, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
 	public $Ranks = array(), $Invites = array(), $Wars = array();
 	private $_trash_ranks = array();
 	
@@ -518,7 +518,7 @@ class Guilds
 	
 	function Load($id)
 	{
-		$query = Core::$DB->query("SELECT `id`, `name`, `owner_id`, `creationdate`, `motd`, `image`, `status`, `formationTime` FROM `guilds` WHERE `id` = '{$id}'");
+		$query = Core::$DB->query("SELECT `id`, `name`, `owner_id`, `creationdate`, `motd`, `image`, `status`, `formationTime`, `guild_points`, `guild_better_points` FROM `guilds` WHERE `id` = '{$id}'");
 	
 		if($query->numRows() != 1)
 		{
@@ -535,6 +535,8 @@ class Guilds
 		$this->_image = $fetch->image;
 		$this->_status = $fetch->status;
 		$this->_formationTime = $fetch->formationTime;
+		$this->_guildPoints = $fetch->guild_points;
+		$this->_guildBetterPoints = $fetch->guild_better_points;
 		
 		$this->Ranks = Guild_Rank::RankList($this->_id);
 		
@@ -901,6 +903,16 @@ class Guilds
 	function GetFormationTime()
 	{
 		return $this->_formationTime;
+	}		
+
+	function GetPoints()
+	{
+		return $this->_guildPoints;
+	}		
+
+	function GetBetterPoints()
+	{
+		return $this->_guildBetterPoints;
 	}		
 }
 ?>

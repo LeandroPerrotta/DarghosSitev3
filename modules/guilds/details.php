@@ -54,35 +54,43 @@ class View
 		else
 			$warStatus = "Esta guilda não está em guerra.";
 		
+		//guild info header
+		$guildTable = new HTML_Table();
+		$guildTable->AddField("Logotipo", null, null, 3);
+		$guildTable->AddRow();
+		
+		$guildDesc = "
+			<p><h3>{$this->guild->GetName()}</h3></p>
+			<p>{$this->guild->GetMotd()}</p>";
+		
+		$guildTable->AddField("<img src='".GUILD_IMAGE_DIR."{$this->guild->GetImage()}' height='100' width='100' />");
+		$guildTable->AddField($guildDesc, 90);
+		$guildTable->AddField("<img src='".GUILD_IMAGE_DIR."{$this->guild->GetImage()}' height='100' width='100' />");
+		$guildTable->AddRow();
+		
+		$guildInfoTable = new HTML_Table();
+		$guildInfoTable->AddField("Informações da Guilda");
+		$guildInfoTable->AddRow();
+		
+		$guildFormStatus = ($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> até <b>".Core::formatDate($this->guild->GetFormationTime())."</b>.";
+		$guildInfoTable->AddField($guildFormStatus);
+		$guildInfoTable->AddRow();
+		
+		$guildInfoTable->AddField("Esta guilda foi criada em <b>".Core::formatDate($this->guild->GetCreationDate())."</b>.");
+		$guildInfoTable->AddRow();
+		
+		$guildInfoTable->AddField("Pontos da guilda (força / total): <b>{$this->guild->GetBetterPoints()}/{$this->guild->GetPoints()}</b>");
+		$guildInfoTable->AddRow();	
+		
+		$guildInfoTable->AddField("Estado de Guerra: <b>{$warStatus}</b>");
+		$guildInfoTable->AddRow();		
+				
 		$guildPage = "
 		<div title='guild_page' class='viewable' style='margin: 0px; padding: 0px;'>
 		
-			<table cellspacing='0' cellpadding='0' id='table'>
-				<tr>
-					<th colspan='3' style='text-align: center;'>Logotipo</th>
-				</tr>		
-				<tr>
-					<td><img src='".GUILD_IMAGE_DIR."{$this->guild->GetImage()}' height='100' width='100' /></td> <td width='90%'><div style='text-align: center; font: normal 30px Verdana, sans-serif;'>{$this->guild->GetName()}</div>{$this->guild->GetMotd()}</td> <td><img src='".GUILD_IMAGE_DIR."{$this->guild->GetImage()}'/></td>
-				</tr>
-			</table>
+			{$guildTable->Draw()}
 		
-			<table cellspacing='0' cellpadding='0' id='table'>
-				<tr>
-					<th>Informações da Guilda</th>
-				</tr>
-				<tr>
-					<td>".(($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> até <b>".Core::formatDate($this->guild->GetFormationTime())."</b>.")."</td>
-				</tr>
-				
-				<tr>
-					<td>Esta guilda foi criada em <b>".Core::formatDate($this->guild->GetCreationDate())."</b>.</td>
-				</tr>
-				
-				<tr>
-					<td>Estado de Guerra: <b>{$warStatus}</b></td>
-				</tr>
-											
-			</table>";				
+			{$guildInfoTable->Draw()}";				
 
 		if($this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
 		{			
@@ -92,21 +100,19 @@ class View
 			    <a class='buttonstd' href='?ref=guilds.disband&name={$this->guild->GetName()}'>Desmanchar Guild</a>
 			</p>				
 			";	
-		}			
+		}					
 		
-		$guildPage .= "					
-				
-		<p><h3>Lista de Membros</h3></p>
+		//loading guild members and preparing table to draw
+		$membersTable = new HTML_Table();
+		$membersTable->AddField("Rank", 25);
+		$membersTable->AddField("Nome e apelido");
+		$membersTable->AddField("Membro desde");
+		$membersTable->AddRow();
 		
-		<table cellspacing='0' cellpadding='0' id='table'>
-			<tr>
-				<th>Posição</th> <th>Nome e Titulo</th> <th>Membro Desde</th>
-			</tr>		
-		";			
-				
 		foreach($this->guild->Ranks as $rank)
 		{			
 			$showRank = true;
+			$guildMembersCount += $rank->MemberCount();
 			
 			foreach($rank->Members as $member)
 			{
@@ -118,18 +124,21 @@ class View
 				
 				$showRank = false;
 				
-				$guildPage .= "
-					<tr>
-						<td width='25%'>{$rankToWrite}</td> 
-						<td><a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick}</td> 
-						<td>".Core::formatDate($member->getGuildJoinIn())."</td>
-					</tr>	
-				";				
+				$nick = "<a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick} {$online}";
+				
+				$membersTable->AddField($rankToWrite);
+				$membersTable->AddField($nick);
+				$membersTable->AddField(Core::formatDate($member->getGuildJoinIn()));
+				$membersTable->AddRow();		
 			}
-		}
+		}			
 		
-		$guildPage .= "
-		</table>";
+		$guildPage .= "					
+				
+		<p><h3>Lista de Membros</h3></p>
+		
+		{$membersTable->Draw()}	
+		";
 		
 		if($this->loggedAcc and $this->memberLevel > GUILD_RANK_NO_MEMBER)
 		{

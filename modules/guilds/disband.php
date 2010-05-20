@@ -12,7 +12,7 @@ if($_GET['name'])
 			return false;
 		}	
 		
-		if($guild->MembersCount() > 1)
+		if($guild->MembersCount() > 1 || $guild->InvitesCount() != 0)
 		{
 			$message = Lang::Message(LMSG_GUILD_NEED_NO_MEMBERS_DISBAND);			
 			return false;
