@@ -273,7 +273,7 @@ class View
 		{
 			$warPage .= "
 			<tr>
-				<td colspan='4'><span style='font-weight: bold;'>Guerras que estão para se iniciar no proximo server save.</span></td>
+				<td colspan='5'><span style='font-weight: bold;'>Guerras que estão para se iniciar no proximo server save.</span></td>
 			</tr>";			
 
 			foreach($warsWaitingList as $guild_war)
@@ -289,7 +289,7 @@ class View
 					
 				$warPage .= "
 				<tr>
-					<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+					<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
 				</tr>";				
 			}
 		}
