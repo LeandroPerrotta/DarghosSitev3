@@ -3,7 +3,7 @@ class Character
 {
 	private $db, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
 	
-	private $_hasGuild = false;
+	private $_loadGuild = false;
 	
 	private $_guild_name, /* readonly */
 			$_guild_id, /* readonly */
@@ -43,19 +43,22 @@ class Character
 			
 			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");
 
-			//first, erease all guild member information from player
-			Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->data['id']}'");			
-			
-			//player have rank id, saving guild member information
-			if($this->_guild_rank_id)
-			{				
-				//add a new guild information
-				Core::$DB->query("
-					INSERT INTO `guild_members`
-						(`player_id`, `rank_id`, `nick`, `join_in`) 
-						values
-						('{$this->data["id"]}', '{$this->_guild_rank_id}', '{$this->_guild_nick}', '{$this->_guild_join_in}')
-				");
+			if($this->_loadGuild)
+			{
+				//first, erease all guild member information from player
+				Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->data['id']}'");			
+				
+				//player have rank id, saving guild member information
+				if($this->_guild_rank_id)
+				{				
+					//add a new guild information
+					Core::$DB->query("
+						INSERT INTO `guild_members`
+							(`player_id`, `rank_id`, `nick`, `join_in`) 
+							values
+							('{$this->data["id"]}', '{$this->_guild_rank_id}', '{$this->_guild_nick}', '{$this->_guild_join_in}')
+					");
+				}
 			}
 		}
 		//create new character!!
@@ -144,13 +147,13 @@ class Character
 	
 	function LoadGuild()
 	{
+		$this->_loadGuild = true;
+		
 		//loading guild infos of player
 		$query = Core::$DB->query("SELECT `rank_id`, `nick`, `join_in` FROM `guild_members` WHERE `player_id` = '{$this->data["id"]}'");
 		
 		if($query->numRows() == 1)
-		{
-			$this->_hasGuild = true;
-			
+		{			
 			$fetch = $query->fetch();
 			
 			$this->_guild_nick = $fetch->nick;
