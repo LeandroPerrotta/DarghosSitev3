@@ -133,7 +133,7 @@ if($_POST or $_GET)
 		</table>";
 
 		$_gmAcc = new Account();
-		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= 5)
+		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= 6)
 		{
 			include_once("classes/contribute.php");
 			$contribute = new Contribute();
