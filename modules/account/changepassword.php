@@ -25,7 +25,10 @@ if($_POST)
 		$account->setPassword(Strings::encrypt($_POST["account_newpassword"]));
 		$account->save();
 		
-		$_SESSION["login"][0] = $account->getPassword();
+		$_SESSION["login"] = array();
+		
+		$_SESSION["login"][] = $account->getId();
+		$_SESSION["login"][] = $account->getPassword();
 		
 		$success = Lang::Message(LMSG_ACCOUNT_PASSWORD_CHANGED);
 	}
