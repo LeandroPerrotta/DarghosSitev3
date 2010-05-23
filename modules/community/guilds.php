@@ -142,6 +142,112 @@ $guild_wars = "
 </div>
 ";	
 	
+/*
+ * Ended Wars List
+ */	
+	
+$_warsTable = new HTML_Table();
+$_warsTable->AddDataRow("Guerras terminadas");	
+
+$warsEnded = Guild_War::ListEndedWars();
+
+if($warsEnded)
+{
+	$style = "font-weight: bold;";
+	
+	$_warsTable->AddField("Declarante", null, $style);	
+	$_warsTable->AddField("Oponente", null, $style);
+	$_warsTable->AddField("Declarada em", null, $style);
+	$_warsTable->AddField("Vencedor", null, $style);
+	$_warsTable->AddField("", 5);
+	$_warsTable->AddRow();
+	
+	foreach($warsEnded as $guild_war)
+	{
+		$guild = new Guilds();
+		$guild->Load($guild_war->GetGuildId());
+		
+		$opponent = new Guilds();
+		$opponent->Load($guild_war->GetOpponentId());
+		
+		$_warsTable->AddField($guild->GetName());	
+		$_warsTable->AddField($opponent->GetName());
+		$_warsTable->AddField(Core::formatDate($guild_war->GetDeclarationDate()));
+
+		$winner = $guild->GetName();
+		
+		if($guild_war->GetOpponentFrags() > $guild_war->GetGuildFrags())
+			$winner = $opponent->GetName();
+		
+		$_warsTable->AddField($winner);
+		
+		$string = "<a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a>";
+		
+		$_warsTable->AddField($string);
+		$_warsTable->AddRow();		
+	}
+}
+else
+{
+	$_warsTable->AddField("Nenhuma guerra foi terminada até o momento.");
+	$_warsTable->AddRow();		
+}
+
+$end_wars = "
+<div title='end_wars' style='margin: 0px; padding: 0px;'>
+	{$_warsTable->Draw()}
+</div>
+";
+	
+/*
+ * Negotiation Wars List
+ */	
+	
+$_warsTable = new HTML_Table();
+$_warsTable->AddDataRow("Guerras em negociação");	
+
+$warsNegotiation = Guild_War::ListNegotiationWars();
+
+if($warsNegotiation)
+{
+	$style = "font-weight: bold;";
+	
+	$_warsTable->AddField("Declarante", null, $style);	
+	$_warsTable->AddField("Oponente", null, $style);
+	$_warsTable->AddField("Declarada em", null, $style);
+	$_warsTable->AddField("", 5);
+	$_warsTable->AddRow();
+	
+	foreach($warsNegotiation as $guild_war)
+	{
+		$guild = new Guilds();
+		$guild->Load($guild_war->GetGuildId());
+		
+		$opponent = new Guilds();
+		$opponent->Load($guild_war->GetOpponentId());
+		
+		$_warsTable->AddField($guild->GetName());	
+		$_warsTable->AddField($opponent->GetName());
+		$_warsTable->AddField(Core::formatDate($guild_war->GetDeclarationDate()));
+
+		$string = "<a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a>";
+		
+		$_warsTable->AddField($string);
+		$_warsTable->AddRow();		
+	}
+}
+else
+{
+	$_warsTable->AddField("Nenhuma guerra em negociação neste momento.");
+	$_warsTable->AddRow();		
+}
+
+$negotiation_wars = "
+<div title='negotiation_wars' style='margin: 0px; padding: 0px;'>
+	{$_warsTable->Draw()}
+</div>
+";		
+	
 $module .= "
 <br><p>
 	<a class='buttonstd' href='?ref=guilds.create'>Criar nova Guild</a>
@@ -151,12 +257,16 @@ $module .= "
 	<div class='autoaction' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 		<select>
 			<option value='guild_list'>Lista de Guildas</option>
-			<option value='guild_wars'>Guildas em Guerra</option>
+			<option value='guild_wars'>Guerras em andamento</option>
+			<option value='end_wars'>Guerras terminadas</option>
+			<option value='negotiation_wars'>Guerras em negociação</option>
 		</select>
 	</div>
 	
 	{$guild_list}
 	{$guild_wars}
+	{$end_wars}
+	{$negotiation_wars}
 	
 </fieldset>";
 ?>

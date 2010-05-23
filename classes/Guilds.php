@@ -68,7 +68,55 @@ class Guild_War
 		}			
 		
 		return $warList;
-	}	
+	}
+	
+	static function ListEndedWars()
+	{
+		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_DISABLED."' AND `reply` = '-1' ORDER BY `declaration_date`");
+		
+		if($query->numRows() == 0)
+		{
+			return false;
+		}
+		
+		$warList = array();
+		
+		for($i = 0; $i < $query->numRows(); ++$i)
+		{	
+			$fetch = $query->fetch();
+			
+			$guild_war = new Guild_War();
+			$guild_war->Load($fetch->id);
+			
+			$warList[] = $guild_war;
+		}			
+		
+		return $warList;
+	}
+	
+	static function ListNegotiationWars()
+	{
+		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_DISABLED."' AND `reply` >= '0' ORDER BY `declaration_date`");
+		
+		if($query->numRows() == 0)
+		{
+			return false;
+		}
+		
+		$warList = array();
+		
+		for($i = 0; $i < $query->numRows(); ++$i)
+		{	
+			$fetch = $query->fetch();
+			
+			$guild_war = new Guild_War();
+			$guild_war->Load($fetch->id);
+			
+			$warList[] = $guild_war;
+		}			
+		
+		return $warList;
+	}
 	
 	/*
 	 * Constructor and Functions
