@@ -337,6 +337,8 @@ class Character
 			{
 				$rank = $guild->SearchRankByLowest();
 				
+				$this->LoadGuild();
+				
 				$this->setGuildRankId($rank->GetId());
 				$this->setGuildNick("");
 				$this->setGuildJoinIn(time());
