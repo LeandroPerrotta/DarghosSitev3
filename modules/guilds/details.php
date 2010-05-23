@@ -110,10 +110,11 @@ class View
 		$membersTable->AddRow();
 		
 		$lastRankName = "";
+		$first = true;
 		
 		foreach($this->guild->Ranks as $rank)
-		{		
-			if($lastRankName == $rank->GetName())	
+		{			
+			if($first || $lastRankName != $rank->GetName())	
 				$showRank = true;		
 				
 			$guildMembersCount += $rank->MemberCount();
@@ -137,6 +138,7 @@ class View
 			}
 			
 			$lastRankName = $rank->GetName();
+			$first = false;
 		}			
 		
 		$guildPage .= "					
