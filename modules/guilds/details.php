@@ -112,8 +112,10 @@ class View
 		$lastRankName = "";
 		
 		foreach($this->guild->Ranks as $rank)
-		{			
-			$showRank = true;		
+		{		
+			if($lastRankName == $rank->GetName())	
+				$showRank = true;		
+				
 			$guildMembersCount += $rank->MemberCount();
 			
 			foreach($rank->Members as $member)
@@ -124,7 +126,6 @@ class View
 				$rankToWrite = ($showRank) ? "<b>{$rank->GetName()}</b>" : "";
 				$memberNick = ($member->getGuildNick()) ? "(<i>{$member->getGuildNick()}</i>)" : "";
 				
-				if($lastRankName != $rank->GetName())
 				$showRank = false;
 				
 				$nick = "<a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick} {$online}";
