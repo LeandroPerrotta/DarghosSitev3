@@ -48,7 +48,7 @@ if($_GET['name'])
 				return false;
 			}
 			
-			$selectedRank = $guild->SearchRankByName($_POST["member_rank"]);
+			$selectedRank = $guild->SearchRankByLevel($_POST["member_rank"]);
 			
 			if(!$selectedRank || $selectedRank->GetLevel() == GUILD_RANK_LEADER)
 			{
@@ -136,7 +136,7 @@ if($_GET['name'])
 			{
 				if($rank->GetLevel() != GUILD_RANK_LEADER)
 				{
-					$option_ranks .= "<option ".(($rank->GetId() == $lowerRank->GetId()) ? "selected='selected'" : "")." value='{$rank->GetName()}'>{$rank->GetName()}</option>";
+					$option_ranks .= "<option ".(($rank->GetId() == $lowerRank->GetId()) ? "selected='selected'" : "")." value='{$rank->GetLevel()}'>{$rank->GetName()}</option>";
 				}	
 				
 				foreach($rank->Members as $member)

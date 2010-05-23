@@ -109,9 +109,11 @@ class View
 		$membersTable->AddField("Membro desde");
 		$membersTable->AddRow();
 		
+		$lastRankName = "";
+		
 		foreach($this->guild->Ranks as $rank)
 		{			
-			$showRank = true;
+			$showRank = true;		
 			$guildMembersCount += $rank->MemberCount();
 			
 			foreach($rank->Members as $member)
@@ -122,6 +124,7 @@ class View
 				$rankToWrite = ($showRank) ? "<b>{$rank->GetName()}</b>" : "";
 				$memberNick = ($member->getGuildNick()) ? "(<i>{$member->getGuildNick()}</i>)" : "";
 				
+				if($lastRankName != $rank->GetName())
 				$showRank = false;
 				
 				$nick = "<a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick} {$online}";
@@ -131,6 +134,8 @@ class View
 				$membersTable->AddField(Core::formatDate($member->getGuildJoinIn()));
 				$membersTable->AddRow();		
 			}
+			
+			$lastRankName = $rank->GetName();
 		}			
 		
 		$guildPage .= "					
@@ -186,7 +191,7 @@ class View
 				
 				$guildPage .= "
 					<tr>
-						<td><a href='?ref=character.view&name='{$character->getName()}'>{$character->getName()}</a> {$cancelInvite}</td> <td>".Core::formatDate($date)."</td>
+						<td><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> {$cancelInvite}</td> <td>".Core::formatDate($date)."</td>
 					</tr>	
 				";	
 			}	
