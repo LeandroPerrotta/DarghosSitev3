@@ -36,6 +36,7 @@ if($_GET['name'])
 		
 		$old_owner = new Character();
 		$old_owner->load($guild->GetOwnerId());
+		$old_owner->LoadGuild();
 		$old_owner->setGuildRankId($vice_rank->GetId());
 		$old_owner->save();
 		
