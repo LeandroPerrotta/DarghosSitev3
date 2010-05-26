@@ -20,6 +20,8 @@ if($_GET['name'])
 			return false;			
 		}
 		
+		$member->LoadGuild();
+		
 		if($member->GetGuildLevel() != GUILD_RANK_VICE)
 		{
 			$message = Lang::Message(LMSG_GUILD_PERMISSION);
