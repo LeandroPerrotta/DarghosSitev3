@@ -46,5 +46,35 @@ class Houses
 	{
 		return $this->data[$field];
 	}
+	
+	static function deleteOldHouses()
+	{
+		$xml = new DOMDocument();
+		$xml->load(DIR_DATA.HOUSES_FILE);		
+		
+		$exists = array();
+		
+		foreach($xml->getElementsByTagName("house") as $house)
+		{
+			$exists[] = $house->getAttribute("houseid");
+		}		
+		
+		$query = Core::$DB->query("SELECT `id` FROM `houses`");
+		$i = 0;
+		
+		while($fetch = $query->fetch())
+		{
+			if(!in_array($fetch->id, $exists))
+			{
+				Core::$DB->query("DELETE FROM `map_store` WHERE `house_id` = '{$fetch->id}'");
+				Core::$DB->query("DELETE FROM `house_lists` WHERE `house_id` = '{$fetch->id}'");
+				Core::$DB->query("DELETE FROM `houses` WHERE `id` = '{$fetch->id}'");
+				
+				$i++;
+			}
+		}
+		
+		echo "Casas apagadas: {$i}";
+	}
 }
 ?>
