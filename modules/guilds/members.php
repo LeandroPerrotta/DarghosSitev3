@@ -88,6 +88,12 @@ if($_GET['name'])
 				return false;
 			}
 			
+			if($guild->OnWar())
+			{
+				$message = Lang::Message(LMSG_GUILD_IS_ON_WAR, $_GET['name']);
+				return false;			
+			}			
+			
 			$character->setGuildRankId( null );
 		}
 		
