@@ -33,6 +33,7 @@ $menu['COMMUNITY.HIGHSCORES'] = "Highscores";
 $menu['COMMUNITY.GUILDS'] = "Guildas";
 $menu['COMMUNITY.HOUSES'] = "Casas";
 $menu['COMMUNITY.LAST_DEATHS'] = "Últimas Mortes";
+$menu['COMMUNITY.POLLS'] = "Enquetes";
 
 $menu['STATUS'] = "Server Status";
 $menu['STATUS.WHO_IS_ONLINE'] = "Quem está Online?";

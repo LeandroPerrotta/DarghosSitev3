@@ -1,5 +1,5 @@
 <?php
-$query = $db->query("SELECT * FROM houses");
+$query = $db->query("SELECT * FROM houses ORDER BY `townid`");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
@@ -14,7 +14,7 @@ $module .= "
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
 	<tr>
-		<th width='20%'>Nome</th> <th width='10%'>Cidade</th> <th width='25%'>Dono</th> <th width='10%'>Aluguel</th> <th>Tamanho</th>
+		<th>Nome</th> <th>Cidade</th> <th>Dono</th> <th width='10%'>Aluguel</th> <th width='10%'>Tamanho</th>
 	</tr>";
 
 while($fetch = $query->fetch())

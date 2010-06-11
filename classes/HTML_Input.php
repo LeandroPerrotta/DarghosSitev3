@@ -2,7 +2,7 @@
 class HTML_Input
 {
 	private $_name, $_value, $_size = 40, $_length, $_type = "text";
-	private $_isPassword = false, $_isDisabled = false, $_isWritable = true;
+	private $_isPassword = false, $_isDisabled = false, $_isWritable = true, $_isDefault = false;
 	private $_isTextArea = false, $_textAreaRows = 8, $_textAreaColums = 30;
 	
 	function HTML_Input()
@@ -50,6 +50,11 @@ class HTML_Input
 		$this->_type = "radio";
 	}	
 	
+	function IsDefault()
+	{
+		$this->_isDefault = true;
+	}
+	
 	function IsDisabled()
 	{
 		$this->_isDisabled = true;
@@ -58,6 +63,11 @@ class HTML_Input
 	function IsNotWritable()
 	{
 		$this->_isWritable = false;
+	}
+	
+	function IsButton()
+	{
+		$this->_type = "submit";
 	}
 	
 	function IsTextArea($rows = null, $colums = null)
@@ -81,15 +91,19 @@ class HTML_Input
 			{
 				case "text": 		$string .= " type='text'"; 			break;
 				case "password": 	$string .= " type='password'"; 		break;
-				case "radio": 		$string .= " type='radio'"; 			break;
+				case "radio": 		$string .= " type='radio'"; 		break;
 				case "checkbox": 	$string .= " type='checkbox'"; 		break;
+				case "submit": 		$string .= " type='submit' class='button'"; 		break;
 			}
 			
 			if(!$this->_isWritable)
 				$string .= " readonly='readonly'";
+			
+			if($this->_isDefault)
+				$string .= " checked='checked'";
 				
 			if($this->_isDisabled)
-				$string .= " enabled='enabled'";
+				$string .= " disabled='disabled'";
 				
 			if($this->_length)
 				$string .= " maxlength='{$this->_length}'";

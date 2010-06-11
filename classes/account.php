@@ -640,7 +640,20 @@ class Account
 				return $result->id;	
 		}
 		
-		return false;	
+		return false;
+	}
+	
+	function getHighLevel()
+	{
+		$query = $this->db->query("SELECT `level` FROM `players` WHERE `account_id` = '{$this->data[id]}' ORDER BY `level` DESC LIMIT 1");
+		
+		if($query->numRows() != 0)
+		{
+			$result = $query->fetch();
+			return $result->level;
+		}
+		
+		return false;		
 	}
 	
 	function getCharMinLevel()

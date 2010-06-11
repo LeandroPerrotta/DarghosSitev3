@@ -181,6 +181,7 @@
 									<li><a href="?ref=community.guilds"><? echo $menu['COMMUNITY.GUILDS']; ?></a></li>
 									<li><a href="?ref=community.houses"><? echo $menu['COMMUNITY.HOUSES']; ?></a></li>
 									<li><a href="?ref=community.lastdeaths"><? echo $menu['COMMUNITY.LAST_DEATHS']; ?></a></li>
+									<li><a href="?ref=community.polls"><? echo $menu['COMMUNITY.POLLS']; ?></a></li>
 									<li><a href="?ref=status.whoisonline"><? echo $menu['STATUS.WHO_IS_ONLINE']; ?></a></li>
 								</ul>
 							</li>	

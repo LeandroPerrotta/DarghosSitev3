@@ -91,6 +91,12 @@ class Lang_Messages
 		self::$messages[LMSG_GUILD_WAR_REJECTED] = "A declaração de guerra da guilda @v1@ foi rejeitada com sucesso. Sua guilda não entrará mais nesta guerra.";
 		self::$messages[LMSG_GUILD_IS_ON_WAR] = "A guilda @v1@ esta em guerra com outra(s) guildas, portanto, certas operações na guilda não estão disponiveis, como abandonar guilda, convidar novos membros, aceitar convites, remover membros. Tente novamente quando a guerra estiver encerrada.";
 		self::$messages[LMSG_GUILD_WAR_ALREADY] = "A sua guilda já declarou ou está em guerra contra a guilda @v1@. Você poderá declarar guerra contra esta guilda quando a guerra atual estiver terminada.";
+		self::$messages[LMSG_FORUM_ACCOUNT_NOT_HAVE_USER] = "Caro jogador, sua conta ainda não efetuou o cadastro para poder usar o forum do Darghos para poder ler topicos, responder enquetes e etc. Para criar o seu usuario, clique <a href='?ref=forum.register'>aqui</a>.";
+		self::$messages[LMSG_FORUM_ACCOUNT_NOT_HAVE_CHARACTERS] = "Caro jogador, para ultilizar os recursos de nosso Forum é necessário possui um personagem na conta ao menos com level 20 ou superior.";
+		self::$messages[LMSG_FORUM_POLL_ALREADY_VOTED] = "Desculpe, você já votou para está enquete e somente é permitido um voto por úsuario.";
+		self::$messages[LMSG_FORUM_POLL_ONLY_FOR_PREMIUM] = "Desculpe, mas está enquete só pode receber votos de usuarios que possuam uma conta premium.";
+		self::$messages[LMSG_FORUM_POLL_NEED_MIN_LEVEL] = "Desculpe, mas para votar nesta enquete é preciso possuir na sua conta ao menos um personagem com nivel @v1@ ou superior.";
+		self::$messages[LMSG_FORUM_POLL_TIME_EXPIRED] = "Desculpe, mas esta enquete já está encerrada.";
 	
 		self::$messages[LMSG_ACCOUNT_REGISTERED] = "
 			<p>Parabens, sua conta foi criada com sucesso!</p>
@@ -335,6 +341,18 @@ class Lang_Messages
 			<p>Uma nova proposta foi enviada ao lider da outra guilda para ele analisar, ele poderá aceita-la, rejeitar-la ou ainda enviar uma nova proposta de volta a você.</p>
 			<p>Caso a proposta seja aceita a guerra será iniciada no proximo server save, caso os gold coins de rendição possam ser reservados das contas de banco de cada um dos lideres das duas guildas.</p>
 			<p>Desejamos uma boa sorte a sua guilda nesta guerra e um bom jogo!</p>
+		";				
+		
+		self::$messages[LMSG_FORUM_ACCOUNT_REGISTERED] = "
+			<p>Caro jogador,</p>
+			<p>Sua conta foi registrada no forum com sucesso!</p>
+			<p>Agora você já pode participar de nossos topicos e enquetes! Lembre-se de seguir as regras de uso do Forum.</p>
+		";				
+		
+		self::$messages[LMSG_FORUM_POLL_VOTE_DONE] = "
+			<p>Caro jogador,</p>
+			<p>O seu voto foi computado em nosso banco de dados com sucesso!</p>
+			<p>Obrigado por participar!</p>
 		";				
 	}
 }

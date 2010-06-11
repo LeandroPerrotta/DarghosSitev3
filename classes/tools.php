@@ -1,4 +1,43 @@
 <?
+class t_Group
+{
+	private $_group;
+	private $_groupNames = array(
+		1 => "Jogador",
+		2 => "Tutor",
+		3 => "Senior Tutor",
+		4 => "Game Master",
+		5 => "Community Manager",
+		6 => "Administrador"
+	);
+	
+	function t_Group($group = null)
+	{
+		if($group)	
+			$this->Set($group);
+	}
+	
+	function Set($group)
+	{
+		$this->_group = $group;
+	}
+	
+	function SetByName($name)
+	{
+		$this->_group = array_search($name, $this->_groupNames);
+	}
+	
+	function Get()
+	{
+		return $this->_group;
+	}
+	
+	function GetByName()
+	{
+		return $this->_groupNames[$this->_group];
+	}	
+}
+
 class t_Sex
 {
 	private $_sex;

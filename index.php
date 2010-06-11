@@ -44,6 +44,7 @@ else
 	include "classes/strings.php";
 	include "classes/tickets.php";
 	include "classes/monsters.php";
+	include "classes/Forum.php";
 	
 	include "classes/HTML_Table.php";
 	include "classes/HTML_SelectBox.php";

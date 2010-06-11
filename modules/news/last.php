@@ -1,4 +1,31 @@
 <?
+$query = $db->query("SELECT topics.title FROM ".DB_WEBSITE_PREFIX."forum_topics as topics, ".DB_WEBSITE_PREFIX."forum_polls as polls WHERE polls.end_date > UNIX_TIMESTAMP() AND topics.id = polls.topic_id ORDER by topics.id DESC LIMIT 5");
+
+if($query->numRows() != 0)
+{
+	$polls = "";
+	
+	while($fetch = $query->fetch())
+	{
+		$polls .= "
+		<tr>
+			<td>{$fetch->title}</td>
+		</tr>
+		";
+	}
+	
+	$module .= "
+	<table cellspacing='0' cellpadding='0' class='fastnews'>
+	
+		<tr>
+			<th>Ultimas enquetes ativas</th>
+		</tr>
+					
+		{$polls}
+		
+	</table>";	
+}
+
 $query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."fastnews ORDER by post_data DESC LIMIT 5");
 $fastnews = "";
 

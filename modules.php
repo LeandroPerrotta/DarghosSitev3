@@ -244,6 +244,10 @@ else
 				case "guilds":
 					$patch['file'] = $topic;
 				break;				
+
+				case "polls":
+					$patch['file'] = $topic;
+				break;				
 								
 				default:
 					$patch['dir'] = "errors";
@@ -284,6 +288,7 @@ else
 				break;	
 
 				case "invitereply":
+					$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 
@@ -303,14 +308,17 @@ else
 				break;	
 
 				case "leave":
+					$needPremium = true;
 					$patch['file'] = $topic;
 				break;	
 					
 				case "declarewar":
+					$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 				
 				case "replywar":
+					$needPremium = true;
 					$patch['file'] = $topic;
 				break;
 				
@@ -392,6 +400,30 @@ else
 			}
 			
 		break;
+		
+		case "forum":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "topic":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "register":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;				
+				
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;
+			}
+			
+		break;		
 		
 		case "general":
 		
