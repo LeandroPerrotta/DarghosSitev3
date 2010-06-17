@@ -57,7 +57,7 @@ if($pollList)
 
 if(!$haveActive)
 {
-	$activeTable->AddField("Não possuimos nenhuma enquete aberta.", null, null, 2);
+	$activeTable->AddField("Não possuimos nenhuma enquete aberta.", null, null, 4);
 	$activeTable->AddRow();		
 }
 
