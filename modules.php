@@ -417,6 +417,11 @@ else
 					$patch['file'] = $topic;
 				break;				
 				
+				case "newtopic":
+					$patch['file'] = $topic;
+					$needMinGroup = 5;			
+				break;					
+				
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";

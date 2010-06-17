@@ -8,13 +8,18 @@
 		
 		<link href="<?php echo $layoutDir; ?>style.css" media="screen" rel="stylesheet" type="text/css" />
 		<link href="default.css" media="screen" rel="stylesheet" type="text/css" />
+		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
+		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
+		<script src="<?php echo $layoutDir; ?>lists.js" type="text/javascript"></script>		
+		<script src="<?php echo $layoutDir; ?>ext.js" type="text/javascript"></script>
+		<script src="<?php echo $layoutDir; ?>ping.js" type="text/javascript"></script>				
 	
 	</head>
 	
 	<body>
 		<script>
 		//sendPing();
-		</script>	
+		</script>		
 	
 		<div id="wrapper">
 			<div id="wrapper_b">
@@ -147,6 +152,7 @@
 									<ul class="always_viewable" >
 										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
 										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li>
+										<li><a href="?ref=forum.newtopic">Nova Enquete </a></li>
 										<li><a href="?ref=tickets.super_list">Ticket System</a></li>	
 										<li><a href="?ref=adv.addprize">Permitir AdPage</a></li>	
 									</ul>
@@ -252,12 +258,6 @@
 				<p id="footer">&copy; 2006~2010 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p>
 			</div>
 		</div>
-		
-		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
-		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
-		<script src="<?php echo $layoutDir; ?>lists.js" type="text/javascript"></script>		
-		<script src="<?php echo $layoutDir; ?>ext.js" type="text/javascript"></script>
-		<script src="<?php echo $layoutDir; ?>ping.js" type="text/javascript"></script>		
 		
 		<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

@@ -37,7 +37,7 @@ class Forum_User
 					(`account_id`, `player_id`)
 					values
 					('{$this->_accountid}', '{$this->_playerid}')
-			");		
+			");
 
 			$this->_id = Core::$DB->lastInsertId();				
 		}
@@ -83,6 +83,11 @@ class Forum_User
 		return $this->_accountid;
 	}
 	
+	function GetId()
+	{
+		return $this->_id;
+	}
+	
 	function SetPlayerId($player_id)
 	{
 		$this->_playerid = $player_id;
@@ -94,10 +99,12 @@ class Forum_User
 	}
 	
 	function GetPollVote($poll_id)
-	{
+	{		
 		$query = Core::$DB->query("
 			SELECT 
-				`vote`.`opt_id` 
+				`polls_opt`.`id`,
+				`polls_opt`.`option`, 
+				`vote`.`public` 
 			FROM 
 				`".DB_WEBSITE_PREFIX."forum_user_votes` AS `vote`, 
 				`".DB_WEBSITE_PREFIX."forum_polls_opt` AS `polls_opt` 
@@ -109,7 +116,15 @@ class Forum_User
 		if($query->numRows() == 0)
 			return false;
 			
-		return $query->fetch()->opt_id;	
+		$vote = array();
+		
+		$fetch = $query->fetch();
+		
+		$vote["id"] = $fetch->id;
+		$vote["option"] = $fetch->option;
+		$vote["public"] = $fetch->public;
+			
+		return $vote;	
 	}
 	
 	function SetPollVote($option_id, $public)
@@ -141,6 +156,7 @@ class Forum_Topics
 	private $_id, $_title, $_topic, $_date, $_authorid, $_isPoll = false;
 	private $_poll_id, $_poll_text, $_poll_topicid, $_poll_enddate, $_poll_flags, $_poll_minlevel, $_poll_ismultiple = false, $_poll_onlypremium = false;
 	private $_poll_options = array();
+	private $_posts = array();
 	
 	function Forum_Topics($id = null)
 	{
@@ -169,7 +185,87 @@ class Forum_Topics
 			$this->LoadPoll();
 		}
 		
+		$this->LoadPosts();
+		
 		return true;		
+	}
+	
+	function Save()
+	{
+		if($this->_id)
+		{
+			
+		}	
+		else
+		{
+			$flag = 0;
+			if($this->_isPoll)
+			{
+				$flag = pow(2, FORUM_TOPIC_FLAGS_IS_POLL - 1);
+				echo "Flag: " . $flag;
+			}
+
+			Core::$DB->query("
+				INSERT INTO
+					`".DB_WEBSITE_PREFIX."forum_topics`
+					(`title`, `topic`, `date`, `author_id`, `flags`)
+					values
+					('{$this->_title}', '{$this->_topic}', '{$this->_date}', '{$this->_authorid}', '{$flag}')
+			");
+
+			$this->_id = Core::$DB->lastInsertId();		
+
+			if($this->_isPoll)
+			{
+				$flag = 0;
+				if($this->_poll_onlypremium)
+					$flag = pow(2, FORUM_POLLS_FLAGS_IS_ONLY_FOR_PREMIUM - 1);
+				
+				Core::$DB->query("
+					INSERT INTO
+						`".DB_WEBSITE_PREFIX."forum_polls`
+						(`topic_id`, `text`, `end_date`, `flags`, `min_level`)
+						values
+						('{$this->_id}', '{$this->_poll_text}', '{$this->_poll_enddate}', '{$flag}', '{$this->_poll_minlevel}')
+				");	
+
+				$this->_poll_id = Core::$DB->lastInsertId();
+			}
+		}	
+	}
+	
+	function AddPollOption($option)
+	{
+		Core::$DB->query("
+			INSERT INTO
+				`".DB_WEBSITE_PREFIX."forum_polls_opt`
+				(`poll_id`, `option`)
+				values
+				('{$this->_poll_id}', '{$option}')
+		");		
+	}
+	
+	function LoadPosts()
+	{
+		$query = Core::$DB->query("SELECT id, user_id, date, topic_id, post FROM ".DB_WEBSITE_PREFIX."forum_posts WHERE `topic_id` = '{$this->_id}'");
+	
+		if($query->numRows() == 0)
+			return false;		
+			
+		for($i = 0; $i < $query->numRows(); ++$i)
+		{	
+			$fetch = $query->fetch();
+			
+			$this->_posts[] = array(
+				"id" => $fetch->id,
+				"user_id" => $fetch->user_id,
+				"date" => $fetch->date,
+				"topic_id" => $fetch->topic_id,
+				"post" => $fetch->post
+			);
+		}
+		
+		return true;
 	}
 	
 	function LoadPoll()
@@ -202,11 +298,70 @@ class Forum_Topics
 		{				
 			$fetch = $query->fetch();	
 			
+			$votes = Core::$DB->query("SELECT `user_id` FROM `".DB_WEBSITE_PREFIX."forum_user_votes` WHERE `opt_id` = '{$fetch->id}'");
+			
 			$this->_poll_options[$fetch->id] = array (
 				"poll_id" => $fetch->poll_id,
-				"option" => $fetch->option
+				"option" => $fetch->option,
+				"votes" => $votes->numRows()
 			);
 		}	
+	}
+	
+	function SendPost($post, $user_id)
+	{
+		Core::$DB->query("
+			INSERT INTO
+				`".DB_WEBSITE_PREFIX."forum_posts`
+				(`user_id`, `date`, `topic_id`, `post`)
+				values
+				('{$user_id}', '".time()."', '{$this->_id}', '{$post}')
+		");		
+	}
+	
+	function SetTitle($title)
+	{
+		$this->_title = $title;
+	}
+	
+	function SetTopic($topic)
+	{
+		$this->_topic = $topic;
+	}
+	
+	function SetDate($date)
+	{
+		$this->_date = $date;
+	}
+	
+	function SetAuthorId($author_id)
+	{
+		$this->_authorid = $author_id;
+	}
+	
+	function SetIsPoll($isPoll = true)
+	{
+		$this->_isPoll = $isPoll;
+	}
+	
+	function SetPollText($poll_text)
+	{
+		$this->_poll_text = $poll_text;
+	}
+	
+	function SetPollMinLevel($poll_minlevel)
+	{
+		$this->_poll_minlevel = $poll_minlevel;
+	}
+	
+	function SetPollEnd($poll_end)
+	{
+		$this->_poll_enddate = $poll_end;
+	}
+	
+	function SetPollIsOnlyForPremium($onlyPremium = true)
+	{
+		$this->_poll_onlypremium = $onlyPremium;
 	}
 	
 	function GetId()
@@ -232,6 +387,16 @@ class Forum_Topics
 	function GetAuthorId()
 	{
 		return $this->_authorid;
+	}
+	
+	function GetPosts()
+	{
+		return $this->_posts;
+	}
+	
+	function GetPostCount()
+	{
+		return count($this->_posts);
 	}
 	
 	function IsPoll()
@@ -272,6 +437,18 @@ class Forum_Topics
 	function PollIsOnlyForPremiums()
 	{
 		return $this->_poll_onlypremium;
+	}
+	
+	function GetTotalVotes()
+	{
+		$t = 0;
+		
+		foreach($this->_poll_options as $key => $value)
+		{
+			$t += $value["votes"];
+		}
+		
+		return $t;
 	}
 }
 ?>

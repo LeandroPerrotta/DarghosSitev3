@@ -15,6 +15,16 @@ $activeTable->AddField("Requer premium?", 5, $style);
 $activeTable->AddField("Termina em", null, $style);
 $activeTable->AddRow();
 
+$inactiveTable = new HTML_Table();
+$inactiveTable->AddDataRow("Enquetes concluidas");
+
+$inactiveTable->AddField("Titulo", null, $style);	
+$inactiveTable->AddField("Terminou em", null, $style);
+$inactiveTable->AddRow();
+
+$haveActive = false;
+$haveInactive = false;
+
 foreach($pollList as $poll)
 {
 	if(time() < $poll->GetPollEnd())
@@ -28,8 +38,30 @@ foreach($pollList as $poll)
 			$activeTable->AddField("Não");
 		
 		$activeTable->AddField(Core::formatDate($poll->GetPollEnd()));
-		$activeTable->AddRow();		
+		$activeTable->AddRow();	
+
+		$haveActive = true;
 	}
+	else
+	{
+		$inactiveTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
+		$inactiveTable->AddField(Core::formatDate($poll->GetPollEnd()));
+		$inactiveTable->AddRow();	
+
+		$haveInactive = true;
+	}
+}
+
+if(!$haveActive)
+{
+	$activeTable->AddField("Não possuimos nenhuma enquete aberta.", null, null, 2);
+	$activeTable->AddRow();		
+}
+
+if(!$haveInactive)
+{
+		$inactiveTable->AddField("Não possuimos nenhuma enquete concluida.", null, null, 2);
+		$inactiveTable->AddRow();	
 }
 
 $activedPolls = "
@@ -39,7 +71,7 @@ $activedPolls = "
 	
 $endedPolls = "
 <div title='ended' style='margin: 0px; padding: 0px;'>
-	
+	{$inactiveTable->Draw()}
 </div>";
 
 $module .= "

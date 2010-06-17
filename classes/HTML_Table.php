@@ -2,14 +2,14 @@
 class HTML_Table
 {
 	private $_dataRow = array(), $_colums, $_fields = array();
-	private $_width = "90%";
+	private $_width = "90%", $_dropdown = false;
 	
 	function HTML_Table()
 	{
 		
 	}
 	
-	function AddField($value, $width = null, $style = null, $colspan = null)
+	function AddField($value, $width = null, $style = null, $colspan = null, $isheader = null)
 	{
 		$field = array();
 		
@@ -23,7 +23,10 @@ class HTML_Table
 
 		if($colspan)
 			$field["colspan"] = $colspan;	
-		
+			
+		if($isheader)	
+			$field["class"] = "header";
+			
 		$this->_fields[] = $field;
 	}
 	
@@ -52,10 +55,20 @@ class HTML_Table
 		$this->_width = $width;
 	}
 	
+	function IsDropDownHeader()
+	{
+		$this->_dropdown = true;
+	}
+	
 	function Draw()
 	{
+		$args = "";
+		
+		if($this->_dropdown)
+			$args .= "class='dropdowntable-2'";
+		
 		$string = "
-		<table width='{$this->_width}' cellspacing='0' cellpadding='0' id='table'>";
+		<table width='{$this->_width}' {$args} cellspacing='0' cellpadding='0' id='table'>";
 		
 		$i = 0;
 		
@@ -106,6 +119,9 @@ class HTML_Table
 							
 						if($field["colspan"])
 							$args .= " colspan='{$field["colspan"]}'";
+							
+						if($field["class"])
+							$args .= " class='{$field["class"]}'";
 						
 						$string .= "
 							<td {$args}>{$field["value"]}</td>

@@ -75,10 +75,10 @@ class HTML_Input
 		$this->_isTextArea = true;
 		
 		if($rows)
-			$this->_textAreaRows;
+			$this->_textAreaRows = $rows;
 		
 		if($colums)
-			$this->_textAreaColums;
+			$this->_textAreaColums = $colums;
 	}
 	
 	function Draw()

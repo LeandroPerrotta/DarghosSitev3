@@ -1,5 +1,5 @@
 $(document).ready(function() {	
-	//MENUS DE NAVEGAÇÃO
+	//MENUS DE NAVEGAï¿½ï¿½O
 	$("#left ul li div").next("ul[class!='always_viewable']").hide();
 	$("#left ul li div").next("ul[class='viewable']").show();
 	
@@ -46,6 +46,28 @@ $(document).ready(function() {
 		$(this).parent().children("div[class!='always_viewable']").slideToggle();
 	});	
 	
+	$("table[class='dropdowntable-2'] tr td[class!='always_viewable']").hide();
+	
+	$("table[class='dropdowntable-2'] tr th span").click(function() {		
+		var plus = $(this).hasClass("tooglePlus");
+		var minus = $(this).hasClass("toogleMinus");
+		
+		if(plus)
+		{
+			$(this).removeClass("tooglePlus");
+			$(this).addClass("toogleMinus");
+			
+			$("table[class='dropdowntable-2'] tr td").show();
+		}
+		else if(minus)
+		{
+			$(this).removeClass("toogleMinus");
+			$(this).addClass("tooglePlus");
+			
+			$("table[class='dropdowntable-2'] tr td").hide();
+		}	
+	});	
+	
 	//FASTNEWS		
 	$("table[class='fastnews'] tr td span").click(function() {		
 		var classe = $(this).hasClass("tooglePlus");
@@ -76,7 +98,7 @@ $(document).ready(function() {
 		}	
 	});		
 	
-	//SELECTBOX COM ALTERAÇÃO DINAMICA DE CONTEUDO
+	//SELECTBOX COM ALTERAï¿½ï¿½O DINAMICA DE CONTEUDO
 	$("fieldset div[class='autoaction']").nextAll("div[class!='viewable']").hide();	
 	
 	$("fieldset div[class='autoaction'] select").change(function() {

@@ -1,5 +1,5 @@
 <?
-$query = $db->query("SELECT topics.title FROM ".DB_WEBSITE_PREFIX."forum_topics as topics, ".DB_WEBSITE_PREFIX."forum_polls as polls WHERE polls.end_date > UNIX_TIMESTAMP() AND topics.id = polls.topic_id ORDER by topics.id DESC LIMIT 5");
+$query = $db->query("SELECT topics.id, topics.title, polls.end_date FROM ".DB_WEBSITE_PREFIX."forum_topics as topics, ".DB_WEBSITE_PREFIX."forum_polls as polls WHERE polls.end_date > UNIX_TIMESTAMP() AND topics.id = polls.topic_id ORDER by topics.id DESC LIMIT 5");
 
 if($query->numRows() != 0)
 {
@@ -9,16 +9,16 @@ if($query->numRows() != 0)
 	{
 		$polls .= "
 		<tr>
-			<td>{$fetch->title}</td>
+			<td><span style='float:left;'><a href='?ref=forum.topic&v={$fetch->id}'>{$fetch->title}</a></span> <span style='float:right;'>Termina em ".Core::formatDate($fetch->end_date)."</span></td>
 		</tr>
 		";
 	}
 	
 	$module .= "
-	<table cellspacing='0' cellpadding='0' class='fastnews'>
+	<table cellspacing='0' cellpadding='0' class='dropdowntable-2'>
 	
 		<tr>
-			<th>Ultimas enquetes ativas</th>
+			<th>Ultimas enquetes ativas <span class='tooglePlus'></span></th>
 		</tr>
 					
 		{$polls}

@@ -97,6 +97,7 @@ class Lang_Messages
 		self::$messages[LMSG_FORUM_POLL_ONLY_FOR_PREMIUM] = "Desculpe, mas está enquete só pode receber votos de usuarios que possuam uma conta premium.";
 		self::$messages[LMSG_FORUM_POLL_NEED_MIN_LEVEL] = "Desculpe, mas para votar nesta enquete é preciso possuir na sua conta ao menos um personagem com nivel @v1@ ou superior.";
 		self::$messages[LMSG_FORUM_POLL_TIME_EXPIRED] = "Desculpe, mas esta enquete já está encerrada.";
+		self::$messages[LMSG_FORUM_POST_TOO_LONG] = "Desculpe, mas o seu post não pode exceder 2048 caracteres.";
 	
 		self::$messages[LMSG_ACCOUNT_REGISTERED] = "
 			<p>Parabens, sua conta foi criada com sucesso!</p>
@@ -352,6 +353,12 @@ class Lang_Messages
 		self::$messages[LMSG_FORUM_POLL_VOTE_DONE] = "
 			<p>Caro jogador,</p>
 			<p>O seu voto foi computado em nosso banco de dados com sucesso!</p>
+			<p>Obrigado por participar!</p>
+		";				
+		
+		self::$messages[LMSG_FORUM_POST_SENT] = "
+			<p>Caro jogador,</p>
+			<p>O seu post foi enviado com sucesso para este topico!</p>
 			<p>Obrigado por participar!</p>
 		";				
 	}

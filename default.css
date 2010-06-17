@@ -53,7 +53,11 @@ fieldset select option{
 	border-bottom: 1px solid #000;
 	border-right: 1px solid #000;
 	margin: 0;
-	width: auto;
+	width: 60px;
+}
+
+.button:hover {
+	cursor: pointer;
 }
 
 .buttonstd {
@@ -103,7 +107,7 @@ table {
 	width: 100%;
 }
 
-table tr th {
+table tr th, table tr .header {
 	background: #333 url(newlay/images/item.jpg) repeat-x;
 	padding: 6px;
 	

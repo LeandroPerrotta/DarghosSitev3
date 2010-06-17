@@ -70,6 +70,20 @@ class View
 		{
 			return $this->PollPost();
 		}
+		
+		if($_POST["user_post"])
+		{
+			if(strlen($_POST["user_post"]) > 2048)
+			{
+				$this->_message = Lang::Message(LMSG_FORUM_POST_TOO_LONG);
+				return false;				
+			}
+			
+			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetId());
+			
+			$this->_message = Lang::Message(LMSG_FORUM_POST_SENT);
+			return true;
+		}
 	}
 	
 	function PollPost()
@@ -130,7 +144,11 @@ class View
 		if($this->topic->IsPoll())
 		{
 			$pollTable = new HTML_Table();
-			$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Termina em: ".Core::formatDate($this->topic->GetPollEnd())."</span>");
+			
+			if(time() > $this->topic->GetPollEnd())
+				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Terminou em: ".Core::formatDate($this->topic->GetPollEnd())."</span>");
+			else
+				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Termina em: ".Core::formatDate($this->topic->GetPollEnd())."</span>");
 			
 			$pollTable->AddField($this->topic->GetPollText());
 			$pollTable->AddRow();
@@ -139,7 +157,7 @@ class View
 			
 			$optString = "";
 			
-			$hasVoted = $this->user->GetPollVote($this->topic->GetPollId());
+			$vote = $this->user->GetPollVote($this->topic->GetPollId());
 			
 			foreach($options as $optionid => $option)
 			{
@@ -154,21 +172,26 @@ class View
 					
 				$field->SetValue($optionid);
 				
-				if($hasVoted)
+				if($vote)
 				{
 					$field->IsDisabled();
 					
-					if($optionid == $hasVoted)
+					if($optionid == $vote["id"])
 						$field->IsDefault();
 				}
 				
-				$optString .= "{$field->Draw()} {$option["option"]} <br>";
+				$optVotes = null;
+				
+				if(time() > $this->topic->GetPollEnd())
+					$optVotes = " - {$option["votes"]} voto(s) ou ".round(($option["votes"] / $this->topic->GetTotalVotes()) * 100, 2)."%";
+					
+				$optString .= "{$field->Draw()} {$option["option"]} {$optVotes}<br>";
 			}
 			
 			$pollTable->AddField($optString);
 			$pollTable->AddRow();			
 			
-			if(!$hasVoted)
+			if(!$vote)
 			{
 				$isVisible = new HTML_Input();
 				$isVisible->SetName("visibility");
@@ -183,7 +206,7 @@ class View
 			$button->IsButton();
 			$button->SetValue("Votar");
 			
-			if($hasVoted)
+			if($vote)
 				$button->IsDisabled();
 			
 			$module .= "
@@ -201,8 +224,11 @@ class View
 		
 		$table->AddDataRow("<span style='float: left;'>#1</span> <span style='float: right; font-weight: normal;'>".Core::formatDate($this->topic->GetDate())."</span>");
 		
+		$author = new Forum_User();
+		$author->Load($this->topic->GetAuthorId());
+		
 		$character = new Character();
-		$character->load($this->user->GetPlayerId());
+		$character->load($author->GetPlayerId());
 		
 		$group = new t_Group($character->getGroup());
 		
@@ -216,12 +242,92 @@ class View
 		$string = "
 		<p><span style='font-size: 12px; font-weight: bold;'>{$this->topic->GetTitle()}</span></p>
 		<p class='line'></p>
-		<p style='margin-top: 25px;'>{$this->topic->GetTopic()}</p>";
+		<p style='margin-top: 25px;'>".nl2br($this->topic->GetTopic())."</p>";
 		
 		$table->AddField($string, null, "vertical-align: top;");
 		$table->AddRow();
 		
+		if($this->topic->GetPostCount() != 0)
+		{
+			$i = 2;
+			foreach($this->topic->GetPosts() as $key => $post)
+			{
+				//header
+				$string = "<span style='float: left; font-weight: bold;'>#{$i}</span> <span style='float: right; font-weight: normal;'>".Core::formatDate($post["date"])."</span>";				
+				
+				$table->addField($string, null, null, 2, true);
+				$table->AddRow();
+				
+				//body user
+				$user_post = new Forum_User();
+				$user_post->Load($post["user_id"]);
+				
+				$user_character = new Character();
+				$user_character->load($user_post->GetPlayerId());
+				
+				$group = new t_Group($user_character->getGroup());				
+				
+				$string = "
+				<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
+				{$group->GetByName()}
+				";
+				
+				$table->AddField($string, 20, "height: 90px; vertical-align: top;");
+				
+				$string = "";
+				
+				//body post
+				
+				$vote = $user_post->GetPollVote($this->topic->GetPollId());
+				
+				if($this->topic->IsPoll() && $vote && $vote["public"] == 1)
+				{
+					$string .= "<div style='border: 1px #9f9d9d solid; line-height:200%; padding: 0px; padding-left: 5px;'>Meu voto: <span style='font-weight: bold;'>{$vote["option"]}</span></div>";
+				}
+				
+				$string .= "
+				<!-- <p><span style='font-size: 12px; font-weight: bold;'></span></p>
+				<p class='line'></p> -->
+				<p style='margin-top: 10px;'>".nl2br($post["post"])."</p>";
+				
+				$table->AddField($string, null, "vertical-align: top;");				
+				
+				$table->AddRow();
+		
+				$i++;				
+			}
+		}
+		
 		$module .= "{$table->Draw()}";
+		
+		$post = new HTML_Input();
+		$post->SetName("user_post");
+		$post->IsTextArea(7, 65);
+		
+		$button = new HTML_Input();
+		$button->IsButton();
+		$button->SetValue("Enviar");
+		
+		$table = new HTML_Table();
+		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
+		$table->IsDropDownHeader();
+		
+		$string = "
+			<div style='text-align: center;'>{$post->Draw()}
+			
+			<p>
+				{$button->Draw()}
+			</p></div>";
+		
+		$table->AddField($string);
+		$table->AddRow();
+		
+		$module .= "
+		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
+			<fieldset>
+				{$table->Draw()}				
+			</fieldset>
+		</form>";
 	}
 }
 
