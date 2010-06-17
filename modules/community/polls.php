@@ -25,30 +25,33 @@ $inactiveTable->AddRow();
 $haveActive = false;
 $haveInactive = false;
 
-foreach($pollList as $poll)
+if($pollList)
 {
-	if(time() < $poll->GetPollEnd())
+	foreach($pollList as $poll)
 	{
-		$activeTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
-		$activeTable->AddField($poll->GetPollMinLevel());
-		
-		if($poll->PollIsOnlyForPremiums())
-			$activeTable->AddField("Sim");
+		if(time() < $poll->GetPollEnd())
+		{
+			$activeTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
+			$activeTable->AddField($poll->GetPollMinLevel());
+			
+			if($poll->PollIsOnlyForPremiums())
+				$activeTable->AddField("Sim");
+			else
+				$activeTable->AddField("Não");
+			
+			$activeTable->AddField(Core::formatDate($poll->GetPollEnd()));
+			$activeTable->AddRow();	
+	
+			$haveActive = true;
+		}
 		else
-			$activeTable->AddField("Não");
-		
-		$activeTable->AddField(Core::formatDate($poll->GetPollEnd()));
-		$activeTable->AddRow();	
-
-		$haveActive = true;
-	}
-	else
-	{
-		$inactiveTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
-		$inactiveTable->AddField(Core::formatDate($poll->GetPollEnd()));
-		$inactiveTable->AddRow();	
-
-		$haveInactive = true;
+		{
+			$inactiveTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
+			$inactiveTable->AddField(Core::formatDate($poll->GetPollEnd()));
+			$inactiveTable->AddRow();	
+	
+			$haveInactive = true;
+		}
 	}
 }
 
