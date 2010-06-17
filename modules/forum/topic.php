@@ -270,7 +270,7 @@ class View
 		$table->AddRow();
 		
 		if($this->topic->GetPostCount() != 0)
-		{
+		{			
 			$i = 2;
 			foreach($this->topic->GetPosts() as $key => $post)
 			{
@@ -309,26 +309,8 @@ class View
 				
 				if($this->user->GetAccount()->getGroup() >= GROUP_COMMUNITYMANAGER)
 				{
-					$string .= "
-					<script type='text/javascript'>	
-					$(document).ready(function() {
-					
-						$('.confirm').click(function() {
-			
-							var conf = confirm('Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?');
-						
-							if(conf)
-							{
-								window.location = '?ref=forum.topic&removemsg={$post["id"]}';
-							}
-							else
-							{
-							}
-						});
-					});
-					</script>					
-					
-					<div style='margin: 0px; padding: 0px; text-align: right;'><a class='confirm'>Deletar</a></div>";
+					$string .= "					
+					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a></div>";
 				}
 				
 				$string .= "
@@ -343,7 +325,7 @@ class View
 				$i++;				
 			}
 		}
-		
+	
 		$module .= "{$table->Draw()}";
 		
 		$post = new HTML_Input();
