@@ -1,6 +1,12 @@
 <?
 define("ACCOUNT_CHARACTERLIST_BY_ID", true);
 define("ACCOUNT_CHARACTERLIST_BY_NAME", false);
+define("GROUP_PLAYERS", 1);
+define("GROUP_TUTOR", 2);
+define("GROUP_STUTOR", 3);
+define("GROUP_GAMEMASTER", 4);
+define("GROUP_COMMUNITYMANAGER", 5);
+define("GROUP_ADMINISTRATOR", 6);
 
 class Account
 {
@@ -182,7 +188,7 @@ class Account
 
 	function getGroup()
 	{
-		$characters = $this->getCharacterList(true);
+		$characters = $this->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
 		
 		$highGroup = 1;
 		

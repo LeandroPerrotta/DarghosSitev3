@@ -9,7 +9,7 @@ class View
 	
 	function View()
 	{
-		if(!$_GET['v'])
+		if(!$_GET['v'] && !$_GET['removemsg'])
 		{
 			return;
 		}
@@ -18,6 +18,14 @@ class View
 		{
 			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
 			return false;			
+		}
+		else
+		{
+			if($_GET['removemsg'])
+			{
+				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				return true;					
+			}
 		}
 		
 		if($_SESSION['login'])
@@ -53,12 +61,26 @@ class View
 			return false;			
 		}
 		
-		$this->topic = new Forum_Topics();
-		
-		if(!$this->topic->Load($_GET['v']))
+		if($_GET['v'])
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
-			return false;
+			$this->topic = new Forum_Topics();
+			
+			if(!$this->topic->Load($_GET['v']))
+			{
+				$this->_message = Lang::Message(LMSG_REPORT);
+				return false;
+			}
+		}
+		elseif($_GET['removemsg'])
+		{
+			if($this->user->GetAccount()->getGroup() < GROUP_COMMUNITYMANAGER)
+			{
+				$this->_message = Lang::Message(LMSG_REPORT);
+				return false;				
+			}
+			
+			Forum_Topics::DeletePost($_GET['removemsg']);
+			$this->_message = "Post removido com sucesso!";
 		}
 		
 		return true;
@@ -285,10 +307,34 @@ class View
 					$string .= "<div style='border: 1px #9f9d9d solid; line-height:200%; padding: 0px; padding-left: 5px;'>Meu voto: <span style='font-weight: bold;'>{$vote["option"]}</span></div>";
 				}
 				
+				if($this->user->GetAccount()->getGroup() >= GROUP_COMMUNITYMANAGER)
+				{
+					$string .= "
+					<script type='text/javascript'>	
+					$(document).ready(function() {
+					
+						$('.confirm').click(function() {
+			
+							var conf = confirm('Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?');
+						
+							if(conf)
+							{
+								window.location = '?ref=forum.topic&removemsg={$post["id"]}';
+							}
+							else
+							{
+							}
+						});
+					});
+					</script>					
+					
+					<div style='margin: 0px; padding: 0px; text-align: right;'><a class='confirm'>Deletar</a></div>";
+				}
+				
 				$string .= "
 				<!-- <p><span style='font-size: 12px; font-weight: bold;'></span></p>
 				<p class='line'></p> -->
-				<p style='margin-top: 10px;'>".nl2br($post["post"])."</p>";
+				<div style='margin: 0px; margin-top: 10px; padding: 0px;'><p>".nl2br($post["post"])."</p></div>";
 				
 				$table->AddField($string, null, "vertical-align: top;");				
 				

@@ -228,7 +228,7 @@ class View
 					{$this->_ispoll->Draw()} Topico em forma de enquete.<br />
 				</p>				
 
-				<div class='ispoll' style='margin: 0px; margin-top: 20px; padding: 0px;>
+				<div class='ispoll' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 					<p>
 						<label for='topic_poll_text'>Assunto da enquete</label><br />
 						{$this->_poll_text->Draw()}

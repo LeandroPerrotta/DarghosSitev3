@@ -8,6 +8,7 @@ define("FORUM_POLLS_FLAGS_IS_ONLY_FOR_PREMIUM", 2);
 class Forum_User
 {
 	private $_id, $_accountid, $_playerid;
+	private $account;
 	
 	function Forum_User($id = null)
 	{
@@ -56,6 +57,9 @@ class Forum_User
 		$this->_accountid = $fetch->account_id;
 		$this->_playerid = $fetch->player_id;
 		
+		$this->account = new Account();
+		$this->account->load($this->_accountid);
+		
 		return true;
 	}
 	
@@ -81,6 +85,11 @@ class Forum_User
 	function GetAccountId()
 	{
 		return $this->_accountid;
+	}
+	
+	function GetAccount()
+	{
+		return $this->account;
 	}
 	
 	function GetId()
@@ -151,6 +160,11 @@ class Forum_Topics
 		}
 		
 		return $topics;
+	}
+	
+	static function DeletePost($post_id)
+	{
+		Core::$DB->query("DELETE FROM `".DB_WEBSITE_PREFIX."forum_posts` WHERE `id` = '{$post_id}'");		
 	}
 	
 	private $_id, $_title, $_topic, $_date, $_authorid, $_isPoll = false;
