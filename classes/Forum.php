@@ -171,6 +171,8 @@ class Forum_Topics
 	private $_poll_id, $_poll_text, $_poll_topicid, $_poll_enddate, $_poll_flags, $_poll_minlevel, $_poll_ismultiple = false, $_poll_onlypremium = false;
 	private $_poll_options = array();
 	private $_posts = array();
+	private $_postStart = 0;
+	private $_postSize = 10;
 	
 	function Forum_Topics($id = null)
 	{
@@ -261,7 +263,7 @@ class Forum_Topics
 	
 	function LoadPosts()
 	{
-		$query = Core::$DB->query("SELECT id, user_id, date, topic_id, post FROM ".DB_WEBSITE_PREFIX."forum_posts WHERE `topic_id` = '{$this->_id}'");
+		$query = Core::$DB->query("SELECT id, user_id, date, topic_id, post FROM ".DB_WEBSITE_PREFIX."forum_posts WHERE `topic_id` = '{$this->_id}' ORDER by DATE ASC LIMIT {$this->_postStart}, {$this->_postSize}");
 	
 		if($query->numRows() == 0)
 			return false;		
@@ -331,6 +333,11 @@ class Forum_Topics
 				values
 				('{$user_id}', '".time()."', '{$this->_id}', '{$post}')
 		");		
+	}
+	
+	function SetPostStart($start)
+	{
+		$this->_postStart = $start;
 	}
 	
 	function SetTitle($title)
@@ -410,7 +417,8 @@ class Forum_Topics
 	
 	function GetPostCount()
 	{
-		return count($this->_posts);
+		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_posts WHERE `topic_id` = '{$this->_id}'");
+		return $query->numRows();
 	}
 	
 	function IsPoll()

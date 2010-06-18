@@ -65,6 +65,15 @@ class View
 		{
 			$this->topic = new Forum_Topics();
 			
+			$page = 0;
+			
+			if($_GET["p"])
+				$page = $_GET["p"];
+				
+			$start = $page * 10;
+			
+			$this->topic->SetPostStart($start);
+			
 			if(!$this->topic->Load($_GET['v']))
 			{
 				$this->_message = Lang::Message(LMSG_REPORT);
@@ -243,8 +252,7 @@ class View
 			</form>";
 		}
 		
-		
-		$table->AddDataRow("<span style='float: left;'>#1</span> <span style='float: right; font-weight: normal;'>".Core::formatDate($this->topic->GetDate())."</span>");
+		$table->AddDataRow("<span style='float: right; font-weight: normal;'>".Core::formatDate($this->topic->GetDate())."</span>");
 		
 		$author = new Forum_User();
 		$author->Load($this->topic->GetAuthorId());
@@ -269,9 +277,20 @@ class View
 		$table->AddField($string, null, "vertical-align: top;");
 		$table->AddRow();
 		
+		$module .= "{$table->Draw()}";
+		
+		$table = new HTML_Table();
+		
 		if($this->topic->GetPostCount() != 0)
 		{			
-			$i = 2;
+			$page = 0;
+			
+			if($_GET["p"])
+				$page = $_GET["p"];
+				
+			$start = $page * 10;			
+			
+			$i = $start + 1;
 			foreach($this->topic->GetPosts() as $key => $post)
 			{
 				//header
@@ -326,6 +345,47 @@ class View
 			}
 		}
 	
+		$now = 0;
+		$page = 0;
+		
+		if(!$_GET["p"])
+			$page = 1;
+		else
+		{
+			$now = $_GET["p"];
+			$page = $_GET["p"] + 1;
+		}
+			
+		$ultima = floor($this->topic->GetPostCount() / 10);
+		
+		$module .= "<div>";
+		
+		if($now > 0)
+			$module .= "<span style='margin-top: 10px; float: left;'><a href='?ref=forum.topic&v={$_GET['v']}'>Primeira</a> | <a href='?ref=forum.topic&v={$_GET['v']}&p=".($now - 1)."'>Anterior</a></span>";
+			
+		$module .= "<span style='margin-top: 10px; float: right;'>";	
+
+		$havenext = false;
+		
+		if($now != $ultima)
+		{
+			$module .= "<a href='?ref=forum.topic&v={$_GET['v']}&p=".($now + 1)."'>Proximo</a>";
+			$havenext = true;
+		}		
+		
+		if($now < $ultima)
+		{
+			if($havenext)
+			{
+				$module .= " | ";
+			}			
+			
+			$module .= "<a href='?ref=forum.topic&v={$_GET['v']}&p={$ultima}'>Ultima</a>";
+		}
+		
+		$module .= "</span>";
+			
+		$module .= "</div>";
 		$module .= "{$table->Draw()}";
 		
 		$post = new HTML_Input();
