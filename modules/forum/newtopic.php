@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $_title, $_topic, $_ispoll, $_poll_text, $_poll_end_date, $_poll_onlypremium, $_poll_minlevel, $_poll_optioncount; 
+	private $_title, $_topic, $_ispoll, $_isnotice, $_poll_text, $_poll_end_date, $_poll_onlypremium, $_poll_minlevel, $_poll_optioncount; 
 	
 	//variables
 	private $_message;	
@@ -35,6 +35,11 @@ class View
 		$this->_ispoll->IsCheackeable();
 		$this->_ispoll->SetValue("true");
 		$this->_ispoll->SetName("topic_ispoll");
+		
+		$this->_isnotice = new HTML_Input();
+		$this->_isnotice->IsCheackeable();
+		$this->_isnotice->SetValue("true");
+		$this->_isnotice->SetName("topic_isnotice");
 		
 		$this->_poll_text = new HTML_Input();
 		$this->_poll_text->IsTextArea(7, 50);
@@ -99,36 +104,39 @@ class View
 			return false;			
 		}
 			
-		if($this->_ispoll->GetPost() != "true")
+		/*if($this->_ispoll->GetPost() != "true")
 		{
 			$this->_message = "Só é permitido criar topicos em forma de enquete no momento.";
 			return false;			
-		}	
+		}	*/
 
-		if(!$this->_poll_text->GetPost() || !$this->_poll_end_date->GetPost() || !$this->_poll_minlevel->GetPost())
+		if($this->_ispoll->GetPost() == "true" && (!$this->_poll_text->GetPost() || !$this->_poll_end_date->GetPost() || !$this->_poll_minlevel->GetPost()))
 		{
 			$this->_message = "Preencha todos campos referentes a enquete corretamente.";
 			return false;			
 		}
 
-		if(!is_numeric($this->_poll_end_date->GetPost()) || !is_numeric($this->_poll_minlevel->GetPost()))
+		if($this->_ispoll->GetPost() == "true" && (!is_numeric($this->_poll_end_date->GetPost()) || !is_numeric($this->_poll_minlevel->GetPost())))
 		{
 			$this->_message = "Duração da enquete e level minimo devem conter apénas numeros.";
 			return false;				
 		}
 
-		if($this->_poll_end_date->GetPost() < 5 || $this->_poll_end_date->GetPost() > 90)
+		if($this->_ispoll->GetPost() == "true" && ($this->_poll_end_date->GetPost() < 5 || $this->_poll_end_date->GetPost() > 90))
 		{
 			$this->_message = "A duração da enquete deve ser entre 5 dias e 90 dias.";
 			return false;				
 		}
 		
-		for($i = 1; $i <= $this->_poll_optioncount->GetPost(); $i++)
+		if($this->_ispoll->GetPost() == "true")
 		{
-			if(!$_POST["option_{$i}"])
+			for($i = 1; $i <= $this->_poll_optioncount->GetPost(); $i++)
 			{
-				$this->_message = "Você deve preencher todas opções.";
-				return false;					
+				if(!$_POST["option_{$i}"])
+				{
+					$this->_message = "Você deve preencher todas opções.";
+					return false;					
+				}
 			}
 		}
 		
@@ -138,19 +146,32 @@ class View
 		$topic->SetTopic($this->_topic->GetPost());
 		$topic->SetDate(time());
 		$topic->SetAuthorId($this->user->GetId());
-		$topic->SetIsPoll();
-		$topic->SetPollText($this->_poll_text->GetPost());
-		$topic->SetPollMinLevel($this->_poll_minlevel->GetPost());
-		$topic->SetPollEnd(time() + (60 * 60 * 24 * $this->_poll_end_date->GetPost()));
 		
-		if($this->_poll_onlypremium->GetPost() == "true")
-			$topic->SetPollIsOnlyForPremium();
+		if($this->_isnotice->GetPost() == "true")
+		{
+			$topic->SetIsNotice();
+		}
+
+		if($this->_ispoll->GetPost() == "true")
+		{
+			$topic->SetIsPoll();
+			
+			$topic->SetPollText($this->_poll_text->GetPost());
+			$topic->SetPollMinLevel($this->_poll_minlevel->GetPost());
+			$topic->SetPollEnd(time() + (60 * 60 * 24 * $this->_poll_end_date->GetPost()));
+			
+			if($this->_poll_onlypremium->GetPost() == "true")
+				$topic->SetPollIsOnlyForPremium();			
+		}			
 			
 		$topic->Save();	
 			
-		for($i = 1; $i <= $this->_poll_optioncount->GetPost(); $i++)
+		if($this->_ispoll->GetPost() == "true")
 		{
-			$topic->AddPollOption($_POST["option_{$i}"]);
+			for($i = 1; $i <= $this->_poll_optioncount->GetPost(); $i++)
+			{
+				$topic->AddPollOption($_POST["option_{$i}"]);
+			}
 		}		
 
 		$this->_message = "Seu topico foi criado com sucesso!";
@@ -256,6 +277,10 @@ class View
 					<div class='poll_options' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 					</div>
 				</div>
+				
+				<p>
+					{$this->_isnotice->Draw()} O topíco é uma notícia.<br />
+				</p>
 				
 				<p id='line'></p>
 				

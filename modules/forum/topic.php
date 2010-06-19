@@ -43,6 +43,9 @@ class View
 			else
 			{
 				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				
+				global $module;
+				$module .= "<p><a class='buttonstd' href='?ref=forum.topic&v={$_GET['v']}'>Voltar</a></p>";				
 				return true;
 			}
 		}		
@@ -118,7 +121,7 @@ class View
 	}
 	
 	function PollPost()
-	{
+	{		
 		$options = $this->topic->GetPollOptions();
 		if(!array_key_exists($_POST["poll_option"], $options))
 		{
@@ -159,7 +162,6 @@ class View
 			$visible = 1;
 		
 		$this->user->SetPollVote($_POST["poll_option"], $visible);
-		
 		$this->_message = Lang::Message(LMSG_FORUM_POLL_VOTE_DONE);
 		return true;
 	}

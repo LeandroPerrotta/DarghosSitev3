@@ -65,11 +65,27 @@ $module .= "
 	
 </table>";
 
-$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by post_data DESC LIMIT 3");
+$notices = Forum_Topics::ListNoticeTopics();
 
-while($fetch = $query->fetch())
+if($notices)
+{	
+	foreach($notices as $topic)
+	{
+		$comment = '<p style="text-align: right;"><a href="?ref=forum.topic&v='.$topic->GetId().'">Comentar</a> ('.$topic->GetPostCount().' já comentaram!)</p>';
+		Core::sendMessageBox("<span style='float: left;'>".$topic->GetTitle()."</span> <span style='float: right;'>".Core::formatDate($topic->GetDate())."</span>", "{$topic->GetTopic()} {$comment}"); 	
+	}
+}
+
+if(!$notices || count($notices) < 3)
 {
-	$showcomment = (HIDE_FORUMLINKS != 0) ? '<p style="text-align: right;"><a href="'.$fetch->forum_url.'">Comentar está notícia</a></p>' : '';
-	Core::sendMessageBox("<span style='float: left;'>".$fetch->topic."</span> <span style='float: right;'>".Core::formatDate($fetch->post_data)."</span>", "{$fetch->post} {$showcomment}"); 
+	$limit = 3 - count($notices);
+	
+	$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by post_data DESC LIMIT {$limit}");
+	
+	while($fetch = $query->fetch())
+	{
+		$showcomment = (HIDE_FORUMLINKS != 0) ? '<p style="text-align: right;"><a href="'.$fetch->forum_url.'">Comentar está notícia</a></p>' : '';
+		Core::sendMessageBox("<span style='float: left;'>".$fetch->topic."</span> <span style='float: right;'>".Core::formatDate($fetch->post_data)."</span>", "{$fetch->post} {$showcomment}"); 
+	}
 }
 ?>

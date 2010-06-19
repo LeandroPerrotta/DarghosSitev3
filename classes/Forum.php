@@ -1,6 +1,7 @@
 <?php
 
 define("FORUM_TOPIC_FLAGS_IS_POLL", 1);
+define("FORUM_TOPIC_FLAGS_IS_NOTICE", 2);
 
 define("FORUM_POLLS_FLAGS_IS_MULTIPLE_SELECTION", 1);
 define("FORUM_POLLS_FLAGS_IS_ONLY_FOR_PREMIUM", 2);
@@ -146,7 +147,7 @@ class Forum_Topics
 {
 	static function ListPollTopics()
 	{
-		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_POLL.") != 0");
+		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_POLL.") != 0 ORDER BY `date` DESC");
 		
 		if($query->numRows() == 0)
 			return false;		
@@ -162,12 +163,30 @@ class Forum_Topics
 		return $topics;
 	}
 	
+	static function ListNoticeTopics($limit = 3)
+	{
+		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_NOTICE.") != 0 ORDER BY `date` DESC LIMIT {$limit}");
+		
+		if($query->numRows() == 0)
+			return false;		
+			
+		$topics = array();	
+			
+		for($i = 0; $i < $query->numRows(); ++$i)
+		{	
+				$fetch = $query->fetch();
+				$topics[] = new Forum_Topics($fetch->id);
+		}
+		
+		return $topics;
+	}	
+	
 	static function DeletePost($post_id)
 	{
 		Core::$DB->query("DELETE FROM `".DB_WEBSITE_PREFIX."forum_posts` WHERE `id` = '{$post_id}'");		
 	}
 	
-	private $_id, $_title, $_topic, $_date, $_authorid, $_isPoll = false;
+	private $_id, $_title, $_topic, $_date, $_authorid, $_isPoll = false, $_isNotice = false;
 	private $_poll_id, $_poll_text, $_poll_topicid, $_poll_enddate, $_poll_flags, $_poll_minlevel, $_poll_ismultiple = false, $_poll_onlypremium = false;
 	private $_poll_options = array();
 	private $_posts = array();
@@ -201,6 +220,11 @@ class Forum_Topics
 			$this->LoadPoll();
 		}
 		
+		if(($fetch->flags & FORUM_TOPIC_FLAGS_IS_NOTICE) != 0)
+		{
+			$this->_isNotice = true;
+		}
+		
 		$this->LoadPosts();
 		
 		return true;		
@@ -217,8 +241,12 @@ class Forum_Topics
 			$flag = 0;
 			if($this->_isPoll)
 			{
-				$flag = pow(2, FORUM_TOPIC_FLAGS_IS_POLL - 1);
-				echo "Flag: " . $flag;
+				$flag += pow(2, FORUM_TOPIC_FLAGS_IS_POLL - 1);
+			}
+			
+			if($this->_isNotice)
+			{
+				$flag += pow(2, FORUM_TOPIC_FLAGS_IS_NOTICE - 1);
 			}
 
 			Core::$DB->query("
@@ -363,6 +391,11 @@ class Forum_Topics
 	function SetIsPoll($isPoll = true)
 	{
 		$this->_isPoll = $isPoll;
+	}
+	
+	function SetIsNotice($isNotice = true)
+	{
+		$this->_isNotice = $isNotice;
 	}
 	
 	function SetPollText($poll_text)
