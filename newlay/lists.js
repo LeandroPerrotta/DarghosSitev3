@@ -99,6 +99,7 @@ $(document).ready(function() {
 		}	
 	}
 	$("table[class='fastnews'] span[class='tooglePlus']").click(fastNewsDropDown);
+	$("table[class='fastnews'] span[class='littleFastNew']").click(fastNewsDropDown);
 	
 	//SELECTBOX COM ALTERAï¿½ï¿½O DINAMICA DE CONTEUDO
 	$("fieldset div[class='autoaction']").nextAll("div[class!='viewable']").hide();	
