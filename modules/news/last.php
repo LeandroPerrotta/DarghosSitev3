@@ -67,6 +67,13 @@ $module .= "
 
 $notices = Forum_Topics::ListNoticeTopics();
 
+$news = 0;
+
+if($notices)
+{
+	$news = count($notices);
+}
+
 if($notices)
 {	
 	foreach($notices as $topic)
@@ -76,9 +83,9 @@ if($notices)
 	}
 }
 
-if(!$notices || count($notices) < 3)
+if($news < 3)
 {
-	$limit = 3 - count($notices);
+	$limit = 3 - $news;
 	
 	$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by post_data DESC LIMIT {$limit}");
 	

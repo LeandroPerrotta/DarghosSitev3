@@ -1,5 +1,5 @@
 $(document).ready(function() {	
-	//MENUS DE NAVEGA��O
+	//MENUS DE NAVEGAï¿½ï¿½O
 	$("#left ul li div").next("ul[class!='always_viewable']").hide();
 	$("#left ul li div").next("ul[class='viewable']").show();
 	
@@ -68,8 +68,9 @@ $(document).ready(function() {
 		}	
 	});	
 	
-	//FASTNEWS		
-	$("table[class='fastnews'] tr td span").click(function() {		
+	//FASTNEWS
+	function fastNewsDropDown()
+	{
 		var classe = $(this).hasClass("tooglePlus");
 		
 		if(classe)
@@ -96,9 +97,10 @@ $(document).ready(function() {
 			$(this).parent().children("span[class='fullFastNew']").hide();
 			$(this).parent().children("span[class='littleFastNew']").show();			
 		}	
-	});		
+	}
+	$("table[class='fastnews'] span[class='tooglePlus']").click(fastNewsDropDown);
 	
-	//SELECTBOX COM ALTERA��O DINAMICA DE CONTEUDO
+	//SELECTBOX COM ALTERAï¿½ï¿½O DINAMICA DE CONTEUDO
 	$("fieldset div[class='autoaction']").nextAll("div[class!='viewable']").hide();	
 	
 	$("fieldset div[class='autoaction'] select").change(function() {

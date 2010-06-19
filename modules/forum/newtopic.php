@@ -279,7 +279,7 @@ class View
 				</div>
 				
 				<p>
-					{$this->_isnotice->Draw()} O topíco é uma notícia.<br />
+					{$this->_isnotice->Draw()} O tópico é uma notícia.<br />
 				</p>
 				
 				<p id='line'></p>
