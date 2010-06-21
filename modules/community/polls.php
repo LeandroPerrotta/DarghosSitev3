@@ -9,17 +9,17 @@ $activeTable->AddDataRow("Enquetes em atividade");
 
 $style = "font-weight: bold;";
 
-$activeTable->AddField("Titulo", null, $style);	
-$activeTable->AddField("Level minimo", 5, $style);
-$activeTable->AddField("Requer premium?", 5, $style);
-$activeTable->AddField("Termina em", null, $style);
+$activeTable->AddField("Titulo / Detalhes", null, $style);	
+$activeTable->AddField("Respostas", null, $style);	
+$activeTable->AddField("Ultimo por", null, $style);	
 $activeTable->AddRow();
 
 $inactiveTable = new HTML_Table();
 $inactiveTable->AddDataRow("Enquetes concluidas");
 
-$inactiveTable->AddField("Titulo", null, $style);	
-$inactiveTable->AddField("Terminou em", null, $style);
+$inactiveTable->AddField("Titulo / Detalhes", null, $style);	
+$inactiveTable->AddField("Respostas", null, $style);
+$inactiveTable->AddField("Ultimo por", null, $style);
 $inactiveTable->AddRow();
 
 $haveActive = false;
@@ -31,24 +31,80 @@ if($pollList)
 	{
 		if(time() < $poll->GetPollEnd())
 		{
-			$activeTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
-			$activeTable->AddField($poll->GetPollMinLevel());
+			$premium = "Não.";
 			
 			if($poll->PollIsOnlyForPremiums())
-				$activeTable->AddField("Sim");
-			else
-				$activeTable->AddField("Não");
+				$premium = "Sim.";
 			
-			$activeTable->AddField(Core::formatDate($poll->GetPollEnd()));
-			$activeTable->AddRow();	
+			
+			$string = "
+				<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a><br/>
+				<i>Iniciado em " . Core::formatDate($poll->GetDate()) . ".
+				Termina em " . Core::formatDate($poll->GetPollEnd()) . ".</i><br>
+				Premium: {$premium} Level: {$poll->GetPollMinLevel()}
+			";
+			
+			$activeTable->AddField($string);				
+			$activeTable->AddField($poll->GetPostCount());	
+			
+			$lastPost = $poll->GetLastPost();
+			
+			if($poll->GetPostCount() > 0)
+			{	
+				$user_post = new Forum_User();
+				$user_post->Load($lastPost["user_id"]);
+				
+				$user_character = new Character();
+				$user_character->load($user_post->GetPlayerId());			
+				
+				$string = "
+					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
+					<i>" . Core::formatDate($lastPost["date"]) . "</i>
+				";
+			}
+			else
+			{
+				$string = "<i>Nenhum post.</i>";				
+			}
 	
+			$activeTable->AddField($string);	
+			$activeTable->AddRow();				
+			
 			$haveActive = true;
 		}
 		else
-		{
-			$inactiveTable->AddField("<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a>");	
-			$inactiveTable->AddField(Core::formatDate($poll->GetPollEnd()));
-			$inactiveTable->AddRow();	
+		{			
+			$string = "
+				<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a><br/>
+				<i>Iniciado em " . Core::formatDate($poll->GetDate()) . ".
+				Terminou em " . Core::formatDate($poll->GetPollEnd()) . ".</i>
+			";
+			
+			$inactiveTable->AddField($string);				
+			$inactiveTable->AddField($poll->GetPostCount());	
+			
+			$lastPost = $poll->GetLastPost();
+			
+			if($poll->GetPostCount() > 0)
+			{	
+				$user_post = new Forum_User();
+				$user_post->Load($lastPost["user_id"]);
+				
+				$user_character = new Character();
+				$user_character->load($user_post->GetPlayerId());			
+				
+				$string = "
+					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
+					<i>" . Core::formatDate($lastPost["date"]) . "</i>
+				";
+			}
+			else
+			{
+				$string = "<i>Nenhum post.</i>";				
+			}
+	
+			$inactiveTable->AddField($string);	
+			$inactiveTable->AddRow();					
 	
 			$haveInactive = true;
 		}
@@ -57,7 +113,7 @@ if($pollList)
 
 if(!$haveActive)
 {
-	$activeTable->AddField("Não possuimos nenhuma enquete aberta.", null, null, 4);
+	$activeTable->AddField("Não possuimos nenhuma enquete aberta.", null, null, 3);
 	$activeTable->AddRow();		
 }
 

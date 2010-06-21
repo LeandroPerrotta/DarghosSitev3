@@ -392,7 +392,9 @@ class View
 		
 		$post = new HTML_Input();
 		$post->SetName("user_post");
+		$post->SetId("user_post");
 		$post->IsTextArea(7, 65);
+		$post->OnKeyPress("countCharacters(2048);");
 		
 		$button = new HTML_Input();
 		$button->IsButton();
@@ -402,17 +404,22 @@ class View
 		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
 		$table->IsDropDownHeader();
 		
-		$string = "
+		$string = "			
+		
 			<div style='text-align: center;'>{$post->Draw()}
 			
 			<p>
 				{$button->Draw()}
-			</p></div>";
+			</p>
+			
+			<p id='charactersLeft'>Restam 2048 caracteres.</p>
+			
+			</div>";
 		
 		$table->AddField($string);
 		$table->AddRow();
 		
-		$module .= "
+		$module .= "		
 		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
 			<fieldset>
 				{$table->Draw()}				

@@ -141,3 +141,20 @@ function fillSearchBox(value)
 	$("#player_suggestions").hide();
 }
 
+function countCharacters(limit)
+{	
+	var value = $("#user_post").val();
+	//alert(value);
+	var string = new String(value);
+	
+	$("#charactersLeft").empty();
+	
+	if(string.length < limit)
+	{
+		$("#charactersLeft").append("Restam " + (limit - string.length) + " caracteres.");
+	}
+	else
+	{
+		$("#charactersLeft").append("<span style='color: red;'>Texto muito grande, delete caracteres para que fique com " + limit + " ou menos.</span>");
+	}
+}

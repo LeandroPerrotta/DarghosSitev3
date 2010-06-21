@@ -1,9 +1,10 @@
 <?php
 class HTML_Input
 {
-	private $_name, $_value, $_size = 40, $_length, $_type = "text";
+	private $_name, $_id, $_value, $_size = 40, $_length, $_type = "text";
 	private $_isPassword = false, $_isDisabled = false, $_isWritable = true, $_isDefault = false;
 	private $_isTextArea = false, $_textAreaRows = 8, $_textAreaColums = 30;
+	private $_event_onkeypress;
 	
 	function HTML_Input()
 	{
@@ -33,6 +34,11 @@ class HTML_Input
 	function SetSize($size)
 	{
 		$this->_size = $size;
+	}
+	
+	function SetId($id)
+	{
+		$this->_id = $id;
 	}
 	
 	function IsPassword()
@@ -81,6 +87,13 @@ class HTML_Input
 			$this->_textAreaColums = $colums;
 	}
 	
+	/* Events */
+	
+	function OnKeyPress($string)
+	{
+		$this->_event_onkeypress = $string;
+	}
+	
 	function Draw()
 	{		
 		if(!$this->_isTextArea)
@@ -96,6 +109,9 @@ class HTML_Input
 				case "submit": 		$string .= " type='submit' class='button'"; 		break;
 			}
 			
+			if($this->_id)
+				$string .= " id='{$this->_id}'";
+			
 			if(!$this->_isWritable)
 				$string .= " readonly='readonly'";
 			
@@ -108,17 +124,26 @@ class HTML_Input
 			if($this->_length)
 				$string .= " maxlength='{$this->_length}'";
 				
+			if($this->_event_onkeypress)
+				$string .= " onkeyup='{$this->_event_onkeypress}'";
+				
 			$string .= "/>";
 		}
 		else
 		{
 			$string = "<textarea name='{$this->_name}' rows='{$this->_textAreaRows}' cols='{$this->_textAreaColums}'";
 			
+			if($this->_id)
+				$string .= " id='{$this->_id}'";			
+			
 			if(!$this->_isWritable)
 				$string .= " readonly='readonly'";
 				
 			if($this->_isDisabled)
 				$string .= " enabled='enabled'";		
+				
+			if($this->_event_onkeypress)
+				$string .= " onkeyup='{$this->_event_onkeypress}'";				
 
 			$string .= ">{$this->_value}</textArea>";	
 		}

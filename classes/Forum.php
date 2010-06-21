@@ -454,6 +454,11 @@ class Forum_Topics
 		return $query->numRows();
 	}
 	
+	function GetLastPost()
+	{
+		return $this->_posts[count($this->_posts) - 1];
+	}
+	
 	function IsPoll()
 	{
 		return $this->_isPoll;
