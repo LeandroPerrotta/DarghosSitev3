@@ -456,7 +456,15 @@ class Forum_Topics
 	
 	function GetLastPost()
 	{
-		return $this->_posts[count($this->_posts) - 1];
+		$query = Core::$DB->query("SELECT user_id, date FROM ".DB_WEBSITE_PREFIX."forum_posts WHERE `topic_id` = '{$this->_id}' ORDER BY date DESC LIMIT 1");
+		
+		$fetch = $query->fetch();
+		
+		$array = array();
+		$array["user_id"] = $fetch->user_id;
+		$array["date"] = $fetch->date;
+		
+		return $array;
 	}
 	
 	function IsPoll()
