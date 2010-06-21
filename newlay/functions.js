@@ -123,8 +123,6 @@ function requestSearchBox(value)
 		function(info){
 			if(info.length > 0){
 				$("#player_suggestions_list").html(info);
-				$("#player_suggestions").hide();
-				$("#player_suggestions").css({display:"block"});
 				$("#player_suggestions").show("slow");
 			}
 			else{

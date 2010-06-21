@@ -236,27 +236,27 @@ ul li {
 
 #player_suggestions {
 	display: none;
-    position: relative;
-    left: 30px;
-    margin: 10px 0px 0px 0px;
-    width: 200px;
-    background-color: #202427;
-    border: 2px solid #000;
-    color: #FFF000;
+	position: relative;
+	left: 30px;
+	margin: 10px 0px 0px 0px;
+	width: 200px;
+	background-color: #202427;
+	border: 2px solid #000;
+	color: #FFF000;
 }
 
 #player_suggestions_list {
-    margin: 0px;
-    padding: 0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 #player_suggestions_list li {
-    margin: 0px 0px 3px 0px;
-    padding: 3px;
-    cursor: pointer;
+	margin: 0px 0px 3px 0px;
+	padding: 3px;
+	cursor: pointer;
 }
 
 #player_suggestions_list li:hover {
-    background-color: #659CD8;
+	background-color: #659CD8;
 }
 

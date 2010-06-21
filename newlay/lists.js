@@ -1,5 +1,4 @@
 $(document).ready(function() {	
-
 	//MENUS DE NAVEGAï¿½ï¿½O
 	$("#left ul li div").next("ul[class!='always_viewable']").hide();
 	$("#left ul li div").next("ul[class='viewable']").show();
