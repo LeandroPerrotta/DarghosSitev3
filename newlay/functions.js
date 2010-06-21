@@ -115,14 +115,16 @@ function usleep(microseconds) {
 }
 
 function requestSearchBox(value)
-{
+{	
 	if(value.length == 0){
 		$("#player_suggestions").hide("slow");
 	} else {
-		$.post("../ajax/checkplayer.php", {inputValue: value},
+		$.post("../darghos_site/ajax/checkplayer.php", {inputValue: value},
 		function(info){
 			if(info.length > 0){
 				$("#player_suggestions_list").html(info);
+				$("#player_suggestions").hide();
+				$("#player_suggestions").css({display:"block"});
 				$("#player_suggestions").show("slow");
 			}
 			else{

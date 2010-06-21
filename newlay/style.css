@@ -235,6 +235,7 @@ ul li {
 }
 
 #player_suggestions {
+	display: none;
     position: relative;
     left: 30px;
     margin: 10px 0px 0px 0px;

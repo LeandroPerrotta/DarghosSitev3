@@ -64,7 +64,7 @@ else
 		echo "Impossivel se conectar ao banco de dados.";
 	}
 	
-	if(defined('SITE_ROOT_DIR'))
+	/*if(defined('SITE_ROOT_DIR'))
 	{	
 		if("http://".$_SERVER["HTTP_HOST"].SITE_ROOT_DIR != CONFIG_SITEEMAIL.SITE_ROOT_DIR)
 		{
@@ -77,7 +77,7 @@ else
 		{
 			Core::redirect(CONFIG_SITEEMAIL, false); 
 		}		
-	}
+	}*/
 	
 	$tools = new Tools();
 	Strings::Init();

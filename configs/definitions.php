@@ -91,4 +91,3 @@ define('BANTYPE_DELETION', 5);
 //Outras
 define('CHARACTERS_AJAX_REQUEST', 5); //numero de players retornados pela consulta ajax
 ?>
-
