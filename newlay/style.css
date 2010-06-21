@@ -233,3 +233,29 @@ ul li {
 	color: #00ff00;
 	font-weight: bold;
 }
+
+#player_suggestions {
+    position: relative;
+    left: 30px;
+    margin: 10px 0px 0px 0px;
+    width: 200px;
+    background-color: #202427;
+    border: 2px solid #000;
+    color: #FFF000;
+}
+
+#player_suggestions_list {
+    margin: 0px;
+    padding: 0px;
+}
+
+#player_suggestions_list li {
+    margin: 0px 0px 3px 0px;
+    padding: 3px;
+    cursor: pointer;
+}
+
+#player_suggestions_list li:hover {
+    background-color: #659CD8;
+}
+

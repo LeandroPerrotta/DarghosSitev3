@@ -113,3 +113,29 @@ function usleep(microseconds) {
     while (new Date() < (start + microseconds/1000)) {}
     return true;
 }
+
+function requestSearchBox(value)
+{
+	if(value.length == 0){
+		$("#player_suggestions").hide("slow");
+	} else {
+		$.post("../ajax/checkplayer.php", {inputValue: value},
+		function(info){
+			if(info.length > 0){
+				$("#player_suggestions_list").html(info);
+				$("#player_suggestions").show("slow");
+			}
+			else{
+				$("#player_suggestions").hide("slow");
+			}
+		}
+		);
+	}
+}
+
+function fillSearchBox(value)
+{
+	$("#player_name").val(value);
+	$("#player_suggestions").hide();
+}
+

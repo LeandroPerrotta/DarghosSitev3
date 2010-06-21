@@ -87,4 +87,8 @@ define('BANTYPE_NAMELOCK', 2);
 define('BANTYPE_BANISHMENT', 3);
 define('BANTYPE_NOTATION', 4);
 define('BANTYPE_DELETION', 5);
+
+//Outras
+define('CHARACTERS_AJAX_REQUEST', 5); //numero de players retornados pela consulta ajax
 ?>
+

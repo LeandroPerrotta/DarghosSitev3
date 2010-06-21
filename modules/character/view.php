@@ -426,7 +426,12 @@ $module .= '
 		
 		<p>
 			<label for="player_name">Nome</label><br />
-			<input name="player_name" size="40" type="text" value="" />
+			<input id="player_name" name="player_name" size="40" type="text" value="" onkeyup="requestSearchBox(this.value);" />
+
+			<div id="player_suggestions">
+				<div id="player_suggestions_list">
+				</div>
+			</div>
 		</p>		
 		
 		<div id="line1"></div>
