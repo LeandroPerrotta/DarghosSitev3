@@ -1,5 +1,5 @@
 <?
-if($_POST or $_GET)
+if($_POST["player_name"] || $_GET['name'])
 {		
 	$name = ($_POST) ? $_POST["player_name"] : $_GET['name'];
 
