@@ -79,7 +79,7 @@ if($notices)
 	foreach($notices as $topic)
 	{
 		$comment = '<p style="text-align: right;"><a href="?ref=forum.topic&v='.$topic->GetId().'">Comentar</a> ('.$topic->GetPostCount().' já comentaram!)</p>';
-		Core::sendMessageBox("<span style='float: left;'>".$topic->GetTitle()."</span> <span style='float: right;'>".Core::formatDate($topic->GetDate())."</span>", "{$topic->GetTopic()} {$comment}"); 	
+		Core::sendMessageBox("<span style='float: left;'>".$topic->GetTitle()."</span> <span style='float: right;'>".Core::formatDate($topic->GetDate())."</span>", "".nl2br($topic->GetTopic())." {$comment}"); 	
 	}
 }
 
