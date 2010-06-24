@@ -847,7 +847,7 @@ class Guilds
 	
 	function OnWar()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')");
+		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND `end_date` < '".time()."' AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')");
 		return (($query->numRows() != 0) ? true : false);
 	}
 	

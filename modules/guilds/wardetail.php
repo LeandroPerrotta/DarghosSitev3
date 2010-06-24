@@ -95,8 +95,17 @@ class View
 		$table->AddField(Core::formatDate($this->guild_war->GetDeclarationDate()));	
 		$table->AddRow();	
 		
-		$table->AddField("Termina em");
-		$table->AddField(Core::formatDate($this->guild_war->GetEndDate()) . " ({$endWar} dias)");	
+		if(time() < $this->guild_war->GetEndDate())
+		{
+			$table->AddField("Termina em");
+			$table->AddField(Core::formatDate($this->guild_war->GetEndDate()) . " ({$endWar} dias)");	
+		}
+		else
+		{
+			$table->AddField("Terminou em");
+			$table->AddField(Core::formatDate($this->guild_war->GetEndDate()));				
+		}
+		
 		$table->AddRow();	
 		
 		$guildFrags = "{$this->guild_war->GetGuildFrags()} / {$this->guild_war->GetFragLimit()}";
