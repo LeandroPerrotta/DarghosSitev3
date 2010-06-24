@@ -1,4 +1,8 @@
 <?
+if($_GET["p"] && $_GET["p"] > 24)
+	$_GET["p"] = 24;
+	
+
 if(isset($_POST['skill']))
 {
 	($_POST['show_onlyPeacers'] == 1) ? Core::redirect("?ref=community.highscores&skill={$_POST['skill']}&filter=1") : Core::redirect("?ref=community.highscores&skill={$_POST['skill']}");
@@ -57,23 +61,76 @@ $module .= '
 	</fieldset>
 </form>';
 
+$page = 0;
+
+if($_GET["p"])
+	$page = $_GET["p"];
+	
+$start = $page * 20;
+
 if($skill == "experience" or $skill == "maglevel")
 {
 	if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
-		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 AND lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." ORDER BY {$skill} DESC LIMIT 100");
+		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 AND lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." ORDER BY {$skill} DESC LIMIT {$start}, 20");
 	else
-		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 ORDER BY {$skill} DESC LIMIT 100");
+		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 ORDER BY {$skill} DESC LIMIT {$start}, 20");
 }
 else
 {
 	$skillid = $_skill[$skill];
 	if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
-		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 AND player.lastlogin < '".(time() - (60 * 60 * 24 * HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS))."' ORDER BY skill.value DESC LIMIT 100");
+		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 AND player.lastlogin < '".(time() - (60 * 60 * 24 * HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS))."' ORDER BY skill.value DESC LIMIT {$start}, 20");
 	else
-		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 ORDER BY skill.value DESC LIMIT 100");
+		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 ORDER BY skill.value DESC LIMIT {$start}, 20");
 }
 
 $character = new Character();
+
+$now = 0;
+$page = 0;
+
+if(!$_GET["p"])
+	$page = 1;
+else
+{
+	$now = $_GET["p"];
+	$page = $_GET["p"] + 1;
+}
+	
+$ultima = 24;
+
+$_skill = "";	
+	
+if($_GET['skill'])	
+	$_skill = "&skill={$_GET['skill']}";
+
+$module .= "<div>";
+
+if($now > 0)
+	$module .= "<span style='margin-top: 10px; float: left;'><a href='?ref=community.highscores{$_skill}'>Primeira</a> | <a href='?ref=community.highscores{$_skill}&p=".($now - 1)."'>Anterior</a></span>";
+
+$module .= "<span style='margin-top: 10px; float: right;'>";	
+
+$havenext = false;
+
+if($now != $ultima)
+{
+	$module .= "<a href='?ref=community.highscores{$_skill}&p=".($now + 1)."'>Proximo</a>";
+	$havenext = true;
+}		
+
+if($now < $ultima)
+{
+	if($havenext)
+	{
+		$module .= " | ";
+	}			
+	
+	$module .= "<a href='?ref=community.highscores{$_skill}&p={$ultima}'>Ultima</a>";
+}
+
+$module .= "</span>";
+$module .= "</div>";
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
@@ -82,9 +139,17 @@ $module .= "
 	</tr>	
 ";
 
+$page = 0;
+
+if($_GET["p"])
+	$page = $_GET["p"];
+	
+$start = $page * 20;	
+
+$n = $start + 1;	
+
 while($fetch = $query->fetch())
-{
-	$n++;	
+{		
 	$character->load($fetch->id);
 	
 	if($skill == "experience")
@@ -108,6 +173,8 @@ while($fetch = $query->fetch())
 			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> $online</td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
 		</tr>
 	";
+	
+	$n++;
 }
 
 $module .= "
