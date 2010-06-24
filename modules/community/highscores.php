@@ -104,10 +104,13 @@ $_skill = "";
 if($_GET['skill'])	
 	$_skill = "&skill={$_GET['skill']}";
 
+if($_GET['filter'])
+	$_filter = "&filter={$_GET["filter"]}";	
+	
 $module .= "<div>";
 
 if($now > 0)
-	$module .= "<span style='margin-top: 10px; float: left;'><a href='?ref=community.highscores{$_skill}'>Primeira</a> | <a href='?ref=community.highscores{$_skill}&p=".($now - 1)."'>Anterior</a></span>";
+	$module .= "<span style='margin-top: 10px; float: left;'><a href='?ref=community.highscores{$_skill}{$_filter}'>Primeira</a> | <a href='?ref=community.highscores{$_skill}{$_filter}&p=".($now - 1)."'>Anterior</a></span>";
 
 $module .= "<span style='margin-top: 10px; float: right;'>";	
 
@@ -115,7 +118,7 @@ $havenext = false;
 
 if($now != $ultima)
 {
-	$module .= "<a href='?ref=community.highscores{$_skill}&p=".($now + 1)."'>Proximo</a>";
+	$module .= "<a href='?ref=community.highscores{$_skill}{$_filter}&p=".($now + 1)."'>Proximo</a>";
 	$havenext = true;
 }		
 
@@ -126,7 +129,7 @@ if($now < $ultima)
 		$module .= " | ";
 	}			
 	
-	$module .= "<a href='?ref=community.highscores{$_skill}&p={$ultima}'>Ultima</a>";
+	$module .= "<a href='?ref=community.highscores{$_skill}{$_filter}&p={$ultima}'>Ultima</a>";
 }
 
 $module .= "</span>";
