@@ -288,7 +288,6 @@ else
 				break;	
 
 				case "invitereply":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 
