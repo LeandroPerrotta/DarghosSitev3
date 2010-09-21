@@ -307,7 +307,6 @@ else
 				break;	
 
 				case "leave":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;	
 					
