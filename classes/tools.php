@@ -89,7 +89,7 @@ class t_Vocation
 		9 => "Warmaster Sorcerer",
 		10 => "Warden Druid",
 		11 => "Holy Paladin",
-		12 => "Berserk Knight",
+		12 => "Berserk Warrior",
 	);
 	
 	function t_Vocation($vocation_id = null)
