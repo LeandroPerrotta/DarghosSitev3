@@ -85,7 +85,11 @@ class t_Vocation
 		5 => "Master Sorcerer",
 		6 => "Elder Druid",
 		7 => "Royal Paladin",
-		8 => "Elite Knight"
+		8 => "Elite Knight",
+		9 => "Warmaster Sorcerer",
+		10 => "Warden Druid",
+		11 => "Holy Paladin",
+		12 => "Berserk Knight",
 	);
 	
 	function t_Vocation($vocation_id = null)

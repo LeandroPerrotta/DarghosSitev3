@@ -17,6 +17,10 @@ $_vocationid[5] = "Master Sorcerer";
 $_vocationid[6] = "Elder Druid";
 $_vocationid[7] = "Royal Paladin";
 $_vocationid[8] = "Elite Knight";	
+$_vocationid[9] = "Warmaster Sorcerer";	
+$_vocationid[10] = "Warden Druid";	
+$_vocationid[11] = "Holy Paladin";	
+$_vocationid[12] = "Berserk Knight";	
 
 $_townid = array(
 	1 => array("name" => "Quendor", 			"canCreate" => 0, 		"premium" => 0),

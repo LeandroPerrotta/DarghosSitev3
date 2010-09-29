@@ -65,6 +65,11 @@ if(is_array($player_list))
 			$charOptions .= " - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
 		}
 		
+		if(ENABLE_REBORN_SYSTEM == 1)
+		{
+			$npcOptions .= "<a href='?ref=character.reborn&name={$character->getName()}'>Baron Samedi</a>";
+		}
+		
 		if($character->deletionStatus())
 		{
 			$charStatus[] = "<font color='red'>será deletado em: ".Core::formatDate($character->deletionStatus())."</font>";
@@ -110,6 +115,9 @@ if(is_array($player_list))
 						<tr>	
 							<td><b>Ações</b></td> <td>{$charOptions}</td>
 						</tr>
+						<tr>	
+							<td><b>NPCs</b></td> <td>{$npcOptions}</td>
+						</tr>						
 					</table>
 				</div>
 			</td>

@@ -158,6 +158,12 @@ else
 						$patch['file'] = $topic;
 					}	
 				break;				
+				
+				case "reborn":
+					$needPremium = true;
+					$needLogin = true;		
+					$patch['file'] = $topic;	
+				break;				
 	
 				default:
 					$patch['dir'] = "errors";

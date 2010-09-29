@@ -133,6 +133,21 @@ function requestSearchBox(value)
 	}
 }
 
+function requestRebornPlayer(value)
+{	
+	$.post("../ajax/rebornplayer.php", {inputValue: value},
+		function(info){
+		
+			if(Number(info) == 1){
+				return 1;
+			}
+			else{
+				return 0;
+			}
+		}
+	);
+}
+
 function fillSearchBox(value)
 {
 	$("#player_name").val(value);

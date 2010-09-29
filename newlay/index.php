@@ -10,7 +10,7 @@
 		<link href="default.css" media="screen" rel="stylesheet" type="text/css" />
 		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>functions.js" type="text/javascript"></script>
-		<script src="<?php echo $layoutDir; ?>lists.js" type="text/javascript"></script>		
+		<script src="<?php echo $layoutDir; ?>lists.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>ext.js" type="text/javascript"></script>
 		<script src="<?php echo $layoutDir; ?>ping.js" type="text/javascript"></script>				
 	

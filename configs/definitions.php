@@ -31,6 +31,7 @@ define('USEREMOTECONNECTIONS', 0);
 define('STORAGE_SHOPSYS_ITEM_ID', 8985);
 define('STORAGE_SHOPSYS_ITEM_COUNT', 8986);
 define('STORAGE_SHOPSYS_ID', 8987);
+define('STORAGE_REBORNS', 8899);
 
 define('ENCRYPTION_TYPE', "md5");
 
@@ -46,6 +47,7 @@ define('SHOW_DEATHS_DAYS_AGO', 30); //Limite de mortes dias atrz que sero exibid
 define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 0); //Possibilidade de ignorar personagens no rank que no entraram no jogo a X dias
 define('HIDE_FORUMLINKS', 0); //Esconde os links ligados a forums, como o Comentar nas noticias.
 define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
+define('ENABLE_REBORN_SYSTEM', 1); //Ativa o sistema de reborn
 /*
 define('SHOW_PREMIUMFEATURES', 1); //Exibi as opes de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)
 */
