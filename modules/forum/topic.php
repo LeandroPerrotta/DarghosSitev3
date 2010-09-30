@@ -402,10 +402,8 @@ class View
 				//o character escolhido não existe mais... vamos pegar o personagem com mais level entao...
 				if(!$user_character->load($user_post->GetPlayerId()))
 				{
-					$user_acc = new Account();
-					$user_acc->load($user_post->GetAccountId());
-					
-					$cid = $user_acc->getHighCharacter();
+					$user_acc = $user_post->GetAccount();
+					$cid = $user_acc->getHighCharacter(true);
 					
 					$user_character->load($cid);
 				}
