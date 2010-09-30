@@ -399,7 +399,16 @@ class View
 				$user_post->Load($post["user_id"]);
 				
 				$user_character = new Character();
-				$user_character->load($user_post->GetPlayerId());
+				//o character escolhido não existe mais... vamos pegar o personagem com mais level entao...
+				if(!$user_character->load($user_post->GetPlayerId()))
+				{
+					$user_acc = new Account();
+					$user_acc->load($user_post->GetAccountId());
+					
+					$cid = $user_acc->getHighCharacter();
+					
+					$user_character->load($cid);
+				}
 				
 				$group = new t_Group($user_character->getGroup());				
 				
