@@ -133,6 +133,7 @@ define("LMSG_FORUM_POLL_TIME_EXPIRED", 130);
 define("LMSG_FORUM_POLL_VOTE_DONE", 131);
 define("LMSG_FORUM_POST_TOO_LONG", 132);
 define("LMSG_FORUM_POST_SENT", 133);
+define("LMSG_FORUM_USER_BANNISHED", 134);
 
 class Lang extends Lang_Messages{
 	

@@ -119,6 +119,38 @@ class t_Vocation
 	}
 }
 
+class t_ForumBans
+{
+	private $_type;
+	private $_type_str = array(
+		0 => "24 horas",
+		1 => "7 dias",
+		2 => "30 dias",
+		3 => "indeterminado"
+	);
+	
+	function t_ForumBans($_type = null)
+	{
+		if($_type)
+			$this->Set($_type);
+	}
+	
+	function Set($_type)
+	{
+		$this->_type = $_type;
+	}
+	
+	function Get()
+	{
+		return $this->_type;
+	}
+	
+	function GetByName()
+	{
+		return $this->_type_str[$this->_type];
+	}
+}
+
 
 class Tools
 {		

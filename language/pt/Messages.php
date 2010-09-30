@@ -361,6 +361,12 @@ class Lang_Messages
 			<p>O seu post foi enviado com sucesso para este topico!</p>
 			<p>Obrigado por participar!</p>
 		";				
+		
+		self::$messages[LMSG_FORUM_USER_BANNISHED] = "
+			<p>Caro usuario,</p>
+			<p>Seu usuario está bloqueado de participar de nossos topicos e enquetes desde o dia @v1@ com duração <b>@v2@</b>.</p>
+			<p>Este bloqueio foi aplicado por @v3@ pelo seguinte motivo:<br><i>@v4@</i></p>
+		";				
 	}
 }
 ?>

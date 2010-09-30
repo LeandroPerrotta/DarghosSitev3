@@ -6,9 +6,15 @@ define("FORUM_TOPIC_FLAGS_IS_NOTICE", 2);
 define("FORUM_POLLS_FLAGS_IS_MULTIPLE_SELECTION", 1);
 define("FORUM_POLLS_FLAGS_IS_ONLY_FOR_PREMIUM", 2);
 
+define("FORUM_BAN_DAY", 0);
+define("FORUM_BAN_7_DAYS", 1);
+define("FORUM_BAN_30_DAYS", 2);
+define("FORUM_BAN_PERSISTENT", 3);
+
 class Forum_User
 {
 	private $_id, $_accountid, $_playerid;
+	private $_bans = array();
 	private $account;
 	
 	function Forum_User($id = null)
@@ -140,6 +146,61 @@ class Forum_User
 	function SetPollVote($option_id, $public)
 	{
 		Core::$DB->query("INSERT INTO `".DB_WEBSITE_PREFIX."forum_user_votes` values ('{$this->_id}', '{$option_id}', '".time()."', '{$public}')");		
+	}
+	
+	function AddBan($type, $date, $reason, $author)
+	{
+		Core::$DB->query("INSERT INTO `".DB_WEBSITE_PREFIX."forum_bans` (`user_id`, `date`, `type`, `author`, `reason`) values ('{$this->_id}', '{$date}', '{$type}', '{$author}', '{$reason}')");	
+	}
+	
+	function LoadBans()
+	{
+		$query = Core::$DB->query("SELECT `date`,`type`,`reason`,`author` FROM `".DB_WEBSITE_PREFIX."forum_bans` WHERE `user_id` = '{$this->_id}' ORDER BY `date` DESC");
+		if($query && $query->numRows() == 0)
+		{
+			return false;
+		}
+
+		for($i = 0; $i < $query->numRows(); ++$i)
+		{	
+			$fetch = $query->fetch();
+			$this->_bans[] = array(
+				"date" => "{$fetch->date}",
+				"type" => "{$fetch->type}",
+				"reason" => "{$fetch->reason}",
+				"author" => "{$fetch->author}"
+			);
+		}		
+
+		return true;
+	}
+	
+	function IsBannished()
+	{
+		if(!$this->LoadBans())
+			return false;
+			
+		foreach($this->_bans as $key => $values)
+		{
+			if($values["type"] == FORUM_BAN_DAY && $values["date"] + (60 * 60 * 24) > time())
+			{
+				return $values;
+			}
+			elseif($values["type"] == FORUM_BAN_7_DAYS && $values["date"] + (60 * 60 * 24 * 7) > time())
+			{
+				return $values;
+			}
+			elseif($values["type"] == FORUM_BAN_30_DAYS && $values["date"] + (60 * 60 * 24 * 30) > time())
+			{
+				return $values;
+			}
+			elseif($values["type"] == FORUM_BAN_PERSISTENT)
+			{
+				return $values;
+			}
+		}
+		
+		return false;
 	}
 }
 

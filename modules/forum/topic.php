@@ -7,9 +7,12 @@ class View
 	//custom variables
 	private $loggedAcc, $topic, $user;	
 	
+	//html fields
+	private $_bantype, $_banreason;
+	
 	function View()
 	{
-		if(!$_GET['v'] && !$_GET['removemsg'])
+		if(!$_GET['v'] && !$_GET['removemsg'] && !$_GET['banuser'])
 		{
 			return;
 		}
@@ -34,12 +37,39 @@ class View
 			$this->loggedAcc->load($_SESSION['login'][0]);
 		}		
 		
+		if($_GET['banuser'])
+		{
+			$this->_bantype = new HTML_SelectBox();
+			$this->_bantype->SetName("bantype");
+			$this->_bantype->SetSize(250);
+			$this->_bantype->AddOption("24 horas sem postar", FORUM_BAN_DAY);
+			$this->_bantype->AddOption("7 dias sem postar", FORUM_BAN_7_DAYS);
+			$this->_bantype->AddOption("30 dias sem postar", FORUM_BAN_30_DAYS);
+			$this->_bantype->AddOption("Proibido de postar para sempre", FORUM_BAN_PERSISTENT);
+			
+			$this->_banreason = new HTML_Input();
+			$this->_banreason->IsTextArea();
+			$this->_banreason->SetName("banreason");		
+		}
+		
 		if($_POST)
 		{
+			if($_GET['banuser'] && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+			{
+				if(!$this->PostBanUser())
+				{
+					Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				}			
+
+				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				
+				return true;
+			}
+			
 			if(!$this->Post())
 			{
 				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
-			}
+			}			
 			else
 			{
 				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
@@ -48,7 +78,13 @@ class View
 				$module .= "<p><a class='buttonstd' href='?ref=forum.topic&v={$_GET['v']}'>Voltar</a></p>";				
 				return true;
 			}
-		}		
+		}	
+
+		if($this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER && $_GET['banuser'])
+		{
+			$this->DrawBanUser();
+			return true;
+		}	
 		
 		$this->Draw();
 		return true;		
@@ -113,6 +149,21 @@ class View
 				return false;				
 			}
 			
+			$ban = $this->user->IsBannished();
+			
+			if($ban)
+			{
+				$t_BanType = new t_ForumBans($ban["type"]);
+				
+				$bannisher = new Forum_User();
+				$bannisher->Load($ban["author"]);
+				$bannisher_p = new Character();
+				$bannisher_p->load($bannisher->GetPlayerId());
+				
+				$this->_message = Lang::Message(LMSG_FORUM_USER_BANNISHED, Core::formatDate($ban["date"]), $t_BanType->GetByName(), $bannisher_p->getName(), $ban["reason"]);
+				return false;					
+			}
+			
 			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetId());
 			
 			$this->_message = Lang::Message(LMSG_FORUM_POST_SENT);
@@ -164,6 +215,48 @@ class View
 		$this->user->SetPollVote($_POST["poll_option"], $visible);
 		$this->_message = Lang::Message(LMSG_FORUM_POLL_VOTE_DONE);
 		return true;
+	}
+	
+	function PostBanUser()
+	{
+		$user = new Forum_User();
+		if(!$user->Load($_GET["banuser"]))
+		{
+			$this->_message = "Usuario não encontrado!";
+			return false;
+		}
+		
+		$user->AddBan($_POST['bantype'], time(), $_POST['banreason'], $this->user->GetId());
+		$this->_message = "Punição aplicada ao usuario com sucesso!";
+
+		return true;
+	}
+	
+	function DrawBanUser()
+	{
+		global $module;
+		
+		$module .=	"
+		<form action='' method='post'>
+			<fieldset>
+				
+				<p>
+					<label for='bantype'>Tipo de punição</label><br />
+					{$this->_bantype->Draw()}
+				</p>					
+				
+				<p>
+					<label for='banreason'>Motivo da punição</label><br />
+					{$this->_banreason->Draw()}
+				</p>				
+				
+				<p id='line'></p>
+				
+				<p>
+					<input class='button' type='submit' value='Enviar' />
+				</p>
+			</fieldset>
+		</form>";		
 	}
 	
 	function Draw()
@@ -331,7 +424,7 @@ class View
 				if($this->user->GetAccount()->getGroup() >= GROUP_COMMUNITYMANAGER)
 				{
 					$string .= "					
-					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a></div>";
+					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a> - <a href='?ref=forum.topic&banuser={$user_post->GetId()}'>Punir</a></div>";
 				}
 				
 				$string .= "
