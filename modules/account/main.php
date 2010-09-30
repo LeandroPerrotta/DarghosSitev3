@@ -42,6 +42,7 @@ if(is_array($player_list))
 		unset($charStatus);
 		unset($statusString);
 		unset($charOptions);
+		unset($npcOptions);
 		
 		$invite = $character->getInvite();
 		
