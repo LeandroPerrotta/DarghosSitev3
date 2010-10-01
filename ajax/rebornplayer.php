@@ -21,7 +21,7 @@ $db = new MySQL();
 $db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);
 
 //Faz a query e retorna codigo html
-$query = $db->query("SELECT `id`, `name` FROM `players` WHERE `name` = '{$inputValue}' AND `online` = '0' AND `level` >= 300 AND `vocation` > '4' AND `vocation` <= '8'");
+$query = $db->query("SELECT `id`, `name` FROM `players` WHERE `name` = '{$inputValue}' AND `online` = '0' AND `level` >= ".FIRST_REBORN_LEVEL." AND `vocation` > '4' AND `vocation` <= '8'");
 if($query && $query->numRows() > 0){	
 	$db->query("UPDATE `players` SET `level` = '8', `experience` = '4200', `health` = '185', `healthmax` = '185', `mana` = '35', `manamax` = '35', `cap` = '470', `town_id` = '6', `posx` = '0', `posy` = '0', `posz` = '0', `vocation` = (`vocation` + 4) WHERE `name` = '{$inputValue}'");
 	

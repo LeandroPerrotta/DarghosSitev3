@@ -95,9 +95,9 @@ class View
 			)
 		);
 		
-		if($this->character->getLevel() < 300)
+		if($this->character->getLevel() < FIRST_REBORN_LEVEL)
 			$this->_talk[2] = array(
-				"text" => "Como se sabe, todos possuem uma alma. Eu tenho o poder de fortificar almas, entretanto para isto é necessario um terrivel sacrificio e você não possui força fisica sulficiente para aguentar isto. Você precisa se fortalecer fisicamente até o level 300 para poder fortalecer sua alma.",
+				"text" => "Como se sabe, todos possuem uma alma. Eu tenho o poder de fortificar almas, entretanto para isto é necessario um terrivel sacrificio e você não possui força fisica sulficiente para aguentar isto. Você precisa se fortalecer fisicamente até o level ".FIRST_REBORN_LEVEL." para poder fortalecer sua alma.",
 				"options" => array(
 					array("text" => "Ir embora.", "topic" => "leave")
 				)			

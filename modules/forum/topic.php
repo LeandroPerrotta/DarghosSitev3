@@ -399,19 +399,29 @@ class View
 				$user_post->Load($post["user_id"]);
 				
 				$user_character = new Character();
+				
+				$username = "Desconhecido";
+				
 				//o character escolhido não existe mais... vamos pegar o personagem com mais level entao...
 				if(!$user_character->load($user_post->GetPlayerId()))
 				{
 					$user_acc = $user_post->GetAccount();
-					$cid = $user_acc->getHighCharacter(true);
-					
-					$user_character->load($cid);
+					if(count($user_acc->getCharacterList()) > 0)
+					{
+						$cid = $user_acc->getHighCharacter(true);
+						$user_character->load($cid);
+						$username = $user_character->getName();
+					}
 				}
-				
+				else
+				{
+					$username = $user_character->getName();
+				}
+
 				$group = new t_Group($user_character->getGroup());				
 				
 				$string = "
-				<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
+				<a href='?ref=character.view&name={$username}'>{$username}</a><br>
 				{$group->GetByName()}
 				";
 				
