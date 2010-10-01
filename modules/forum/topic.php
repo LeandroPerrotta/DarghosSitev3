@@ -400,7 +400,7 @@ class View
 				
 				$user_character = new Character();
 				
-				$username = "Desconhecido";
+				$nochar = false;
 				
 				//o character escolhido não existe mais... vamos pegar o personagem com mais level entao...
 				if(!$user_character->load($user_post->GetPlayerId()))
@@ -410,20 +410,29 @@ class View
 					{
 						$cid = $user_acc->getHighCharacter(true);
 						$user_character->load($cid);
-						$username = $user_character->getName();
 					}
-				}
-				else
-				{
-					$username = $user_character->getName();
+					else
+					{
+						$nochar = true;
+					}
 				}
 
 				$group = new t_Group($user_character->getGroup());				
 				
-				$string = "
-				<a href='?ref=character.view&name={$username}'>{$username}</a><br>
-				{$group->GetByName()}
-				";
+				if(!$nochar)
+				{
+					$string = "
+					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
+					{$group->GetByName()}
+					";
+				}
+				else
+				{
+					$string = "
+					Desconhecido<br>
+					Conta sem personagem
+					";
+				}
 				
 				$table->AddField($string, 20, "height: 90px; vertical-align: top;");
 				
