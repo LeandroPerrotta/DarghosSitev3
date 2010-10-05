@@ -2,6 +2,7 @@
 class Monsters
 {
 	private $db, $data = array(), $element;
+	static private $instance;
 
 	function __construct()
 	{
@@ -14,6 +15,18 @@ class Monsters
 			die("Banco de dados de monstros não localizado.");	
 	}
 
+	static function GetInstance()
+	{
+		if(self::$_instance)
+		{
+			return self::$_instance;
+		}
+		
+		$class = __CLASS__;
+		self::$_instance = new $class;
+		return self::$_instance;
+	}	
+	
 	function load($name)
 	{
 		foreach($this->element->monster as $monster)

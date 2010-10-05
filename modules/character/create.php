@@ -6,6 +6,8 @@ if($_POST)
 	
 	$character = new Character();
 
+	$monsters = Monsters::GetInstance();
+	
 	if(!$_POST["player_name"] or !$_POST["player_vocation"] or !$_POST["player_sex"])
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
@@ -17,6 +19,10 @@ if($_POST)
 	elseif($character->loadByName($_POST["player_name"]))
 	{
 		$error = Lang::Message(LMSG_CHARACTER_NAME_ALREADY_USED);
+	}
+	elseif($monsters->load($_POST["player_name"]))
+	{
+		$error = Lang::Message(LMSG_WRONG_NAME);
 	}
 	elseif(count($account->getCharacterList()) == 10)
 	{

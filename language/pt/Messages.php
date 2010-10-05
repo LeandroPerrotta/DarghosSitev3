@@ -31,7 +31,7 @@ class Lang_Messages
 		self::$messages[LMSG_CHANGEEMAIL_ALREADY_HAVE_REQUEST] = "Esta conta já possui uma mudança de e-mail agendada.";
 		self::$messages[LMSG_CHANGEEMAIL_NOTHING] = "A sua conta não possui uma mudança de endereço de e-mail agendada para ser cancelada.";
 		self::$messages[LMSG_CHARACTER_WRONG] = "Este personagem não existe em nosso banco de dados.";
-		self::$messages[LMSG_WRONG_NAME] = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
+		self::$messages[LMSG_WRONG_NAME] = "Este nome possui formatação ilegal ou está reservado. Tente novamente com outro nome.";
 		self::$messages[LMSG_CHARACTER_NAME_ALREADY_USED] = "O nome escolhido já esta em uso por outro personagem no jogo. Escolha outro nome.";
 		self::$messages[LMSG_CHARACTER_NOT_TO_DELETION] = "Este personagem não está marcado para ser deletado.";
 		self::$messages[LMSG_CHARACTER_ALREADY_TO_DELETE] = "Este personagem já está marcado para ser deletado.";
