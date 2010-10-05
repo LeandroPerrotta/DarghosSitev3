@@ -2,7 +2,7 @@
 class Monsters
 {
 	private $db, $data = array(), $element;
-	static private $instance;
+	static private $_instance;
 
 	function __construct()
 	{
