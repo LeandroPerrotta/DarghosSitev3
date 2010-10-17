@@ -40,6 +40,11 @@ class Monsters
 			return false;
 	}
 	
+	function getList()
+	{
+		return $this->element->monster;
+	}
+	
 	function get($field)
 	{
 		return $this->data[$field];

@@ -19,7 +19,7 @@ if($post)
 				$character = new Character();
 				$character->load($charId);
 				
-				if($character->getLevel() >= 100)
+				if($character->getLevel() >= 50)
 				{
 					$charsLevel100++;
 				}
@@ -46,19 +46,19 @@ if($post)
 	
 	if($account->getPassword() != Strings::encrypt($_POST['account_password']))
 	{
-		$error = "Confirma��o da senha falhou.";
+		$error = "Confirmaçãoo da senha falhou.";
 	}
 	elseif($premtest)
 	{
-		$error = "A sua conta j� recebeu este beneficio no dia {Core::formatDate($premtest)}. Somente � permitido receber este beneficio uma vez por conta.";
+		$error = "A sua conta já recebeu este beneficio no dia " . Core::formatDate($premtest) . ". Somente é permitido receber este beneficio uma vez por conta.";
 	}	
 	elseif($havePremiums != 0)
 	{
-		$error = "Voc� j� obteve uma Conta Premium da forma tradicional. Este recurso s� est� disponivel a jogadores que jamais possuiram uma Conta Premium.";
+		$error = "Você já obteve uma Conta Premium da forma tradicional. Este recurso só esta disponivel a jogadores que jamais possuiram uma Conta Premium.";
 	}
 	elseif($charsLevel100 == 0)
 	{
-		$error = "Para receber este recurso � necessario que voc� tenha atingido o level 100 em algum dos personagens de sua conta.";
+		$error = "Para receber este recurso é necessario que você tenha atingido o level 50 em algum dos personagens de sua conta.";
 	}			
 	else
 	{		
@@ -66,7 +66,7 @@ if($post)
 		
 		$success = "
 		<p>Caro jogador,</p>
-		<p>A sua conta recebeu o beneficio de Premium Test com sucesso! Agora voc� possui ".PREMTEST_DAYS." gratuitos para conhecer o Darghos a vontade!</p>
+		<p>A sua conta recebeu o beneficio de Premium Test com sucesso! Agora você possui ".PREMTEST_DAYS." gratuitos para conhecer o Darghos a vontade!</p>
 		<p>Tenha um bom jogo!</p>
 		";
 	}
