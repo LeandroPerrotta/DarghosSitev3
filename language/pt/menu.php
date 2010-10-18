@@ -7,7 +7,11 @@ $menu['ABOUT'] = "Sobre o ".CONFIG_SITENAME."";
 $menu['FAQ'] = "".CONFIG_SITENAME." FAQ";
 $menu['HOW_PLAY'] = "Como Jogar?";
 $menu['FANSITES'] = "Fansites";
-$menu['LIBRARY'] = "Darghopédia";
+
+$menu['DARGHOPEDIA'] = "Darghopédia";
+
+$menu['DARGHOPEDIA_REBORN'] = "Reborn";
+$menu['DARGHOPEDIA_QUESTS'] = "Quests & Dungeons";
 
 $menu['ACCOUNTS'] = "Contas";
 $menu['ACCOUNT.REGISTER'] = "Registrar-se";

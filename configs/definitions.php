@@ -39,6 +39,8 @@ define('ENCRYPTION_TYPE', "md5");
 define('DBPAGES_HOWPLAY', 1);
 define('DBPAGES_ABOUT', 2);
 define('DBPAGES_PREMIUMFEATURES', 3);
+define('DBPAGES_DARGHOPEDIA_REBORN', 4);
+define('DBPAGES_DARGHOPEDIA_QUESTS', 5);
 
 define('PREMTEST_DAYS', 10); //Dias que os jogadores podero receber de PremTest, para quem atingir level 100 e nunca ter possuido uma premium account.
 define('DAYS_TO_CHANGE_EMAIL', 15); //Dias de espera necessarios para uma mudana de e-mail agendada

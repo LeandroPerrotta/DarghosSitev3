@@ -121,6 +121,28 @@ else
 			
 		break;
 		
+		case "darghopedia":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "reborn":
+					$patch['file'] = $topic;
+				break;
+				
+				case "quests":
+					$patch['file'] = $topic;
+				break;						
+	
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;			
+		
 		case "character":
 		
 			$patch['dir'] = $module;
