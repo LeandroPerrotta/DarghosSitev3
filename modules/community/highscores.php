@@ -1,22 +1,29 @@
 <?
+$filter_onlyOnIOP = false;
+$filter_hideRebornPlayers = false;
+$filter_inactivePlayers = false;
+
+if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
+	$filter_inactivePlayers = true;
+
 if($_GET["p"] && $_GET["p"] > 24)
 	$_GET["p"] = 24;
 	
 
 if(isset($_POST['skill']))
 {
-	($_POST['show_onlyPeacers'] == 1) ? Core::redirect("?ref=community.highscores&skill={$_POST['skill']}&filter=1") : Core::redirect("?ref=community.highscores&skill={$_POST['skill']}");
+	Core::redirect("?ref=community.highscores&skill={$_POST['skill']}");
 }
 
+($_POST['show_onlyPeacers'] == 1) ? setCookie("filter_onlyOnIOP", 1) : setCookie("filter_onlyOnIOP", 0);
+($_POST['hide_rebornPlayers'] == 1) ? setCookie("filter_hideRebornPlayers", 1) : setCookie("filter_hideRebornPlayers", 0);
+
+($_COOKIE['filter_onlyOnIOP'] == 1) ? $filter_onlyOnIOP = true : null;
+($_COOKIE['filter_hideRebornPlayers'] == 1) ? $filter_hideRebornPlayers = true : null;
+
 if(isset($_GET['skill']))
-{
-	if(isset($_GET['filter']))
-	{
-		$filter = $_GET['filter'];	
-	}
-	
-	$skill = $_GET['skill'];
-	
+{	
+	$skill = $_GET['skill'];	
 }
 else
 {
@@ -50,7 +57,8 @@ $module .= '
 
 		<p>		
 			<label for="filter">Filtros</label><br />
-			<input '.((isset($filter) ? 'checked="checked"' : null)).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace.
+			<input '.(($filter_onlyOnIOP) ? 'checked="checked"' : null).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace. <br>
+			<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hide_rebornPlayers" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).
 		</p>		
 		
 		<div id="line1"></div>
@@ -70,18 +78,36 @@ $start = $page * 20;
 
 if($skill == "experience" or $skill == "maglevel")
 {
-	if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
-		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 AND lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." ORDER BY {$skill} DESC LIMIT {$start}, 20");
-	else
-		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 ORDER BY {$skill} DESC LIMIT {$start}, 20");
+	$query = $db->query("
+		SELECT 
+			id 
+		FROM 
+			players 
+		WHERE 
+			".(($filter_onlyOnIOP) ? 
+				"town_id = 6 AND" : null)."
+			".(($filter_inactivePlayers) ? 
+				" lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." AND " : null)."
+			group_id < 3 ORDER BY ".((!$filter_hideRebornPlayers && $skill == "experience") ? "reborn_level DESC," : null)." {$skill} DESC LIMIT {$start}, 20");
 }
 else
 {
 	$skillid = $_skill[$skill];
-	if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
-		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 AND player.lastlogin < '".(time() - (60 * 60 * 24 * HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS))."' ORDER BY skill.value DESC LIMIT {$start}, 20");
-	else
-		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 ORDER BY skill.value DESC LIMIT {$start}, 20");
+	$query = $db->query("
+		SELECT 
+			player.id 
+		FROM 
+			players as player, player_skills as skill 
+		WHERE 
+			".(($filter_onlyOnIOP) ? 
+				"player.town_id = 6 AND" : null)."
+			".(($filter_inactivePlayers) ? 
+				"player.lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." AND " : null)."				
+			player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3
+		ORDER BY 
+			skill.value DESC 
+		LIMIT 
+			{$start}, 20");
 }
 
 $character = new Character();
@@ -104,8 +130,8 @@ $_skill = "";
 if($_GET['skill'])	
 	$_skill = "&skill={$_GET['skill']}";
 
-if($_GET['filter'])
-	$_filter = "&filter={$_GET["filter"]}";	
+if($_GET['only_peacers'])
+	$_filter = "&filter={$_GET["only_peacers"]}";	
 	
 $module .= "<div>";
 
@@ -138,7 +164,7 @@ $module .= "</div>";
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
 	<tr>
-		<th width='5%'>&nbsp;</th> <th width='50%'>Nome</th> <th>Vocação</th> <th>Nível</th> ".(($skill == "experience") ? "<th>Pontos</th>" : null)."
+		<th width='5%'>&nbsp;</th> <th width='50%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> ".(($skill == "experience") ? "<th>Pontos</th>" : null)."
 	</tr>	
 ";
 

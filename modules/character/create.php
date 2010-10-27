@@ -33,6 +33,9 @@ if($_POST)
 		$vocation = new t_Vocation();
 		$vocation->SetByName($_POST["player_vocation"]);
 		
+		if($vocation->Get() > 4)
+			$vocation->Set(1);
+		
 		$sex = new t_Sex();
 		$sex->SetByName($_POST["player_sex"]);		
 		

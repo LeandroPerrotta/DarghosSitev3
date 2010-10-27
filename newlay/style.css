@@ -228,6 +228,12 @@ ul li {
 	margin-bottom: 6px;
 }
 
+.line_1{
+	border-bottom: 1px solid #cbc9c8;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+
 .online{
 	font-size: 8px;
 	color: #00ff00;
