@@ -686,5 +686,10 @@ class Character
 	{
 		return $this->data['posz'];
 	}	
+
+	function getStamina()
+	{
+		return $this->data['stamina'];
+	}	
 }
 ?>
