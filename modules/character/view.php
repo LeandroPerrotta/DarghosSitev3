@@ -169,7 +169,7 @@ if($_POST["player_name"] || $_GET['name'])
 					<th colspan='2'>Informações Avançadas</th>
 				</tr>
 				<tr>
-					<td width='25%'><b>Horas de Stamina</b></td><td>".($character->getStamina() > 0) ? $character->getStamina() / 1000 / 60 / 60 / 42 : "Nenhuma"."</td>
+					<td width='25%'><b>Horas de Stamina</b></td><td>".(($character->getStamina() > 0) ? $character->getStamina() / 1000 / 60 / 60 / 42 : "Nenhuma")."</td>
 				</tr>	
 				<tr>
 					<td width='25%'><b>Numero da Conta</b></td><td>{$account->getId()}</td>
