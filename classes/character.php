@@ -525,6 +525,11 @@ class Character
 		$this->data['created'] = $value;
 	}
 	
+	function setStamina($value)
+	{
+		$this->data['stamina'] = $value;
+	}
+	
 	function setHidden($value)
 	{
 		$this->data['hidden'] = $value;

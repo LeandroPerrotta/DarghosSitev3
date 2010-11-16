@@ -4,6 +4,7 @@ class HTML_Input
 	private $_name, $_id, $_value, $_size = 40, $_length, $_type = "text";
 	private $_isPassword = false, $_isDisabled = false, $_isWritable = true, $_isDefault = false;
 	private $_isTextArea = false, $_textAreaRows = 8, $_textAreaColums = 30;
+	private $_label = "";
 	private $_event_onkeypress;
 	
 	function HTML_Input()
@@ -31,6 +32,11 @@ class HTML_Input
 		$this->_length = $length;
 	}
 	
+	function SetLabel($label)
+	{
+		$this->_label = $label;
+	}
+	
 	function SetSize($size)
 	{
 		$this->_size = $size;
@@ -55,6 +61,11 @@ class HTML_Input
 	{
 		$this->_type = "radio";
 	}	
+	
+	function IsHidden()
+	{
+		$this->_type = "hidden";
+	}
 	
 	function IsDefault()
 	{
@@ -96,15 +107,23 @@ class HTML_Input
 	
 	function Draw()
 	{		
+		$string = "";
+		
+		if($this->_label && $this->_type != "radio" && $this->_type != "checkbox")
+		{
+			$string .= "<label for='{$this->_name}'>{$this->_label}</label></br>";
+		}
+		
 		if(!$this->_isTextArea)
 		{
-			$string = "<input name='{$this->_name}' value='{$this->_value}' size='{$this->_size}'";	
+			$string .= "<input name='{$this->_name}' value='{$this->_value}' size='{$this->_size}'";	
 	
 			switch($this->_type)
 			{
 				case "text": 		$string .= " type='text'"; 			break;
 				case "password": 	$string .= " type='password'"; 		break;
 				case "radio": 		$string .= " type='radio'"; 		break;
+				case "hidden": 		$string .= " type='hidden'"; 		break;
 				case "checkbox": 	$string .= " type='checkbox'"; 		break;
 				case "submit": 		$string .= " type='submit' class='button'"; 		break;
 			}
@@ -127,11 +146,19 @@ class HTML_Input
 			if($this->_event_onkeypress)
 				$string .= " onkeyup='{$this->_event_onkeypress}'";
 				
+			if($this->_type == "hidden")
+				$string .= " style='display: none;'";
+				
 			$string .= "/>";
+			
+			if($this->_label && ($this->_type == "radio" || $this->_type == "checkbox"))
+			{
+				$string .= " " . $this->_label;
+			}			
 		}
 		else
 		{
-			$string = "<textarea name='{$this->_name}' rows='{$this->_textAreaRows}' cols='{$this->_textAreaColums}'";
+			$string .= "<textarea name='{$this->_name}' rows='{$this->_textAreaRows}' cols='{$this->_textAreaColums}'";
 			
 			if($this->_id)
 				$string .= " id='{$this->_id}'";			
@@ -145,7 +172,7 @@ class HTML_Input
 			if($this->_event_onkeypress)
 				$string .= " onkeyup='{$this->_event_onkeypress}'";				
 
-			$string .= ">{$this->_value}</textArea>";	
+			$string .= ">{$this->_value}</textarea>";	
 		}
 		
 		//echo "<textarea cols='25' rows='10'>{$string}</textarea>";

@@ -98,6 +98,9 @@ class Lang_Messages
 		self::$messages[LMSG_FORUM_POLL_NEED_MIN_LEVEL] = "Desculpe, mas para votar nesta enquete é preciso possuir na sua conta ao menos um personagem com nivel @v1@ ou superior.";
 		self::$messages[LMSG_FORUM_POLL_TIME_EXPIRED] = "Desculpe, mas esta enquete já está encerrada.";
 		self::$messages[LMSG_FORUM_POST_TOO_LONG] = "Desculpe, mas o seu post não pode exceder 2048 caracteres.";
+		self::$messages[LMSG_STAMINA_NOT_HAVE_PREMDAYS] = "Você não possui tempo sulficiente em sua conta premium para recuperar esta quantidade de stamina.";
+		self::$messages[LMSG_STAMINA_VALUE_WRONG] = "Você deve selecionar corretamente a quantidade de stamina que deseja recuperar.";
+		self::$messages[LMSG_DARGHOSPOINTS_NEED_ACCEPT_TERMS] = "Para adquirir seus Darghos Points é necessario concordar com nossos termos de uso.";
 	
 		self::$messages[LMSG_ACCOUNT_REGISTERED] = "
 			<p>Parabens, sua conta foi criada com sucesso!</p>
@@ -366,6 +369,12 @@ class Lang_Messages
 			<p>Caro usuario,</p>
 			<p>Seu usuario está bloqueado de participar de nossos topicos e enquetes desde o dia @v1@ com duração <b>@v2@</b>.</p>
 			<p>Este bloqueio foi aplicado por @v3@ pelo seguinte motivo:<br><i>@v4@</i></p>
+		";				
+		
+		self::$messages[LMSG_STAMINA_SUCCESSFULY] = "
+			<p>Caro usuario,</p>
+			<p>A recuperação de stamina do personagem de sua conta @v1@ foi concluida com sucesso! Agora ele possui <b>@v2@</b> horas de stamina!</p>
+			<p>Tenha um bom jogo! Agora mais descançado!</p>
 		";				
 	}
 }

@@ -169,7 +169,12 @@ class Account
 		$leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
 		
 		return $leftDays;
-	}			
+	}		
+
+	function getPremEnd()
+	{
+		return $this->data['premend'];
+	}
 
 	function getEmail()
 	{

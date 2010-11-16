@@ -5,7 +5,7 @@ $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
 
-$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes" : "Você não possui dias de conta premium.";	
+$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes (expira em ".Core::formatDate($account->getPremEnd()).")" : "Você não possui dias de conta premium.";	
 $warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
 $email = $account->getEmail();	
 $creation = ($account->getCreation() != 0) ? Core::formatDate($account->getCreation()) : "Indisponível";	
@@ -64,6 +64,7 @@ if(is_array($player_list))
 		if(SHOW_SHOPFEATURES == 1)
 		{
 			$charOptions .= " - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
+			$charOptions .= " - <a href='?ref=character.stamina&name={$character->getName()}'>Recuperar Stamina</a>";
 		}
 		
 		if(ENABLE_REBORN_SYSTEM == 1)
