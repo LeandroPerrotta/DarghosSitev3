@@ -116,6 +116,8 @@ class View
 		$this->character->setStamina($_POST["stamina-value"] * 60 * 60 * 1000);
 		$this->character->save();
 		
+		Core::$DB->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('stamina','{$this->character->getId()}','{$cost}','".time()."')");
+		
 		$this->_message = Lang::Message(LMSG_STAMINA_SUCCESSFULY, $this->character->getName(), $_POST["stamina-value"]);		
 		return true;
 	}

@@ -64,7 +64,7 @@ if(is_array($player_list))
 		if(SHOW_SHOPFEATURES == 1)
 		{
 			$charOptions .= " - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
-			$charOptions .= " - <a href='?ref=character.stamina&name={$character->getName()}'>Recuperar Stamina</a>";
+			$charOptions .= " - <a href='?ref=character.stamina&name={$character->getName()}'>Regenerar Stamina</a>";
 		}
 		
 		if(ENABLE_REBORN_SYSTEM == 1)

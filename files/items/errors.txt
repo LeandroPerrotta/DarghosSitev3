@@ -1,0 +1,1084 @@
+sh: gifsicle: not found
+sh: gifsicle: not found
+sh: gifsicle: not found
+sh: gifsicle: not found
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: <stdin>: trailing garbage ignored
+gifsicle: <stdin>: trailing garbage ignored
+gifsicle: <stdin>: trailing garbage ignored
+gifsicle: <stdin>: trailing garbage ignored
+gifsicle: <stdin>: trailing garbage ignored
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: <stdin>: not a GIF image
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: unrecognized option '--repleace'
+Usage: gifsicle [OPTION | FILE | FRAME]...
+Try 'gifsicle --help' for more information.
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)
+gifsicle: warning: so many colors that local colormaps were required
+gifsicle: (You may want to try '--colors 256'.)

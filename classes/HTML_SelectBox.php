@@ -2,7 +2,7 @@
 class HTML_SelectBox
 {
 	private $_options = array();
-	private $_name, $_size = 120, $_selectedIndex = 0;
+	private $_name, $_size = 120, $_selectedIndex = 0, $onChangeSubmit = false;
 	
 	function HTML_SelectBox()
 	{
@@ -46,6 +46,11 @@ class HTML_SelectBox
 		return array_push($this->_options, $option);
 	}
 	
+	function onChangeSubmit()
+	{
+		$this->onChangeSubmit = true;
+	}
+	
 	function GetPost()
 	{
 		return $_POST[$this->_name];
@@ -53,7 +58,12 @@ class HTML_SelectBox
 	
 	function Draw()
 	{
-		$string = "<select name='{$this->_name}' style='width: {$this->_size}px;'>";
+		$onchange = "";
+		
+		if($this->onChangeSubmit)
+			$onchange = "onchange='this.form.submit()'";
+		
+		$string = "<select name='{$this->_name}' style='width: {$this->_size}px;' {$onchange}>";
 
 		foreach($this->_options as $key => $option)
 		{
