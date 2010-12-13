@@ -25,7 +25,7 @@
 			<div id="wrapper_b">
 				<h1><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
-				<p id="announcement"><marquee direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de conta premium! Confira!</marquee></p>
+				<div id="announcement"><marquee style="margin: 13px;" direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de conta premium! Confira!</marquee></div>
 				
 				<div id="content_wrapper">
 					<div id="left">
@@ -166,7 +166,7 @@
 									<li><a href="?ref=contribute.myorders"><? echo $menu['PREMIUM.MY_ORDERS']; ?></a></li>
 									<li><a href="?ref=account.itemshop_log"><? echo $menu['PREMIUM.LOG_ITEMSHOP']; ?></a></li>
 								</ul>
-							</li>		
+							</li>								
 							
 								<?php 
 								if($account->getGroup() >= 5) 
@@ -281,7 +281,7 @@
 					</div>
 				</div>
 				
-				<p id="footer">&copy; 2006~2010 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p>
+				<div id="footer"><p style="margin: 13px;">&copy; 2006~2010 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p></div>
 			</div>
 		</div>
 		

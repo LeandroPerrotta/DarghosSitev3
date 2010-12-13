@@ -48,7 +48,7 @@ class Guild_War
 	
 	static function ListStartedWars()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_STARTED."' ORDER BY `declaration_date`");
+		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_STARTED."' AND `end_date` >= '".time()."' ORDER BY `declaration_date`");
 		
 		if($query->numRows() == 0)
 		{
@@ -72,7 +72,23 @@ class Guild_War
 	
 	static function ListEndedWars()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_DISABLED."' AND `reply` = '-1' ORDER BY `declaration_date`");
+		$query = Core::$DB->query("
+			SELECT 
+				`id` 
+			FROM 
+				`guild_wars` 
+			WHERE 
+				`status` = '".GUILD_WAR_DISABLED."' OR 
+				(`end_date` <= '".time()."' OR 
+					(`frag_limit` > 0 AND 
+						(
+							`guild_frags` >= `frag_limit` OR 
+							`opponent_frags` >= `frag_limit`
+						)
+					)
+				) 
+			ORDER BY 
+				`declaration_date`");
 		
 		if($query->numRows() == 0)
 		{
@@ -96,7 +112,7 @@ class Guild_War
 	
 	static function ListNegotiationWars()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_DISABLED."' AND `reply` >= '0' ORDER BY `declaration_date`");
+		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE (`status` = '".GUILD_WAR_DISABLED."' AND `reply` >= '0') OR (`status` = '".GUILD_WAR_WAITING."' AND `reply` = '-1') ORDER BY `declaration_date`");
 		
 		if($query->numRows() == 0)
 		{

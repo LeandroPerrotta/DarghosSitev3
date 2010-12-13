@@ -1,20 +1,4 @@
 <?
-	/* Item Sprite Reader
-		- Para usar faça algo parecido: <img src="http://site.do.seu.ot/tibiaitem/2400.gif" />, onde 2400 é o item id que irá variar
-		- Coloque abaixo os caminhos dos arquivos necessários
-		- Criado por Magus [www.otserv.com.br]
-	*/
-	class SpriteReader
-	{
-		private $file;
-		
-		function SpriteReader($filepatch)
-		{
-			$this->file = fopen($filepatch, 'rb') or exit("Cannot read file: {$filepatch}");
-		}
-	}	
-
-
 	function DrawImage($id, $k, $fp, $spr, $multipler = 1)
 	{		
 		//if ($id < 100) return;
@@ -57,63 +41,49 @@
 		}		
 	}
 
-	$spr_path = '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia/Tibia.spr';
-	$dat_path = '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia/Tibia.dat';
-	$otb_path = '/home/leandro/otserv/DarghosData/items/items.otb';
+	$spr_path = '/var/www/darghos/files/Tibia.spr';
+	$dat_path = '/var/www/darghos/files/Tibia.dat';
+	$otb_path = '/home/darghos/data/items/items.otb';
 	$caching = true;
 	
-	define('HEX_PREFIX', '0x');
-	
-	$isOutfit = false;
-	
-	if($_GET['type'])
-	{
-		$isOutfit = true;
-		settype(($myId = $_GET['type']), 'integer');
-		$img_path = "{$myId}.gif"; //only if caching
-	}
-	else	
-	{
-		settype(($myId = $_GET['id']), 'integer');
-		$img_path = "{$myId}.gif"; //only if caching
-	}
-	
+	define('HEX_PREFIX', '0x');	
+
+	settype(($myId = $_GET['id']), 'integer');
+	$img_path = "{$myId}.gif"; //only if caching
+
 	if ($caching && file_exists($img_path))
 	{
 		$spr = imagecreatefromgif($img_path);
 	}
 	else
 	{	
-		if ($caching && !file_exists('cache')) mkdir('cache');
+		//if ($caching && !file_exists('cache')) mkdir('cache');
 		
-		if (!$isOutfit && $myId < 100)
+		if ($myId < 100)
 			trigger_error('Item id must be a number above 100', E_USER_ERROR);
 		
-		if(!$isOutfit)
-		{	
-			$fp = fopen($otb_path, 'rb') or exit;
-			
-			while (false !== ($char = fgetc($fp)))
-			{				
-				$optByte = HEX_PREFIX.bin2hex($char);
-				if ($optByte == 0xFE) 
-					$init = true;
-				elseif ($optByte == 0x10 && $init)
+		$fp = fopen($otb_path, 'rb') or exit;
+		
+		while (false !== ($char = fgetc($fp)))
+		{				
+			$optByte = HEX_PREFIX.bin2hex($char);
+			if ($optByte == 0xFE) 
+				$init = true;
+			elseif ($optByte == 0x10 && $init)
+			{
+				extract(unpack('x2/Ssid', fread($fp, 4)));
+				if ($myId == $sid)
 				{
-					extract(unpack('x2/Ssid', fread($fp, 4)));
-					if ($myId == $sid)
-					{
-						
-						if (HEX_PREFIX.bin2hex(fread($fp, 1)) == 0x11)
-							extract(unpack('x2/SmyId', fread($fp, 4)));
-						break;
-					}
-					$init = false;
+					
+					if (HEX_PREFIX.bin2hex(fread($fp, 1)) == 0x11)
+						extract(unpack('x2/SmyId', fread($fp, 4)));
+					break;
 				}
+				$init = false;
 			}
-			
-			fclose($fp);
 		}
+		
+		fclose($fp);
 		
 		$fp = fopen($dat_path, 'rb') or exit;
 		
@@ -127,8 +97,6 @@
 
 		if ($myId > $maxId)
 			trigger_error(sprintf('Out of range', ftell($fp)), E_USER_ERROR);
-		
-		$lastoffSet = 0;	
 			
 		for ($id = 100 /* Void */; $id <= $myId; $id++)
 		{			
@@ -161,8 +129,6 @@
 				}
 				$prevByte = $optByte;
 				fseek($fp, $offset, SEEK_CUR);
-				
-				$lastoffSet = $offset;
 			}
 			
 			extract(unpack('Cwidth/Cheight', fread($fp, 2)));
@@ -175,11 +141,7 @@
 			
 			$spr_count = array_product(unpack('C*', fread($fp, 5))) * $width * $height;
 			$sprites = unpack('S*', fread($fp, 2 * $spr_count));
-			
-			//die("SprC:" . print_r($spr_count).", Sprites:" . print_r($sprites));
 		}
-		
-		echo "Blend: ".$blend;
 		
 		fclose($fp);
 			
@@ -187,222 +149,33 @@
 		
 		if ($nostand)
 		{		
-			echo "nostand";	
 			for ($i = 0; $i < sizeof($sprites)/4; $i++)
 				$spriteIds = array_merge((array)$spriteIds, array_reverse(array_slice($sprites, $i*4, 4)));
 		}
 		else
 			$spriteIds = (array) $sprites[array_rand($sprites)];
 		
-		fseek($fp, 6);
-
-		$printSeparated = true;
+		fseek($fp, 6);	
 		
-		if(!$printSeparated)
-		{
-			$animation_patch = "{$_GET["type"]}";
-			if(!$isOutfit)
-				$animation_patch = "{$_GET["id"]}";
-				
-			$cmd = 'gifsicle --loop -O1 --disposal=background --multifile --delay 50 - > '.$animation_patch.'.gif';
-			$desc = array(0 => array("pipe", "r"), 1 => array("pipe", "w"), 2 => array("file", "errors.txt", "a"));
-			$proc = proc_open($cmd, $desc, $pipes);		
-			
-			if(!is_resource($proc))
-			{
-				die('Could not start gifsicle');
-			}		
-		}		
-		
-		$spr_c = count($spriteIds);
-		
-		if($isOutfit)
-		{			
-			if($spr_c == 12)
-			{
-				$front = array(5, 9);
-				//$front = false;
-			}
-			elseif($spr_c == 16)
-			{
-				$front = array(1);
-			}
-			elseif($spr_c == 48)
-			{
-				$front = array(6, 10);
-			}	
-			elseif($spr_c == 24)
-			{
-				if($_GET["type"] == 19) //slime apenas?	
-					$front = array(0, 4, 8, 12, 16, 20);
-				else
-					$front = array(15, 23);
-			}
-			elseif($spr_c == 32)
-			{
-				$front = array(2, 6);
-			}
-			//player outfit
-			elseif($spr_c == 288)
-			{
-				$front = array(28, 52);
-			}	
-			elseif($spr_c == 96)
-			{
-				$front = array(12, 20);
-			}
-			elseif($spr_c == 64)
-			{
-				$front = array(2, 6, 10);
-			}	
-			elseif($spr_c == 80)
-			{
-				$front = array(6, 14);
-			}	
-			elseif($spr_c == 8)
-			{
-				$front = array(1, 5);
-			}	
-			else
-			{			
-				$fron = false;
-			}
-					
-			$gifPos = 0;
-			$spritesDraw = 1;		
-		}
-		
-		$multipler = ($width != 1 && $height != 1) ? 2 : 1;
-		print_r($spriteIds);
-		echo "<br>Count: {$spr_c}, Multipler: {$multipler}";
-	
-		echo "<br>Width: {$width} Height: {$height}";
-		
-		/*$hackoutfits = array(92);
-		if(in_array($_GET["id"], $hackoutfits))
-		{
-			$multipler = 2;
-		}*/
 		$spr = imagecreatetruecolor(32 * $width, 32 * $height);
 		imagecolortransparent($spr, imagecolorallocate($spr, 0, 0, 0));	
-		
+
 		foreach ($spriteIds as $k => $id)
 		{				
-			echo "<br>Id:".$id.", Sprite: {$spritesDraw}";
-			
-			if(!$isOutfit)
-			{
-				/*$spr = imagecreatetruecolor(32, 32);
-				imagecolortransparent($spr, imagecolorallocate($spr, 0, 0, 0));*/
+			//echo "<br>Id:".$id.", Sprite: {$spritesDraw}";
 				
-				drawImage($id, $k, $fp, $spr, $multipler);
-				
-				/*if(!$printSeparated)
-				{
-					ob_start();
-					imagegif($spr);
-					$contents = ob_get_contents();		
-					fwrite($pipes[0], $contents);		
-					ob_end_clean();	
-				}
-				else
-					imagegif($spr, "{$_GET["id"]}_{$k}.gif");
-					
-				imagedestroy($spr);*/
-					
-				continue;
-			}				
-				
-			$label = $k;
-							
-			if($multipler == 1)
-			{
-				$spr = imagecreatetruecolor(32 * $width, 32 * $height);
-				imagecolortransparent($spr, imagecolorallocate($spr, 0, 0, 0));						
-			}
-			else
-			{
-				if($spritesDraw == 1)
-				{
-					$spr = imagecreatetruecolor(32 * $width, 32 * $height);
-					imagecolortransparent($spr, imagecolorallocate($spr, 0, 0, 0));									
-				}
-			}
-			
-			drawImage($id, $k, $fp, $spr, $multipler);
-			
-			if($multipler == 1)
-			{
-				if(!$printSeparated)
-				{
-					if(!$front || in_array($label, $front)) 
-					{
-						ob_start();
-						imagegif($spr);
-						$contents = ob_get_contents();		
-						fwrite($pipes[0], $contents);		
-						ob_end_clean();
-					}		
-				}
-				else
-				{
-					if(!$front || in_array($label, $front)) 
-						imagegif($spr, "{$_GET["type"]}_{$label}.gif");
-				}
-					
-				imagedestroy($spr);	
-			}
-			else
-			{
-				if($spritesDraw == 4)
-				{
-					if(!$printSeparated)
-					{
-						if(!$front || in_array($gifPos, $front))
-						{						
-							ob_start();
-							imagegif($spr);
-							$contents = ob_get_contents();		
-							fwrite($pipes[0], $contents);		
-							ob_end_clean();		
-						}		
-					}
-					else	
-					{					
-						if(!$front || in_array($gifPos, $front))
-						{
-							$label = $gifPos;
-							imagegif($spr, "{$_GET["type"]}_{$label}.gif");
-							imagedestroy($spr);	
-						}
-					}
-					$spritesDraw = 0;	
-					$gifPos++;
-				}
-			}
+			drawImage($id, $k, $fp, $spr, $multipler);				
+		}
+		
 
-			$spritesDraw++;
-		}
-		
-		if(!$printSeparated)
-		{
-			fclose($pipes[0]);
-			fclose($pipes[1]);
-			fclose($pipes[2]);		
-			proc_close($proc);		
-		}
-		
-		if(!$isOutfit)
-		{
-			imagegif($spr, "{$_GET["id"]}.gif");
-			imagedestroy($spr);
-		}
-		
+		imagegif($spr, $img_path);
+		imagedestroy($spr);
+
 		fclose($fp);
 
 		//if ($caching && !file_exists($img_path)) imagegif($spr, $img_path);
 	}
-	
+
 	$spr = imagecreatefromgif($img_path);
 	header('Content-type: image/gif');
 

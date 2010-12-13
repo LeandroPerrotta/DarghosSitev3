@@ -51,11 +51,11 @@ else
 				case "logout":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;		
+				break;			
 
 				case "premium":
 					$patch['file'] = $topic;
-				break;		
+				break;
 
 				case "changeemail":
 					$needLogin = true;
@@ -134,6 +134,14 @@ else
 				case "quests":
 					$patch['file'] = $topic;
 				break;						
+				
+				case "monsterlist":
+					$patch['file'] = $topic;
+				break;						
+				
+				case "monster":
+					$patch['file'] = $topic;
+				break;						
 	
 				default:
 					$patch['dir'] = "errors";
@@ -186,6 +194,12 @@ else
 					$needLogin = true;		
 					$patch['file'] = $topic;	
 				break;				
+				
+				case "stamina":
+					$needPremium = false;
+					$needLogin = false;		
+					$patch['file'] = $topic;	
+				break;				
 	
 				default:
 					$patch['dir'] = "errors";
@@ -231,7 +245,7 @@ else
 				break;					
 			}
 			
-		break;		
+		break;	
 		
 		case "news":
 		

@@ -208,5 +208,46 @@ class Tools
 		
 		return $ticketName;
 	}
+	
+	static function getPercentOf($value, $total)
+	{
+		return round(($value / $total) * 100);
+	}
+	
+	static function isSorcerer($vocation)
+	{
+		$sorcerer = 1;
+		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+			return true;
+			
+		return false;
+	}
+	
+	static function isDruid($vocation)
+	{
+		$sorcerer = 2;
+		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+			return true;
+			
+		return false;
+	}
+	
+	static function isPaladin($vocation)
+	{
+		$sorcerer = 3;
+		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+			return true;
+			
+		return false;
+	}
+	
+	static function isKnight($vocation)
+	{
+		$sorcerer = 4;
+		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+			return true;
+			
+		return false;
+	}
 }
 ?>

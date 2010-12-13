@@ -44,6 +44,12 @@ h2 span {
 	font-weight: normal;
 }
 
+h3 {
+	font: bold 14px Verdana, sans-serif;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #cbc9c8;
+}
+
 p {
 	margin-top: 10px;
 }
@@ -67,8 +73,8 @@ ul li {
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	margin: 0;
-	padding: 13px;
 	text-align: center;
+	height: 40px;
 }
 
 #content_wrapper {

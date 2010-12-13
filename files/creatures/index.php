@@ -60,7 +60,7 @@
 	$spr_path = '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia/Tibia.spr';
 	$dat_path = '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia/Tibia.dat';
 	$otb_path = '/home/leandro/otserv/DarghosData/items/items.otb';
-	$caching = true;
+	$caching = false;
 	
 	define('HEX_PREFIX', '0x');
 	
@@ -245,7 +245,7 @@
 			//player outfit
 			elseif($spr_c == 288)
 			{
-				$front = array(28, 52);
+				#$front = array(28, 52);
 			}	
 			elseif($spr_c == 96)
 			{

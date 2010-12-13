@@ -34,7 +34,7 @@ class Monsters
 					$array["category"] = $cat;
 					$array["patch"] = $patch;
 					
-					$this->list->offsetSet($name, $array);
+					$this->list->offsetSet(strtolower($name), $array);
 				}
 			}			
 		}
@@ -78,7 +78,7 @@ class Monsters
 			$added[] = $info["category"];			
 			$select->AddOption($info["category"]);
 			
-			if($_GET["category"] && $info["category"] == $_GET["category"])
+			if(isset($_GET["category"]) && isset($info["category"]) && $info["category"] == $_GET["category"])
 			{
 				$select->SelectedIndex($i);
 			}
@@ -96,12 +96,12 @@ class Monsters
 	
 	function loadByName($name)
 	{
-		if(!$this->list->offsetExists($name))
+		if(!$this->list->offsetExists(strtolower($name)))
 		{
 			return false;
 		}
 		
-		$info = $this->list->offsetGet($name);
+		$info = $this->list->offsetGet(strtolower($name));
 		
 		$this->monster = new DOMDocument();
 		$this->monster->load(DIR_DATA."monster/".$info["patch"]);
@@ -499,11 +499,11 @@ class Monsters
 			$attack = $iterator->current();
 			$attack instanceof ArrayObject;
 			
-			$damage = 0;
-			$damage = $attack->offsetGet("max");
-			$meele = $attack->offsetGet("melee");		
-			if($meele)
+			$damage = ($attack->offsetExists("max")) ?  $attack->offsetGet("max") : 0;
+		
+			if($attack->offsetExists("melee"))
 			{
+				$meele = $attack->offsetGet("melee");	
 				$meele instanceof ArrayObject;
 				
 				$damage += $this->getMaxMeeleDamage($meele->offsetGet("skill"), $meele->offsetGet("attack")); 

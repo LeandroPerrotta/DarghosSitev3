@@ -20,7 +20,7 @@ if($_POST)
 	{
 		$error = Lang::Message(LMSG_CHARACTER_NAME_ALREADY_USED);
 	}
-	elseif($monsters->load($_POST["player_name"]))
+	elseif($monsters->loadByName($_POST["player_name"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_NAME);
 	}

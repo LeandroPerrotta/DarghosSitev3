@@ -7,24 +7,14 @@ $it instanceof ArrayIterator;
 
 global $module;
 
-$module .= '
-';
-
-$table .= "
-<table cellspacing='0' cellpadding='0' id='table'>
-	<tr>
-		<th>#</th>
-		<th>Nome</th>
-		<th>Experience</th>
-	</tr>";
-
+$table = "";
 
 while($it->valid())
 {
 	$info = $it->current();
 	$name = $it->key();
 	
-	if($info["category"] == $_GET["category"])
+	if(isset($_GET["category"]) && isset($info["category"]) && $info["category"] == $_GET["category"])
 	{
 		$monster->loadByName($name);
 		
@@ -46,6 +36,14 @@ while($it->valid())
 	$it->next();
 }
 
+if($table == "")
+{
+	$table .= "
+	<tr>
+		<td colspan='3'>Selecione uma categoria acima.</td> 
+	</tr>";		
+}
+
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="get">
 	<fieldset>
@@ -60,14 +58,21 @@ $module .= '
 </form>
 
 <form action="'.$_SERVER['REQUEST_URI'].'" method="get">
-		<fieldset>
-			<p>	
-				<input type="hidden" name="ref" value="'.$_GET["ref"].'"/> 	
-				<label for="category">Selecione uma categoria</label><br />
-				'.$monster->getListAsSelect()->Draw().'
-			</p>		
-			
-		</fieldset>
-	</form>
+	<fieldset>
+		<p>	
+			<input type="hidden" name="ref" value="'.$_GET["ref"].'"/> 	
+			<label for="category">Selecione uma categoria</label><br />
+			'.$monster->getListAsSelect()->Draw().'
+		</p>		
+		
+	</fieldset>
+</form>
+	
+<table cellspacing="0" cellpadding="0" id="table">
+	<tr>
+		<th>#</th>
+		<th>Nome</th>
+		<th>Experience</th>
+	</tr>	
 '.$table.'
 </table>';

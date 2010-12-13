@@ -3,6 +3,9 @@ ini_set("display_errors", 3 );
 //ini_set("memory_limit", "64M");
 error_reporting(3); 
 
+/*function __autoload($class_name) {
+    include_once "classes/{$class_name}.php";
+}*/
 
 list($t, $date) = explode(" ", microtime());
 
@@ -45,6 +48,8 @@ else
 	include "classes/tickets.php";
 	include "classes/monsters.php";
 	include "classes/Forum.php";
+	include "classes/DP_Products.php";
+	include "classes/Items.php";
 	
 	include "classes/HTML_Table.php";
 	include "classes/HTML_SelectBox.php";
@@ -64,7 +69,7 @@ else
 		echo "Impossivel se conectar ao banco de dados.";
 	}
 	
-	if(defined('SITE_ROOT_DIR'))
+	/*if(defined('SITE_ROOT_DIR'))
 	{	
 		if("http://".$_SERVER["HTTP_HOST"].SITE_ROOT_DIR != CONFIG_SITEEMAIL.SITE_ROOT_DIR)
 		{
@@ -77,7 +82,7 @@ else
 		{
 			Core::redirect(CONFIG_SITEEMAIL, false); 
 		}		
-	}
+	}*/
 	
 	$tools = new Tools();
 	Strings::Init();

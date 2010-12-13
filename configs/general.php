@@ -30,7 +30,7 @@ $_townid = array(
 	5 => array("name" => "Salazart", 			"canCreate" => 0, 		"premium" => 1),
 	6 => array("name" => "Island of Peace", 	"canCreate" => 1, 		"premium" => 0),
 	7 => array("name" => "Northrend", 			"canCreate" => 0, 		"premium" => 1),
-	7 => array("name" => "Kashmir", 			"canCreate" => 0, 		"premium" => 1)
+	9 => array("name" => "Kashmir", 			"canCreate" => 0, 		"premium" => 1)
 );
 
 $_skill['fist'] = 0;

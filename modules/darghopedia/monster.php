@@ -276,7 +276,7 @@ class View
 			elseif($chance <= 99999){ $chanceStr = "Quase sempre"; }
 			elseif($chance == 100000){ $chanceStr = "Sempre"; }
 			
-			$quanty = ($lot->offsetGet("countmax") > 0) ? "{$lot->offsetGet("countmax")}x" : "";
+			$quanty = ($lot->offsetExists("countmax") && $lot->offsetGet("countmax") > 0) ? "{$lot->offsetGet("countmax")}x" : "";
 			$img = "<img src='files/items/{$lot->offsetGet("id")}.gif'/>";
 			
 			$itemsStr .= "
