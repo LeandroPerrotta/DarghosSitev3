@@ -12,6 +12,7 @@ $menu['DARGHOPEDIA'] = "Darghopédia";
 
 $menu['DARGHOPEDIA_REBORN'] = "Reborn";
 $menu['DARGHOPEDIA_QUESTS'] = "Quests & Dungeons";
+$menu['DARGHOPEDIA_WORLD'] = "O Mundo";
 
 $menu['ACCOUNTS'] = "Contas";
 $menu['ACCOUNT.REGISTER'] = "Registrar-se";

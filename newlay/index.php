@@ -63,8 +63,9 @@
 							<li>
 								<div name="darghopedia"><strong><? echo $menu['DARGHOPEDIA']; ?></strong> <span class="<?php echo $menudropdown['darghopedia']['button']; ?>"></span></div>
 								<ul <?php echo $menudropdown['darghopedia']['status']; ?>>
+									<li><a href="?ref=darghopedia.world"><? echo $menu['DARGHOPEDIA_WORLD']; ?></a></li>
 									<li><a href="?ref=darghopedia.reborn"><? echo $menu['DARGHOPEDIA_REBORN']; ?></a></li>
-									<li><a href="?ref=darghopedia.quests"><? echo $menu['DARGHOPEDIA_QUESTS']; ?></a></li>																	
+									<li><a href="?ref=darghopedia.quests"><? echo $menu['DARGHOPEDIA_QUESTS']; ?></a></li>
 								</ul>
 							</li>							
 						
