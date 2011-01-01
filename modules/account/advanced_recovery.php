@@ -2,7 +2,7 @@
 if($_SESSION['recovery'])
 {	
 	$character = new Character();
-	$character->loadByName($_SESSION['recovery'][0]); 
+	$character->loadByName($_SESSION['recovery']); 
 	
 	$chkEmail = new Account();
 	
@@ -64,7 +64,7 @@ if($_SESSION['recovery'])
 			
 					<p>
 						<label for="recovery_name">'.$pages["ACCOUNT.ADVANCED_RECOVERY.CHARACTER_NAME"].'</label><br />
-						<input readonly="readonly" name="recovery_name" size="40" type="text" value="'.$_SESSION['recovery'][0].'" />
+						<input readonly="readonly" name="recovery_name" size="40" type="text" value="'.$_SESSION['recovery'].'" />
 					</p>		
 					
 					';

@@ -24,13 +24,14 @@ $_vocationid[12] = "Berserk Warrior";
 
 $_townid = array(
 	1 => array("name" => "Quendor", 			"canCreate" => 0, 		"premium" => 0),
-	2 => array("name" => "Aracura", 			"canCreate" => 0, 		"premium" => 1),
+	2 => array("name" => "Aaragon", 			"canCreate" => 0, 		"premium" => 1),
 	3 => array("name" => "Rookgaard", 			"canCreate" => 0, 		"premium" => 0),
 	4 => array("name" => "Thorn", 				"canCreate" => 0, 		"premium" => 0),
 	5 => array("name" => "Salazart", 			"canCreate" => 0, 		"premium" => 1),
 	6 => array("name" => "Island of Peace", 	"canCreate" => 1, 		"premium" => 0),
 	7 => array("name" => "Northrend", 			"canCreate" => 0, 		"premium" => 1),
-	9 => array("name" => "Kashmir", 			"canCreate" => 0, 		"premium" => 1)
+	9 => array("name" => "Kashmir", 			"canCreate" => 0, 		"premium" => 1),
+	10 => array("name" => "Aracura", 			"canCreate" => 0, 		"premium" => 1)
 );
 
 $_skill['fist'] = 0;

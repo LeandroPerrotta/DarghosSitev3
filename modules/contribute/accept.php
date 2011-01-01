@@ -1,7 +1,10 @@
 <?
+$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
+$promocaoEnd = mktime("0", "0", "0", "1", "16", "2011");
+
 $contribute = new Contribute();
 
-if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
+if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status, generated_in") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
 {
 	if($_POST)
 	{
@@ -21,7 +24,12 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 			$account = new Account();
 			$account->load($contribute->get("target_account"));
 			
-			$account->updatePremDays($contribute->get("period"));
+			$premdays = $contribute->get("period");
+			
+      if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)			
+			   $premdays = $contribute->get("period") * 2;
+			   
+			$account->updatePremDays($premdays);
 			
 			$account->save();
 			
@@ -71,6 +79,12 @@ IMPORTANTE: Após aceitar o serviço, receber e começar a desfrutar dos benefic
 
 A mudança deste documento pode ser efetuada sem aviso, ou prévio aviso, cabendo a você se manter atualizado as regras e ao contrato.";
 
+$contrStr = "Contribuição de {$contribute->get("period")} dias de Conta Premium"; 
+    
+if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)
+{
+  $contrStr = "Contribuição de <span class='cortado'>{$contribute->get("period")}</span> <span class='promocao'>".($contribute->get("period") * 2)."</span> dias de Conta Premium";
+} 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
@@ -78,7 +92,7 @@ $module .= '
 		<ul id="charactersview">
 			<p>Pedido Numero: '.$contribute->get("id").'</p>
 			<li><b>Personagem: </b> '.$contribute->get("target").'.</li>
-			<li><b>Periodo: </b> Contribuições de '.$contribute->get("period").' dias de Conta Premium.</li>
+			<li><b>Periodo: </b> '.$contrStr.'.</li>
 			
 		</ul>	
 		

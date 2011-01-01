@@ -10,7 +10,12 @@ if($_POST)
 	$form_OrderMail = $_POST["order_email"];
 	$form_OrderTarget = $_POST["order_target"];
 	$form_OrderType = $_POST["order_type"];
+	
 	$form_OrderDays = $_POST["order_days"];
+	
+	$form_OrderDaysStr = $_POST["order_days"];
+	if($_POST["order_days"] > 30)
+		$form_OrderDaysStr = $_POST["order_days"] * 2;
 
 	if(!$form_OrderName or !$form_OrderMail or !$form_OrderTarget or !$form_OrderType or !$form_OrderDays)
 	{
@@ -70,7 +75,7 @@ if($_POST)
 					<p>
 						<label for="order_days">Periodo e valor desta Contribuição</label><br />
 						
-						'.$form_OrderDays.' dias por '.$_contribution[$form_OrderType][$form_OrderDays].'.
+						'.$form_OrderDaysStr.' dias por '.$_contribution[$form_OrderType][$form_OrderDays].'.
 					</p>
 					
 					<div id="line1"></div>
@@ -133,15 +138,17 @@ $module .= '
 				<ul id="pagelist">
 					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 4.50 (R$ 0.64/dia)</li>
 					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 12.90 (R$ 0.43/dia)</li>
-					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 24.50 (R$ 0.41/dia)</li>
-					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 34.90 (R$ 0.39/dia)</li>
-					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 64.90 (R$ 0.36/dia)</li>
-					<li><input name="order_days" type="radio" value="360"> 360 dias - R$ 119.90 (R$ 0.33/dia)</li>
+					<li><input name="order_days" type="radio" value="60"> *PROMOÇÃO NATAL* <span class="cortado">60 dias</span> <span class="promocao">120 dias</span> - R$ 24.50 (<span class="cortado">R$ 0.41</span> R$ 0.20/dia)</li>
+					<li><input name="order_days" type="radio" value="90"> *PROMOÇÃO NATAL* <span class="cortado">90 dias</span> <span class="promocao">180 dias</span> - R$ 34.90 (<span class="cortado">R$ 0.39</span>R$ 0.19/dia)</li>
+					<li><input name="order_days" type="radio" value="180"> *PROMOÇÃO NATAL* <span class="cortado">180 dias</span> <span class="promocao">360 dias</span> - R$ 64.90 (<span class="cortado">R$ 0.36</span>R$ 0.18/dia)</li>
+					<li><input name="order_days" type="radio" value="360"> *PROMOÇÃO NATAL* <span class="cortado">360 dias</span> <span class="promocao">720 dias</span> - R$ 119.90 (<span class="cortado">R$ 0.33</span>R$ 0.16/dia)</li>
 				</ul>	
 			</p>
 			
 			<h3>Observações IMPORTANTES:</h3>
 			<ul>
+				<li>A promoção especial de natal, de dobro de premium days somente é valido para os pacotes acima mencioandos como *PROMOÇÃO NATAL*.</li>
+				<li>A promoção especial de natal é limitada, e so valida para pedindos gerados até dia 31/12/2010.</li>
 				<li>Pagamentos via PagSeguro/Boleto Bancário são liberados apénas após compensar o pagamento (de 1 a 3 dias úteis).</li>
 				<li>Pagamentos via PagSeguro/Transferencia Eletronica são liberados em um prazo de 6 horas.</li>
 				<li><font color="red">Não efetuar depósito na conta informada no boleto, isto invalida o pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>

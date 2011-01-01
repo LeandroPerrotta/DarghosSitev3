@@ -13,6 +13,16 @@ if(is_array($oders))
 		if($contribute->get("status") == 1)
 			$status = $_contribution['status'][$contribute->get("status")].". <a href='?ref=contribute.accept&id=".$contribute->get("id")."'>[aceitar]</a>";
 		
+		$contrStr = "Contribuição de {$contribute->get("period")} dias de Conta Premium";	
+			
+		$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
+		$promocaoEnd = mktime("0", "0", "0", "1", "16", "2011");
+		
+		if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)
+		{
+			$contrStr = "Contribuição de <span class='cortado'>{$contribute->get("period")}</span> <span class='promocao'>".($contribute->get("period") * 2)."</span> dias de Conta Premium";
+		}	
+			
 		$orderList .= "
 		<tr>
 			<td>
@@ -30,7 +40,7 @@ if(is_array($oders))
 							<td><b>Forma de Contribuição</b></td> <td>{$contribute->get("type")}</td>
 						</tr>	
 						<tr>
-							<td><b>Periodo</b></td> <td> Contribuição de {$contribute->get("period")} dias de Conta Premium.</td>
+							<td><b>Periodo</b></td> <td> {$contrStr}</td>
 						</tr>
 						<tr>
 							<td><b>Custo</b></td> <td> {$contribute->get("cost")}</td>

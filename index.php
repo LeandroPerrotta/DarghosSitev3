@@ -48,7 +48,6 @@ else
 	include "classes/tickets.php";
 	include "classes/monsters.php";
 	include "classes/Forum.php";
-	include "classes/DP_Products.php";
 	include "classes/Items.php";
 	
 	include "classes/HTML_Table.php";

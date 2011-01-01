@@ -1,5 +1,14 @@
 @CHARSET "ISO-8859-1";
 
+.cortado{
+  text-decoration: line-through;
+  color: #cfcfcf;
+}
+.promocao{
+  font-weight: bold;
+  color: #00c320;
+}
+
 fieldset{
 }	
 

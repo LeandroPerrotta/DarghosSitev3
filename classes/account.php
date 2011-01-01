@@ -67,9 +67,8 @@ class Account
 	{
 		$query = $this->db->query("SELECT id FROM accounts WHERE email = '".$email."'");
 		
-		if($query->numRows() != 0)
+		if($query->numRows() != 0 && $this->load($query->fetch()->id))
 		{
-			$this->load($query->fetch()->id);
 			return true;
 		}
 		else

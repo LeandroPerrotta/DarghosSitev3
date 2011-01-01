@@ -130,7 +130,7 @@ else
 				}
 				else
 				{
-					$_SESSION['recovery'][] = $_POST['recovery_name'];
+					$_SESSION['recovery'] = $_POST['recovery_name'];
 					Core::redirect("index.php?ref=account.advanced_recovery");	
 				}		
 			}

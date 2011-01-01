@@ -241,6 +241,11 @@ class Contribute extends MySQL
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_value = str_replace(",", ".", $price[1]);			
 			
+			$periodStr = $this->data['period'];
+			
+			if($this->data['period'] > 30)
+			 $periodStr = "{$this->data['period']} - em promocao: ".($this->data['period'] * 2)." - ";
+			
 			$form = '
 				<form target="pagseguro" action="'.CONTRIBUTE_PAGSEGUROURL.'" method="post">
 				<input type="hidden" name="email_cobranca" value="'.$_contribution['emailadmin'].'">
@@ -248,7 +253,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="ref_transacao" value="'.$this->data['id'].'">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium. (ref: '.$this->data['id'].')">
+				<input type="hidden" name="item_descr_1" value="Contribuicao para '.$periodStr.' dias de Conta Premium. (ref: '.$this->data['id'].')">
 				<input type="hidden" name="item_quant_1" value="1">
 				<input type="hidden" name="item_valor_1" value="'.$price_value.'">
 				<input type="hidden" name="item_frete_1" value="000">

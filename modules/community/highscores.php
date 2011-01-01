@@ -196,10 +196,11 @@ while($fetch = $query->fetch())
 	}
 	
 	$online = ($character->getOnline() == 1) ? "[<span class='online'>Online</span>]" : "";
+	$guild = ($character->LoadGuild()) ? "<span style='font-size: 9px;'><br>Membro da guild <a href='?ref=guilds.details&name={$character->GetGuildName()}'>{$character->GetGuildName()}</a><span>" : "<span style='font-size: 9px;'><br>Não pertence a nenhuma guild.";
 	
 	$module .= "
 		<tr>
-			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> $online</td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
+			<td>{$n}.</td> <td class='name'><a style='font-size: 14px;' href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> {$online} {$guild} </td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
 		</tr>
 	";
 	
