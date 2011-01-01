@@ -127,6 +127,10 @@ else
 		
 			switch($topic)
 			{
+				case "world":
+					$patch['file'] = $topic;
+				break;				
+				
 				case "reborn":
 					$patch['file'] = $topic;
 				break;
