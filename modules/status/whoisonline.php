@@ -51,10 +51,11 @@ else
 	$_islandofpeace = 0;
 	$_quendor = 0;
 	$_thorn = 0;
-	$_aracura = 0;
+	$_aaragon = 0;
 	$_salazart = 0;
 	$_northrend = 0;
 	$_kashmir = 0;	
+	$_aracura = 0;	
 	
 	if($_totalplayers == 0)
 	{
@@ -88,14 +89,16 @@ else
 				$_quendor++;
 			elseif($town["name"] == "Thorn")
 				$_thorn++;
-			elseif($town["name"] == "Aracura")
-				$_aracura++;
+			elseif($town["name"] == "Aaragon")
+				$_aaragon++;
 			elseif($town["name"] == "Salazart")
 				$_salazart++;
 			elseif($town["name"] == "Northrend")
 				$_northrend++;
 			elseif($town["name"] == "Kashmir")
 				$_kashmir++;
+			elseif($town["name"] == "Aracura")
+				$_aracura++;
 				
 			if($_isadmin)
 			{
@@ -130,13 +133,14 @@ else
 		<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
 	</tr>
 	<tr>
-		<td colspan='2'>Island of Peace:</td><td colspan='2'>".Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
+		<td>Island of Peace:</td><td>".Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
+		<td>Quendor:</td><td>".Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
 	</tr>
 	<tr>
-		<td>Quendor:</td><td>".Tools::getPercentOf($_quendor, $_totalplayers)."%</td><td>Thorn:</td><td>".Tools::getPercentOf($_thorn, $_totalplayers)."%</td>
+		<td>Thorn:</td><td>".Tools::getPercentOf($_thorn, $_totalplayers)."%</td><td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
 	</tr>
 	<tr>
-		<td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td><td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
+		<td>Aaragon:</td><td>".Tools::getPercentOf($_aaragon, $_totalplayers)."%</td><td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
 	</tr>
 	<tr>
 		<td>Northrend:</td><td>".Tools::getPercentOf($_northrend, $_totalplayers)."%</td><td>Kashmir:</td><td>".Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
