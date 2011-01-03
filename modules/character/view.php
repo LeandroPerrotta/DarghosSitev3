@@ -41,7 +41,7 @@ if($_POST["player_name"] || $_GET['name'])
 			{		
 				$module .= "
 				<tr>
-					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia {Core::formatDate($character->deletionStatus())}.</font></td>
+					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia ". Core::formatDate($character->deletionStatus()) . ".</font></td>
 				</tr>";				
 			}
 		
