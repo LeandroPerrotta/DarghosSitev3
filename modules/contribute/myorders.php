@@ -16,7 +16,7 @@ if(is_array($oders))
 		$contrStr = "Contribuição de {$contribute->get("period")} dias de Conta Premium";	
 			
 		$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
-		$promocaoEnd = mktime("0", "0", "0", "1", "16", "2011");
+		$promocaoEnd = mktime("0", "0", "0", "1", "15", "2011");
 		
 		if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)
 		{

@@ -514,12 +514,12 @@ class Monsters
 			if($interval < 2000)
 			{
 				$m = 2000 / $interval;
-				$damage = ceil($damage / $m);
+				$damage = ceil($damage * $m);
 			}
 			elseif($interval > 2000)
 			{
 				$m = $interval / 2000;
-				$damage = ceil($damage * $m);
+				$damage = ceil($damage / $m);
 			}
 			
 			$damagemax += $damage;

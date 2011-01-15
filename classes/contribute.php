@@ -238,12 +238,15 @@ class Contribute extends MySQL
 		elseif($this->data['type'] == "PagSeguro")*/
 		if($this->data['type'] == "PagSeguro")
 		{
+			$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
+			$promocaoEnd = mktime("0", "0", "0", "1", "15", "2011");			
+			
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_value = str_replace(",", ".", $price[1]);			
 			
 			$periodStr = $this->data['period'];
 			
-			if($this->data['period'] > 30)
+			if($this->data['period'] > 30 && $this->data["generated_in"] >= $promocaoStart && $this->data["generated_in"] < $promocaoEnd)
 			 $periodStr = "{$this->data['period']} - em promocao: ".($this->data['period'] * 2)." - ";
 			
 			$form = '

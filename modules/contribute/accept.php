@@ -1,6 +1,6 @@
 <?
 $promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
-$promocaoEnd = mktime("0", "0", "0", "1", "16", "2011");
+$promocaoEnd = mktime("0", "0", "0", "1", "15", "2011");
 
 $contribute = new Contribute();
 
