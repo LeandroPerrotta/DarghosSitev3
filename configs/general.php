@@ -55,10 +55,10 @@ $_contribution['emailadmin'] = (date("d", time()) <= 15) ? "premium@darghos.com"
 
 $_contribution['PagSeguro']["7"] = "R$ 4.50";
 $_contribution['PagSeguro']["30"] = "R$ 12.90";
-$_contribution['PagSeguro']["60"] = "R$ 24.50";
-$_contribution['PagSeguro']["90"] = "R$ 34.90";
-$_contribution['PagSeguro']["180"] = "R$ 64.90";
-$_contribution['PagSeguro']["360"] = "R$ 119.90";
+$_contribution['PagSeguro']["120"] = "R$ 24.50";
+$_contribution['PagSeguro']["180"] = "R$ 34.90";
+$_contribution['PagSeguro']["360"] = "R$ 64.90";
+$_contribution['PagSeguro']["720"] = "R$ 119.90";
 
 $_contribution['PayPal']["7"] = "USD 1.90";
 $_contribution['PayPal']["30"] = "USD 5.90";
