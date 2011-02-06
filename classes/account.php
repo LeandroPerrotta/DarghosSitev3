@@ -28,6 +28,8 @@ class Account
 		'creation' => ''	*/
 	);
 	
+	private $real_name = "", $location = "", $url = "", $creation;
+	
 	function __construct()
 	{
 		global $db;
@@ -36,24 +38,28 @@ class Account
 	
 	function load($id, $fields = null)
 	{
-		$query = $this->db->query("SELECT id, name, password, premend, email, blocked, warnings, url, location, real_name, creation, lastAdClick FROM accounts WHERE id = '".$id."'");		
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings` FROM `accounts` WHERE `id` = '{$id}'";
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id` FROM `accounts` WHERE `id` = '{$id}'";
+			
+		$query = $this->db->query($query_str);		
 		
 		if($query->numRows() != 0)
 		{
-			$fetch = $query->fetch();
+			$this->data = $query->fetchAssocArray();
 			
-			$this->data['id'] = $fetch->id;				
-			$this->data['name'] = addslashes($fetch->name);	
-			$this->data['password'] = $fetch->password;	
-			$this->data['premend'] = $fetch->premend;	
-			$this->data['email'] = $fetch->email;	
-			$this->data['blocked'] = $fetch->blocked;	
-			$this->data['warnings'] = $fetch->warnings;	
-			$this->data['url'] = addslashes($fetch->url);	
-			$this->data['location'] = addslashes($fetch->location);	
-			$this->data['real_name'] = addslashes($fetch->real_name);	
-			$this->data['creation'] = $fetch->creation;	
-			$this->data['lastAdClick'] = $fetch->lastAdClick;
+			$query = $this->db->query("SELECT `real_name`, `location`, `url`, `creation` FROM `".Tools::getSiteTable("accounts_personal")."` WHERE `account_id` = '{$id}'");
+			
+			if($query->numRows() != 0)
+			{
+				$fetch = $query->fetch();
+				
+				$this->real_name = $fetch->real_name;
+				$this->location = $fetch->location;
+				$this->url = $fetch->url;
+				$this->creation = $fetch->creation;
+			}
 			
 			return true;	
 		}
@@ -92,6 +98,57 @@ class Account
 		}
 	}		
 
+	function save()
+	{
+		$i = 0;
+		
+		//update
+		if(isset($this->data['id']))
+		{
+			foreach($this->data as $field => $value)
+			{
+				$i++;
+				
+				if($i == count($this->data))
+				{
+					$update .= "`".$field."` = '".$value."'";
+				}
+				else
+				{
+					$update .= "`".$field."` = '".$value."', ";
+				}			
+			}
+			
+			$this->db->query("UPDATE accounts SET $update WHERE id = '".$this->data['id']."'");
+			$this->db->query("UPDATE ".Tools::getSiteTable("accounts_personal")." SET `real_name` = '{$this->real_name}', `location` = '{$this->location}', `url` = '{$this->url}', `creation` = '{$this->creation}' WHERE `account_id` = '{$this->data["id"]}'");
+		}
+		//new account
+		else
+		{
+			foreach($this->data as $field => $value)
+			{
+				$i++;
+				
+				if($i == count($this->data))
+				{
+					$insert_fields .= "".$field."";
+					$insert_values .= "'".$value."'";
+				}
+				else
+				{
+					$insert_fields .= "".$field.", ";
+					$insert_values .= "'".$value."', ";
+				}			
+			}
+
+			$this->db->query("INSERT INTO accounts ($insert_fields) values($insert_values)");		
+			$this->db->query("INSERT INTO ".Tools::getSiteTable("accounts_personal")." VALUES('{$this->data["id"]}', '{$this->real_name}', '{$this->location}', '{$this->url}', '$this->creation')");	
+		}
+	}	
+	
+	/* GETS */
+	
+	/* Função obsoleta, use get{FIELDNAME}() ao invez de get($FIELDNAME)*/
 	function get($field)
 	{
 		switch($field)
@@ -146,97 +203,45 @@ class Account
 		}
 	}	
 	
-	function getId()
-	{
-		return $this->data['id'];
-	}	
-
-	function getName()
-	{
-		return stripslashes($this->data['name']);
-	}	
+	/* Informações internas da conta */
+	function getId() { return $this->data['id']; }	
 	
-	function getPassword()
-	{
-		return $this->data['password'];
-	}		
-
-	function getPremDays()
-	{
-		$leftDays = $this->data["premend"] - time();
-		
-		$leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
-		
-		return $leftDays;
-	}		
-
-	function getPremEnd()
-	{
-		return $this->data['premend'];
-	}
-
-	function getEmail()
-	{
-		return $this->data['email'];
-	}		
-
-	function getBlocked()
-	{
-		return $this->data['blocked'];
-	}
-
-	function getWarnings()
-	{
-		return $this->data['warnings'];
-	}
-
-	function getGroup()
-	{
-		$characters = $this->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
-		
-		$highGroup = 1;
-		
-		if(is_array($characters))
+	function getName(){ return stripslashes($this->data['name']); }	
+	
+	function getPassword() { return $this->data['password']; }			
+	
+	function getPremEnd() 
+	{ 
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
 		{
-			foreach($characters as $cid)
-			{				
-				$character = new Character();
-				$character->load($cid);
-				
-				if($character->getGroup() > $highGroup)
-				{
-					$highGroup = $character->getGroup();
-				}
-			}
+			return $this->data['premend']; 
 		}
-		
-		return $highGroup;
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+		{
+			return ($this->getPremDays() > 0) ? time() + ($this->getPremDays() * 60 * 60 * 24) : 0;
+		}
 	}
+	
+	function getEmail() { return $this->data['email']; }		
+	
+	function getBlocked() { return $this->data['blocked']; }
 
-	function getLocation()
-	{
-		return stripslashes($this->data['location']);
-	}
+	function getWarnings() { return $this->data['warnings']; }
 
-	function getUrl()
-	{
-		return stripslashes($this->data['url']);
-	}
 
-	function getRealName()
-	{
-		return stripslashes($this->data['real_name']);
-	}
+	/* Personal Infos */ 
+	function getLocation() { return stripslashes($this->location); }
+	
+	function getUrl() { return stripslashes($this->url); }
+	
+	function getRealName() { return stripslashes($this->real_name); }	
 			
-	function getCreation()
-	{
-		return $this->data['creation'];
-	}	
+	function getCreation() { return $this->creation; }	
 
-	function getLastAdClick()
-	{
-		return $this->data['lastAdClick'];
-	}	
+	/* Handle Functions */
+	/*
+	function getLastAdClick() { return $this->data['lastAdClick']; }
+	
 	
 	function canClickAdPage()
 	{
@@ -249,6 +254,56 @@ class Account
 			return false;
 		}		
 	}
+	*/
+	
+	function getPremDays()
+	{
+		if(SERVER_DISTRO == DISTRO_TFS)
+		{
+			$pastDays = (time() - $this->data['lastday']) / 60 / 60 / 24;
+			$newDays = $this->data['premdays'] - $pastDays;	
+			return ($newDays > 0 ? $newDays : 0);
+		}
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+		{
+			if($this->data["premend"] == 0)
+				return 0;
+			
+			$leftDays = $this->data["premend"] - time();
+			$leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;	
+			return $leftDays;			
+		}
+	}	
+	
+	function getGroup()
+	{
+		if(SERVER_DISTRO == DISTRO_TFS)
+		{
+			return $this->data["group_id"];
+		}
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+		{	
+			$characters = $this->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
+			
+			$highGroup = 1;
+			
+			if(is_array($characters))
+			{
+				foreach($characters as $cid)
+				{				
+					$character = new Character();
+					$character->load($cid);
+					
+					if($character->getGroup() > $highGroup)
+					{
+						$highGroup = $character->getGroup();
+					}
+				}
+			}
+			
+			return $highGroup;
+		}
+	}	
 	
 	function getCharacterList($returnValue = ACCOUNT_CHARACTERLIST_BY_NAME)
 	{
@@ -293,6 +348,8 @@ class Account
 		return $guild_level;
 	}
 	
+	
+	/* SETS */
 	function set($field, $value)
 	{
 		switch($field)
@@ -309,8 +366,8 @@ class Account
 				return $this->setPassword($value);
 			break;	
 			
-			case "premdays":
-				return $this->setPremDays($value);
+			case "premend":
+				return $this->setPremEnd($value);
 			break;		
 			
 			case "email":
@@ -366,9 +423,9 @@ class Account
 		$this->data['password'] = $password;
 	}
 	
-	function setPremDays($premdays)
+	function setPremEnd($premend)
 	{
-		$this->data['premend'] = $premdays;
+		$this->data['premend'] = $premend;
 	}
 	
 	function setEmail($email)
@@ -399,100 +456,71 @@ class Account
 	
 	function setLocation($location)
 	{
-		$this->data['location'] =  Strings::SQLInjection($location);
+		$this->location =  Strings::SQLInjection($location);
 	}
 	
 	function setUrl($url)
 	{
-		$this->data['url'] = Strings::SQLInjection($url);
+		$this->url = Strings::SQLInjection($url);
 	}
 	
 	function setRealName($real_name)
 	{
-		$this->data['real_name'] = Strings::SQLInjection($real_name);
+		$this->real_name = Strings::SQLInjection($real_name);
 	}
 	
 	function setCreation($creation)
 	{
-		$this->data['creation'] = $creation;
+		$this->creation = $creation;
 	}	
-	
-	function save()
-	{
-		$i = 0;
-		
-		//update
-		if(isset($this->data['id']))
-		{
-			foreach($this->data as $field => $value)
-			{
-				$i++;
-				
-				if($i == count($this->data))
-				{
-					$update .= "`".$field."` = '".$value."'";
-				}
-				else
-				{
-					$update .= "`".$field."` = '".$value."', ";
-				}			
-			}
-			
-			$this->db->query("UPDATE accounts SET $update WHERE id = '".$this->data['id']."'");
-		}
-		//new account
-		else
-		{
-			foreach($this->data as $field => $value)
-			{
-				$i++;
-				
-				if($i == count($this->data))
-				{
-					$insert_fields .= "".$field."";
-					$insert_values .= "'".$value."'";
-				}
-				else
-				{
-					$insert_fields .= "".$field.", ";
-					$insert_values .= "'".$value."', ";
-				}			
-			}
-
-			$this->db->query("INSERT INTO accounts ($insert_fields) values($insert_values)");			
-		}
-	}
 		
 	function updatePremDays($premdays, $increment = true)
 	{
 		if($increment)
 		{
-			$daysnow = $this->getPremDays();
-			
-			if($daysnow == 0)
+			if(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			{
-				$daysnew = time() + (60 * 60 * 24 * $premdays);
-				$this->setPremDays($daysnew);
+				$daysnow = $this->getPremDays();
+				
+				if($daysnow == 0)
+				{
+					$daysnew = time() + (60 * 60 * 24 * $premdays);
+					$this->setPremEnd($daysnew);
+				}
+				else
+				{
+					$daysnew = time() + (60 * 60 * 24 * ($premdays + $daysnow));	
+					$this->setPremEnd($daysnew);
+				}
 			}
-			else
+			elseif(SERVER_DISTRO == DISTRO_TFS)
 			{
-				$daysnew = time() + (60 * 60 * 24 * ($premdays + $daysnow));	
-				$this->setPremDays($daysnew);
+				$this->data["premdays"] = $this->getPremDays() + $premdays;
+				$this->data["lastday"] = time();
 			}
 		}
 		else
 		{
-			$daysnow = $this->getPremDays();
-			
-			if($daysnow == 0)
-			{
-				return false;
+			if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			{			
+				$daysnow = $this->getPremDays();
+				
+				if($daysnow == 0)
+				{
+					return false;
+				}
+				else
+				{
+					$daysnew = $this->data["premend"] - (60 * 60 * 24 * $premdays);	
+					$this->setPremEnd($daysnew);
+				}
 			}
-			else
+			elseif(SERVER_DISTRO == DISTRO_TFS)
 			{
-				$daysnew = $this->data["premend"] - (60 * 60 * 24 * $premdays);	
-				$this->setPremDays($daysnew);
-			}			
+				$newdays = $this->getPremDays() - $premdays;
+				$this->data["premdays"] = ($newdays > 0) ? $newdays : 0;
+				$this->data["lastday"] = time();
+			}							
 		}
 		
 		return true;
@@ -688,5 +716,6 @@ class Account
 			
 		return false;	
 	}
+	
 }
 ?>

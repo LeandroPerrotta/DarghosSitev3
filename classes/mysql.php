@@ -11,7 +11,7 @@ class MySQL
 	
 	public function close() 
 	{
-		@mysql_close($connection);			
+		@mysql_close($this->connection);			
 	}	
 	
 	public function query($queryStr) 
@@ -20,7 +20,7 @@ class MySQL
 		
 		if(!$query)
 		{
-			echo mysql_error($this->connection)."<br>";
+			echo mysql_error($this->connection)."<br>{$queryStr}<br><br>";
 			return false;		
 		}	
 		else
@@ -29,7 +29,7 @@ class MySQL
 	
 	public function ExecQuery($queryStr) 
 	{
-		return mysql_query($queryStr, $this->connection);
+		return mysql_unbuffered_query($queryStr, $this->connection);
 	}	
 	
 	public function lastInsertId() 
@@ -71,6 +71,11 @@ class Query
 	public function fetchArray() 
 	{
 		return mysql_fetch_array($this->queryResource);
+	}
+	
+	public function fetchAssocArray()
+	{
+		return mysql_fetch_assoc($this->queryResource);
 	}
 	
 	public function pointerRow($rownumber)

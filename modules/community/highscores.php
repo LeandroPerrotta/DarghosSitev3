@@ -1,6 +1,9 @@
 <?
 $filter_onlyOnIOP = false;
-$filter_hideRebornPlayers = false;
+
+if(ENABLE_REBORN_SYSTEM)
+	$filter_hideRebornPlayers = false;
+	
 $filter_inactivePlayers = false;
 
 if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
@@ -16,10 +19,14 @@ if(isset($_POST['skill']))
 }
 
 ($_POST['show_onlyPeacers'] == 1) ? setCookie("filter_onlyOnIOP", 1) : setCookie("filter_onlyOnIOP", 0);
-($_POST['hide_rebornPlayers'] == 1) ? setCookie("filter_hideRebornPlayers", 1) : setCookie("filter_hideRebornPlayers", 0);
+
+if(ENABLE_REBORN_SYSTEM)
+	($_POST['hide_rebornPlayers'] == 1) ? setCookie("filter_hideRebornPlayers", 1) : setCookie("filter_hideRebornPlayers", 0);
 
 ($_COOKIE['filter_onlyOnIOP'] == 1) ? $filter_onlyOnIOP = true : null;
-($_COOKIE['filter_hideRebornPlayers'] == 1) ? $filter_hideRebornPlayers = true : null;
+
+if(ENABLE_REBORN_SYSTEM)
+	($_COOKIE['filter_hideRebornPlayers'] == 1) ? $filter_hideRebornPlayers = true : null;
 
 if(isset($_GET['skill']))
 {	
@@ -58,7 +65,7 @@ $module .= '
 		<p>		
 			<label for="filter">Filtros</label><br />
 			<input '.(($filter_onlyOnIOP) ? 'checked="checked"' : null).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace. <br>
-			<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hide_rebornPlayers" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).
+			'.((ENABLE_REBORN_SYSTEM) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hide_rebornPlayers" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).' :  '').'
 		</p>		
 		
 		<div id="line1"></div>
@@ -88,7 +95,7 @@ if($skill == "experience" or $skill == "maglevel")
 				"town_id = 6 AND" : null)."
 			".(($filter_inactivePlayers) ? 
 				" lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." AND " : null)."
-			group_id < 3 ORDER BY ".((!$filter_hideRebornPlayers && $skill == "experience") ? "reborn_level DESC," : null)." {$skill} DESC LIMIT {$start}, 20");
+			group_id < 3 ORDER BY ".((ENABLE_REBORN_SYSTEM && !$filter_hideRebornPlayers && $skill == "experience") ? "reborn_level DESC," : null)." {$skill} DESC LIMIT {$start}, 20");
 }
 else
 {

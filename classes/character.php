@@ -1,7 +1,7 @@
 <?
 class Character
 {
-	private $db, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
+	private $db, $data = array(), $site_data = array(), $skills = array(), $guild = array() /* deprecated? */;
 	
 	private $_loadGuild = false;
 	
@@ -42,6 +42,14 @@ class Character
 			}
 			
 			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");
+			$this->db->query("
+			UPDATE 
+				`".Tools::getSiteTable("players")."` 
+			SET 
+				`creation` = '{$this->site_data["creation"]}',
+				`visible` = '{$this->site_data["visible"]}'
+			WHERE 
+				`player_id` = '{$this->data['id']}'");
 
 			if($this->_loadGuild)
 			{
@@ -80,67 +88,47 @@ class Character
 				}			
 			}
 
-			$this->db->query("INSERT INTO players ($insert_fields) values($insert_values)");
-
+			$this->db->query("INSERT INTO players ($insert_fields) values($insert_values)");			
 			$this->data['id'] = $this->db->lastInsertId();
+			
+			$this->db->query("
+			INSERT INTO 
+				`".Tools::getSiteTable("players")."` 
+				(
+					`player_id`,
+					`creation`,
+					`visible`		
+				)
+			VALUES (
+				'{$this->data['id']}',
+				'{$this->site_data["creation"]}',
+				'{$this->site_data["visible"]}'
+			)");			
 		}
 	}	
 	
 	function load($player_id)
 	{
-		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, created, hidden, online, skull_time FROM players WHERE id = '".$player_id."'");		
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, created, hidden, online, skull_time FROM players WHERE id = '".$player_id."'";
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description FROM players WHERE id = '".$player_id."'";
+			
+		$query = $this->db->query($query_str);		
 		
 		if($query->numRows() != 1)
 		{
 			return false;
 		}	
 			
-		$fetch = $query->fetch();
+		$this->data = $query->fetchAssocArray();
 		
-		$this->data['id'] = $fetch->id;				
-		$this->data['name'] = $fetch->name;
-		$this->data['group_id'] = $fetch->group_id;
-		$this->data['account_id'] = $fetch->account_id;
-		$this->data['level'] = $fetch->level;
-		$this->data['vocation'] = $fetch->vocation;
-		$this->data['health'] = $fetch->health;
-		$this->data['healthmax'] = $fetch->healthmax;
-		$this->data['experience'] = $fetch->experience;
-		$this->data['lookbody'] = $fetch->lookfeet;
-		$this->data['lookfeet'] = $fetch->lookfeet;
-		$this->data['lookhead'] = $fetch->lookhead;
-		$this->data['looklegs'] = $fetch->looklegs;
-		$this->data['looktype'] = $fetch->looktype;
-		$this->data['lookaddons'] = $fetch->lookaddons;
-		$this->data['maglevel'] = $fetch->maglevel;
-		$this->data['mana'] = $fetch->mana;
-		$this->data['manamax'] = $fetch->manamax;
-		$this->data['manaspent'] = $fetch->manaspent;
-		$this->data['soul'] = $fetch->soul;
-		$this->data['town_id'] = $fetch->town_id;
-		$this->data['posx'] = $fetch->posx;
-		$this->data['posy'] = $fetch->posy;
-		$this->data['posz'] = $fetch->posz;
-		$this->data['conditions'] = $fetch->conditions;
-		$this->data['cap'] = $fetch->cap;
-		$this->data['sex'] = $fetch->sex;
-		$this->data['lastlogin'] = $fetch->lastlogin;
-		$this->data['lastip'] = $fetch->lastip;
-		$this->data['save'] = $fetch->save;
-		$this->data['skull_type'] = $fetch->skull_type;
-		$this->data['lastlogout'] = $fetch->lastlogout;
-		$this->data['balance'] = $fetch->balance;
-		$this->data['stamina'] = $fetch->stamina;
-		$this->data['direction'] = $fetch->direction;
-		$this->data['loss_experience'] = $fetch->loss_experience;
-		$this->data['loss_mana'] = $fetch->loss_mana;
-		$this->data['loss_skills'] = $fetch->loss_skills;
-		$this->data['loss_items'] = $fetch->loss_items;
-		$this->data['description'] = addslashes($fetch->description);
-		$this->data['created'] = $fetch->created;
-		$this->data['hidden'] = $fetch->hidden;
-		$this->data['online'] = $fetch->online;
-		$this->data['skull_time'] = $fetch->skull_time;
+		$query = $this->db->query("SELECT `creation`, `visible` FROM `".Tools::getSiteTable("players")."` WHERE `player_id` = '{$this->data["id"]}'");
+		
+		if($query->numRows() > 0)
+		{
+			$this->site_data = $query->fetchAssocArray();
+		}
 		
 		return true;			
 	}
@@ -149,19 +137,33 @@ class Character
 	{
 		$this->_loadGuild = true;
 		
+		//precisamos implementar o guild system do TFS...
+		if(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `players`.`rank_id`, `players`.`guildnick`, `players_site`.`guildjoin` FROM `players` LEFT JOIN `".Tools::getSiteTable("players")."` as `players_site` ON `players`.`id` = `players_site`.`player_id` WHERE `id` = '{$this->data["id"]}'";
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `rank_id`, `nick`, `join_in` FROM `guild_members` WHERE `player_id` = '{$this->data["id"]}'";
+		
 		//loading guild infos of player
-		$query = Core::$DB->query("SELECT `rank_id`, `nick`, `join_in` FROM `guild_members` WHERE `player_id` = '{$this->data["id"]}'");
+		$query = Core::$DB->query($query_str);
 		
 		if($query->numRows() == 1)
 		{			
 			$fetch = $query->fetch();
 			
-			$this->_guild_nick = $fetch->nick;
-			$this->_guild_join_in = $fetch->join_in;
+			if(SERVER_DISTRO == DISTRO_TFS)
+			{
+				$this->_guild_nick = $fetch->guildnick;
+				$this->_guild_join_in = $fetch->guildjoin;
+			}
+			elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			{
+				$this->_guild_nick = $fetch->nick;
+				$this->_guild_join_in = $fetch->join_in;
+			}
 			
 			//loading guild rank of member
 			$rank = new Guild_Rank();
-			$rank->load($fetch->rank_id);
+			if(!$rank->load($fetch->rank_id)) return false;				
 			
 			$this->Rank = $rank;
 			
@@ -182,56 +184,6 @@ class Character
 		}		
 		
 		return false;
-	}
-		
-	function loadLastDeaths()
-	{
-		$query = $this->db->query("SELECT id, player_id, date, level FROM player_deaths WHERE player_id = '".$this->data['id']."' AND date + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY date DESC");	
-		
-		if($query->numRows() != 0)
-		{	
-			$deathlist = array();
-			while($death_fetch = $query->fetch())
-			{		
-				$_killer = NULL;
-				$_altkiller = NULL;
-				
-				$killers_query = $this->db->query("SELECT id, death_id, lasthit FROM killers WHERE death_id = '{$death_fetch->id}'");
-				while($killers_fetch = $killers_query->fetch())
-				{
-					$player_killers_query = $this->db->query("SELECT kill_id, player_id WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
-					if($player_killers_query->numRows() != 0)
-					{
-						if($killers_fetch->lasthit == 1)
-							$_killer = $player_killers_query->fetch()->player_id;
-						else
-							$_altkiller = $player_killers_query->fetch()->player_id;
-					}
-					
-					$env_killers_query = $this->db->query("SELECT kill_id, name FROM environment_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
-					if($env_killers_query->numRows() != 0)
-					{
-						if($killers_fetch->lasthit == 1)
-							$_killer = $env_killers_query->fetch()->name;
-						else
-							$_altkiller = $env_killers_query->fetch()->name;
-					}
-					
-				}
-				
-				$deathlist[] = array
-				(
-					"time" => $death_fetch->date,
-					"level" => $death_fetch->level,
-					"killed_by" => $_killer,
-					"altkilled_by" => $_altkiller
-				);	
-			}
-			
-			return $deathlist;
-		}	
-		else
-			return false;	
 	}
 	
 	function getHouse()
@@ -522,7 +474,7 @@ class Character
 	
 	function setCreation($value)
 	{
-		$this->data['created'] = $value;
+		$this->site_data['creation'] = $value;
 	}
 	
 	function setStamina($value)
@@ -532,7 +484,7 @@ class Character
 	
 	function setHidden($value)
 	{
-		$this->data['hidden'] = $value;
+		$this->site_data['visible'] = $value;
 	}
 	
 	
@@ -664,12 +616,12 @@ class Character
 	
 	function getCreation()
 	{
-		return $this->data['created'];
+		return $this->site_data['creation'];
 	}
 	
 	function getHidden()
 	{
-		return $this->data['hidden'];
+		return $this->site_data['visible'];
 	}
 	
 	function getLastLogin()

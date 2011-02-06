@@ -1,3 +1,37 @@
+CREATE TABLE `darghos`.`wb_guild_wars` (
+  `war_id` INTEGER  NOT NULL,
+  `reply` INTEGER  NOT NULL DEFAULT 0,
+  `comment` INTEGER  NOT NULL
+)
+ENGINE = InnoDB;
+
+CREATE TABLE `wb_guilds` (
+  `guild_id` INTEGER  NOT NULL,
+  `image` VARCHAR(255)  NOT NULL,
+  `status` INTEGER  NOT NULL,
+  `formationTime` INTEGER  NOT NULL,
+  `guild_points` INTEGER  NOT NULL,
+  `guild_better_points` INTEGER  NOT NULL
+)
+ENGINE = InnoDB;
+
+CREATE TABLE `wb_players` (
+  `player_id` INTEGER  NOT NULL,
+  `creation` INTEGER  NOT NULL,
+  `visible` INTEGER  NOT NULL,
+  `guildjoin` INTEGER  NOT NULL DEFAULT 0
+)
+ENGINE = InnoDB;
+
+CREATE TABLE `wb_accounts_personal` (
+  `account_id` INTEGER  NOT NULL,
+  `real_name` VARCHAR(255)  NOT NULL,
+  `location` VARCHAR(255)  NOT NULL,
+  `url` VARCHAR(255)  NOT NULL,
+  `creation` INTEGER  NOT NULL
+)
+ENGINE = InnoDB;
+
 CREATE TABLE `wb_tutortest_questions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `question` varchar(255) NOT NULL DEFAULT '0',
@@ -132,10 +166,6 @@ CREATE TABLE `guild_invites` (
   `date` varchar(255) NOT NULL
 ) ENGINE=InnoDB;
 
-ALTER TABLE `accounts` ADD `real_name` VARCHAR(255) AFTER `warnings`;
-ALTER TABLE `accounts` ADD `location` VARCHAR(255) AFTER `real_name`;
-ALTER TABLE `accounts` ADD `url` VARCHAR(255) AFTER `location`;
-ALTER TABLE `accounts` ADD `creation` INTEGER NOT NULL DEFAULT 0 AFTER `url`;
 ALTER TABLE `guilds` ADD `motd` VARCHAR(255) NOT NULL AFTER `creationdata`;
 ALTER TABLE `guilds` ADD `image` VARCHAR(255) NOT NULL AFTER `motd`;
 ALTER TABLE `guilds` ADD `status` INT(10) NOT NULL DEFAULT 0 AFTER `image`;

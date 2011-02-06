@@ -249,5 +249,10 @@ class Tools
 			
 		return false;
 	}
+	
+	static function getSiteTable($tablename)
+	{
+		return DB_WEBSITE_PREFIX.$tablename;
+	}
 }
 ?>

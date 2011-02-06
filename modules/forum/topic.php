@@ -118,6 +118,12 @@ class View
 				$this->_message = Lang::Message(LMSG_REPORT);
 				return false;
 			}
+			
+			if($this->topic->IsNotice() && !ENABLE_NEW_COMMENTS)
+			{
+				$this->_message = Lang::Message(LMSG_REPORT);
+				return false;
+			}
 		}
 		elseif($_GET['removemsg'])
 		{

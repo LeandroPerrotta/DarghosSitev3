@@ -78,7 +78,7 @@ if($notices)
 {	
 	foreach($notices as $topic)
 	{
-		$comment = '<p style="text-align: right;"><a href="?ref=forum.topic&v='.$topic->GetId().'">Comentar</a> ('.$topic->GetPostCount().' já comentaram!)</p>';
+		$comment = (ENABLE_NEW_COMMENTS == 1) ? '<p style="text-align: right;"><a href="?ref=forum.topic&v='.$topic->GetId().'">Comentar</a> ('.$topic->GetPostCount().' já comentaram!)</p>' : null;
 		Core::sendMessageBox("<span style='float: left;'>".$topic->GetTitle()."</span> <span style='float: right;'>".Core::formatDate($topic->GetDate())."</span>", "".nl2br($topic->GetTopic())." {$comment}"); 	
 	}
 }
@@ -91,7 +91,7 @@ if($news < 3)
 	
 	while($fetch = $query->fetch())
 	{
-		$showcomment = (HIDE_FORUMLINKS != 0) ? '<p style="text-align: right;"><a href="'.$fetch->forum_url.'">Comentar está notícia</a></p>' : '';
+		$showcomment = (ENABLE_NEW_COMMENTS == 1) ? '<p style="text-align: right;"><a href="'.$fetch->forum_url.'">Comentar está notícia</a></p>' : '';
 		Core::sendMessageBox("<span style='float: left;'>".$fetch->topic."</span> <span style='float: right;'>".Core::formatDate($fetch->post_data)."</span>", "{$fetch->post} {$showcomment}"); 
 	}
 }

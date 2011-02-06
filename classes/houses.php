@@ -35,7 +35,12 @@ class Houses
 			$this->data['name'] = $fetch->name;
 			$this->data['rent'] = $fetch->rent;
 			$this->data['size'] = $fetch->tiles;
-			$this->data['townid'] = $fetch->townid;			
+			
+			if(SERVER_DISTRO == DISTRO_TFS)
+				$this->data['townid'] = $fetch->town;		
+			elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+				$this->data['townid'] = $fetch->townid;		
+					
 			$this->data['owner'] = $fetch->owner;
 			$this->data['paid'] = $fetch->paid;
 			$this->data['warnings'] = $fetch->warnings;

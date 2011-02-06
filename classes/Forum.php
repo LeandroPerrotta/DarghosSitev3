@@ -533,6 +533,11 @@ class Forum_Topics
 		return $this->_isPoll;
 	}
 	
+	function IsNotice()
+	{
+		return $this->_isNotice;
+	}
+	
 	function GetPollId()
 	{
 		return $this->_poll_id;

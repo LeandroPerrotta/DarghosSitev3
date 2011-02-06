@@ -2,8 +2,13 @@
 
 define('MANUTENTION', 0);
 
-define('CONFIG_SITEEMAIL', "http://localhost:8090");
-define('SITE_ROOT_DIR', "/darghos_site"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+define('CONFIG_SITEEMAIL', "http://www.darghos.com.br");
+#define('SITE_ROOT_DIR', "/darghos_site"); //COMENTE ESTA LINHA CASO NO SEJA NECESSARIO DEFINIR UMA SUBPASTA
+
+define('DISTRO_TFS', 'tfs');
+define('DISTRO_OPENTIBIA', 'opentibia');
+
+define('SERVER_DISTRO', DISTRO_TFS);
 
 define('DIR_DATA', "/home/leandro/otserv/DarghosData/");
 define('HOUSES_FILE', "world/-house.xml");
@@ -15,9 +20,14 @@ define('CONFIG_SITENAME', "Darghos Server");
 define('CONFIG_OWNERNAME', "Equipe UltraxSoft");
 
 /*	Configuraes SMTP	 */
-define('SMTP_HOST', "smtp-auth.no-ip.com");
+/*define('SMTP_HOST', "smtp-auth.no-ip.com");
 define('SMTP_PORT', 3325);
 define('SMTP_USER', "darghos.net@noip-smtp");
+define('SMTP_PASS', "***REMOVED***");*/
+
+define('SMTP_HOST', "ultraxsoft.com");
+define('SMTP_PORT', 25);
+define('SMTP_USER', "webadmin@ultraxsoft.com");
 define('SMTP_PASS', "***REMOVED***");
 
 /* CONFIGURAES PARA STATUS */
@@ -31,7 +41,7 @@ define('USEREMOTECONNECTIONS', 0);
 define('STORAGE_SHOPSYS_ITEM_ID', 8985);
 define('STORAGE_SHOPSYS_ITEM_COUNT', 8986);
 define('STORAGE_SHOPSYS_ID', 8987);
-define('STORAGE_REBORNS', 8899);
+define('STORAGE_REBORNS', 15300);
 
 define('ENCRYPTION_TYPE', "md5");
 
@@ -48,10 +58,10 @@ define('DAYS_TO_CHANGE_EMAIL', 15); //Dias de espera necessarios para uma mudana
 define('DAYS_TO_DELETE_CHARACTER', 30); //Dias de espera necessarios para deletar um personagem da conta
 define('SHOW_DEATHS_DAYS_AGO', 30); //Limite de mortes dias atrz que sero exibidas
 define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 0); //Possibilidade de ignorar personagens no rank que no entraram no jogo a X dias
-define('HIDE_FORUMLINKS', 0); //Esconde os links ligados a forums, como o Comentar nas noticias.
+define('ENABLE_NEW_COMMENTS', 0); //Habilitar ou não a possibilidade dos jogadores comentarem em noticias.
 define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
 
-define('ENABLE_REBORN_SYSTEM', 1); //Ativa o sistema de reborn
+define('ENABLE_REBORN_SYSTEM', 0); //Ativa o sistema de reborn
 define('FIRST_REBORN_LEVEL', 200); //level minimo para o primeiro reborn
 /*
 define('SHOW_PREMIUMFEATURES', 1); //Exibi as opes de Premium como Vantagens, Sistema de Compra, Historico e etc (0 = hide, 1 = show)

@@ -16,487 +16,8 @@ define("GUILD_WAR_DISABLED", 	-1);
 
 define("GUILD_DEFAULT_IMAGE", "default_logo.gif");
 
-class Guild_War
-{
-	private $_id, $_guildid, $_opponentid, $_fraglimit, $_declarationdate, $_enddays, $_enddate, $_guildfee, $_opponentfee, $_guildfrags, $_opponentfrags, $_comment, $_status = -1, $_reply;
-	
-	/*
-	 * Static Functions
-	 */	
-	
-	static function ListWarsByGuild($guild_id)
-	{	
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `guild_id` = '{$guild_id}' OR `opponent_id` = '{$guild_id}'");
-		
-		if($query->numRows() == 0)
-			return false;
-		
-		$_wars = array();
-		
-		for($i = 0; $i < $query->numRows(); ++$i)
-		{
-			$fetch = $query->fetch();
-			
-			$guild_war = new Guild_War();
-			$guild_war->Load($fetch->id);
-			
-			$_wars[] = $guild_war;
-		}
-		
-		return $_wars;
-	}
-	
-	static function ListStartedWars()
-	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_STARTED."' AND `end_date` >= '".time()."' ORDER BY `declaration_date`");
-		
-		if($query->numRows() == 0)
-		{
-			return false;
-		}
-		
-		$warList = array();
-		
-		for($i = 0; $i < $query->numRows(); ++$i)
-		{	
-			$fetch = $query->fetch();
-			
-			$guild_war = new Guild_War();
-			$guild_war->Load($fetch->id);
-			
-			$warList[] = $guild_war;
-		}			
-		
-		return $warList;
-	}
-	
-	static function ListEndedWars()
-	{
-		$query = Core::$DB->query("
-			SELECT 
-				`id` 
-			FROM 
-				`guild_wars` 
-			WHERE 
-				`status` = '".GUILD_WAR_DISABLED."' OR 
-				(`end_date` <= '".time()."' OR 
-					(`frag_limit` > 0 AND 
-						(
-							`guild_frags` >= `frag_limit` OR 
-							`opponent_frags` >= `frag_limit`
-						)
-					)
-				) 
-			ORDER BY 
-				`declaration_date`");
-		
-		if($query->numRows() == 0)
-		{
-			return false;
-		}
-		
-		$warList = array();
-		
-		for($i = 0; $i < $query->numRows(); ++$i)
-		{	
-			$fetch = $query->fetch();
-			
-			$guild_war = new Guild_War();
-			$guild_war->Load($fetch->id);
-			
-			$warList[] = $guild_war;
-		}			
-		
-		return $warList;
-	}
-	
-	static function ListNegotiationWars()
-	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE (`status` = '".GUILD_WAR_DISABLED."' AND `reply` >= '0') OR (`status` = '".GUILD_WAR_WAITING."' AND `reply` = '-1') ORDER BY `declaration_date`");
-		
-		if($query->numRows() == 0)
-		{
-			return false;
-		}
-		
-		$warList = array();
-		
-		for($i = 0; $i < $query->numRows(); ++$i)
-		{	
-			$fetch = $query->fetch();
-			
-			$guild_war = new Guild_War();
-			$guild_war->Load($fetch->id);
-			
-			$warList[] = $guild_war;
-		}			
-		
-		return $warList;
-	}
-	
-	/*
-	 * Constructor and Functions
-	 */	
-	
-	function Guild_War()
-	{
-		
-	}
-	
-	function Load($war_id)
-	{
-		$query = Core::$DB->query("SELECT `id`, `guild_id`, `opponent_id`, `frag_limit`, `declaration_date`, `end_date`, `guild_fee`, `opponent_fee`, `guild_frags`, `opponent_frags`, `comment`, `status`, `reply` FROM `guild_wars` WHERE `id` = '{$war_id}'");
-	
-		if($query->numRows() == 0)
-		{			
-			return false;
-		}
-		
-		$fetch = $query->fetch();
-		
-		$this->_id = $fetch->id;
-		$this->_guildid = $fetch->guild_id;
-		$this->_opponentid = $fetch->opponent_id;
-		$this->_fraglimit = $fetch->frag_limit;
-		$this->_declarationdate = $fetch->declaration_date;
-		$this->_enddate = $fetch->end_date;
-		$this->_guildfee = $fetch->guild_fee;
-		$this->_opponentfee = $fetch->opponent_fee;
-		$this->_guildfrags = $fetch->guild_frags;
-		$this->_opponentfrags = $fetch->opponent_frags;
-		$this->_comment = $fetch->comment;
-		$this->_status = $fetch->status;
-		$this->_reply = $fetch->reply;
-		
-		return true;
-	}
-	
-	function Save()
-	{
-		if($this->_id)
-		{
-			Core::$DB->query("
-				UPDATE 
-					`guild_wars` 
-				SET 
-					`guild_id` = '{$this->_guildid}', 
-					`opponent_id` = '{$this->_opponentid}', 
-					`frag_limit` = '{$this->_fraglimit}',
-					`declaration_date` = '{$this->_declarationdate}',
-					`end_date` = '{$this->_enddate}',
-					`guild_fee` = '{$this->_guildfee}',
-					`opponent_fee` = '{$this->_opponentfee}',
-					`guild_frags` = '{$this->_guildfrags}',
-					`opponent_frags` = '{$this->_opponentfrags}',
-					`comment` = '{$this->_comment}',
-					`status` = '{$this->_status}',
-					`reply` = '{$this->_reply}'
-				WHERE 
-					`id` = '{$this->_id}'
-			");			
-		}
-		else
-		{
-			Core::$DB->query("
-				INSERT INTO
-					`guild_wars`
-					(`guild_id`, `opponent_id`, `frag_limit`, `declaration_date`, `end_date`, `guild_fee`, `opponent_fee`, `guild_frags`, `opponent_frags`, `comment`, `status`, `reply`)
-					values
-					('{$this->_guildid}', '{$this->_opponentid}', '{$this->_fraglimit}', '{$this->_declarationdate}', '{$this->_enddate}', '{$this->_guildfee}', '{$this->_opponentfee}', '{$this->_guildfrags}', '{$this->_opponentfrags}', '{$this->_comment}', '{$this->_status}', '{$this->_reply}')
-			");		
-
-			$this->_id = Core::$DB->lastInsertId();		
-		}
-	}
-	
-	/*
-	 * Getters and Setters
-	 */	
-	
-	function SetId($id)
-	{
-		$this->_id = $id;
-	}
-	
-	function SetGuildId($guild_id)
-	{
-		$this->_guildid = $guild_id;
-	}
-	
-	function SetOpponentId($guild_id)
-	{
-		$this->_opponentid = $guild_id;
-	}
-	
-	function SetFragLimit($frag_limit)
-	{
-		$this->_fraglimit = $frag_limit;
-	}
-	
-	function SetDeclarationDate($declaration_date)
-	{
-		$this->_declarationdate = $declaration_date;
-	}
-	
-	function SetEndDate($end_date)
-	{
-		$this->_enddate = $end_date;
-	}
-	
-	function SetGuildFee($fee)
-	{
-		$this->_guildfee = $fee;
-	}
-	
-	function SetOpponentFee($fee)
-	{
-		$this->_opponentfee = $fee;
-	}
-	
-	function SetGuildFrags($frags)
-	{
-		$this->_guildfrags = $frags;
-	}
-	
-	function SetOpponentFrags($frags)
-	{
-		$this->_opponentfrags = $frags;
-	}
-	
-	function SetComment($comment)
-	{
-		$this->_comment = $comment;
-	}
-	
-	function SetStatus($status)
-	{
-		$this->_status = $status;
-	}
-	
-	function SetReply($reply)
-	{
-		$this->_reply = $reply;
-	}
-	
-	function GetId()
-	{
-		return $this->_id;
-	}
-	
-	function GetGuildId()
-	{
-		return $this->_guildid;
-	}
-	
-	function GetOpponentId()
-	{
-		return $this->_opponentid;
-	}
-	
-	function GetFragLimit()
-	{
-		return $this->_fraglimit;
-	}
-	
-	function GetDeclarationDate()
-	{
-		return $this->_declarationdate;
-	}
-	
-	function GetEndDate()
-	{
-		return $this->_enddate;
-	}
-	
-	function GetGuildFee()
-	{
-		return $this->_guildfee;
-	}
-	
-	function GetOpponentFee()
-	{
-		return $this->_opponentfee;
-	}
-	
-	function GetGuildFrags()
-	{
-		return $this->_guildfrags;
-	}
-	
-	function GetOpponentFrags()
-	{
-		return $this->_opponentfrags;
-	}
-	
-	function GetComment()
-	{
-		return $this->_comment;
-	}
-	
-	function GetStatus()
-	{
-		return $this->_status;
-	}
-	
-	function GetReply()
-	{
-		return $this->_reply;
-	}	
-}
-
-class Guild_Rank
-{
-	private $_id, $_guildid, $_name, $_level;
-	
-	public $Members = array();
-	
-	/*
-	 * Static Functions
-	 */
-	
-	static function RankList($guild_id)
-	{		
-		$query = Core::$DB->query("SELECT `id` FROM `guild_ranks` WHERE `guild_id` = '{$guild_id}'");
-		
-		if($query->numRows() == 0)
-			return false;		
-
-		$_ranks = array();	
-		
-		
-		for($i = 0; $i < $query->numRows(); ++$i)
-		{			
-			$fetch = $query->fetch();			
-			
-			$rank = new Guild_Rank();
-			$rank->Load($fetch->id);
-			
-			$_ranks[] = $rank;
-		}
-		
-		return $_ranks;
-	}
-	
-	/*
-	 * Constructor and Functions
-	 */
-	
-	function Guild_Rank()
-	{
-
-	}
-
-	function Load($rank_id)
-	{		
-		$query = Core::$DB->query("SELECT `id`, `guild_id`, `name`, `level` FROM `guild_ranks` WHERE `id` = '{$rank_id}'");
-		
-		if($query->numRows() == 0)
-			return false;
-	
-		$fetch = $query->fetch();
-
-		$this->_id = $fetch->id;
-		$this->_guildid = $fetch->guild_id;
-		$this->_name = $fetch->name;
-		$this->_level = $fetch->level;
-		
-		$query = Core::$DB->query("SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'");
-		
-		if($query->numRows() != 0)
-		{			
-			for($i = 0; $i < $query->numRows(); ++$i)
-			{					
-							
-				$fetch = $query->fetch();
-				
-				$character = new Character();
-				
-				if(!$character->load($fetch->player_id))
-					return false;	
-				
-				$this->Members[] = $character;
-				//echo "Rank:" . $character->getName() . "<br>";
-			}			
-		}	
-	}
-	
-	function Save()
-	{
-		if($this->_id)
-		{
-			Core::$DB->query("
-				UPDATE 
-					`guild_ranks` 
-				SET 
-					`name` = '{$this->_name}', 
-					`level` = '{$this->_level}', 
-					`guild_id` = '{$this->_guildid}'
-				WHERE 
-					`id` = '{$this->_id}'
-			");			
-		}
-		else
-		{
-			Core::$DB->query("
-				INSERT INTO
-					`guild_ranks`
-					(`name`, `guild_id`, `level`)
-					values
-					('{$this->_name}', '{$this->_guildid}', '{$this->_level}')
-			");			
-		}
-	}
-	
-	function Delete()
-	{
-		Core::$DB->query("DELETE FROM `guild_ranks` WHERE `id` = '{$this->_id}'");		
-	}
-	
-	function MemberCount()
-	{
-		$query = Core::$DB->query("SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'");
-		return $query->numRows();
-	}
-	
-	/*
-	 * Getters and Setters
-	 */
-	
-	function GetId()
-	{
-		return $this->_id;
-	}
-	
-	function GetGuildId()
-	{
-		return $this->_guildid;
-	}
-	
-	function GetName()
-	{
-		return $this->_name;
-	}
-	
-	function GetLevel()
-	{
-		return $this->_level;
-	}
-	
-	function SetGuildId($guild_id)
-	{
-		$this->_guildid = $guild_id;
-	}
-	
-	function SetName($name)
-	{
-		$this->_name = $name;
-	}
-	
-	function SetLevel($level)
-	{
-		$this->_level = $level;
-	}
-}
+include_once("Guild_War.php");
+include_once("Guild_Rank.php");
 
 class Guilds
 {
@@ -534,7 +55,12 @@ class Guilds
 	
 	static function ActivedGuildsList()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guilds` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdate`");
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdate`";
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdata`";
+			
+		$query = Core::$DB->query($query_str);
 		
 		if($query->numRows() == 0)
 		{
@@ -558,7 +84,12 @@ class Guilds
 	
 	static function FormingGuildsList()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guilds` WHERE `status` = '".GUILD_STATUS_IN_FORMATION."' ORDER BY `creationdate`");
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".GUILD_STATUS_IN_FORMATION."' ORDER BY `creationdate`";
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".GUILD_STATUS_IN_FORMATION."' ORDER BY `creationdata`";
+			
+		$query = Core::$DB->query($query_str);		
 
 		if($query->numRows() == 0)
 		{
@@ -582,7 +113,50 @@ class Guilds
 	
 	function Load($id)
 	{
-		$query = Core::$DB->query("SELECT `id`, `name`, `owner_id`, `creationdate`, `motd`, `image`, `status`, `formationTime`, `guild_points`, `guild_better_points` FROM `guilds` WHERE `id` = '{$id}'");
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "
+			SELECT 
+				`guilds`.`id`, 
+				`guilds`.`name`, 
+				`guilds`.`owner_id`, 
+				`guilds`.`creationdate`, 
+				`guilds`.`motd`, 
+				`guilds_site`.`image`, 
+				`guilds_site`.`status`, 
+				`guilds_site`.`guilds`.`formationTime`, 
+				`guilds_site`.`guild_points`, 
+				`guilds_site`.`guild_better_points` 
+			FROM 
+				`guilds` 
+			LEFT JOIN 
+				`".Tools::getSiteTable("guilds")."` as `guilds_site`
+			ON
+				`guilds`.`id` = `guilds_site`.`guild_id`
+			WHERE 
+				`guilds`.`id` = '{$id}'";
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "
+			SELECT 
+				`guilds`.`id`, 
+				`guilds`.`name`, 
+				`guilds`.`ownerid`, 
+				`guilds`.`creationdata`, 
+				`guilds`.`motd`, 
+				`guilds_site`.`image`, 
+				`guilds_site`.`status`, 
+				`guilds_site`.`guilds`.`formationTime`, 
+				`guilds_site`.`guild_points`, 
+				`guilds_site`.`guild_better_points` 
+			FROM 
+				`guilds` 
+			LEFT JOIN 
+				`".Tools::getSiteTable("guilds")."` as `guilds_site`
+			ON
+				`guilds`.`id` = `guilds_site`.`guild_id`
+			WHERE 
+				`guilds`.`id` = '{$id}'";		
+			
+		$query = Core::$DB->query($query_str);
 	
 		if($query->numRows() != 1)
 		{
@@ -593,14 +167,23 @@ class Guilds
 
 		$this->_id = $fetch->id;
 		$this->_name = $fetch->name;
-		$this->_ownerid = $fetch->owner_id;
-		$this->_creationdate = $fetch->creationdate;
 		$this->_motd = $fetch->motd;
 		$this->_image = $fetch->image;
 		$this->_status = $fetch->status;
 		$this->_formationTime = $fetch->formationTime;
 		$this->_guildPoints = $fetch->guild_points;
 		$this->_guildBetterPoints = $fetch->guild_better_points;
+		
+		if(SERVER_DISTRO == DISTRO_TFS)
+		{
+			$this->_ownerid = $fetch->ownerid;
+			$this->_creationdate = $fetch->creationdata;
+		}
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+		{
+			$this->_ownerid = $fetch->owner_id;
+			$this->_creationdate = $fetch->creationdate;			
+		}
 		
 		$this->Ranks = Guild_Rank::RankList($this->_id);
 		
@@ -659,32 +242,72 @@ class Guilds
 	{
 		if($this->_id)
 		{
-			Core::$DB->query("
+			if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+				$query_str = "
 				UPDATE 
-					`guilds` 
+					`guilds`
 				SET 
 					`name` = '{$this->_name}', 
 					`owner_id` = '{$this->_ownerid}', 
 					`creationdate` = '{$this->_creationdate}', 
-					`motd` = '{$this->_motd}', 
+					`motd` = '{$this->_motd}'
+				WHERE 
+					`id` = '{$this->_id}'";
+			elseif(SERVER_DISTRO == DISTRO_TFS)
+				$query_str = "
+				UPDATE 
+					`guilds`
+				SET 
+					`name` = '{$this->_name}', 
+					`ownerid` = '{$this->_ownerid}', 
+					`creationdata` = '{$this->_creationdate}', 
+					`motd` = '{$this->_motd}'
+				WHERE 
+					`id` = '{$this->_id}'";
+				
+						
+			
+			Core::$DB->query($query_str);
+			
+			Core::$DB->query("
+				UPDATE 
+					`".Tools::getSiteTable("guilds")."`
+				SET 
 					`image` = '{$this->_image}', 
 					`status` = '{$this->_status}', 
 					`formationTime` = '{$this->_formationTime}' 
 				WHERE 
-					`id` = '{$this->_id}'
-			");
+					`guild_id` = '{$this->_id}'
+			");			
 		}
 		else
 		{
-			Core::$DB->query("
+			if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+				$query_str = "				
 				INSERT INTO
 					`guilds`
-					(`name`, `owner_id`, `creationdate`, `motd`, `image`, `status`, `formationTime`)
+					(`name`, `owner_id`, `creationdate`, `motd`)
 					values
-					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')
-			");
+					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')";
+			elseif(SERVER_DISTRO == DISTRO_TFS)
+				$query_str = "				
+				INSERT INTO
+					`guilds`
+					(`name`, `ownerid`, `creationdata`, `motd`)
+					values
+					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')";		
+				
+			Core::$DB->query($query_str);
 			
 			$this->_id = Core::$DB->lastInsertId();
+			
+			Core::$DB->query("
+			INSERT INTO
+					`".Tools::getSiteTable("guilds")."`
+					(`guild_id`,`image`, `status`, `formationTime`)
+					values
+					('{$this->_id}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')");
+			
 			$this->Ranks = Guild_Rank::RankList($this->_id);
 		}
 	}
@@ -720,8 +343,13 @@ class Guilds
 		$wars = array();
 		foreach($this->Wars as $guild_war)
 		{			
+			$guild_war instanceof Guild_War;
+
 			if($guild_war->GetStatus() == $status)
 			{
+				if($status == GUILD_WAR_WAITING && $guild_war->GetEndDate() < time())
+					continue;
+				
 				$wars[] = $guild_war;
 			}
 		}

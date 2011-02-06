@@ -1,56 +1,55 @@
-<?php
-if($_POST)
+<?
+
+$query = Core::$DB->query("SELECT * FROM old_accounts ORDER BY id");
+
+while($fetch = $query->fetch())
 {
-	$player = new Character();
-	
-	if(!$_POST["addprize_character"])
-	{
-		$error = "Preencha todos campos do formulario corretamente.";
-	}
-	elseif(!$player->loadByName($_POST["addprize_character"]))
-	{
-		$error = "Este personagem n�o existe.";
-	}
+	if($fetch->premend == 0 || $fetch->premend <= time())
+		$premdays = 0;
 	else
-	{
-		$_accountp = $player->getAccountId();
-		
-		$_account = new Account();
-		$_account->load($_accountp);
-		
-		$_account->setCanSeeAdPage();
-		$_account->save();
-		
-		$success = "
-		<p>A conta do personagem {$_POST["addprize_character"]} agora pode visualizar a pagina de click por premium!</p>
-		";		
-	}
+		$premdays = ($fetch->premend - time()) / 60 / 60 / 24;
+	
+	Core::$DB->query("
+	INSERT INTO 
+		accounts 
+		(
+			`name`, 
+			`password`,
+			`premdays`,
+			`lastday`,
+			`email`,
+			`warnings`
+		)
+		VALUES
+		(
+			'".addslashes($fetch->name)."',
+			'{$fetch->password}',
+			'{$premdays}',
+			UNIX_TIMESTAMP(),
+			'".addslashes($fetch->email)."',
+			'{$fetch->warnings}'
+		)");
+	
+	$id = Core::$DB->lastInsertId();
+	
+	Core::$DB->query("
+	INSERT INTO 
+		wb_accounts_personal 
+		(
+			`account_id`, 
+			`real_name`,
+			`location`,
+			`url`,
+			`creation`
+		)
+		VALUES
+		(
+			'{$id}',
+			'".addslashes($fetch->real_name)."',
+			'".addslashes($fetch->location)."',
+			'".addslashes($fetch->url)."',
+			'{$fetch->creation}'
+		)");	
 }
 
-if($success)	
-{
-	Core::sendMessageBox("Sucesso!", $success);
-}	
-elseif($error)	
-{
-	Core::sendMessageBox("Erro!", $error);
-}
-
-$module .=	'
-<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-	<fieldset>			
-		
-		<p>
-			<label for="addprize_character">Nome do Personagem</label><br />
-			<input id="addprize_character" name="addprize_character" size="40" type="text" value="" />
-		</p>	
-
-		<div id="line1"></div>
-		
-		<p>
-			<input class="button" type="submit" value="Enviar" />
-		</p>			
-
-	</fieldset>
-</form>';	
 ?>

@@ -76,8 +76,6 @@ class Core
 			
 		$mail->AddAddress($to);
 
-		//$mail->AddBcc("jotape.ms@hotmail.com");
-
 		$mail->Subject = $emailsubject[$emailid];
 		$mail->Body = $emailmodel[$emailid];
 		

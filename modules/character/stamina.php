@@ -110,7 +110,7 @@ class View
 			return false;			
 		}
 	
-		$this->loggedAcc->setPremDays($this->loggedAcc->getPremEnd() - ($cost * 60 * 60));
+		$this->loggedAcc->setPremEnd($this->loggedAcc->getPremEnd() - ($cost * 60 * 60));
 		$this->loggedAcc->save();
 		
 		$this->character->setStamina($_POST["stamina-value"] * 60 * 60 * 1000);

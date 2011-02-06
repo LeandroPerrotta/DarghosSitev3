@@ -1,5 +1,10 @@
 <?php
-$query = $db->query("SELECT * FROM houses ORDER BY `townid`");
+if(SERVER_DISTRO == DISTRO_TFS)
+	$query_str = "SELECT * FROM houses ORDER BY `town`";
+elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+	$query_str = "SELECT * FROM houses ORDER BY `townid`";
+
+$query = $db->query($query_str);
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
