@@ -180,7 +180,7 @@ class View
 			</tr>
 			<tr>
 				<td style='text-align: right; vertical-align: bottom; width: 64px; height: 64px;'><img src='{$img}'/></td> 
-				<td><h3>{$monster->getName()}</h3><br/>{$monster->getHealthMax()} pontos de vida.<br>".($monster->getExperience() * EXP_NORMAL)." (".($monster->getExperience() * EXP_REBORN)." para reborns) pontos de experiencia por morte.</td>
+				<td><h3>{$monster->getName()}</h3><br/>{$monster->getHealthMax()} pontos de vida.<br>".($monster->getExperience())." (multiplique pelo seu stage) pontos de experiencia por morte.</td>
 			</tr>
 			<tr>
 				<td>Geral</td> <td>{$features}</td>
@@ -260,7 +260,7 @@ class View
 			$items instanceof Items;
 			
 			$name = $items->getNameById($lot->offsetGet("id"));
-			$chance = $lot->offsetGet("chance");
+			$chance = $lot->offsetGet("chance") * LOT_RATE;
 			$chanceStr = "";
 			
 			if($chance <= 50){ $chanceStr = "Desista de tentar pegar este item..."; }

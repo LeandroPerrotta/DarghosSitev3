@@ -1,6 +1,5 @@
 <?php
-define("EXP_NORMAL", 8);
-define("EXP_REBORN", 6);
+define('LOT_RATE', 2);
 
 class Monsters
 {
