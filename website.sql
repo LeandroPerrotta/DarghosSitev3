@@ -1,4 +1,4 @@
-CREATE TABLE `darghos`.`wb_guild_wars` (
+CREATE TABLE `wb_guild_wars` (
   `war_id` INTEGER  NOT NULL,
   `reply` INTEGER  NOT NULL DEFAULT 0,
   `comment` INTEGER  NOT NULL
@@ -166,6 +166,7 @@ CREATE TABLE `guild_invites` (
   `date` varchar(255) NOT NULL
 ) ENGINE=InnoDB;
 
+ALTER TABLE `guild_invites` ADD `date` INTEGER NOT NULL AFTER `guild_id`;
 ALTER TABLE `guilds` ADD `motd` VARCHAR(255) NOT NULL AFTER `creationdata`;
 ALTER TABLE `guilds` ADD `image` VARCHAR(255) NOT NULL AFTER `motd`;
 ALTER TABLE `guilds` ADD `status` INT(10) NOT NULL DEFAULT 0 AFTER `image`;

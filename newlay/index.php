@@ -107,7 +107,7 @@
 								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
 									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>
-									<li><a href="?ref=account.premiumtest"><? echo $menu['ACCOUNT.PREMIUM_TEST']; ?></a></li>
+									<!-- <li><a href="?ref=account.premiumtest"></a></li> -->
 									<!--  <li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li> -->
 									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>			
 								</ul>
