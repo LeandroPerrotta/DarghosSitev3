@@ -55,7 +55,12 @@ class Guild_Rank
 		$this->_name = $fetch->name;
 		$this->_level = $fetch->level;
 		
-		$query = Core::$DB->query("SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'");
+		if(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `id` FROM `players` WHERE `rank_id` = '{$this->_id}'";
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'";
+			
+		$query = Core::$DB->query($query_str);
 		
 		if($query->numRows() != 0)
 		{			
@@ -109,7 +114,12 @@ class Guild_Rank
 	
 	function MemberCount()
 	{
-		$query = Core::$DB->query("SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'");
+		if(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `id` FROM `players` WHERE `rank_id` = '{$this->_id}'";
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'";
+			
+		$query = Core::$DB->query($query_str);		
 		return $query->numRows();
 	}
 	

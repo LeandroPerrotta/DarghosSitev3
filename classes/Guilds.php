@@ -328,7 +328,12 @@ class Guilds
 	{
 		$this->EreaseInvites();
 
-		Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->_ownerid}'");
+		if(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "UPDATE `players` SET `rank_id` = '0' WHERE `rank_id` = '{$this->_id}'";
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "DELETE FROM `guild_members` WHERE `player_id` = '{$this->_ownerid}'";		
+		
+		Core::$DB->query($query_str);
 		
 		foreach($this->Ranks as $rank)
 		{
