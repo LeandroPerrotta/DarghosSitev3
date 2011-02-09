@@ -58,7 +58,7 @@ if($_POST)
 		$character->setTownId(6);
 		$character->setLookType($outfitType);
 		$character->setConditions(null);
-		$character->setDescription("");
+		$character->setComment("");
 		$character->setCreation(time());
 		
 		$character->save();

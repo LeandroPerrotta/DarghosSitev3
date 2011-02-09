@@ -121,7 +121,7 @@ if($_POST["player_name"] || $_GET['name'])
 			{
 				$module .= "
 				<tr>
-					<td><b>Comentario</b></td> <td>".nl2br(stripslashes($character->getDescription()))."</td>
+					<td><b>Comentario</b></td> <td>".nl2br(stripslashes($character->getComment()))."</td>
 				</tr>";					
 			}
 			

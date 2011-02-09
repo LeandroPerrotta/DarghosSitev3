@@ -31,8 +31,8 @@ if($_GET['name'])
 				else
 				{		
 					$hide = ($_POST["character_hide"] == 1) ? "1" : "0";
-					$character->set("comment", $_POST["character_comment"]);
-					$character->set("hide", $hide);
+					$character->setComment($_POST["character_comment"]);
+					$character->setHidden($hide);
 					
 					$character->save();
 					

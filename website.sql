@@ -19,6 +19,7 @@ CREATE TABLE `wb_players` (
   `player_id` INTEGER  NOT NULL,
   `creation` INTEGER  NOT NULL,
   `visible` INTEGER  NOT NULL,
+  `comment` text,
   `guildjoin` INTEGER  NOT NULL DEFAULT 0
 )
 ENGINE = InnoDB;

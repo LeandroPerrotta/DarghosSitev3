@@ -47,6 +47,7 @@ class Character
 				`".Tools::getSiteTable("players")."` 
 			SET 
 				`creation` = '{$this->site_data["creation"]}',
+				`comment` = '{$this->site_data["comment"]}',
 				`visible` = '{$this->site_data["visible"]}'
 			WHERE 
 				`player_id` = '{$this->data['id']}'");
@@ -97,11 +98,13 @@ class Character
 				(
 					`player_id`,
 					`creation`,
+					`comment`,
 					`visible`		
 				)
 			VALUES (
 				'{$this->data['id']}',
 				'{$this->site_data["creation"]}',
+				'{$this->site_data["comment"]}',
 				'{$this->site_data["visible"]}'
 			)");			
 		}
@@ -110,7 +113,7 @@ class Character
 	function load($player_id)
 	{
 		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
-			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, created, hidden, online, skull_time FROM players WHERE id = '".$player_id."'";
+			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, online, skull_time FROM players WHERE id = '".$player_id."'";
 		elseif(SERVER_DISTRO == DISTRO_TFS)
 			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, online FROM players WHERE id = '".$player_id."'";
 			
@@ -123,7 +126,7 @@ class Character
 			
 		$this->data = $query->fetchAssocArray();
 		
-		$query = $this->db->query("SELECT `creation`, `visible` FROM `".Tools::getSiteTable("players")."` WHERE `player_id` = '{$this->data["id"]}'");
+		$query = $this->db->query("SELECT `creation`, `visible`, `comment` FROM `".Tools::getSiteTable("players")."` WHERE `player_id` = '{$this->data["id"]}'");
 		
 		if($query->numRows() > 0)
 		{
@@ -364,7 +367,7 @@ class Character
 			case "town_id";				$this->setTownId($value); 			break;	
 			case "cap";					$this->setCap($value); 				break;	
 			case "sex";					$this->setSex($value); 				break;	
-			case "comment";				$this->setDescription($value); 		break;	
+			case "comment";				$this->setComment($value); 			break;	
 			case "description";			$this->setDescription($value); 		break;	
 			case "creation";			$this->setCreation($value); 		break;	
 			case "created";				$this->setCreation($value); 		break;	
@@ -472,6 +475,11 @@ class Character
 		$this->data['description'] = Strings::SQLInjection($value);
 	}
 	
+	function setComment($value)
+	{
+		$this->site_data['commnet'] = $value;
+	}
+	
 	function setCreation($value)
 	{
 		$this->site_data['creation'] = $value;
@@ -504,7 +512,7 @@ class Character
 			case "sex":					return $this->getSex();					break;
 			case "online":				return $this->getOnline();				break;
 			case "description":			return $this->getDescription();			break;
-			case "comment":				return $this->getDescription();			break;
+			case "comment":				return $this->getComment();			break;
 			case "created":				return $this->getCreation();			break;
 			case "hide":				return $this->getHidden();				break;
 		}
@@ -612,6 +620,11 @@ class Character
 	function getDescription()
 	{
 		return stripslashes($this->data['description']);
+	}
+	
+	function getComment()
+	{
+		return $this->site_data['comment'];
 	}
 	
 	function getCreation()
