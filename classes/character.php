@@ -477,7 +477,7 @@ class Character
 	
 	function setComment($value)
 	{
-		$this->site_data['commnet'] = $value;
+		$this->site_data['comment'] = $value;
 	}
 	
 	function setCreation($value)
