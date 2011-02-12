@@ -46,7 +46,7 @@ if($_POST)
 			
 		$character->setName($_POST["player_name"]);
 		$character->setAccountId($_SESSION['login'][0]);
-		$character->setGroup(1);
+		$character->setGroup(GROUP_PLAYERS);
 		$character->setSex($sex->Get());
 		$character->setVocation($vocation->Get());
 		$character->setExperience(4200);

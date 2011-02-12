@@ -12,7 +12,7 @@ if($_SESSION['login'])
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getGroup() >= 5)
+	if($account->getGroup() >= GROUP_COMMUNITYMANAGER)
 	{
 		if($_POST)
 		{

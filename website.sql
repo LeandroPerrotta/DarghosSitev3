@@ -176,4 +176,4 @@ ALTER TABLE `players` ADD `description` VARCHAR(255) NOT NULL AFTER `stamina`;
 ALTER TABLE `players` ADD `hidden` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `created` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
 ALTER TABLE `players` ADD `guild_join_date` INT(10) NOT NULL DEFAULT 0 AFTER `description`;
-ALTER TABLE `players` ADD `spoofed` INT(10) NOT NULL DEFAULT 0 AFTER `guild_join_date`;
+ALTER TABLE `players` ADD `is_spoof` TINYINT(1) NOT NULL DEFAULT 0;

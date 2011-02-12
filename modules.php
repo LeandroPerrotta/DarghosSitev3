@@ -463,7 +463,7 @@ else
 				
 				case "newtopic":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
+					$needMinGroup = GROUP_COMMUNITYMANAGER;			
 				break;					
 				
 				default:
@@ -513,17 +513,17 @@ else
 			{
 				case "fastnews":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
+					$needMinGroup = GROUP_COMMUNITYMANAGER;			
 				break;			
 
 				case "tutortest":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
+					$needMinGroup = GROUP_COMMUNITYMANAGER;			
 				break;	
 
 				case "addprize":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
+					$needMinGroup = GROUP_ADMINISTRATOR;			
 				break;						
 				
 				default:
@@ -545,7 +545,7 @@ else
 	if($_GET)
 	{	
 		$_isPremium = false;
-		$_groupId = 1;
+		$_groupId = GROUP_PLAYERS;
 		
 		if($_SESSION['login'])
 		{

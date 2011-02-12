@@ -12,7 +12,7 @@ class View
 			$loggedAcc = new Account();
 			$loggedAcc->load($_SESSION['login'][0]);	
 
-			if($loggedAcc->getGroup() >= 5)
+			if($loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
 			{
 				$this->_canSee = true;
 				

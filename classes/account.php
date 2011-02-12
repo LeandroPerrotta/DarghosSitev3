@@ -1,12 +1,13 @@
 <?
 define("ACCOUNT_CHARACTERLIST_BY_ID", true);
 define("ACCOUNT_CHARACTERLIST_BY_NAME", false);
-define("GROUP_PLAYERS", 1);
-define("GROUP_TUTOR", 2);
-define("GROUP_STUTOR", 3);
-define("GROUP_GAMEMASTER", 4);
-define("GROUP_COMMUNITYMANAGER", 5);
-define("GROUP_ADMINISTRATOR", 6);
+define("GROUP_PLAYERS", 			1);
+define("GROUP_NON_PVP_PLAYERS", 	2);
+define("GROUP_TUTOR", 				3);
+define("GROUP_STUTOR", 				4);
+define("GROUP_GAMEMASTER", 			5);
+define("GROUP_COMMUNITYMANAGER", 	6);
+define("GROUP_ADMINISTRATOR", 		7);
 
 class Account
 {

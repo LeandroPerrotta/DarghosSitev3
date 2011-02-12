@@ -170,7 +170,7 @@
 							</li>								
 							
 								<?php 
-								if($account->getGroup() >= 5) 
+								if($account->getGroup() >= GROUP_COMMUNITYMANAGER) 
 								{
 								?>
 								

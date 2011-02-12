@@ -133,7 +133,7 @@ if($_POST["player_name"] || $_GET['name'])
 		</table>";
 
 		$_gmAcc = new Account();
-		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= 6)
+		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == GROUP_ADMINISTRATOR)
 		{
 			include_once("classes/contribute.php");
 			$contribute = new Contribute();
@@ -330,7 +330,7 @@ if($_POST["player_name"] || $_GET['name'])
 		
 		$_gmAcc = new Account();
 		
-		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= 5)))
+		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= GROUP_GAMEMASTER)))
 		{
 			$kills = $deaths->getKillsOfPlayer($character->getId());
 
