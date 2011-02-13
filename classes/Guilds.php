@@ -144,7 +144,7 @@ class Guilds
 				`guilds`.`motd`, 
 				`guilds_site`.`image`, 
 				`guilds_site`.`status`, 
-				`guilds_site`.`guilds`.`formationTime`, 
+				`guilds_site`.`formationTime`, 
 				`guilds_site`.`guild_points`, 
 				`guilds_site`.`guild_better_points` 
 			FROM 
