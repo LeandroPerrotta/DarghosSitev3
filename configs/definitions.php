@@ -60,6 +60,7 @@ define('SHOW_DEATHS_DAYS_AGO', 30); //Limite de mortes dias atrz que sero exibid
 define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 0); //Possibilidade de ignorar personagens no rank que no entraram no jogo a X dias
 define('ENABLE_NEW_COMMENTS', 0); //Habilitar ou não a possibilidade dos jogadores comentarem em noticias.
 define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
+define('ENABLE_BUY_STAMINA', 0); //Ativa o sistema de comprar stamina (0 = disabled, 1 = enabled)
 
 define('ENABLE_REBORN_SYSTEM', 0); //Ativa o sistema de reborn
 define('FIRST_REBORN_LEVEL', 200); //level minimo para o primeiro reborn

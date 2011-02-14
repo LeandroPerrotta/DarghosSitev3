@@ -199,11 +199,16 @@ else
 					$patch['file'] = $topic;	
 				break;				
 				
+
 				case "stamina":
-					$needPremium = false;
-					$needLogin = false;		
-					$patch['file'] = $topic;	
-				break;				
+						if(ENABLE_BUY_STAMINA)
+						{						
+							$needPremium = true;
+							$needLogin = true;		
+							$patch['file'] = $topic;	
+						}
+				break;
+								
 	
 				default:
 					$patch['dir'] = "errors";
