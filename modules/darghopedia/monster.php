@@ -261,6 +261,7 @@ class View
 			
 			$name = $items->getNameById($lot->offsetGet("id"));
 			$chance = $lot->offsetGet("chance") * LOT_RATE;
+			$chance = min($chance, 100000);
 			$chanceStr = "";
 			
 			if($chance <= 50){ $chanceStr = "Desista de tentar pegar este item..."; }
