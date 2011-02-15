@@ -29,7 +29,7 @@ class Account
 		'creation' => ''	*/
 	);
 	
-	private $real_name = "", $location = "", $url = "", $creation;
+	private $real_name = "", $location = "", $url = "", $creation, $load_personal = false;
 	
 	function __construct()
 	{
@@ -55,6 +55,7 @@ class Account
 			if($query->numRows() != 0)
 			{
 				$fetch = $query->fetch();
+				$this->load_personal = true;
 				
 				$this->real_name = $fetch->real_name;
 				$this->location = $fetch->location;
@@ -121,7 +122,11 @@ class Account
 			}
 			
 			$this->db->query("UPDATE accounts SET $update WHERE id = '".$this->data['id']."'");
-			$this->db->query("UPDATE ".Tools::getSiteTable("accounts_personal")." SET `real_name` = '{$this->real_name}', `location` = '{$this->location}', `url` = '{$this->url}', `creation` = '{$this->creation}' WHERE `account_id` = '{$this->data["id"]}'");
+			
+			if($this->load_personal)
+				$this->db->query("UPDATE ".Tools::getSiteTable("accounts_personal")." SET `real_name` = '{$this->real_name}', `location` = '{$this->location}', `url` = '{$this->url}', `creation` = '{$this->creation}' WHERE `account_id` = '{$this->data["id"]}'");
+			else
+				$this->db->query("INSERT INTO ".Tools::getSiteTable("accounts_personal")." (`account_id`, `creation`) VALUES('{$this->data["id"]}', '$this->creation')");
 		}
 		//new account
 		else
@@ -142,7 +147,9 @@ class Account
 				}			
 			}
 
-			$this->db->query("INSERT INTO accounts ($insert_fields) values($insert_values)");		
+			$this->db->query("INSERT INTO accounts ($insert_fields) values($insert_values)");	
+			$this->data["id"] = $this->db->lastInsertId();
+			
 			$this->db->query("INSERT INTO ".Tools::getSiteTable("accounts_personal")." VALUES('{$this->data["id"]}', '{$this->real_name}', '{$this->location}', '{$this->url}', '$this->creation')");	
 		}
 	}	

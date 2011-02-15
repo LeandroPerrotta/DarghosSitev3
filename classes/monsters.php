@@ -1,5 +1,5 @@
 <?php
-define('LOT_RATE', 2);
+define('LOT_RATE', 5);
 
 class Monsters
 {
