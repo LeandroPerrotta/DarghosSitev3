@@ -9,7 +9,7 @@ class View
 	
 	function View()
 	{
-		if(!$_GET['value'])
+		if(!$_GET['value'] || !ENABLE_GUILD_WARS)
 		{
 			return;
 		}

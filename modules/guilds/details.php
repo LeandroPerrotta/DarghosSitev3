@@ -105,7 +105,7 @@ class View
 		
 			{$guildInfoTable->Draw()}";				
 
-		if($this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
+		if(!ENABLE_GUILD_READ_ONLY && $this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
 		{			
 			$guildPage .= "
 			<p>
@@ -165,19 +165,19 @@ class View
 		{
 			$guildPage .= "<p>";
 			
-			if($this->memberLevel >= GUILD_RANK_VICE)
+			if(!ENABLE_GUILD_READ_ONLY && $this->memberLevel >= GUILD_RANK_VICE)
 			$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.members&name={$this->guild->GetName()}'>Editar Membros</a>				
 			";
 				
-			if($this->memberLevel == GUILD_RANK_LEADER)
+			if(!ENABLE_GUILD_READ_ONLY && $this->memberLevel == GUILD_RANK_LEADER)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.ranks&name={$this->guild->GetName()}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$this->guild->GetName()}'>Passar Liderança</a>				
 				";	
 			}
 			
-			if($this->memberLevel >= GUILD_RANK_MEMBER_OPT_3)
+			if(!ENABLE_GUILD_READ_ONLY && $this->memberLevel >= GUILD_RANK_MEMBER_OPT_3)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.leave&name={$this->guild->GetName()}'>Sair da Guild</a>				
@@ -225,7 +225,7 @@ class View
 		</table>
 		";			
 		
-		if($this->loggedAcc and $this->memberLevel >= GUILD_RANK_VICE)
+		if(!ENABLE_GUILD_READ_ONLY && $this->loggedAcc and $this->memberLevel >= GUILD_RANK_VICE)
 		{
 			$guildPage .= "
 				<p>

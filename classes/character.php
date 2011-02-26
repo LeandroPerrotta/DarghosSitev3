@@ -52,7 +52,7 @@ class Character
 			WHERE 
 				`player_id` = '{$this->data['id']}'");
 
-			if($this->_loadGuild)
+			if($this->_loadGuild && SERVER_DISTRO == DISTRO_OPENTIBIA)
 			{
 				//first, erease all guild member information from player
 				Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->data['id']}'");			
@@ -142,7 +142,18 @@ class Character
 		
 		//precisamos implementar o guild system do TFS...
 		if(SERVER_DISTRO == DISTRO_TFS)
-			$query_str = "SELECT `players`.`rank_id`, `players`.`guildnick`, `players_site`.`guildjoin` FROM `players` LEFT JOIN `".Tools::getSiteTable("players")."` as `players_site` ON `players`.`id` = `players_site`.`player_id` WHERE `id` = '{$this->data["id"]}'";
+			$query_str = "
+						SELECT 
+							`p`.`rank_id`, 
+							`p`.`guildnick`, 
+							`players_site`.`guildjoin` 
+						FROM 
+							`players` as `p`
+						LEFT JOIN 
+							`".Tools::getSiteTable("players")."` as `players_site` 
+						ON 
+							`p`.`id` = `players_site`.`player_id` 
+						WHERE `p`.`id` = '{$this->data["id"]}'";
 		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			$query_str = "SELECT `rank_id`, `nick`, `join_in` FROM `guild_members` WHERE `player_id` = '{$this->data["id"]}'";
 		

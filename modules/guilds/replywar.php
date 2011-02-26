@@ -14,7 +14,7 @@ class View
 	
 	function View()
 	{
-		if(!$_GET["value"] || !is_numeric($_GET["value"]))
+		if(!$_GET["value"] || !is_numeric($_GET["value"]) || !ENABLE_GUILD_WARS)
 		{	
 			return;
 		}

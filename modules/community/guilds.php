@@ -265,10 +265,14 @@ if(ENABLE_GUILD_WARS)
 }
 		
 	$module .= "
-	<br><p>
-		<a class='buttonstd' href='?ref=guilds.create'>Criar nova Guild</a>
-	</p>	
+	<br>";
 	
+	if(!ENABLE_GUILD_READ_ONLY)
+	$module .= "<p>
+		<a class='buttonstd' href='?ref=guilds.create'>Criar nova Guild</a>
+	</p>";
+	
+	$module .="
 	<fieldset>
 		<div class='autoaction' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 			<select>

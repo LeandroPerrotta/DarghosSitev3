@@ -126,7 +126,7 @@ class View
 	
 	function View()
 	{
-		if(!$_GET['name'])
+		if(!$_GET['name'] || !ENABLE_GUILD_WARS)
 		{
 			return;
 		}

@@ -61,23 +61,29 @@ class Guild_Rank
 			$query_str = "SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'";
 			
 		$query = Core::$DB->query($query_str);
-		
+
 		if($query->numRows() != 0)
-		{			
+		{		
 			for($i = 0; $i < $query->numRows(); ++$i)
 			{					
-							
 				$fetch = $query->fetch();
 				
 				$character = new Character();
-				
-				if(!$character->load($fetch->player_id))
+
+				if(SERVER_DISTRO == DISTRO_TFS)		
+					$player_id = $fetch->id;
+				elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+					$player_id = $fetch->player_id;
+
+				if(!$character->load($player_id))
 					return false;	
 				
 				$this->Members[] = $character;
 				//echo "Rank:" . $character->getName() . "<br>";
 			}			
-		}	
+		}
+		
+		return true;
 	}
 	
 	function Save()
