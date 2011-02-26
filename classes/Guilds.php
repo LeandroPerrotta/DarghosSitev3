@@ -589,7 +589,7 @@ class Guilds
 	
 	function GetImage()
 	{
-		return $this->_image;
+		return ($this->_image != "") ? $this->_image : GUILD_DEFAULT_IMAGE;
 	}	
 
 	function GetStatus()

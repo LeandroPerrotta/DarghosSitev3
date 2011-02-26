@@ -22,7 +22,10 @@ $guild_list = "
 		$style = "font-weight: bold;";
 		
 		$_guildsTable->AddField("Descrição", null, $style);
-		$_guildsTable->AddField("Pontos", null, $style);
+		
+		if(ENABLE_GUILD_POINTS)
+			$_guildsTable->AddField("Pontos", null, $style);
+			
 		$_guildsTable->AddRow();
 		
 		foreach($guildsActived as $guild)
@@ -38,9 +41,11 @@ $guild_list = "
 				
 			$_guildsTable->AddField($string, null, $style, null);
 			
-			$string = "{$guild->GetBetterPoints()}/{$guild->GetPoints()}";
-			
-			$_guildsTable->AddField($string);
+			if(ENABLE_GUILD_POINTS)
+			{
+				$string = "{$guild->GetBetterPoints()}/{$guild->GetPoints()}";
+				$_guildsTable->AddField($string);
+			}
 			
 			$_guildsTable->AddRow();
 		}

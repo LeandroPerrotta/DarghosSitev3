@@ -49,10 +49,14 @@ class View
 	{
 		global $module;
 		
-		if($this->guild->OnWar())
-			$warStatus = "<span style='color: red;'>Esta guilda está em guerra com outra(s) guilda(s).</span>";
-		else
-			$warStatus = "Esta guilda não está em guerra.";
+		
+		if(ENABLE_GUILD_WARS)
+		{
+			if($this->guild->OnWar())
+				$warStatus = "<span style='color: red;'>Esta guilda está em guerra com outra(s) guilda(s).</span>";
+			else
+				$warStatus = "Esta guilda não está em guerra.";
+		}
 		
 		//guild info header
 		$guildTable = new HTML_Table();
@@ -72,18 +76,27 @@ class View
 		$guildInfoTable->AddField("Informações da Guilda");
 		$guildInfoTable->AddRow();
 		
-		$guildFormStatus = ($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> até <b>".Core::formatDate($this->guild->GetFormationTime())."</b>.";
-		$guildInfoTable->AddField($guildFormStatus);
-		$guildInfoTable->AddRow();
+		if(ENABLE_GUILD_FORMATION)
+		{
+			$guildFormStatus = ($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> até <b>".Core::formatDate($this->guild->GetFormationTime())."</b>.";
+			$guildInfoTable->AddField($guildFormStatus);
+			$guildInfoTable->AddRow();
+		}
 		
 		$guildInfoTable->AddField("Esta guilda foi criada em <b>".Core::formatDate($this->guild->GetCreationDate())."</b>.");
 		$guildInfoTable->AddRow();
 		
-		$guildInfoTable->AddField("Pontos da guilda (força / total): <b>{$this->guild->GetBetterPoints()}/{$this->guild->GetPoints()}</b>");
-		$guildInfoTable->AddRow();	
+		if(ENABLE_GUILD_POINTS)
+		{
+			$guildInfoTable->AddField("Pontos da guilda (força / total): <b>{$this->guild->GetBetterPoints()}/{$this->guild->GetPoints()}</b>");
+			$guildInfoTable->AddRow();	
+		}
 		
-		$guildInfoTable->AddField("Estado de Guerra: <b>{$warStatus}</b>");
-		$guildInfoTable->AddRow();		
+		if(ENABLE_GUILD_WARS)
+		{
+			$guildInfoTable->AddField("Estado de Guerra: <b>{$warStatus}</b>");
+			$guildInfoTable->AddRow();	
+		}	
 				
 		$guildPage = "
 		<div title='guild_page' class='viewable' style='margin: 0px; padding: 0px;'>
@@ -233,190 +246,203 @@ class View
 		</div>
 		";
 		
-		$warPage = "
-		<div title='guild_wars' style='margin: 0px; padding: 0px;'>";
+		$warPage = "";
 		
-		$this->guild->LoadWars();
-		
-		$warPage .= "
-		<p><h3>Guerras em andamento</h3></p>
-		
-		<table cellspacing='0' cellpadding='0' id='table'>
-			<tr>
-				<th>Oponente</th> <th>Iniciada em</th> <th>Termina em</th> <th>Ou após</th> <th></th>
-			</tr>						
-		";		
-		
-		$warsList = $this->guild->SearchWarsByStatus(GUILD_WAR_STARTED);
-		$warsWaitingList = $this->guild->SearchWarsByStatus(GUILD_WAR_WAITING);
-		
-		if(count($warsList) != 0)
-		{			
-			foreach($warsList as $guild_war)
-			{
-				$opponent = new Guilds();
-				
-				if($guild_war->GetGuildId() == $this->guild->GetId())
-					$opponent->Load($guild_war->GetOpponentId());
-				elseif($guild_war->GetOpponentId() == $this->guild->GetId())
-					$opponent->Load($guild_war->GetGuildId());
-				
-				$endWar = round(($guild_war->GetEndDate() - time()) / (60 * 60 * 24));	
-					
-				$warPage .= "
-				<tr>
-					<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
-				</tr>";
-			}
-		}
-		else
+		if(ENABLE_GUILD_WARS)
 		{
-			$warPage .= "
-			<tr>
-				<td colspan='5'>Esta guilda não está em guerra com nenhuma outra guilda.</td>
-			</tr>";			
-		}
-		
-		if(count($warsWaitingList) != 0)
-		{
-			$warPage .= "
-			<tr>
-				<td colspan='5'><span style='font-weight: bold;'>Guerras que estão para se iniciar no proximo server save.</span></td>
-			</tr>";			
-
-			foreach($warsWaitingList as $guild_war)
-			{
-				$opponent = new Guilds();
-				
-				if($guild_war->GetGuildId() == $this->guild->GetId())
-					$opponent->Load($guild_war->GetOpponentId());
-				elseif($guild_war->GetOpponentId() == $this->guild->GetId())
-					$opponent->Load($guild_war->GetGuildId());
-				
-				$endWar = round(($guild_war->GetEndDate() - time()) / (60 * 60 * 24));		
-					
-				$warPage .= "
-				<tr>
-					<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
-				</tr>";				
-			}
-		}
-		
-		$warPage .= "
-		</table>
-		";		
-		
-		if($this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
-		{			
-			$warPage .= "
-			<p>
-			    <a class='buttonstd' href='?ref=guilds.declarewar&name={$this->guild->GetName()}'>Declarar Guerra</a>				
-			</p>		
-			";				
-		}		
-		
-		$declarationsList = $this->guild->SearchWarsByStatus(GUILD_WAR_DISABLED);
-		
-		$warPage .= "
-		<p><h3>Guerras declaradas</h3></p>
-		
-		<table cellspacing='0' cellpadding='0' id='table'>
-			<tr>
-				<th>Oponente</th> <th>Declarada em</th> <th>Status</th>
-			</tr>						
-		";	
-		
-		if(count($declarationsList) != 0)
-		{	
-			$byGuild = null;
-			$againstGuild = null;
+			$warPage = "
+			<div title='guild_wars' style='margin: 0px; padding: 0px;'>";
 			
-			foreach($declarationsList as $guild_war)
+			$this->guild->LoadWars();
+			
+			$warPage .= "
+			<p><h3>Guerras em andamento</h3></p>
+			
+			<table cellspacing='0' cellpadding='0' id='table'>
+				<tr>
+					<th>Oponente</th> <th>Iniciada em</th> <th>Termina em</th> <th>Ou após</th> <th></th>
+				</tr>						
+			";		
+			
+			$warsList = $this->guild->SearchWarsByStatus(GUILD_WAR_STARTED);
+			$warsWaitingList = $this->guild->SearchWarsByStatus(GUILD_WAR_WAITING);
+			
+			if(count($warsList) != 0)
 			{			
-				if($guild_war->GetReply() != -1)
-				{					
-					$opponent = new Guilds();				
+				foreach($warsList as $guild_war)
+				{
+					$opponent = new Guilds();
 					
 					if($guild_war->GetGuildId() == $this->guild->GetId())
-					{
-						if($guild_war->GetReply() == 0)
-							$status = "Aguardando resposta...";
-						if($guild_war->GetReply() == 1)	
-							$status = "<a href='?ref=guilds.replywar&value={$guild_war->GetId()}'>Responder proposta de guerra.</a>";							
-						
 						$opponent->Load($guild_war->GetOpponentId());
-						
-						$byGuild .= "
-						<tr>
-							<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
-						</tr>";	
-					}
 					elseif($guild_war->GetOpponentId() == $this->guild->GetId())
-					{
-						if($guild_war->GetReply() == 1)
-							$status = "Aguardando resposta...";
-						if($guild_war->GetReply() == 0)	
-							$status = "<a href='?ref=guilds.replywar&value={$guild_war->GetId()}'>Responder proposta de guerra.</a>";							
-						
 						$opponent->Load($guild_war->GetGuildId());
+					
+					$endWar = round(($guild_war->GetEndDate() - time()) / (60 * 60 * 24));	
 						
-						$againstGuild .= "
-						<tr>
-							<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
-						</tr>";							
-					}
+					$warPage .= "
+					<tr>
+						<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+					</tr>";
 				}
+			}
+			else
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='5'>Esta guilda não está em guerra com nenhuma outra guilda.</td>
+				</tr>";			
+			}
+			
+			if(count($warsWaitingList) != 0)
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='5'><span style='font-weight: bold;'>Guerras que estão para se iniciar no proximo server save.</span></td>
+				</tr>";			
+	
+				foreach($warsWaitingList as $guild_war)
+				{
+					$opponent = new Guilds();
+					
+					if($guild_war->GetGuildId() == $this->guild->GetId())
+						$opponent->Load($guild_war->GetOpponentId());
+					elseif($guild_war->GetOpponentId() == $this->guild->GetId())
+						$opponent->Load($guild_war->GetGuildId());
+					
+					$endWar = round(($guild_war->GetEndDate() - time()) / (60 * 60 * 24));		
+						
+					$warPage .= "
+					<tr>
+						<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+					</tr>";				
+				}
+			}
+			
+			$warPage .= "
+			</table>
+			";		
+			
+			
+			if($this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
+			{			
+				$warPage .= "
+				<p>
+				    <a class='buttonstd' href='?ref=guilds.declarewar&name={$this->guild->GetName()}'>Declarar Guerra</a>				
+				</p>		
+				";				
 			}		
-		}
-
-		$warPage .= "
-		<tr>
-			<td colspan='3'><span style='font-weight: bold;'>Guerras declaradas por esta guilda:</span></td>
-		</tr>";			
-		
-		if($byGuild)
-		{
-			$warPage .= $byGuild;
-		}
-		else
-		{
+			
+			$declarationsList = $this->guild->SearchWarsByStatus(GUILD_WAR_DISABLED);
+			
+			$warPage .= "
+			<p><h3>Guerras declaradas</h3></p>
+			
+			<table cellspacing='0' cellpadding='0' id='table'>
+				<tr>
+					<th>Oponente</th> <th>Declarada em</th> <th>Status</th>
+				</tr>						
+			";	
+			
+			if(count($declarationsList) != 0)
+			{	
+				$byGuild = null;
+				$againstGuild = null;
+				
+				foreach($declarationsList as $guild_war)
+				{			
+					if($guild_war->GetReply() != -1)
+					{					
+						$opponent = new Guilds();				
+						
+						if($guild_war->GetGuildId() == $this->guild->GetId())
+						{
+							if($guild_war->GetReply() == 0)
+								$status = "Aguardando resposta...";
+							if($guild_war->GetReply() == 1)	
+								$status = "<a href='?ref=guilds.replywar&value={$guild_war->GetId()}'>Responder proposta de guerra.</a>";							
+							
+							$opponent->Load($guild_war->GetOpponentId());
+							
+							$byGuild .= "
+							<tr>
+								<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
+							</tr>";	
+						}
+						elseif($guild_war->GetOpponentId() == $this->guild->GetId())
+						{
+							if($guild_war->GetReply() == 1)
+								$status = "Aguardando resposta...";
+							if($guild_war->GetReply() == 0)	
+								$status = "<a href='?ref=guilds.replywar&value={$guild_war->GetId()}'>Responder proposta de guerra.</a>";							
+							
+							$opponent->Load($guild_war->GetGuildId());
+							
+							$againstGuild .= "
+							<tr>
+								<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
+							</tr>";							
+						}
+					}
+				}		
+			}
+	
 			$warPage .= "
 			<tr>
-				<td colspan='3'>Esta guilda não declarou nenhuma guerra contra outra guilda.</td>
-			</tr>";					
-		}
-		
-		$warPage .= "
-		<tr>
-			<td colspan='3'><span style='font-weight: bold;'>Guerras declaradas contra esta guilda:</span></td>
-		</tr>";				
-		
-		if($againstGuild)
-		{
-			$warPage .= $againstGuild;
-		}
-		else
-		{
+				<td colspan='3'><span style='font-weight: bold;'>Guerras declaradas por esta guilda:</span></td>
+			</tr>";			
+			
+			if($byGuild)
+			{
+				$warPage .= $byGuild;
+			}
+			else
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='3'>Esta guilda não declarou nenhuma guerra contra outra guilda.</td>
+				</tr>";					
+			}
+			
 			$warPage .= "
 			<tr>
-				<td colspan='3'>Nenhuma guerra foi declarada contra esta guilda.</td>
-			</tr>";					
-		}		
-		
-		$warPage .= "
-		</table>
-		";			
-		
-		$warPage .= "
-		</div>
-		";
+				<td colspan='3'><span style='font-weight: bold;'>Guerras declaradas contra esta guilda:</span></td>
+			</tr>";				
+			
+			if($againstGuild)
+			{
+				$warPage .= $againstGuild;
+			}
+			else
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='3'>Nenhuma guerra foi declarada contra esta guilda.</td>
+				</tr>";					
+			}		
+			
+			$warPage .= "
+			</table>
+			";			
+			
+			$warPage .= "
+			</div>
+			";
+		}
 		
 		$module .= "
 		<fieldset>
 			<div class='autoaction' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 				<select>
-					<option value='guild_page'>Pagina da Guilda</option>
-					<option value='guild_wars'>Guerras da Guilda</option>
+					<option value='guild_page'>Pagina da Guilda</option>";
+		
+					if(ENABLE_GUILD_WARS)
+					{
+						$module .= "
+						<option value='guild_wars'>Guerras da Guilda</option>";
+					}
+					
+				$module .= "
 				</select>
 			</div>		
 			

@@ -63,6 +63,7 @@ define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Chan
 define('ENABLE_BUY_STAMINA', 0); //Ativa o sistema de comprar stamina (0 = disabled, 1 = enabled)
 define('ENABLE_GUILD_WARS', 0); //Ativa o sistema de Guild Wars pelo site
 define('ENABLE_GUILD_FORMATION', 0); //Ativa a opção que as guilds são exibidas separadas em categorias por ativas e em formação, estão opção deve ser desativada para TFS (0 = disabled, 1 = enabled)
+define('ENABLE_GUILD_POINTS', 0); //Sistema de pontuação de guildas (0 = disabled, 1 = enabled)
 
 define('ENABLE_REBORN_SYSTEM', 0); //Ativa o sistema de reborn
 define('FIRST_REBORN_LEVEL', 200); //level minimo para o primeiro reborn
