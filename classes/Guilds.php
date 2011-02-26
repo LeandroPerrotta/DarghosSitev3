@@ -55,10 +55,10 @@ class Guilds
 	
 	static function ActivedGuildsList()
 	{
-		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA && ENABLE_GUILD_FORMATION)
 			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdate`";
-		elseif(SERVER_DISTRO == DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdata`";
+		elseif(SERVER_DISTRO == DISTRO_TFS || !ENABLE_GUILD_FORMATION)
+			$query_str = "SELECT `id` FROM `guilds` ORDER BY `creationdata`";
 			
 		$query = Core::$DB->query($query_str);
 		

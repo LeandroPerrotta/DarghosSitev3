@@ -61,6 +61,8 @@ define('HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS', 0); //Possibilidade de ignorar p
 define('ENABLE_NEW_COMMENTS', 0); //Habilitar ou não a possibilidade dos jogadores comentarem em noticias.
 define('SHOW_SHOPFEATURES', 1); //Exibi features de Shop, como o Item Shop, Change Name, Change Sex e etc (0 = hide, 1 = show)
 define('ENABLE_BUY_STAMINA', 0); //Ativa o sistema de comprar stamina (0 = disabled, 1 = enabled)
+define('ENABLE_GUILD_WARS', 0); //Ativa o sistema de Guild Wars pelo site
+define('ENABLE_GUILD_FORMATION', 0); //Ativa a opção que as guilds são exibidas separadas em categorias por ativas e em formação, estão opção deve ser desativada para TFS (0 = disabled, 1 = enabled)
 
 define('ENABLE_REBORN_SYSTEM', 0); //Ativa o sistema de reborn
 define('FIRST_REBORN_LEVEL', 200); //level minimo para o primeiro reborn
