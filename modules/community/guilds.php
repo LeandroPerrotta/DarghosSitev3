@@ -99,6 +99,10 @@ $guild_list .= "
  * Guilds Wars List
  */	
 	
+$guild_wars = "";
+$end_wars = "";
+$negotiation_wars = "";
+
 if(ENABLE_GUILD_WARS)
 {	
 	$_warsTable = new HTML_Table();
@@ -253,6 +257,7 @@ if(ENABLE_GUILD_WARS)
 		{$_warsTable->Draw()}
 	</div>
 	";		
+}
 		
 	$module .= "
 	<br><p>
@@ -262,10 +267,17 @@ if(ENABLE_GUILD_WARS)
 	<fieldset>
 		<div class='autoaction' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 			<select>
-				<option value='guild_list'>Lista de Guildas</option>
-				<option value='guild_wars'>Guerras em andamento</option>
-				<option value='end_wars'>Guerras terminadas</option>
-				<option value='negotiation_wars'>Guerras em negociação</option>
+				<option value='guild_list'>Lista de Guildas</option>";
+				
+				if(ENABLE_GUILD_WARS)
+				{
+					$module .= "	
+					<option value='guild_wars'>Guerras em andamento</option>
+					<option value='end_wars'>Guerras terminadas</option>
+					<option value='negotiation_wars'>Guerras em negociação</option>";
+				}
+				
+				$module .= "
 			</select>
 		</div>
 		
@@ -275,5 +287,5 @@ if(ENABLE_GUILD_WARS)
 		{$negotiation_wars}
 		
 	</fieldset>";
-}
+
 ?>
