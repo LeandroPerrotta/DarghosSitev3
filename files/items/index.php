@@ -1,184 +1,261 @@
-<?
-	function DrawImage($id, $k, $fp, $spr, $multipler = 1)
+<?PHP
+
+	// Set the item ID to re-create.
+	$myid = ( isset( $_GET['id'] ) ? $_GET['id'] : 0 );
+	$mycount = 1;
+
+
+	if ( $myid >= 100 )
 	{		
-		//if ($id < 100) return;
+		$files = array(
+			'otb' => '/home/darghos/data/items/items.otb',
+			'spr' => '/var/www/darghos/files/Tibia.spr',
+			'dat' => '/var/www/darghos/files/Tibia.dat'
+		);
 		
-		fseek($fp, 6 + ($id - 1) * 4);
+		$newImagePath = "{$myId}.gif";
 
-		extract(unpack('Laddress', fread($fp, 4)));
-		fseek($fp, $address + 3);
-
-		extract(unpack('Ssize', fread($fp, 2)));
-
-		$num = 0;
-		$bit = 0;
 		
-		while ($bit < $size)
+		
+		
+		
+		
+		if ( !defined( 'HEX_PREFIX' ) )
+			define( 'HEX_PREFIX', '0x' );
+		
+		$nostand = false;
+
+		/* READ OTB */
+		$otb = fopen( $files['otb'], 'rb' );
+		while( false !== ( $char = fgetc( $otb ) ) )
 		{
-			$pixels = unpack('Strans/Scolored', fread($fp, 4));
-			$num += $pixels['trans'];
-			
-			for ($i = 0; $i < $pixels['colored']; $i++)
-			{
-				extract(unpack('Cred/Cgreen/Cblue', fread($fp, 3)));
-				
-				$red = $red == 0 ? ($green == 0 ? ($blue == 0 ? 1 : $red) : $red) : $red;
-				
-				if($multipler > 1)
-				{
-					//echo "<br>multipler</br>";
-					imagesetpixel($spr, $num % 32 + ($k % 2 == 1 ? 32 : 0), $num / 32 + ($k % 4 != 1 && $k % 4 != 0 ? 32 : 0), imagecolorallocate($spr, $red, $green, $blue));
-				}
-				else
-				{
-					//echo "<br>no multipler</br>";
-					imagesetpixel($spr, $num % 32, $num / 32, imagecolorallocate($spr, $red, $green, $blue));
-				}
-				$num++;
-			}
-			
-			$bit += 4 + 3 * $pixels['colored'];
-		}		
-	}
+			$byte = HEX_PREFIX.bin2hex( $char );
 
-	$spr_path = '/var/www/darghos/files/Tibia.spr';
-	$dat_path = '/var/www/darghos/files/Tibia.dat';
-	$otb_path = '/home/darghos/data/items/items.otb';
-	$caching = true;
-	
-	define('HEX_PREFIX', '0x');	
-
-	settype(($myId = $_GET['id']), 'integer');
-	$img_path = "{$myId}.gif"; //only if caching
-
-	if ($caching && file_exists($img_path))
-	{
-		$spr = imagecreatefromgif($img_path);
-	}
-	else
-	{	
-		//if ($caching && !file_exists('cache')) mkdir('cache');
-		
-		if ($myId < 100)
-			trigger_error('Item id must be a number above 100', E_USER_ERROR);
-		
-		$fp = fopen($otb_path, 'rb') or exit;
-		
-		while (false !== ($char = fgetc($fp)))
-		{				
-			$optByte = HEX_PREFIX.bin2hex($char);
-			if ($optByte == 0xFE) 
+			if ( $byte == 0xFE )
 				$init = true;
-			elseif ($optByte == 0x10 && $init)
+			elseif ( $byte == 0x10 and $init )
 			{
-				extract(unpack('x2/Ssid', fread($fp, 4)));
-				if ($myId == $sid)
+				extract( unpack( 'x2/Ssid', fread( $otb, 4 ) ) );
+
+				if ( $myid == $sid )
 				{
-					
-					if (HEX_PREFIX.bin2hex(fread($fp, 1)) == 0x11)
-						extract(unpack('x2/SmyId', fread($fp, 4)));
-					break;
+					if ( HEX_PREFIX.bin2hex( fread( $otb, 1 ) ) == 0x11 )
+					{
+						extract( unpack( 'x2/Smyid', fread( $otb, 4 ) ) );
+						break;
+					}
 				}
 				$init = false;
 			}
 		}
-		
-		fclose($fp);
-		
-		$fp = fopen($dat_path, 'rb') or exit;
-		
-		$header = unpack('x4/S*', fread($fp, 12));
-		$maxId = array_sum($header);
-		
-		if($isOutfit)
+
+		fclose( $otb );
+		/* CLOSE OTB */
+
+		/* READ DAT */
+		$dat = fopen( $files['dat'], 'rb' );
+		$max = array_sum( unpack( 'x4/S*', fread( $dat, 12 ) ) );
+
+		if ( $myid > $max )
 		{
-			$myId = $header[1] + $myId;			
+			return false; #trigger_error( sprintf( 'Out of range', ftell( $dat ) ), E_USER_ERROR );
 		}
 
-		if ($myId > $maxId)
-			trigger_error(sprintf('Out of range', ftell($fp)), E_USER_ERROR);
-			
-		for ($id = 100 /* Void */; $id <= $myId; $id++)
-		{			
-			
-			while (($optByte = HEX_PREFIX.bin2hex(fgetc($fp))) != 0xFF)
+		for( $i = 100; $i <= $myid; $i++ )
+		{
+			while( ( $byte = HEX_PREFIX.bin2hex( fgetc( $dat ) ) ) != 0xFF )
 			{
 				$offset = 0;
-				switch ($optByte)
+				switch( $byte )
 				{
-					case 0x00:case 0x09:
-					case 0x0A:case 0x1A:
-					case 0x1D:case 0x1E:
+					case 0x00:
+					case 0x09:
+					case 0x0A:
+					case 0x1A:
+					case 0x1D:
+					case 0x1E:
 						$offset = 2;
-					break;
-					
-					case 0x16:case 0x19:
+						break;
+
+					case 0x16:
+					case 0x19:
 						$offset = 4;
-					break;
-					
-					case 0x01:case 0x02:case 0x03:case 0x04:case 0x05:
-					case 0x06:case 0x07:case 0x08:case 0x0B:case 0x0C:
-					case 0x0D:case 0x0E:case 0x0F:case 0x10:case 0x11:
-					case 0x12:case 0x13:case 0x14:case 0x15:case 0x17:
-					case 0x18:case 0x1B:case 0x1C:case 0x1F:case 0x20:
-					break;
-					
+						break;
+
+					case 0x01:
+					case 0x02:
+					case 0x03:
+					case 0x04:
+					case 0x05:
+					case 0x06:
+					case 0x07:
+					case 0x08:
+					case 0x0B:
+					case 0x0C:
+					case 0x0D:
+					case 0x0E:
+					case 0x0F:
+					case 0x10:
+					case 0x11:
+					case 0x12:
+					case 0x13:
+					case 0x14:
+					case 0x15:
+					case 0x17:
+					case 0x18:
+					case 0x1B:
+					case 0x1C:
+					case 0x1F:
+					case 0x20:
+						break;
+
 					default:
-						trigger_error(sprintf('Unknown dat opt byte: %s (previous opt byte: %s; address: %x)', $optByte, $prevByte, ftell($fp)), E_USER_ERROR);
-					break;
+						return false; #trigger_error( sprintf( 'Unknown .DAT byte %s (previous byte: %s; address %x)', $byte, $prev, ftell( $dat ), E_USER_ERROR ) );
+						break;
 				}
-				$prevByte = $optByte;
-				fseek($fp, $offset, SEEK_CUR);
+
+				$prev = $byte;
+				fseek( $dat, $offset, SEEK_CUR );
 			}
-			
-			extract(unpack('Cwidth/Cheight', fread($fp, 2)));
-			
-			if ($width > 1 || $height > 1)
+			extract( unpack( 'Cwidth/Cheight', fread( $dat, 2 ) ) );
+
+			if ( $width > 1 or $height > 1 )
 			{
-				fseek($fp, 1, SEEK_CUR);
+				fseek( $dat, 1, SEEK_CUR );
 				$nostand = true;
 			}
-			
-			$spr_count = array_product(unpack('C*', fread($fp, 5))) * $width * $height;
-			$sprites = unpack('S*', fread($fp, 2 * $spr_count));
+
+			$sprites_c = array_product( unpack( 'C*', fread( $dat, 5 ) ) ) * $width * $height;
+			$sprites = unpack( 'S*', fread( $dat, 2 * $sprites_c ) );
 		}
-		
-		fclose($fp);
-			
-		$fp = fopen($spr_path, 'rb');
-		
-		if ($nostand)
-		{		
-			for ($i = 0; $i < sizeof($sprites)/4; $i++)
-				$spriteIds = array_merge((array)$spriteIds, array_reverse(array_slice($sprites, $i*4, 4)));
+
+		fclose( $dat );
+		/* CLOSE DAT */
+
+
+		/* READ SPR */
+		$spr = fopen( $files['spr'], 'rb' );
+
+		/*
+		if ( $nostand )
+		{
+			for( $i = 0; $i < sizeof( $sprites ) / 4; $i++ )
+			{
+				$sprites = array_merge( (array) $sprites, array_reverse( array_slice( $sprites, $i * 4, 4 ) ) );
+			}
 		}
 		else
-			$spriteIds = (array) $sprites[array_rand($sprites)];
-		
-		fseek($fp, 6);	
-		
-		$spr = imagecreatetruecolor(32 * $width, 32 * $height);
-		imagecolortransparent($spr, imagecolorallocate($spr, 0, 0, 0));	
-
-		foreach ($spriteIds as $k => $id)
-		{				
-			//echo "<br>Id:".$id.", Sprite: {$spritesDraw}";
-				
-			drawImage($id, $k, $fp, $spr, $multipler);				
+		{
+			$sprites = (array) $sprites[array_rand( $sprites ) ];
 		}
-		
+		*/
 
-		imagegif($spr, $img_path);
-		imagedestroy($spr);
+		if ( !function_exists( 'stackId' ) )
+		{
+			function stackId( $count )
+			{
+				if ( $count >= 50 )
+					$stack = 8;
+				elseif ( $count >= 25 )
+					$stack = 7;
+				elseif ( $count >= 10 )
+					$stack = 6;
+				elseif ( $count >= 5 )
+					$stack = 5;
+				elseif ( $count >= 4 )
+					$stack = 4;
+				elseif ( $count >= 3 )
+					$stack = 3;
+				elseif ( $count >= 2 )
+					$stack = 2;
+				else
+					$stack = 1;
+	
+				return $stack;
+			}
+		}
 
-		fclose($fp);
+		if ( array_key_exists( stackId( $mycount ), $sprites ) )
+		{
+			$sprites = (array) $sprites[stackId( $mycount )];
+		}
+		else
+		{
+			$sprites = (array) $sprites[array_rand( $sprites ) ];
+		}
 
-		//if ($caching && !file_exists($img_path)) imagegif($spr, $img_path);
+		fseek( $spr, 6 );
+
+		$sprite = imagecreatetruecolor( 32 * $width, 32 * $height );
+		imagecolortransparent( $sprite, imagecolorallocate( $sprite, 0, 0, 0 ) );
+
+		foreach( $sprites as $key => $value )
+		{
+			fseek( $spr, 6 + ( $value - 1 ) * 4 );
+			extract( unpack( 'Laddress', fread( $spr, 4 ) ) );
+
+			fseek( $spr, $address + 3 );
+			extract( unpack( 'Ssize', fread( $spr, 2 ) ) );
+
+			list( $num, $bit ) = array( 0, 0 );
+
+			while( $bit < $size )
+			{
+				$pixels = unpack( 'Strans/Scolored', fread( $spr, 4 ) );
+				$num += $pixels['trans'];
+				for( $i = 0; $i < $pixels['colored']; $i++ )
+				{
+					extract( unpack( 'Cred/Cgreen/Cblue', fread( $spr, 3 ) ) );
+
+					$red = ( $red == 0 ? ( $green == 0 ? ( $blue == 0 ? 1 : $red ) : $red ) : $red );
+
+					imagesetpixel( $sprite, 
+						$num % 32 + ( $key % 2 == 1 ? 32 : 0 ), 
+						$num / 32 + ( $key % 4 != 1 and $key % 4 != 0 ? 32 : 0 ), 
+						imagecolorallocate( $sprite, $red, $green, $blue ) );
+
+					$num++;
+				}
+
+				$bit += 4 + 3 * $pixels['colored'];
+			}
+		}
+
+		if ( $mycount >= 2 )
+		{
+			if ( $mycount > 100 )
+				$mycount = 100;
+
+			$font = 3;
+			$length = imagefontwidth( $font ) * strlen( $mycount );
+
+			$pos = array(
+				'x' => ( 32 * $width ) - ( $length + 1 ),
+				'y' => ( 32 * $height ) - 13
+			);
+			imagestring( $sprite, $font, $pos['x'] - 1, $pos['y'] - 1, $mycount, imagecolorallocate( $sprite, 1, 1, 1 ) );
+			imagestring( $sprite, $font, $pos['x'], $pos['y'] - 1, $mycount, imagecolorallocate( $sprite, 1, 1, 1 ) );
+			imagestring( $sprite, $font, $pos['x'] - 1, $pos['y'], $mycount, imagecolorallocate( $sprite, 1, 1, 1 ) );
+
+			imagestring( $sprite, $font, $pos['x'], $pos['y'] + 1, $mycount, imagecolorallocate( $sprite, 1, 1, 1 ) );
+			imagestring( $sprite, $font, $pos['x'] + 1, $pos['y'], $mycount, imagecolorallocate( $sprite, 1, 1, 1 ) );
+			imagestring( $sprite, $font, $pos['x'] + 1, $pos['y'] + 1, $mycount, imagecolorallocate( $sprite, 1, 1, 1 ) );
+
+			imagestring( $sprite, $font, $pos['x'], $pos['y'], $mycount, imagecolorallocate( $sprite, 219, 219, 219 ) );
+		}
+
+		fclose( $spr );
+		/* CLOSE SPR */
+
+		if ( $mycount > 1 )
+		{
+			$folder = explode( '/', $newImagePath );
+			unset( $folder[count( $folder )-1] );
+			$folder = implode( '/', $folder );
+			if ( !file_exists( $folder ) )
+			{
+				mkdir( $folder );
+			}
+		}
+		imagegif( $sprite, $newImagePath );
 	}
-
-	$spr = imagecreatefromgif($img_path);
-	header('Content-type: image/gif');
-
-	imagegif($spr);
-	imagedestroy($spr);
-?>
