@@ -75,6 +75,8 @@ define('SHOW_PREMIUMFEATURES', 1); //Exibi as opes de Premium como Vantagens, Si
 //Ativa a validação por email para modulos como criao de personagem e recuperação de contas entre outros IMPORTANTE: ATIVAO REQUER SERVIDOR SMTP CONFIGURADO
 define('USE_EMAILVALIDATION', true); 
 
+define('REMOVE_AFK_FROM_STATUS', true);
+
 // Constantes para Guildas
 define('GUILDS_FORMATION_DAYS', 5); //Limite de dias para guildas serem formadas
 define('GUILDS_VICELEADERS_NEEDED', 4); //Quantidade de vice-leaders necessarios para uma guild ser formada

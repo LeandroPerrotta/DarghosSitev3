@@ -1,5 +1,11 @@
 @CHARSET "ISO-8859-1";
 
+.afkPlayer{
+	color: #efeee3;
+	font-style: italic;
+	font-weight: normal;
+}
+
 .cortado{
   text-decoration: line-through;
   color: #cfcfcf;

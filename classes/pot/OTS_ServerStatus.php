@@ -94,6 +94,12 @@ class OTS_ServerStatus
  * @since 0.2.0+SVN
  */
     const REQUEST_SERVER_SOFTWARE_INFORMATION = 0x80;
+    
+/**
+ * Player afk info.
+ *
+ */
+    const REQUEST_PLAYER_IS_AFK = 0x100;
 
 /**
  * Basic server respond.
@@ -296,6 +302,17 @@ class OTS_ServerStatus
  * @var int
  */
     protected $peak;
+    
+/**
+ * Players afk.
+ * 
+ * <p>
+ * Note: Custom property from Darghos.
+ * </p>
+ * 
+ * @var int
+ */
+    protected $afk;    	
 /**
  * Map name.
  * 
@@ -425,6 +442,11 @@ class OTS_ServerStatus
                     $this->online = $info->getLong();
                     $this->max = $info->getLong();
                     $this->peak = $info->getLong();
+                    
+                    if(REMOVE_AFK_FROM_STATUS)
+                    {
+                    	$this->afk = $info->getLong();
+                    }                    
                     break;
 
                 case self::RESPOND_MAP_INFO:
@@ -619,6 +641,16 @@ class OTS_ServerStatus
     public function getPlayersPeak()
     {
         return $this->peak;
+    }
+    
+/**
+ * Returns number of players online that are afk.
+ * 
+ * @return int Players afk number.
+ */
+    public function getPlayersAfk()
+    {
+        return $this->afk;
     }
 
 /**

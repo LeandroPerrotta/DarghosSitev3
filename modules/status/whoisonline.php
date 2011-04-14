@@ -39,9 +39,13 @@ else
 		$_premiums = 0;
 	}
 	
-	$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
+	if(SERVER_DISTRO == DISTRO_TFS)
+		$query = $db->query("SELECT name, vocation, level, town_id, account_id, promotion FROM players WHERE online = '1' ORDER BY name");
+	else
+		$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
 	
 	$_totalplayers = $query->numRows();
+	$_afkPlayers = $status->getPlayersAfk();
 	
 	$_sorcerers = 0;	
 	$_druids = 0;	
@@ -69,6 +73,13 @@ else
 			$playersonmsg = "Nós temos 1 jogador conectado em nosso servidor.";
 		else	
 			$playersonmsg = "Nós temos {$_totalplayers} jogadores conectados em nosso servidor.";	
+			
+		if($_afkPlayers == 1)
+			$playersonmsg .= " Destes, 1 está treinando.";
+		elseif($_afkPlayers == 0)
+			$playersonmsg .= " Destes, nenhum está treinando.";
+		elseif($_afkPlayers > 1)
+			$playersonmsg .= " Destes, {$_afkPlayers} estão treinando.";
 
 		while($fetch = $query->fetch())
 		{			
@@ -109,53 +120,74 @@ else
 					$_premiums++;
 			}
 			
+			$isAfk = $info->playerIsAfk($fetch->name);
+			
+			$vocation_id = $fetch->vocation;
+			
+			if(SERVER_DISTRO == DISTRO_TFS && $fetch->promotion == 1)
+			{
+				$vocation_id += 4;
+			}
+			
+			//var_dump($isAfk);
+			
 			$players_list .= "
 			<tr>
-				<td><a href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$fetch->vocation]}</td> <td>{$fetch->level}</td>
+				<td><a ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$vocation_id]}</td> <td>{$fetch->level}</td>
 			</tr>";		
 		}			
 	}
 	
-	$module .= "
-	<tr>
-		<td colspan='4'>{$playersonmsg}</td>
-	</tr>
-	<tr>
-		<td colspan='4'><b>Destes, são das vocações:</b></td>
-	</tr>
-	<tr>
-		<td>Sorcerer's:</td><td>".Tools::getPercentOf($_sorcerers, $_totalplayers)."%</td><td>Druid's:</td><td>".Tools::getPercentOf($_druids, $_totalplayers)."%</td>
-	</tr>
-	<tr>
-		<td>Paladin's:</td><td>".Tools::getPercentOf($_paladins, $_totalplayers)."%</td><td>Knight's:</td><td>".Tools::getPercentOf($_knights, $_totalplayers)."%</td>
-	</tr>
-	<tr>
-		<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
-	</tr>
-	<tr>
-		<td>Island of Peace:</td><td>".Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
-		<td>Quendor:</td><td>".Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
-	</tr>
-	<tr>
-		<td>Thorn:</td><td>".Tools::getPercentOf($_thorn, $_totalplayers)."%</td><td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
-	</tr>
-	<tr>
-		<td>Aaragon:</td><td>".Tools::getPercentOf($_aaragon, $_totalplayers)."%</td><td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
-	</tr>
-	<tr>
-		<td>Northrend:</td><td>".Tools::getPercentOf($_northrend, $_totalplayers)."%</td><td>Kashmir:</td><td>".Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
-	</tr>";
-	
-	if($_isadmin)
+	if($_totalplayers > 0)
 	{
 		$module .= "
 		<tr>
-			<td colspan='4'><b>Destes, são:</b></td>
+			<td colspan='4'>{$playersonmsg}</td>
 		</tr>
 		<tr>
-			<td>Free Account's:</td><td>".Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
-		</tr>		
-		";
+			<td colspan='4'><b>Destes, são das vocações:</b></td>
+		</tr>
+		<tr>
+			<td>Sorcerer's:</td><td>".Tools::getPercentOf($_sorcerers, $_totalplayers)."%</td><td>Druid's:</td><td>".Tools::getPercentOf($_druids, $_totalplayers)."%</td>
+		</tr>
+		<tr>
+			<td>Paladin's:</td><td>".Tools::getPercentOf($_paladins, $_totalplayers)."%</td><td>Knight's:</td><td>".Tools::getPercentOf($_knights, $_totalplayers)."%</td>
+		</tr>
+		<tr>
+			<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
+		</tr>
+		<tr>
+			<td>Island of Peace:</td><td>".Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
+			<td>Quendor:</td><td>".Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
+		</tr>
+		<tr>
+			<td>Thorn:</td><td>".Tools::getPercentOf($_thorn, $_totalplayers)."%</td><td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
+		</tr>
+		<tr>
+			<td>Aaragon:</td><td>".Tools::getPercentOf($_aaragon, $_totalplayers)."%</td><td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
+		</tr>
+		<tr>
+			<td>Northrend:</td><td>".Tools::getPercentOf($_northrend, $_totalplayers)."%</td><td>Kashmir:</td><td>".Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
+		</tr>";
+		
+		if($_isadmin)
+		{
+			$module .= "
+			<tr>
+				<td colspan='4'><b>Destes, são:</b></td>
+			</tr>
+			<tr>
+				<td>Free Account's:</td><td>".Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
+			</tr>		
+			";
+		}
+	}
+	else
+	{
+		$module .= "
+		<tr>
+			<td colspan='4'>{$playersonmsg}</td>
+		</tr>";		
 	}
 	
 	$module .= "

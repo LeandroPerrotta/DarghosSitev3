@@ -256,7 +256,9 @@
 													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
 													<em>IP:</em> darghos.com.br<br />
 													<em>Port:</em> ".STATUS_PORT."<br />
-													<em>Players:</em> {$status->getOnlinePlayers()}<br />
+													<em>Total connected:</em> ".($status->getOnlinePlayers() + $status->getPlayersAfk())."<br />
+													<em>Playing:</em> {$status->getOnlinePlayers()}<br />
+													<em>Training:</em> {$status->getPlayersAfk()}<br />
 													<em>Uptime:</em> {$uptime}<br />
 													<em>Ping:</em> <span class='ping'>aguarde...</span>
 													";	
