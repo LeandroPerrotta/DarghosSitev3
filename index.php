@@ -40,8 +40,7 @@ else
 	include "classes/deaths.php";
 	include "classes/contribute.php";
 	include "classes/bans.php";
-	include "classes/itemshop.php";
-	include "classes/itemshop_list.php";
+	include "classes/ItemShop.php";
 	include "classes/pagesdb.php";
 	include "classes/tools.php";
 	include "classes/strings.php";
@@ -49,6 +48,7 @@ else
 	include "classes/monsters.php";
 	include "classes/Forum.php";
 	include "classes/Items.php";
+	include "classes/Auction.php";
 	
 	include "classes/HTML_Table.php";
 	include "classes/HTML_SelectBox.php";

@@ -4,6 +4,8 @@ class HTML_Table
 	private $_dataRow = array(), $_colums, $_fields = array();
 	private $_width = "90%", $_dropdown = false;
 	
+	public $style = "";
+	
 	function HTML_Table()
 	{
 		
@@ -65,7 +67,10 @@ class HTML_Table
 		$args = "";
 		
 		if($this->_dropdown)
-			$args .= "class='dropdowntable-2'";
+			$args .= "class='dropdowntable-2' ";
+			
+		if($this->style != "")
+			$args .= "style='{$this->style}' ";
 		
 		$string = "
 		<table width='{$this->_width}' {$args} cellspacing='0' cellpadding='0' id='table'>";
@@ -115,7 +120,7 @@ class HTML_Table
 							$args .= "width='{$field["width"]}%'";
 							
 						if($field["style"])
-							$args .= " style='{$field["style"]}%'";
+							$args .= " style='{$field["style"]}'";
 							
 						if($field["colspan"])
 							$args .= " colspan='{$field["colspan"]}'";

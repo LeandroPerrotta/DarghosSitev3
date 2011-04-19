@@ -1,7 +1,7 @@
 * {
 	border: none;
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 }
 
 a {
@@ -188,8 +188,8 @@ ul li {
 	width: 591px;
 }
 
-#right div {
-	padding: 0 10px 10px 10px;
+#right > div {
+	padding: 0 15px 10px 15px;
 }
 
 #right div.last {
@@ -272,3 +272,48 @@ ul li {
 	background-color: #659CD8;
 }
 
+#tileList{
+	padding: 1px;
+	background: #333;
+	border-top: 1px solid #666;
+	border-left: 1px solid #666;
+	border-bottom: 1px solid #666;
+	
+}
+
+#tileItem{
+	
+	background: #000 url(images/tileitem.png) repeat-y;
+	display: inline-block;
+	text-align: center;
+	vertical-align: top;
+	width: 137px;
+	margin-right: -3px;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+
+#tileItem:hover{
+	
+	background: #000 url(images/tileitem_over.png) repeat-y;
+	cursor: pointer;
+}
+
+#tileItem h3{
+	
+	border: none;
+	text-decoration: none;
+	font-size: 12px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+#tileItem img{
+
+	margin: 2px;
+}
+
+#tileItem p{
+	
+	margin-bottom: 5px;
+}

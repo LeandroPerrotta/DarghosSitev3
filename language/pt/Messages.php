@@ -272,7 +272,7 @@ class Lang_Messages
 		self::$messages[LMSG_ITEMSHOP_PURCHASE_SUCCESS] = "
 			<p>Caro jogador,</p>
 			<p>A compra de @v1@x @v2@ por @v3@ dias de sua conta premium foi efetuada com sucesso!</p>
-			<p>O seu item estara em sua backpack principal no proximo log-in.</p>
+			<p>O seu item estara em um present box no depot especial para o item shop, no ultimo andar do depot da cidade de Aracura.</p>
 			<p>Tenha um bom jogo!</p>
 		";				
 			

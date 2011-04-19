@@ -1,6 +1,6 @@
 <?php
 $info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
-$status = $info->info(OTS_ServerStatus::REQUEST_BASIC_SERVER_INFO | OTS_ServerStatus::REQUEST_OWNER_SERVER_INFO | OTS_ServerStatus::REQUEST_MISC_SERVER_INFO | OTS_ServerStatus::REQUEST_PLAYERS_INFO | OTS_ServerStatus::REQUEST_MAP_INFO);
+$status = $info->info(OTS_ServerStatus::REQUEST_PLAYERS_INFO);
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>

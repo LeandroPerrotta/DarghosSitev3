@@ -1,3 +1,35 @@
+/*
+ * AUCTION ITEMS
+ */
+
+CREATE TABLE `wb_auction_bids` (
+  `id` INTEGER  NOT NULL AUTO_INCREMENT,
+  `auction_id` INTEGER  NOT NULL,
+  `player_id` INTEGER  NOT NULL,
+  `bid` INTEGER  NOT NULL,
+  `date` INTEGER  NOT NULL,
+  `enabled` INTEGER  NOT NULL,
+  PRIMARY KEY (`id`)
+)
+ENGINE = InnoDB;
+
+CREATE TABLE `wb_auction_products` (
+  `id` INTEGER  NOT NULL AUTO_INCREMENT,
+  `type` INTEGER  NOT NULL,
+  `name` VARCHAR(255)  NOT NULL,
+  `description` TEXT  NOT NULL,
+  `params` TEXT  NOT NULL,
+  `min_bid` INTEGER  NOT NULL DEFAULT 0,
+  `creation` INTEGER  NOT NULL,
+  `start_in` INTEGER  NOT NULL,
+  `end_in` INTEGER  NOT NULL,
+  PRIMARY KEY (`id`)
+)
+
+/*
+ * END
+ */
+
 CREATE TABLE `wb_guild_wars` (
   `war_id` INTEGER  NOT NULL,
   `reply` INTEGER  NOT NULL DEFAULT 0,
@@ -105,27 +137,23 @@ CREATE TABLE `wb_iptries` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `wb_itemshop` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `player_id` int(10) unsigned NOT NULL,
-  `itemlist_id` int(10) unsigned NOT NULL,
-  `time` int(10) unsigned NOT NULL,
-  `received` int(10) unsigned NOT NULL DEFAULT '0',
-  `account_id` int(10) unsigned NOT NULL DEFAULT '0',
+CREATE TABLE `wb_itemshop_log` (
+  `id` INTEGER  NOT NULL AUTO_INCREMENT,
+  `shop_id` INTEGER  NOT NULL,
+  `date` INTEGER  NOT NULL,
+  `player_id` INTEGER  NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE = InnoDB;
 
-CREATE TABLE `wb_itemshop_list` (
+CREATE TABLE `wb_itemshop` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `item_id` int(10) unsigned NOT NULL,
-  `count` int(10) unsigned NOT NULL,
-  `cost` int(10) unsigned NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `special` varchar(255) NOT NULL DEFAULT '0',
-  `time` int(10) unsigned NOT NULL,
-  `actived` int(10) unsigned NOT NULL DEFAULT '1',
+  `params` varchar(1000) NOT NULL,
+  `price` int(10) unsigned NOT NULL,
+  `added_in` int(10) unsigned NOT NULL,
+  `enabled` int(10) unsigned NOT NULL DEFAULT '1',
+  `type` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

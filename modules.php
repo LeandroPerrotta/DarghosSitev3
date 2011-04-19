@@ -183,14 +183,6 @@ else
 				case "undelete":
 					$needLogin = true;		
 					$patch['file'] = $topic;
-				break;		
-
-				case "itemshop":
-					if(SHOW_SHOPFEATURES != 0)
-					{
-						$needLogin = true;		
-						$patch['file'] = $topic;
-					}	
 				break;				
 				
 				case "reborn":
@@ -464,7 +456,7 @@ else
 				case "register":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;				
+				break;		
 				
 				case "newtopic":
 					$patch['file'] = $topic;
@@ -537,7 +529,27 @@ else
 				break;					
 			}
 			
-		break;		
+		break;	
+
+	
+			case "itemshop":
+			{
+				$patch['dir'] = $module;		
+				
+				if(SHOW_SHOPFEATURES == 1)
+				{
+					if(file_exists("modules/{$module}/{$topic}.php"))
+					{
+						$patch['file'] = $topic;
+						break;
+					}
+				}
+				
+				$patch['dir'] = "errors";
+				$patch['file'] = "notfound";
+				break;
+			}
+		
 		
 		default:
 			$patch['dir'] = "errors";
