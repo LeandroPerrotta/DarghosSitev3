@@ -1,6 +1,6 @@
 <?php
-$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
-$status = $info->info(OTS_ServerStatus::REQUEST_PLAYERS_INFO);
+$status_query = Core::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
+$stats_fetch = $status_query->fetch();
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
@@ -8,7 +8,7 @@ $module .= "
 		<th colspan='4'>Server Status</th>
 	</tr>";	
 
-if(!$status)
+if($fetch->online == 0 || $fetch->date < time - 60 * 5)
 {
 	$module .= "
 	<tr>
@@ -40,12 +40,27 @@ else
 	}
 	
 	if(SERVER_DISTRO == DISTRO_TFS)
-		$query = $db->query("SELECT name, vocation, level, town_id, account_id, promotion FROM players WHERE online = '1' ORDER BY name");
+		$query = $db->query("
+		SELECT 
+			player.name, 
+			player.vocation, 
+			player.level, 
+			player.town_id, 
+			player.account_id, 
+			player.promotion,
+			list.isAfk
+		FROM 
+			`".Tools::getSiteTable("who_is_online")."` as `list`
+		LEFT JOIN
+			`players` as `player`
+		ON
+			list.player_id = player.id
+		ORDER BY player.name");
 	else
 		$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
 	
-	$_totalplayers = $query->numRows();
-	$_afkPlayers = $status->getPlayersAfk();
+	$_totalplayers = $stats_fetch->players;
+	$_afkPlayers = $stats_fetch->afk;
 	
 	$_sorcerers = 0;	
 	$_druids = 0;	
@@ -120,7 +135,7 @@ else
 					$_premiums++;
 			}
 			
-			$isAfk = $info->playerIsAfk($fetch->name);
+			$isAfk = $fetch->isAfk;
 			
 			$vocation_id = $fetch->vocation;
 			
