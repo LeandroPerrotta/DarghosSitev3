@@ -220,8 +220,8 @@
 							</li>	
 							
 							<?php 
-							$info = new OTS_ServerInfo(STATUS_ADDRESS, STATUS_PORT);
-							$status = $info->info(OTS_ServerStatus::REQUEST_BASIC_SERVER_INFO | OTS_ServerStatus::REQUEST_OWNER_SERVER_INFO | OTS_ServerStatus::REQUEST_MISC_SERVER_INFO | OTS_ServerStatus::REQUEST_PLAYERS_INFO | OTS_ServerStatus::REQUEST_MAP_INFO);
+							$query = Core::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
+							$fetch = $query->fetch();
 							?>
 							
 							<li>
@@ -231,7 +231,7 @@
 										<div>								
 											<p>
 												<?php 
-												if(!$status)
+												if($fetch->online == 0 || $fetch->date < time - 60 * 5)
 												{
 													echo "
 													<em>Status:</em> <font color='#ec0404'><b>offline</b></font>
@@ -239,8 +239,8 @@
 												}
 												else
 												{
-													$seconds = $status->getUptime() % 60;
-													$uptime = floor($status->getUptime() / 60);
+													$seconds = $fetch->uptime % 60;
+													$uptime = floor($fetch->uptime / 60);
 											
 													$minutes = $uptime % 60;
 													$uptime = floor($uptime / 60);
@@ -256,9 +256,9 @@
 													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
 													<em>IP:</em> darghos.com.br<br />
 													<em>Port:</em> ".STATUS_PORT."<br />
-													<em>Total connected:</em> ".($status->getOnlinePlayers() + $status->getPlayersAfk())."<br />
-													<em>Playing:</em> {$status->getOnlinePlayers()}<br />
-													<em>Training:</em> {$status->getPlayersAfk()}<br />
+													<em>Total connected:</em> ".($fetch->players + $fetch->afk)."<br />
+													<em>Playing:</em> {$fetch->players}<br />
+													<em>Training:</em> {$fetch->afk}<br />
 													<em>Uptime:</em> {$uptime}<br />
 													<em>Ping:</em> <span class='ping'>aguarde...</span>
 													";	
