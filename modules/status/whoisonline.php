@@ -8,7 +8,7 @@ $module .= "
 		<th colspan='4'>Server Status</th>
 	</tr>";	
 
-if($fetch->online == 0 || $fetch->date < time - 60 * 5)
+if($stats_fetch->online == 0 || $stats_fetch->date < time - 60 * 5)
 {
 	$module .= "
 	<tr>
