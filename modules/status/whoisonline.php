@@ -42,19 +42,17 @@ else
 	if(SERVER_DISTRO == DISTRO_TFS)
 		$query = $db->query("
 		SELECT 
-			player.name, 
-			player.vocation, 
-			player.level, 
-			player.town_id, 
-			player.account_id, 
-			player.promotion,
-			list.isAfk
+			name, 
+			vocation, 
+			level, 
+			town_id, 
+			account_id, 
+			promotion,
+			afk
 		FROM 
-			`".Tools::getSiteTable("who_is_online")."` as `list`
-		LEFT JOIN
-			`players` as `player`
-		ON
-			list.player_id = player.id
+			`players`
+		WHERE
+			`online` = '1'
 		ORDER BY player.name");
 	else
 		$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");

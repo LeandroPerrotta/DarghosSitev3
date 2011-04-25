@@ -222,41 +222,7 @@ class OTS_ServerInfo
 
         // offline
         return false;
-    }
-
-/**
- * Checks if player are afk.
- * 
- * <p>
- * This method uses binary info protocol.
- * </p>
- * 
- * @param string $name Player name.
- * @return bool True if player is online and afk, false if player are offline, not afk or server server is offline.
- * @throws E_OTS_OutOfBuffer When there is read attemp after end of packet stream.
- */
-    public function playerIsAfk($name)
-    {
-        // request packet
-        $request = new OTS_Buffer();
-        $request->putChar(255);
-        $request->putChar(1);
-        $request->putShort(OTS_ServerStatus::REQUEST_PLAYER_IS_AFK);
-        $request->putString($name);
-
-        $status = $this->send($request);
-
-        // checks if server is online
-        if($status)
-        {
-            $status->skip(2);
-            $status->getChar();
-            return (bool) $status->getChar();
-        }
-
-        // offline
-        return false;
-    }    
+    }   
     
 /**
  * Magic PHP5 method.

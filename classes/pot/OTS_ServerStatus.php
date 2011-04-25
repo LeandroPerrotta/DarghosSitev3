@@ -94,12 +94,6 @@ class OTS_ServerStatus
  * @since 0.2.0+SVN
  */
     const REQUEST_SERVER_SOFTWARE_INFORMATION = 0x80;
-    
-/**
- * Player afk info.
- *
- */
-    const REQUEST_PLAYER_IS_AFK = 0x100;
 
 /**
  * Basic server respond.
