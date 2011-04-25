@@ -57,7 +57,7 @@ else
 	else
 		$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
 	
-	$_totalplayers = $stats_fetch->players;
+	$_totalplayers = $stats_fetch->players + $stats_fetch->afk;
 	$_afkPlayers = $stats_fetch->afk;
 	
 	$_sorcerers = 0;	
