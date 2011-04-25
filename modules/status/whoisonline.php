@@ -53,7 +53,7 @@ else
 			`players`
 		WHERE
 			`online` = '1'
-		ORDER BY player.name");
+		ORDER BY name");
 	else
 		$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
 	
@@ -133,7 +133,7 @@ else
 					$_premiums++;
 			}
 			
-			$isAfk = $fetch->isAfk;
+			$isAfk = $fetch->afk;
 			
 			$vocation_id = $fetch->vocation;
 			
