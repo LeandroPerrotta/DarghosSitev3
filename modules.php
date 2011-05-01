@@ -25,7 +25,7 @@ else
 	switch($module)
 	{
 		case "account":
-		
+					
 			$patch['dir'] = $module;
 		
 			switch($topic)
@@ -111,7 +111,12 @@ else
 				case "prize":
 					$needLogin = true;	
 					$patch['file'] = $topic;
-				break;				
+				break;			
+
+				case "changename":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;						
 				
 				default:
 					$patch['dir'] = "errors";

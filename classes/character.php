@@ -331,7 +331,7 @@ class Character
 	
 	function loadOldNames()
 	{
-		$query = $this->db->query("SELECT value, time FROM ".DB_WEBSITE_PREFIX."changelog WHERE type = 'name' and player_id = '{$this->data["id"]}' ORDER BY time DESC");
+		$query = $this->db->query("SELECT `value`, `time` FROM ".DB_WEBSITE_PREFIX."changelog WHERE `type` = 'name' and `key` = '{$this->data["id"]}' ORDER BY `time` DESC");
 		$names = array();
 		
 		if($query->numRows() != 0)
@@ -389,56 +389,22 @@ class Character
 	
 	
 	
-	function setId($value)
-	{
-		$this->data['id'] = $value;
-	}
-	
-	function setName($value)
-	{
-		$this->data['name'] = $value;
-	}
-	
-	function setGroup($value)
-	{
-		$this->data['group_id'] = $value;
-	}
-	
-	function setAccountId($value)
-	{
-		$this->data['account_id'] = $value;
-	}
-	
-	function setLevel($value)
-	{
-		$this->data['level'] = $value;
-	}
-	
-	function setVocation($value)
-	{
-		$this->data['vocation'] = $value;
-	}
+	function setId($value){ $this->data['id'] = $value; }	
+	function setName($value){ $this->data['name'] = $value; }	
+	function setGroup($value){ $this->data['group_id'] = $value; }	
+	function setAccountId($value){ $this->data['account_id'] = $value; }	
+	function setLevel($value){ $this->data['level'] = $value; }	
+	function setVocation($value){ $this->data['vocation'] = $value; }
 	
 	function setHealth($value)
-	{
+	{		
 		$this->data['health'] = $value;
 		$this->data['healthmax'] = $value;
 	}
 	
-	function setExperience($value)
-	{
-		$this->data['experience'] = $value;
-	}
-
-	function setLookType($value)
-	{
-		$this->data['looktype'] = $value;
-	}	
-	
-	function setMagLevel($value)
-	{
-		$this->data['maglevel'] = $value;
-	}
+	function setExperience($value){	$this->data['experience'] = $value; }
+	function setLookType($value){ $this->data['looktype'] = $value; }		
+	function setMagLevel($value){ $this->data['maglevel'] = $value;	}
 	
 	function setMana($value)
 	{
@@ -446,67 +412,18 @@ class Character
 		$this->data['manamax'] = $value;
 	}
 	
-	function setTownId($value)
-	{
-		$this->data['town_id'] = $value;
-	}
-	
-	function setConditions($value)
-	{
-		$this->data['conditions'] = $value;
-	}	
-	
-	function setCap($value)
-	{
-		$this->data['cap'] = $value;
-	}
-	
-	function setSex($value)
-	{
-		$this->data['sex'] = $value;
-	}
-	
-	function setGuildRankId($rank_id)
-	{
-		$this->_guild_rank_id = $rank_id;
-	}
-	
-	function setGuildNick($nick)
-	{
-		$this->_guild_nick = Strings::SQLInjection($nick);
-	}
-	
-	function setGuildJoinIn($join_in)
-	{
-		$this->_guild_join_in = $join_in;
-	}	
-	
-	function setDescription($value)
-	{
-		$this->data['description'] = Strings::SQLInjection($value);
-	}
-	
-	function setComment($value)
-	{
-		$this->site_data['comment'] = $value;
-	}
-	
-	function setCreation($value)
-	{
-		$this->site_data['creation'] = $value;
-	}
-	
-	function setStamina($value)
-	{
-		$this->data['stamina'] = $value;
-	}
-	
-	function setHidden($value)
-	{
-		$this->site_data['visible'] = $value;
-	}
-	
-	
+	function setTownId($value){	$this->data['town_id'] = $value; }	
+	function setConditions($value){	$this->data['conditions'] = $value;	}	
+	function setCap($value){ $this->data['cap'] = $value; }	
+	function setSex($value){ $this->data['sex'] = $value; }	
+	function setGuildRankId($rank_id){ $this->_guild_rank_id = $rank_id; }	
+	function setGuildNick($nick){ $this->_guild_nick = Strings::SQLInjection($nick); }	
+	function setGuildJoinIn($join_in){ $this->_guild_join_in = $join_in; }		
+	function setDescription($value){ $this->data['description'] = Strings::SQLInjection($value); }	
+	function setComment($value){ $this->site_data['comment'] = $value; }	
+	function setCreation($value){ $this->site_data['creation'] = $value; }	
+	function setStamina($value){ $this->data['stamina'] = $value; }	
+	function setHidden($value){	$this->site_data['visible'] = $value; }	
 	
 	function get($field)
 	{
@@ -533,149 +450,43 @@ class Character
 	
 	
 	
-	function getId()
-	{
-		return $this->data['id'];
-	}
-	
-	function getName()
-	{
-		return $this->data['name'];
-	}
-	
-	function getGroup()
-	{
-		return $this->data['group_id'];
-	}
-	
-	function getAccountId()
-	{
-		return $this->data['account_id'];
-	}
-	
-	function getLevel()
-	{
-		return $this->data['level'];
-	}
-	
-	function getMagicLevel()
-	{
-		return $this->data['maglevel'];
-	}	
+	function getId(){ return $this->data['id']; }
+	function getName(){ return $this->data['name'];	}
+	function getGroup(){ return $this->data['group_id']; }
+	function getAccountId(){ return $this->data['account_id']; }
+	function getLevel(){ return $this->data['level']; }
+	function getMagicLevel(){ return $this->data['maglevel']; }	
 	
 	function getVocation()
 	{
 		$vocation = $this->data['vocation'];
 		
-		if(SERVER_DISTRO == DISTRO_TFS && $this->data['promotion'] == 1)
+		if(SERVER_DISTRO == DISTRO_TFS && $this->data['promotion'] == 1 && $this->loadAccount()->getPremDays() > 0)
 			$vocation = $vocation + 4;
 			
 		return $vocation;
 	}
 	
-	function getExperience()
-	{
-		return $this->data['experience'];
-	}
-	
-	function getMagLevel()
-	{
-		return $this->data['maglevel'];
-	}
-	
-	function getTownId()
-	{
-		return $this->data['town_id'];
-	}
-	
-	function getSex()
-	{
-		return $this->data['sex'];
-	}
-	
-	function GetGuildRank()
-	{
-		return $this->_guild_rank;
-	}
-	
-	function GetGuildRankId()
-	{
-		return $this->_guild_rank_id;
-	}
-	
-	function GetGuildName()
-	{
-		return $this->_guild_name;
-	}
-	
-	function GetGuildId()
-	{
-		return $this->_guild_id;
-	}
-	
-	function GetGuildLevel()
-	{
-		return $this->_guild_level;
-	}
-	
-	function getGuildNick()
-	{
-		return stripslashes($this->_guild_nick);
-	}
-	
-	function getGuildJoinIn()
-	{
-		return $this->_guild_join_in;
-	}	
-	
-	function getOnline()
-	{
-		return $this->data['online'];
-	}
-	
-	function getDescription()
-	{
-		return stripslashes($this->data['description']);
-	}
-	
-	function getComment()
-	{
-		return $this->site_data['comment'];
-	}
-	
-	function getCreation()
-	{
-		return $this->site_data['creation'];
-	}
-	
-	function getHidden()
-	{
-		return $this->site_data['visible'];
-	}
-	
-	function getLastLogin()
-	{
-		return $this->data['lastlogin'];
-	}	
-	
-	function getPosX()
-	{
-		return $this->data['posx'];
-	}
-	
-	function getPosY()
-	{
-		return $this->data['posy'];
-	}
-
-	function getPosZ()
-	{
-		return $this->data['posz'];
-	}	
-
-	function getStamina()
-	{
-		return $this->data['stamina'];
-	}	
+	function getExperience(){ return $this->data['experience']; }
+	function getMagLevel(){	return $this->data['maglevel'];	}
+	function getTownId(){ return $this->data['town_id']; }
+	function getSex(){ return $this->data['sex']; }
+	function GetGuildRank(){ return $this->_guild_rank; }
+	function GetGuildRankId(){ return $this->_guild_rank_id; }
+	function GetGuildName(){ return $this->_guild_name;	}
+	function GetGuildId(){ return $this->_guild_id; }
+	function GetGuildLevel(){ return $this->_guild_level; }	
+	function getGuildNick(){ return stripslashes($this->_guild_nick); }	
+	function getGuildJoinIn(){ return $this->_guild_join_in; }		
+	function getOnline(){ return $this->data['online']; }	
+	function getDescription(){ return stripslashes($this->data['description']); }	
+	function getComment(){ return $this->site_data['comment']; }
+	function getCreation(){	return $this->site_data['creation']; }	
+	function getHidden(){ return $this->site_data['visible']; }	
+	function getLastLogin(){ return $this->data['lastlogin']; }		
+	function getPosX(){ return $this->data['posx']; }
+	function getPosY(){ return $this->data['posy']; }
+	function getPosZ(){	return $this->data['posz'];	}	
+	function getStamina(){ return $this->data['stamina']; }	
 }
 ?>

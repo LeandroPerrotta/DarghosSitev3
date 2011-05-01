@@ -123,11 +123,13 @@ else
 				$_kashmir++;
 			elseif($town["name"] == "Aracura")
 				$_aracura++;
+
+			$_characc = new Account();
+			$_characc->load($fetch->account_id);				
 				
 			if($_isadmin)
 			{
-				$_characc = new Account();
-				$_characc->load($fetch->account_id);
+
 				
 				if($_characc->getPremDays() > 0)
 					$_premiums++;
@@ -137,7 +139,7 @@ else
 			
 			$vocation_id = $fetch->vocation;
 			
-			if(SERVER_DISTRO == DISTRO_TFS && $fetch->promotion == 1)
+			if(SERVER_DISTRO == DISTRO_TFS && $fetch->promotion == 1 && $_characc->getPremDays() > 0)
 			{
 				$vocation_id += 4;
 			}

@@ -102,6 +102,8 @@ class Lang_Messages
 		self::$messages[LMSG_STAMINA_VALUE_WRONG] = "Você deve selecionar corretamente a quantidade de stamina que deseja recuperar.";
 		self::$messages[LMSG_DARGHOSPOINTS_NEED_ACCEPT_TERMS] = "Para adquirir seus Darghos Points é necessario concordar com nossos termos de uso.";
 		self::$messages[LMSG_MONSTER_NOT_FOUND] = "O monstro @v1@ não existe em nosso servidor.";
+		self::$messages[LMSG_OPERATION_NEED_PREMDAYS] = "A sua conta não possui os @v1@ premdays disponiveis necessarios para concluir esta operação.";
+		self::$messages[LMSG_ACCOUNT_CHANGENAME_SUCCESS] = "O nome da sua conta foi modificado para @v1@ com sucesso!";
 	
 		self::$messages[LMSG_ACCOUNT_REGISTERED] = "
 			<p>Parabens, sua conta foi criada com sucesso!</p>

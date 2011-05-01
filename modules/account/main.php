@@ -237,7 +237,10 @@ if($account->getName() == $account->getId())
 else
 {			
 	$module .= "
-	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>";
+	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> 
+	<a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>
+	<a class='buttonstd' href='?ref=account.changename'>Renomear</a>
+	";
 }
 
 $module .= "

@@ -82,8 +82,7 @@ if($_GET['name'])
 						$account->updatePremDays(PREMDAYS_TO_CHANGENAME, false /* false to decrement days */);						
 						$account->save();				
 						
-						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
-						
+						Core::addChangeLog('name', $character->get("id"), $_POST["character_newname"]);
 						$success = Lang::Message(LMSG_CHARACTER_NAME_CHANGED, $oldName, $_POST["character_newname"]);
 					}
 				}			
@@ -121,8 +120,7 @@ if($_GET['name'])
 						
 						$account->save();		
 		
-						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('sex','{$character->get("id")}','{$sexo}','".time()."')");
-						
+						Core::addChangeLog('sex', $character->get("id"), $sexo);
 						$success = Lang::Message(LMSG_CHARACTER_SEX_CHANGED, $character->getName());
 					}		
 				}		

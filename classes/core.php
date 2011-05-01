@@ -43,6 +43,21 @@ class Core
 		// could be: POT::connect(POT::DB_MYSQL, $config);		
 	}
 	
+	static function addChangeLog($type, $key, $value)
+	{
+		self::$DB->query("
+			INSERT INTO 
+				".Tools::getSiteTable("changelog")." 
+				(`type`,`key`,`value`,`time`) 
+			VALUES 
+			(
+				'{$type}',
+				'{$key}',
+				'{$value}',
+				'".time()."'
+			)");
+	}
+	
 	static function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
 		include "libs/phpmailer/class.phpmailer.php";
