@@ -87,12 +87,15 @@ else
 		else	
 			$playersonmsg = "Nós temos {$_totalplayers} jogadores conectados em nosso servidor.";	
 			
-		if($_afkPlayers == 1)
-			$playersonmsg .= " Destes, 1 está treinando.";
-		elseif($_afkPlayers == 0)
-			$playersonmsg .= " Destes, nenhum está treinando.";
-		elseif($_afkPlayers > 1)
-			$playersonmsg .= " Destes, {$_afkPlayers} estão treinando.";
+		if(REMOVE_AFK_FROM_STATUS)
+		{
+			if($_afkPlayers == 1)
+				$playersonmsg .= " Destes, 1 está treinando.";
+			elseif($_afkPlayers == 0)
+				$playersonmsg .= " Destes, nenhum está treinando.";
+			elseif($_afkPlayers > 1)
+				$playersonmsg .= " Destes, {$_afkPlayers} estão treinando.";
+		}
 
 		while($fetch = $query->fetch())
 		{			

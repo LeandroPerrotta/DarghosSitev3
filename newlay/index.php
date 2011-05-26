@@ -252,16 +252,26 @@
 													
 													$uptime = ($days >= 1) ? "{$days}d {$hours}h {$minutes}m" : "{$hours}h {$minutes}m";
 													
-													echo "
-													<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />
-													<em>IP:</em> darghos.com.br<br />
-													<em>Port:</em> ".STATUS_PORT."<br />
-													<em>Total connected:</em> ".($fetch->players + $fetch->afk)."<br />
-													<em>Playing:</em> {$fetch->players}<br />
-													<em>Training:</em> {$fetch->afk}<br />
-													<em>Uptime:</em> {$uptime}<br />
-													<em>Ping:</em> <span class='ping'>aguarde...</span>
-													";	
+													$str = "<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />";
+													$str .= "<em>IP:</em> ".STATUS_ADDRESS."<br />";
+													$str .= "<em>Port:</em> ".STATUS_PORT."<br />";
+													
+													if(REMOVE_AFK_FROM_STATUS)
+													{
+														$str .= "<em>Total connected:</em> ".($fetch->players + $fetch->afk)."<br />";
+														$str .= "<em>Playing:</em> {$fetch->players}<br />";
+														$str .= "<em>Training:</em> {$fetch->afk}<br />";
+													}
+													else
+													{
+														$str .= "<em>Total connected:</em> ".($fetch->players)."<br />";
+													}
+													
+													$str .= "<em>Uptime:</em> {$uptime}<br />";
+													$str .= "<em>Ping:</em> <span class='ping'>aguarde...</span>";
+													
+													
+													echo $str;	
 												}
 												?>
 											</p>
