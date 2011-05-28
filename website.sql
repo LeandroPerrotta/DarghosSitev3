@@ -142,6 +142,13 @@ CREATE TABLE `wb_iptries` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE `wb_itemshop_use_log` (
+  `log_id` INTEGER  NOT NULL,
+  `player_id` INTEGER  NOT NULL,
+  `date` INTEGER  NOT NULL
+)
+ENGINE = InnoDB;
+
 CREATE TABLE `wb_itemshop_log` (
   `id` INTEGER  NOT NULL AUTO_INCREMENT,
   `shop_id` INTEGER  NOT NULL,

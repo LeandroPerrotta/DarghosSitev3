@@ -121,7 +121,9 @@ class ItemShop
 			VALUES 
 				(
 					'{$this->id}', '".time()."', '{$player_id}'
-				)");		
+				)");	
+
+		return Core::$DB->lastInsertId();
 	}
 	
 	function doPlayerGiveThing($player_id)
@@ -132,8 +134,6 @@ class ItemShop
 			$stack = $item_prop[self::PARAM_ITEM_STACKABLE] ? $item_prop[self::PARAM_ITEM_STACKABLE] : false;
 			$this->doPlayerGiveItem($player_id, $item_prop[self::PARAM_ITEM_ID], $item_prop[self::PARAM_ITEM_COUNT], $stack);
 		}
-		
-		$this->logItemPurchase($player_id);
 	}
 	
 	function doPlayerGiveItem($player_id, $item_id, $item_count, $item_stackable = false)
@@ -179,7 +179,7 @@ class ItemShop
 		{
 			do{
 				$sid++;
-				$this->doPlayerAddDepotItem($player_id, $sid, $present_sid, $item_id, 1);
+				$this->doPlayerAddDepotItem($player_id, $sid, $present_sid, $item_id, 1, true);
 				
 				$item_count--;
 			}while($item_count > 0);		
@@ -206,15 +206,36 @@ class ItemShop
 		}		
 	}
 	
-	function doPlayerAddDepotItem($player_id, $sid, $pid, $itemtype, $count)
+	function doPlayerAddDepotItem($player_id, $sid, $pid, $itemtype, $count, $log = false)
 	{
+		$attr = "";
+		
+		if($log)
+		{
+			$log_id = $this->logItemPurchase($player_id);
+			
+			$attrdata = new OTS_Buffer();
+			
+			$ATTRIBUTE_MAP = 128;
+			
+			$VALUE_TYPE_INTEGER = 2;
+			
+			$attrdata->putChar($ATTRIBUTE_MAP);
+			$attrdata->putShort(1); //attributes count
+			$attrdata->putString("itemShopLogId"); //attribute name
+			$attrdata->putChar($VALUE_TYPE_INTEGER); //attribute value data type
+			$attrdata->putLong($log_id); //attribute value
+			
+			$attr = $attrdata->getBuffer();
+		}
+		
 		Core::$DB->query("
 			INSERT INTO 
 				`player_depotitems` 
-				(`player_id`, `sid`, `pid`, `itemtype`, `count`) 
+				(`player_id`, `sid`, `pid`, `itemtype`, `count`, `attributes`) 
 			VALUES 
 				(
-					'{$player_id}', '{$sid}', '{$pid}', '{$itemtype}', '{$count}'
+					'{$player_id}', '{$sid}', '{$pid}', '{$itemtype}', '{$count}', '{$attr}'
 				)");
 	}	
 	
