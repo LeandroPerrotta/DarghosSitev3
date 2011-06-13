@@ -282,7 +282,7 @@ class View
 			else
 				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Termina em: ".Core::formatDate($this->topic->GetPollEnd())."</span>");
 			
-			$pollTable->AddField($this->topic->GetPollText());
+			$pollTable->AddField(nl2br($this->topic->GetPollText()));
 			$pollTable->AddRow();
 			
 			$options = $this->topic->GetPollOptions();
