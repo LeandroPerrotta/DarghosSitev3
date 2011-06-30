@@ -150,7 +150,11 @@ else
 				
 				case "monster":
 					$patch['file'] = $topic;
-				break;						
+				break;		
+
+				case "pvp_arenas":
+					$patch['file'] = $topic;
+				break;					
 	
 				default:
 					$patch['dir'] = "errors";
