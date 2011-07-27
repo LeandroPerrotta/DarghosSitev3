@@ -1,7 +1,7 @@
 <?
-ini_set("display_errors", 3 );
+ini_set("display_errors", 1 );
 //ini_set("memory_limit", "64M");
-error_reporting(3); 
+error_reporting(E_ERROR | E_WARNING); 
 
 /*function __autoload($class_name) {
     include_once "classes/{$class_name}.php";

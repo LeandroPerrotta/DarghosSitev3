@@ -156,7 +156,7 @@ class View
 		
 		$guildPage .= "					
 				
-		<p><h3>Lista de Membros</h3></p>
+		<div style='margin-top: 32px;'><h3>Lista de Membros</h3></div>
 		
 		{$membersTable->Draw()}	
 		";
@@ -189,7 +189,7 @@ class View
 		
 
 		$guildPage .= "	
-		<p><h3>Personagens Convidados</h3></p>
+		<div style='margin-top: 32px;'><h3>Personagens Convidados</h3></div>
 		
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>

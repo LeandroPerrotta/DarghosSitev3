@@ -110,7 +110,7 @@ class View
 			return false;			
 		}
 						
-		$character->setGuildRankId( null );
+		$character->setGuildRankId( GUILD_RANK_NO_MEMBER );
 		$character->save();
 		
 		$this->_message = Lang::Message(LMSG_GUILD_LEAVE, $this->_character->GetPost(), $_GET['name']);		

@@ -154,23 +154,30 @@ class Core
 	
 	static function redirect($url, $local = true/*, $delay = false*/) 
 	{		
-		if($local)
-			$url = CONFIG_SITEEMAIL."/".$url;
+		//if($local)
+			//$url = CONFIG_SITEEMAIL."/".$url;
 	
-		header("Location: ".$url." ");
-	}	
+		//header("Location: ".$url." ");	
+		$html =  "<script type='text/javascript'>window.location = \"http://{$_SERVER["HTTP_HOST"]}/{$url}\"</script>";
+		echo $html;
+	}
 	
 	static function getIpTries()
 	{
-		$query = self::$DB->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
+		$query = self::$DB->query("SELECT COUNT(*) as `rows` FROM `".Tools::getSiteTable("iptries")."` WHERE `ip_addr` = '".$_SERVER['REMOTE_ADDR']."' AND `date` >= '".(time - (60 * 60 * 24))."'");		
 		
 		if($query->numRows() != 0)
 		{
-			return $query->fetch()->tries;
+			return $query->fetch()->rows;
 		}
 		else
 			return false;
 	}
+	
+	static function increaseIpTries()
+	{
+		self::$DB->query("INSERT INTO `".Tools::getSiteTable("iptries")."` (`ip_addr`, `date`) VALUES ('".$_SERVER['REMOTE_ADDR']."', '".time()."')");
+	}		
 	
 	static function getGlobalValue($field)
 	{
@@ -194,18 +201,6 @@ class Core
 			self::$DB->query("UPDATE ".DB_WEBSITE_PREFIX."global SET value = '{$value}' WHERE field = '{$field}'");
 		else
 			self::$DB->query("INSERT INTO ".DB_WEBSITE_PREFIX."global (`field`, `value`) values('{$field}', '{$value}')");
-	}	
-	
-	static function increaseIpTries()
-	{
-		$query = self::$DB->query("SELECT * FROM ".DB_WEBSITE_PREFIX."iptries WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");		
-		
-		if($query->numRows() != 0)
-		{
-			self::$DB->query("UPDATE ".DB_WEBSITE_PREFIX."iptries SET tries = tries + 1, last_trie = '".time()."' WHERE ip_addr = '".$_SERVER['REMOTE_ADDR']."'");	
-		}
-		else
-			self::$DB->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
 	
 	static function getLastAdClick()

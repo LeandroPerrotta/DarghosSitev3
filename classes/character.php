@@ -42,31 +42,47 @@ class Character
 			}
 			
 			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");
-			$this->db->query("
+			
+			
+			$query_str = "
 			UPDATE 
 				`".Tools::getSiteTable("players")."` 
 			SET 
 				`creation` = '{$this->site_data["creation"]}',
 				`comment` = '{$this->site_data["comment"]}',
-				`visible` = '{$this->site_data["visible"]}'
-			WHERE 
-				`player_id` = '{$this->data['id']}'");
-
-			if($this->_loadGuild && SERVER_DISTRO == DISTRO_OPENTIBIA)
-			{
-				//first, erease all guild member information from player
-				Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->data['id']}'");			
+				`visible` = '{$this->site_data["visible"]}',";
+			
+			if(SERVER_DISTRO == DISTRO_TFS)
+				$query_str .= "`guildjoin` = '{$this->_guild_join_in}'";
 				
-				//player have rank id, saving guild member information
-				if($this->_guild_rank_id)
-				{				
-					//add a new guild information
-					Core::$DB->query("
-						INSERT INTO `guild_members`
-							(`player_id`, `rank_id`, `nick`, `join_in`) 
-							values
-							('{$this->data["id"]}', '{$this->_guild_rank_id}', '{$this->_guild_nick}', '{$this->_guild_join_in}')
-					");
+				$query_str .= "
+			WHERE 
+				`player_id` = '{$this->data['id']}'";
+
+			$this->db->query($query_str);
+			
+			if($this->_loadGuild)
+			{
+				if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+				{
+					//first, erease all guild member information from player
+					Core::$DB->query("DELETE FROM `guild_members` WHERE `player_id` = '{$this->data['id']}'");			
+					
+					//player have rank id, saving guild member information
+					if($this->_guild_rank_id)
+					{				
+						//add a new guild information
+						Core::$DB->query("
+							INSERT INTO `guild_members`
+								(`player_id`, `rank_id`, `nick`, `join_in`) 
+								values
+								('{$this->data["id"]}', '{$this->_guild_rank_id}', '{$this->_guild_nick}', '{$this->_guild_join_in}')
+						");
+					}
+				}
+				elseif(SERVER_DISTRO == DISTRO_TFS)
+				{
+					$this->db->query("UPDATE `players` SET `rank_id` = '{$this->_guild_rank_id}', `guildnick` = '".$this->_guild_nick."' WHERE `id` = '{$this->data["id"]}'");			
 				}
 			}
 		}
@@ -298,7 +314,7 @@ class Character
 		{
 			list($guild_id, $inviteDate) = $invite;
 			
-			$guild = new Guilds();			
+			$guild = new Guilds();
 			if($guild->Load($guild_id))
 			{
 				$rank = $guild->SearchRankByLowest();
@@ -416,9 +432,9 @@ class Character
 	function setConditions($value){	$this->data['conditions'] = $value;	}	
 	function setCap($value){ $this->data['cap'] = $value; }	
 	function setSex($value){ $this->data['sex'] = $value; }	
-	function setGuildRankId($rank_id){ $this->_guild_rank_id = $rank_id; }	
-	function setGuildNick($nick){ $this->_guild_nick = Strings::SQLInjection($nick); }	
-	function setGuildJoinIn($join_in){ $this->_guild_join_in = $join_in; }		
+	function setGuildRankId($rank_id){ $this->_loadGuild = true; $this->_guild_rank_id = $rank_id; }	
+	function setGuildNick($nick){ $this->_loadGuild = true; $this->_guild_nick = Strings::SQLInjection($nick); }	
+	function setGuildJoinIn($join_in){ $this->_loadGuild = true; $this->_guild_join_in = $join_in; }		
 	function setDescription($value){ $this->data['description'] = Strings::SQLInjection($value); }	
 	function setComment($value){ $this->site_data['comment'] = $value; }	
 	function setCreation($value){ $this->site_data['creation'] = $value; }	
@@ -440,7 +456,7 @@ class Character
 			case "sex":					return $this->getSex();					break;
 			case "online":				return $this->getOnline();				break;
 			case "description":			return $this->getDescription();			break;
-			case "comment":				return $this->getComment();			break;
+			case "comment":				return $this->getComment();				break;
 			case "created":				return $this->getCreation();			break;
 			case "hide":				return $this->getHidden();				break;
 		}

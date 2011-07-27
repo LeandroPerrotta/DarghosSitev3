@@ -55,10 +55,10 @@ class Guilds
 	
 	static function ActivedGuildsList()
 	{
-		if(SERVER_DISTRO == DISTRO_OPENTIBIA && ENABLE_GUILD_FORMATION)
+		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guilds`, `".Tools::getSiteTable("guilds")."` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdate`";
-		elseif(SERVER_DISTRO == DISTRO_TFS || !ENABLE_GUILD_FORMATION)
-			$query_str = "SELECT `id` FROM `guilds` ORDER BY `creationdata`";
+		elseif(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `guilds`.`id` FROM `guilds` LEFT JOIN `".Tools::getSiteTable("guilds")."` as `guild_site` ON `guild_site`.`guild_id` = `guilds`.`id` WHERE `guild_site`.`status` = '".GUILD_STATUS_FORMED."' ORDER BY `guilds`.`creationdata`";
 			
 		$query = Core::$DB->query($query_str);
 		
@@ -288,14 +288,14 @@ class Guilds
 					`guilds`
 					(`name`, `owner_id`, `creationdate`, `motd`)
 					values
-					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')";
+					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}')";
 			elseif(SERVER_DISTRO == DISTRO_TFS)
 				$query_str = "				
 				INSERT INTO
 					`guilds`
-					(`name`, `ownerid`, `creationdata`, `motd`)
+					(`name`, `ownerid`, `creationdata`, `motd`, `checkdata`)
 					values
-					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')";		
+					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '".(time() + (60 * 60 * 24 * 7))."')";		
 				
 			Core::$DB->query($query_str);
 			
@@ -340,6 +340,7 @@ class Guilds
 			$rank->Delete();
 		}
 		
+		Core::$DB->query("DELETE FROM `".Tools::getSiteTable("guilds")."` WHERE `guild_id` = '{$this->_id}'");
 		Core::$DB->query("DELETE FROM `guilds` WHERE `id` = '{$this->_id}'");
 	}	
 	
@@ -496,7 +497,14 @@ class Guilds
 	
 	function OnWar()
 	{
-		$query = Core::$DB->query("SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND '".time()."' < `end_date` AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')");
+		$query_str = "";
+		
+		if(SERVER_DISTRO == DISTRO_TFS)
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `enemy_id` = '{$this->_id}') AND '".time()."' < `end` AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')";
+		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND '".time()."' < `end_date` AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')";
+		
+			$query = Core::$DB->query($query_str);
 		return (($query->numRows() != 0) ? true : false);
 	}
 	

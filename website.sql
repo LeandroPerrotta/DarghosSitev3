@@ -52,6 +52,17 @@ CREATE TABLE `wb_guilds` (
 )
 ENGINE = InnoDB;
 
+DELIMITER |
+CREATE TRIGGER `oncreate_guilds`
+AFTER INSERT
+ON `guilds`
+FOR EACH ROW
+BEGIN
+	INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Leader', 6, NEW.`id`);
+	INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Vice-Leader', 5, NEW.`id`);
+	INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('Member', 4, NEW.`id`);
+END |
+
 CREATE TABLE `wb_players` (
   `player_id` INTEGER  NOT NULL,
   `creation` INTEGER  NOT NULL,
