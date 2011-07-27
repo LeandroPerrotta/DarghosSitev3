@@ -53,7 +53,7 @@ if(!ENABLE_GUILD_READ_ONLY)
 		$guild->SetName($_POST["guild_name"]);
 		$guild->SetOwnerId($character->getId());
 		$guild->SetCreationDate(time());
-		$guild->SetMotd("Aqui está a descrição da guilda {$_POST["guild_name"]}!");
+		$guild->SetMotd("Esta é uma guilda recem criada!");
 		$guild->SetStatus(GUILD_STATUS_IN_FORMATION);
 		$guild->SetFormationTime(time() + 60 * 60 * 24 * GUILDS_FORMATION_DAYS);
 		$guild->SetImage(GUILD_DEFAULT_IMAGE);
