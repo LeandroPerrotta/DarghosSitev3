@@ -6,6 +6,7 @@ class ItemShop
 	const PARAM_ITEM_ID = "item_id";
 	const PARAM_ITEM_STACKABLE = "item_stackable";
 	const PARAM_ITEM_COUNT = "item_count";
+	const PARAM_ITEM_ACTION_ID = "item_action_id";
 	
 	private $id, $name, $description, $params, $price, $added_in, $enabled, $type;
 
@@ -132,11 +133,12 @@ class ItemShop
 		{
 			$item_prop = $this->getParams();
 			$stack = $item_prop[self::PARAM_ITEM_STACKABLE] ? $item_prop[self::PARAM_ITEM_STACKABLE] : false;
-			$this->doPlayerGiveItem($player_id, $item_prop[self::PARAM_ITEM_ID], $item_prop[self::PARAM_ITEM_COUNT], $stack);
+			$action_id = $item_prop[self::PARAM_ITEM_ACTION_ID] ? $item_prop[self::PARAM_ITEM_ACTION_ID] : null;
+			$this->doPlayerGiveItem($player_id, $item_prop[self::PARAM_ITEM_ID], $item_prop[self::PARAM_ITEM_COUNT], $stack, $action_id);
 		}
 	}
 	
-	function doPlayerGiveItem($player_id, $item_id, $item_count, $item_stackable = false)
+	function doPlayerGiveItem($player_id, $item_id, $item_count, $item_stackable = false, $item_action_id = null)
 	{
 		$DEPOT_ID = 11;
 		
@@ -179,7 +181,7 @@ class ItemShop
 		{
 			do{
 				$sid++;
-				$this->doPlayerAddDepotItem($player_id, $sid, $present_sid, $item_id, 1, true);
+				$this->doPlayerAddDepotItem($player_id, $sid, $present_sid, $item_id, 1, true, $item_action_id);
 				
 				$item_count--;
 			}while($item_count > 0);		
@@ -206,28 +208,45 @@ class ItemShop
 		}		
 	}
 	
-	function doPlayerAddDepotItem($player_id, $sid, $pid, $itemtype, $count, $log = false)
+	function doPlayerAddDepotItem($player_id, $sid, $pid, $itemtype, $count, $log = false, $action_id = null)
 	{
 		$attr = "";
 		
+		$attrdata = new OTS_Buffer();
+		
+		$ATTRIBUTE_MAP = 128;		
+		$VALUE_TYPE_INTEGER = 2;		
+		
+		$attrdata->putChar($ATTRIBUTE_MAP);
+		
+		$attr_count = 0;
+		
+		if($log)
+			$attr_count++;
+			
+		if($action_id)
+			$attr_count++;
+		
+		$attrdata->putShort($attr_count); //attributes count	
+			
 		if($log)
 		{
 			$log_id = $this->logItemPurchase($player_id);
 			
-			$attrdata = new OTS_Buffer();
-			
-			$ATTRIBUTE_MAP = 128;
-			
-			$VALUE_TYPE_INTEGER = 2;
-			
-			$attrdata->putChar($ATTRIBUTE_MAP);
-			$attrdata->putShort(1); //attributes count
 			$attrdata->putString("itemShopLogId"); //attribute name
 			$attrdata->putChar($VALUE_TYPE_INTEGER); //attribute value data type
 			$attrdata->putLong($log_id); //attribute value
-			
-			$attr = $attrdata->getBuffer();
 		}
+		
+		if($action_id)
+		{
+			$attrdata->putString("aid"); //attribute name
+			$attrdata->putChar($VALUE_TYPE_INTEGER); //attribute value data type
+			$attrdata->putLong($action_id); //attribute value
+		}
+		
+		if($attr_count > 0)
+			$attr = $attrdata->getBuffer();
 		
 		Core::$DB->query("
 			INSERT INTO 

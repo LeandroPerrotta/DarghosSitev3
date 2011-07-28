@@ -6,6 +6,7 @@ class View
 			$_item_name,
 			$_item_id,
 			$_item_count,
+			$_item_action_id,
 			$_item_is_stackable,
 			$_item_description,
 			$_item_price
@@ -39,6 +40,10 @@ class View
 		$this->_item_count = new HTML_Input();
 		$this->_item_count->SetName("item_count");	
 		$this->_item_count->SetSize(10);		
+		
+		$this->_item_action_id = new HTML_Input();
+		$this->_item_action_id->SetName("item_action_id");	
+		$this->_item_action_id->SetSize(10);		
 		
 		$this->_item_is_stackable = new HTML_Input();
 		$this->_item_is_stackable->IsCheackeable();
@@ -99,6 +104,7 @@ class View
 			
 			$item_id = $this->_item_id->GetPost();
 			$item_count = $this->_item_count->GetPost();
+			$item_action_id = $this->_item_count->getPost();
 			$item_is_stack = $this->_item_is_stackable->GetPost();
 		
 			if(!$name 
@@ -115,9 +121,10 @@ class View
 			if(!is_numeric($item_id) 
 				|| !is_numeric($item_count)
 				|| !is_numeric($price)
+				|| ($item_action_id && !is_numeric($item_action_id))
 			)
 			{
-				$this->_message = "Os campos de id do item, quantidade e preço precisam ser numericos.";
+				$this->_message = "Os campos de id do item, quantidade, action id e preço precisam ser numericos.";
 				return false;						
 			}			
 			
@@ -131,6 +138,9 @@ class View
 			$params[ItemShop::PARAM_ITEM_ID] = $item_id;
 			$params[ItemShop::PARAM_ITEM_COUNT] = $item_count;
 			$params[ItemShop::PARAM_ITEM_STACKABLE] = ($item_is_stack == "true") ? 1 : 0;
+			
+			if($item_action_id)
+				$params[ItemShop::PARAM_ITEM_ACTION_ID] = $item_action_id;
 			
 			$item->setParams($params);
 			$item->setAddedIn(time());
@@ -175,11 +185,16 @@ class View
 				<p>
 					<label for='item_count'>Quantidade</label><br />
 					{$this->_item_count->Draw()}
-				</p>			
+				</p>		
 
 				<p>
+					<label for='item_count'>Action ID (necessario para alguns itens)</label><br />
+					{$this->_item_action_id->Draw()}
+				</p>				
+				
+				<p>
 					{$this->_item_is_stackable->Draw()} É agrupavel?<br />
-				</p>	
+				</p>			
 
 				<p>
 					<label for='item_description'>Descrição</label><br />
