@@ -164,7 +164,7 @@ class Core
 	
 	static function getIpTries()
 	{
-		$query = self::$DB->query("SELECT COUNT(*) as `rows` FROM `".Tools::getSiteTable("iptries")."` WHERE `ip_addr` = '".$_SERVER['REMOTE_ADDR']."' AND `date` >= '".(time - (60 * 60 * 24))."'");		
+		$query = self::$DB->query("SELECT COUNT(*) as `rows` FROM `".Tools::getSiteTable("iptries")."` WHERE `ip_addr` = '".$_SERVER['REMOTE_ADDR']."' AND `date` >= '".(time() - (60 * 60 * 24))."'");		
 		
 		if($query->numRows() != 0)
 		{
