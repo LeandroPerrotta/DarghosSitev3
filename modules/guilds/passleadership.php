@@ -34,6 +34,9 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		$member->setGuildRankId($leader_rank->GetId());
 		$member->save();
 		
+		$guild->SetOwnerId($member->getId());
+		$guild->Save();
+		
 		$old_owner = new Character();
 		$old_owner->load($guild->GetOwnerId());
 		$old_owner->LoadGuild();
