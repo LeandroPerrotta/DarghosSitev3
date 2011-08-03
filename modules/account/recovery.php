@@ -44,18 +44,13 @@ else
 		$account = new Account();
 		$character = new Character();
 		
-		$loadEmail = $account->loadByEmail($_POST['recovery_email']);
-		$characterList = $account->getCharacterList();
+		$accCharacter = $account->loadByCharacterName($_POST['recovery_name']);
 		
 		if($_POST['recovery_information'] != 4 and (!$_POST['recovery_name'] or !$_POST['recovery_email']))
 		{
 			$error = Lang::Message(LMSG_FILL_FORM);
 		}	
-		elseif($_POST['recovery_information'] != 4 and !$loadEmail)
-		{
-			$error = Lang::Message(LMSG_RECOVERY_UNKNOWN_EMAIL);
-		}
-		elseif($_POST['recovery_information'] != 4 and !in_array($_POST['recovery_name'], $characterList))
+		elseif($_POST['recovery_information'] != 4 and (!$accCharacter or $account->getEmail() != $_POST['recovery_email']))
 		{
 			$error = Lang::Message(LMSG_RECOVERY_UNKNOWN_CHARACTER);
 		}

@@ -99,6 +99,21 @@ class Account
 			return false;
 		}
 	}		
+	
+	function loadByCharacterName($name)
+	{
+		$query = $this->db->query("SELECT `account_id` FROM `players` WHERE name = '".$name."'");
+		
+		if($query->numRows() != 0)
+		{
+			$this->load($query->fetch()->account_id);
+			return true;
+		}
+		else
+		{
+			return false;
+		}		
+	}
 
 	function save()
 	{
