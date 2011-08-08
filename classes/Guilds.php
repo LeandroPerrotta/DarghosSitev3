@@ -10,9 +10,17 @@ define("GUILD_RANK_MEMBER_OPT_2", 	2);
 define("GUILD_RANK_MEMBER_OPT_3", 	1);
 define("GUILD_RANK_NO_MEMBER", 		0);
 
-define("GUILD_WAR_STARTED", 	1);
-define("GUILD_WAR_WAITING", 	0);
-define("GUILD_WAR_DISABLED", 	-1);
+if(SERVER_DISTRO == DISTRO_OPENTIBIA)
+{
+	define("GUILD_WAR_STARTED", 	2);
+	define("GUILD_WAR_WAITING", 	1);
+	define("GUILD_WAR_DISABLED", 	0);
+}
+elseif(SERVER_DISTRO == DISTRO_TFS)
+{
+	define("GUILD_WAR_STARTED", 	1);
+	define("GUILD_WAR_DISABLED", 	0);	
+}
 
 define("GUILD_DEFAULT_IMAGE", "default_logo.gif");
 
@@ -21,7 +29,7 @@ include_once("Guild_Rank.php");
 
 class Guilds
 {
-	private $_id, $_name, $_ownerid, $_creationdate, $_motd, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
+	private $_id, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
 	public $Ranks = array(), $Invites = array(), $Wars = array();
 	private $_trash_ranks = array();
 	
@@ -142,6 +150,7 @@ class Guilds
 				`guilds`.`ownerid`, 
 				`guilds`.`creationdata`, 
 				`guilds`.`motd`, 
+				`guilds`.`balance`, 
 				`guilds_site`.`image`, 
 				`guilds_site`.`status`, 
 				`guilds_site`.`formationTime`, 
@@ -178,6 +187,7 @@ class Guilds
 		{
 			$this->_ownerid = $fetch->ownerid;
 			$this->_creationdate = $fetch->creationdata;
+			$this->_balance = $fetch->balance;
 		}
 		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
 		{
@@ -261,7 +271,8 @@ class Guilds
 					`name` = '{$this->_name}', 
 					`ownerid` = '{$this->_ownerid}', 
 					`creationdata` = '{$this->_creationdate}', 
-					`motd` = '{$this->_motd}'
+					`motd` = '{$this->_motd}',
+					`balance` = '{$this->balance}'
 				WHERE 
 					`id` = '{$this->_id}'";
 				
@@ -293,9 +304,9 @@ class Guilds
 				$query_str = "				
 				INSERT INTO
 					`guilds`
-					(`name`, `ownerid`, `creationdata`, `motd`, `checkdata`)
+					(`name`, `ownerid`, `creationdata`, `motd`, `balance`, `checkdata`)
 					values
-					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '".(time() + (60 * 60 * 24 * 7))."')";		
+					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '0', '".(time() + (60 * 60 * 24 * 7))."')";		
 				
 			Core::$DB->query($query_str);
 			
@@ -500,7 +511,7 @@ class Guilds
 		$query_str = "";
 		
 		if(SERVER_DISTRO == DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `enemy_id` = '{$this->_id}') AND '".time()."' < `end` AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')";
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `enemy_id` = '{$this->_id}') AND '".time()."' < `end` AND (`status` = '".GUILD_WAR_STARTED."')";
 		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND '".time()."' < `end_date` AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')";
 		
@@ -555,6 +566,11 @@ class Guilds
 		$this->_motd = $motd;
 	}
 	
+	function SetBalance($balance)
+	{
+		$this->_balance = $balance;
+	}
+	
 	function SetImage($image)
 	{
 		$this->_image = $image;
@@ -594,6 +610,11 @@ class Guilds
 	{
 		return $this->_motd;
 	}	
+	
+	function GetBalance()
+	{
+		return $this->_balance;
+	}
 	
 	function GetImage()
 	{

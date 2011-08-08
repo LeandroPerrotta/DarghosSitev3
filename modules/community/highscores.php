@@ -40,8 +40,7 @@ else
 if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
 {
 	$module .= '
-	<p> Este highscores mostra apenas personagens <b>ativos</b> no jogo (Apenas os que não estão inativos a menos de 7 dias atrás).
-	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
+	<p> <b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos ' .HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS. ' dias.';
 }
 
 $module .= '

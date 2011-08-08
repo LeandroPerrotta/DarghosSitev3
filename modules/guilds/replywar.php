@@ -4,7 +4,7 @@ class View
 	//html fields
 	private $_password;
 	private $_replywar, $_replywaroptions; //reply
-	private $_warfraglimit, $_warenddate, $_warguildfee, $_waropponentfee, $_warcomment; //negotiate
+	private $_warfraglimit, $_warenddate, $_warguildfee, /*$_waropponentfee,*/ $_warcomment; //negotiate
 	
 	//variables
 	private $_message;	
@@ -56,11 +56,11 @@ class View
 		$this->_warguildfee->SetLenght(9);
 		$this->_warguildfee->SetValue($this->guild_war->GetGuildFee());
 		
-		$this->_waropponentfee = new HTML_Input();
+		/*$this->_waropponentfee = new HTML_Input();
 		$this->_waropponentfee->SetName("war_opponent_fee");
 		$this->_waropponentfee->SetSize(10);
 		$this->_waropponentfee->SetLenght(9);
-		$this->_waropponentfee->SetValue($this->guild_war->GetOpponentFee());
+		$this->_waropponentfee->SetValue($this->guild_war->GetOpponentFee());*/
 		
 		$this->_warcomment = new HTML_Input();
 		$this->_warcomment->SetName("war_comment");
@@ -168,9 +168,18 @@ class View
 			
 			if($this->_replywar->GetPost() == "Aceitar")
 			{
+				if($this->guild->GetBalance() < $this->guild_war->GetGuildFee())
+				{
+					$this->_message = Lang::Message(LMSG_GUILD_BALANCE_TOO_LOW);
+					return false;						
+				}
+				
 				$this->guild_war->SetReply( -1 );
 				$this->guild_war->SetStatus( GUILD_WAR_WAITING );
 				$this->guild_war->Save();
+				
+				$this->guild->SetBalance($this->guild->GetBalance() - $this->guild_war->GetGuildFee());
+				$this->guild->Save();
 				
 				$this->_message = Lang::Message(LMSG_GUILD_WAR_ACCEPTED, $this->guild->GetName(), $this->opponent->GetName());
 				
@@ -181,6 +190,9 @@ class View
 				$this->guild_war->SetReply( -1 );
 				$this->guild_war->Save();
 				
+				$this->opponent->SetBalance($this->opponent->GetBalance() + $this->guild_war->GetGuildFee());
+				$this->opponent->Save();
+				
 				$this->_message = Lang::Message(LMSG_GUILD_WAR_REJECTED, $this->opponent->GetName());
 				
 				return true;
@@ -188,13 +200,13 @@ class View
 		}
 		elseif($this->_replywaroptions->GetPost() == "war_negotiate")
 		{
-			if(!$this->_warfraglimit->GetPost() || !$this->_warguildfee->GetPost() || !$this->_waropponentfee->GetPost())
+			if(!$this->_warfraglimit->GetPost() || !$this->_warguildfee->GetPost() /*|| !$this->_waropponentfee->GetPost()*/)
 			{
 				$this->_message = Lang::Message(LMSG_FILL_FORM);
 				return false;
 			}		
 		
-			if(!is_numeric($this->_warfraglimit->GetPost()) || !is_numeric($this->_warguildfee->GetPost()) || !is_numeric($this->_waropponentfee->GetPost()))
+			if(!is_numeric($this->_warfraglimit->GetPost()) || !is_numeric($this->_warguildfee->GetPost()) /*|| !is_numeric($this->_waropponentfee->GetPost())*/)
 			{
 				$this->_message = Lang::Message(LMSG_FILL_NUMERIC_FIELDS);
 				return false;
@@ -215,7 +227,7 @@ class View
 				}
 			}
 			
-			if($this->_warguildfee->GetPost() < 0  || $this->_warguildfee->GetPost() > 100000000 || $this->_waropponentfee->GetPost() < 0 || $this->_waropponentfee->GetPost() > 100000000)
+			if($this->_warguildfee->GetPost() < 0  || $this->_warguildfee->GetPost() > 100000000 /*|| $this->_waropponentfee->GetPost() < 0 || $this->_waropponentfee->GetPost() > 100000000*/)
 			{
 				$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_FEE);
 				return false;
@@ -228,23 +240,35 @@ class View
 					$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_COMMENT_LENGTH);
 					return false;				
 				}
-			}		
-
+			}				
+	
+			if($this->guild->GetBalance() < $this->_warguildfee->GetPost())
+			{
+				$this->_message = Lang::Message(LMSG_GUILD_BALANCE_TOO_LOW);
+				return false;						
+			}				
+			
+			$this->opponent->SetBalance($this->opponent->GetBalance() + $this->guild_war->GetGuildFee());
+			$this->opponent->Save();
+			
+			$this->guild->SetBalance($this->guild->GetBalance() - $this->_warguildfee->GetPost());
+			$this->guild->Save();			
+			
 			$guildFee = $this->_warguildfee->GetPost();
-			$opponentFee = $this->_waropponentfee->GetPost();
+			/*$opponentFee = $this->_waropponentfee->GetPost();*/
 			$replyValue = 0;
 			
 			if($this->replyIsOpponent)
 			{
 				$replyValue = 1;
-				$guildFee = $this->_waropponentfee->GetPost();
-				$opponentFee = $this->_warguildfee->GetPost();				
+				$guildFee = $this->_warguildfee->GetPost();
+				/*$opponentFee = $this->_warguildfee->GetPost();*/				
 			}
 			
 			$this->guild_war->SetReply($replyValue);
 			$this->guild_war->SetFragLimit($this->_warfraglimit->GetPost());
 			$this->guild_war->SetGuildFee($guildFee);
-			$this->guild_war->SetOpponentFee($opponentFee);
+			/*$this->guild_war->SetOpponentFee($opponentFee);*/
 			
 			if($this->_warenddate->GetPost())
 				$this->guild_war->SetEndDate(($this->_warenddate->GetPost() * 60 * 60 * 24) + time());
@@ -292,11 +316,7 @@ class View
 				</p>				
 							
 				<p>
-					<span style='font-weight: bold;'>Pagamento caso a guilda {$this->guild->GetName()} perder ou se render:</span> {$this->guild_war->GetOpponentFee()} gold coins
-				</p>
-							
-				<p>
-					<span style='font-weight: bold;'>Pagamento caso a guilda {$this->opponent->GetName()} perder ou se render:</span> {$this->guild_war->GetGuildFee()} gold coins
+					<span style='font-weight: bold;'>Pagamento por derrota:</span> {$this->guild_war->GetOpponentFee()} gold coins
 				</p>
 							
 				<p>
@@ -326,13 +346,8 @@ class View
 				</p>
 				
 				<p>
-					<label for='war_guild_fee'>Pagamento da guilda {$this->guild->GetName()} pela rendição (<span style='text-decoration: italic;'>quantidade de gold coins de 0 a 100000000 (100 kk)</span>)</label><br />
+					<label for='war_guild_fee'>Pagamento por derrota (<span style='text-decoration: italic;'>quantidade de gold coins de 0 a 100000000 (100 kk)</span>)</label><br />
 					{$this->_warguildfee->Draw()}
-				</p>
-				
-				<p>
-					<label for='war_opponent_fee'>Pagamento da guilda {$this->opponent->GetName()} pela rendição (<span style='text-decoration: italic;'>quantidade de gold coins de 0 a 100000000 (100 kk)</span>)</label><br />
-					{$this->_waropponentfee->Draw()}
 				</p>
 				
 				<p>

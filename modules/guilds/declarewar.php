@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $_waropponent, $_warfraglimit, $_warenddate, $_warguildfee, $_waropponentfee, $_warcomment, $_password;
+	private $_waropponent, $_warfraglimit, $_warenddate, $_warguildfee, /*$_waropponentfee,*/ $_warcomment, $_password;
 	
 	//variables
 	private $_message;
@@ -18,16 +18,22 @@ class View
 			return false;
 		}
 		
-		if(!$this->_warfraglimit->GetPost() || !$this->_warenddate->GetPost() || !$this->_warguildfee->GetPost() || !$this->_waropponentfee->GetPost())
+		if(!$this->_warfraglimit->GetPost() || !$this->_warenddate->GetPost() || !$this->_warguildfee->GetPost() /*|| !$this->_waropponentfee->GetPost()*/)
 		{
 			$this->_message = Lang::Message(LMSG_FILL_FORM);
 			return false;
 		}		
 	
-		if(!is_numeric($this->_warfraglimit->GetPost()) || !is_numeric($this->_warenddate->GetPost()) || !is_numeric($this->_warguildfee->GetPost()) || !is_numeric($this->_waropponentfee->GetPost()))
+		if(!is_numeric($this->_warfraglimit->GetPost()) || !is_numeric($this->_warenddate->GetPost()) || !is_numeric($this->_warguildfee->GetPost()) /*|| !is_numeric($this->_waropponentfee->GetPost())*/)
 		{
 			$this->_message = Lang::Message(LMSG_FILL_NUMERIC_FIELDS);
 			return false;
+		}
+		
+		if($this->guild->GetBalance() < $this->_warguildfee->GetPost())
+		{
+			$this->_message = Lang::Message(LMSG_GUILD_BALANCE_TOO_LOW);
+			return false;			
 		}
 		
 		if($this->_warfraglimit->GetPost() < 10  || $this->_warfraglimit->GetPost() > 1000)
@@ -42,7 +48,7 @@ class View
 			return false;
 		}
 		
-		if($this->_warguildfee->GetPost() < 0  || $this->_warguildfee->GetPost() > 100000000 || $this->_waropponentfee->GetPost() < 0 || $this->_waropponentfee->GetPost() > 100000000)
+		if($this->_warguildfee->GetPost() < 0  || $this->_warguildfee->GetPost() > 100000000 /*|| $this->_waropponentfee->GetPost() < 0 || $this->_waropponentfee->GetPost() > 100000000*/)
 		{
 			$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_FEE);
 			return false;
@@ -71,6 +77,9 @@ class View
 			return false;			
 		}
 		
+		$this->guild->SetBalance($this->guild->GetBalance() - $this->_warguildfee->GetPost());
+		$this->guild->Save();
+		
 		$guild_war = new Guild_War();
 		
 		$guild_war->SetGuildId($this->guild->GetId());
@@ -79,11 +88,11 @@ class View
 		$guild_war->SetDeclarationDate(time());
 		$guild_war->SetEndDate(($this->_warenddate->GetPost() * 60 * 60 * 24) + time ());
 		$guild_war->SetGuildFee($this->_warguildfee->GetPost());
-		$guild_war->SetOpponentFee($this->_waropponentfee->GetPost());
+		/*$guild_war->SetOpponentFee($this->_waropponentfee->GetPost());*/
 		$guild_war->SetComment($this->_warcomment->GetPost());
 		$guild_war->Save();
 		
-		$this->_message = Lang::Message(LMSG_GUILD_WAR_DECLARED, $this->guild->GetName(), $opponent->GetName(), $this->_warfraglimit->GetPost(), $this->_warenddate->GetPost(), $this->_warguildfee->GetPost(), $this->_waropponentfee->GetPost());
+		$this->_message = Lang::Message(LMSG_GUILD_WAR_DECLARED, $this->guild->GetName(), $opponent->GetName(), $this->_warfraglimit->GetPost(), $this->_warenddate->GetPost(), $this->_warguildfee->GetPost(), $this->_warguildfee->GetPost());
 		
 		return true;			
 	}	
@@ -176,10 +185,10 @@ class View
 		$this->_warguildfee->SetSize(10);
 		$this->_warguildfee->SetLenght(9);
 		
-		$this->_waropponentfee = new HTML_Input();
+		/*$this->_waropponentfee = new HTML_Input();
 		$this->_waropponentfee->SetName("war_opponent_fee");
 		$this->_waropponentfee->SetSize(10);
-		$this->_waropponentfee->SetLenght(9);
+		$this->_waropponentfee->SetLenght(9);*/
 		
 		$this->_warcomment = new HTML_Input();
 		$this->_warcomment->SetName("war_comment");
@@ -228,15 +237,10 @@ class View
 					<label for='war_end_date'>Limite de tempo para terminar a guerra (<span style='text-decoration: italic;'>numero de dias de 7 a 360</span>)</label><br />
 					{$this->_warenddate->Draw()}
 				</p>
-				
+
 				<p>
-					<label for='war_guild_fee'>Nosso pagamento pela rendição (<span style='text-decoration: italic;'>quantidade de gold coins de 0 a 100000000 (100 kk)</span>)</label><br />
+					<label for='war_guild_fee'>Pagamento por derrota (<span style='text-decoration: italic;'>quantidade de gold coins de 0 a 100000000 (100 kk)</span>)</label><br />
 					{$this->_warguildfee->Draw()}
-				</p>
-				
-				<p>
-					<label for='war_opponent_fee'>Pagamento do oponente pela rendição (<span style='text-decoration: italic;'>quantidade de gold coins de 0 a 100000000 (100 kk)</span>)</label><br />
-					{$this->_waropponentfee->Draw()}
 				</p>
 				
 				<p>

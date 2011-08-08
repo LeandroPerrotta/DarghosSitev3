@@ -160,11 +160,6 @@ class Guild_War
 						`guild_wars`.`status` = '".GUILD_WAR_DISABLED."' 
 						AND `guild_wars_site`.`reply` >= '0'
 					) 
-					OR 
-					(
-						`guild_wars`.`status` = '".GUILD_WAR_WAITING."' 
-						AND `guild_wars_site`.`reply` = '-1'
-					)
 				) 
 				AND `guild_wars`.`end` > UNIX_TIMESTAMP()
 			ORDER BY 
@@ -225,7 +220,7 @@ class Guild_War
 			ON
 				`guild_wars_site`.`war_id` = `guild_wars`.`id`
 			WHERE 
-				guild_wars`.`id` = '{$war_id}'";
+				`guild_wars`.`id` = '{$war_id}'";
 		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			$query_str = "
 			SELECT 
@@ -249,7 +244,7 @@ class Guild_War
 			ON
 				`guild_wars_site`.`war_id` = `guild_wars`.`id`
 			WHERE 
-				guild_wars`.`id` = '{$war_id}'";		
+				`guild_wars`.`id` = '{$war_id}'";		
 		
 		$query = Core::$DB->query($query_str);
 	

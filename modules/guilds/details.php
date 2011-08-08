@@ -86,6 +86,12 @@ class View
 		$guildInfoTable->AddField("Esta guilda foi criada em <b>".Core::formatDate($this->guild->GetCreationDate())."</b>.");
 		$guildInfoTable->AddRow();
 		
+		if($this->loggedAcc and $this->memberLevel > GUILD_RANK_NO_MEMBER)
+		{	
+			$guildInfoTable->AddField("Saldo do banco: <b>{$this->guild->GetBalance()} moedas de ouro.</b>");
+			$guildInfoTable->AddRow();			
+		}	
+		
 		if(ENABLE_GUILD_POINTS)
 		{
 			$guildInfoTable->AddField("Pontos da guilda (força / total): <b>{$this->guild->GetBetterPoints()}/{$this->guild->GetPoints()}</b>");
