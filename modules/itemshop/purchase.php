@@ -60,10 +60,18 @@ class View
 		$this->_selected_item->SetName("selected_item");
 		$this->_selected_item->IsRadio();
 		
-		$this->_character = new HTML_Input();
+		$this->_character = new HTML_SelectBox();
 		$this->_character->SetName("character");
-		$this->_character->SetValue($_GET["name"]);
-		$this->_character->IsNotWritable();
+		
+		foreach($this->loggedAcc->getCharacterList() as $k => $name)
+		{
+			$this->_character->AddOption($name);
+			
+			if($_GET["name"] && $_GET["name"] == $name)
+			{
+				$this->_character->SelectedIndex($k);
+			}
+		}
 		
 		$this->_itemlist = ItemShop::getItemShopList();
 		
