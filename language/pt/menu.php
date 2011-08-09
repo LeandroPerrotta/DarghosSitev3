@@ -23,6 +23,7 @@ $menu['ACCOUNT.RECOVERY'] = "Recuperar Conta";
 $menu['ACCOUNT.PREMIUM'] = "Conta Premium";
 $menu['ACCOUNT.MAIN'] = "Principal";
 $menu['ACCOUNT.PREMIUM_TEST'] = "Teste de Conta Premium";
+$menu['ACCOUNT.ITEM_SHOP'] = "Item Shop";
 $menu['ACCOUNT.LOGOUT'] = "Log-out";
 
 $menu['SUPPORT'] = "Suporte";
