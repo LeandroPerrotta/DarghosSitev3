@@ -1,7 +1,7 @@
 <?php
 $pageDb = new PagesDB();
 
-$pageDb->load(DBPAGES_DARGHOPEDIA_PVP_ARENAS);
+$pageDb->load(DBPAGES_DARGHOPEDIA_WEEK_EVENTS);
 
 if(!$_SESSION['login'])
 {
