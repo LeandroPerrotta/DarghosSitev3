@@ -17,10 +17,10 @@ if($_SESSION['login'])
 		if($_POST)
 		{
 			$pageDb->setContent($_POST['Page']);
-			$pageDb->save(DBPAGES_DARGHOPEDIA_PVP_ARENAS);
+			$pageDb->save(DBPAGES_DARGHOPEDIA_WEEK_EVENTS);
 			
 			Core::sendMessageBox("Sucesso!", "A pagina foi editada com sucesso!");
-			$pageDb->load(DBPAGES_DARGHOPEDIA_PVP_ARENAS);
+			$pageDb->load(DBPAGES_DARGHOPEDIA_WEEK_EVENTS);
 		}		
 		
 		$module .= "<br><form action='{$_SERVER['REQUEST_URI']}' method='post'>";
