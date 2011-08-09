@@ -4,7 +4,7 @@ if($_POST)
 	$character = new Character();
 	
 	$_paymentMethods = array("PagSeguro");
-	$_paymentPeriods = array(7, 30, 120, 180, 360, 720);
+	$_paymentPeriods = array(30, 60, 90);
 	
 	$form_OrderName = $_POST["order_name"];
 	$form_OrderMail = $_POST["order_email"];
@@ -134,12 +134,9 @@ $module .= '
 				<label for="order_days">Periodo desta Contribuição</label><br />
 				
 				<ul id="pagelist">
-					<li><input name="order_days" type="radio" value="7"> 7 dias - R$ 4.50 (R$ 0.64/dia)</li>
-					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 12.90 (R$ 0.43/dia)</li>
-					<li><input name="order_days" type="radio" value="120"> 120 dias - R$ 24.50 (R$ 0.20/dia)</li>
-					<li><input name="order_days" type="radio" value="180"> 180 dias - R$ 34.90 (R$ 0.19/dia)</li>
-					<li><input name="order_days" type="radio" value="360"> 360 dias - R$ 64.90 (R$ 0.18/dia)</li>
-					<li><input name="order_days" type="radio" value="720"> 720 dias - R$ 119.90 (R$ 0.16/dia)</li>
+					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 7.50</li>
+					<li><input name="order_days" type="radio" value="120"> 60 dias - R$ 15.00</li>
+					<li><input name="order_days" type="radio" value="180"> 90 dias - R$ 22.50</li>
 				</ul>	
 			</p>
 			
