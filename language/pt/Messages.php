@@ -90,6 +90,7 @@ class Lang_Messages
 		self::$messages[LMSG_GUILD_WAR_WRONG_COMMENT_LENGTH] = "O comentario de declaração de guerra não deve exceder 500 caracteres.";
 		self::$messages[LMSG_GUILD_WAR_REJECTED] = "A declaração de guerra da guilda @v1@ foi rejeitada com sucesso. Sua guilda não entrará mais nesta guerra.";
 		self::$messages[LMSG_GUILD_IS_ON_WAR] = "A guilda @v1@ esta em guerra com outra(s) guildas, portanto, certas operações na guilda não estão disponiveis, como abandonar guilda, convidar novos membros, aceitar convites, remover membros. Tente novamente quando a guerra estiver encerrada.";
+		self::$messages[LMSG_GUILD_BALANCE_TOO_LOW] = "O balanço no banco de sua guilda está muito baixo.";
 		self::$messages[LMSG_GUILD_WAR_ALREADY] = "A sua guilda já declarou ou está em guerra contra a guilda @v1@. Você poderá declarar guerra contra esta guilda quando a guerra atual estiver terminada.";
 		self::$messages[LMSG_FORUM_ACCOUNT_NOT_HAVE_USER] = "Caro jogador, sua conta ainda não efetuou o cadastro para poder usar o forum do Darghos para poder ler topicos, responder enquetes e etc. Para criar o seu usuario, clique <a href='?ref=forum.register'>aqui</a>.";
 		self::$messages[LMSG_FORUM_ACCOUNT_NOT_HAVE_CHARACTERS] = "Caro jogador, para ultilizar os recursos de nosso Forum é necessário possui um personagem na conta ao menos com level 20 ou superior.";
