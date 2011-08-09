@@ -11,16 +11,7 @@ class View
 	private $loggedAcc, $user, $isAdmin = false;	
 	
 	function View()
-	{		
-		if(!$_GET["name"])
-			return false;
-		
-		if(!$this->Prepare())
-		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
-			return false;
-		}
-		
+	{				
 		if($_SESSION['login'])
 		{
 			$this->loggedAcc = new Account();
@@ -33,6 +24,12 @@ class View
 		}
 		else
 		{
+			return false;
+		}		
+		
+		if(!$this->Prepare())
+		{
+			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
 			return false;
 		}
 		
