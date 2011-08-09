@@ -135,8 +135,8 @@ $module .= '
 				
 				<ul id="pagelist">
 					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 7.50</li>
-					<li><input name="order_days" type="radio" value="120"> 60 dias - R$ 15.00</li>
-					<li><input name="order_days" type="radio" value="180"> 90 dias - R$ 22.50</li>
+					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 15.00</li>
+					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 22.50</li>
 				</ul>	
 			</p>
 			

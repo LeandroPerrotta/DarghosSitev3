@@ -14,6 +14,7 @@ $menu['DARGHOPEDIA_REBORN'] = "Reborn";
 $menu['DARGHOPEDIA_QUESTS'] = "Quests & Dungeons";
 $menu['DARGHOPEDIA_WORLD'] = "O Mundo";
 $menu['DARGHOPEDIA_PVP_ARENAS'] = "PvP Arenas";
+$menu['DARGHOPEDIA_WEEK_EVENTS'] = "Eventos Semanais";
 
 $menu['ACCOUNTS'] = "Contas";
 $menu['ACCOUNT.REGISTER'] = "Registrar-se";

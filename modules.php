@@ -154,6 +154,10 @@ else
 
 				case "pvp_arenas":
 					$patch['file'] = $topic;
+				break;			
+						
+				case "week_events":
+					$patch['file'] = $topic;
 				break;					
 	
 				default:

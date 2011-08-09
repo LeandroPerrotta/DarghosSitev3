@@ -18,7 +18,7 @@ class View
 			return false;
 		}
 		
-		if(!$this->_warfraglimit->GetPost() || !$this->_warenddate->GetPost() || !$this->_warguildfee->GetPost() /*|| !$this->_waropponentfee->GetPost()*/)
+		if(!$this->_warfraglimit->GetPost() || !$this->_warenddate->GetPost())
 		{
 			$this->_message = Lang::Message(LMSG_FILL_FORM);
 			return false;

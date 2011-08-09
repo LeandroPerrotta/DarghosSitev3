@@ -53,6 +53,7 @@ define('DBPAGES_DARGHOPEDIA_REBORN', 4);
 define('DBPAGES_DARGHOPEDIA_QUESTS', 5);
 define('DBPAGES_DARGHOPEDIA_WORLD', 6);
 define('DBPAGES_DARGHOPEDIA_PVP_ARENAS', 7);
+define('DBPAGES_DARGHOPEDIA_WEEK_EVENTS', 8);
 
 define('PREMTEST_DAYS', 10); //Dias que os jogadores podero receber de PremTest, para quem atingir level 100 e nunca ter possuido uma premium account.
 define('DAYS_TO_CHANGE_EMAIL', 15); //Dias de espera necessarios para uma mudana de e-mail agendada

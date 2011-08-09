@@ -67,6 +67,7 @@
 									<?php if(ENABLE_REBORN_SYSTEM){ ?><li><a href="?ref=darghopedia.reborn"><? echo $menu['DARGHOPEDIA_REBORN']; ?></a></li><?php } ?>
 									<li><a href="?ref=darghopedia.quests"><? echo $menu['DARGHOPEDIA_QUESTS']; ?></a></li>
 									<li><a href="?ref=darghopedia.pvp_arenas"><? echo $menu['DARGHOPEDIA_PVP_ARENAS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
+									<li><a href="?ref=darghopedia.week_events"><? echo $menu['DARGHOPEDIA_WEEK_EVENTS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
 								</ul>
 							</li>							
 						
