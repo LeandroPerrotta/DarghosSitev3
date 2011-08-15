@@ -181,11 +181,14 @@
 								<li>
 									<div><strong>Admin Panel</strong></div>
 									<ul class="always_viewable" >
-										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>
-										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li>
+										<li><a href="?ref=adv.fastnews">Noticia Rápida </a></li>						
 										<li><a href="?ref=forum.newtopic">Novo Tópico </a></li>
+										<li><a href="?ref=adv.emailcampaign">Campanha de Email</a></li> 
+										<!-- 
+										<li><a href="?ref=adv.tutortest">Questões Tutortest </a></li> 
 										<li><a href="?ref=tickets.super_list">Ticket System</a></li>	
 										<li><a href="?ref=adv.addprize">Permitir AdPage</a></li>	
+										-->
 									</ul>
 								</li>								
 								

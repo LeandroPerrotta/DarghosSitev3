@@ -534,6 +534,11 @@ else
 				case "addprize":
 					$patch['file'] = $topic;
 					$needMinGroup = GROUP_ADMINISTRATOR;			
+				break;				
+						
+				case "emailcampaign":
+					$patch['file'] = $topic;
+					$needMinGroup = GROUP_ADMINISTRATOR;			
 				break;						
 				
 				default:
