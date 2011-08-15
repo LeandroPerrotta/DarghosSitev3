@@ -53,6 +53,8 @@ else
 	include "classes/HTML_SelectBox.php";
 	include "classes/HTML_Input.php";
 	
+	include "libs/phpmailer/class.phpmailer.php";
+	
 	try
 	{
 		$db = new MySQL();

@@ -79,9 +79,7 @@ class View
 	}
 	
 	function sendEmail($subject, $content, $to, $from = CONFIG_SITEEMAIL) 
-	{
-		include "libs/phpmailer/class.phpmailer.php";
-		
+	{		
 		$mail = new PHPMailer();
 		
 		$mail->IsHTML(true);
@@ -146,6 +144,7 @@ class View
 			}
 		}
 		
+		$this->_message = "A campanha de email foi enviada com sucesso!";
 		return true;			
 	}
 	

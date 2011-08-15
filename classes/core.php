@@ -60,8 +60,6 @@ class Core
 	
 	static function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
-		include "libs/phpmailer/class.phpmailer.php";
-
 		if($arg)
 		{
 			$emailvalue = array();
