@@ -46,7 +46,7 @@ class View
 
 		$this->_extraEmails = new HTML_Input();
 		$this->_extraEmails->IsTextArea(7, 50);
-		$this->_extraEmails->SetName("content");		
+		$this->_extraEmails->SetName("extraEmails");		
 		
 		if($_POST)
 		{
