@@ -88,7 +88,9 @@ class View
 			`log`.`date`,
 			`players`.`name` as `player_name`,
 			`shop`.`name`,
-			`shop`.`price`
+			`shop`.`price`,
+			`use`.`date` as `use_date`,
+			`player_use`.`name` as `player_use`
 		FROM 
 			`".Tools::getSiteTable("itemshop_log")."` `log` 
 		LEFT JOIN
@@ -99,6 +101,14 @@ class View
 			`players`
 		ON
 			`players`.`id` = `log`.`player_id`
+		LEFT JOIN
+			`".Tools::getSiteTable("itemshop_use_log")."` `use`
+		ON
+			`use`.`log_id` = `log`.`id`
+		LEFT JOIN
+			`players` `player_use`
+		ON
+			`player_use`.`id` = `use`.`player_id`
 		{$limit}
 		ORDER BY 
 			`date` DESC");
@@ -122,9 +132,18 @@ class View
 		$this->_log_table->AddRow();			
 		
 		while($row = $query->fetchAssocArray())
-		{	
+		{				
 			$this->_log_table->AddField("<a href='?ref=character.view&name={$row["player_name"]}'>{$row["player_name"]}</a>");
-			$this->_log_table->AddField($row["name"]);
+			
+			$item = $row["name"];
+			
+			if($row["player_use"])
+			{
+				$item .= " usado por:
+				<br><a href='?ref=character.view&name={$row["player_use"]}'>{$row["player_use"]}</a><br> em ".Core::formatDate($row["use_date"])."";
+			}
+			
+			$this->_log_table->AddField($item);
 			$this->_log_table->AddField($row["price"]);
 			$this->_log_table->AddField(Core::formatDate($row["date"]));
 			$this->_log_table->AddRow();	
