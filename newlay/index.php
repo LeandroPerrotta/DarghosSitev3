@@ -169,7 +169,7 @@
 									<li><a href="?ref=account.premium"><? echo $menu['ACCOUNT.PREMIUM']; ?></a></li>
 									<li><a href="?ref=contribute.order"><? echo $menu['PREMIUM.ORDER']; ?></a></li>
 									<li><a href="?ref=contribute.myorders"><? echo $menu['PREMIUM.MY_ORDERS']; ?></a></li>
-									<li><a href="?ref=account.itemshop_log"><? echo $menu['PREMIUM.LOG_ITEMSHOP']; ?></a></li>
+									<li><a href="?ref=itemshop.history"><? echo $menu['PREMIUM.LOG_ITEMSHOP']; ?></a></li>
 								</ul>
 							</li>								
 							

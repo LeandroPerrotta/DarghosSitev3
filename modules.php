@@ -85,14 +85,6 @@ else
 					$patch['file'] = $topic;
 				break;
 
-				case "itemshop_log":
-					if(SHOW_SHOPFEATURES != 0)
-					{
-						$needLogin = true;	
-						$patch['file'] = $topic;					
-					}		
-				break;	
-
 				case "setname":
 					$needLogin = true;	
 					$patch['file'] = $topic;

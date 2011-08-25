@@ -67,7 +67,7 @@ class HTML_SelectBox
 
 		foreach($this->_options as $key => $option)
 		{
-			if($option["selected"] == 1)
+			if($option["selected"] == 1 || ($_POST && $this->GetPost() == $option["value"]))
 				$string .= "<option selected='selected' value='{$option["value"]}'>{$option["label"]}</option>";
 			else
 				$string .= "<option value='{$option["value"]}'>{$option["label"]}</option>";	

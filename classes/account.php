@@ -740,5 +740,38 @@ class Account
 		return false;	
 	}
 	
+	function getItemShopPurchasesQuery($daysago = nil)
+	{	
+		if($daysago)
+		{
+			$limit = " AND `log`.`date` >= UNIX_TIMESTAMP() - (60 * 60 * 24 * {$daysago})";
+		}
+		
+		$query = $this->db->query("
+		SELECT 
+			`log`.`date`,
+			`players`.`name` as `player_name`,
+			`shop`.`name`,
+			`shop`.`price`
+		FROM 
+			`".Tools::getSiteTable("itemshop_log")."` `log` 
+		LEFT JOIN
+			`".Tools::getSiteTable("itemshop")."` `shop`
+		ON
+			`shop`.`id` = `log`.`shop_id`
+		LEFT JOIN
+			`players`
+		ON
+			`players`.`id` = `log`.`player_id`
+		WHERE 
+			`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
+			{$limit}
+		ORDER BY 
+			`date` DESC");
+		
+		$query instanceof Query;
+		return $query;	
+	}
+	
 }
 ?>

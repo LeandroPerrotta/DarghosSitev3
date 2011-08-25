@@ -262,7 +262,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="item_frete_1" value="000">
 				
 				<input class="button" type="submit" value="Finalizar" />	
-				</form>			
+				</form>
 			';
 			
 			return $form;	
