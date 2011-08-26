@@ -64,6 +64,7 @@
 								<div name="darghopedia"><strong><? echo $menu['DARGHOPEDIA']; ?></strong> <span class="<?php echo $menudropdown['darghopedia']['button']; ?>"></span></div>
 								<ul <?php echo $menudropdown['darghopedia']['status']; ?>>
 									<li><a href="?ref=darghopedia.world"><? echo $menu['DARGHOPEDIA_WORLD']; ?></a></li>
+									<li><a href="?ref=darghopedia.monsterlist"><? echo $menu['DARGHOPEDIA_MONSTERS']; ?></a></li>
 									<?php if(ENABLE_REBORN_SYSTEM){ ?><li><a href="?ref=darghopedia.reborn"><? echo $menu['DARGHOPEDIA_REBORN']; ?></a></li><?php } ?>
 									<li><a href="?ref=darghopedia.quests"><? echo $menu['DARGHOPEDIA_QUESTS']; ?></a></li>
 									<li><a href="?ref=darghopedia.pvp_arenas"><? echo $menu['DARGHOPEDIA_PVP_ARENAS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
@@ -300,24 +301,18 @@
 							<li>
 								<div><strong>Top 5 matadores do dia</strong></div>
 								<ul class="always_viewable" >
-									<li>	
-										<div>								
-											<p>
-												<?php 									
-												$str = "";
-												
-												$pos = 1;
-												while($fetch = $query->fetch())
-												{
-													$str .= "#{$pos} <a href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a> ($fetch->c)";
-													$pos++;
-												}
-												
-												echo $str
-												?>
-											</p>
-										</div>	
-									</li>						
+									<?php 									
+									$str = "";
+									
+									$pos = 1;
+									while($fetch = $query->fetch())
+									{
+										$str .= "<li><a href='?ref=character.view&name={$fetch->name}'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
+										$pos++;
+									}
+									
+									echo $str
+									?>				
 								</ul>
 							</li>
 							<?php 
