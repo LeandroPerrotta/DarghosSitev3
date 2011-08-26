@@ -9,6 +9,40 @@ class Deaths
 		$this->db = $db;
 	}
 	
+	static function getTopFraggers($startdate, $enddate, $size = 5)
+	{
+		$query = Core::$DB->query("
+		SELECT 
+			`players`.`name`, 
+			`players`.`level`, 
+			COUNT(*) as `c` 
+		FROM 
+			`player_killers`
+		LEFT JOIN 
+			`killers` 
+		ON 
+			`killers`.`id` = `player_killers`.`kill_id` 
+		LEFT JOIN 
+			`players` 
+		ON 
+			`player_killers`.`player_id` = `players`.`id` 
+		LEFT JOIN 
+			`player_deaths` 
+		ON 
+			`player_deaths`.`id` = `killers`.`death_id` 
+		WHERE
+			`player_deaths`.`date` >= {$startdate} 
+			AND `player_deaths`.`date` <= {$enddate} 
+		GROUP BY 
+			`player_killers`.`player_id` 
+		ORDER BY 
+			`c` DESC 
+		LIMIT {$size};		
+		");
+		
+		return $query;
+	}
+	
 	function load($death_id)
 	{
 		$query = $this->db->query("SELECT id, player_id, date, level FROM player_deaths WHERE id = '{$death_id}' AND date + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY date DESC");			

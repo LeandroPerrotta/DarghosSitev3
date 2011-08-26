@@ -286,6 +286,43 @@
 									</li>						
 								</ul>
 							</li>
+							
+							<?php 
+							$today = getdate();
+							$start = mktime(15, 0, 0, $today["mon"], $today["mday"] - 2, $today["year"]);
+							$end = mktime(15, 0, 0, $today["mon"], $today["mday"] - 1, $today["year"]);
+							
+							$query = Deaths::getTopFraggers($start, $end);		
+
+							if($query->numRows() > 0)
+							{
+							?>
+							<li>
+								<div><strong>Top 5 matadores do dia</strong></div>
+								<ul class="always_viewable" >
+									<li>	
+										<div>								
+											<p>
+												<?php 									
+												$str = "";
+												
+												$pos = 1;
+												while($fetch = $query->fetch())
+												{
+													$str .= "#{$pos} <a href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a> ($fetch->c)";
+													$pos++;
+												}
+												
+												echo $str
+												?>
+											</p>
+										</div>	
+									</li>						
+								</ul>
+							</li>
+							<?php 
+							}
+							?>														
 								
 							<li>
 								<div><strong>Facebook</strong></div>
