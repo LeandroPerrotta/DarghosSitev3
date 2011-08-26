@@ -9,6 +9,15 @@ if($_POST)
 	$_arg[] = stripslashes($_POST['account_name']);
 	$_arg[] = $password;
 	
+	$reusing = false;
+	$loadedEmail = false;
+	
+	if($account->loadByEmail($_POST['account_email']))
+	{
+		$reusing = (count($account->getCharacterList()) == 0) ? true : false;
+		$loadedEmail = true;
+	}
+	
 	if(!$_POST['account_email'] or !$_POST['account_name'])
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
@@ -21,7 +30,7 @@ if($_POST)
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_NAME_WRONG_SIZE);
 	}
-	elseif($account->loadByEmail($_POST['account_email']))
+	elseif($loadedEmail and !$reusing)
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 	}		
@@ -39,11 +48,15 @@ if($_POST)
 	}
 	else
 	{
-		$account->setEmail($_POST['account_email']);
+		if(!$reusing)
+		{
+			$account->setEmail($_POST['account_email']);
+			$account->setCreation(time());
+		}
+		
 		$account->setPassword(Strings::encrypt($password));
 		$account->setName($_POST['account_name']);
-		$account->setCreation(time());
-		
+
 		$account->save();
 	
 		$success = Lang::Message(LMSG_ACCOUNT_REGISTERED);

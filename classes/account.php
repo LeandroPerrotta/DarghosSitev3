@@ -109,10 +109,8 @@ class Account
 			$this->load($query->fetch()->account_id);
 			return true;
 		}
-		else
-		{
-			return false;
-		}		
+
+		return false;		
 	}
 
 	function save()
