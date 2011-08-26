@@ -172,6 +172,7 @@ class View
 		global $module;		
 				
 		$module .= "		
+		<div style='margin-top: 5px; margin-bottom: 5px; display: block; width: 100%; text-align: right;'><a href='?ref=itemshop.history'>Ver Historico</a></div>
 		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
 			<fieldset>
 	

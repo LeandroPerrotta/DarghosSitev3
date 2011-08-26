@@ -110,7 +110,6 @@
 									<li><a href="?ref=contribute.order"><span style="font-weight: bold"><? echo $menu['PREMIUM.ORDER']; ?></span></a></li>
 									<li><a href="?ref=itemshop.purchase"><span style="font-weight: bold"><? echo $menu['PREMIUM.ITEM_SHOP']; ?></span></a></li>
 									<li><a href="?ref=contribute.myorders"><? echo $menu['PREMIUM.MY_ORDERS']; ?></a></li>
-									<li><a href="?ref=itemshop.history"><? echo $menu['PREMIUM.LOG_ITEMSHOP']; ?></a></li>
 								</ul>
 							</li>								
 							
@@ -313,7 +312,7 @@
 					</div>
 				</div>
 				
-				<div id="footer"><p style="margin: 13px;">&copy; 2006~2010 <a href="http://www.ultraxsoft.com">Equipe UltraxSoft</a></p></div>
+				<div id="footer"><p style="margin: 13px;">&copy; 2006~2011 <a href="index.php">Equipe UltraxSoft</a></p></div>
 			</div>
 		</div>
 		
