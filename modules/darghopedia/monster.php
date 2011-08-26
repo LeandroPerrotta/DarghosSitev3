@@ -264,12 +264,12 @@ class View
 			$chance = min($chance, 100000);
 			$chanceStr = "";
 			
-			if($chance <= 50){ $chanceStr = "Desista de tentar pegar este item..."; }
-			elseif($chance <= 100){ $chanceStr = "Item Épico..."; }
-			elseif($chance <= 200){ $chanceStr = "Extremamente raro"; }
+			if($chance <= 50){ $chanceStr = "<span style='color: #ff921d; font-weight: bold;'>Item lendário</span>"; }
+			elseif($chance <= 100){ $chanceStr = "<span style='color: #822385; font-weight: bold;'>Item épico</span>"; }
+			elseif($chance <= 200){ $chanceStr = "<span style='color: #247622; font-weight: bold;'>Extremamente raro</span>"; }
 			elseif($chance <= 500){ $chanceStr = "Muito raro"; }
 			elseif($chance <= 1000){ $chanceStr = "Raro"; }
-			elseif($chance <= 2500){ $chanceStr = "Normal"; }
+			elseif($chance <= 2500){ $chanceStr = "Pouco raro"; }
 			elseif($chance <= 5000){ $chanceStr = "Um pouco frequente";	}
 			elseif($chance <= 10000){ $chanceStr = "Muito frequente"; }
 			elseif($chance <= 20000){ $chanceStr = "Frequente"; }
