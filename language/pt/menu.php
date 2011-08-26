@@ -18,21 +18,16 @@ $menu['DARGHOPEDIA_PVP_ARENAS'] = "PvP Arenas";
 $menu['DARGHOPEDIA_WEEK_EVENTS'] = "Eventos Semanais";
 
 $menu['ACCOUNTS'] = "Contas";
-$menu['ACCOUNT.REGISTER'] = "Registrar-se";
+$menu['ACCOUNT.REGISTER'] = "Criar Conta!";
 $menu['ACCOUNT.LOGIN'] = "Log-in";
 $menu['ACCOUNT.RECOVERY'] = "Recuperar Conta";
-$menu['ACCOUNT.PREMIUM'] = "Conta Premium";
+$menu['ACCOUNT.PREMIUM'] = "Beneficios Premium";
 $menu['ACCOUNT.MAIN'] = "Principal";
-$menu['ACCOUNT.PREMIUM_TEST'] = "Teste de Conta Premium";
-$menu['ACCOUNT.ITEM_SHOP'] = "Item Shop";
 $menu['ACCOUNT.LOGOUT'] = "Log-out";
-
-$menu['SUPPORT'] = "Suporte";
-$menu['SUPPORT.OPEN_TICKET'] = "Abrir Ticket";
-$menu['SUPPORT.MY_TICKETS'] = "Meus Tickets";
 
 $menu['PREMIUMS'] = "Conta Premium";
 $menu['PREMIUM.ORDER'] = "Obter Conta Premium";
+$menu['PREMIUM.ITEM_SHOP'] = "Item Shop";
 $menu['PREMIUM.MY_ORDERS'] = "Meus Pedidos";
 $menu['PREMIUM.LOG_ITEMSHOP'] = "Historico do Item Shop";
 

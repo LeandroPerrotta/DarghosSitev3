@@ -39,38 +39,7 @@
 									<li><a href="?ref=general.howplay"><? echo $menu['HOW_PLAY']; ?></a></li>
 									<li><a href="?ref=general.fansites"><? echo $menu['FANSITES']; ?></a></li>																																	
 								</ul>
-							</li>
-							
-							<?php 
-								$menudropdown['darghopedia']['status'] = "class='viewable'";
-								$menudropdown['darghopedia']['button'] = "toogleMinus";
-							
-								if($_COOKIE['menudropdown_darghopedia'])
-								{ 
-									if($_COOKIE['menudropdown_darghopedia'] == "true")
-									{ 
-										$menudropdown['darghopedia']['status'] = "class='viewable'"; 
-										$menudropdown['darghopedia']['button'] = "toogleMinus";
-									}
-									elseif($_COOKIE['menudropdown_community'] == "false")
-									{
-										$menudropdown['darghopedia']['status'] = null;
-										$menudropdown['darghopedia']['button'] = "tooglePlus";
-									}	
-								} 
-							?>									
-							
-							<li>
-								<div name="darghopedia"><strong><? echo $menu['DARGHOPEDIA']; ?></strong> <span class="<?php echo $menudropdown['darghopedia']['button']; ?>"></span></div>
-								<ul <?php echo $menudropdown['darghopedia']['status']; ?>>
-									<li><a href="?ref=darghopedia.world"><? echo $menu['DARGHOPEDIA_WORLD']; ?></a></li>
-									<li><a href="?ref=darghopedia.monsterlist"><? echo $menu['DARGHOPEDIA_MONSTERS']; ?></a></li>
-									<?php if(ENABLE_REBORN_SYSTEM){ ?><li><a href="?ref=darghopedia.reborn"><? echo $menu['DARGHOPEDIA_REBORN']; ?></a></li><?php } ?>
-									<li><a href="?ref=darghopedia.quests"><? echo $menu['DARGHOPEDIA_QUESTS']; ?></a></li>
-									<li><a href="?ref=darghopedia.pvp_arenas"><? echo $menu['DARGHOPEDIA_PVP_ARENAS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
-									<li><a href="?ref=darghopedia.week_events"><? echo $menu['DARGHOPEDIA_WEEK_EVENTS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
-								</ul>
-							</li>							
+							</li>						
 						
 							<?php if(!$_SESSION['login']){ ?>
 							<?php 
@@ -109,43 +78,13 @@
 							<li>
 								<div><strong>Minha Conta</strong></div>
 								<ul class="always_viewable">
-									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>
-									<li><a href="?ref=itemshop.purchase"><? echo $menu['ACCOUNT.ITEM_SHOP']; ?></a></li>
-									
+									<li><a href="?ref=account.main"><? echo $menu['ACCOUNT.MAIN']; ?></a></li>									
 									<!-- <li><a href="?ref=account.premiumtest"></a></li> -->
 									<!--  <li><a href="?ref=account.importElerian">Conta Premium Elerian </a></li> -->
 									<li><a href="?ref=account.logout"><? echo $menu['ACCOUNT.LOGOUT']; ?></a></li>			
 								</ul>
 							</li>
-							
-							
-						<?php 
-								$menudropdown['support']['status'] = null;
-								$menudropdown['support']['button'] = "tooglePlus";
-							
-								if($_COOKIE['menudropdown_support'])
-								{ 
-									if($_COOKIE['menudropdown_support'] == "true")
-									{ 
-										$menudropdown['support']['status'] = "class='viewable'"; 
-										$menudropdown['support']['button'] = "toogleMinus";
-									}
-									elseif($_COOKIE['menudropdown_support'] == "false")
-									{
-										$menudropdown['support']['status'] = null;
-										$menudropdown['support']['button'] = "tooglePlus";
-									}	
-								} 
-							?>							
-							<li>
-								<div name="support"><strong><? echo $menu['SUPPORT']; ?></strong> <span class="<?php echo $menudropdown['support']['button']; ?>"></span></div>
-								<ul <?php echo $menudropdown['support']['status']; ?>>
-									<li><a href="?ref=tickets.send"><? echo $menu['SUPPORT.OPEN_TICKET']; ?></a></li>
-									<li><a href="?ref=tickets.tickets"><? echo $menu['SUPPORT.MY_TICKETS']; ?></a></li>
-								</ul>
-							</li>		
-		
-							
+				
 							<?php 
 								$menudropdown['contribute']['status'] = null;
 								$menudropdown['contribute']['button'] = "tooglePlus";
@@ -168,7 +107,8 @@
 								<div name="contribute"><strong><? echo $menu['PREMIUMS']; ?></strong> <span class="<?php echo $menudropdown['contribute']['button']; ?>"></span></div>
 								<ul <?php echo $menudropdown['contribute']['status']; ?>>
 									<li><a href="?ref=account.premium"><? echo $menu['ACCOUNT.PREMIUM']; ?></a></li>
-									<li><a href="?ref=contribute.order"><? echo $menu['PREMIUM.ORDER']; ?></a></li>
+									<li><a href="?ref=contribute.order"><span style="font-weight: bold"><? echo $menu['PREMIUM.ORDER']; ?></span></a></li>
+									<li><a href="?ref=itemshop.purchase"><span style="font-weight: bold"><? echo $menu['PREMIUM.ITEM_SHOP']; ?></span></a></li>
 									<li><a href="?ref=contribute.myorders"><? echo $menu['PREMIUM.MY_ORDERS']; ?></a></li>
 									<li><a href="?ref=itemshop.history"><? echo $menu['PREMIUM.LOG_ITEMSHOP']; ?></a></li>
 								</ul>
@@ -194,7 +134,38 @@
 								</li>								
 								
 								<?php } ?>																		
-							<?php } ?>
+							<?php 
+							} 
+							
+							$menudropdown['darghopedia']['status'] = "class='viewable'";
+							$menudropdown['darghopedia']['button'] = "toogleMinus";
+						
+							if($_COOKIE['menudropdown_darghopedia'])
+							{ 
+								if($_COOKIE['menudropdown_darghopedia'] == "true")
+								{ 
+									$menudropdown['darghopedia']['status'] = "class='viewable'"; 
+									$menudropdown['darghopedia']['button'] = "toogleMinus";
+								}
+								elseif($_COOKIE['menudropdown_darghopedia'] == "false")
+								{
+									$menudropdown['darghopedia']['status'] = null;
+									$menudropdown['darghopedia']['button'] = "tooglePlus";
+								}	
+							} 
+							?>									
+							
+							<li>
+								<div name="darghopedia"><strong><? echo $menu['DARGHOPEDIA']; ?></strong> <span class="<?php echo $menudropdown['darghopedia']['button']; ?>"></span></div>
+								<ul <?php echo $menudropdown['darghopedia']['status']; ?>>
+									<li><a href="?ref=darghopedia.world"><? echo $menu['DARGHOPEDIA_WORLD']; ?></a></li>
+									<li><a href="?ref=darghopedia.monsterlist"><? echo $menu['DARGHOPEDIA_MONSTERS']; ?></a></li>
+									<?php if(ENABLE_REBORN_SYSTEM){ ?><li><a href="?ref=darghopedia.reborn"><? echo $menu['DARGHOPEDIA_REBORN']; ?></a></li><?php } ?>
+									<li><a href="?ref=darghopedia.quests"><? echo $menu['DARGHOPEDIA_QUESTS']; ?></a></li>
+									<li><a href="?ref=darghopedia.pvp_arenas"><? echo $menu['DARGHOPEDIA_PVP_ARENAS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
+									<li><a href="?ref=darghopedia.week_events"><? echo $menu['DARGHOPEDIA_WEEK_EVENTS']; ?> <span style="font-size: 8px; color: #00ff00;">(novo!)</span></a></li>
+								</ul>
+							</li>								
 				
 							<?php 
 								$menudropdown['community']['status'] = "class='viewable'";
