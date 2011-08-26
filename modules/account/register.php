@@ -17,7 +17,7 @@ if($_POST)
 	{
 		$loadedEmail = true;
 		
-		if(count($account->getCharacterList())) $reusing = true;
+		if(count($account->getCharacterList()) == 0) $reusing = true;
 		if($reusing and $account->getName() == $_POST['account_name']) $reusing_name = true;
 	}
 	
