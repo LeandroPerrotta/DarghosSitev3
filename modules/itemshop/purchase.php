@@ -59,6 +59,7 @@ class View
 		
 		$this->_character = new HTML_SelectBox();
 		$this->_character->SetName("character");
+		$this->_character->SetSize(150);
 		
 		$this->_character->AddOption("");
 		$this->_character->SelectedIndex(0);
@@ -183,9 +184,9 @@ class View
 				<p>O sistema funciona de maneira automatica e no instante em que você finalizar a sua troca o <b>seu item já estará disponivel dentro do jogo em um depot localizado no ultimo andar do depot da cidade de Aracura</b>, caso você não saiba chegar até lá, basta ir em qualquer barco do jogo e dizer ao NPC as palavras: \"hi\", \"aracura\" e \"yes\".</p>					
 				
 				<p>
-					<label> Personagem<br>
-						{$this->_character->Draw()}
-					</label>
+					<label>Personagem</label>
+					{$this->_character->Draw()}
+					
 				</p>
 				
 				{$this->_itemlist_table->Draw()}
