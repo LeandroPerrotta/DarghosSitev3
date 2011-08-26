@@ -10,12 +10,18 @@ if($_POST)
 	$_arg[] = $password;
 	
 	$reusing = false;
+	$reusing_name = false;
 	$loadedEmail = false;
 	
 	if($account->loadByEmail($_POST['account_email']))
 	{
 		$reusing = (count($account->getCharacterList()) == 0) ? true : false;
 		$loadedEmail = true;
+		
+		if($reusing)
+		{
+			if($account->getName() == $_POST['account_name']) $reusing_name = true;
+		}
 	}
 	
 	if(!$_POST['account_email'] or !$_POST['account_name'])
@@ -34,7 +40,7 @@ if($_POST)
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 	}		
-	elseif($account->loadByName($_POST['account_name']))
+	elseif($account->loadByName($_POST['account_name']) and (!$reusing and !$reusing_name))
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
 	}			
@@ -55,7 +61,11 @@ if($_POST)
 		}
 		
 		$account->setPassword(Strings::encrypt($password));
-		$account->setName($_POST['account_name']);
+		
+		if(!$reusing_name)
+		{
+			$account->setName($_POST['account_name']);
+		}
 
 		$account->save();
 	
