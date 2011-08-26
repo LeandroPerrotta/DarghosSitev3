@@ -60,6 +60,9 @@ class View
 		$this->_character = new HTML_SelectBox();
 		$this->_character->SetName("character");
 		
+		$this->_character->AddOption("");
+		$this->_character->SelectedIndex(0);
+		
 		foreach($this->loggedAcc->getCharacterList() as $k => $name)
 		{
 			$this->_character->AddOption($name);
