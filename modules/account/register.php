@@ -24,6 +24,8 @@ if($_POST)
 		}
 	}
 	
+	$account = new Account();
+	
 	if(!$_POST['account_email'] or !$_POST['account_name'])
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
