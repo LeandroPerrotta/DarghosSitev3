@@ -13,15 +13,12 @@ if($_POST)
 	$reusing_name = false;
 	$loadedEmail = false;
 	
-	if($account->loadByEmail($_POST['account_email']))
+	if($_POST['account_email'] and $account->loadByEmail($_POST['account_email']))
 	{
-		$reusing = (count($account->getCharacterList()) == 0) ? true : false;
 		$loadedEmail = true;
 		
-		if($reusing)
-		{
-			if($account->getName() == $_POST['account_name']) $reusing_name = true;
-		}
+		if(count($account->getCharacterList())) $reusing = true;
+		if($reusing and $account->getName() == $_POST['account_name']) $reusing_name = true;
 	}
 	
 	$account = new Account();
