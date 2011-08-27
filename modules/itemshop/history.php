@@ -24,6 +24,7 @@ class View
 		}
 		else
 		{
+			Core::requireLogin();
 			return false;
 		}		
 		
