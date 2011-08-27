@@ -39,7 +39,8 @@ class Lang_Messages
 		self::$messages[LMSG_ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS] = "A sua conta já possui 10 personagens criados. Para criar um novo personagem é necessario se desfazer de um já existente deletando-o.";
 		self::$messages[LMSG_CHANGEINFOS_WRONG_SIZE] = "Os campos Nome Real e Localidade devem possuir no maximo 25 caracteres enquanto Website deve conter no maximo 50 caracteres.";
 		self::$messages[LMSG_SECRETKEY_ALREADY_EXISTS] = "Esta conta já possui uma chave secreta configurada.";
-		self::$messages[LMSG_SECRETKEY_WRONG_SIZE] = "A sua chave secreta deve possuir entre 10 e 50 caracteres e seu lembrete entre 5 e 25 caracteres.";
+		self::$messages[LMSG_SECRETKEY_WRONG_SIZE] = "A sua chave secreta deve possuir entre 6 e 15 caracteres e seu lembrete entre 5 e 25 caracteres.";
+		self::$messages[LMSG_SECRETKEY_MUST_BY_UNLIKE_REMINDER] = "Para sua segurança, o seu lembrete e sua chave de recuperação não podem ser iguais.";
 		self::$messages[LMSG_ACCOUNT_SETNAME_SAME_ID] = "O nome de sua conta deve ser diferente do seu antigo numero.";
 		self::$messages[LMSG_CONTR_TERMS] = "Para aceitar uma contribuição é necessario estar de acordo com todas clausulas e termos de nosso contrato de serviço.";
 		self::$messages[LMSG_CONTR_ORDER_NUMBER_DUPLICATED] = "Ouve uma falha ao obter um numero para seu pedido. Por favor tente novamente, se o problema persistir aguarde algumas horas.";
@@ -174,13 +175,31 @@ class Lang_Messages
 		
 		self::$messages[LMSG_SECRETKEY_SUCCESS] = "
 			<p>Caro jogador,</p>
-			<p>A chave secreta @v1@ foi configurada com sucesso em sua conta!</p>
+			<p>A chave secreta <span style='font-weight: bold; size: 20px'>@v1@</span> foi configurada com sucesso em sua conta!</p>
+			<p><span style='color: red; font-weight: bold; size: 20px;'>IMPORTANTE:</span></p>
+			<p>A baixo segue uma lista de coisas sobre a segurança de sua Chave Secreta que você <b>precisa</b> saber para que ela sempre esteja segura:</p>
+			<p>
+				• <b>Esta chave por razões de segurança é <span style='size: 15px'>IMODIFICAVEL</span>, ou seja, não pode ser modificada <u>NUNCA</u>!</b><br>
+				• <b>Por isto, se você contar-la ou deixar outra(s) pessoa(s) saber-la, esta conta não será mais apénas sua, sera <u>SEMPRE</u> de você e desta(s) pessoa(s)!</b><br>
+				• <b>É recomendavel que você anote esta chave em um papel e guarde-a em um local seguro e que a preserve!</b><br>
+				• <b>Jamais guarde esta chave em qualquer lugar de seu computador como em arquivos do tipo texto (.txt)!</b><br>
+				• <b>Se você um dia for hackeado, e for usar-la para recuperar sua conta, certifique-se que primeiro seu computador não está infectado (NESTAS OCASIÕES É ALTAMENTE RECOMENDAVEL A FORMATAÇÃO DO DISCO), pois se não, o hacker também irá saber de sua chave!</b><br>
+			</p>			
 			<p>Tenha um bom jogo!</p>
 		";			
 		
 		self::$messages[LMSG_SECRETKEY_CUSTOM_SUCCESS] = "
 			<p>Caro jogador,</p>
-			<p>A sua chave secreta @v1@ com o lembrete @v2@ foi configurada com sucesso em sua conta!</p>
+			<p>A sua chave secreta <span style='font-weight: bold; size: 20px'>@v1@</span> com o lembrete <span style='font-decoration: italic; size: 12px'>@v2@</span> foi configurada com sucesso em sua conta!</p>
+			<p><span style='color: red; font-weight: bold; size: 20px;'>IMPORTANTE:</span></p>
+			<p>A baixo segue uma lista de coisas sobre a segurança de sua Chave Secreta que você <b>precisa</b> saber para que ela sempre esteja segura:</p>
+			<p>
+				• <b>Esta chave por razões de segurança é <span style='size: 15px'>IMODIFICAVEL</span>, ou seja, não pode ser modificada <u>NUNCA</u>!</b><br>
+				• <b>Por isto, se você contar-la ou deixar outra(s) pessoa(s) saber-la, esta conta não será mais apénas sua, sera <u>SEMPRE</u> de você e desta(s) pessoa(s)!</b><br>
+				• <b>É recomendavel que você anote esta chave em um papel e guarde-a em um local seguro e que a preserve!</b><br>
+				• <b>Jamais guarde esta chave em qualquer lugar de seu computador como em arquivos do tipo texto (.txt)!</b><br>
+				• <b>Se você um dia for hackeado, e for usar-la para recuperar sua conta, certifique-se que primeiro seu computador não está infectado (NESTAS OCASIÕES É ALTAMENTE RECOMENDAVEL A FORMATAÇÃO DO DISCO), pois se não, o hacker também irá saber de sua chave!</b><br>
+			</p>
 			<p>Tenha um bom jogo!</p>
 		";			
 		

@@ -102,13 +102,18 @@ $(document).ready(function() {
 	$("table[class='fastnews'] span[class='littleFastNew']").click(fastNewsDropDown);
 	
 	//SELECTBOX COM ALTERAï¿½ï¿½O DINAMICA DE CONTEUDO
-	$("fieldset div[class='autoaction']").nextAll("div[class!='viewable']").hide();	
+	$("div[class='autoaction']").nextAll("div[class!='viewable']").hide();	
 	
-	$("fieldset div[class='autoaction'] select").change(function() {
-		var valueSelected = $("fieldset div[class='autoaction'] option:selected").val();
-
-		$("fieldset div[class='autoaction']").nextAll('div[title!="' + valueSelected + '"]').hide();
-		$("fieldset div[class='autoaction']").nextAll("div[title='" + valueSelected + "']").slideDown();
-		
-	});		
+	$("div[class='autoaction'] select").change(onChange);		
+	$("div[class='autoaction'] input[type='radio']").change(onChange);
 });
+
+function onChange()
+{
+	var valueSelected = $(this).val();
+	
+	//alert(valueSelected);
+	
+	$("fieldset div[class='autoaction']").nextAll('div[title!="' + valueSelected + '"]').hide();
+	$("fieldset div[class='autoaction']").nextAll("div[title='" + valueSelected + "']").slideDown();	
+}

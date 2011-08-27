@@ -12,16 +12,22 @@ if($_POST)
 	$reusing = false;
 	$reusing_name = false;
 	$loadedEmail = false;
+	$loadedName = false;
 	
 	if($_POST['account_email'] and $account->loadByEmail($_POST['account_email']))
 	{
 		$loadedEmail = true;
 		
 		if(count($account->getCharacterList()) == 0) $reusing = true;
-		if($reusing and $account->getName() == $_POST['account_name']) $reusing_name = true;
+		if($_POST['account_name'] and $reusing and $account->getName() == $_POST['account_name']) $reusing_name = true;
 	}
 	
 	$account = new Account();
+	
+	if($reusing and $reusing_name) $loadedName = false;
+	elseif($account->loadByName($_POST['account_name'])) $loadedName =  true;
+	
+	
 	
 	if(!$_POST['account_email'] or !$_POST['account_name'])
 	{
@@ -39,7 +45,7 @@ if($_POST)
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
 	}		
-	elseif($account->loadByName($_POST['account_name']) and (!$reusing and !$reusing_name))
+	elseif($loadedName)
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
 	}			
@@ -52,11 +58,15 @@ if($_POST)
 		$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 	}
 	else
-	{
+	{		
 		if(!$reusing)
 		{
 			$account->setEmail($_POST['account_email']);
 			$account->setCreation(time());
+		}
+		else
+		{
+			$account->loadByEmail($_POST['account_email']);
 		}
 		
 		$account->setPassword(Strings::encrypt($password));
