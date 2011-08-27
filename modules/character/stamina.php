@@ -44,7 +44,7 @@ class View
 		
 		if(!$this->loggedAcc->load($_SESSION['login'][0]))
 		{
-			$this->_message = Lang::Message(LMSG_NEED_LOGIN);
+			Core::requireLogin();
 			return false;			
 		}		
 		

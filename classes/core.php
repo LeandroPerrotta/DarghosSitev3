@@ -160,6 +160,12 @@ class Core
 		echo $html;
 	}
 	
+	static function requireLogin()
+	{
+		$_SESSION["login_redirect"] = $_SERVER["REQUEST_URI"];
+		Core::redirect("?ref=account.login");
+	}
+	
 	static function getIpTries()
 	{
 		$query = self::$DB->query("SELECT COUNT(*) as `rows` FROM `".Tools::getSiteTable("iptries")."` WHERE `ip_addr` = '".$_SERVER['REMOTE_ADDR']."' AND `date` >= '".(time() - (60 * 60 * 24))."'");		
