@@ -751,7 +751,10 @@ class Account
 			`log`.`date`,
 			`players`.`name` as `player_name`,
 			`shop`.`name`,
-			`shop`.`price`
+			`shop`.`price`,
+			`use`.`date` as `use_date`,
+			`player_use`.`name` as `player_use`
+			`player_use`.`id` as `id_use`			
 		FROM 
 			`".Tools::getSiteTable("itemshop_log")."` `log` 
 		LEFT JOIN
@@ -762,6 +765,14 @@ class Account
 			`players`
 		ON
 			`players`.`id` = `log`.`player_id`
+		LEFT JOIN
+			`".Tools::getSiteTable("itemshop_use_log")."` `use`
+		ON
+			`use`.`log_id` = `log`.`id`
+		LEFT JOIN
+			`players` `player_use`
+		ON
+			`player_use`.`id` = `use`.`player_id`			
 		WHERE 
 			`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
 			{$limit}
