@@ -747,6 +747,7 @@ class Account
 		
 		$query = $this->db->query("
 		SELECT 
+			`log`.`id`,
 			`log`.`date`,
 			`players`.`name` as `player_name`,
 			`shop`.`name`,

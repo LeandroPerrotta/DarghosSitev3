@@ -11,7 +11,7 @@ class View
 	private $loggedAcc, $isAdmin = false;	
 	
 	function View()
-	{				
+	{					
 		if($_SESSION['login'])
 		{
 			$this->loggedAcc = new Account();
@@ -20,6 +20,9 @@ class View
 			if($this->loggedAcc->getGroup() == GROUP_ADMINISTRATOR)
 			{
 				$this->isAdmin = true;
+				
+				if($_GET["use"])
+					$this->markAsUsed($_GET["use"]);
 			}			
 		}
 		else
@@ -77,6 +80,11 @@ class View
 		return true;
 	}
 	
+	function markAsUsed($id)
+	{
+		Core::$DB->query("INSERT INTO `".Tools::getSiteTable("itemshop_log")."` VALUES ('{$id}', '0', '".time()."')");
+	}
+	
 	function getPurchases($daysago = null)
 	{
 		if($daysago)
@@ -86,12 +94,14 @@ class View
 		
 		$query = Core::$DB->query("
 		SELECT 
+			`log`.`id`,
 			`log`.`date`,
 			`players`.`name` as `player_name`,
 			`shop`.`name`,
 			`shop`.`price`,
 			`use`.`date` as `use_date`,
 			`player_use`.`name` as `player_use`
+			`player_use`.`id` as `id_use`
 		FROM 
 			`".Tools::getSiteTable("itemshop_log")."` `log` 
 		LEFT JOIN
@@ -126,28 +136,47 @@ class View
 		$this->_log_table->AddField("Historico Item Shop");
 		$this->_log_table->AddRow();	
 		
+		if($this->isAdmin)
+			$this->_log_table->AddField("<b>#</b>", "3%");
+		
 		$this->_log_table->AddField("<b>Personagem</b>", "30%");
 		$this->_log_table->AddField("<b>Item</b>", "35%");
 		$this->_log_table->AddField("<b>Custo</b>", "10%");
 		$this->_log_table->AddField("<b>Data</b>");
 		$this->_log_table->AddRow();			
 		
+		if($this->isAdmin)
+			$this->_log_table->AddField("<b>Admin</b>", "5%");		
+		
 		while($row = $query->fetchAssocArray())
 		{				
+			if($this->isAdmin)
+				$this->_log_table->AddField($row["id"]);			
+			
 			$this->_log_table->AddField("<a href='?ref=character.view&name={$row["player_name"]}'>{$row["player_name"]}</a>");
 			
 			$item = $row["name"];
 			
 			if($row["player_use"])
 			{
-				$item .= " usado por:
-				<br><a href='?ref=character.view&name={$row["player_use"]}'>{$row["player_use"]}</a><br> em ".Core::formatDate($row["use_date"])."";
+				if($row["id_use"] == 0)
+				{
+					$item .= " (cancelado)";					
+				}
+				else
+				{
+					$item .= " usado por:
+					<br><a href='?ref=character.view&name={$row["player_use"]}'>{$row["player_use"]}</a><br> em ".Core::formatDate($row["use_date"])."";
+				}
 			}
 			
 			$this->_log_table->AddField($item);
 			$this->_log_table->AddField($row["price"]);
 			$this->_log_table->AddField(Core::formatDate($row["date"]));
 			$this->_log_table->AddRow();	
+			
+			if($this->isAdmin)
+				$this->_log_table->AddField("<a href='?ref=itemshop.history&use={$row["id"]}'>Usar</a>");					
 		}		
 	}
 	
