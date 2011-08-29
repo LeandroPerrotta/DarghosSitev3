@@ -753,7 +753,7 @@ class Account
 			`shop`.`name`,
 			`shop`.`price`,
 			`use`.`date` as `use_date`,
-			`player_use`.`name` as `player_use`
+			`player_use`.`name` as `player_use`,
 			`player_use`.`id` as `id_use`			
 		FROM 
 			`".Tools::getSiteTable("itemshop_log")."` `log` 
