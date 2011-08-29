@@ -143,10 +143,11 @@ class View
 		$this->_log_table->AddField("<b>Item</b>", "35%");
 		$this->_log_table->AddField("<b>Custo</b>", "10%");
 		$this->_log_table->AddField("<b>Data</b>");
-		$this->_log_table->AddRow();			
 		
 		if($this->isAdmin)
-			$this->_log_table->AddField("<b>Admin</b>", "5%");		
+			$this->_log_table->AddField("<b>Admin</b>", "5%");	
+			
+		$this->_log_table->AddRow();			
 		
 		while($row = $query->fetchAssocArray())
 		{				
