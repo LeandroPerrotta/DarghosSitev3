@@ -774,10 +774,10 @@ class Account
 		ON
 			`player_use`.`id` = `use`.`player_id`			
 		WHERE 
-			`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
+			`players`.`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
 			{$limit}
 		ORDER BY 
-			`date` DESC");
+			`log`.`date` DESC");
 		
 		$query instanceof Query;
 		return $query;	
