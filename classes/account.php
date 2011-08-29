@@ -774,7 +774,7 @@ class Account
 		ON
 			`player_use`.`id` = `use`.`player_id`			
 		WHERE 
-			`players`.`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
+			`log`.`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
 			{$limit}
 		ORDER BY 
 			`log`.`date` DESC");
