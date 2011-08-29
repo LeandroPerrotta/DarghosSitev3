@@ -82,7 +82,7 @@ class View
 	
 	function markAsUsed($id)
 	{
-		Core::$DB->query("INSERT INTO `".Tools::getSiteTable("itemshop_log")."` VALUES ('{$id}', '0', '".time()."')");
+		Core::$DB->query("INSERT INTO `".Tools::getSiteTable("itemshop_use_log")."` VALUES ('{$id}', '0', '".time()."')");
 	}
 	
 	function getPurchases($daysago = null)
