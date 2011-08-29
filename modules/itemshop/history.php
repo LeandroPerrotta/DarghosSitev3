@@ -174,10 +174,11 @@ class View
 			$this->_log_table->AddField($item);
 			$this->_log_table->AddField($row["price"]);
 			$this->_log_table->AddField(Core::formatDate($row["date"]));
-			$this->_log_table->AddRow();	
 			
 			if($this->isAdmin)
-				$this->_log_table->AddField("<a href='?ref=itemshop.history&use={$row["id"]}'>Usar</a>");					
+				$this->_log_table->AddField("<a href='?ref=itemshop.history&use={$row["id"]}'>Usar</a>");		
+							
+			$this->_log_table->AddRow();				
 		}		
 	}
 	
