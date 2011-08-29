@@ -158,7 +158,7 @@ class View
 			
 			$item = $row["name"];
 			
-			if($row["player_use"])
+			if($row["player_use"] && $this->isAdmin)
 			{
 				if($row["id_use"] == 0)
 				{
