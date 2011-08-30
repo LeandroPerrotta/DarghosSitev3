@@ -1,7 +1,7 @@
 <?php
 define("BG_KILLS_RATE", 5);
 define("BG_ASSISTS_RATE", 1);
-define("BG_DEATHS_RATE", -6);
+define("BG_DEATHS_RATE", 6);
 
 class Battleground
 {
