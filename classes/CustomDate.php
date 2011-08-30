@@ -37,7 +37,7 @@ class CustomDate
 			$this->_sec || 0,
 			$this->_month || 0,
 			$this->_day || 0,
-			$this->_y || 0
+			$this->_year || 0
 		);
 		
 		return $this->_timestamp;
