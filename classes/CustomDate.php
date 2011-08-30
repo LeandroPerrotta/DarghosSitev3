@@ -32,12 +32,12 @@ class CustomDate
 	function makeDate()
 	{
 		$this->_timestamp = mktime(
-			$this->_hour || 0,
-			$this->_min || 0,
-			$this->_sec || 0,
-			$this->_month || 0,
-			$this->_day || 0,
-			$this->_year || 0
+			$this->_hour | 0,
+			$this->_min | 0,
+			$this->_sec | 0,
+			$this->_month | 0,
+			$this->_day | 0,
+			$this->_year | 0
 		);
 		
 		return $this->_timestamp;
