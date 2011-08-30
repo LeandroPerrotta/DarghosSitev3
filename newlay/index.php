@@ -289,7 +289,9 @@
 									$pos = 1;
 									while($fetch = $query->fetch())
 									{
-										$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: 9px'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
+										$size = (strlen($fetch->name) > 15) ? "8px" : "9px";
+										
+										$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: {$size}'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
 										$pos++;
 									}
 									
@@ -314,7 +316,8 @@
 									$pos = 1;
 									foreach($result as $key => $value)
 									{
-										$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: 9px'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
+										$size = (strlen($value["name"]) > 15) ? "8px" : "9px";
+										$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: {$size}'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
 										$pos++;
 										
 										if($pos > 5)
