@@ -256,7 +256,7 @@
 										</div>	
 									</li>						
 								</ul>
-							</li>
+							</li>	
 							
 							<?php 
 							$today = new CustomDate();
@@ -289,7 +289,7 @@
 									$pos = 1;
 									while($fetch = $query->fetch())
 									{
-										$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: 8px'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
+										$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: 9px'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
 										$pos++;
 									}
 									
@@ -299,8 +299,33 @@
 							</li>
 							<?php 
 							}
-							?>								
-								
+											
+							$result = Battleground::buildRating(Battleground::listAll($start_stamp, $end_stamp));
+
+							if(count($result) > 0)
+							{
+							?>
+							<li>
+								<div><strong>Top Battleground Rating</strong></div>
+								<ul class="always_viewable" >
+									<?php 									
+									$str = "";
+									
+									$pos = 1;
+									foreach($result as $key => $value)
+									{
+										$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: 9px'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
+										$pos++;
+									}
+									
+									echo $str
+									?>				
+								</ul>
+							</li>
+							<?php 
+							}
+							?>									
+												
 							<li>
 								<div><strong>Facebook</strong></div>
 								<ul class="always_viewable" >
