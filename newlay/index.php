@@ -259,11 +259,23 @@
 							</li>
 							
 							<?php 
-							$today = getdate();
-							$start = mktime(15, 0, 0, $today["mon"], $today["mday"] - 2, $today["year"]);
-							$end = mktime(15, 0, 0, $today["mon"], $today["mday"] - 1, $today["year"]);
+							$today = new CustomDate();
 							
-							$query = Deaths::getTopFraggers($start, $end);		
+							$end_day = null;
+							
+							if($today->getHour() > 15) $end_day = $today->getDay();
+							else $end_day = $today->getDay() - 1;
+							
+							$start_day = $end_day - 1;
+															
+							$make_stamp = new CustomDate(); $make_stamp->_hour = 15; $make_stamp->_month = $today->getMonth(); $make_stamp->_day = $start_day; $make_stamp->_year = $today->getYear();
+							
+							$start_stamp = $make_stamp->makeDate();		
+							
+							$make_stamp->_day = $end_day;
+							
+							$end_stamp = $make_stamp->makeDate();									
+							$query = Deaths::getTopFraggers($start_stamp, $end_stamp);	
 
 							if($query->numRows() > 0)
 							{
@@ -277,7 +289,7 @@
 									$pos = 1;
 									while($fetch = $query->fetch())
 									{
-										$str .= "<li><a href='?ref=character.view&name={$fetch->name}'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
+										$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: 8px'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
 										$pos++;
 									}
 									
@@ -287,7 +299,7 @@
 							</li>
 							<?php 
 							}
-							?>														
+							?>								
 								
 							<li>
 								<div><strong>Facebook</strong></div>
