@@ -32,6 +32,7 @@ else
 {			
 	include "classes/mysql.php";
 	include "classes/core.php";
+	include "classes/CustomDate.php";
 	
 	include "classes/account.php";
 	include "classes/character.php";
