@@ -18,7 +18,7 @@ class CustomDate
 	function getWeekDay(){	return date("w", $this->_timestamp); }
 	function getYearDay(){	return date("z", $this->_timestamp); }
 	function getMonth($withzero = false){ return date(($withzero) ? "m" : "n", $this->_timestamp); }
-	function getYear($two_digits = false){ return date(($two_digits) ? "Y" : "y", $this->_timestamp); }
+	function getYear($two_digits = false){ return date(($two_digits) ? "y" : "Y", $this->_timestamp); }
 	
 	//time
 	function getHour24($withzero = false){ return date(($withzero) ? "H" : "G", $this->_timestamp); }
