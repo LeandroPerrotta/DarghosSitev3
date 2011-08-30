@@ -317,7 +317,7 @@
 										$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: 9px'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
 										$pos++;
 										
-										if($pos == 5)
+										if($pos > 5)
 											break;
 									}
 									
