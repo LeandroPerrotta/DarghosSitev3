@@ -5,7 +5,7 @@ class CustomDate
 {
 	private $_timestamp;
 	
-	public $_month, $_year, $_day, $_min, $_hour, $_sec;
+	public $_month = 0, $_year = 0, $_day = 0, $_min= 0, $_hour = 0, $_sec = 0;
 	
 	function __construct($timestamp = null)
 	{
