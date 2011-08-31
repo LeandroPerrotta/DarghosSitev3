@@ -5,10 +5,8 @@ define("BG_DEATHS_RATE", 6);
 
 class Battleground
 {
-	static function listAll($from, $to = null)
-	{
-		$to = (isset($to)) ? time() : $to;
-		
+	static function listAll($from, $to)
+	{		
 		$query = Core::$DB->query("
 		SELECT 
 			result.player_id, 

@@ -118,10 +118,10 @@ class ItemShop
 		Core::$DB->query("
 			INSERT INTO 
 				`".Tools::getSiteTable("itemshop_log")."`
-				(`shop_id`, `date`, `player_id`) 
+				(`shop_id`, `date`, `player_id`, `received`) 
 			VALUES 
 				(
-					'{$this->id}', '".time()."', '{$player_id}'
+					'{$this->id}', '".time()."', '{$player_id}', '0'
 				)");	
 
 		return Core::$DB->lastInsertId();

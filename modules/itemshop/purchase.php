@@ -166,7 +166,8 @@ class View
 		$this->loggedAcc->updatePremDays($item->getPrice(), false);
 		$this->loggedAcc->save();
 		
-		$item->doPlayerGiveThing($character->getId());
+		//$item->doPlayerGiveThing($character->getId());
+		$item->logItemPurchase($character->getId());
 		
 		$this->_message = Lang::Message(LMSG_ITEMSHOP_PURCHASE_SUCCESS, $item_prop[ItemShop::PARAM_ITEM_COUNT], $item->getName(), $item->getPrice());
 		return true;		
@@ -182,7 +183,7 @@ class View
 			<fieldset>
 	
 				<p>Bem vindo ao item shop do Darghos, aqui você pode trocar dias de sua conta premium por itens especiais dentro do jogo.</p>
-				<p>O sistema funciona de maneira automatica e no instante em que você finalizar a sua troca o <b>seu item já estará disponivel dentro do jogo em um depot localizado no ultimo andar do depot da cidade de Aracura</b>, caso você não saiba chegar até lá, basta ir em qualquer barco do jogo e dizer ao NPC as palavras: \"hi\", \"aracura\" e \"yes\".</p>					
+				<p>O sistema funciona de maneira automatica e no instante em que você efetuar o log-in no jogo <b>irá receber o(s) itens obtidos</b>.</p>					
 				
 				<p>
 					<label>Personagem</label>
