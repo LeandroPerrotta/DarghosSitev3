@@ -419,7 +419,6 @@ if($_POST["player_name"] || $_GET['name'])
 			else
 			{
 				$module .= "
-				<div title='statistics' style='margin: 0px; padding: 0px;'>
 				<table cellspacing='0' cellpadding='0'>
 					<tr>
 						<th colspan='3'>Assassinatos Recentes</th>
