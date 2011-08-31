@@ -257,45 +257,49 @@ if($_POST["player_name"] || $_GET['name'])
 		</table>
 		</div>";
 
+		$module .= "
+		<div title='statistics' style='margin: 0px; padding: 0px;'>
+		<table cellspacing='0' cellpadding='0'>
+			<tr>
+				<th colspan='2'>Mortes Causadas</th>
+			</tr>	
+			<tr>
+				<td>Matou {$character->getTotalKills()} jogadores.</td>
+			</tr>	
+			<tr>
+				<td>Participou da morte de {$character->getTotalAssists()} jogadores.</td>
+			</tr>				
+			<tr>
+				<td>Matou {$character->getTotalBgKills()} jogadores em battlegrounds.</td>
+			</tr>						
+			<tr>
+				<td>Participou da morte de {$character->getTotalBgAssists()} jogadores em battlegrounds.</td>
+			</tr>
+		</table>	
+
+		<table cellspacing='0' cellpadding='0'>
+			<tr>
+				<th colspan='2'>Mortes Sofridas</th>
+			</tr>	
+			<tr>
+				<td>Foi morto {$character->getTotalDeaths()} vezes (total).</td>
+			</tr>	
+			<tr>
+				<td>Foi morto {$character->getTotalDeathsPlayers()} vezes com participação de jogadores.</td>
+			</tr>				
+			<tr>
+				<td>Foi morto {$character->getTotalDeathsEnv()} vezes com participação de criaturas.</td>
+			</tr>						
+			<tr>
+				<td>Foi morto {$character->getTotalBgDeaths()} vezes em battlegrounds.</td>
+			</tr>						
+		</table>		
+		";	
+			
 		if(is_array($deathlist))
 		{
 			$module .= "
-			<div title='statistics' style='margin: 0px; padding: 0px;'>
-			<table cellspacing='0' cellpadding='0'>
-				<tr>
-					<th colspan='2'>Mortes Causadas</th>
-				</tr>	
-				<tr>
-					<td>Matou {$character->getTotalKills()} jogadores.</td>
-				</tr>	
-				<tr>
-					<td>Participou da morte de {$character->getTotalAssists()} jogadores.</td>
-				</tr>				
-				<tr>
-					<td>Matou {$character->getTotalBgKills()} jogadores em battlegrounds.</td>
-				</tr>						
-				<tr>
-					<td>Participou da morte de {$character->getTotalBgAssists()} jogadores em battlegrounds.</td>
-				</tr>
-			</table>	
-
-			<table cellspacing='0' cellpadding='0'>
-				<tr>
-					<th colspan='2'>Mortes Sofridas</th>
-				</tr>	
-				<tr>
-					<td>Foi morto {$character->getTotalDeaths()} vezes (total).</td>
-				</tr>	
-				<tr>
-					<td>Foi morto {$character->getTotalDeathsPlayers()} vezes com participação de jogadores.</td>
-				</tr>				
-				<tr>
-					<td>Foi morto {$character->getTotalDeathsEnv()} vezes com participação de criaturas.</td>
-				</tr>						
-				<tr>
-					<td>Foi morto {$character->getTotalBgDeaths()} vezes em battlegrounds.</td>
-				</tr>						
-			</table>			
+		
 									
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
@@ -376,9 +380,8 @@ if($_POST["player_name"] || $_GET['name'])
 			}
 			
 			$module .= "
-			</table>
-			</div>";		
-		}
+			</table>";		
+		}		
 		
 		$_gmAcc = new Account();
 		
@@ -389,7 +392,6 @@ if($_POST["player_name"] || $_GET['name'])
 			if(is_array($kills))
 			{
 				$module .= "
-				<div title='statistics' style='margin: 0px; padding: 0px;'>
 				<table cellspacing='0' cellpadding='0'>
 					<tr>
 						<th colspan='3'>Assassinatos Recentes</th>
@@ -412,8 +414,7 @@ if($_POST["player_name"] || $_GET['name'])
 				}
 				
 				$module .= "
-				</table>
-				</div>";						
+				</table>";						
 			}
 			else
 			{
@@ -429,10 +430,12 @@ if($_POST["player_name"] || $_GET['name'])
 					</tr>					
 					
 				</table>	
-				</div>
 				";					
 			}
 		}
+		
+		$module .= "
+		</div>";		
 		
 		if($character->get("hide") == 0)
 		{
