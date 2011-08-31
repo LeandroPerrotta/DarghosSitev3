@@ -263,8 +263,44 @@ if($_POST["player_name"] || $_GET['name'])
 			<div title='statistics' style='margin: 0px; padding: 0px;'>
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
+					<th colspan='2'>Mortes Causadas</th>
+				</tr>	
+				<tr>
+					<td>Matou {$character->getTotalKills()} jogadores.</td>
+				</tr>	
+				<tr>
+					<td>Participou da morte de {$character->getTotalAssists()} jogadores.</td>
+				</tr>				
+				<tr>
+					<td>Matou {$character->getTotalBgKills()} jogadores em battlegrounds.</td>
+				</tr>						
+				<tr>
+					<td>Participou da morte de {$character->getTotalBgAssists()} jogadores em battlegrounds.</td>
+				</tr>
+			</table>	
+
+			<table cellspacing='0' cellpadding='0'>
+				<tr>
+					<th colspan='2'>Mortes Sofridas</th>
+				</tr>	
+				<tr>
+					<td>Foi morto {$character->getTotalDeaths()} vezes (total).</td>
+				</tr>	
+				<tr>
+					<td>Foi morto {$character->getTotalDeathsPlayers()} vezes com participação de jogadores.</td>
+				</tr>				
+				<tr>
+					<td>Foi morto {$character->getTotalDeathsEnv()} vezes com participação de criaturas.</td>
+				</tr>						
+				<tr>
+					<td>Foi morto {$character->getTotalBgDeaths()} vezes em battlegrounds.</td>
+				</tr>						
+			</table>			
+									
+			<table cellspacing='0' cellpadding='0'>
+				<tr>
 					<th colspan='2'>Mortes Recentes</th>
-				</tr>					
+				</tr>									
 			";
 			
 			foreach($deathlist as $death_id)

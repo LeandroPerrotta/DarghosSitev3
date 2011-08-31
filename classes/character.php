@@ -375,6 +375,152 @@ class Character
 		return true;
 	}
 	
+	function getTotalKills()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`player_killers` `killer`
+		LEFT JOIN
+			`killers` `killers`	
+		ON
+			`killer`.`kill_id` = `killers`.`id`
+		WHERE
+			`killers`.`final_hit` = '1' AND
+			`killer`.`player_id` = {$this->getId()}
+		");
+		
+		$fetch = $query->fetch();
+		return $fetch->count;	
+	}
+	
+	function getTotalBgKills()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`battleground_kills`
+		WHERE
+			`battleground_kills`.`is_frag` = '1' AND
+			`battleground_kills`.`player_id` = {$this->getId()}
+		");
+		
+		$fetch = $query->fetch();
+		return $fetch->count;		
+	}
+	
+	function getTotalAssists()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`player_killers` `killer`
+		WHERE
+			`killer`.`player_id` = {$this->getId()}
+		");
+		
+		$fetch = $query->fetch();
+		return $fetch->count;	
+	}
+	
+	function getTotalBgAssists()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`battleground_kills`
+		WHERE
+			`battleground_kills`.`player_id` = {$this->getId()}
+		");
+		
+		$fetch = $query->fetch();
+		return $fetch->count;	
+	}
+	
+	function getTotalDeathsPlayers()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`player_deaths` `death`
+		LEFT JOIN
+			`killers`
+		ON
+			`killers`.`death_id` = `death`.`id`
+		LEFT JOIN
+			`player_killers` `pk`
+		ON
+			`pk`.`kill_id` = `killers`.`id`
+		WHERE
+			`death`.`player_id` = {$this->getId()} AND
+      		`pk`.`player_id` != ''
+		GROUP BY
+			`death`.`id`
+		");
+		
+		return $query->numRows();	
+	}
+	
+	function getTotalDeathsEnv()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`player_deaths` `death`
+		LEFT JOIN
+			`killers`
+		ON
+			`killers`.`death_id` = `death`.`id`
+		LEFT JOIN
+			`environment_killers` `ek`
+		ON
+			`ek`.`kill_id` = `killers`.`id`
+		WHERE
+			`death`.`player_id` = {$this->getId()} AND
+      		`ek`.`name` != ''
+		GROUP BY
+			`death`.`id`
+		");
+
+		return $query->numRows();		
+	}
+	
+	function getTotalDeaths()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`player_deaths` `death`
+		WHERE
+			`death`.`player_id` = {$this->getId()}
+		");
+		
+		$fetch = $query->fetch();
+		return $fetch->count;
+	}
+	
+	function getTotalBgDeaths()
+	{
+		$query = $this->db->query("
+		SELECT
+			COUNT(*) as `count`
+		FROM
+			`battleground_deaths`
+		WHERE
+			`battleground_deaths`.`player_id` = {$this->getId()}
+		");
+		
+		$fetch = $query->fetch();
+		return $fetch->count;			
+	}	
+	
 	function set($field, $value)
 	{
 		switch($field)

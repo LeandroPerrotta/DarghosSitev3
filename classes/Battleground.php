@@ -7,7 +7,7 @@ class Battleground
 {
 	static function listAll($from, $to = null)
 	{
-		$to = $to | time();
+		$to = (isset($to)) ? time() : $to;
 		
 		$query = Core::$DB->query("
 		SELECT 
@@ -104,7 +104,7 @@ class Battleground
 				);
 			}
 			
-			$rating = ($array[$fetch->player_id]["kills"] * BG_KILLS_RATE) + ($array[$fetch->player_id]["assists"] * BG_ASSISTS_RATE) - ($array[$fetch->player_id]["deaths"] * BG_DEATHS_RATE);
+			$rating = (($array[$fetch->player_id]["kills"] * BG_KILLS_RATE) + ($array[$fetch->player_id]["assists"] * BG_ASSISTS_RATE)) - ($array[$fetch->player_id]["deaths"] * BG_DEATHS_RATE);
 			
 			$array[$fetch->player_id]["rating"] = ($rating > 0) ? $rating : 0; 
 		}
