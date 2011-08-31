@@ -30,18 +30,18 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		
 		$leader_rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER);
 		$vice_rank = $guild->SearchRankByLevel(GUILD_RANK_VICE);
-		
+
 		$member->setGuildRankId($leader_rank->GetId());
-		$member->save();
-		
-		$guild->SetOwnerId($member->getId());
-		$guild->Save();
+		$member->save();		
 		
 		$old_owner = new Character();
 		$old_owner->load($guild->GetOwnerId());
 		$old_owner->LoadGuild();
 		$old_owner->setGuildRankId($vice_rank->GetId());
 		$old_owner->save();
+		
+		$guild->SetOwnerId($member->getId());
+		$guild->Save();		
 		
 		$message = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $old_owner->getName(), $_POST["member_candidate"]);
 		return true;
