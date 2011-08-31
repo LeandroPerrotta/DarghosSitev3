@@ -106,13 +106,30 @@ $(document).ready(function() {
 	
 	$("div[class='autoaction'] select").change(onChange);		
 	$("div[class='autoaction'] input[type='radio']").change(onChange);
+	$("div[class='autoaction'] input[type='radio']").change(onChange);
+	
+	$("#horizontalSelector").nextAll("div[class!='viewable']").hide();
+	
+	$("#horizontalSelector ul li").click(function(){
+			
+		$(this).parent().children().each(function(){
+			if($(this).attr("checked") == "true")
+				$(this).attr("checked", "");
+		});
+		
+		$(this).attr("checked", "true");
+		var valueSelected = $(this).attr("name");
+		
+		$("#horizontalSelector").nextAll('div[title!="' + valueSelected + '"]').hide();
+		$("#horizontalSelector").nextAll("div[title='" + valueSelected + "']").slideDown();	
+	});
 });
 
 function onChange()
 {
 	var valueSelected = $(this).val();
 	
-	//alert(valueSelected);
+	alert(valueSelected);
 	
 	$("fieldset div[class='autoaction']").nextAll('div[title!="' + valueSelected + '"]').hide();
 	$("fieldset div[class='autoaction']").nextAll("div[title='" + valueSelected + "']").slideDown();	

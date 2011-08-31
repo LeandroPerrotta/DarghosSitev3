@@ -169,6 +169,15 @@ ul li {
 	background: #333 url(images/item.jpg) repeat-x;
 }
 
+#left ul li div.red {
+	background: #333 url(images/item_red.jpg) repeat-x;
+	height: 15px;
+}
+
+#left td strong.red {
+	background: #333 url(images/item_red.jpg) repeat-x;
+}
+
 #left li ul li div {
 	background: #333 url(images/subitem.jpg) repeat;
 	height: auto;
@@ -316,4 +325,53 @@ ul li {
 #tileItem p{
 	
 	margin-bottom: 5px;
+}
+
+#horizontalSelector {
+
+}
+
+#horizontalSelector span[name='left_corner']{
+	
+	display: inline-block;
+	background: url(images/left_corner.png) repeat-x;
+	width: 17px;
+	height: 24px;
+}
+
+#horizontalSelector span[name='right_corner']{
+	display: inline-block;
+	background: url(images/right_corner.png) repeat-x;
+	width: 17px;
+	height: 24px;
+	margin-left: -3px;
+}
+
+#horizontalSelector ul{
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#horizontalSelector ul li{
+	background: #333 url(images/tileitem_2.png) repeat-x;
+	display: inline-block;
+	width: 90px;
+	line-height: 24px;
+	margin: 0px;
+	margin-left: -3px;
+}
+
+#horizontalSelector ul li span{
+	text-align: center;
+	width: 90px;
+	display: block;
+	font-weight: bold;
+}
+
+#horizontalSelector ul li span:hover, #horizontalSelector ul li[checked="true"]{
+	cursor: pointer;
+	background: #333 url(images/tileitem_over2.png) repeat-x;
 }

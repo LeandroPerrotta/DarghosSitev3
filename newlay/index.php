@@ -281,7 +281,7 @@
 							{
 							?>
 							<li>
-								<div><strong>Top 5 matadores do dia</strong></div>
+								<div class="red"><strong>Top 5 matadores do dia</strong></div>
 								<ul class="always_viewable" >
 									<?php 									
 									$str = "";
@@ -308,7 +308,7 @@
 							{
 							?>
 							<li>
-								<div><strong>Top Battleground Rating</strong></div>
+								<div class="red"><strong>Top Battleground Rating</strong></div>
 								<ul class="always_viewable" >
 									<?php 									
 									$str = "";
@@ -333,7 +333,7 @@
 							?>									
 												
 							<li>
-								<div><strong>Facebook</strong></div>
+								<div ><strong>Facebook</strong></div>
 								<ul class="always_viewable" >
 									<li>	
 										<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Darghos/205124342834613" width="180" height="345" style="margin-top: 0px; border: none;" colorscheme="dark" show_faces="true" border_color="" stream="false" header="false"></fb:like-box>

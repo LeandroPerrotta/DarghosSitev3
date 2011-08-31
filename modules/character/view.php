@@ -32,6 +32,18 @@ if($_POST["player_name"] || $_GET['name'])
 		$oldnames = $character->loadOldNames();
 	
 		$module .= "
+		<br>
+		<div id='horizontalSelector'>
+			<span name='left_corner'></span>
+			<ul>
+				<li name='profile' checked='true'><span>Profile</span></li>
+				<li name='statistics'><span>Estatisticas</span></li>
+				<li name='accounts'><span>Conta</span></li>
+			</ul>
+			<span name='right_corner'></span>
+		</div>
+		
+		<div title='profile' class='viewable' style='margin: 0px; padding: 0px;'>
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Personagem</th>
@@ -130,7 +142,8 @@ if($_POST["player_name"] || $_GET['name'])
 				<td><b>Último Login:</b></td> <td>{$lastlogin}</td>
 			</tr>	
 			
-		</table>";
+		</table>
+		</div>";
 
 		$_gmAcc = new Account();
 		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == GROUP_ADMINISTRATOR)
@@ -191,6 +204,7 @@ if($_POST["player_name"] || $_GET['name'])
 		}
 		
 		$module .= "
+		<div title='accounts' style='margin: 0px; padding: 0px;'>
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Informaçães da Conta</th>
@@ -240,12 +254,13 @@ if($_POST["player_name"] || $_GET['name'])
 			<tr>
 				<td><b>Website:</b></td> <td>{$url}</td>
 			</tr>						
-		</table>";
+		</table>
+		</div>";
 
 		if(is_array($deathlist))
 		{
 			$module .= "
-			
+			<div title='statistics' style='margin: 0px; padding: 0px;'>
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
 					<th colspan='2'>Mortes Recentes</th>
@@ -325,7 +340,8 @@ if($_POST["player_name"] || $_GET['name'])
 			}
 			
 			$module .= "
-			</table>";		
+			</table>
+			</div>";		
 		}
 		
 		$_gmAcc = new Account();
@@ -337,7 +353,7 @@ if($_POST["player_name"] || $_GET['name'])
 			if(is_array($kills))
 			{
 				$module .= "
-				
+				<div title='statistics' style='margin: 0px; padding: 0px;'>
 				<table cellspacing='0' cellpadding='0'>
 					<tr>
 						<th colspan='3'>Assassinatos Recentes</th>
@@ -360,12 +376,13 @@ if($_POST["player_name"] || $_GET['name'])
 				}
 				
 				$module .= "
-				</table>";						
+				</table>
+				</div>";						
 			}
 			else
 			{
 				$module .= "
-				
+				<div title='statistics' style='margin: 0px; padding: 0px;'>
 				<table cellspacing='0' cellpadding='0'>
 					<tr>
 						<th colspan='3'>Assassinatos Recentes</th>
@@ -376,6 +393,7 @@ if($_POST["player_name"] || $_GET['name'])
 					</tr>					
 					
 				</table>	
+				</div>
 				";					
 			}
 		}
@@ -383,6 +401,7 @@ if($_POST["player_name"] || $_GET['name'])
 		if($character->get("hide") == 0)
 		{
 			$module .= "
+			<div title='accounts' style='margin: 0px; padding: 0px;'>
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
 					<th colspan='3'>Outros Personagens</th>
@@ -407,7 +426,8 @@ if($_POST["player_name"] || $_GET['name'])
 			}
 
 			$module .= "
-			</table>";		
+			</table>
+			</div>";		
 		}
 		
 		
