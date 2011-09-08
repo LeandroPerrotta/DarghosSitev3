@@ -404,7 +404,7 @@ class Character
 			`custom_pvp_kills`
 		WHERE
 			`is_frag` = '1' AND
-			`player_id` = {$this->getId()},
+			`player_id` = {$this->getId()} AND
 			`type` = ".PVP_TYPE_BATTLEGROUND."
 		");
 		
