@@ -31,13 +31,9 @@ class Strings
 	}
 	
 	static function SQLInjection($string)
-	{
-		//$string = nl2br($string);
-	    //$string = get_magic_quotes_gpc() ? stripslashes($string) : $string;
-	    
-		$string = !get_magic_quotes_gpc() ? addslashes($string) : $string;
-	 
-	    //$string = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($string) : mysql_escape_string($string);
+	{	    
+		$string = get_magic_quotes_gpc() ? stripslashes($string) : $string;
+		$string = mysql_real_escape_string($string);
 	 
 	    return $string;		
 	}
@@ -130,10 +126,23 @@ class Strings
 		return $enc;
 	}	
 	
+	static function canUseSecretKey($key)
+	{
+		if(trim($key) != $key)
+			return false;
+			
+		$temp = str_match($key, "qwertyuiopasdfghjklzxcvbnm ");
+		
+		if($temp != strlen($key))
+			return false;	
+
+		return true;
+	}
+	
 	static function canUseName($nameString, $checkBlackList = true)
 	{
 		if(trim($nameString) != $nameString)
-			return false;	
+			return false;
 		
 		$palavras = explode(" ", $nameString);
 		

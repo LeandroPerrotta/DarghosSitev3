@@ -129,8 +129,6 @@ function onChange()
 {
 	var valueSelected = $(this).val();
 	
-	alert(valueSelected);
-	
 	$("fieldset div[class='autoaction']").nextAll('div[title!="' + valueSelected + '"]').hide();
 	$("fieldset div[class='autoaction']").nextAll("div[title='" + valueSelected + "']").slideDown();	
 }
