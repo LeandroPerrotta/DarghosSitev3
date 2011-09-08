@@ -3,6 +3,9 @@ define("BG_KILLS_RATE", 5);
 define("BG_ASSISTS_RATE", 1);
 define("BG_DEATHS_RATE", 6);
 
+define("PVP_TYPE_BATTLEGROUND", 0);
+define("PVP_TYPE_ARENA", 1);
+
 class Battleground
 {
 	static function listAll($from, $to)
@@ -23,13 +26,15 @@ class Battleground
 						0 as assists, 
 						0 as deaths 
 					FROM 
-						battleground_kills 
+						custom_pvp_kills 
 					WHERE 
 						is_frag = 1 
 					AND 
 						`date` > {$from} 
 					AND
 						`date` <= {$to}
+					AND
+						`type` = ".PVP_TYPE_BATTLEGROUND."
 					GROUP BY 
 						player_id
 				) 
@@ -41,11 +46,13 @@ class Battleground
 						0 as assists, 
 						COUNT(*) as deaths 
 					FROM 
-						battleground_deaths 
+						custom_pvp_deaths 
 					WHERE  
 						`date` > {$from} 
 					AND
-						`date` <= {$to}						
+						`date` <= {$to}		
+					AND
+						`type` = ".PVP_TYPE_BATTLEGROUND."										
 					GROUP BY 
 						player_id
 				) 
@@ -57,11 +64,13 @@ class Battleground
 						COUNT(*) as assists, 
 						0 as deaths 
 					FROM 
-						battleground_kills 
+						custom_pvp_kills 
 					WHERE 
 						`date` > {$from} 
 					AND
-						`date` <= {$to}						
+						`date` <= {$to}	
+					AND
+						`type` = ".PVP_TYPE_BATTLEGROUND."												
 					GROUP BY 
 						player_id
 				)

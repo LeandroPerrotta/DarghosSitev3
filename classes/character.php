@@ -401,10 +401,11 @@ class Character
 		SELECT
 			COUNT(*) as `count`
 		FROM
-			`battleground_kills`
+			`custom_pvp_kills`
 		WHERE
-			`battleground_kills`.`is_frag` = '1' AND
-			`battleground_kills`.`player_id` = {$this->getId()}
+			`is_frag` = '1' AND
+			`player_id` = {$this->getId()},
+			`type` = ".PVP_TYPE_BATTLEGROUND."
 		");
 		
 		$fetch = $query->fetch();
@@ -432,9 +433,10 @@ class Character
 		SELECT
 			COUNT(*) as `count`
 		FROM
-			`battleground_kills`
+			`custom_pvp_kills`
 		WHERE
-			`battleground_kills`.`player_id` = {$this->getId()}
+			`player_id` = {$this->getId()} AND
+			`type` = ".PVP_TYPE_BATTLEGROUND."
 		");
 		
 		$fetch = $query->fetch();
@@ -512,9 +514,10 @@ class Character
 		SELECT
 			COUNT(*) as `count`
 		FROM
-			`battleground_deaths`
+			`custom_pvp_deaths`
 		WHERE
-			`battleground_deaths`.`player_id` = {$this->getId()}
+			`player_id` = {$this->getId()} AND
+			`type` = ".PVP_TYPE_BATTLEGROUND."
 		");
 		
 		$fetch = $query->fetch();
