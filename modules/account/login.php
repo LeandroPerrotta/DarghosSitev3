@@ -12,7 +12,7 @@ if($_POST)
 			Core::redirect("index.php?ref=account.main");	
 		else
 		{
-			$url = $_SESSION["login_redirect"];
+			$url = trim($_SESSION["login_redirect"], "/");
 			unset($_SESSION["login_redirect"]);
 			Core::redirect($url);
 		}
