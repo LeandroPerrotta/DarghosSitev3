@@ -298,7 +298,7 @@ class Guild_War
 					`guild_id` = '{$this->_guildid}', 
 					`enemy_id` = '{$this->_opponentid}', 
 					`frags` = '{$this->_fraglimit}',
-					`begins` = '{$this->_declarationdate}',
+					`begin` = '{$this->_declarationdate}',
 					`end` = '{$this->_enddate}',
 					`payment` = '{$this->_guildfee}',
 					`guild_kills` = '{$this->_guildfrags}',
