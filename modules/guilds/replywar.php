@@ -175,7 +175,7 @@ class View
 				}
 				
 				$this->guild_war->SetReply( -1 );
-				$this->guild_war->SetStatus( GUILD_WAR_WAITING );
+				$this->guild_war->SetStatus( GUILD_WAR_STARTED );
 				$this->guild_war->Save();
 				
 				$this->guild->SetBalance($this->guild->GetBalance() - $this->guild_war->GetGuildFee());
