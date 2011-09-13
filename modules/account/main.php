@@ -7,7 +7,7 @@ $player_list = $account->getCharacterList();
 
 $premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes (expira em ".Core::formatDate($account->getPremEnd()).")" : "Você não possui dias de conta premium.";	
 $warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
-$email = $account->getEmail();	
+$email = ($account->getEmail()) ? $account->getEmail() : "<span style='color: red; font-weight: bold'>Nenhum e-mail registrado!</span>";	
 $creation = ($account->getCreation() != 0) ? Core::formatDate($account->getCreation()) : "Indisponível";	
 $realname = ($account->getRealName()) ?	$account->getRealName() : "<i>Sem Nome</i>";
 $location = ($account->getLocation()) ?	$account->getLocation() : "<i>Sem Localidade</i>";
@@ -135,19 +135,28 @@ $module .= "
 if(is_array($newemail = $account->getEmailToChange()))
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.Core::formatDate($newemail['date']).'. Você pode cancelar esta mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
+	<p><span id="notify">Atenção:</span> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.Core::formatDate($newemail['date']).'. Você pode cancelar esta mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
 }
 
 if($confirmed and $confirmed >= 1)
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, um pedido efetuado por sua conta foi confirmado com sucesso! Você já pode aceitar este pagamento ou visualizar maiores informações deste pedindo na categoria Conta Premium, na seções Meus Pedidos. Tenha um bom jogo!</p>';
+	<p><span id="notify">Atenção:</span> Caro jogador, um pedido efetuado por sua conta foi confirmado com sucesso! Você já pode aceitar este pagamento ou visualizar maiores informações deste pedindo na categoria Conta Premium, na seções Meus Pedidos. Tenha um bom jogo!</p>';
 }
 
-if(!$secretkey)
+if($account->getEmail() && !$secretkey)
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
+	<p><span id="notify">Atenção:</span> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
+}
+
+if(!$account->getEmail())
+{
+	$module .= '
+	<script type="text/javascript">
+	fogAlert("Você ainda não possui um e-mail registrado em sua conta. Você deve registrar um e-mail valido em sua conta para aumentar a segurança de sua conta. Note que enquanto você não o fizer, caso você perda seus dados de login, <b>você não conseguirá recuperar sua conta</b>.");
+	</script>
+	<p><span id="notify">Atenção:</span> Caro jogador, sua conta ainda não possui um e-mail registrado e por isto não está segura. Recomendamos que você registre um e-mail clicando <a href="?ref=account.validateEmail">aqui</a>. Ao registrar um e-mail em sua conta também será liberado alguns recursos como possibilidade de gerar uma chave secreta e obter uma conta premium.</p>';	
 }
 
 if($invitesList)
@@ -160,7 +169,7 @@ if(isset($charDel))
 	foreach($charDel as $name => $deletion)
 	{
 		$module .= '
-		<p><font style="color: red; font-weight: bold;">Atenção:</font> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.Core::formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
+		<p><span id="notify">Atenção:</span> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.Core::formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
 	}
 }		
 
@@ -238,9 +247,26 @@ else
 {			
 	$module .= "
 	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> 
-	<a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>
+	";
+	
+	if(!$account->getEmail())
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.validateEmail'>Registrar E-mail</a>
+		";		
+	}
+	else
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>
+		";		
+	}
+	
+	$module .= "
 	<a class='buttonstd' href='?ref=account.changename'>Renomear</a>
 	";
+	
+	
 }
 
 $module .= "

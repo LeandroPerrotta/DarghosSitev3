@@ -1,14 +1,6 @@
 <?
 class Strings
 {
-	private static $db;
-	
-	static function Init()
-	{
-		global $db;
-		self::$db = $db;
-	}
-	
 	static function filterInputs($checkGets = false)
 	{
 		if($_POST)
@@ -36,6 +28,14 @@ class Strings
 		$string = mysql_real_escape_string($string);
 	 
 	    return $string;		
+	}
+	
+	static function isNull($value)
+	{
+		if(!empty($value) || !isset($value) || !$value || $value = "")
+			return false;
+			
+		return true;
 	}
 	
 	static function randKey($tamanho, $separadores, $randTypeElement = "default") 
@@ -103,7 +103,7 @@ class Strings
 	
 	static function isFromBlackList($string)
 	{
-		$query = self::$db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blackliststrings");
+		$query = Core::$DB->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blackliststrings");
 		
 		while($fetch = $query->fetch())
 		{
@@ -155,7 +155,7 @@ class Strings
 		if(ucfirst($palavras[0]) != $palavras[0])
 			return false;
 			
-		if(ucfirst($palavras[2]) != $palavras[2])
+		if(isset($palavras[2]) && ((ucfirst($palavras[2]) != $palavras[2])))
 			return false;			
 			
 		if(count($palavras) == 3)

@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -21,9 +20,14 @@
 		//sendPing();
 		</script>		
 	
-		<div id="wrapper">
-			<div id="wrapper_b">
-				<h1><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
+		
+	
+		<div id="wrapper">	
+			<div id="fog-screen">
+			
+			</div>
+			<div id="wrapper_b">				
+				<h1 class='header'><span>Darghos Server</span></h1> <!-- tudo que ficar dentro de <span> será escondido pelo CSS, deixe o texto para que deficientes visuais possam saber o nome do site -->
 				
 				<div id="announcement"><marquee style="margin: 13px;" direction=left behavior=scroll onmouseover=this.stop() onmouseout=this.start()>Novos pacotes de conta premium! Confira!</marquee></div>
 				
@@ -195,142 +199,7 @@
 									<li><a href="?ref=community.polls"><? echo $menu['COMMUNITY.POLLS']; ?></a></li>
 									<li><a href="?ref=status.whoisonline"><? echo $menu['STATUS.WHO_IS_ONLINE']; ?></a></li>
 								</ul>
-							</li>	
-							
-							<?php 
-							$query = Core::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
-							$fetch = $query->fetch();
-							?>
-							
-							<li>
-								<div><strong>Server Status</strong></div>
-								<ul class="always_viewable" >
-									<li>	
-										<div>								
-											<p>
-												<?php 
-												if($fetch->online == 0 || $fetch->date < time - 60 * 5)
-												{
-													echo "
-													<em>Status:</em> <font color='#ec0404'><b>offline</b></font>
-													";
-												}
-												else
-												{
-													$seconds = $fetch->uptime % 60;
-													$uptime = floor($fetch->uptime / 60);
-											
-													$minutes = $uptime % 60;
-													$uptime = floor($uptime / 60);
-											
-													$hours = $uptime % 24;
-													$uptime = floor($uptime / 24);
-											
-													$days = $uptime % 365;
-													
-													$uptime = ($days >= 1) ? "{$days}d {$hours}h {$minutes}m" : "{$hours}h {$minutes}m";
-													
-													$str = "<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />";
-													$str .= "<em>IP:</em> ".STATUS_ADDRESS."<br />";
-													$str .= "<em>Port:</em> ".STATUS_PORT."<br />";
-													
-													if(REMOVE_AFK_FROM_STATUS)
-													{
-														$str .= "<em>Total connected:</em> ".($fetch->players + $fetch->afk)."<br />";
-														$str .= "<em>Playing:</em> {$fetch->players}<br />";
-														$str .= "<em>Training:</em> {$fetch->afk}<br />";
-													}
-													else
-													{
-														$str .= "<em>Total connected:</em> ".($fetch->players)."<br />";
-													}
-													
-													$str .= "<em>Uptime:</em> {$uptime}<br />";
-													$str .= "<em>Ping:</em> <span class='ping'>aguarde...</span>";
-													
-													
-													echo $str;	
-												}
-												?>
-											</p>
-										</div>	
-									</li>						
-								</ul>
-							</li>	
-							
-							<?php 
-							$today = new CustomDate();
-							
-							$end_day = null;
-							
-							if($today->getHour() > 15) $end_day = $today->getDay();
-							else $end_day = $today->getDay() - 1;
-							
-							$start_day = $end_day - 1;
-															
-							$make_stamp = new CustomDate(); $make_stamp->_hour = 15; $make_stamp->_month = $today->getMonth(); $make_stamp->_day = $start_day; $make_stamp->_year = $today->getYear();
-							
-							$start_stamp = $make_stamp->makeDate();		
-							
-							$make_stamp->_day = $end_day;
-							
-							$end_stamp = $make_stamp->makeDate();									
-							$query = Deaths::getTopFraggers($start_stamp, $end_stamp);	
-
-							if($query->numRows() > 0)
-							{
-							?>
-							<li>
-								<div class="red"><strong>Top 5 matadores do dia</strong></div>
-								<ul class="always_viewable" >
-									<?php 									
-									$str = "";
-									
-									$pos = 1;
-									while($fetch = $query->fetch())
-									{
-										$size = (strlen($fetch->name) > 15) ? "8px" : "9px";
-										
-										$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: {$size}'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
-										$pos++;
-									}
-									
-									echo $str
-									?>				
-								</ul>
-							</li>
-							<?php 
-							}
-											
-							$result = Battleground::buildRating(Battleground::listAll($start_stamp, $end_stamp));
-
-							if(count($result) > 0)
-							{
-							?>
-							<li>
-								<div class="red"><strong>Top Battleground Rating</strong></div>
-								<ul class="always_viewable" >
-									<?php 									
-									$str = "";
-									
-									$pos = 1;
-									foreach($result as $key => $value)
-									{
-										$size = (strlen($value["name"]) > 15) ? "8px" : "9px";
-										$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: {$size}'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
-										$pos++;
-										
-										if($pos > 5)
-											break;
-									}
-									
-									echo $str
-									?>				
-								</ul>
-							</li>
-							<?php 
-							}
-							?>									
+							</li>								
 												
 							<li>
 								<div ><strong>Facebook</strong></div>
@@ -345,12 +214,153 @@
 					
 					<div id="right">
 					
-						<? if($patch['urlnavigation']){ ?>
-						<h2><? echo $patch['urlnavigation']; ?></h2>			
-						<?php } ?>
+						<div id="content">							
+							<? if($patch['urlnavigation']){ ?>
+							<div id="nav-bar" style="padding: 0px"><span><? echo $patch['urlnavigation']; ?></span></div>			
+							<?php } ?>
+							
+							<div>								
+								<? echo $module; ?>
+							</div>
+						</div>
 						
-						<div>								
-							<? echo $module; ?>
+						<div id="right-menu">
+							<ul>
+								<?php 
+								$query = Core::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
+								$fetch = $query->fetch();
+								?>
+								
+								<li>
+									<div><strong>Server Status</strong></div>
+									<ul class="always_viewable" >
+										<li>	
+											<div>								
+												<p>
+													<?php 
+													if($fetch->online == 0 || $fetch->date < time - 60 * 5)
+													{
+														echo "
+														<em>Status:</em> <font color='#ec0404'><b>offline</b></font>
+														";
+													}
+													else
+													{
+														$seconds = $fetch->uptime % 60;
+														$uptime = floor($fetch->uptime / 60);
+												
+														$minutes = $uptime % 60;
+														$uptime = floor($uptime / 60);
+												
+														$hours = $uptime % 24;
+														$uptime = floor($uptime / 24);
+												
+														$days = $uptime % 365;
+														
+														$uptime = ($days >= 1) ? "{$days}d {$hours}h {$minutes}m" : "{$hours}h {$minutes}m";
+														
+														$str = "<em>Status:</em> <font color='#00ff00'><b>online</b></font><br />";
+														$str .= "<em>IP:</em> ".STATUS_ADDRESS."<br />";
+														$str .= "<em>Port:</em> ".STATUS_PORT."<br />";
+														
+														if(REMOVE_AFK_FROM_STATUS)
+														{
+															$str .= "<em>Total connected:</em> ".($fetch->players + $fetch->afk)."<br />";
+															$str .= "<em>Playing:</em> {$fetch->players}<br />";
+															$str .= "<em>Training:</em> {$fetch->afk}<br />";
+														}
+														else
+														{
+															$str .= "<em>Total connected:</em> ".($fetch->players)."<br />";
+														}
+														
+														$str .= "<em>Uptime:</em> {$uptime}<br />";
+														$str .= "<em>Ping:</em> <span class='ping'>aguarde...</span>";
+														
+														
+														echo $str;	
+													}
+													?>
+												</p>
+											</div>	
+										</li>						
+									</ul>
+								</li>	
+								
+								<?php 
+								$today = new CustomDate();
+								
+								$end_day = null;
+								
+								if($today->getHour() > 15) $end_day = $today->getDay();
+								else $end_day = $today->getDay() - 1;
+								
+								$start_day = $end_day - 1;
+																
+								$make_stamp = new CustomDate(); $make_stamp->_hour = 15; $make_stamp->_month = $today->getMonth(); $make_stamp->_day = $start_day; $make_stamp->_year = $today->getYear();
+								
+								$start_stamp = $make_stamp->makeDate();		
+								
+								$make_stamp->_day = $end_day;
+								
+								$end_stamp = $make_stamp->makeDate();									
+								$query = Deaths::getTopFraggers($start_stamp, $end_stamp);	
+	
+								if($query->numRows() > 0)
+								{
+								?>
+								<li>
+									<div class="red"><strong>Top 5 matadores do dia</strong></div>
+									<ul class="always_viewable" >
+										<?php 									
+										$str = "";
+										
+										$pos = 1;
+										while($fetch = $query->fetch())
+										{
+											$size = (strlen($fetch->name) > 15) ? "8px" : "9px";
+											
+											$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: {$size}'>{$pos}. {$fetch->name} ($fetch->c)</a></li>";
+											$pos++;
+										}
+										
+										echo $str
+										?>				
+									</ul>
+								</li>
+								<?php 
+								}
+												
+								$result = Battleground::buildRating(Battleground::listAll($start_stamp, $end_stamp));
+	
+								if(count($result) > 0)
+								{
+								?>
+								<li>
+									<div class="red"><strong>Top Battleground Rating</strong></div>
+									<ul class="always_viewable" >
+										<?php 									
+										$str = "";
+										
+										$pos = 1;
+										foreach($result as $key => $value)
+										{
+											$size = (strlen($value["name"]) > 15) ? "8px" : "9px";
+											$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: {$size}'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
+											$pos++;
+											
+											if($pos > 5)
+												break;
+										}
+										
+										echo $str
+										?>				
+									</ul>
+								</li>
+								<?php 
+								}
+								?>		
+							</ul>							
 						</div>
 					</div>
 				</div>

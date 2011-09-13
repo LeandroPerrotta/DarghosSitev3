@@ -77,19 +77,19 @@ class t_Vocation
 {
 	private $_vocation_id;
 	private $_vocation_names = array(
-		0 => "None",
-		1 => "Sorcerer",
-		2 => "Druid",
-		3 => "Paladin",
-		4 => "Knight",
-		5 => "Master Sorcerer",
-		6 => "Elder Druid",
-		7 => "Royal Paladin",
-		8 => "Elite Knight",
+		0 => "none",
+		1 => "sorcerer",
+		2 => "druid",
+		3 => "paladin",
+		4 => "knight",
+		5 => "master sorcerer",
+		6 => "elder druid",
+		7 => "royal paladin",
+		8 => "elite knight"/*,
 		9 => "Warmaster Sorcerer",
 		10 => "Warden Druid",
 		11 => "Holy Paladin",
-		12 => "Berserk Warrior",
+		12 => "Berserk Warrior",*/
 	);
 	
 	function t_Vocation($vocation_id = null)
@@ -105,7 +105,7 @@ class t_Vocation
 	
 	function SetByName($name)
 	{
-		$this->_vocation_id = array_search($name, $this->_vocation_names);
+		$this->_vocation_id = array_search(strtolower($name), $this->_vocation_names);
 	}
 	
 	function Get()

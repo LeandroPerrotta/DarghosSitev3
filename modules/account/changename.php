@@ -63,22 +63,12 @@ class View
 		$password = $this->_password->GetPost();
 		$name = $this->_name->GetPost();
 		
-		if(!$password || !$name)
-		{
-			$this->_message = Lang::Message(LMSG_FILL_FORM);
-			return false;				
-		}
+		$checkName = Ajax_account::checkName();
 		
-		if(strlen($name) < 5 || strlen($name) > 25)
+		if($checkName["error"])
 		{
-			$this->_message = Lang::Message(LMSG_ACCOUNT_NAME_WRONG_SIZE);
+			$this->_message = $checkName["text"];
 			return false;				
-		}
-		
-		if($newacc->loadByName($name))
-		{
-			$this->_message = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
-			return false;			
 		}
 		
 		if($this->loggedAcc->getPassword() != Strings::encrypt($password))
@@ -116,7 +106,7 @@ class View
 				<p> • O sistema é sensivel ao uso de letras maiusculas e minusculas, o que significa que MeuNovoNome é diferente de meunovonome que também é diferente de MEUNOVONOME.</p>	
 
 				<p>
-					<label for='account_password'>Novo nome</label><br />
+					<label for='account_name'>Novo nome</label><br />
 					{$this->_name->Draw()}
 				</p>				
 				

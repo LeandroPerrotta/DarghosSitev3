@@ -15,9 +15,15 @@ if($_POST)
 	
 	$form_OrderDaysStr = $_POST["order_days"];
 
+	
+	$account = Account::loadLogged();
 	if(!$form_OrderName or !$form_OrderMail or !$form_OrderTarget or !$form_OrderType or !$form_OrderDays)
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
+	}
+	elseif(!$account->getEmail())
+	{
+		$error = Lang::Message(LMSG_OPERATION_REQUIRE_VALIDATED_EMAIL);
 	}
 	elseif(!$character->loadByName($form_OrderTarget))
 	{

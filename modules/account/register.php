@@ -1,129 +1,263 @@
-<?
-if($_POST)
-{		
-	$account = new Account();
-	$password = Strings::randKey(8, 1, "lower+number");
+<?php
+class View
+{
+	//html fields
+	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_genre, $_char_vocation;
 	
-	//argumentos para e-mail
-	$_arg = array();
-	$_arg[] = stripslashes($_POST['account_name']);
-	$_arg[] = $password;
+	//variables
+	private $_message;		
 	
-	$reusing = false;
-	$reusing_name = false;
-	$loadedEmail = false;
-	$loadedName = false;
+	//custom variables
+	private $loggedAcc, $steps;		
 	
-	if($_POST['account_email'] and $account->loadByEmail($_POST['account_email']))
-	{
-		$loadedEmail = true;
-		
-		if(count($account->getCharacterList()) == 0) $reusing = true;
-		if($_POST['account_name'] and $reusing and $account->getName() == $_POST['account_name']) $reusing_name = true;
-	}
-	
-	$account = new Account();
-	
-	if($reusing and $reusing_name) $loadedName = false;
-	elseif($account->loadByName($_POST['account_name'])) $loadedName =  true;
-	
-	
-	
-	if(!$_POST['account_email'] or !$_POST['account_name'])
-	{
-		$error = Lang::Message(LMSG_FILL_FORM);
-	}
-	elseif(!$_POST['account_privacypolicy'])
-	{
-		$error = Lang::Message(LMSG_PRIVACY_POLICY);
-	}
-	elseif(strlen($_POST['account_name']) < 5 or strlen($_POST['account_name']) > 25)
-	{
-		$error = Lang::Message(LMSG_ACCOUNT_NAME_WRONG_SIZE);
-	}
-	elseif($loadedEmail and !$reusing)
-	{
-		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
-	}		
-	elseif($loadedName)
-	{
-		$error = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
-	}			
-	elseif(!Strings::validEmail($_POST['account_email']))
-	{
-		$error = Lang::Message(LMSG_WRONG_EMAIL);
-	}	
-	elseif((USE_EMAILVALIDATION) and !Core::mail(EMAIL_REGISTER, $_POST['account_email'], $_arg))
-	{
-		$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
-	}
-	else
+	function View()
 	{		
-		if(!$reusing)
+		if($_SESSION["login"])
 		{
-			$account->setEmail($_POST['account_email']);
-			$account->setCreation(time());
-		}
-		else
-		{
-			$account->loadByEmail($_POST['account_email']);
+			Core::redirect("index.php");
+			return;
 		}
 		
-		$account->setPassword(Strings::encrypt($password));
-		
-		if(!$reusing_name)
+		if(!$this->Prepare())
 		{
-			$account->setName($_POST['account_name']);
+			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			return false;			
+		}		
+		
+		if($_POST)
+		{
+			if(!$this->Post())
+			{
+				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			}
+			else
+			{
+				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				return true;
+			}
 		}
-
-		$account->save();
-	
-		$success = Lang::Message(LMSG_ACCOUNT_REGISTERED);
-	
-		if(USE_EMAILVALIDATION)
-			$success .= Lang::Message(LMSG_ACCOUNT_INFOS_SEND);
-		else
-			$success .= Lang::Message(LMSG_ACCOUNT_PASSWORD_IS, $password);
+		
+		$this->Draw();
+		return true;			
 	}
-}
-
-if($success)	
-{
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
-}
-else
-{
-	if($error)	
-	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
-	}
-
-
-$module .=	'
-	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-		<fieldset>
-			
-			<p>
-				<label for="account_email">'.$pages["ACCOUNT.REGISTER.EMAIL_ADDRESS"].'</label><br />
-				<input id="account_email" name="account_email" size="40" type="text" value="" />
-			</p>
-			
-			<p>
-				<label for="account_email">'.$pages["ACCOUNT.REGISTER.ACCOUNT_NAME"].'</label><br />
-				<input id="account_email" name="account_name" size="40" type="text" value="" />
-			</p>			
+	
+	function Prepare()
+	{		
+		
+		$this->_account_name = new HTML_Input();
+		$this->_account_name->SetName("account_name");
+		$this->_account_name->SetSize(HTML_INPUT_SIZE_SMALL);
 				
-			<p>
-				<input name="account_privacypolicy" id="account_privacypolicy" type="checkbox" value="1" /> '.$pages["ACCOUNT.REGISTER.PRIVACY_POLICY_ACCEPT"].'
-			</p>
-			
-			<div id="line1"></div>
-			
-			<p>
-				<input class="button" type="submit" value="'.$buttons['SUBMIT'].'" />
-			</p>
-		</fieldset>
-	</form>';
+		$this->_account_password = new HTML_Input();
+		$this->_account_password->SetName("account_password");		
+		$this->_account_password->IsPassword();		
+		$this->_account_password->SetSize(HTML_INPUT_SIZE_SMALL);
+		
+		$this->_account_confirm_password = new HTML_Input();
+		$this->_account_confirm_password->SetName("account_confirm_password");		
+		$this->_account_confirm_password->IsPassword();		
+		$this->_account_confirm_password->SetSize(HTML_INPUT_SIZE_SMALL);
 
-}
-?>	
+		$this->_account_email = new HTML_Input();
+		$this->_account_email->SetName("account_email");	
+		$this->_account_email->SetSize(HTML_INPUT_SIZE_SMALL);
+		
+		$this->_char_name = new HTML_Input();
+		$this->_char_name->SetName("character_name");
+		$this->_char_name->SetSize(HTML_INPUT_SIZE_SMALL);
+		
+		$this->_char_genre = new HTML_SelectBox();
+		$this->_char_genre->SetName("character_genre");
+		$this->_char_genre->AddOption("Masculino", "male");
+		$this->_char_genre->AddOption("Feminino", "female");
+		
+		$this->_char_vocation = new HTML_SelectBox();
+		$this->_char_vocation->SetName("character_vocation");
+		$this->_char_vocation->SetSize(HTML_SELECTBOX_SIZE_BIG);
+		$this->_char_vocation->AddOption("");
+		$this->_char_vocation->AddOption("Knight (Cavaleiro)", "knight");
+		$this->_char_vocation->AddOption("Paladin (Paladino)", "paladin");		
+		$this->_char_vocation->AddOption("Sorcerer (Feitiçeiro)", "sorcerer");		
+		$this->_char_vocation->AddOption("Druid (Druida)", "druid");		
+		
+		$this->steps = array();
+		
+		$this->steps[] = array(
+			"step" => "1",
+			"title" => "Criar nova conta (passo a passo)",
+			"body" => "
+			<p>Seja bem vindo ao Darghos! Este formulario irá o ajudar a criar a sua primeira conta, seu primeiro personagem e também informções que você deve saber.</p>
+			<p class='long-margin-top'>Escreva no campo a baixo o <b>nome de sua conta</b> que você desejar, este é o principal dado de sua conta para você efetuar tanto o login no jogo como no website.</p>
+			<p> 
+				<label>Nome da conta:</label>
+				{$this->_account_name->Draw()}
+			</p>
+			<p class='long-margin-top'>Escreva no campo a baixo a <b>senha de acesso para sua conta</b> que você desejar, este dado não é menos importante que o nome de sua conta.</p>
+			<p> 
+				<label>Senha de acesso:</label>
+				{$this->_account_password->Draw()}
+				
+				<label>Confirmação:</label>
+				{$this->_account_confirm_password->Draw()}
+				
+			</p>			
+			",
+		);
+		
+		$this->steps[] = array(
+			"step" => "2",
+			"title" => "Conta criada! E-mail e segurança",
+			"body" => "
+			<h3>Parabens!</h3>
+			<p>A sua conta, nomeada como <b><span id='account_name'></span></b> e a senha informada foi cadastrada com <b>sucesso</b>! Não se esqueça de memorizar-las ou anotar-las num local seguro!</p>
+			<p class='long-margin-top'>Porem existem mais dados que são necessarios para aumentar a segurança de sua conta, o principal é o cadastro de seu e-mail.</p>
+			<p>Quando você precisar recuperar sua conta, em caso de perda de dados, esquecimento ou mesmo <i>hacking</i>, será em seu e-mail que o sistema enviará tudo o que for necessario para você recuperar o acesso a sua conta em segurança. Você pode optar por já efetuar o registro de seu e-mail em sua conta ou deixar-lo para depois.</p>
+			<p><b>Obs:</b> Você recebera alertas de segurança quando você efetuar login tanto no website como no jogo enquanto você não cadastrar um e-mail, além de que alguns recursos de sua conta ficarão bloqueados, entre eles:</p>
+			<ul>
+				<li>Gerar uma chave de recuperação.</li>
+				<li>Adquirir uma Conta Premium.</li>
+				<li>Adquirir uma semana de Premium gratuita ao atingir level 100 em seu personagem.</li>
+			</ul>	
+			
+			<div class='long-margin-top'>
+				<label><input type='radio' name='email_check' value='0'> <span>Quero deixar o cadastro de meu e-mail para depois...</span></label>
+				<label><input type='radio' name='email_check' value='1'> <span><b>Eu desejo cadastrar meu e-mail agora! (recomendavel)</b></span></label>
+				
+				<div class='email_check'>
+					<div class='1' style='display: none;'>
+						<p>
+							<label>Endereço de e-mail</label>
+							{$this->_account_email->Draw()}						
+						</p>
+					</div>
+				</div>
+			</div>
+			",
+		);
+		
+		$this->steps[] = array(
+			"step" => "3",
+			"title" => "Seu primeiro personagem",
+			"body" => "
+			<p class='email_check long-margin-bottom' style='display: none;'>Foi enviado a seu endereço de e-mail <b><span id='account_email'></span></b> uma mensagem contendo um link para validação do e-mail informado, basta que você acesse-o para finalizar o cadastro do e-mail em sua conta garantindo sua segurança e liberando todos os recursos disponiveis para conta!</p>
+			<p>O proximo passo será a criação de seu primeiro personagem no Darghos. Preencha o campo abaixo com o nome que você deseja para seu personagem.</p>	
+			
+			<p>
+				<label>Nome do personagem:</label>
+				{$this->_char_name->Draw()}			
+			</p>
+			
+			<p class='long-margin-top'>Os personagens podem ser do genero masculino ou feminino, selecione abaixo o genero desejado para seu personagem.</p>
+			<p>
+				<label>Genero do personagem:</label>
+				{$this->_char_genre->Draw()}			
+			</p>
+			
+			<p class='long-margin-top'>Todo personagem no Darghos pertence a uma vocação. No total existem quatro vocações disponiveis, cada uma com suas proprias habilidades, estilo de jogo e caracteristicas, selecione abaixo a vocação que você deseja para o seu personagem.</p>
+			<p>
+				<label>Vocação do personagem:</label>
+				{$this->_char_vocation->Draw()}			
+				
+				<div class='character_vocation'>
+					<div class='knight' style='display: none;'>
+						<p>
+							<p><b>Especialidade:</b><br> Causar dano fisico com armas de curta distancia e proteção de sí proprio com escudo.</p>
+							<p><b>Armas usada:</b><br> Espadas (swords), machados (axes), martelos (club).</p>
+							<p><b>Dominio magico:</b><br> Baixo.</p>
+							<p><b>Outras caracteristicas:</b><br> Possuir muita vida, defesa e capacidade de regeneração fazem desta classe sua especialidade a sobrevivencia.</p>
+						</p>
+					</div>
+					<div class='paladin' style='display: none;'>
+						<p>
+							<p><b>Especialidade:</b><br> Causar dano fisico com armas a longa e curta distancia.</p>
+							<p><b>Armas usada:</b><br> Arcos (bows), bestas (crossbows), lanças (spears), estrelas (stars).</p>
+							<p><b>Dominio magico:</b><br> Médio.</p>
+							<p><b>Outras caracteristicas:</b><br> Possuir vida e defesa razoaveis, junto a uma boa capacidade de regeneração fazem classe sua especialidade causar danos fisicos e ter boas chances de sobrevivencia.</p>
+						</p>
+					</div>		
+					<div class='sorcerer' style='display: none;'>
+						<p>
+							<p><b>Especialidade:</b><br> Extremamente letal causando dano mágico a longa distancia. </p>
+							<p><b>Armas usada:</b><br> Varinhas (wands).</p>
+							<p><b>Dominio magico:</b><br> Alto.</p>
+							<p><b>Outras caracteristicas:</b><br> Seu grande arsenal de feitiços e encantamentos fazem desta classe sua especilidade a agressividade com danos magicos. Porem sua baixa vida a torna vulneravel.</p>
+						</p>
+					</div>	
+					<div class='druid' style='display: none;'>
+						<p>
+							<p><b>Especialidade:</b><br> Causar dano mágico a longa distancia. </p>
+							<p><b>Armas usada:</b><br> Cajados (rods).</p>
+							<p><b>Dominio magico:</b><br> Alto.</p>
+							<p><b>Outras caracteristicas:</b> Grande arsenal com feitiços e encantamentos para ajudar e recuperar a si proprio e amigos fazem desta classe sua especialidade causar danos magicos e auxiliar em combate.</p>
+						</p>
+					</div>												
+				</div>				
+			</p>			
+			
+			",
+		);		
+		
+		$this->steps[] = array(
+			"step" => "4",
+			"title" => "Personagem criado!",
+			"body" => "
+			<h3>Parabens!</h3>
+			<p>O seu primeiro personagem, <b><span id='character_name'></span></b> foi criado com <b>sucesso</b>!</p>
+			<p>Você já pode se conectar ao Darghos e começar a se divertir! Se necessario, neste <a href='?ref=general.howplay'>link</a> você pode obter o download do cliente e instruções de como se conectar.</p>
+			<p><h3>Primeiros passos</h3></p>
+			<p>Você começa sua jornada em Island of Peace. Mas não se deixe enganar pelo nome do lugar, de inicio <b>Mereus</b> solicitará sua ajuda na batalha conta os inimigos! Boa sorte!</p>
+			",
+		);		
+		
+		return true;
+	}
+	
+	function Post()
+	{
+		return true;
+	}
+	
+	function Draw()
+	{
+		global $module;		
+		
+		Core::includeJavaScriptSource("account_register.js");
+		
+		$module .= "		
+		<fieldset style='margin-top: 20px;'>
+		
+		<div id='step_by_step'>
+		";
+		
+		foreach($this->steps as $step)
+		{
+			$hide = ($step["step"] > 1) ? "style='display: none;'" : null;
+			$module .= "
+			
+			<div class='{$step["step"]}' {$hide}>
+				<div id='new-title-bar'>
+					<h3 id='new-title'>
+						{$step["title"]}
+					</h3>
+					<div id='infos-line'>
+					parte {$step["step"]} de ".count($this->steps)."
+					</div>	
+				</div>
+				<div id='new-summary'>{$step["body"]}</div>
+			</div>
+			";			
+		}
+		
+		$module .= "	
+		</div>		
+		<p class='line'></p>
+			
+		<p>
+			<input id='btNext' class='button' type='submit' value='Proximo'/>
+		</p>
+		</fieldset>";
+	}
+}	
+
+$view = new View();
+?>

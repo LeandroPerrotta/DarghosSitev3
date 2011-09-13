@@ -1,8 +1,12 @@
 <?php
+define("HTML_SELECTBOX_SIZE_SMALL", 60);
+define("HTML_SELECTBOX_SIZE_NORMAL", 120);
+define("HTML_SELECTBOX_SIZE_BIG", 240);
+
 class HTML_SelectBox
 {
 	private $_options = array();
-	private $_name, $_size = 120, $_selectedIndex = 0, $onChangeSubmit = false;
+	private $_name, $_size = HTML_SELECTBOX_SIZE_NORMAL, $_selectedIndex = 0, $onChangeSubmit = false;
 	
 	function HTML_SelectBox()
 	{

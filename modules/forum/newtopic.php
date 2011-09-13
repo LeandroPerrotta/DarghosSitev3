@@ -28,8 +28,9 @@ class View
 		$this->_title->SetName("topic_title");
 		
 		$this->_topic = new HTML_Input();
-		$this->_topic->IsTextArea(7, 50);
+		$this->_topic->IsTextArea(25, 80);
 		$this->_topic->SetName("topic_content");
+		$this->_topic->SetId("topic_content");
 		
 		$this->_ispoll = new HTML_Input();
 		$this->_ispoll->IsCheackeable();
@@ -230,7 +231,7 @@ class View
 			drawOptions(str);
 
 		});
-		</script>
+		</script>	
 		
 		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
 			<fieldset>
@@ -239,10 +240,10 @@ class View
 					<label for='topic_title'>Titulo do topico</label><br />
 					{$this->_title->Draw()}
 				</p>					
-				
+			  	
 				<p>
-					<label for='topic_content'>Conteudo do topico</label><br />
-					{$this->_topic->Draw()}
+					<label for='{$this->_topic->GetName()}'>Conteudo do topico</label><br />
+					".Core::CKEditor($this->_topic->GetName(), "")."
 				</p>	
 
 				<p>

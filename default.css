@@ -1,5 +1,41 @@
 @CHARSET "ISO-8859-1";
 
+#new-title-bar{
+	background: #333 url(newlay/images/new_title_bg.jpg) no-repeat;
+	height: 55px;
+	display: block;
+}
+
+#new-title {
+	text-decoration: none;
+	padding-left: 8px;
+	padding-top: 9px;
+	border: 0px;
+	display: block;
+	font-size: 16px;
+}
+
+#infos-line{
+	padding-left: 14px;
+}
+
+#new-comments{
+	background: url(newlay/images/icon_comment.gif) no-repeat;
+	padding-left: 18px;
+}
+
+#new-comments:hover{
+	text-decoration: none;
+	color: #57584d;
+}
+
+#new-summary {
+	padding-top: 10px;
+	padding-left: 8px;
+	padding-right: 8px;
+	margin-bottom: 30px;
+}
+
 .afkPlayer{
 	color: #efeee3;
 	font-style: italic;
@@ -15,6 +51,34 @@
   color: #00c320;
 }
 
+#notify{
+	margin-left: 8px;
+	padding-left: 19px;
+	font-weight: bold;
+	color: red;
+	background: url(newlay/images/icon_right.png) -15px no-repeat;
+	line-height: 23px;
+	display: inline-block;
+}
+
+#notify-correct{
+	background: url(newlay/images/icon_right.png) no-repeat;
+	width: 15px;
+	height: 23px;
+	vertical-align: middle;
+	display: inline-block;
+	margin-left: 8px;
+}
+
+#notify-loading {
+	background: url(newlay/images/icon_loading.gif) no-repeat;
+	width: 15px;
+	height: 23px;
+	vertical-align: middle;
+	display: inline-block;
+	margin-left: 8px;	
+}
+
 fieldset{
 }	
 
@@ -22,6 +86,12 @@ fieldset label {
 	display: block;
 	font-weight: bold;
 	margin-top: 10px;
+	line-height: 30px;
+	vertical-align: middle;
+}
+
+fieldset label input{
+	vertical-align: middle;
 }
 
 fieldset input {
@@ -35,6 +105,7 @@ fieldset input {
 	padding: 4px;
 	width: auto;
 	border-collapse:collapse; 
+	height: 22px;
 }
 
 fieldset textarea{
@@ -57,10 +128,20 @@ fieldset select {
 	border-right: 1px solid #666;
 	color: #FFF;
 	font: normal 12px Verdana, sans-serif;
+	margin-top: 3px;
+	height: 20px;
 }
 
 fieldset select option{
 	background: #333 url(newlay/images/subitem.jpg) repeat-x;
+}
+
+.long-margin-top {
+	margin-top: 25px;
+}
+
+.long-margin-bottom {
+	margin-bottom: 25px;
 }
 
 .button {
@@ -73,31 +154,31 @@ fieldset select option{
 
 .button:hover {
 	cursor: pointer;
+	background: #333 url(newlay/images/subitem_over.jpg) repeat-x;
 }
 
 .buttonstd {
-	margin-top: 12px;
-	background: #333 url(newlay/images/subitem.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	border-right: 1px solid #000;
 	color: #FFF;
 	font: normal 11px Verdana, sans-serif;
-	width: auto;
-	padding: 7px;	
+	display: inline-block;
+	line-height: 25px;
+	background: #333 url(newlay/images/subitem.jpg) repeat-x;
+	padding-left: 4px;
+	padding-right: 4px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	min-width: 65px;
+	text-align: center;
 }
 
 .buttonstd:hover{
+	background: #333 url(newlay/images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
 	font-weight: normal;
-	cursor: default;
-}
-
-.buttonstd:active{
-	padding: -1px;
-	border: 1px solid #000;
-	border-bottom: 2px solid #000;
-	border-right: 2px solid #000;
+	cursor: pointer;
 }
 
 #msgbox{

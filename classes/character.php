@@ -1,7 +1,11 @@
 <?
 class Character
 {
-	private $db, $data = array(), $site_data = array(), $skills = array(), $guild = array() /* deprecated? */;
+	private $db, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
+	
+	private $site_data = array(
+		"visible" => 1
+	);
 	
 	private $_loadGuild = false;
 	
@@ -89,6 +93,9 @@ class Character
 		//create new character!!
 		else
 		{
+			$insert_fields = "";
+			$insert_values = "";			
+			
 			foreach($this->data as $field => $value)
 			{
 				$i++;
@@ -122,7 +129,7 @@ class Character
 				'{$this->site_data["creation"]}',
 				'{$this->site_data["comment"]}',
 				'{$this->site_data["visible"]}'
-			)");			
+			)");
 		}
 	}	
 	

@@ -31,6 +31,20 @@ class Account
 	
 	private $real_name = "", $location = "", $url = "", $creation, $load_personal = false;
 	
+	static function loadLogged()
+	{
+		if(!$_SESSION["login"])
+			return false;
+			
+		$account = new Account();
+		$logged = $account->load($_SESSION['login'][0]);
+
+		if(!$logged)
+			return false;
+			
+		return $account;
+	}	
+	
 	function __construct()
 	{
 		global $db;
@@ -144,6 +158,9 @@ class Account
 		//new account
 		else
 		{
+			$insert_fields = "";
+			$insert_values = "";
+			
 			foreach($this->data as $field => $value)
 			{
 				$i++;
@@ -781,6 +798,31 @@ class Account
 		
 		$query instanceof Query;
 		return $query;	
+	}
+	
+	function addEmailValidate($email, $code)
+	{
+		$this->db->query("INSERT INTO `".Tools::getSiteTable("email_validating")."` VALUES ('{$this->getId()}', '{$email}', '{$code}', UNIX_TIMESTAMP())");
+	}
+	
+	function activateEmailByCode($code)
+	{
+		$query = $this->db->query("SELECT `email` FROM `".Tools::getSiteTable("email_validating")."` WHERE `account_id` = {$this->getId()} AND `code` = '{$code}'");
+		
+		if($query->numRows() == 0)
+			return false;
+			
+		$fetch = $query->fetch();	
+		$this->setEmail($fetch->email);
+		$this->save();
+		$this->clearEmailCodes();
+		
+		return true;
+	}
+	
+	function clearEmailCodes()
+	{
+		$query = $this->db->query("DELETE FROM `".Tools::getSiteTable("email_validating")."` WHERE `account_id` = {$this->getId()}");
 	}
 	
 }

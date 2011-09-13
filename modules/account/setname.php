@@ -4,22 +4,20 @@ if($_POST)
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
+	$checkName = Ajax_account::checkName();
+	
 	if($account->getPassword() != Strings::encrypt($_POST['account_password']))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
-	elseif(strlen($_POST['account_name']) < 5 or strlen($_POST['account_name']) > 25)
+	elseif($checkName["error"])
 	{
-		$error = Lang::Message(LMSG_ACCOUNT_NAME_WRONG_SIZE);
+		$error = $checkName["text"];
 	}	
 	elseif($account->getName() == $_POST['account_name'])
 	{
 		$error = Lang::Message(LMSG_ACCOUNT_SETNAME_SAME_ID);
-	}
-	elseif($account->loadByName($_POST['account_name']))
-	{
-		$error = Lang::Message(LMSG_ACCOUNT_NAME_ALREADY_USED);
-	}			
+	}	
 	else
 	{		
 		$account->setName($_POST['account_name']);

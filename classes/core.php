@@ -9,6 +9,15 @@ class Core
 		return new FCKeditor($instance);
 	}
 	
+	static function CKEditor($element, $value)
+	{
+		include_once "libs/ckeditor/ckeditor.php";
+		$class = new CKEditor();
+		$class->returnOutput = true;
+		$class->basePath = "libs/ckeditor/";
+		return $class->editor($element, $value);
+	}
+	
 	static function InitPOT()
 	{
 		// includes POT main file
@@ -56,55 +65,50 @@ class Core
 				'{$value}',
 				'".time()."'
 			)");
-	}
-	
-	static function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
-	{
-		if($arg)
-		{
-			$emailvalue = array();
-			foreach($arg as $value)
-			{
-				$emailvalue[] = $value;
-			}
-			
-			include "configs/emails.php";		
-		}
-		
-		$mail = new PHPMailer();
-		
-		$mail->IsHTML(true);
-		$mail->IsSMTP();
-		//$mail->SMTPDebug = true;
-
-		$mail->SMTPAuth   = true;
-		$mail->Host       = SMTP_HOST;
-		$mail->Port       = SMTP_PORT;
-
-		$mail->Username   = SMTP_USER;
-		$mail->Password   = SMTP_PASS;
-			
-		$mail->FromName = CONFIG_SITENAME;
-		$mail->From = SMTP_USER;
-			
-		$mail->AddAddress($to);
-
-		$mail->Subject = $emailsubject[$emailid];
-		$mail->Body = $emailmodel[$emailid];
-		
-		if ($mail->Send()) 
-		{
-			return true;
-		}
-		
-		return false;
 	}	
 	
-	/* DEPRECATED FUNCTION */
-	static function loadClass($class)
+	static function autoLoad($classname)
 	{
-		include_once "classes/".strtolower($class).".php";
-		return new $class();
+		if(class_exists($classname))
+			return;
+		
+		if(file_exists("classes/{$classname}.php"))		
+		{
+			require_once("classes/{$classname}.php");
+			return;
+		}
+		elseif(file_exists("classes/". strtolower($classname).".php"))
+		{
+			require_once("classes/". strtolower($classname).".php");		
+			return;
+		}	
+			
+		$array = explode("_", $classname);
+		if(count($array) > 1)
+		{
+			$sepCount = count($array);
+			
+			$patch = "";
+			
+			$first = true;
+			
+			foreach($array as $value)
+			{
+				$patch .= (!$first) ? "/" : null;
+				$patch .= "{$value}";
+				$first = false;
+			}
+			
+			$patch .= ".php";
+			
+			if(file_exists($patch))
+			{
+				require_once($patch);
+				return;
+			}
+		}
+		
+		trigger_error("Não foi possivel carregar classe {$classname} automaticamente.");
 	}
 	
 	static function InitLanguage()
@@ -231,5 +235,14 @@ class Core
 			</table>		
 		';
 	}
+	
+	static function includeJavaScriptSource($file)
+	{
+		global $module;
+		
+		$module .= '
+		<script type="text/javascript" src="javascript/'.$file.'"></script>
+		';		
+	}	
 }		
 ?>

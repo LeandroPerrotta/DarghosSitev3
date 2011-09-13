@@ -119,7 +119,7 @@ function requestSearchBox(value)
 	if(value.length == 0){
 		$("#player_suggestions").hide("slow");
 	} else {
-		$.post("../ajax/checkplayer.php", {inputValue: value},
+		$.post("../Ajax/checkplayer.php", {inputValue: value},
 		function(info){
 			if(info.length > 0){
 				$("#player_suggestions_list").html(info);
@@ -135,7 +135,7 @@ function requestSearchBox(value)
 
 function requestRebornPlayer(value)
 {	
-	$.post("../ajax/rebornplayer.php", {inputValue: value},
+	$.post("../Ajax/rebornplayer.php", {inputValue: value},
 		function(info){
 		
 			if(Number(info) == 1){
@@ -152,6 +152,41 @@ function fillSearchBox(value)
 {
 	$("#player_name").val(value);
 	$("#player_suggestions").hide();
+}
+
+function showFogScreen()
+{
+	$("#fog-screen").css("width", $("#wrapper").width());
+	$("#fog-screen").css("height", $("#wrapper").height());
+	$("#fog-screen").show();
+}
+
+function fogLoading()
+{
+	showFogScreen();
+	
+	var _html = "<div id='fog-loading'></div>";
+	$("#fog-screen").html(_html);
+}
+
+function onFogLoaded()
+{
+	$("#fog-screen").children("#fog-loading").remove();
+	$("#fog-screen").hide();
+}
+
+function fogAlert(message)
+{
+	showFogScreen();
+	
+	var _html = "<div id='fog-alert'> <span id='fog-alert-title'>AVISO!</span> <span id='fog-alert-content'>" + message + " </span> <p class='line'></p> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Ok</span></a></div>";
+	$("#fog-screen").html(_html);
+}
+
+function onFogAlertClick()
+{
+	$("#fog-screen").children("#fog-alert").remove();
+	$("#fog-screen").hide();
 }
 
 function countCharacters(limit)

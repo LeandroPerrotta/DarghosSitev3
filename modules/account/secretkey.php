@@ -8,6 +8,10 @@ if($_POST)
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}	
+	elseif(!$account->getEmail())
+	{
+		$error = Lang::Message(LMSG_OPERATION_REQUIRE_VALIDATED_EMAIL);
+	}	
 	elseif($account->getSecretKey())
 	{
 		$error = Lang::Message(LMSG_SECRETKEY_ALREADY_EXISTS);	
@@ -38,8 +42,7 @@ if($_POST)
 		}
 		else
 		{
-			$account->setSecretKey($_POST["recovery_key"], $_POST["recovery_lembrete"]);
-			
+			$account->setSecretKey($_POST["recovery_key"], $_POST["recovery_lembrete"]);			
 			$success = Lang::Message(LMSG_SECRETKEY_CUSTOM_SUCCESS, $_POST["recovery_key"], $_POST["recovery_lembrete"]);			
 		}
 	}

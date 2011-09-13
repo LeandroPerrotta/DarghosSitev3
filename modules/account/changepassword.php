@@ -4,25 +4,23 @@ if($_POST)
 	$account = new Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+	$checkPassword = Ajax_account::checkPassword();
+	
+	if($account->getPassword() != Strings::encrypt($_POST["account_password_current"]))
 	{
 		$error = Lang::Message(LMSG_WRONG_PASSWORD);
 	}
-	elseif($_POST["account_newpassword"] != $_POST["account_confirmation"])
+	elseif($checkPassword["error"])
 	{
-		$error = Lang::Message(LMSG_CHANGEPASS_WRONG_NEWPASS_CONFIRM);
+		$error = $checkPassword["text"];
 	}
-	elseif($_POST["account_newpassword"] == $_POST["account_password"])
+	elseif(Strings::encrypt($_POST["account_password"]) == $account->getPassword())
 	{
 		$error = Lang::Message(LMSG_CHANGEPASS_SAME_PASSWORD);
 	}
-	elseif(strlen($_POST["account_newpassword"]) < 6 or strlen($_POST["account_newpassword"]) > 20)
-	{
-		$error = Lang::Message(LMSG_CHANGEPASS_WRONG_NEWPASS_LENGHT);
-	}
 	else
 	{
-		$account->setPassword(Strings::encrypt($_POST["account_newpassword"]));
+		$account->setPassword(Strings::encrypt($_POST["account_password"]));
 		$account->save();
 		
 		$_SESSION["login"] = array();
@@ -50,18 +48,18 @@ $module .= '
 	<fieldset>
 		
 		<p>
-			<label for="account_newpassword">'.$pages["ACCOUNT.CHANGE_PASSWORD.NEW_PASSWORD"].'</label><br />
-			<input name="account_newpassword" size="40" type="password" value="" />
+			<label for="account_password">'.$pages["ACCOUNT.CHANGE_PASSWORD.NEW_PASSWORD"].'</label><br />
+			<input name="account_password" size="40" type="password" value="" />
 		</p>
 		
 		<p>
-			<label for="account_confirmation">'.$pages["ACCOUNT.CHANGE_PASSWORD.NEW_PASSWORD_CONFIRM"].'</label><br />
-			<input name="account_confirmation" size="40" type="password" value="" />
+			<label for="account_confirm_password">'.$pages["ACCOUNT.CHANGE_PASSWORD.NEW_PASSWORD_CONFIRM"].'</label><br />
+			<input name="account_confirm_password" size="40" type="password" value="" />
 		</p>	
 
 		<p>
-			<label for="account_password">'.$pages["ACCOUNT.CHANGE_PASSWORD.CURRENT_PASSWORD"].'</label><br />
-			<input name="account_password" size="40" type="password" value="" />
+			<label for="account_password_current">'.$pages["ACCOUNT.CHANGE_PASSWORD.CURRENT_PASSWORD"].'</label><br />
+			<input name="account_password_current" size="40" type="password" value="" />
 		</p>			
 		
 		<div id="line1"></div>

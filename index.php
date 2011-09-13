@@ -1,6 +1,7 @@
 <?
 ini_set("display_errors", 1 );
 //ini_set("memory_limit", "64M");
+//error_reporting(E_ERROR | E_WARNING); 
 error_reporting(E_ERROR | E_WARNING); 
 
 /*function __autoload($class_name) {
@@ -30,9 +31,12 @@ if(MANUTENTION == 1)
 }
 else
 {			
-	include "classes/mysql.php";
+	
 	include "classes/core.php";
-	include "classes/CustomDate.php";
+
+	spl_autoload_register("Core::autoLoad");
+	
+	include "classes/mysql.php";
 	
 	include "classes/account.php";
 	include "classes/character.php";
@@ -41,15 +45,12 @@ else
 	include "classes/deaths.php";
 	include "classes/contribute.php";
 	include "classes/bans.php";
-	include "classes/ItemShop.php";
 	include "classes/pagesdb.php";
 	include "classes/tools.php";
 	include "classes/strings.php";
 	include "classes/tickets.php";
 	include "classes/monsters.php";
 	include "classes/Forum.php";
-	include "classes/Items.php";
-	include "classes/Battleground.php";
 	
 	include "classes/HTML_Table.php";
 	include "classes/HTML_SelectBox.php";
@@ -87,13 +88,13 @@ else
 	}*/
 	
 	$tools = new Tools();
-	Strings::Init();
 
 	$menu = array();
 	$buttons = array();
 	$pages = array();
 	
 	Core::InitLanguage();
+	Emails::init();
 	
 	include "modules.php";
 	include "{$layoutDir}index.php";

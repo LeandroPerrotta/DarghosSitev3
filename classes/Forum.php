@@ -208,7 +208,7 @@ class Forum_Topics
 {
 	static function ListPollTopics()
 	{
-		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_POLL.") != 0 ORDER BY `date` DESC");
+		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_POLL.") != 0 AND `deleted` = 0 ORDER BY `date` DESC");
 		
 		if($query->numRows() == 0)
 			return false;		
@@ -224,9 +224,10 @@ class Forum_Topics
 		return $topics;
 	}
 	
-	static function ListNoticeTopics($limit = 3)
+	static function ListNoticeTopics($start, $results = SHOW_NEWS)
 	{
-		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_NOTICE.") != 0 ORDER BY `date` DESC LIMIT {$limit}");
+		$query_str = "SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_NOTICE.") != 0  AND `deleted` = 0 ORDER BY `date` DESC LIMIT {$start}, {$results}";		
+		$query = Core::$DB->query($query_str);
 		
 		if($query->numRows() == 0)
 			return false;		
@@ -242,12 +243,13 @@ class Forum_Topics
 		return $topics;
 	}	
 	
-	static function DeletePost($post_id)
+	static function TotalNoticeTopics()
 	{
-		Core::$DB->query("DELETE FROM `".DB_WEBSITE_PREFIX."forum_posts` WHERE `id` = '{$post_id}'");		
+		$query = Core::$DB->query("SELECT id FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE (flags & ".FORUM_TOPIC_FLAGS_IS_NOTICE.") != 0  AND `deleted` = 0 ORDER BY `date`");
+		return $query->numRows();
 	}
 	
-	private $_id, $_title, $_topic, $_date, $_authorid, $_isPoll = false, $_isNotice = false;
+	private $_id, $_title, $_topic, $_date, $_authorid, $_deleted, $_isPoll = false, $_isNotice = false;
 	private $_poll_id, $_poll_text, $_poll_topicid, $_poll_enddate, $_poll_flags, $_poll_minlevel, $_poll_ismultiple = false, $_poll_onlypremium = false;
 	private $_poll_options = array();
 	private $_posts = array();
@@ -262,7 +264,7 @@ class Forum_Topics
 	
 	function Load($id)
 	{	
-		$query = Core::$DB->query("SELECT id, title, topic, date, author_id, flags FROM ".DB_WEBSITE_PREFIX."forum_topics WHERE `id` = '{$id}'");
+		$query = Core::$DB->query("SELECT `id`, `title`, `topic`, `date`, `author_id`, `flags`, `deleted` FROM `".DB_WEBSITE_PREFIX."forum_topics` WHERE `id` = '{$id}'");
 		
 		if($query->numRows() != 1)
 			return false;
@@ -274,6 +276,7 @@ class Forum_Topics
 		$this->_topic = $fetch->topic;
 		$this->_date = $fetch->date;
 		$this->_authorid = $fetch->author_id;
+		$this->_deleted = $fetch->deleted;
 		
 		if(($fetch->flags & FORUM_TOPIC_FLAGS_IS_POLL) != 0)
 		{
@@ -295,7 +298,16 @@ class Forum_Topics
 	{
 		if($this->_id)
 		{
-			
+			Core::$DB->query("
+				UPDATE
+					`".DB_WEBSITE_PREFIX."forum_topics`
+				SET
+					`title` = '{$this->_title}',
+					`topic` = '{$this->_topic}',
+					`deleted` = '{$this->_deleted}'
+				WHERE
+					`id` = '{$this->_id}'
+			");			
 		}	
 		else
 		{
@@ -477,6 +489,11 @@ class Forum_Topics
 	function SetPollIsOnlyForPremium($onlyPremium = true)
 	{
 		$this->_poll_onlypremium = $onlyPremium;
+	}
+	
+	function SetIsDeleted($isDeleted = true)
+	{
+		$this->_deleted = $isDeleted;
 	}
 	
 	function GetId()

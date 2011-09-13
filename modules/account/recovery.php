@@ -9,13 +9,8 @@ if($_GET['key'])
 	}
 	else
 	{
-		$password = Strings::randKey(8, 1, "lower+number");
-
-		//argumentos para e-mail
-		$_arg = array();
-		$_arg[] = $password;		
-		
-		if(!Core::mail(EMAIL_RECOVERY_PASSWORD, $account->getEmail(), $_arg))
+		$password = Strings::randKey(8, 1, "lower+number");		
+		if(!Emails::send($account->getEmail(), Emails::EMSG_RECOVERY_ACCOUNT_NEW_PASSWORD, array($password)))
 		{
 			$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 		}		
@@ -58,12 +53,8 @@ else
 		{		
 			/* RECUPERAÇÃO DO NUMERO DA CONTA */
 			if($_POST['recovery_information'] == 1)
-			{
-				//argumentos para e-mail
-				$_arg = array();
-				$_arg[] = $account->getName();
-				
-				if(!Core::mail(EMAIL_RECOVERY_ACCOUNT, $account->getEmail(), $_arg))
+			{				
+				if(!Emails::send($account->getEmail(), Emails::EMSG_RECOVERY_ACCOUNT_NAME, array($account->getName())))
 				{
 					$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 				}		
@@ -75,13 +66,9 @@ else
 			/* RECUPERAÇÃO DA SENHA DA CONTA */
 			elseif($_POST['recovery_information'] == 2)
 			{
-				$key = Strings::randKey(8, 1, "number");
+				$key = Strings::randKey(8, 1, "number");		
 				
-				//argumentos para e-mail
-				$_arg = array();
-				$_arg[] = $key;			
-				
-				if(!Core::mail(EMAIL_RECOVERY_PASSWORDKEY, $account->getEmail(), $_arg))
+				if(!Emails::send($account->getEmail(), Emails::EMSG_RECOVERY_ACCOUNT_PASSWORD, array($key)))
 				{
 					$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 				}		
@@ -95,14 +82,9 @@ else
 			/* RECUPERAÇÃO DO NUMERO E SENHA DA CONTA */
 			elseif($_POST['recovery_information'] == 3)
 			{
-				$key = Strings::randKey(8, 1, "number");
+				$key = Strings::randKey(8, 1, "number");		
 				
-				//argumentos para e-mail
-				$_arg = array();
-				$_arg[] = $account->getName();
-				$_arg[] = $key;			
-				
-				if(!Core::mail(EMAIL_RECOVERY_BOTH, $account->getEmail(), $_arg))
+				if(!Emails::send($account->getEmail(), Emails::EMSG_RECOVERY_ACCOUNT_BOTH, array($account->getName(), $key)))
 				{
 					$error = Lang::Message(LMSG_FAIL_SEND_EMAIL);
 				}		

@@ -8,7 +8,7 @@ class View
 	private $loggedAcc, $topic, $user;	
 	
 	//html fields
-	private $_bantype, $_banreason;
+	private $_bantype, $_banreason, $_topic, $_title;
 	
 	function View()
 	{
@@ -24,18 +24,14 @@ class View
 		}
 		else
 		{
-			if($_GET['removemsg'])
+			if($_GET['removemsg'] || $_GET['delete'])
 			{
 				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
 				return true;					
 			}
 		}
 		
-		if($_SESSION['login'])
-		{
-			$this->loggedAcc = new Account();
-			$this->loggedAcc->load($_SESSION['login'][0]);
-		}		
+		$this->loggedAcc = Account::loadLogged();
 		
 		if($_GET['banuser'])
 		{
@@ -54,7 +50,7 @@ class View
 		
 		if($_POST)
 		{
-			if($_GET['banuser'] && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+			if($this->loggedAcc && $_GET['banuser'] && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
 			{
 				if(!$this->PostBanUser())
 				{
@@ -65,6 +61,18 @@ class View
 				
 				return true;
 			}
+			
+			if($this->loggedAcc && $_GET['edit'] && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+			{
+				if(!$this->PostEditTopic())
+				{
+					Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				}			
+
+				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				
+				return true;
+			}			
 			
 			if(!$this->Post())
 			{
@@ -80,11 +88,17 @@ class View
 			}
 		}	
 
-		if($this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER && $_GET['banuser'])
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER && $_GET['banuser'])
 		{
 			$this->DrawBanUser();
 			return true;
 		}	
+		
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER && $_GET['edit'])
+		{
+			$this->DrawEditTopic();
+			return true;
+		}		
 		
 		$this->Draw();
 		return true;		
@@ -93,12 +107,6 @@ class View
 	function Prepare()
 	{
 		$this->user = new Forum_User();
-		
-		if(!$this->user->LoadByAccount($_SESSION['login'][0]))
-		{
-			$this->_message = Lang::Message(LMSG_FORUM_ACCOUNT_NOT_HAVE_USER);
-			return false;			
-		}
 		
 		if($_GET['v'])
 		{
@@ -124,10 +132,36 @@ class View
 				$this->_message = Lang::Message(LMSG_REPORT);
 				return false;
 			}
+			
+			if($this->loggedAcc && $_GET['edit'] && $_GET['edit'] == "1")
+			{
+				$this->_title = new HTML_Input();
+				$this->_title->SetName("topic_title");
+				$this->_title->SetValue($this->topic->GetTitle());
+				
+				$this->_topic = new HTML_Input();
+				$this->_topic->IsTextArea(25, 80);
+				$this->_topic->SetName("topic_content");
+				$this->_topic->SetId("topic_content");	
+				$this->_topic->SetValue($this->topic->GetTopic());		
+			}	
+			elseif($this->loggedAcc && $_GET['delete'] && $_GET['delete'] == "1")
+			{
+				if($this->loggedAcc->getGroup() < GROUP_COMMUNITYMANAGER)
+				{
+					$this->_message = Lang::Message(LMSG_REPORT);
+					return false;				
+				}
+				
+				$this->topic->SetIsDeleted();
+				$this->topic->Save();
+				
+				$this->_message = "Topico removido com sucesso!";
+			}						
 		}
 		elseif($_GET['removemsg'])
 		{
-			if($this->user->GetAccount()->getGroup() < GROUP_COMMUNITYMANAGER)
+			if($this->loggedAcc && $this->loggedAcc->getGroup() < GROUP_COMMUNITYMANAGER)
 			{
 				$this->_message = Lang::Message(LMSG_REPORT);
 				return false;				
@@ -135,13 +169,25 @@ class View
 			
 			Forum_Topics::DeletePost($_GET['removemsg']);
 			$this->_message = "Post removido com sucesso!";
-		}
+		}	
 		
 		return true;
 	}
 	
 	function Post()
 	{
+		if(!$this->loggedAcc)
+		{
+			Core::requireLogin();
+			return false;
+		}
+		
+		if(!$this->user->LoadByAccount($_SESSION['login'][0]))
+		{			
+			$this->_message = Lang::Message(LMSG_FORUM_ACCOUNT_NOT_HAVE_USER);
+			return false;			
+		}		
+		
 		if($_POST["poll_option"] && $this->topic->IsPoll())
 		{
 			return $this->PollPost();
@@ -238,6 +284,24 @@ class View
 		return true;
 	}
 	
+	function PostEditTopic()
+	{
+		if($this->_title->GetPost())
+		{
+			$this->topic->SetTitle($this->_title->GetPost());
+		}
+		
+		if($this->_topic->GetPost())
+		{
+			$this->topic->SetTopic($this->_topic->GetPost());
+		}
+		
+		$this->topic->Save();
+		$this->_message = "Topico {$this->_title->GetPost()} editado com sucesso!";
+
+		return true;
+	}	
+	
 	function DrawBanUser()
 	{
 		global $module;
@@ -254,6 +318,33 @@ class View
 				<p>
 					<label for='banreason'>Motivo da punição</label><br />
 					{$this->_banreason->Draw()}
+				</p>				
+				
+				<p id='line'></p>
+				
+				<p>
+					<input class='button' type='submit' value='Enviar' />
+				</p>
+			</fieldset>
+		</form>";		
+	}
+	
+	function DrawEditTopic()
+	{
+		global $module;
+		
+		$module .=	"
+		<form action='' method='post'>
+			<fieldset>
+				
+				<p>
+					<label for='title'>Titulo do Topico</label><br />
+					{$this->_title->Draw()}
+				</p>					
+				
+				<p>
+					<label for='{$this->_topic->GetName()}'>Conteudo do topico</label><br />
+					".Core::CKEditor($this->_topic->GetName(), $this->_topic->GetValue())."
 				</p>				
 				
 				<p id='line'></p>
@@ -370,10 +461,18 @@ class View
 		
 		$table->AddField($string, 20, "height: 90px; vertical-align: top;");
 		
+		
 		$string = "
 		<p><span style='font-size: 12px; font-weight: bold;'>{$this->topic->GetTitle()}</span></p>
-		<p class='line'></p>
-		<p style='margin-top: 25px;'>".nl2br($this->topic->GetTopic())."</p>";
+		<p class='line'></p>";
+
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+		{
+			$string .= "					
+			<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o topico {$this->topic->GetTitle()} com id #{$this->topic->GetId()}?\")' href='?ref=forum.topic&v={$this->topic->GetId()}&delete=1'>Excluir</a> - <a href='?ref=forum.topic&v={$this->topic->GetId()}&edit=1'>Editar</a></div>";
+		}		
+		
+		$string .= "<p style='margin-top: 25px;'>{$this->topic->GetTopic()}</p>";
 		
 		$table->AddField($string, null, "vertical-align: top;");
 		$table->AddRow();
@@ -453,7 +552,7 @@ class View
 					$string .= "<div style='border: 1px #9f9d9d solid; line-height:200%; padding: 0px; padding-left: 5px;'>Meu voto: <span style='font-weight: bold;'>{$vote["option"]}</span></div>";
 				}
 				
-				if($this->user->GetAccount()->getGroup() >= GROUP_COMMUNITYMANAGER)
+				if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
 				{
 					$string .= "					
 					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a> - <a href='?ref=forum.topic&banuser={$user_post->GetId()}'>Punir</a></div>";

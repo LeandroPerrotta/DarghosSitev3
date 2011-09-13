@@ -108,7 +108,12 @@ else
 				case "changename":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;						
+				break;			
+
+				case "validateEmail":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";
@@ -454,7 +459,6 @@ else
 			switch($topic)
 			{
 				case "topic":
-					$needLogin = true;
 					$patch['file'] = $topic;
 				break;
 				
@@ -542,23 +546,23 @@ else
 		break;	
 
 	
-			case "itemshop":
+		case "itemshop":
+		{
+			$patch['dir'] = $module;		
+			
+			if(SHOW_SHOPFEATURES == 1)
 			{
-				$patch['dir'] = $module;		
-				
-				if(SHOW_SHOPFEATURES == 1)
+				if(file_exists("modules/{$module}/{$topic}.php"))
 				{
-					if(file_exists("modules/{$module}/{$topic}.php"))
-					{
-						$patch['file'] = $topic;
-						break;
-					}
+					$patch['file'] = $topic;
+					break;
 				}
-				
-				$patch['dir'] = "errors";
-				$patch['file'] = "notfound";
-				break;
 			}
+			
+			$patch['dir'] = "errors";
+			$patch['file'] = "notfound";
+			break;
+		}
 		
 		
 		default:

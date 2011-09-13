@@ -1,7 +1,11 @@
 <?php
+define("HTML_INPUT_SIZE_SMALL", 20);
+define("HTML_INPUT_SIZE_NORMAL", 40);
+define("HTML_INPUT_SIZE_BIG", 80);
+
 class HTML_Input
 {
-	private $_name, $_id, $_value, $_size = 40, $_length, $_type = "text";
+	private $_name, $_id, $_value, $_size = HTML_INPUT_SIZE_NORMAL, $_length, $_type = "text";
 	private $_isPassword = false, $_isDisabled = false, $_isWritable = true, $_isDefault = false;
 	private $_isTextArea = false, $_textAreaRows = 8, $_textAreaColums = 30;
 	private $_label = "";
@@ -20,6 +24,21 @@ class HTML_Input
 	function GetPost()
 	{
 		return $_POST[$this->_name];
+	}
+	
+	function GetName()
+	{
+		return $this->_name;
+	}
+	
+	function GetValue()
+	{
+		return $this->_value;
+	}	
+	
+	function GetId()
+	{
+		return $this->_id;
 	}
 	
 	function SetName($name)
@@ -116,7 +135,7 @@ class HTML_Input
 		
 		if(!$this->_isTextArea)
 		{
-			$string .= "<input name='{$this->_name}' value='{$this->_value}' size='{$this->_size}'";	
+			$string .= "<input name='{$this->_name}' value='{$this->_value}' autocomplete='off' size='{$this->_size}'";	
 	
 			switch($this->_type)
 			{

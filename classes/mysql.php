@@ -27,6 +27,11 @@ class MySQL
 			return new Query($query, $this->connection);
 	}
 	
+	function escapeString($string)
+	{
+		return mysql_real_escape_string($string, $this->connection);
+	}
+	
 	public function ExecQuery($queryStr) 
 	{
 		return mysql_unbuffered_query($queryStr, $this->connection);

@@ -116,7 +116,7 @@ function sendPingResult()
 		alert("Este navegador não suporta tecnologia Ajax.");
 	}	
 	
-	xmlhttp.open("GET", "ajax/ping.php?value=log&pingavg=" + minPing, false);	
+	xmlhttp.open("GET", "Ajax/ping.php?value=log&pingavg=" + minPing, false);	
 	xmlhttp.send(null);	
 	
 	if(xmlhttp.responseText == "mysql_error")

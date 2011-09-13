@@ -20,6 +20,9 @@ class Lang_Messages
 		self::$messages[LMSG_RECOVERY_UNKNOWN_EMAIL] = "Não existe nenhuma conta em nosso banco registrada para este endereço de e-mail.";
 		self::$messages[LMSG_RECOVERY_UNKNOWN_CHARACTER] = "Este personagem não pertence a conta do endereço de e-mail informado.";
 		self::$messages[LMSG_RECOVERY_WRONG_KEY] = "Chave de recuperação de conta inexistente ou inválida.";
+		self::$messages[LMSG_CAN_NOT_VALIDATE_EMAIL] = "Não foi possivel validar o e-mail para esta conta, tente novamente.";
+		self::$messages[LMSG_OPERATION_REQUIRE_VALIDATED_EMAIL] = "Esta operação requer que sua conta já possua um endereço de e-mail registrado e valido.";
+		self::$messages[LMSG_ACCOUNT_ALREADY_VALIDATED_EMAIL] = "A sua conta já possui um e-mail validado.";
 		self::$messages[LMSG_RECOVERY_WRONG_SECRET_KEY] = "A chave secreta informada para mudança de e-mail de sua conta está incorreta. Por movitos de segurançaa você só poder efetuar 3 tentativas desta operação, após as 3 tentativas este recurso estará bloqueado por 24 horas.";
 		self::$messages[LMSG_RECOVERY_FILL_CHARACTER_NAME] = "Para efetuar esta operação é necessario informar ao menos o nome de um personagem da conta que deseja recuperar.";
 		self::$messages[LMSG_RECOVERY_DISABLED] = "Esta conta não possui uma chave de recuperação registrada e portanto este recurso não pode ser utilizado para ela.";
@@ -398,7 +401,19 @@ class Lang_Messages
 			<p>Caro usuario,</p>
 			<p>A recuperação de stamina do personagem de sua conta @v1@ foi concluida com sucesso! Agora ele possui <b>@v2@</b> horas de stamina!</p>
 			<p>Tenha um bom jogo! Agora mais descançado!</p>
-		";				
+		";		
+
+		self::$messages[LMSG_VALIDATE_EMAIL_SUCCESSFULY] = "
+			<p>Caro usuario,</p>
+			<p>O endereço de e-mail <b>@v1@</b> foi validado com sucesso em sua conta!</p>
+			<p>Tenha um bom jogo!</p>
+		";		
+		
+		self::$messages[LMSG_ACCOUNT_VALIDATING_EMAIL_SEND] = "
+			<p>Caro usuario,</p>
+			<p>Foi enviado a mensagem de validação para o endereço de e-mail <b>@v1@</b> com sucesso!</p>
+			<p>Tenha um bom jogo!</p>
+		";		
 	}
 }
 ?>

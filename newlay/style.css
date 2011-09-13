@@ -21,34 +21,44 @@ body {
 	padding: 20px 0;
 }	
 
-h1 {
-	background: #333 url(images/header.jpg) no-repeat;
+h1.header{
+	background: #333 url(images/header.gif) no-repeat;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	height: 120px;
 }
 
-h1 span {
+h1.header span {
 	display: none;
 }
 
-h2 {
+#nav-bar {
 	background: #333 url(images/item.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	font: bold 11px Verdana, sans-serif;
-	padding: 6px;
+	height: 25px;
 }
 
-h2 span {
-	font-weight: normal;
+#nav-bar span {
+	display: block;
+	line-height: 25px;
+	margin-left: 6px;
 }
 
 h3 {
 	font: bold 14px Verdana, sans-serif;
 	padding-bottom: 4px;
-	border-bottom: 1px solid #cbc9c8;
 }
+
+h2 {
+	font: bold 17px Verdana, sans-serif;
+}
+
+h1 {
+	font: bold 20px Verdana, sans-serif;
+}
+
 
 p {
 	margin-top: 10px;
@@ -94,36 +104,47 @@ ul li {
 	width: 581px;
 }
 
-#left {
+#left, #right-menu {
 	border-right: 1px solid #000;
-	background: #333 url(images/metal_bar.jpg) -3px bottom repeat-y;
 	float: left;
 	padding-bottom: 6px;
 	width: 186px;
 }
 
-#left ul {
+#left {
+	background: #333 url(images/metal_bar.jpg) -3px bottom repeat-y;
+}
+
+#right-menu {
+	background: #333 url(images/metal_bar_right.jpg) 0.5px bottom repeat-y;
+}
+
+#left ul, #right-menu ul {
 	border-right: 1px solid #000;
 	list-style: none;
 	margin: 0;
 	width: 180px;
 }
 
-#left tr {
+#right-menu ul{
+	margin-left: 3.9px;
+}
+
+#left tr, #right-menu tr {
 	border-right: 1px solid #000;
 	list-style: none;
 	margin: 0;
 	width: 180px;
 }
 
-#left ul li{
+#left ul li, #right-menu ul li{
 	display: inline;
 	margin: 0;
 }
 
 
 
-#left ul li a, #left ul li div, #left ul li table {
+#left ul li a, #left ul li div, #left ul li table, #right-menu ul li a, #right-menu ul li div, #right-menu ul li table{
 	background: #333 url(images/subitem.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
@@ -135,69 +156,77 @@ ul li {
 	font-weight: normal;
 }
 
-#left ul li div strong{
+#right-menu > ul > li > div {
+	margin-left: 4px;
+}
+
+#left ul li div strong,  #right-menu ul li div strong{
 	float: left;
 	cursor: default;
 	font-weight: bold;
 }
 
-#left tr td strong {
+#right-menu ul li div strong {
+	
+}
+
+#left tr td strong, #right-menu tr td strong{
 	cursor: pointer;
 }
 
-#left ul li a:hover {
+#left ul li a:hover, #right-menu ul li a:hover{
 	background: #333 url(images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
 }
 
-#left td a:hover {
+#left td a:hover, #right-menu td a:hover{
 	background: #333 url(images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
 }
 
-#left tr td table {
+#left tr td table, #right-menu tr td table{
 	background: #333 url(images/subitem.jpg) repeat;
 	padding: 0 6px 6px 6px;
 }
 
-#left ul li div {
+#left ul li div, #right-menu ul li div{
 	background: #333 url(images/item.jpg) repeat-x;
 	height: 15px;
 }
 
-#left td strong {
+#left td strong, #right-menu td strong{
 	background: #333 url(images/item.jpg) repeat-x;
 }
 
-#left ul li div.red {
+#left ul li div.red, #right-menu ul li div.red{
 	background: #333 url(images/item_red.jpg) repeat-x;
 	height: 15px;
 }
 
-#left td strong.red {
+#left td strong.red, #right-menu td strong.red{
 	background: #333 url(images/item_red.jpg) repeat-x;
 }
 
-#left li ul li div {
+#left li ul li div, #right-menu li ul li div{
 	background: #333 url(images/subitem.jpg) repeat;
 	height: auto;
 }
 
-#left ul li div p {
+#left ul li div p, #right-menu ul li div p{
 	margin-top: 6px;
 }
 
-#left ul li div p em {
+#left ul li div p em, #right-menu ul li div p em{
 	font-style: normal;
 	font-weight: bold;
 }
 
 #right {
 	float: right;
-	width: 591px;
+	width: 815px;
 }
 
-#right > div {
+#right > div > div {
 	padding: 0 15px 10px 15px;
 }
 
@@ -205,13 +234,72 @@ ul li {
 	border: none;
 }
 
+#content {
+	width: 627px;
+	float: left;
+}
+
+/*#right-menu {
+	width: 187px;
+	display: block;
+	float: right;
+}*/
+
 #wrapper {
 	background: #333 url(images/wrapper.jpg) repeat;
 	height: 1%;
 	margin: 0 auto;
 	padding: 10px;
 	overflow: hidden;
-	width: 780px;
+	width: 1004px;
+}
+
+#fog-screen {
+	z-index: 100;
+	position: absolute;
+	display: none;
+	background: url(images/trans_background.png) repeat;
+}
+
+#fog-alert{
+	width: 300px;
+	border: 2px solid black;
+	background: #333 url(images/wrapper_b.jpg) repeat;
+	top: 40%;
+	left: 50%;
+	margin-left: -100px;
+	position: fixed;
+	padding: 6px;
+}
+
+#fog-loading{
+	width: 16px;
+	height: 16px;
+	border: 2px solid black;
+	background: #333 url(images/icon_loading.gif) repeat;
+	top: 40%;
+	left: 50%;
+	margin-left: -8px;
+	position: fixed;
+}
+
+#fog-alert-title{
+	background: url(images/icon_right.png) -15px no-repeat;
+	padding-left: 19px;
+	font-size: 16px;
+	display: block;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+#fog-alert-content{
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#fog-alert span{
+	display: block;
 }
 
 #wrapper_b {
