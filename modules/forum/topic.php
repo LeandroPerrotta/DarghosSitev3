@@ -17,6 +17,8 @@ class View
 			return;
 		}
 		
+		$this->loggedAcc = Account::loadLogged();
+		
 		if(!$this->Prepare())
 		{
 			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
@@ -29,9 +31,7 @@ class View
 				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
 				return true;					
 			}
-		}
-		
-		$this->loggedAcc = Account::loadLogged();
+		}	
 		
 		if($_GET['banuser'])
 		{
