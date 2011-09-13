@@ -260,7 +260,7 @@ class View
 			$items instanceof Items;
 			
 			$name = $items->getNameById($lot->offsetGet("id"));
-			$chance = $lot->offsetGet("chance") * LOT_RATE;
+			$chance = $lot->offsetGet("chance") * Monsters::LOT_RATE;
 			$chance = min($chance, 100000);
 			$chanceStr = "";
 			

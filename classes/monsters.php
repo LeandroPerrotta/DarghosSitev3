@@ -1,8 +1,8 @@
 <?php
-define('LOT_RATE', 5);
-
 class Monsters
 {
+	const LOT_RATE = 1;
+	
 	private $db, $monsterList, $monster, $list;
 	static private $_instance;
 

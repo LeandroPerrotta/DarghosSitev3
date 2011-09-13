@@ -1,8 +1,8 @@
 <?php
-define("DATE_PATTERN_DEFAULT", "d/m/y - H:i");
-
 class CustomDate
 {
+	const DATE_PATTERN_DEFAULT = "d/m/y - H:i";
+	
 	private $_timestamp;
 	
 	public $_month = 0, $_year = 0, $_day = 0, $_min= 0, $_hour = 0, $_sec = 0;
@@ -27,7 +27,7 @@ class CustomDate
 	function getMins(){ return date("i", $this->_timestamp); }
 	function getSecs(){ return date("s", $this->_timestamp); }
 	
-	function getFormated($pattern = DATE_PATTERN_DEFAULT){ return date($pattern, $this->_timestamp); }
+	function getFormated($pattern = self::DATE_PATTERN_DEFAULT){ return date($pattern, $this->_timestamp); }
 
 	function makeDate()
 	{

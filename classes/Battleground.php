@@ -1,13 +1,13 @@
 <?php
-define("BG_KILLS_RATE", 5);
-define("BG_ASSISTS_RATE", 1);
-define("BG_DEATHS_RATE", 6);
-
-define("PVP_TYPE_BATTLEGROUND", 0);
-define("PVP_TYPE_ARENA", 1);
-
 class Battleground
 {
+	const BG_KILLS_RATE = 5;
+	const BG_ASSISTS_RATE = 1;
+	const BG_DEATHS_RATE = 6;
+	
+	const PVP_TYPE_BATTLEGROUND = 0;
+	const PVP_TYPE_ARENA = 1;
+	
 	static function listAll($from, $to)
 	{		
 		$query = Core::$DB->query("
@@ -34,7 +34,7 @@ class Battleground
 					AND
 						`date` <= {$to}
 					AND
-						`type` = ".PVP_TYPE_BATTLEGROUND."
+						`type` = ".self::PVP_TYPE_BATTLEGROUND."
 					GROUP BY 
 						player_id
 				) 
@@ -52,7 +52,7 @@ class Battleground
 					AND
 						`date` <= {$to}		
 					AND
-						`type` = ".PVP_TYPE_BATTLEGROUND."										
+						`type` = ".self::PVP_TYPE_BATTLEGROUND."										
 					GROUP BY 
 						player_id
 				) 
@@ -70,7 +70,7 @@ class Battleground
 					AND
 						`date` <= {$to}	
 					AND
-						`type` = ".PVP_TYPE_BATTLEGROUND."												
+						`type` = ".self::PVP_TYPE_BATTLEGROUND."												
 					GROUP BY 
 						player_id
 				)
@@ -111,7 +111,7 @@ class Battleground
 				);
 			}
 			
-			$rating = (($array[$fetch->player_id]["kills"] * BG_KILLS_RATE) + ($array[$fetch->player_id]["assists"] * BG_ASSISTS_RATE)) - ($array[$fetch->player_id]["deaths"] * BG_DEATHS_RATE);
+			$rating = (($array[$fetch->player_id]["kills"] * self::BG_KILLS_RATE) + ($array[$fetch->player_id]["assists"] * self::BG_ASSISTS_RATE)) - ($array[$fetch->player_id]["deaths"] * self::BG_DEATHS_RATE);
 			
 			$array[$fetch->player_id]["rating"] = ($rating > 0) ? $rating : 0; 
 		}

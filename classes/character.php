@@ -412,7 +412,7 @@ class Character
 		WHERE
 			`is_frag` = '1' AND
 			`player_id` = {$this->getId()} AND
-			`type` = ".PVP_TYPE_BATTLEGROUND."
+			`type` = ".Battleground::PVP_TYPE_BATTLEGROUND."
 		");
 		
 		$fetch = $query->fetch();
@@ -443,7 +443,7 @@ class Character
 			`custom_pvp_kills`
 		WHERE
 			`player_id` = {$this->getId()} AND
-			`type` = ".PVP_TYPE_BATTLEGROUND."
+			`type` = ".Battleground::PVP_TYPE_BATTLEGROUND."
 		");
 		
 		$fetch = $query->fetch();
@@ -524,7 +524,7 @@ class Character
 			`custom_pvp_deaths`
 		WHERE
 			`player_id` = {$this->getId()} AND
-			`type` = ".PVP_TYPE_BATTLEGROUND."
+			`type` = ".Battleground::PVP_TYPE_BATTLEGROUND."
 		");
 		
 		$fetch = $query->fetch();
