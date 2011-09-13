@@ -437,10 +437,10 @@ class OTS_ServerStatus
                     $this->max = $info->getLong();
                     $this->peak = $info->getLong();
                     
-                    if(REMOVE_AFK_FROM_STATUS)
+                    /*if(REMOVE_AFK_FROM_STATUS)
                     {
                     	$this->afk = $info->getLong();
-                    }                    
+                    }*/                 
                     break;
 
                 case self::RESPOND_MAP_INFO:

@@ -84,6 +84,13 @@ class Core
 		}	
 			
 		$array = explode("_", $classname);
+		
+		//pequeno hack anti-POT
+		if($array[0] == "OTS")
+		{
+			return;
+		}		
+		
 		if(count($array) > 1)
 		{
 			$sepCount = count($array);
@@ -106,9 +113,15 @@ class Core
 				require_once($patch);
 				return;
 			}
+			
+			if(file_exists(strtolower($patch)))
+			{
+				require_once(strtolower($patch));
+				return;
+			}			
 		}
 		
-		trigger_error("Não foi possivel carregar classe {$classname} automaticamente.");
+		trigger_error("Não foi possivel carregar classe {$classname} automaticamente.", E_USER_ERROR);
 	}
 	
 	static function InitLanguage()
