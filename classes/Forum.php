@@ -249,6 +249,11 @@ class Forum_Topics
 		return $query->numRows();
 	}
 	
+	static function DeletePost($post_id)
+	{
+		Core::$DB->query("DELETE FROM `".DB_WEBSITE_PREFIX."forum_posts` WHERE `id` = '{$post_id}'");		
+	}	
+	
 	private $_id, $_title, $_topic, $_date, $_authorid, $_deleted, $_isPoll = false, $_isNotice = false;
 	private $_poll_id, $_poll_text, $_poll_topicid, $_poll_enddate, $_poll_flags, $_poll_minlevel, $_poll_ismultiple = false, $_poll_onlypremium = false;
 	private $_poll_options = array();
