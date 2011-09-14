@@ -21,7 +21,7 @@ $db = new MySQL();
 $db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);
 
 //Faz a query e retorna codigo html
-$query = $db->query("SELECT `name` FROM `players` WHERE `name` LIKE '" . $inputValue . "%' LIMIT " . CHARACTERS_AJAX_REQUEST);
+$query = $db->query("SELECT `name` FROM `players` WHERE `name` LIKE '" . $db->escapeString($inputValue) . "%' LIMIT " . CHARACTERS_AJAX_REQUEST);
 if($query && $query->numRows() > 0){
 	while($arr = $query->fetchArray()){
 		echo "<li onclick='fillSearchBox(\"{$arr['name']}\")'>{$arr['name']}</li>";
