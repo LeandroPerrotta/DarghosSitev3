@@ -44,6 +44,11 @@ class HTML_Input
 	function SetName($name)
 	{
 		$this->_name = $name;
+		
+		if($_POST && !Strings::isNull($_POST[$name]))
+		{
+			$this->SetValue($_POST[$name]);
+		}
 	}
 	
 	function SetLenght($length)
