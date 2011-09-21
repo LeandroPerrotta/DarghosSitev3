@@ -18,7 +18,7 @@ else
 /*if($noInjection)
 {*/
 	Strings::filterInputs(true);
-
+	
 	$needLogin = false;
 	$needPremium = false;
 
@@ -326,12 +326,12 @@ else
 				break;		
 
 				case "edit":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;			
 
 				case "ranks":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 
@@ -345,17 +345,17 @@ else
 				break;		
 
 				case "members":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;				
 
 				case "passleadership":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;				
 				
 				case "disband":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;	
 
