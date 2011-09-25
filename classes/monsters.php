@@ -174,6 +174,17 @@ class Monsters
 		
 		for($i = 0; $i < $nodeList->length; $i++)
 		{
+			$attackName = $nodeList->item($i)->getAttribute("name");
+			
+			$validAttacks = array(
+				"melee", "distance", "physical", "drown", "fire"
+				, "energy", "poison", "earth", "ice", "holy", "death"
+				, "lifedrain", "manadrain"
+			);			
+			
+			if(!in_array($attackName, $validAttacks))
+				continue;
+			
 			$attack = new ArrayObject();
 			
 			$value = $nodeList->item($i)->getAttribute("min");
@@ -187,8 +198,7 @@ class Monsters
 			$value = $nodeList->item($i)->getAttribute("interval");
 			if($value)
 				$attack->offsetSet("interval", $value);				
-				
-			$attackName = $nodeList->item($i)->getAttribute("name");
+			
 			if($attackName == "melee")
 			{
 				$meele = new ArrayObject();
