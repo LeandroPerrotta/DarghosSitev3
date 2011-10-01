@@ -1,5 +1,15 @@
 @CHARSET "ISO-8859-1";
 
+.notHasAchiev{
+	color: #7e7e7e;
+	font-size: 9px;
+}
+
+.hasAchiev{
+	font-size: 9px;
+	font-weight: bold;
+}
+
 #new-title-bar{
 	background: #333 url(newlay/images/new_title_bg.jpg) no-repeat;
 	height: 55px;
