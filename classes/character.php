@@ -1,6 +1,24 @@
 <?
 class Character
 {
+	const
+		PH_TYPE_LOG = 1
+		, PH_TYPE_ACHIEVEMENT = 2
+		;
+		
+	const
+		PH_LOG_BATTLEGROUND_WIN = 1
+		, PH_LOG_BATTLEGROUND_LOST = 2
+		, PH_LOG_BATTLEGROUND_DRAW = 3
+		;
+		
+	const
+		PH_ACHIEV_BATTLEGROUND_GET_1500_RATING = 1
+		, PH_ACHIEV_BATTLEGROUND_GET_2000_RATING = 2
+		, PH_ACHIEV_BATTLEGROUND_ISANE_KILLER = 3
+		, PH_ACHIEV_BATTLEGROUND_PERFECT = 4
+		;
+	
 	private $db, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
 	
 	private $site_data = array(
@@ -138,7 +156,7 @@ class Character
 		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, online, skull_time FROM players WHERE id = '".$player_id."'";
 		elseif(SERVER_DISTRO == DISTRO_TFS)
-			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, online, promotion FROM players WHERE id = '".$player_id."'";
+			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, online, promotion, battleground_rating FROM players WHERE id = '".$player_id."'";
 			
 		$query = $this->db->query($query_str);		
 		
@@ -531,6 +549,50 @@ class Character
 		return $fetch->count;			
 	}	
 	
+	function getBattlegroundsWon()
+	{
+		$query = Core::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_WIN."");
+		return $query->numRows();
+	}
+	
+	function getBattlegroundsLose()
+	{
+		$query = Core::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_LOST."");
+		return $query->numRows();
+	}
+	
+	function getBattlegroundsDraw()
+	{
+		$query = Core::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_DRAW."");
+		return $query->numRows();
+	}	
+	
+	function hasAchievement($history)
+	{
+		$query = Core::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_ACHIEVEMENT." AND `history` = {$history}");
+		return $query->numRows() > 0;
+	}
+	
+	function hasAchievBattlegroundRating1500()
+	{
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_GET_1500_RATING);
+	}
+	
+	function hasAchievBattlegroundRating2000()
+	{
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_GET_2000_RATING);
+	}
+	
+	function hasAchievBattlegroundInsaneKiller()
+	{
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_ISANE_KILLER);
+	}
+	
+	function hasAchievBattlegroundPerfect()
+	{
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_PERFECT);
+	}	
+	
 	function set($field, $value)
 	{
 		switch($field)
@@ -660,5 +722,6 @@ class Character
 	function getPosY(){ return $this->data['posy']; }
 	function getPosZ(){	return $this->data['posz'];	}	
 	function getStamina(){ return $this->data['stamina']; }	
+	function getBattlegroundRating() { return $this->data['battleground_rating']; }
 }
 ?>

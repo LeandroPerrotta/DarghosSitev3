@@ -38,6 +38,7 @@ if($_POST["player_name"] || $_GET['name'])
 			<ul>
 				<li name='profile' checked='true'><span>Profile</span></li>
 				<li name='statistics'><span>Estatisticas</span></li>
+				<li name='achievements'><span>Façanhas</span></li>
 				<li name='accounts'><span>Conta</span></li>
 			</ul>
 			<span name='right_corner'></span>
@@ -89,6 +90,10 @@ if($_POST["player_name"] || $_GET['name'])
 				<td><b>Magic Level:</b></td> <td>{$character->getMagicLevel()}</td>
 			</tr>			
 
+			<tr>
+				<td><b>Battleground Rating:</b></td> <td>{$character->getBattlegroundRating()}</td>
+			</tr>			
+			
 			<tr>
 				<td><b>Sexo:</b></td> <td>{$_sexid[$character->getSex()]}</td>
 			</tr>	
@@ -204,7 +209,7 @@ if($_POST["player_name"] || $_GET['name'])
 		}
 		
 		$module .= "
-		<div title='accounts' style='margin: 0px; padding: 0px;'>
+		<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Informaçães da Conta</th>
@@ -258,7 +263,22 @@ if($_POST["player_name"] || $_GET['name'])
 		</div>";
 
 		$module .= "
-		<div title='statistics' style='margin: 0px; padding: 0px;'>
+		<div title='statistics' style='display: none; margin: 0px; padding: 0px;'>
+		<table cellspacing='0' cellpadding='0'>
+			<tr>
+				<th colspan='2'>Battlegrounds</th>
+			</tr>	
+			<tr>
+				<td>Venceu {$character->getBattlegroundsWon()} partidas.</td>
+			</tr>	
+			<tr>
+				<td>Empatou {$character->getBattlegroundsDraw()} partidas.</td>
+			</tr>	
+			<tr>
+				<td>Perdeu {$character->getBattlegroundsLose()} partidas.</td>
+			</tr>
+		</table>		
+		
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
 				<th colspan='2'>Mortes Causadas</th>
@@ -275,7 +295,7 @@ if($_POST["player_name"] || $_GET['name'])
 			<tr>
 				<td>Participou da morte de {$character->getTotalBgAssists()} jogadores em battlegrounds.</td>
 			</tr>
-		</table>	
+		</table>
 
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
@@ -434,12 +454,33 @@ if($_POST["player_name"] || $_GET['name'])
 		}
 		
 		$module .= "
-		</div>";		
+		</div>
+		
+		<div title='achievements' style='display: none; margin: 0px; padding: 0px;'>
+		<table cellspacing='0' cellpadding='0'>
+			<tr>
+				<th colspan='2'>Battlegrounds</th>
+			</tr>	
+			<tr>
+				<td><span class='".($character->hasAchievBattlegroundRating1500() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 1.500 pontos de classificação (rating).</span></td>
+			</tr>	
+			<tr>
+				<td><span class='".($character->hasAchievBattlegroundRating2000() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 2.000 pontos de classificação (rating).</span></td>
+			</tr>
+			<tr>
+				<td><span class='".($character->hasAchievBattlegroundInsaneKiller() ? "hasAchiev" : "notHasAchiev")."'>Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez em uma Battleground.</span></td>
+			</tr>
+			<tr>
+				<td><span class='".($character->hasAchievBattlegroundPerfect() ? "hasAchiev" : "notHasAchiev")."'>Partida Perfeita! Esmagou os oponentes em uma battleground com o magnifico resultado final de 50x0.</span></td>
+			</tr>								
+		</table>		
+		</div>
+		";		
 		
 		if($character->get("hide") == 0)
 		{
 			$module .= "
-			<div title='accounts' style='margin: 0px; padding: 0px;'>
+			<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
 					<th colspan='3'>Outros Personagens</th>

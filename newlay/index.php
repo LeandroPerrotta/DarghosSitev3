@@ -331,9 +331,9 @@
 								<?php 
 								}
 												
-								$result = Battleground::buildRating(Battleground::listAll($start_stamp, $end_stamp));
-	
-								if(count($result) > 0)
+								$result = Battleground::listByBestRating();
+								
+								if($result->numRows() > 0)
 								{
 								?>
 								<li>
@@ -343,14 +343,11 @@
 										$str = "";
 										
 										$pos = 1;
-										foreach($result as $key => $value)
+										while($fetch = $result->fetch())
 										{
-											$size = (strlen($value["name"]) > 15) ? "8px" : "9px";
-											$str .= "<li><a href='?ref=character.view&name={$value["name"]}' style='font-size: {$size}'>{$pos}. {$value["name"]} ({$value["rating"]})</a></li>";
+											$size = (strlen($fetch->name) > 15) ? "8px" : "9px";
+											$str .= "<li><a href='?ref=character.view&name={$fetch->name}' style='font-size: {$size}'>{$pos}. {$fetch->name} ({$fetch->battleground_rating})</a></li>";
 											$pos++;
-											
-											if($pos > 5)
-												break;
 										}
 										
 										echo $str
