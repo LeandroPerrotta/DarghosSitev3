@@ -36,6 +36,7 @@ class Contribute extends MySQL
 		$item->load($YALAHARIAN_SHOP_ID);
 		
 		$item->logItemPurchase($character->getId());
+		return true;
 	}
 	
 	static function formatCost($cost, $toPrint = true)
