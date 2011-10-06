@@ -20,7 +20,7 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 		{
 			$error = Lang::Message(LMSG_CONTR_TERMS);
 		}
-		elseif($premium["onAccept"] && !call_user_func("Contribute::{$premium["onAccept"]}", $contribute, $error))
+		elseif($premium["onAccept"] && !call_user_func("Contribute::{$premium["onAccept"]}", $contribute, &$error))
 		{
 			//
 		}
