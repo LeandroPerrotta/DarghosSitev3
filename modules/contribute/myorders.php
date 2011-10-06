@@ -13,15 +13,18 @@ if(is_array($oders))
 		if($contribute->get("status") == 1)
 			$status = $_contribution['status'][$contribute->get("status")].". <a href='?ref=contribute.accept&id=".$contribute->get("id")."'>[aceitar]</a>";
 		
-		$contrStr = "Contribuição de {$contribute->get("period")} dias de Conta Premium";	
-			
-		$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
-		$promocaoEnd = mktime("0", "0", "0", "1", "15", "2011");
+		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));	
 		
-		if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)
+		$character_name = "";
+		
+		if(is_numeric($contribute->get("target")))
 		{
-			$contrStr = "Contribuição de <span class='cortado'>{$contribute->get("period")}</span> <span class='promocao'>".($contribute->get("period") * 2)."</span> dias de Conta Premium";
-		}	
+			$character = new Character();
+			$character->load($contribute->get("target"));
+			$character_name = $character->getName();
+		}
+		else
+			$character_name = $contribute->get("target");
 			
 		$orderList .= "
 		<tr>
@@ -34,13 +37,13 @@ if(is_array($oders))
 							<td width='30%'><b>Nome</b></td> <td>{$contribute->get("name")}</td>
 						</tr>
 						<tr>
-							<td><b>Personagem</b></td> <td>{$contribute->get("target")}</td>
+							<td><b>Personagem</b></td> <td>{$character_name}</td>
 						</tr>	
 						<tr>
 							<td><b>Forma de Contribuição</b></td> <td>{$contribute->get("type")}</td>
 						</tr>	
 						<tr>
-							<td><b>Periodo</b></td> <td> {$contrStr}</td>
+							<td><b>Descrição</b></td> <td> {$premium["text"]}</td>
 						</tr>
 						<tr>
 							<td><b>Custo</b></td> <td> {$contribute->get("cost")}</td>

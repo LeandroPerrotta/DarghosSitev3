@@ -3,21 +3,13 @@ if($_POST)
 {	
 	$character = new Character();
 	
-	$_paymentMethods = array("PagSeguro");
-	$_paymentPeriods = array(30, 60, 90);
-	
 	$form_OrderName = $_POST["order_name"];
 	$form_OrderMail = $_POST["order_email"];
-	$form_OrderTarget = $_POST["order_target"];
-	$form_OrderType = $_POST["order_type"];
-	
+	$form_OrderTarget = $_POST["order_target"];	
 	$form_OrderDays = $_POST["order_days"];
 	
-	$form_OrderDaysStr = $_POST["order_days"];
-
-	
 	$account = Account::loadLogged();
-	if(!$form_OrderName or !$form_OrderMail or !$form_OrderTarget or !$form_OrderType or !$form_OrderDays)
+	if(!$form_OrderName or !$form_OrderMail or !$form_OrderTarget or !$form_OrderDays)
 	{
 		$error = Lang::Message(LMSG_FILL_FORM);
 	}
@@ -29,7 +21,7 @@ if($_POST)
 	{
 		$error = Lang::Message(LMSG_CHARACTER_WRONG);
 	}
-	elseif(!in_array($form_OrderType, $_paymentMethods) or !in_array($form_OrderDays, $_paymentPeriods))
+	elseif(!Contribute::isValidPeriod($form_OrderDays))
 	{
 		$error = Lang::Message(LMSG_REPORT);
 	}
@@ -37,10 +29,12 @@ if($_POST)
 	{
 		$success = true;
 		
-		foreach($_POST as $value)
-		{
-			$_SESSION['contribute'][] = $value;
-		}
+		$_SESSION['contribute']["order_name"] = $form_OrderName;
+		$_SESSION['contribute']["order_email"] = $form_OrderMail;
+		$_SESSION['contribute']["order_target"] = $form_OrderTarget;
+		$_SESSION['contribute']["order_period"] = $form_OrderDays;
+		
+		$premiumInfos =  Contribute::getPremiumInfoByPeriod($form_OrderDays);
 	
 		$module .= '	
 			<form action="?ref=contribute.confirm" method="post">
@@ -48,7 +42,7 @@ if($_POST)
 					
 					<p><h3>Confirmação do Pedido</h3></p>
 					
-					<p>Analize abaixo se todos dados foram preenchidos corretamente, e se assim for clique no botão Confirmar e você será criado o seu pedido e você será direcionado a uma pagina para anotar o numero de seu pedido e ir ao site do '.$form_OrderType.' para concluir a sua contribuição.</p>
+					<p>Verifique abaixo se todos dados foram preenchidos corretamente, e se assim for clique no botão Confirmar e você será criado o seu pedido e você será direcionado a uma pagina para anotar o numero de seu pedido e ir ao site do '.$form_OrderType.' para concluir a sua contribuição.</p>
 				
 					<p><h3>Informações Pessoais</h3></p>
 					<div id="line1"></div>
@@ -70,16 +64,10 @@ if($_POST)
 						<label for="order_target">Personagem Destino desta Contribuição</label><br />
 						'.$form_OrderTarget.'
 					</p>	
-				
-					<p>
-						<label for="order_target">Forma de Pagamento desta Contribuição</label><br />
-						'.$form_OrderType.'.
-					</p>
 					
 					<p>
-						<label for="order_days">Periodo e valor desta Contribuição</label><br />
-						
-						'.$form_OrderDaysStr.' dias por '.$_contribution[$form_OrderType][$form_OrderDays].'.
+						<label for="order_days">Detalhes da contribuição</label><br />
+						'.$premiumInfos["product"].' por '.Contribute::formatCost($premiumInfos["cost"]).'.
 					</p>
 					
 					<div id="line1"></div>
@@ -127,27 +115,36 @@ $module .= '
 				<label for="order_target">Personagem destino desta Contribuição</label><br />
 				<input name="order_target" size="40" type="text" value="" /> <br><em>(Preencha com o nome de um personagem de sua conta ou o nome do personagem um amigo caso seja um presente por exemplo.)</em>
 			</p>	
-		
-			<p>
-				<label for="order_type">Forma de Pagamento desta Contribuição</label><br />
-				
-				<ul id="pagelist">
-					<li><input name="order_type" type="radio" checked="checked" value="PagSeguro"> PagSeguro <em>(recomendado para pagamentos nacionais como boleto e transferencia eletronica)</em></li>
-				</ul>	
-			</p>
 			
 			<p>
-				<label for="order_days">Periodo desta Contribuição</label><br />
-				
-				<ul id="pagelist">
-					<li><input name="order_days" type="radio" value="30"> 30 dias - R$ 7.50</li>
-					<li><input name="order_days" type="radio" value="60"> 60 dias - R$ 15.00</li>
-					<li><input name="order_days" type="radio" value="90"> 90 dias - R$ 22.50</li>
+				<label for="order_days">Periodo desta Contribuição</label>						
+				<ul style="list-style: none;">
+					';
+
+						foreach(Contribute::$premiums as $k => $premium)
+						{
+							$premium = Contribute::getPremiumInfoByPeriod($premium["period"]);		
+							$module .= "
+							
+								<li style='margin-left: 0px;'>	
+									<label style='margin-left: 6px; display: inline; line-height: 30px;'>					
+										<input style='margin-top: 0px;' name='order_days' type='radio' value='{$premium["period"]}'>
+										<span style='font-size: 12px;'>{$premium["text"]}</span> por
+										<span style='font-weight: bold;'>".Contribute::formatCost($premium["cost"])."</span>	
+									</label>							
+								</li>
+							";
+						}
+					
+					$module .= '
 				</ul>	
 			</p>
 			
 			<h3>Observações IMPORTANTES:</h3>
 			<ul>
+				<li>A promoção do brinde Yalaharian Outfit Ticket é valida apénas para pedidos para conta premium de 180 dias e gerados até 23:59 do dia 15/10.</li>
+				<li>O outfit ticket brinde para o Dia das Criança concede apénas uma unica parte do Outfit ou seus Addon que você não possua, na ordem: Outfit, 1o Addon, 2o Addon.</li>
+				<li>O outfit ticket será recebido no primeiro login do personagem escolhido acima para receber a Conta Premium após esta liberada e aceita.</li>
 				<li>Pagamentos via PagSeguro/Boleto Bancário são liberados apénas após compensar o pagamento (de 1 a 3 dias úteis).</li>
 				<li>Pagamentos via PagSeguro/Transferencia Eletronica são liberados em um prazo de 6 horas.</li>
 				<li><font color="red">Não efetuar depósito na conta informada no boleto, isto invalida o pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>
