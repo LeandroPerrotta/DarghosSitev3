@@ -1,7 +1,4 @@
 <?
-$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
-$promocaoEnd = mktime("0", "0", "0", "1", "15", "2011");
-
 $contribute = new Contribute();
 
 if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status, generated_in") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
@@ -12,6 +9,8 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 		$chkAccount->load($_SESSION['login'][0]);		
 		
 		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));
+		
+		$error = NULL;
 		
 		if(Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
@@ -30,11 +29,7 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 			$account = new Account();
 			$account->load($contribute->get("target_account"));
 			
-			$premdays = $contribute->get("period");
-			
-      if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)			
-			   $premdays = $contribute->get("period") * 2;
-			   
+			$premdays = $contribute->get("period");			   
 			$account->updatePremDays($premdays);
 			
 			$account->save();
