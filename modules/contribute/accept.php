@@ -11,6 +11,8 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 		$chkAccount = new Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
+		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));
+		
 		if(Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
 			$error = Lang::Message(LMSG_WRONG_PASSWORD);
@@ -18,6 +20,10 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 		elseif($_POST["accept_terms"] != "1")
 		{
 			$error = Lang::Message(LMSG_CONTR_TERMS);
+		}
+		elseif($premium["onAccept"] && !call_user_func("Contribute::{$premium["onAccept"]}", $contribute, $error))
+		{
+			//
 		}
 		else
 		{
@@ -79,20 +85,27 @@ IMPORTANTE: Após aceitar o serviço, receber e começar a desfrutar dos benefic
 
 A mudança deste documento pode ser efetuada sem aviso, ou prévio aviso, cabendo a você se manter atualizado as regras e ao contrato.";
 
-$contrStr = "Contribuição de {$contribute->get("period")} dias de Conta Premium"; 
-    
-if($contribute->get("period") > 30 && $contribute->get("generated_in") >= $promocaoStart && $contribute->get("generated_in") < $promocaoEnd)
+$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));
+
+$character_name = "";
+
+if(is_numeric($contribute->get("target")))
 {
-  $contrStr = "Contribuição de <span class='cortado'>{$contribute->get("period")}</span> <span class='promocao'>".($contribute->get("period") * 2)."</span> dias de Conta Premium";
-} 
+	$character = new Character();
+	$character->load($contribute->get("target"));
+	$character_name = $character->getName();
+}
+else
+	$character_name = $contribute->get("target");
+
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 	
 		<ul id="charactersview">
 			<p>Pedido Numero: '.$contribute->get("id").'</p>
-			<li><b>Personagem: </b> '.$contribute->get("target").'.</li>
-			<li><b>Periodo: </b> '.$contrStr.'.</li>
+			<li><b>Personagem: </b> '.$character_name.'.</li>
+			<li><b>Descrição: </b> '.$premium["text"].'.</li>
 			
 		</ul>	
 		

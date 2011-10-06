@@ -5,7 +5,7 @@ if($_SESSION['contribute'])
 	$orderNumber = $contribute->getNewOrderNumber();
 	
 	$character = new Character();
-	$character->loadByName($_SESSION['contribute'][2]);
+	$character->loadByName($_SESSION['contribute']["order_target"]);
 	$target_account = $character->get("account_id");
 	
 	if(!$orderNumber)
@@ -13,12 +13,14 @@ if($_SESSION['contribute'])
 		$error = Lang::Message(LMSG_CONTR_ORDER_NUMBER_DUPLICATED);
 	}
 	
-	$contribute->set("name", $_SESSION['contribute'][0]);
-	$contribute->set("email", $_SESSION['contribute'][1]);
-	$contribute->set("target", $_SESSION['contribute'][2]);
-	$contribute->set("type", $_SESSION['contribute'][3]);
-	$contribute->set("period", $_SESSION['contribute'][4]);
-	$contribute->set("cost", $_contribution[$_SESSION['contribute'][3]][$_SESSION['contribute'][4]]);
+	$premium = Contribute::getPremiumInfoByPeriod($_SESSION['contribute']["order_period"]);
+	
+	$contribute->set("name", $_SESSION['contribute']["order_name"]);
+	$contribute->set("email", $_SESSION['contribute']["order_email"]);
+	$contribute->set("target", $character->getId());
+	$contribute->set("type", Contribute::TYPE_PAGSEGURO);
+	$contribute->set("period", $_SESSION['contribute']["order_period"]);
+	$contribute->set("cost", Contribute::formatCost($premium["cost"]));
 	$contribute->set("server", SERVER_ID);
 	$contribute->set("generated_by", $_SESSION['login'][0]);
 	$contribute->set("generated_in", time());
@@ -27,7 +29,7 @@ if($_SESSION['contribute'])
 	
 	$contribute->save();
 
-	$module = Lang::Message(LMSG_CONTR_ORDER_CREATED, $_SESSION['contribute'][3], $orderNumber, $contribute->sendUrl());
+	$module = Lang::Message(LMSG_CONTR_ORDER_CREATED, $orderNumber, $contribute->sendUrl());
 		
 	unset($_SESSION['contribute']);
 }

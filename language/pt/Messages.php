@@ -239,11 +239,11 @@ class Lang_Messages
 				<p><h3>Pedido Gerado com sucesso!</h3></p>
 				
 				<p>Caro jogador, o seu pedido foi gerado com sucesso! Anote abaixo o numero de seu pedido para consulta ou qualquer eventual problema.</p>
-				<p>Clicando no botão Finalizar abaixo você será direcionado ao site do @v1@ aonde você irá terminar o processo efetuando o pagamento de sua contribuição.</p>
+				<p>Clicando no botão Finalizar abaixo você será direcionado ao site do PagSeguro aonde você irá terminar o processo efetuando o pagamento de sua contribuição.</p>
 				
-				<p>Numero do Pedido de sua Contribuição: <h3>@v2@</h3></p>
+				<p>Numero do Pedido de sua Contribuição: <h3>@v1@</h3></p>
 				
-				<p>@v3@</p>
+				<p>@v2@</p>
 			</fieldset>
 		";		
 

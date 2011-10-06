@@ -1,8 +1,103 @@
 <?
 class Contribute extends MySQL
-{
+{	
+	static public $premiums = array(
+		array("period" => 30, "product" => "Contribuicao para 30 dias de Conta Premium", "text" => "30 dias.", "cost" => 7.50),
+		array("period" => 60, "product" => "Contribuicao para 60 dias de Conta Premium", "text" => "60 dias (2 meses).", "cost" => 15.00),
+		array("period" => 90, "product" => "Contribuicao para 90 dias de Conta Premium", "text" => "90 dias (3 meses).", "cost" => 22.50),
+		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium", "text" => "180 dias (6 meses).", "cost" => 44.90)
+	);
+	
+	static public $premiumsPromotions = array(
+		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium + Outfit Ticket", "text" => "<span class='promocao'>Esp. Dia das Crianças!</span> 180 dias (6 meses) + 1 Ticket para Yalaharian Outfit!", "cost" => 44.90
+			,"start" => "05/10/2011", "end" => "15/10/2011", "onAccept" => "diadascriancas")
+	);
+	
+	const
+		TYPE_PAGSEGURO = "PagSeguro"
+		;
+	
 	private $db, $data = array();
 
+	static function diadascriancas(Contribute $contribute, &$error)
+	{
+		$character = new Character();
+		$character->load($contribute->get("target"));
+		
+		if($character->getOnline())
+		{
+			$error = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
+			return false;
+		}
+		
+		$YALAHARIAN_SHOP_ID = 65;
+		
+		$item = new ItemShop();
+		$item->load($YALAHARIAN_SHOP_ID);
+		
+		$item->logItemPurchase($character->getId());
+	}
+	
+	static function formatCost($cost, $toPrint = true)
+	{
+		$str = "";
+		
+		if($toPrint)
+			$str .= "R$ ";
+			
+		$str .= ($toPrint) ? number_format($cost, 2, ",", ".") : number_format($cost, 2);
+		
+		return $str;
+	}
+	
+	static function getPremiumInfoByPeriod($period)
+	{
+		foreach(self::$premiums as $k => $premium)
+		{
+			if($premium["period"] == $period)
+			{
+				$promotion = self::getPromotion($period);
+				return ($promotion) ? $promotion : $premium;
+			}
+		}		
+		
+		return NULL;
+	}
+	
+	static function getPromotion($period)
+	{
+		foreach(self::$premiumsPromotions as $k => $premium)
+		{
+			if($premium["period"] == $period)
+			{				
+				list($start_day, $start_month, $start_year) = explode("/", $premium["start"]);
+				list($end_day, $end_month, $end_year) = explode("/", $premium["end"]);
+				
+				$now = getdate();
+				
+				if($now["mday"] >= $start_day && $now["mon"] >= $start_month && $now["year"] >= $start_year
+					&& $now["mday"] <= $end_day && $now["mon"] <= $end_month && $now["year"] <= $end_year)	
+				{		
+					return $premium;
+				}
+				else
+					return NULL;
+			}
+				
+		}		
+	}
+	
+	static function isValidPeriod($period)
+	{
+		foreach(self::$premiums as $k => $premium)
+		{
+			if($premium["period"] == $period)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	function __construct()
 	{
 		if(USEREMOTECONNECTIONS == 1)
@@ -227,7 +322,7 @@ class Contribute extends MySQL
 				<input type="hidden" name="no_shipping" value="0">
 				<input type="hidden" name="no_note" value="1">
 				<input type="hidden" name="currency_code" value="'.$price_coin.'">
-				<input type="hidden" name="item_name" value="Contribuição para '.$this->data['period'].' dias de Conta Premium.">
+				<input type="hidden" name="item_name" value="ContribuiÃ§Ã£o para '.$this->data['period'].' dias de Conta Premium.">
 				<input type="hidden" name="amount" value="'.$price_value.'">
 				<input type="hidden" name="on0" value="REF#'.$this->data['id'].'">
 				
@@ -237,17 +332,8 @@ class Contribute extends MySQL
 		}
 		elseif($this->data['type'] == "PagSeguro")*/
 		if($this->data['type'] == "PagSeguro")
-		{
-			$promocaoStart = mktime("0", "0", "0", "12", "14", "2010");
-			$promocaoEnd = mktime("0", "0", "0", "1", "15", "2011");			
-			
-			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
-			$price_value = str_replace(",", ".", $price[1]);			
-			
-			$periodStr = $this->data['period'];
-			
-			if($this->data['period'] > 30 && $this->data["generated_in"] >= $promocaoStart && $this->data["generated_in"] < $promocaoEnd)
-			 $periodStr = "{$this->data['period']} - em promocao: ".($this->data['period'] * 2)." - ";
+		{			
+			$premium = self::getPremiumInfoByPeriod($this->data['period']);
 			
 			$form = '
 				<form target="pagseguro" action="'.CONTRIBUTE_PAGSEGUROURL.'" method="post">
@@ -256,9 +342,9 @@ class Contribute extends MySQL
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="ref_transacao" value="'.$this->data['id'].'">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="Contribuicao para '.$periodStr.' dias de Conta Premium. (ref: '.$this->data['id'].')">
+				<input type="hidden" name="item_descr_1" value="'.$premium["product"].'. (ref: '.$this->data['id'].')">
 				<input type="hidden" name="item_quant_1" value="1">
-				<input type="hidden" name="item_valor_1" value="'.$price_value.'">
+				<input type="hidden" name="item_valor_1" value="'.self::formatCost($premium["cost"], false).'">
 				<input type="hidden" name="item_frete_1" value="000">
 				
 				<input class="button" type="submit" value="Finalizar" />	
