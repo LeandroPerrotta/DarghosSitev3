@@ -186,6 +186,8 @@ if($_POST["player_name"] || $_GET['name'])
 				$alreadyIsPremiumHTML .= " ({$numberOfPremiums}x)";
 			}
 			
+			$character->loadSkills();
+			
 			$module .= "
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
@@ -210,8 +212,23 @@ if($_POST["player_name"] || $_GET['name'])
 					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
 				</tr>
 				<tr>
-					<td><b>Player ID</b></td><td>x:{$character->getId()}</td>
-				</tr>				
+					<td><b>Player ID</b></td><td>{$character->getId()}</td>
+				</tr>	
+				<tr>
+					<td><b>Skill sword</b></td><td>{$character->getSkill($_skill['sword'])}</td>
+				</tr>
+				<tr>
+					<td><b>Skill axe</b></td><td>{$character->getSkill($_skill['axe'])}</td>
+				</tr>										
+				<tr>
+					<td><b>Skill club</b></td><td>{$character->getSkill($_skill['club'])}</td>
+				</tr>										
+				<tr>
+					<td><b>Skill shield</b></td><td>{$character->getSkill($_skill['shield'])}</td>
+				</tr>										
+				<tr>
+					<td><b>Skill distance</b></td><td>{$character->getSkill($_skill['distance'])}</td>
+				</tr>										
 			</table>														
 				";			
 		}
