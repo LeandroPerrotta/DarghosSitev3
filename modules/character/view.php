@@ -21,6 +21,7 @@ if($_POST["player_name"] || $_GET['name'])
 		
 		$houseid = $character->getHouse();
 		$lastlogin = ($character->getLastLogin()) ? Core::formatDate($character->getLastLogin()) : "Nunca entrou.";
+		$creation = Core::formatDate($character->getCreation());
 		
 		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
 		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "não configurado";
@@ -142,13 +143,17 @@ if($_POST["player_name"] || $_GET['name'])
 				</tr>";					
 			}
 			
-			$module .= "
+			$module .= "			
+			<tr>
+				<td><b>Criado em:</b></td> <td>{$creation}</td>
+			</tr>	
+
 			<tr>
 				<td><b>Último Login:</b></td> <td>{$lastlogin}</td>
-			</tr>	
+			</tr>			
 			
 		</table>
-		</div>";
+		";
 
 		$_gmAcc = new Account();
 		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == GROUP_ADMINISTRATOR)
@@ -204,11 +209,15 @@ if($_POST["player_name"] || $_GET['name'])
 				<tr>
 					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
 				</tr>
+				<tr>
+					<td><b>Player ID</b></td><td>x:{$character->getId()}</td>
+				</tr>				
 			</table>														
 				";			
 		}
 		
 		$module .= "
+		</div>
 		<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
