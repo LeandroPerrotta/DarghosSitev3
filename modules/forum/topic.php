@@ -405,7 +405,7 @@ class View
 				
 				$optVotes = null;
 				
-				if(time() > $this->topic->GetPollEnd() || $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+				if(time() > $this->topic->GetPollEnd() || ($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER))
 					$optVotes = " - {$option["votes"]} voto(s) ou ".round(($option["votes"] / $this->topic->GetTotalVotes()) * 100, 2)."%";
 					
 				$optString .= "{$field->Draw()} {$option["option"]} {$optVotes}<br>";
