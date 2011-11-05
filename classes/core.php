@@ -179,6 +179,11 @@ class Core
 	
 	static function requireLogin()
 	{
+		if($_POST)
+		{
+			$_SESSION["login_post"] = $_POST;
+		}
+		
 		$_SESSION["login_redirect"] = $_SERVER["REQUEST_URI"];
 		Core::redirect("?ref=account.login");
 	}
@@ -231,6 +236,11 @@ class Core
 		$fetch = $query->fetch();
 		
 		return $fetch->date;
+	}
+	
+	static function isLogged()
+	{
+		return $_SESSION["login"];
 	}
 	
 	static function sendMessageBox($title, $msg)

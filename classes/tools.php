@@ -154,6 +154,11 @@ class t_ForumBans
 
 class Tools
 {		
+	static function hasFlag($value, $flag)
+	{
+		return ($value & $flag);
+	}
+	
 	function getBanReason($reason_id)
 	{
 		switch($reason_id)

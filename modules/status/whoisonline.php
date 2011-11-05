@@ -37,6 +37,8 @@ else
 	if($_isadmin)
 	{
 		$_premiums = 0;
+		$levelSum = 0;
+		$spoofPlayers = 0;
 	}
 	
 	if(SERVER_DISTRO == DISTRO_TFS)
@@ -49,6 +51,7 @@ else
 			account_id, 
 			promotion,
 			afk
+			,`is_spoof`
 		FROM 
 			`players`
 		WHERE
@@ -67,7 +70,6 @@ else
 	
 	$_islandofpeace = 0;
 	$_quendor = 0;
-	$_thorn = 0;
 	$_aaragon = 0;
 	$_salazart = 0;
 	$_northrend = 0;
@@ -95,47 +97,81 @@ else
 				$playersonmsg .= " Destes, nenhum está treinando.";
 			elseif($_afkPlayers > 1)
 				$playersonmsg .= " Destes, {$_afkPlayers} estão treinando.";
-		}
+		}			
 
 		while($fetch = $query->fetch())
-		{			
-			if(Tools::isSorcerer($fetch->vocation))
-				$_sorcerers++;
-			elseif(Tools::isDruid($fetch->vocation))
-				$_druids++;				
-			elseif(Tools::isPaladin($fetch->vocation))
-				$_paladins++;				
-			else
-				$_knights++;	
-				
+		{							
 			$town = $_townid[$fetch->town_id];
-			
-			if($town["name"] == "Island of Peace")
-				$_islandofpeace++;
-			elseif($town["name"] == "Quendor")
-				$_quendor++;
-			elseif($town["name"] == "Thorn")
-				$_thorn++;
-			elseif($town["name"] == "Aaragon")
-				$_aaragon++;
-			elseif($town["name"] == "Salazart")
-				$_salazart++;
-			elseif($town["name"] == "Northrend")
-				$_northrend++;
-			elseif($town["name"] == "Kashmir")
-				$_kashmir++;
-			elseif($town["name"] == "Aracura")
-				$_aracura++;
 
 			$_characc = new Account();
-			$_characc->load($fetch->account_id);				
+			$_characc->load($fetch->account_id);		
+
+			$spoofStyle = "";
 				
 			if($_isadmin)
-			{
+			{						
+				if($fetch->is_spoof == 1)
+				{
+					$spoofPlayers++;
+					$spoofStyle = "style='font-weight: normal;'";						
+				}
+				else
+				{
+					$levelSum += $fetch->level;
+					
+					if($_characc->getPremDays() > 0)
+						$_premiums++;
+						
+					if($town["name"] == "Island of Peace")
+						$_islandofpeace++;
+					elseif($town["name"] == "Quendor")
+						$_quendor++;
+					elseif($town["name"] == "Aaragon")
+						$_aaragon++;
+					elseif($town["name"] == "Salazart")
+						$_salazart++;
+					elseif($town["name"] == "Northrend")
+						$_northrend++;
+					elseif($town["name"] == "Kashmir")
+						$_kashmir++;
+					elseif($town["name"] == "Aracura")
+						$_aracura++;		
 
-				
-				if($_characc->getPremDays() > 0)
-					$_premiums++;
+					if(Tools::isSorcerer($fetch->vocation))
+						$_sorcerers++;
+					elseif(Tools::isDruid($fetch->vocation))
+						$_druids++;				
+					elseif(Tools::isPaladin($fetch->vocation))
+						$_paladins++;				
+					else
+						$_knights++;							
+				}
+			}
+			else
+			{
+				if(Tools::isSorcerer($fetch->vocation))
+					$_sorcerers++;
+				elseif(Tools::isDruid($fetch->vocation))
+					$_druids++;				
+				elseif(Tools::isPaladin($fetch->vocation))
+					$_paladins++;				
+				else
+					$_knights++;	
+
+				if($town["name"] == "Island of Peace")
+					$_islandofpeace++;
+				elseif($town["name"] == "Quendor")
+					$_quendor++;
+				elseif($town["name"] == "Aaragon")
+					$_aaragon++;
+				elseif($town["name"] == "Salazart")
+					$_salazart++;
+				elseif($town["name"] == "Northrend")
+					$_northrend++;
+				elseif($town["name"] == "Kashmir")
+					$_kashmir++;
+				elseif($town["name"] == "Aracura")
+					$_aracura++;					
 			}
 			
 			$isAfk = $fetch->afk;
@@ -151,13 +187,20 @@ else
 			
 			$players_list .= "
 			<tr>
-				<td><a ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$vocation_id]}</td> <td>{$fetch->level}</td>
+				<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$vocation_id]}</td> <td>{$fetch->level}</td>
 			</tr>";		
 		}			
 	}
 	
 	if($_totalplayers > 0)
 	{
+		if($_isadmin)
+		{
+			$_totalplayers -= $spoofPlayers;
+			$playersonmsg .= " ({$_totalplayers} / {$spoofPlayers})";
+			
+		}	
+		
 		$module .= "
 		<tr>
 			<td colspan='4'>{$playersonmsg}</td>
@@ -179,24 +222,29 @@ else
 			<td>Quendor:</td><td>".Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Thorn:</td><td>".Tools::getPercentOf($_thorn, $_totalplayers)."%</td><td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
+			<td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
+			<td>Aaragon:</td><td>".Tools::getPercentOf($_aaragon, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Aaragon:</td><td>".Tools::getPercentOf($_aaragon, $_totalplayers)."%</td><td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
+			<td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
+			<td>Northrend:</td><td>".Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Northrend:</td><td>".Tools::getPercentOf($_northrend, $_totalplayers)."%</td><td>Kashmir:</td><td>".Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
+			<td>Kashmir:</td><td>".Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
 		</tr>";
 		
 		if($_isadmin)
 		{
 			$module .= "
 			<tr>
-				<td colspan='4'><b>Destes, são:</b></td>
+				<td colspan='4'><b>Estatisticas:</b></td>
 			</tr>
 			<tr>
 				<td>Free Account's:</td><td>".Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
 			</tr>		
+			<tr>
+				<td colspan='2'>Level médio:</td><td colspan='2'>".(ceil($levelSum / $_totalplayers))."</td>
+			</tr>			
 			";
 		}
 	}

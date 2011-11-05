@@ -12,6 +12,7 @@ define("GROUP_ADMINISTRATOR", 		7);
 class Account
 {
 	private $db; 
+	private static $logged;
 	
 	private $data = array(
 /*		'id' => '',
@@ -33,16 +34,17 @@ class Account
 	
 	static function loadLogged()
 	{
-		if(!$_SESSION["login"])
+		if(!Core::isLogged())
 			return false;
 			
-		$account = new Account();
-		$logged = $account->load($_SESSION['login'][0]);
-
-		if(!$logged)
-			return false;
+		if(!self::$logged)
+		{
+			self::$logged = new Account();			
+			if(!self::$logged->load($_SESSION['login'][0]))
+				return false;			
+		}
 			
-		return $account;
+		return self::$logged;
 	}	
 	
 	function __construct()
@@ -256,7 +258,7 @@ class Account
 		}
 		elseif(SERVER_DISTRO == DISTRO_TFS)
 		{
-			return ($this->getPremDays() > 0) ? time() + ($this->getPremDays() * 60 * 60 * 24) : 0;
+			return ($this->getPremDays() > 0) ? ceil(time() + ($this->getPremDays() * 60 * 60 * 24)) : 0;
 		}
 	}
 	
@@ -300,7 +302,7 @@ class Account
 		{
 			$pastDays = (time() - $this->data['lastday']) / 60 / 60 / 24;
 			$newDays = $this->data['premdays'] - $pastDays;	
-			return ($newDays > 0 ? $newDays : 0);
+			return ($newDays > 0 ? ceil($newDays) : 0);
 		}
 		elseif(SERVER_DISTRO == DISTRO_OPENTIBIA)
 		{

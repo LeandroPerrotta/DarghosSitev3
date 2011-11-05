@@ -291,7 +291,7 @@ class View
 						<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
 					</tr>";
 				}
-			}
+			}			
 			else
 			{
 				$warPage .= "

@@ -33,6 +33,7 @@ else
 {			
 	
 	include "classes/core.php";
+	include "classes/Enums.php";
 
 	spl_autoload_register("Core::autoLoad");
 	
@@ -95,6 +96,12 @@ else
 	
 	Core::InitLanguage();
 	Emails::init();
+	
+	if(!$_SESSION["login_redirect"] && $_SESSION["login_post"])
+	{
+		$_POST = $_SESSION["login_post"];
+		unset($_SESSION["login_post"]);
+	}
 	
 	include "modules.php";
 	include "{$layoutDir}index.php";
