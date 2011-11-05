@@ -247,7 +247,7 @@ class Menus
 	{			
 		$result = Battleground::listByBestRating();
 
-		if($result->numRows() > 0)
+		if($result->numRows() == 0)
 			return false;
 			
 		$ul = $xml->addChild("ul");
