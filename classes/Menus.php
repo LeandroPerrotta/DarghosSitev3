@@ -79,7 +79,7 @@ class Menus
 				,array("name" => "Casas", "url" => "?ref=community.houses")
 				,array("name" => "Mortes Recentes", "url" => "?ref=community.lastdeaths")			
 				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
-				,array("name" => "Quem está online?", "url" => "?ref=community.whoisonline")			
+				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline")			
 			)		
 		)		
 		,array(
