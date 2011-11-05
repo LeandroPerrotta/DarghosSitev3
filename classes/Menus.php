@@ -247,26 +247,23 @@ class Menus
 	{			
 		$result = Battleground::listByBestRating();
 
-		if(count($result) == 0)
+		if($result->numRows() > 0)
 			return false;
 			
 		$ul = $xml->addChild("ul");
 		$ul->addAttribute("class", "always_viewable");	
 
 		$pos = 1;
-		foreach($result as $key => $value)
+		while($fetch = $result->fetch())
 		{
-			$size = (strlen($value["name"]) > 15) ? "8px" : "9px";
+			$size = (strlen($fetch->name) > 15) ? "8px" : "9px";
 			
 			$li = $ul->addChild("li");
-			$a = $li->addChild("a", "{$pos}. {$value["name"]} ({$value["rating"]})");
-			$a->addAttribute("href", "?ref=character.view&name={$value["name"]}");
-			$a->addAttribute("style", "font-size: {$size}");
+			$a = $li->addChild("a", "{$pos}. {$fetch->name} ({$fetch->battleground_rating})");
+			$a->addAttribute("href", "?ref=character.view&name={$fetch->name}");
+			$a->addAttribute("style", "font-size: {$size}");			
 			
 			$pos++;
-			
-			if($pos > 5)
-				break;
 		}		
 		
 		return true;
