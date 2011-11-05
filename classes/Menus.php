@@ -244,23 +244,8 @@ class Menus
 	}
 	
 	static function drawTopBgRating(SimpleXMLElement &$xml)
-	{
-		$today = new CustomDate();	
-		$end_day = null;
-		
-		if($today->getHour() > 15) $end_day = $today->getDay();
-		else $end_day = $today->getDay() - 1;
-		
-		$start_day = $end_day - 1;
-										
-		$make_stamp = new CustomDate(); $make_stamp->_hour = 15; $make_stamp->_month = $today->getMonth(); $make_stamp->_day = $start_day; $make_stamp->_year = $today->getYear();
-		
-		$start_stamp = $make_stamp->makeDate();		
-		
-		$make_stamp->_day = $end_day;
-		
-		$end_stamp = $make_stamp->makeDate();				
-		$result = Battleground::buildRating(Battleground::listAll($start_stamp, $end_stamp));
+	{			
+		$result = Battleground::listByBestRating();
 
 		if(count($result) == 0)
 			return false;

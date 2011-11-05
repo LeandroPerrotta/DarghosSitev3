@@ -258,7 +258,7 @@ class Account
 		}
 		elseif(SERVER_DISTRO == DISTRO_TFS)
 		{
-			return ($this->getPremDays() > 0) ? ceil(time() + ($this->getPremDays() * 60 * 60 * 24)) : 0;
+			return ($this->getPremDays() > 0) ? time() + ceil($this->getPremDays() * 60 * 60 * 24) : 0;
 		}
 	}
 	
