@@ -67,9 +67,9 @@ $module .= '
 			<p>		
 				<label for="skill">Tipo de PvP</label><br />
 				<select name="pvp">
-					<option '.(($pvp == "both") ? 'selected' : null).' value="both">Todos</option>
-					<option '.(($pvp == "enabled") ? 'selected' : null).' value="enabled">Agressivos apénas</option>
-					<option '.(($pvp == "disabled") ? 'selected' : null).' value="disabled">Pacificos apénas</option>
+					<option '.(($filter_pvp == "both") ? 'selected' : null).' value="both">Todos</option>
+					<option '.(($filter_pvp == "enabled") ? 'selected' : null).' value="enabled">Agressivos apénas</option>
+					<option '.(($filter_pvp == "disabled") ? 'selected' : null).' value="disabled">Pacificos apénas</option>
 				</select>
 			</p>';	
 		}
@@ -124,9 +124,9 @@ if($skill == "experience" or $skill == "maglevel")
 	
 	if(ENABLE_PVP_SWITCH)
 	{
-		if($pvp == "enabled")
+		if($filter_pvp == "enabled")
 			$query_str = " AND `pvpEnabled` = 1";
-		elseif($pvp == "disabled")
+		elseif($filter_pvp == "disabled")
 			$query_str = " AND `pvpEnabled` = 0";
 	}
 	
@@ -146,9 +146,9 @@ else
 	$pvp_str = "";
 	if(ENABLE_PVP_SWITCH)
 	{
-		if($pvp == "enabled")
+		if($filter_pvp == "enabled")
 			$pvp_str = " AND `player`.`pvpEnabled` = 1";
-		elseif($pvp == "disabled")
+		elseif($filter_pvp == "disabled")
 			$pvp_str = " AND `player`.`pvpEnabled` = 0";
 	}	
 	
