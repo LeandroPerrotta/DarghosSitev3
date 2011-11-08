@@ -124,9 +124,9 @@ if($skill == "experience" or $skill == "maglevel")
 	if(ENABLE_PVP_SWITCH)
 	{
 		if($filter_pvp == "enabled")
-			$query_str = " AND `pvpEnabled` = 1";
+			$query_str .= " AND `pvpEnabled` = 1";
 		elseif($filter_pvp == "disabled")
-			$query_str = " AND `pvpEnabled` = 0";
+			$query_str .= " AND `pvpEnabled` = 0";
 	}
 	
 	$query_str .= "
