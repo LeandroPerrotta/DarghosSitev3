@@ -24,14 +24,14 @@ if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS > 0)
 	$filter_showInactivePlayers = ($_COOKIE['showInactivePlayers'] == 1) ? true : false;
 }
 
+if(ENABLE_PVP_SWITCH) $pvp = isset($_GET['pvp']) ? $_GET['pvp'] : "both";
+
 if(isset($_POST['skill']))
 {
 	Core::redirect("?ref=community.highscores&skill={$_POST['skill']}");
 }
 
 $skill = isset($_GET['skill']) ? $_GET['skill'] : "experience";
-if(ENABLE_PVP_SWITCH) $pvp = isset($_GET['pvp']) ? $_GET['pvp'] : "both";
-
 
 if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0 && !$filter_showInactivePlayers)
 {
