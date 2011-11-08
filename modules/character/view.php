@@ -87,6 +87,19 @@ if($_POST["player_name"] || $_GET['name'])
 				<td><b>Level:</b></td> <td>{$character->getLevel()}</td>
 			</tr>	
 			
+			";
+			
+			if(ENABLE_PVP_SWITCH)
+			{
+				$pvp_str = $character->isPvpEnabled() ? "<span style='colo: #c12424'><strong>Agressivo</strong></span>" : "<span style='color: #158f9a'>Pacifico</span>";
+				
+				$module .= "
+				<tr>
+					<td><b>PvP:</b></td> <td>{$pvp_str}</td>
+				</tr>";			
+			}
+			
+			$module .= "
 			<tr>
 				<td><b>Magic Level:</b></td> <td>{$character->getMagicLevel()}</td>
 			</tr>			

@@ -4,47 +4,43 @@ $filter_onlyOnIOP = false;
 if(ENABLE_REBORN_SYSTEM)
 	$filter_hideRebornPlayers = false;
 	
-$filter_inactivePlayers = false;
-
-if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
-	$filter_inactivePlayers = true;
-
 if($_GET["p"] && $_GET["p"] > 24)
 	$_GET["p"] = 24;
-	
+
+($_POST['show_onlyPeacers'] == 1) ? setCookie("filter_onlyOnIOP", 1) : setCookie("filter_onlyOnIOP", 0);
+($_COOKIE['filter_onlyOnIOP'] == 1) ? $filter_onlyOnIOP = true : null;
+
+if(ENABLE_REBORN_SYSTEM)
+{
+	($_POST['hide_rebornPlayers'] == 1) ? setCookie("filter_hideRebornPlayers", 1) : setCookie("filter_hideRebornPlayers", 0);
+	($_COOKIE['filter_hideRebornPlayers'] == 1) ? $filter_hideRebornPlayers = true : null;
+}
+
+$filter_showInactivePlayers = true;
+
+if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS > 0)
+{		
+	($_POST['show_inactivePlayers'] == 1) ? setCookie("showInactivePlayers", 1) : setCookie("showInactivePlayers", 0);
+	$filter_showInactivePlayers = ($_COOKIE['showInactivePlayers'] == 1) ? true : false;
+}
 
 if(isset($_POST['skill']))
 {
 	Core::redirect("?ref=community.highscores&skill={$_POST['skill']}");
 }
 
-($_POST['show_onlyPeacers'] == 1) ? setCookie("filter_onlyOnIOP", 1) : setCookie("filter_onlyOnIOP", 0);
+$skill = isset($_GET['skill']) ? $_GET['skill'] : "experience";
+if(ENABLE_PVP_SWITCH) $pvp = isset($_GET['pvp']) ? $_GET['pvp'] : "both";
 
-if(ENABLE_REBORN_SYSTEM)
-	($_POST['hide_rebornPlayers'] == 1) ? setCookie("filter_hideRebornPlayers", 1) : setCookie("filter_hideRebornPlayers", 0);
 
-($_COOKIE['filter_onlyOnIOP'] == 1) ? $filter_onlyOnIOP = true : null;
-
-if(ENABLE_REBORN_SYSTEM)
-	($_COOKIE['filter_hideRebornPlayers'] == 1) ? $filter_hideRebornPlayers = true : null;
-
-if(isset($_GET['skill']))
-{	
-	$skill = $_GET['skill'];	
-}
-else
-{
-	$skill = "experience";
-}
-
-if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
+if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0 && !$filter_showInactivePlayers)
 {
 	$module .= '
 	<p> <b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos ' .HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS. ' dias.';
 }
 
 $module .= '
-<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="POST">
 	<fieldset>
 		<p>		
 			<label for="skill">Tipo de Habilidade</label><br />
@@ -59,12 +55,35 @@ $module .= '
 				<option '.(($skill == "distance") ? 'selected' : null).' value="distance">Pontaria à Distancia</option>
 				<option '.(($skill == "fishing") ? 'selected' : null).' value="fishing">Habilidade de Pesca</option>
 			</select>
-		</p>	
+		</p>';
 
+		if(ENABLE_PVP_SWITCH)
+		{
+			$module .= '
+			<p>		
+				<label for="skill">Tipo de PvP</label><br />
+				<select name="pvp">
+					<option '.(($pvp == "both") ? 'selected' : null).' value="both">Todos</option>
+					<option '.(($pvp == "enabled") ? 'selected' : null).' value="enabled">Agressivos apénas</option>
+					<option '.(($pvp == "disabled") ? 'selected' : null).' value="disabled">Pacificos apénas</option>
+				</select>
+			</p>';	
+		}
+
+		$module .= '
 		<p>		
 			<label for="filter">Filtros</label><br />
 			<input '.(($filter_onlyOnIOP) ? 'checked="checked"' : null).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace. <br>
-			'.((ENABLE_REBORN_SYSTEM) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hide_rebornPlayers" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).' :  '').'
+			'.((ENABLE_REBORN_SYSTEM) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hide_rebornPlayers" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).' :  '');
+			
+			if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS > 0)
+			{
+				$check = ($filter_showInactivePlayers) ? 'checked="checked"' : '';
+				
+				$module .= '<input type="checkbox" name="show_inactivePlayers" '.$check.' value="1" /> Exibir mesmo os personagens inativos.';
+			}
+			
+			$module .= '
 		</p>		
 		
 		<div id="line1"></div>
@@ -83,21 +102,52 @@ if($_GET["p"])
 $start = $page * 20;
 
 if($skill == "experience" or $skill == "maglevel")
-{
-	$query = $db->query("
-		SELECT 
-			id 
-		FROM 
-			players 
-		WHERE 
-			".(($filter_onlyOnIOP) ? 
-				"town_id = 6 AND" : null)."
-			".(($filter_inactivePlayers) ? 
-				" lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." AND " : null)."
-			group_id < 3 ORDER BY ".((ENABLE_REBORN_SYSTEM && !$filter_hideRebornPlayers && $skill == "experience") ? "reborn_level DESC," : null)." {$skill} DESC LIMIT {$start}, 20");
+{	
+	$query_str = "
+	SELECT 
+		`id` 
+	FROM 
+		`players` 
+	WHERE 	
+		group_id < 3 
+	";
+	
+	if($filter_onlyOnIOP)
+		$query_str .= " AND `town_id` = 6";
+		
+	if(!$filter_showInactivePlayers)
+		$query_str .= " AND `lastlogin` > UNIX_TIMESTAMP() - (". HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS. " * 60 * 60 * 24)";
+	
+	if(ENABLE_PVP_SWITCH)
+	{
+		if($pvp == "enabled")
+			$query_str = " AND `pvpEnabled` = 1";
+		elseif($pvp == "disabled")
+			$query_str = " AND `pvpEnabled` = 0";
+	}
+	
+	$query_str .= "
+	ORDER BY 
+		";
+	
+	if(ENABLE_REBORN_SYSTEM && !$filter_hideRebornPlayers && $skill == "experience")
+		$query_str .= "reborn_level DESC, ";
+		
+	$query_str .= "{$skill} DESC LIMIT {$start}, 20";
+		
+	$query = Core::$DB->query($query_str);
 }
 else
 {
+	$pvp_str = "";
+	if(ENABLE_PVP_SWITCH)
+	{
+		if($pvp == "enabled")
+			$pvp_str = " AND `player`.`pvpEnabled` = 1";
+		elseif($pvp == "disabled")
+			$pvp_str = " AND `player`.`pvpEnabled` = 0";
+	}	
+	
 	$skillid = $_skill[$skill];
 	$query = $db->query("
 		SELECT 
@@ -107,9 +157,10 @@ else
 		WHERE 
 			".(($filter_onlyOnIOP) ? 
 				"player.town_id = 6 AND" : null)."
-			".(($filter_inactivePlayers) ? 
+			".((!$filter_showInactivePlayers) ? 
 				"player.lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." AND " : null)."				
 			player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3
+			{$pvp_str}
 		ORDER BY 
 			skill.value DESC 
 		LIMIT 

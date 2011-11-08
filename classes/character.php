@@ -156,7 +156,14 @@ class Character
 		if(SERVER_DISTRO == DISTRO_OPENTIBIA)
 			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, online, skull_time FROM players WHERE id = '".$player_id."'";
 		elseif(SERVER_DISTRO == DISTRO_TFS)
-			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, online, promotion, battleground_rating FROM players WHERE id = '".$player_id."'";
+		{
+			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, online, promotion, battleground_rating";
+		
+			if(ENABLE_PVP_SWITCH)
+				$query_str .= ", pvpEnabled";
+			
+			$query_str .= " FROM players WHERE id = '{$player_id}'";
+		}
 			
 		$query = $this->db->query($query_str);		
 		
@@ -723,5 +730,6 @@ class Character
 	function getPosZ(){	return $this->data['posz'];	}	
 	function getStamina(){ return $this->data['stamina']; }	
 	function getBattlegroundRating() { return $this->data['battleground_rating']; }
+	function isPvpEnabled() { return (bool)$this->data['pvpEnabled']; }
 }
 ?>
