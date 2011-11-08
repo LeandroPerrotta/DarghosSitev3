@@ -113,8 +113,7 @@ if($skill == "experience" or $skill == "maglevel")
 	FROM 
 		`players` 
 	WHERE 	
-		group_id < 3 
-	";
+		group_id < 3";
 	
 	if($filter_onlyOnIOP)
 		$query_str .= " AND `town_id` = 6";
@@ -135,9 +134,9 @@ if($skill == "experience" or $skill == "maglevel")
 		";
 	
 	if(ENABLE_REBORN_SYSTEM && !$filter_hideRebornPlayers && $skill == "experience")
-		$query_str .= "reborn_level DESC, ";
+		$query_str .= "`reborn_level` DESC, ";
 		
-	$query_str .= "{$skill} DESC LIMIT {$start}, 20";
+	$query_str .= "`{$skill}` DESC LIMIT {$start}, 20";
 		
 	$query = Core::$DB->query($query_str);
 }
