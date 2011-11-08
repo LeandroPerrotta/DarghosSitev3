@@ -24,7 +24,11 @@ if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS > 0)
 	$filter_showInactivePlayers = ($_COOKIE['showInactivePlayers'] == 1) ? true : false;
 }
 
-if(ENABLE_PVP_SWITCH) $pvp = isset($_GET['pvp']) ? $_GET['pvp'] : "both";
+if(ENABLE_PVP_SWITCH)
+{	
+	if($_POST['pvp']) setCookie("filter_pvp", $_POST['pvp']);
+	$filter_pvp = ($_COOKIE['filter_pvp']) ? $_COOKIE['filter_pvp'] : "both";
+}
 
 if(isset($_POST['skill']))
 {
