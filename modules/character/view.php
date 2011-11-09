@@ -91,7 +91,7 @@ if($_POST["player_name"] || $_GET['name'])
 			
 			if(ENABLE_PVP_SWITCH)
 			{
-				$pvp_str = $character->isPvpEnabled() ? "<span style='color: #c12424'><strong>Agressivo</strong></span>" : "<span style='color: #00c5d7'><strong>Pacifico</strong></span>";
+				$pvp_str = $character->isPvpEnabled() ? "<span class='pvpEnabled'>Agressivo</span>" : "<span class='pvpDisabled'>Pacifico</span>";
 				
 				$module .= "
 				<tr>

@@ -52,6 +52,7 @@ else
 			promotion,
 			afk
 			,`is_spoof`
+			,`pvpEnabled`
 		FROM 
 			`players`
 		WHERE
@@ -62,6 +63,9 @@ else
 	
 	$_totalplayers = $stats_fetch->players + $stats_fetch->afk;
 	$_afkPlayers = $stats_fetch->afk;
+	
+	$_pvp_enabled = 0;
+	$_pvp_disabled = 0;
 	
 	$_sorcerers = 0;	
 	$_druids = 0;	
@@ -122,6 +126,11 @@ else
 					if($_characc->getPremDays() > 0)
 						$_premiums++;
 						
+					if($fetch->pvpEnabled)
+						$_pvp_enabled++;
+					else
+						$_pvp_disabled++;						
+						
 					if($town["name"] == "Island of Peace")
 						$_islandofpeace++;
 					elseif($town["name"] == "Quendor")
@@ -148,7 +157,7 @@ else
 				}
 			}
 			else
-			{
+			{				
 				if(Tools::isSorcerer($fetch->vocation))
 					$_sorcerers++;
 				elseif(Tools::isDruid($fetch->vocation))
@@ -183,11 +192,14 @@ else
 				$vocation_id += 4;
 			}
 			
-			//var_dump($isAfk);
+			$pvpStr = "<span class='pvpEnabled'>Agressivo</span> (aberto)";
+			
+			if(!$fetch->pvpEnabled)
+				$pvpStr = "<span class='pvpDisabled'>Pacifico</span> (fechado)";	
 			
 			$players_list .= "
 			<tr>
-				<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$vocation_id]}</td> <td>{$fetch->level}</td>
+				<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$vocation_id]}</td> <td>{$fetch->level}</td> <td>{$pvpStr}</td>
 			</tr>";		
 		}			
 	}
@@ -241,7 +253,10 @@ else
 			</tr>
 			<tr>
 				<td>Free Account's:</td><td>".Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
-			</tr>		
+			</tr>
+			<tr>
+				<td>Agressivos:</td><td>".Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>Pacificos:</td><td>".Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
+			</tr>					
 			<tr>
 				<td colspan='2'>Level médio:</td><td colspan='2'>".(ceil($levelSum / $_totalplayers))."</td>
 			</tr>			
@@ -264,7 +279,7 @@ else
 		$module .= "
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
-				<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th>
+				<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> <th>PvP</th>
 			</tr>
 
 			{$players_list}
