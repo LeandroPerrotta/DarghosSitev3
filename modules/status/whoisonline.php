@@ -192,10 +192,10 @@ else
 				$vocation_id += 4;
 			}
 			
-			$pvpStr = "<span class='pvpEnabled'>Agressivo</span> (aberto)";
+			$pvpStr = "<span class='pvpEnabled'>Agressivo</span>";
 			
 			if(!$fetch->pvpEnabled)
-				$pvpStr = "<span class='pvpDisabled'>Pacifico</span> (fechado)";	
+				$pvpStr = "<span class='pvpDisabled'>Pacifico</span>";	
 			
 			$players_list .= "
 			<tr>
