@@ -113,7 +113,7 @@ class Monsters
 	private $looktype, $looktypeex;
 	private $isSummonable = false, $isAttackable = false, $isHostile = true, $isIllusionable = false, $isConviceable = false, $ruOnHealth = 0;
 	private $attacks, $healingmax = 0, $healingfreq = 0;
-	private $physicalPercent = 0, $energyPercent = 0, $earthPercent = 0, $icePercent = 0, $holyPercent = 0, $deathPercent = 0;
+	private $physicalPercent = 0, $firePercent = 0, $energyPercent = 0, $earthPercent = 0, $icePercent = 0, $holyPercent = 0, $deathPercent = 0;
 	public $immunityPhysical = false, 
 			$immunityEnergy = false, 
 			$immunityFire = false, 
@@ -270,6 +270,10 @@ class Monsters
 			$value = $nodeList->item($i)->getAttribute("energyPercent");
 			if($value)
 				$this->energyPercent = $value;
+				
+			$value = $nodeList->item($i)->getAttribute("firePercent");
+			if($value)
+				$this->firePercent = $value;				
 				
 			$value = $nodeList->item($i)->getAttribute("earthPercent");
 			if($value)
@@ -552,6 +556,11 @@ class Monsters
 	function getEnergyPercent()
 	{
 		return $this->energyPercent;
+	}
+	
+	function getFirePercent()
+	{
+		return $this->firePercent;
 	}
 	
 	function getEarthPercent()

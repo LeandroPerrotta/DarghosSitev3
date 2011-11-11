@@ -107,6 +107,7 @@ class View
 		/* ELEMENTS AREA */
 		$elements = "";	
 		if($monster->getPhysicalPercent() != 0) { $elements .= "Ataques Fisícos: {$monster->getPhysicalPercent()}%<br>"; }	
+		if($monster->getFirePercent() != 0) { $elements .= "Fogo: {$monster->getFirePercent()}%<br>"; }	
 		if($monster->getEnergyPercent() != 0) {	$elements .= "Energia: {$monster->getEnergyPercent()}%<br>"; }	
 		if($monster->getEarthPercent() != 0) { $elements .= "Terra: {$monster->getEarthPercent()}%<br>"; }	
 		if($monster->getIcePercent() != 0) { $elements .= "Gelo: {$monster->getIcePercent()}%<br>"; }	
@@ -265,10 +266,9 @@ class View
 			$chanceStr = "";
 			
 			if($chance <= 50){ $chanceStr = "<span style='color: #ff921d; font-weight: bold;'>Item lendário</span>"; }
-			elseif($chance <= 100){ $chanceStr = "<span style='color: #c001ff; font-weight: bold;'>Item épico</span>"; }
-			elseif($chance <= 200){ $chanceStr = "<span style='color: #18b515; font-weight: bold;'>Extremamente raro</span>"; }
-			elseif($chance <= 500){ $chanceStr = "<span style='font-weight: bold;'>Muito raro</span>"; }
-			elseif($chance <= 1000){ $chanceStr = "<span style='font-weight: bold;'>Raro</span>"; }
+			elseif($chance <= 200){ $chanceStr = "<span style='color: #c001ff; font-weight: bold;'>Item épico</span>"; }
+			elseif($chance <= 500){ $chanceStr = "<span style='color: #4925ff; font-weight: bold;'>Extremamente raro</span>"; }
+			elseif($chance <= 1000){ $chanceStr = "<span style='color: #18b515; font-weight: bold;'>Raro</span>"; }
 			elseif($chance <= 2500){ $chanceStr = "<span style='font-weight: bold;'>Pouco raro</span>"; }
 			elseif($chance <= 5000){ $chanceStr = "<span style='color: #dcdcdc;'>Um pouco frequente</span>";	}
 			elseif($chance <= 10000){ $chanceStr = "<span style='color: #dcdcdc;'>Muito frequente</span>"; }
