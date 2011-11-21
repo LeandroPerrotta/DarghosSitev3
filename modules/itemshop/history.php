@@ -101,7 +101,7 @@ class View
 			`shop`.`price`,
 			`use`.`date` as `use_date`,
 			`player_use`.`name` as `player_use`,
-			`player_use`.`id` as `id_use`
+			`use`.`player_id` as `id_use`
 		FROM 
 			`".Tools::getSiteTable("itemshop_log")."` `log` 
 		LEFT JOIN
@@ -158,7 +158,7 @@ class View
 			
 			$item = $row["name"];
 			
-			if($row["player_use"] && $this->isAdmin)
+			if($row["id_use"] != NULL && $this->isAdmin)
 			{
 				if($row["id_use"] == 0)
 				{
