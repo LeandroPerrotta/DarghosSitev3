@@ -5,6 +5,7 @@
 		
 		<title><? echo CONFIG_SITENAME; ?></title>
 		
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		<link href="<?php echo $layoutDir; ?>style.css" media="screen" rel="stylesheet" type="text/css" />
 		<link href="default.css" media="screen" rel="stylesheet" type="text/css" />
 		<script src="<?php echo $layoutDir; ?>jquery.js" type="text/javascript"></script>
