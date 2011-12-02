@@ -94,7 +94,12 @@ class Menus
 			"title" => "Server Status",
 			"name" => "serverstatus",
 			"onDraw" => "drawStatus"
-		)	
+		)
+		,array(
+			"title" => "Test Server Publico",
+			"name" => "testserverstatus",
+			"onDraw" => "drawTestServerStatus"
+		)
 		,array(
 			"title" => "Top 5 Matadores",
 			"color" => e_menuColor::Red,
@@ -117,6 +122,39 @@ class Menus
 		$li = $ul->addChild("li");
 		
 		$li->addChild("facebooktag");
+		
+		return true;
+	}
+	
+	static function drawTestServerStatus(SimpleXMLElement &$xml)
+	{
+		$testIp = "testserver.darghos.com.br";
+		$testPort = "7171";
+		
+		$server = new OTS_ServerInfo($testIp, $testPort);
+		$status = $server->info(OTS_ServerStatus::REQUEST_MISC_SERVER_INFO | OTS_ServerStatus::REQUEST_PLAYERS_INFO);	
+
+		if(!$status)
+			return false;
+			
+		$ul = $xml->addChild("ul");
+		$ul->addAttribute("class", "always_viewable");	
+
+		$li = $ul->addChild("li");
+		$div = $li->addChild("div");
+
+		$p = $div->addChild("p");
+		$p->addChild("em", "Status: ");		
+		$span = $p->addChild("span", "online");	
+		$span->addAttribute("style", "color: #00ff00; font-weight: bold;");		
+		
+		$p = $div->addChild("p");
+		$p->addChild("em", "IP: ");
+		$span = $p->addChild("span", $testIp);	
+
+		$p = $div->addChild("p");
+		$p->addChild("em", "Porta: ");
+		$span = $p->addChild("span", $testPort);
 		
 		return true;
 	}
