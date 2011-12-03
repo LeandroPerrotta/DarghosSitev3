@@ -62,8 +62,10 @@ class Menus
 			"visibility_style" => e_MenuVisibilityStyle::DropDown,
 			"items" => array(
 				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
+				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
 				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
 				,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
+				,array("name" => "Battlegrounds", "url" => "http://pt-br.darghos.wikia.com/wiki/Battlegrounds")
 				,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
 				,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
 			)		
