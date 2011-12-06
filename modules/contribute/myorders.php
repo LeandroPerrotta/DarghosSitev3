@@ -13,7 +13,7 @@ if(is_array($oders))
 		if($contribute->get("status") == 1)
 			$status = $_contribution['status'][$contribute->get("status")].". <a href='?ref=contribute.accept&id=".$contribute->get("id")."'>[aceitar]</a>";
 		
-		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));	
+		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));	
 		
 		$character_name = "";
 		

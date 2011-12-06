@@ -8,7 +8,7 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 		$chkAccount = new Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));
+		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
 		
 		$error = NULL;
 		
@@ -80,7 +80,7 @@ IMPORTANTE: Após aceitar o serviço, receber e começar a desfrutar dos benefic
 
 A mudança deste documento pode ser efetuada sem aviso, ou prévio aviso, cabendo a você se manter atualizado as regras e ao contrato.";
 
-$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"));
+$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
 
 $character_name = "";
 

@@ -142,9 +142,23 @@ $module .= '
 			
 			<h3>Observações IMPORTANTES:</h3>
 			<ul>
-				<li>A promoção do brinde Yalaharian Outfit Ticket é valida apénas para pedidos para conta premium de 180 dias e gerados até 23:59 do dia 15/10.</li>
-				<li>O outfit ticket brinde para o Dia das Criança concede apénas uma unica parte do Outfit ou seus Addon que você não possua, na ordem: Outfit, 1o Addon, 2o Addon.</li>
-				<li>O outfit ticket será recebido no primeiro login do personagem escolhido acima para receber a Conta Premium após esta liberada e aceita.</li>
+				';
+					
+				foreach(Contribute::$specialOffersNotes as $k => $info)
+				{
+					list($start_day, $start_month, $start_year) = explode("/", $info["start"]);
+					list($end_day, $end_month, $end_year) = explode("/", $info["end"]);		
+
+					$now = getdate();
+					
+					if($now["mday"] >= $start_day && $now["mon"] >= $start_month && $now["year"] >= $start_year
+						&& $now["mday"] <= $end_day && $now["mon"] <= $end_month && $now["year"] <= $end_year)	
+					{			
+						$module .= "<li>{$info["note"]}</li>";
+					}				
+				}
+					
+				$module .= '	
 				<li>Pagamentos via PagSeguro/Boleto Bancário são liberados apénas após compensar o pagamento (de 1 a 3 dias úteis).</li>
 				<li>Pagamentos via PagSeguro/Transferencia Eletronica são liberados em um prazo de 6 horas.</li>
 				<li><font color="red">Não efetuar depósito na conta informada no boleto, isto invalida o pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>

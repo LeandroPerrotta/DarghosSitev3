@@ -9,8 +9,44 @@ class Contribute extends MySQL
 	);
 	
 	static public $premiumsPromotions = array(
-		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium + Outfit Ticket", "text" => "<span class='promocao'>Esp. Dia das Crianças!</span> 180 dias (6 meses) + 1 Ticket para Yalaharian Outfit!", "cost" => 44.90
-			,"start" => "05/10/2011", "end" => "15/10/2011", "onAccept" => "diadascriancas")
+		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium + Outfit Ticket"
+			,"text" => "<span class='promocao'>Esp. Dia das Crianças!</span> 180 dias (6 meses) + 1 Ticket para Yalaharian Outfit!"
+			,"cost" => 44.90, "start" => "05/10/2011", "end" => "15/10/2011", "onAccept" => "diadascriancas"),
+			
+		array("period" => 30, "product" => "Contribuição para 30 dias de Conta Premium + Brinde de Natal"
+			,"text" => "<span class='promocao'>Esp. Natal!</span> 30 dias + 1 brinde de natal com items!"
+			,"cost" => 7.50 ,"start" => "06/12/2011", "end" => "31/12/2011", "onAccept" => "natal"),
+			
+		array("period" => 60, "product" => "Contribuição para 60 dias de Conta Premium + Brinde de Natal"
+			,"text" => "<span class='promocao'>Esp. Natal!</span> 60 dias (2 meses) + 1 brinde de natal com items!"
+			,"cost" => 15.00, "start" => "06/12/2011", "end" => "31/12/2011", "onAccept" => "natal"),	
+			
+		array("period" => 90, "product" => "Contribuição para 90 dias de Conta Premium + Brinde de Natal"
+			,"text" => "<span class='promocao'>Esp. Natal!</span> 90 dias (3 meses) + 1 brinde de natal com items!"
+			,"cost" => 22.50,"start" => "06/12/2011", "end" => "31/12/2011", "onAccept" => "natal"),	
+			
+		array("period" => 180, "product" => "Contribuição para 180 dias de Conta Premium + Brinde de Natal"
+			,"text" => "<span class='promocao'>Esp. Natal!</span> 180 dias (6 meses) + 1 brinde de natal com items!"
+			,"cost" => 44.90,"start" => "06/12/2011", "end" => "31/12/2011", "onAccept" => "natal")	
+	);
+
+	static public $specialOffersNotes = array(
+		array("note" => "A promoção do brinde Yalaharian Outfit Ticket é valida apénas para pedidos para conta premium de 180 dias e gerados até 23:59 do dia 15/10."
+			,"start" => "05/10/2011", "end" => "15/10/2011")
+		,array("note" => "O outfit ticket brinde para o Dia das Criança concede apénas uma unica parte do Outfit ou seus Addon que você não possua, na ordem: Outfit, 1o Addon, 2o Addon." 
+			,"start" => "05/10/2011", "end" => "15/10/2011")
+		,array("note" => "O outfit ticket será recebido no primeiro login do personagem escolhido acima para receber a Conta Premium após esta liberada e aceita."
+			,"start" => "05/10/2011", "end" => "15/10/2011")
+		,array("note" => "O brinde de natal é valido para todos os pedidos gerados até as 23:59 do dia 31/12/2011."
+			,"start" => "06/12/2011", "end" => "31/12/2011")
+		,array("note" => "O brinde será recebido no primeiro login do personagem escolhido acima para receber a Conta Premium após esta liberada e aceita."
+			,"start" => "06/12/2011", "end" => "31/12/2011")
+		,array("note" => "O brinde concede items como equipamentos, armas, outfit tickets e acessórios de forma aleatoria."
+			,"start" => "06/12/2011", "end" => "31/12/2011")
+		,array("note" => "Seguindo a tradição natalina para presentes, os presentes somente poderão ser abertos a partir das 00:00 do dia 25/12/2011."
+			,"start" => "06/12/2011", "end" => "31/12/2011")
+		,array("note" => "Somente os brindes para conta premiums de 180 dias, gerados, pagos e recebidos no jogo até 23:59 do dia 24/12/2011 poderão participar do sorteio do premio especial."
+			,"start" => "06/12/2011", "end" => "31/12/2011")
 	);
 	
 	const
@@ -19,6 +55,58 @@ class Contribute extends MySQL
 	
 	private $db, $data = array();
 
+	static function natal(Contribute $contribute, &$error)
+	{
+		$character = new Character();
+		$character->load($contribute->get("target"));
+		
+		if($character->getOnline())
+		{
+			$error = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
+			return false;
+		}		
+		
+		/* 
+		 * ID 72 = Presente de Natal Verde (30 dias)
+		 * ID 73 = Presente de Natal Azul (60 dias)
+		 * ID 74 = Presente de Natal Vermelho (90 dias)
+		 * ID 75 = Presente de Natal Grande (180 dias)
+		*/
+		
+		$NATAL_SHOP_ID = false;
+		
+		switch($contribute->get("period"))
+		{
+			case 30:
+				$NATAL_SHOP_ID = 72;
+				break;
+				
+			case 60:
+				$NATAL_SHOP_ID = 73;
+				break;
+				
+			case 90:
+				$NATAL_SHOP_ID = 74;
+				break;	
+
+			case 90:
+				$NATAL_SHOP_ID = 75;
+				break;				
+		}
+		
+		if(!$NATAL_SHOP_ID)
+		{
+			$error = Lang::Message(LMSG_REPORT);
+			return false;			
+		}
+
+		$item = new ItemShop();
+		$item->load($NATAL_SHOP_ID);
+		
+		$item->logItemPurchase($character->getId());
+		return true;
+	}
+	
 	static function diadascriancas(Contribute $contribute, &$error)
 	{
 		$character = new Character();
@@ -51,13 +139,16 @@ class Contribute extends MySQL
 		return $str;
 	}
 	
-	static function getPremiumInfoByPeriod($period)
+	static function getPremiumInfoByPeriod($period, $date = NULL)
 	{
+		if($date == NULL)
+			$date = time();
+		
 		foreach(self::$premiums as $k => $premium)
 		{
 			if($premium["period"] == $period)
 			{
-				$promotion = self::getPromotion($period);
+				$promotion = self::getPromotion($period, $date);
 				return ($promotion) ? $promotion : $premium;
 			}
 		}		
@@ -65,7 +156,7 @@ class Contribute extends MySQL
 		return NULL;
 	}
 	
-	static function getPromotion($period)
+	static function getPromotion($period, $date)
 	{
 		foreach(self::$premiumsPromotions as $k => $premium)
 		{
@@ -74,18 +165,17 @@ class Contribute extends MySQL
 				list($start_day, $start_month, $start_year) = explode("/", $premium["start"]);
 				list($end_day, $end_month, $end_year) = explode("/", $premium["end"]);
 				
-				$now = getdate();
+				$now = getdate($date);
 				
 				if($now["mday"] >= $start_day && $now["mon"] >= $start_month && $now["year"] >= $start_year
 					&& $now["mday"] <= $end_day && $now["mon"] <= $end_month && $now["year"] <= $end_year)	
 				{		
 					return $premium;
-				}
-				else
-					return NULL;
-			}
-				
-		}		
+				}		
+			}		
+		}	
+
+		return NULL;
 	}
 	
 	static function isValidPeriod($period)
