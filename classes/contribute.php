@@ -89,7 +89,7 @@ class Contribute extends MySQL
 				$NATAL_SHOP_ID = 74;
 				break;	
 
-			case 90:
+			case 180:
 				$NATAL_SHOP_ID = 75;
 				break;				
 		}
