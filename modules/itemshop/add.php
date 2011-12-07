@@ -104,7 +104,7 @@ class View
 			
 			$item_id = $this->_item_id->GetPost();
 			$item_count = $this->_item_count->GetPost();
-			$item_action_id = $this->_item_count->getPost();
+			$item_action_id = $this->_item_action_id->getPost();
 			$item_is_stack = $this->_item_is_stackable->GetPost();
 		
 			if(!$name 
