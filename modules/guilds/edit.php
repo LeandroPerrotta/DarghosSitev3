@@ -50,7 +50,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		}						
 
 		
-		$guild->SetMotd($_POST["guild_motd"]);
+		$guild->SetMotd(strip_tags($_POST["guild_motd"]));
 		
 		if($guild_image)
 		{
