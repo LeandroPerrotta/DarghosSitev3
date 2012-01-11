@@ -1,5 +1,5 @@
 <?
-ini_set("display_errors", 1 );
+//ini_set("display_errors", 1 );
 //ini_set("memory_limit", "64M");
 //error_reporting(E_ERROR | E_WARNING); 
 error_reporting(E_ERROR | E_WARNING); 
@@ -19,24 +19,12 @@ include "configs/index.php";
 
 $layoutDir = "newlay/";
 
-if(MANUTENTION == 1)
-{
-	$module .= "
-	<p>
-	<h3>Voltaremos em breve.</h3>
-	</p>
-	";
-	
-	include "{$layoutDir}indexsimple.php";
-}
-else
-{			
-	
-	include "classes/core.php";
-	include "classes/Enums.php";
+include "classes/core.php";
+include "classes/Enums.php";
+spl_autoload_register("Core::autoLoad");
 
-	spl_autoload_register("Core::autoLoad");
-	
+if(!MANUTENTION)
+{		
 	include "classes/mysql.php";
 	
 	include "classes/account.php";
@@ -65,28 +53,11 @@ else
 		$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);	
 		
 		Core::$DB = $db;
-	
-		Core::InitPOT();
 	}
 	catch (Exception $e)
 	{
 		echo "Impossivel se conectar ao banco de dados.";
 	}
-	
-	/*if(defined('SITE_ROOT_DIR'))
-	{	
-		if("http://".$_SERVER["HTTP_HOST"].SITE_ROOT_DIR != CONFIG_SITEEMAIL.SITE_ROOT_DIR)
-		{
-			Core::redirect(CONFIG_SITEEMAIL.SITE_ROOT_DIR, false); 
-		}	
-	}
-	else
-	{		
-		if("http://".$_SERVER["HTTP_HOST"] != CONFIG_SITEEMAIL)
-		{
-			Core::redirect(CONFIG_SITEEMAIL, false); 
-		}		
-	}*/
 	
 	$tools = new Tools();
 
@@ -102,10 +73,14 @@ else
 		$_POST = $_SESSION["login_post"];
 		unset($_SESSION["login_post"]);
 	}
+}	
+
+Core::InitPOT();
+
+include "modules.php";
+include "{$layoutDir}index.php";
 	
-	include "modules.php";
-	include "{$layoutDir}index.php";
-	
+if(!MANUTENTION)	
 	$db->close();
-}
+
 ?>

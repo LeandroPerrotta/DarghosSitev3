@@ -305,7 +305,7 @@ class Menu
 		
 		$div->addChild("strong", $this->getTitle());
 		
-		if($toogleButton)
+		if(!MANUTENTION && $toogleButton)
 		{
 			$span = $div->addChild("span");
 			$span->addAttribute("class", $toogleButton);
@@ -314,13 +314,16 @@ class Menu
 		//conteudo
 		if($this->type == e_MenuType::Items)
 		{
-			$ul = $li->addChild("ul");
-			$ul->addAttribute("class", $visibility);
-			
-			foreach($this->items as $item)
+			if(!MANUTENTION)
 			{
-				$menuItem = new MenuItem($item["name"], $item["url"], $item["conditions"] | 0, $item["min_group"] | 0, $item["style"] | "");
-				$menuItem->__addToElement(&$ul);
+				$ul = $li->addChild("ul");
+				$ul->addAttribute("class", $visibility);
+				
+				foreach($this->items as $item)
+				{
+					$menuItem = new MenuItem($item["name"], $item["url"], $item["conditions"] | 0, $item["min_group"] | 0, $item["style"] | "");
+					$menuItem->__addToElement(&$ul);
+				}
 			}
 		}
 		elseif($this->type == e_MenuType::CallFunction)

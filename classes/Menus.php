@@ -163,6 +163,9 @@ class Menus
 	
 	static function drawStatus(SimpleXMLElement &$xml)
 	{
+		if(MANUTENTION)
+			return false;
+		
 		$query = Core::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
 		$fetch = $query->fetch();		
 		
@@ -244,6 +247,9 @@ class Menus
 	
 	static function drawTopKillers(SimpleXMLElement &$xml)
 	{
+		if(MANUTENTION)
+			return true;		
+		
 		$today = new CustomDate();	
 		$end_day = null;
 		
@@ -285,6 +291,9 @@ class Menus
 	
 	static function drawTopBgRating(SimpleXMLElement &$xml)
 	{			
+		if(MANUTENTION)
+			return true;		
+		
 		$result = Battleground::listByBestRating();
 
 		if($result->numRows() == 0)

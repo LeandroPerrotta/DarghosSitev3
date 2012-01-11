@@ -17,6 +17,8 @@ else
 
 /*if($noInjection)
 {*/
+if(!MANUTENTION)
+{
 	Strings::filterInputs(true);
 	
 	$needLogin = false;
@@ -614,6 +616,21 @@ else
 	}	
 	else	
 		include("modules/news/last.php");
+}
+else
+{
+		$patch['urlnavigation'] = "/manutenção";
+	
+		$module .= "
+		<div style='margin-top: 16px;' id='new-title-bar'>
+			<h3 id='new-title'>
+				".MANUTENTION_TITLE."
+			</h3>
+			<div id='infos-line'>
+			</div>	
+		</div>
+		<div id='new-summary'>".MANUTENTION_BODY."</div>";
+}
 /*}	
 else
 {
