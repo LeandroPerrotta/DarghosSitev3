@@ -46,23 +46,15 @@ class View
 			
 			$players_query = $db->query("
 			SELECT
-				`btp`.`player_id`
-				,`btp`.`team_id`
-				,`btp`.`deserter`
-				,`btp`.`ip_address`
-				,`btp`.`params`
-				, COUNT(*) as deaths
+				`player_id`
+				,`team_id`
+				,`deserter`
+				,`ip_address`
+				,`params`
 			FROM
-				`battleground_teamplayers` `btp`
-			LEFT JOIN
-				`custom_pvp_deaths` `d`				
-			ON
-				`d`.`player_id` = `btp`.`player_id`
+				`battleground_teamplayers`
 			WHERE
-				`btp`.`battleground_id` = {$fetch->id}
-				AND `d`.`ref_id` = {$fetch->id}
-			GROUP BY
-				`d`.`player_id`				
+				`battleground_id` = {$fetch->id}		
 			");
 			
 			$kstats_query = $db->query("
@@ -84,12 +76,25 @@ class View
 				$stats[$kfetch->player_id]["assists"]++;
 			}		
 			
+			$kstats_query = $db->query("
+			SELECT
+				`player_id`
+			FROM
+				`custom_pvp_deaths`
+			WHERE
+				`ref_id` = {$fetch->id}");
+			
+			while($kfetch = $kstats_query->fetch())
+			{				
+				$stats[$kfetch->player_id]["deaths"]++;
+			}					
+			
 			while($pf = $players_query->fetch())
 			{								
 				$params = json_decode($pf->params, true);
 				
 				$bgMatch->addPlayer($pf->team_id, $pf->player_id, $pf->ip_address, 
-					$stats[$pf->player_id]["kills"] | 0, $stats[$pf->player_id]["assists"] | 0, $pf->deaths | 0, $pf->deserter,
+					$stats[$pf->player_id]["kills"] | 0, $stats[$pf->player_id]["assists"] | 0, $stats[$pf->player_id]["deaths"] | 0, $pf->deserter,
 					$params["damage"], $params["heal"], $params["expGain"], $param["honorGain"], $param["ratingChange"], $param["highStamina"]);
 			}
 			
