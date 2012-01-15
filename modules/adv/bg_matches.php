@@ -199,8 +199,8 @@ class View
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=deaths'>Deaths</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=damage'>Damage</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=heal'>Heal</a>");
-				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=expGain'>Exp</a>");
-				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=honorGain'>Honor</a>");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=gainExp'>Exp</a>");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=gainHonor'>Honor</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=changeRating'>Rating</a>");
 				$subTable->AddRow();
 				
