@@ -95,7 +95,7 @@ class View
 				
 				$bgMatch->addPlayer($pf->team_id, $pf->player_id, $pf->ip_address, 
 					$stats[$pf->player_id]["kills"] | 0, $stats[$pf->player_id]["assists"] | 0, $stats[$pf->player_id]["deaths"] | 0, $pf->deserter,
-					$params["damage"], $params["heal"], $params["expGain"], $param["honorGain"], $param["ratingChange"], $param["highStamina"]);
+					$params["damage"], $params["heal"], $params["expGain"], $params["honorGain"], $params["ratingChange"], $params["highStamina"]);
 			}
 			
 			$matches->append($bgMatch);
