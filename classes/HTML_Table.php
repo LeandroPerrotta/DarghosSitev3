@@ -2,7 +2,7 @@
 class HTML_Table
 {
 	private $_dataRow = array(), $_colums, $_fields = array();
-	private $_width = "90%", $_dropdown = false;
+	private $_width = "90%", $_dropdown = false, $_subtable = false;
 	
 	public $style = "";
 	
@@ -62,12 +62,37 @@ class HTML_Table
 		$this->_dropdown = true;
 	}
 	
+	function IsSubTable()
+	{
+		$this->_subtable = true;
+	}
+	
 	function Draw()
 	{
 		$args = "";
 		
+		$classes = array();
+		
 		if($this->_dropdown)
-			$args .= "class='dropdowntable-2' ";
+			$classes[] = "dropdowntable-2";
+			
+		if($this->_subtable)
+			$classes[] = "dropdowntable";
+			
+		if(count($classes) > 0)
+		{
+			$args .= "class='";
+			
+			foreach($classes as $k => $classe)
+			{
+				$args .= $classe;
+				
+				if($k != count($classes) - 1)
+					$args .= " ";
+			}
+			
+			$args .= "'";
+		}
 			
 		if($this->style != "")
 			$args .= "style='{$this->style}' ";

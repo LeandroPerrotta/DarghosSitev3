@@ -1,22 +1,6 @@
 <?
 list($module, $topic) = explode(".", $_GET['ref']);
 
-/*$noInjection = false;
-
-if(!in_array($_GET['ref'], $_inputsWhiteList))
-{
-	if(Strings::filterInputs(true))
-	{
-		$noInjection = true;
-	}	
-}
-else
-{
-	$noInjection = true;
-}*/
-
-/*if($noInjection)
-{*/
 if(!MANUTENTION)
 {
 	Strings::filterInputs(true);
@@ -524,7 +508,12 @@ if(!MANUTENTION)
 					$needMinGroup = GROUP_COMMUNITYMANAGER;			
 				break;			
 
-				case "tutortest":
+				case "gold_check":
+					$patch['file'] = $topic;
+					$needMinGroup = GROUP_COMMUNITYMANAGER;			
+				break;	
+				
+				case "bg_matches":
 					$patch['file'] = $topic;
 					$needMinGroup = GROUP_COMMUNITYMANAGER;			
 				break;	
@@ -631,11 +620,5 @@ else
 		</div>
 		<div id='new-summary'>".MANUTENTION_BODY."</div>";
 }
-/*}	
-else
-{
-	$module = null;
-	include("modules/errors/sqlinjection.php");	
-}*/
 
 ?>

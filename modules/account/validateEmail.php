@@ -65,11 +65,11 @@ class View
 		$this->_account_password = new HTML_Input();
 		$this->_account_password->SetName("account_password");		
 		$this->_account_password->IsPassword();		
-		$this->_account_password->SetSize(HTML_INPUT_SIZE_SMALL);
+		$this->_account_password->SetSize(HTML_Input::SIZE_SMALL);
 
 		$this->_account_email = new HTML_Input();
 		$this->_account_email->SetName("account_email");	
-		$this->_account_email->SetSize(HTML_INPUT_SIZE_SMALL);	
+		$this->_account_email->SetSize(HTML_Input::SIZE_SMALL);	
 		
 		$this->loggedAcc = Account::loadLogged();
 		

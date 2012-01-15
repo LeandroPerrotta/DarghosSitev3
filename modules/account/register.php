@@ -46,25 +46,25 @@ class View
 		
 		$this->_account_name = new HTML_Input();
 		$this->_account_name->SetName("account_name");
-		$this->_account_name->SetSize(HTML_INPUT_SIZE_SMALL);
+		$this->_account_name->SetSize(HTML_Input::SIZE_SMALL);
 				
 		$this->_account_password = new HTML_Input();
 		$this->_account_password->SetName("account_password");		
 		$this->_account_password->IsPassword();		
-		$this->_account_password->SetSize(HTML_INPUT_SIZE_SMALL);
+		$this->_account_password->SetSize(HTML_Input::SIZE_SMALL);
 		
 		$this->_account_confirm_password = new HTML_Input();
 		$this->_account_confirm_password->SetName("account_confirm_password");		
 		$this->_account_confirm_password->IsPassword();		
-		$this->_account_confirm_password->SetSize(HTML_INPUT_SIZE_SMALL);
+		$this->_account_confirm_password->SetSize(HTML_Input::SIZE_SMALL);
 
 		$this->_account_email = new HTML_Input();
 		$this->_account_email->SetName("account_email");	
-		$this->_account_email->SetSize(HTML_INPUT_SIZE_SMALL);
+		$this->_account_email->SetSize(HTML_Input::SIZE_SMALL);
 		
 		$this->_char_name = new HTML_Input();
 		$this->_char_name->SetName("character_name");
-		$this->_char_name->SetSize(HTML_INPUT_SIZE_SMALL);
+		$this->_char_name->SetSize(HTML_Input::SIZE_SMALL);
 		
 		$this->_char_genre = new HTML_SelectBox();
 		$this->_char_genre->SetName("character_genre");
