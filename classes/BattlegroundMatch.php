@@ -2,8 +2,8 @@
 class BattlegroundMatch
 {
 	const
-		TEAM_ONE = 0
-		,TEAM_TWO = 1
+		TEAM_ONE = 1
+		,TEAM_TWO = 2
 		;
 	
 	public
@@ -42,8 +42,9 @@ class BattlegroundMatch
 	
 	function addPlayer($team, $player_id, $ip_address, $frags, $assists, $deaths, $deserter)
 	{
-		$this->teams[$team]["players"][] = array(
+		$this->teams["players"][] = array(
 			"player_id" => $player_id
+			,"team_id" => $team
 			,"ip_address" => $ip_address
 			,"frags" => $frags
 			,"assists" => $assists
