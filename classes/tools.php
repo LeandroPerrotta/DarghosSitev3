@@ -77,15 +77,15 @@ class t_Vocation
 {
 	private $_vocation_id;
 	private $_vocation_names = array(
-		0 => "none",
-		1 => "sorcerer",
-		2 => "druid",
-		3 => "paladin",
-		4 => "knight",
-		5 => "master sorcerer",
-		6 => "elder druid",
-		7 => "royal paladin",
-		8 => "elite knight"/*,
+		0 => array("name" => "none", "abrev" => "n"),
+		1 => array("name" => "sorcerer", "abrev" => "s"),
+		2 => array("name" => "druid", "abrev" => "d"),
+		3 => array("name" => "paladin", "abrev" => "p"),
+		4 => array("name" => "knight", "abrev" => "k"),
+		5 => array("name" => "master sorcerer", "abrev" => "ms"),
+		6 => array("name" => "elder druid", "abrev" => "ed"),
+		7 => array("name" => "royal paladin", "abrev" => "rp"),
+		8 => array("name" => "elite knight", "abrev" => "ek")/*,
 		9 => "Warmaster Sorcerer",
 		10 => "Warden Druid",
 		11 => "Holy Paladin",
@@ -105,7 +105,7 @@ class t_Vocation
 	
 	function SetByName($name)
 	{
-		$this->_vocation_id = array_search(strtolower($name), $this->_vocation_names);
+		$this->_vocation_id = array_search(strtolower($name), $this->_vocation_names["name"]);
 	}
 	
 	function Get()
@@ -115,7 +115,12 @@ class t_Vocation
 	
 	function GetByName()
 	{
-		return $this->_vocation_names[$this->_vocation_id];
+		return $this->_vocation_names[$this->_vocation_id]["name"];
+	}
+	
+	function GetByAbrev()
+	{
+		return $this->_vocation_names[$this->_vocation_id]["abrev"];
 	}
 }
 

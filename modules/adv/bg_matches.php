@@ -1,7 +1,7 @@
 <?php
 class View
 {		
-	const PAGE_LIMIT = 10;
+	const PAGE_LIMIT = 25;
 	
 	function generateList()
 	{
@@ -42,55 +42,55 @@ class View
 			
 			$bgMatch->createTeams($fetch->team1_points, $fetch->team2_points);
 			
+			$stats = array();
+			
 			$players_query = $db->query("
 			SELECT
 				`btp`.`player_id`
 				,`btp`.`team_id`
 				,`btp`.`deserter`
 				,`btp`.`ip_address`
-				,(
-					SELECT
-						COUNT(*) as kills
-					FROM
-						`custom_pvp_kills` as `k`
-					WHERE
-						`k`.`player_id` = `btp`.`player_id`
-						AND `k`.`is_frag` = 1
-						AND `k`.`ref_id` = {$fetch->id}
-				) as kills
-				,
-				(
-					SELECT
-						COUNT(*) as assists
-					FROM
-						`custom_pvp_kills` as `k`
-					WHERE
-						`k`.`player_id` = `btp`.`player_id`
-						AND `k`.`ref_id` = {$fetch->id}						
-				) as assists
-				,
-				(
-					SELECT
-						COUNT(*) as deaths
-					FROM
-						`custom_pvp_deaths` as `k`
-					WHERE
-						`k`.`player_id` = `btp`.`player_id`
-						AND `k`.`ref_id` = {$fetch->id}						
-				) as deaths				
+				,`btp`.`params`
+				, COUNT(*) as deaths
 			FROM
 				`battleground_teamplayers` `btp`
-				
+			LEFT JOIN
+				`custom_pvp_deaths` `d`				
+			ON
+				`d`.`player_id` = `btp`.`player_id`
 			WHERE
 				`btp`.`battleground_id` = {$fetch->id}
+				AND `d`.`ref_id` = {$fetch->id}
 			GROUP BY
-				`btp`.`player_id`
+				`d`.`player_id`				
 			");
+			
+			$kstats_query = $db->query("
+			SELECT
+				`player_id`,
+				`is_frag`
+			FROM
+				`custom_pvp_kills`
+			WHERE
+				`ref_id` = {$fetch->id}");
+			
+			while($kfetch = $kstats_query->fetch())
+			{
+				if($kfetch->is_frag == 1)
+				{
+					$stats[$kfetch->player_id]["kills"]++;
+				}
+				
+				$stats[$kfetch->player_id]["assists"]++;
+			}		
 			
 			while($pf = $players_query->fetch())
 			{								
+				$params = json_decode($pf->params, true);
+				
 				$bgMatch->addPlayer($pf->team_id, $pf->player_id, $pf->ip_address, 
-					$pf->kills | 0, $pf->assists | 0, $pf->deaths | 0, $pf->deserter);
+					$stats[$pf->player_id]["kills"] | 0, $stats[$pf->player_id]["assists"] | 0, $pf->deaths | 0, $pf->deserter,
+					$params["damage"], $params["heal"], $params["expGain"], $param["honorGain"], $param["ratingChange"], $param["highStamina"]);
 			}
 			
 			$matches->append($bgMatch);
@@ -192,7 +192,11 @@ class View
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=frags'>Frags</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=assists'>Assists</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=deaths'>Deaths</a>");
-				$subTable->AddField("Deserter");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=damage'>Damage</a>");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=heal'>Heal</a>");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=expGain'>Exp</a>");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=honorGain'>Honor</a>");
+				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=changeRating'>Rating</a>");
 				$subTable->AddRow();
 				
 				if(count($matche->teams["players"]) > 0)
@@ -210,12 +214,18 @@ class View
 							,BattlegroundMatch::TEAM_TWO => "B"
 						);
 						
-						$subTable->AddField($p->getName() . " ({$team_str[$pInfo["team_id"]]}, {$p->getLevel()})");
+						$voc = new t_Vocation($p->getVocation());
+						
+						$subTable->AddField(($pInfo["deserter"] ? "(<-) " : "") . $p->getName() . "<br>Time {$team_str[$pInfo["team_id"]]}<br>lv {$p->getLevel()}<br>{$voc->GetByAbrev()} <br>rating {$p->getBattlegroundRating()}");
 						$subTable->AddField($pInfo["ip_address"]);
 						$subTable->AddField($pInfo["frags"]);
 						$subTable->AddField($pInfo["assists"]);
 						$subTable->AddField($pInfo["deaths"]);
-						$subTable->AddField($pInfo["deserter"]);
+						$subTable->AddField($pInfo["damage"]);
+						$subTable->AddField($pInfo["heal"]);
+						$subTable->AddField($pInfo["gainExp"] . ($pInfo["highStamina"] == 1 ? " (*)" : ""));
+						$subTable->AddField($pInfo["gainHonor"]);
+						$subTable->AddField($pInfo["changeRating"]);
 						
 						$subTable->AddRow();
 					}

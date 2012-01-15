@@ -40,7 +40,7 @@ class BattlegroundMatch
 		$this->teams[self::TEAM_TWO]["points"] = $team2_points;	
 	}
 	
-	function addPlayer($team, $player_id, $ip_address, $frags, $assists, $deaths, $deserter)
+	function addPlayer($team, $player_id, $ip_address, $frags, $assists, $deaths, $deserter, $damage, $heal, $gainExp, $gainHonor, $changeRating, $highStamina)
 	{
 		$this->teams["players"][] = array(
 			"player_id" => $player_id
@@ -50,6 +50,12 @@ class BattlegroundMatch
 			,"assists" => $assists
 			,"deaths" => $deaths
 			,"deserter" => $deserter
+			,"damage" => $damage
+			,"heal" => $heal
+			,"gainExp" => $gainExp
+			,"gainHonor" => $gainHonor
+			,"changeRating" => $changeRating
+			,"highStamina" => $highStamina
 		);
 	}
 	
