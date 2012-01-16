@@ -105,7 +105,14 @@ class t_Vocation
 	
 	function SetByName($name)
 	{
-		$this->_vocation_id = array_search(strtolower($name), $this->_vocation_names["name"]);
+		foreach($this->_vocation_names as $k => $value)
+		{
+			if(strtolower($name) == $value["name"])
+			{
+				$this->_vocation_id = $k;
+				break;
+			}
+		}
 	}
 	
 	function Get()
