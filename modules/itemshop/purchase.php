@@ -200,14 +200,17 @@ class View
 					<label>Personagem</label>
 					{$this->_character->Draw()}
 					
-				</p>
+				</p>";
 				
+			/*		
 				<p>
 					<label>Ordenar por</label>
 					{$this->_order_by->Draw()}
 					
 				</p>
-				
+			*/
+
+		$module .= "
 				{$this->_itemlist_table->Draw()}
 				
 				<p id='line'></p>
