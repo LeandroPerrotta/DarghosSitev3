@@ -79,7 +79,7 @@ class View
 		
 		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_IN_FORMATION))
 		{
-			$guildFormStatus = ($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION)." vice-lideres</b> até <b>".\Core\Main::formatDate($this->guild->GetFormationTime())."</b>.";
+			$guildFormStatus = ($this->guild->GetStatus() == \Framework\Guilds::STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION)." vice-lideres</b> até <b>".\Core\Main::formatDate($this->guild->GetFormationTime())."</b>.";
 			$guildInfoTable->AddField($guildFormStatus);
 			$guildInfoTable->AddRow();
 		}
@@ -112,7 +112,7 @@ class View
 		
 			{$guildInfoTable->Draw()}";				
 
-		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel == \Framework\Guilds::RANK_LEADER)
 		{			
 			$guildPage .= "
 			<p>
@@ -172,19 +172,19 @@ class View
 		{
 			$guildPage .= "<p>";
 			
-			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= GUILD_RANK_VICE)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= \Framework\Guilds::RANK_VICE)
 			$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.members&name={$this->guild->GetName()}'>Editar Membros</a>				
 			";
 				
-			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel == GUILD_RANK_LEADER)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.ranks&name={$this->guild->GetName()}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$this->guild->GetName()}'>Passar Liderança</a>				
 				";	
 			}
 			
-			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= GUILD_RANK_MEMBER_OPT_3)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= \Framework\Guilds::RANK_MEMBER_OPT_3)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.leave&name={$this->guild->GetName()}'>Sair da Guild</a>				
@@ -210,7 +210,7 @@ class View
 			{
 				list($player, $date) = $invite;
 				
-				$cancelInvite = ($this->memberLevel == GUILD_RANK_LEADER) ? " [<a href='?ref=guilds.invite&name={$player->getName()}&c=t'>Cancelar convite</a>]" : "";
+				$cancelInvite = ($this->memberLevel == \Framework\Guilds::RANK_LEADER) ? " [<a href='?ref=guilds.invite&name={$player->getName()}&c=t'>Cancelar convite</a>]" : "";
 				
 				$guildPage .= "
 					<tr>
@@ -232,7 +232,7 @@ class View
 		</table>
 		";			
 		
-		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel >= GUILD_RANK_VICE)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel >= \Framework\Guilds::RANK_VICE)
 		{
 			$guildPage .= "
 				<p>
@@ -271,7 +271,7 @@ class View
 				</tr>						
 			";		
 			
-			$warsList = $this->guild->SearchWarsByStatus(GUILD_WAR_STARTED);
+			$warsList = $this->guild->SearchWarsByStatus(\Framework\Guilds::WAR_STARTED);
 			$warsWaitingList = $this->guild->SearchWarsByStatus(GUILD_WAR_WAITING);
 			
 			if(count($warsList) != 0)
@@ -331,7 +331,7 @@ class View
 			";		
 			
 			
-			if($this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
+			if($this->loggedAcc and $this->memberLevel == \Framework\Guilds::RANK_LEADER)
 			{			
 				$warPage .= "
 				<p>
@@ -340,7 +340,7 @@ class View
 				";				
 			}		
 			
-			$declarationsList = $this->guild->SearchWarsByStatus(GUILD_WAR_DISABLED);
+			$declarationsList = $this->guild->SearchWarsByStatus(\Framework\Guilds::WAR_DISABLED);
 			
 			$warPage .= "
 			<p><h3>Guerras declaradas</h3></p>

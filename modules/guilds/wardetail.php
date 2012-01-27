@@ -60,11 +60,11 @@ class View
 	
 		$status = "";	
 		
-		if($this->guild_war->GetStatus() == GUILD_WAR_DISABLED && $this->guild_war->GetReply() > -1)
+		if($this->guild_war->GetStatus() == \Framework\Guilds::WAR_DISABLED && $this->guild_war->GetReply() > -1)
 		{
 			$status = "Em negociação.";
 		}
-		elseif($this->guild_war->GetStatus() == GUILD_WAR_DISABLED && $this->guild_war->GetReply() == -1)
+		elseif($this->guild_war->GetStatus() == \Framework\Guilds::WAR_DISABLED && $this->guild_war->GetReply() == -1)
 		{
 			$status = "Encerrada.";
 		}		
@@ -72,7 +72,7 @@ class View
 		{
 			$status = "A iniciar no proximo server save.";
 		}		
-		elseif($this->guild_war->GetStatus() == GUILD_WAR_STARTED)
+		elseif($this->guild_war->GetStatus() == \Framework\Guilds::WAR_STARTED)
 		{
 			$status = "Em andamento.";
 		}			

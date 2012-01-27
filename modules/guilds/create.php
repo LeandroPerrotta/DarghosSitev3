@@ -30,7 +30,7 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
-		if($account->getGuildLevel() >= GUILD_RANK_VICE)
+		if($account->getGuildLevel() >= \Framework\Guilds::RANK_VICE)
 		{
 			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_ONLY_ONE_VICE_PER_ACCOUNT);
 			return false;
@@ -55,9 +55,9 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		$guild->SetOwnerId($player->getId());
 		$guild->SetCreationDate(time());
 		$guild->SetMotd("Esta é uma guilda recem criada!");
-		$guild->SetStatus(GUILD_STATUS_IN_FORMATION);
+		$guild->SetStatus(\Framework\Guilds::STATUS_FORMATION);
 		$guild->SetFormationTime(time() + 60 * 60 * 24 * Configs::Get(Configs::eConf()->GUILDS_FORMATION_WAIT_DAYS));
-		$guild->SetImage(GUILD_DEFAULT_IMAGE);
+		$guild->SetImage(\Framework\Guilds::DEFAULT_IMAGE);
 		
 		$guild->Save();
 		
@@ -65,7 +65,7 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		//default ranks (member, vice and leader) are created automaticaly by MySQL Triggers
 		//we need search in ranks the rank_id of the leader of guild
-		$rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER); 
+		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER); 
 		
 		if($rank)
 		{

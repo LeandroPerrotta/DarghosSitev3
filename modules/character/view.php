@@ -133,11 +133,11 @@ if($_POST["player_name"] || $_GET['name'])
 				
 				if($houses->get("warnings") == 0)
 				{
-					$housemsg = "{$houses->get("name")} ({$_town->getName()}) com pagamento no dia  ".\Core\Main::formatDate($houses->get("paid")).".";
+					$housemsg = "{$houses->get("name")} ({$_town->GetType()}) com pagamento no dia  ".\Core\Main::formatDate($houses->get("paid")).".";
 				}
 				else
 				{
-					$housemsg = "{$houses->get("name")} ({$_town->getName()}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
+					$housemsg = "{$houses->get("name")} ({$_town->GetType()}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
 				}
 				
 				$module .= "

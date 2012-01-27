@@ -24,7 +24,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		$player->LoadGuild();
 		
-		if($player->GetGuildLevel() < GUILD_RANK_LEADER)
+		if($player->GetGuildLevel() < \Framework\Guilds::RANK_LEADER)
 		{
 			if($player->GetGuildLevel() >= $memberLevel)
 			{
@@ -34,7 +34,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		}
 		else
 		{
-			if($memberLevel != GUILD_RANK_LEADER)
+			if($memberLevel != \Framework\Guilds::RANK_LEADER)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;				
@@ -43,7 +43,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		if($_POST["guild_action"] == "setRank")
 		{
-			if($player->GetGuildLevel() == GUILD_RANK_LEADER)
+			if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
@@ -51,19 +51,19 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			
 			$selectedRank = $guild->SearchRankByLevel($_POST["member_rank"]);
 			
-			if(!$selectedRank || $selectedRank->GetLevel() == GUILD_RANK_LEADER)
+			if(!$selectedRank || $selectedRank->GetLevel() == \Framework\Guilds::RANK_LEADER)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
 			}
 			
-			if($selectedRank->GetLevel() == GUILD_RANK_VICE && !$player->isPremium())
+			if($selectedRank->GetLevel() == \Framework\Guilds::RANK_VICE && !$player->isPremium())
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_ONLY_PREMIUM);
 				return false;				
 			}
 
-			if($selectedRank->GetLevel() == GUILD_RANK_VICE && $player->loadAccount()->getGuildLevel() >= GUILD_RANK_VICE)
+			if($selectedRank->GetLevel() == \Framework\Guilds::RANK_VICE && $player->loadAccount()->getGuildLevel() >= \Framework\Guilds::RANK_VICE)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_ACCOUNT_ALREADY_IS_HIGH_RANK);
 				return false;
@@ -83,7 +83,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		}
 		elseif($_POST["guild_action"] == "exclude")
 		{
-			if($player->GetGuildLevel() == GUILD_RANK_LEADER)
+			if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
@@ -115,7 +115,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	{	
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < \Framework\Guilds::RANK_VICE)
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));		
 	}	
@@ -141,7 +141,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			
 			foreach($guild->Ranks as $rank)
 			{
-				if($rank->GetLevel() != GUILD_RANK_LEADER)
+				if($rank->GetLevel() != \Framework\Guilds::RANK_LEADER)
 				{
 					$option_ranks .= "<option ".(($rank->GetId() == $lowerRank->GetId()) ? "selected='selected'" : "")." value='{$rank->GetLevel()}'>{$rank->GetName()}</option>";
 				}	

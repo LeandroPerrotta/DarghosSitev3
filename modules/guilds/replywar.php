@@ -141,13 +141,13 @@ class View
 			return false;			
 		}
 		
-		if(\Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
+		if(\Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != \Framework\Guilds::RANK_LEADER)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}
 		
-		if( $this->guild_war->GetStatus() != GUILD_WAR_DISABLED )
+		if( $this->guild_war->GetStatus() != \Framework\Guilds::WAR_DISABLED )
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
@@ -176,7 +176,7 @@ class View
 				}
 				
 				$this->guild_war->SetReply( -1 );
-				$this->guild_war->SetStatus( GUILD_WAR_STARTED );
+				$this->guild_war->SetStatus( \Framework\Guilds::WAR_STARTED );
 				$this->guild_war->Save();
 				
 				$this->guild->SetBalance($this->guild->GetBalance() - $this->guild_war->GetGuildFee());

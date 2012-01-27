@@ -4,6 +4,24 @@ use \Core\Configs as g_Configs;
 use \Core\Consts;
 class Guilds
 {
+	const
+		STATUS_FORMATION = 0
+		,STATUS_FORMED = 1
+		
+		,RANK_LEADER = 6
+		,RANK_VICE = 5
+		,RANK_MEMBER = 4
+		,RANK_MEMBER_OPT_1 = 3
+		,RANK_MEMBER_OPT_2 = 2
+		,RANK_MEMBER_OPT_3 = 1
+		,RANK_MEMBER_NO_MEMBER = 0
+		
+		,DEFAULT_IMAGE = "default_logo.gif"
+		
+		,WAR_STARTED = 1
+		,WAR_DISABLED = 0
+		;
+		
 	private $_id, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
 	public $Ranks = array(), $Invites = array(), $Wars = array();
 	private $_trash_ranks = array();
@@ -39,9 +57,9 @@ class Guilds
 	static function ActivedGuildsList()
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `status` = '".GUILD_STATUS_FORMED."' ORDER BY `creationdate`";
+			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `status` = '".self::STATUS_FORMED."' ORDER BY `creationdate`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `guilds`.`id` FROM `guilds` LEFT JOIN `".\Core\Tools::getSiteTable("guilds")."` as `guild_site` ON `guild_site`.`guild_id` = `guilds`.`id` WHERE `guild_site`.`status` = '".GUILD_STATUS_FORMED."' ORDER BY `guilds`.`creationdata`";
+			$query_str = "SELECT `guilds`.`id` FROM `guilds` LEFT JOIN `".\Core\Tools::getSiteTable("guilds")."` as `guild_site` ON `guild_site`.`guild_id` = `guilds`.`id` WHERE `guild_site`.`status` = '".self::STATUS_FORMED."' ORDER BY `guilds`.`creationdata`";
 			
 		$query = \Core\Main::$DB->query($query_str);
 		
@@ -68,9 +86,9 @@ class Guilds
 	static function FormingGuildsList()
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".GUILD_STATUS_IN_FORMATION."' ORDER BY `creationdate`";
+			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdate`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".GUILD_STATUS_IN_FORMATION."' ORDER BY `creationdata`";
+			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdata`";
 			
 		$query = \Core\Main::$DB->query($query_str);		
 
@@ -373,7 +391,7 @@ class Guilds
 	
 	function SearchRankByLowest()
 	{
-		$lowestRank = $this->SearchRankByLevel(GUILD_RANK_MEMBER);
+		$lowestRank = $this->SearchRankByLevel(self::RANK_MEMBER);
 		
 		foreach($this->Ranks as $rank)
 		{
@@ -486,9 +504,9 @@ class Guilds
 		$query_str = "";
 		
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `enemy_id` = '{$this->_id}') AND '".time()."' < `end` AND (`status` = '".GUILD_WAR_STARTED."')";
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `enemy_id` = '{$this->_id}') AND '".time()."' < `end` AND (`status` = '".\Framework\Guilds::WAR_STARTED."')";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND '".time()."' < `end_date` AND (`status` = '".GUILD_WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')";
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE (`guild_id` = '{$this->_id}' OR `opponent_id` = '{$this->_id}') AND '".time()."' < `end_date` AND (`status` = '".\Framework\Guilds::WAR_STARTED."' OR `status` = '".GUILD_WAR_WAITING."')";
 		
 			$query = \Core\Main::$DB->query($query_str);
 		return (($query->numRows() != 0) ? true : false);
@@ -504,7 +522,7 @@ class Guilds
 		foreach($this->Wars as $guild_war)
 		{
 			//check if guild war has already end
-			if($guild_war->GetStatus() == GUILD_WAR_DISABLED && $guild_war->GetReply() == -1)
+			if($guild_war->GetStatus() == self::WAR_DISABLED && $guild_war->GetReply() == -1)
 				continue;
 			
 			if($guild_war->GetGuildId() == $guild_id)
@@ -593,7 +611,7 @@ class Guilds
 	
 	function GetImage()
 	{
-		return ($this->_image != "") ? $this->_image : GUILD_DEFAULT_IMAGE;
+		return ($this->_image != "") ? $this->_image : self::DEFAULT_IMAGE;
 	}	
 
 	function GetStatus()

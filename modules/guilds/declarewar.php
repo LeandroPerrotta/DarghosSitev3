@@ -66,7 +66,7 @@ class View
 		
 		$opponent = new \Framework\Guilds();
 		
-		if(!$opponent->LoadByName($this->_waropponent->GetPost()) || $opponent->GetStatus() == GUILD_STATUS_IN_FORMATION || $opponent->GetName() == $_GET['name'])
+		if(!$opponent->LoadByName($this->_waropponent->GetPost()) || $opponent->GetStatus() == \Framework\Guilds::STATUS_FORMATION || $opponent->GetName() == $_GET['name'])
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
@@ -111,13 +111,13 @@ class View
 			return false;
 		}
 		
-		if(\Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
+		if(\Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != \Framework\Guilds::RANK_LEADER)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}	
 		
-		if($this->guild->GetStatus() == GUILD_STATUS_IN_FORMATION)
+		if($this->guild->GetStatus() == \Framework\Guilds::STATUS_FORMATION)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NEED_TO_BE_FORMED);
 			return false;

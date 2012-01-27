@@ -27,7 +27,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
-		$rank_opt_3 = $guild->SearchRankByLevel(GUILD_RANK_MEMBER_OPT_3);
+		$rank_opt_3 = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER_OPT_3);
 		if($_POST["member_2"])
 		{
 			if(strlen($_POST["member_2"]) > 35)
@@ -43,7 +43,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}			
 			
 			$rank_opt_3->SetName($_POST["member_2"]);
-			$rank_opt_3->SetLevel(GUILD_RANK_MEMBER_OPT_3);
+			$rank_opt_3->SetLevel(\Framework\Guilds::RANK_MEMBER_OPT_3);
 		}
 		else
 		{			
@@ -59,7 +59,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}		
 		}
 		
-		$rank_opt_2 = $guild->SearchRankByLevel(GUILD_RANK_MEMBER_OPT_2);
+		$rank_opt_2 = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER_OPT_2);
 		if($_POST["member_3"])
 		{
 			if(strlen($_POST["member_3"]) > 35)
@@ -81,7 +81,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}			
 			
 			$rank_opt_2->SetName($_POST["member_3"]);
-			$rank_opt_2->SetLevel(GUILD_RANK_MEMBER_OPT_2);
+			$rank_opt_2->SetLevel(\Framework\Guilds::RANK_MEMBER_OPT_2);
 		}
 		else
 		{
@@ -97,7 +97,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}			
 		}
 		
-		$rank_opt_1 = $guild->SearchRankByLevel(GUILD_RANK_MEMBER_OPT_1);
+		$rank_opt_1 = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER_OPT_1);
 		if($_POST["member_4"])
 		{
 			if(strlen($_POST["member_4"]) > 35)
@@ -119,7 +119,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}
 			
 			$rank_opt_1->SetName($_POST["member_4"]);
-			$rank_opt_1->SetLevel(GUILD_RANK_MEMBER_OPT_1);				
+			$rank_opt_1->SetLevel(\Framework\Guilds::RANK_MEMBER_OPT_1);				
 		}
 		else
 		{		
@@ -141,15 +141,15 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		$guild->DeleteRanks();
 		
 		//alteramos os nomes dos ranks primarios
-		$rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER);
+		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER);
 		$rank->SetName($_POST["leader"]);
 		$rank->Save();
 		
-		$rank = $guild->SearchRankByLevel(GUILD_RANK_VICE);
+		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
 		$rank->SetName($_POST["vice"]);	
 		$rank->Save();	
 		
-		$rank = $guild->SearchRankByLevel(GUILD_RANK_MEMBER);
+		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER);
 		$rank->SetName($_POST["member_1"]);	
 		$rank->Save();
 
@@ -176,7 +176,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < \Framework\Guilds::RANK_VICE)
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
 	}	
@@ -216,7 +216,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 					$rank_name = "leader";
 					$rank_pos--;
 					
-					if($memberLevel == GUILD_RANK_VICE)
+					if($memberLevel == \Framework\Guilds::RANK_VICE)
 						$readOnly = "readonly='readonly'";
 				}
 				elseif($rank_pos == 2)
@@ -224,7 +224,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 					$rank_name = "vice";
 					$rank_pos--;
 					
-					if($memberLevel == GUILD_RANK_VICE)
+					if($memberLevel == \Framework\Guilds::RANK_VICE)
 						$readOnly = "readonly='readonly'";				
 				}
 				elseif($rank_pos == 1)

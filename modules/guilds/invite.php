@@ -102,13 +102,13 @@ class View
 			}			
 		}
 		
-		if(!$this->cancel && \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) < GUILD_RANK_VICE)
+		if(!$this->cancel && \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) < \Framework\Guilds::RANK_VICE)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}	
 		
-		if($this->cancel && \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
+		if($this->cancel && \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != \Framework\Guilds::RANK_LEADER)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;

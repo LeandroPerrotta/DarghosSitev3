@@ -40,9 +40,9 @@ class War
 	static function ListStartedWars()
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_STARTED."' AND `end_date` >= '".time()."' ORDER BY `declaration_date`";
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE `status` = '".\Framework\Guilds::WAR_STARTED."' AND `end_date` >= '".time()."' ORDER BY `declaration_date`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guild_wars` WHERE `status` = '".GUILD_WAR_STARTED."' AND `end` >= '".time()."' ORDER BY `begin`";
+			$query_str = "SELECT `id` FROM `guild_wars` WHERE `status` = '".\Framework\Guilds::WAR_STARTED."' AND `end` >= '".time()."' ORDER BY `begin`";
 					
 		$query = \Core\Main::$DB->query($query_str);
 		
@@ -129,7 +129,7 @@ class War
 	
 	static function ListNegotiationWars()
 	{
-		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
+		/*if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "
 			SELECT 
 				`guild_wars`.`id` 
@@ -141,13 +141,13 @@ class War
 				`guild_wars`.`id` = `guild_wars_site`.`war_id` 
 			WHERE 
 				(
-					(`guild_wars`.`status` = '".GUILD_WAR_DISABLED."' AND `guild_wars_site`.`reply` >= '0') 
+					(`guild_wars`.`status` = '".\Framework\Guilds::WAR_DISABLED."' AND `guild_wars_site`.`reply` >= '0') 
 					OR (`guild_wars`.`status` = '".GUILD_WAR_WAITING."' AND `guild_wars_site`.`reply` = '-1')
 				) 
 				AND `guild_wars`.`end_date` > UNIX_TIMESTAMP()
 			ORDER BY 
 				`guild_wars`.`declaration_date`";
-		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
+		else*/if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 			$query_str = "
 			SELECT 
 				`guild_wars`.`id` 
@@ -160,7 +160,7 @@ class War
 			WHERE 
 				(
 					(
-						`guild_wars`.`status` = '".GUILD_WAR_DISABLED."' 
+						`guild_wars`.`status` = '".\Framework\Guilds::WAR_DISABLED."' 
 						AND `guild_wars_site`.`reply` >= '0'
 					) 
 				) 

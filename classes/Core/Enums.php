@@ -64,8 +64,8 @@ class e_Towns
 		,Salazart = 5
 		,IslandOfPeace = 6
 		,Northrend = 7
-		,Kashmir = 8
-		,Aracura = 9
+		,Kashmir = 9
+		,Aracura = 10
 	;	
 }
 

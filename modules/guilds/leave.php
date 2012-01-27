@@ -105,7 +105,7 @@ class View
 		
 		$player->LoadGuild();
 		
-		if($player->GetGuildLevel() == GUILD_RANK_LEADER)
+		if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CANNOT_LEAVE, $_GET['name']);	
 			return false;			

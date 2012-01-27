@@ -23,14 +23,14 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		$member->LoadGuild();
 		
-		if($member->GetGuildLevel() != GUILD_RANK_VICE)
+		if($member->GetGuildLevel() != \Framework\Guilds::RANK_VICE)
 		{
 			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 			return false;
 		}
 		
-		$leader_rank = $guild->SearchRankByLevel(GUILD_RANK_LEADER);
-		$vice_rank = $guild->SearchRankByLevel(GUILD_RANK_VICE);
+		$leader_rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER);
+		$vice_rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
 
 		$member->setGuildRankId($leader_rank->GetId());
 		$member->save();		
@@ -57,7 +57,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != \Framework\Guilds::RANK_LEADER)
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
 	}	
@@ -79,7 +79,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}			
 						
-			$vices = $guild->SearchRankByLevel(GUILD_RANK_VICE);
+			$vices = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
 			
 			foreach($vices->Members as $member)
 			{

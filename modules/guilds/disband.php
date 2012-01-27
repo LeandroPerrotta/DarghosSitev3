@@ -34,7 +34,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	{	
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));		
 	}
-	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != \Framework\Guilds::RANK_LEADER)
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));	
 	}	
