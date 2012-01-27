@@ -36,7 +36,7 @@ class Structs
 			}
 		}
 		
-		$keys = array_keys(static::$m_types);
+		$keys = array_keys(static::$m_typeStrings);
 		return $keys[0];
 	}
 	

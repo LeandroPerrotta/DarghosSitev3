@@ -4,7 +4,11 @@ if($_POST)
 	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$checkPassword = \Framework\Account::checkPassword();
+	/*
+	 * Hack
+	 */
+	include_once("Ajax/account.php");
+	$checkPassword = Ajax_account::checkPassword();
 	
 	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password_current"]))
 	{
