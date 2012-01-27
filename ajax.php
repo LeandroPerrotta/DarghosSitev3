@@ -17,49 +17,33 @@ date_default_timezone_set("America/Sao_Paulo");
 
 session_start();
 
-include "configs/index.php";
-
-include "classes/core.php";
-spl_autoload_register("Core::autoLoad");
-
-include "classes/mysql.php";
-
-include "classes/account.php";
-include "classes/character.php";
-include "classes/tools.php";
-include "classes/strings.php";
-include "classes/monsters.php";
-
-include "libs/phpmailer/class.phpmailer.php";
+include_once "configs/index.php";
+include "classes/Core/Main.php";
+Core\Main::Initialize();
 	
 define('RESPONSE_FIELD_VERIFY', 1);
 define('RESPONSE_NEXT_STEP', 2);
 
-Emails::init();
-
-try
-{
-	$db = new MySQL();
-	$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);	
-	
-	Core::$DB = $db;
-	Core::InitPOT();
-	
-	Strings::filterInputs(true);
-}
-catch (Exception $e)
-{
-	echo "Impossivel se conectar ao banco de dados.";
-}
-
 list($class, $function) = explode("_", $action);
 
 $_class = "Ajax_" . $class;
-if(method_exists($_class, $function))
+if(file_exists("Ajax/{$class}.php"))
 {
-	eval("\$ret = Ajax_{$class}::{$function}();");
-	echo json_encode($ret);
+	include_once("Ajax/{$class}.php");
+	if(method_exists($_class, $function))
+	{
+		eval("\$ret = Ajax_{$class}::{$function}();");
+		
+		if(is_array($ret))
+		{
+			echo json_encode($ret);
+		}
+		else
+		{
+			echo $ret;
+		}
+	}
 }
 
-$db->close();
+Core\Main::$DB->close();
 ?>

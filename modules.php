@@ -1,12 +1,14 @@
 <?
+use \Core\Configs as g_Configs;
 list($module, $topic) = explode(".", $_GET['ref']);
 
-if(!MANUTENTION)
+if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 {
-	Strings::filterInputs(true);
+	Core\Strings::filterInputs(true);
 	
 	$needLogin = false;
 	$needPremium = false;
+	$patch = array();
 
 	switch($module)
 	{
@@ -189,7 +191,7 @@ if(!MANUTENTION)
 				
 
 				case "stamina":
-						if(ENABLE_BUY_STAMINA)
+						if(g_Configs::Get(g_Configs::eConf()->ENABLE_STAMINA_REFILER))
 						{						
 							$needPremium = true;
 							$needLogin = true;		
@@ -388,55 +390,6 @@ if(!MANUTENTION)
 			}
 			
 		break;			
-
-		case "tickets":
-		
-			$patch['dir'] = $module;
-		
-			switch($topic)
-			{
-				case "send":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-
-				case "tickets":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-				
-				case "view":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-				
-				case "close":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;		
-
-				case "open":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-				
-				case "super_view":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;		
-				
-				case "super_list":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;		
-				
-				default:
-					$patch['dir'] = "errors";
-					$patch['file'] = "notfound";
-				break;
-			}
-			
-		break;
 		
 		case "forum":
 		
@@ -455,7 +408,7 @@ if(!MANUTENTION)
 				
 				case "newtopic":
 					$patch['file'] = $topic;
-					$needMinGroup = GROUP_COMMUNITYMANAGER;			
+					$needMinGroup = e_Groups::CommunityManager;			
 				break;					
 				
 				default:
@@ -505,27 +458,27 @@ if(!MANUTENTION)
 			{
 				case "fastnews":
 					$patch['file'] = $topic;
-					$needMinGroup = GROUP_COMMUNITYMANAGER;			
+					$needMinGroup = e_Groups::CommunityManager;			
 				break;			
 
 				case "gold_check":
 					$patch['file'] = $topic;
-					$needMinGroup = GROUP_COMMUNITYMANAGER;			
+					$needMinGroup = e_Groups::CommunityManager;			
 				break;	
 				
 				case "bg_matches":
 					$patch['file'] = $topic;
-					$needMinGroup = GROUP_COMMUNITYMANAGER;			
+					$needMinGroup = e_Groups::CommunityManager;			
 				break;	
 
 				case "addprize":
 					$patch['file'] = $topic;
-					$needMinGroup = GROUP_ADMINISTRATOR;			
+					$needMinGroup = e_Groups::Administrator;			
 				break;				
 						
 				case "emailcampaign":
 					$patch['file'] = $topic;
-					$needMinGroup = GROUP_ADMINISTRATOR;			
+					$needMinGroup = e_Groups::Administrator;			
 				break;						
 				
 				default:
@@ -541,7 +494,7 @@ if(!MANUTENTION)
 		{
 			$patch['dir'] = $module;		
 			
-			if(SHOW_SHOPFEATURES == 1)
+			if(g_Configs::Get(g_Configs::eConf()->ENABLE_ITEM_SHOP) && !g_Configs::Get(g_Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 			{
 				if(file_exists("modules/{$module}/{$topic}.php"))
 				{
@@ -567,12 +520,11 @@ if(!MANUTENTION)
 	if($_GET)
 	{	
 		$_isPremium = false;
-		$_groupId = GROUP_PLAYERS;
+		$_groupId = e_Groups::Player;
 		
 		if($_SESSION['login'])
 		{
-			include_once('classes/account.php');
-			$checkAccount = new Account;	
+			$checkAccount = new Framework\Account();	
 			$checkAccount->load($_SESSION["login"][0]);
 			
 			if($checkAccount->get("premdays") != 0)
@@ -613,12 +565,12 @@ else
 		$module .= "
 		<div style='margin-top: 16px;' id='new-title-bar'>
 			<h3 id='new-title'>
-				".MANUTENTION_TITLE."
+				".g_Configs::Get(g_Configs::eConf()->MANUTENTION_TITLE)."
 			</h3>
 			<div id='infos-line'>
 			</div>	
 		</div>
-		<div id='new-summary'>".MANUTENTION_BODY."</div>";
+		<div id='new-summary'>".g_Configs::Get(g_Configs::eConf()->MANUTENTION_BODY)."</div>";
 }
 
 ?>
