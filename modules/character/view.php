@@ -242,7 +242,7 @@ if($_POST["player_name"] || $_GET['name'])
 					<td><b>Skill club</b></td><td>{$player->getSkill(e_Skills::Club)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill shield</b></td><td>{$player->getSkill(e_Skills::Shield)}</td>
+					<td><b>Skill shield</b></td><td>{$player->getSkill(e_Skills::Shielding)}</td>
 				</tr>										
 				<tr>
 					<td><b>Skill distance</b></td><td>{$player->getSkill(e_Skills::Distance)}</td>
