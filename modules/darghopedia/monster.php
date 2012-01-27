@@ -25,7 +25,7 @@ class View
 			
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}		
 		
@@ -33,11 +33,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -48,12 +48,12 @@ class View
 	
 	function Prepare()
 	{
-		$this->monster = Monsters::GetInstance();
-		$this->monster instanceof Monsters;
+		$this->monster = \Framework\Monsters::GetInstance();
+		$this->monster instanceof \Framework\Monsters;
 		
 		if(!$this->monster->loadByName($_GET['name']))
 		{
-			$this->_message = Lang::Message(LMSG_MONSTER_NOT_FOUND, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->MONSTER_NOT_FOUND, $_GET['name']);
 			return false;			
 		}		
 		
@@ -68,7 +68,7 @@ class View
 	function Draw()
 	{
 		$monster = $this->monster;
-		$monster instanceof Monsters;
+		$monster instanceof \Framework\Monsters;
 		global $module;
 		
 		if($monster->lookIsType())
@@ -257,11 +257,11 @@ class View
 				continue;
 			}
 			
-			$items = Items::GetInstance();
-			$items instanceof Items;
+			$items = \Framework\Items::GetInstance();
+			$items instanceof \Framework\Items;
 			
 			$name = $items->getNameById($lot->offsetGet("id"));
-			$chance = $lot->offsetGet("chance") * Monsters::LOT_RATE;
+			$chance = $lot->offsetGet("chance") * \Framework\Monsters::LOT_RATE;
 			$chance = min($chance, 100000);
 			$chanceStr = "";
 			

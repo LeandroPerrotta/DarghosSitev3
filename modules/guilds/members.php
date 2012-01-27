@@ -1,33 +1,34 @@
 <?php
-if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
+use \Core\Configs;
+if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";		
 	
 	function proccessPost(&$message, Account $account, Guilds $guild)
 	{
-		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
-			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}			
 		
-		$memberLevel = Guilds::GetAccountLevel($account, $guild->GetId());
-		$character = $guild->SearchMemberByName($_POST["guild_member"]);
+		$memberLevel = \Framework\Guilds::GetAccountLevel($account, $guild->GetId());
+		$player = $guild->SearchMemberByName($_POST["guild_member"]);
 		
-		if(!$character)
+		if(!$player)
 		{
-			$message = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
 			return false;
 		}
 		
-		$character->LoadGuild();
+		$player->LoadGuild();
 		
-		if($character->GetGuildLevel() < GUILD_RANK_LEADER)
+		if($player->GetGuildLevel() < GUILD_RANK_LEADER)
 		{
-			if($character->GetGuildLevel() >= $memberLevel)
+			if($player->GetGuildLevel() >= $memberLevel)
 			{
-				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
 			}
 		}
@@ -35,16 +36,16 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		{
 			if($memberLevel != GUILD_RANK_LEADER)
 			{
-				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;				
 			}
 		}
 		
 		if($_POST["guild_action"] == "setRank")
 		{
-			if($character->GetGuildLevel() == GUILD_RANK_LEADER)
+			if($player->GetGuildLevel() == GUILD_RANK_LEADER)
 			{
-				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
 			}
 			
@@ -52,71 +53,71 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			
 			if(!$selectedRank || $selectedRank->GetLevel() == GUILD_RANK_LEADER)
 			{
-				$message = Lang::Message(LMSG_REPORT);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
 			}
 			
-			if($selectedRank->GetLevel() == GUILD_RANK_VICE && !$character->isPremium())
+			if($selectedRank->GetLevel() == GUILD_RANK_VICE && !$player->isPremium())
 			{
-				$message = Lang::Message(LMSG_GUILD_RANK_ONLY_PREMIUM);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_ONLY_PREMIUM);
 				return false;				
 			}
 
-			if($selectedRank->GetLevel() == GUILD_RANK_VICE && $character->loadAccount()->getGuildLevel() >= GUILD_RANK_VICE)
+			if($selectedRank->GetLevel() == GUILD_RANK_VICE && $player->loadAccount()->getGuildLevel() >= GUILD_RANK_VICE)
 			{
-				$message = Lang::Message(LMSG_GUILD_ACCOUNT_ALREADY_IS_HIGH_RANK);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_ACCOUNT_ALREADY_IS_HIGH_RANK);
 				return false;
 			}			
 			
-			$character->setGuildRankId($selectedRank->GetId());
+			$player->setGuildRankId($selectedRank->GetId());
 		}
 		elseif($_POST["guild_action"] == "setNick")
 		{
 			if(strlen($_POST["member_nick"]) < 3 or strlen($_POST["member_nick"]) > 15)
 			{
-				$message = Lang::Message(LMSG_GUILD_TITLE_SIZE);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_TITLE_SIZE);
 				return false;
 			}
 			
-			$character->setGuildNick($_POST["member_nick"]);
+			$player->setGuildNick($_POST["member_nick"]);
 		}
 		elseif($_POST["guild_action"] == "exclude")
 		{
-			if($character->GetGuildLevel() == GUILD_RANK_LEADER)
+			if($player->GetGuildLevel() == GUILD_RANK_LEADER)
 			{
-				$message = Lang::Message(LMSG_GUILD_PERMISSION);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
 			}
 			
 			if($guild->OnWar())
 			{
-				$message = Lang::Message(LMSG_GUILD_IS_ON_WAR, $_GET['name']);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_ON_WAR, $_GET['name']);
 				return false;			
 			}			
 			
-			$character->setGuildRankId( null );
+			$player->setGuildRankId( null );
 		}
 		
-		$character->save();	
-		$message = Lang::Message(LMSG_GUILD_MEMBER_EDITED, $_POST["guild_member"], $_GET['name']);
+		$player->save();	
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_MEMBER_EDITED, $_POST["guild_member"], $_GET['name']);
 		
 		return true;
 	}	
 	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
 	$character_list = $account->getCharacterList();	
 	
-	$guild = new Guilds();
+	$guild = new \Framework\Guilds();
 	
 	if(!$guild->LoadByName($_GET['name']))
 	{	
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));		
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));		
 	}	
 	else
 	{								
@@ -127,13 +128,13 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			
 		if($result)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
 		}
 		else
 		{
 			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}		
 		
 			$lowerRank = $guild->SearchRankByLowest();

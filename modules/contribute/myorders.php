@@ -1,5 +1,5 @@
 <?
-$contribute = new Contribute();
+$contribute = new \Framework\Contribute();
 
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
@@ -8,20 +8,22 @@ if(is_array($oders))
 	foreach($oders as $orderId)
 	{
 		$contribute->load($orderId, "id, name, target, type, period, cost, generated_in, status");
-		$status = $_contribution['status'][$contribute->get("status")];
+		
+		$_status = new t_PaymentStatus($contribute->get("status"));
+		$status = $_status->GetType();
 		
 		if($contribute->get("status") == 1)
-			$status = $_contribution['status'][$contribute->get("status")].". <a href='?ref=contribute.accept&id=".$contribute->get("id")."'>[aceitar]</a>";
+			$status .= " <a href='?ref=contribute.accept&id=".$contribute->get("id")."'>[aceitar]</a>";
 		
-		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));	
+		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));	
 		
 		$character_name = "";
 		
 		if(is_numeric($contribute->get("target")))
 		{
-			$character = new Character();
-			$character->load($contribute->get("target"));
-			$character_name = $character->getName();
+			$player = new \Framework\Player();
+			$player->load($contribute->get("target"));
+			$character_name = $player->getName();
 		}
 		else
 			$character_name = $contribute->get("target");
@@ -49,7 +51,7 @@ if(is_array($oders))
 							<td><b>Custo</b></td> <td> {$contribute->get("cost")}</td>
 						</tr>	
 						<tr>
-							<td><b>Pedido Gerado em</b></td> <td> ".Core::formatDate($contribute->get("generated_in"))."</td>
+							<td><b>Pedido Gerado em</b></td> <td> ".\Core\Main::formatDate($contribute->get("generated_in"))."</td>
 						</tr>																									
 						<tr>	
 							<td><b>Estado Atual</b></td> <td> {$status}</td>
@@ -77,6 +79,6 @@ if(is_array($oders))
 }	
 else
 {
-	Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_ACCOUNT_HAS_NO_ORDERS));
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_HAS_NO_ORDERS));
 }
 ?>

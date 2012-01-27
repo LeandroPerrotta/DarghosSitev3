@@ -5,8 +5,8 @@ class View
 	
 	function generateList()
 	{
-		$db = Core::$DB;
-		$db instanceof MySQL;
+		$db = \Core\Main::$DB;
+		$db instanceof \Core\MySQL;
 		
 		$start = 0;
 		if($_GET["page"] && $_GET["page"] >= 1)
@@ -36,7 +36,7 @@ class View
 			
 		while($fetch = $query->fetch())
 		{
-			$bgMatch = new BattlegroundMatch($fetch->id);
+			$bgMatch = new \Framework\Battlegrounds\Match($fetch->id);
 			$bgMatch->begin = $fetch->begin;
 			$bgMatch->end = $fetch->end;
 			
@@ -118,9 +118,9 @@ class View
 		global $module;
 		$matches = $this->generateList();
 		
-		$db = Core::$DB;
+		$db = \Core\Main::$DB;
 		
-		$table = new HTML_Table();
+		$table = new \Framework\HTML\Table();
 		$table->IsSubTable();
 		$table->AddField("Partidas de Battlegrounds");
 		$table->addRow();
@@ -175,15 +175,15 @@ class View
 			while($it->valid())
 			{
 				$matche = $it->current();
-				$matche instanceof BattlegroundMatch;
+				$matche instanceof \Framework\Battlegrounds\Match;
 				
-				$string = "#{$matche->id} " . Core::formatDate($matche->begin) . " ~ " . Core::formatDate($matche->end) . " <span class='tooglePlus'></span><br/>";
+				$string = "#{$matche->id} " . \Core\Main::formatDate($matche->begin) . " ~ " . \Core\Main::formatDate($matche->end) . " <span class='tooglePlus'></span><br/>";
 				
-				$string .= "(Time A) {$matche->teams[BattlegroundMatch::TEAM_ONE]["points"]} X {$matche->teams[BattlegroundMatch::TEAM_TWO]["points"]} (Time B)"; 
+				$string .= "(Time A) {$matche->teams[\Framework\Battlegrounds\Match::TEAM_ONE]["points"]} X {$matche->teams[\Framework\Battlegrounds\Match::TEAM_TWO]["points"]} (Time B)"; 
 				
 				$string .= "<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>";
 				
-				$subTable = new HTML_Table();
+				$subTable = new \Framework\HTML\Table();
 				
 				$subTable->AddField("Stats");
 				$subTable->AddRow();
@@ -211,12 +211,12 @@ class View
 					
 					foreach($playerList as $pInfo)
 					{
-						$p = new Character();
+						$p = new \Framework\Player();
 						$p->load($pInfo["player_id"]);
 						
 						$team_str = array(
-							BattlegroundMatch::TEAM_ONE => "A"
-							,BattlegroundMatch::TEAM_TWO => "B"
+							\Framework\Battlegrounds\Match::TEAM_ONE => "A"
+							,\Framework\Battlegrounds\Match::TEAM_TWO => "B"
 						);
 						
 						$voc = new t_Vocation($p->getVocation());

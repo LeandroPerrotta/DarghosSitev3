@@ -1,4 +1,4 @@
 <?
-//Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_NEED_LOGIN));
-Core::requireLogin();
+//\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->NEED_LOGIN));
+\Core\Main::requireLogin();
 ?>

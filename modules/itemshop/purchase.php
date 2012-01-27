@@ -2,7 +2,7 @@
 class View
 {
 	//html fields 
-	private $_itemlist_table, $_selected_item, $_character;
+	private $_itemlist_table, $_order_by, $_selected_item, $_character;
 	
 	//variables
 	private $_message, $_itemlist;	
@@ -14,23 +14,23 @@ class View
 	{				
 		if($_SESSION['login'])
 		{
-			$this->loggedAcc = new Account();
+			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 			
-			if($this->loggedAcc->getGroup() == GROUP_ADMINISTRATOR)
+			if($this->loggedAcc->getGroup() == e_Groups::Administrator)
 			{
 				$this->isAdmin = true;
 			}
 		}
 		else
 		{
-			Core::requireLogin();
+			\Core\Main::requireLogin();
 			return false;
 		}		
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;
 		}
 		
@@ -38,11 +38,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -54,11 +54,11 @@ class View
 	function Prepare()
 	{				
 		
-		$this->_selected_item = new HTML_Input();
+		$this->_selected_item = new \Framework\HTML\Input();
 		$this->_selected_item->SetName("selected_item");
 		$this->_selected_item->IsRadio();
 		
-		$this->_character = new HTML_SelectBox();
+		$this->_character = new \Framework\HTML\SelectBox();
 		$this->_character->SetName("character");
 		$this->_character->SetSize(150);
 		
@@ -74,10 +74,21 @@ class View
 				$this->_character->SelectedIndex($k);
 			}
 		}
+			
+		/*
+		$this->_order_by = new \Framework\HTML\SelectBox();		
+		$this->_order_by->SetName("order_by");
+		$this->_order_by->AddOption("Mais vendidos",\Framework\ItemShop::LIST_ORDER_RELEVANCE);
+		$this->_order_by->AddOption("Alfabeticamente",\Framework\ItemShop::LIST_ORDER_NAME);
+		$this->_order_by->AddOption("Mais novos",\Framework\ItemShop::LIST_ORDER_NEWER);
+		$this->_order_by->AddOption("Mais antigos",\Framework\ItemShop::LIST_ORDER_OLDER);
+		$this->_order_by->AddOption("Mais caros",\Framework\ItemShop::LIST_ORDER_PRICE_DESC);
+		$this->_order_by->AddOption("Mais baratos",\Framework\ItemShop::LIST_ORDER_PRICE_ASC);
+		*/
 		
-		$this->_itemlist = ItemShop::getItemShopList();
+		$this->_itemlist = \Framework\ItemShop::getItemShopList();
 		
-		$this->_itemlist_table = new HTML_Table();
+		$this->_itemlist_table = new \Framework\HTML\Table();
 
 		$this->_itemlist_table->AddField("Lista de Items");
 		$this->_itemlist_table->AddRow();	
@@ -92,22 +103,22 @@ class View
 		{
 			foreach($this->_itemlist as $item)
 			{
-				$item instanceof ItemShop;
+				$item instanceof \Framework\ItemShop;
 				
 				$params = $item->getParams();
 				
 				$this->_selected_item->SetValue($item->getId());
 				$this->_itemlist_table->AddField($this->_selected_item->Draw());
 				
-				if($item->getType() == ItemShop::TYPE_ITEM)
+				if($item->getType() == \Framework\ItemShop::TYPE_ITEM)
 				{
-					if($params[ItemShop::PARAM_ITEM_STACKABLE])
-						$this->_itemlist_table->AddField("<img src='files/items/{$params[ItemShop::PARAM_ITEM_ID]}_{$params[ItemShop::PARAM_ITEM_COUNT]}.gif'/>");
+					if($params[\Framework\ItemShop::PARAM_ITEM_STACKABLE])
+						$this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}_{$params[\Framework\ItemShop::PARAM_ITEM_COUNT]}.gif'/>");
 					else
-						$this->_itemlist_table->AddField("<img src='files/items/{$params[ItemShop::PARAM_ITEM_ID]}.gif'/>");
+						$this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}.gif'/>");
 				}				
 				
-				$this->_itemlist_table->AddField($params[ItemShop::PARAM_ITEM_COUNT]."x " . $item->getName());
+				$this->_itemlist_table->AddField($params[\Framework\ItemShop::PARAM_ITEM_COUNT]."x " . $item->getName());
 				$this->_itemlist_table->AddField($item->getDescription());
 				$this->_itemlist_table->AddField($item->getPrice());
 
@@ -130,28 +141,28 @@ class View
 		
 		if(!$tmp_char || !$selected_item)
 		{
-			$this->_message = Lang::Message(LMSG_FILL_FORM);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 			return false;
 		}
 		
-		$character = new Character();
+		$player = new \Framework\Player();
 				
-		if(!$character->loadByName($tmp_char) || $character->getAccountId() != $this->loggedAcc->getId())
+		if(!$player->loadByName($tmp_char) || $player->getAccountId() != $this->loggedAcc->getId())
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}
 		
-		if($character->getOnline())
+		if($player->getOnline())
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 			return false;			
 		}
 		
-		$item = new ItemShop();
+		$item = new \Framework\ItemShop();
 		if(!$item->load($selected_item))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
 		}
 		
@@ -159,17 +170,17 @@ class View
 		
 		if($item->getPrice() > $this->loggedAcc->getPremDays())
 		{
-			$this->_message = Lang::Message(LMSG_ITEMSHOP_COST, $item_prop[ItemShop::PARAM_ITEM_COUNT]);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_COST, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT]);
 			return false;
 		}
 		
 		$this->loggedAcc->updatePremDays($item->getPrice(), false);
 		$this->loggedAcc->save();
 		
-		//$item->doPlayerGiveThing($character->getId());
-		$item->logItemPurchase($character->getId());
+		//$item->doPlayerGiveThing($player->getId());
+		$item->logItemPurchase($player->getId());
 		
-		$this->_message = Lang::Message(LMSG_ITEMSHOP_PURCHASE_SUCCESS, $item_prop[ItemShop::PARAM_ITEM_COUNT], $item->getName(), $item->getPrice());
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_PURCHASE_SUCCESS, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT], $item->getName(), $item->getPrice());
 		return true;		
 	}
 	
@@ -188,6 +199,12 @@ class View
 				<p>
 					<label>Personagem</label>
 					{$this->_character->Draw()}
+					
+				</p>
+				
+				<p>
+					<label>Ordenar por</label>
+					{$this->_order_by->Draw()}
 					
 				</p>
 				

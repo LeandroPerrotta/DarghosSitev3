@@ -14,22 +14,22 @@ class View
 	{		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);
 		
 		$char_list = $this->loggedAcc->getCharacterList(ACCOUNT_CHARACTERLIST_BY_NAME);
 		
 		if(count($char_list) == 0 || $this->loggedAcc->getHighLevel() < 20)
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_FORUM_ACCOUNT_NOT_HAVE_CHARACTERS));
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_ACCOUNT_NOT_HAVE_CHARACTERS));
 			return false;						
 		}
 		
-		$this->_character = new HTML_SelectBox();
+		$this->_character = new \Framework\HTML\SelectBox();
 		$this->_character->SetName("character");
 	
 		foreach($char_list as $playerName)
@@ -39,7 +39,7 @@ class View
 		
 		$this->_character->SelectedIndex(0);
 		
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();			
 		
@@ -47,11 +47,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -62,11 +62,11 @@ class View
 	
 	function Prepare()
 	{
-		$this->user = new Forum_User();
+		$this->user = new \Framework\Forums\User();
 		
 		if($this->user->LoadByAccount($_SESSION['login'][0]))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
 		}
 		
@@ -75,9 +75,9 @@ class View
 	
 	function Post()
 	{
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}		
 		
@@ -85,20 +85,20 @@ class View
 		
 		if(!in_array($this->_character->GetPost(), $char_list))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;				
 		}
 		
-		$character = new Character();
-		$character->loadByName($this->_character->GetPost());
+		$player = new \Framework\Player();
+		$player->loadByName($this->_character->GetPost());
 		
-		$user = new Forum_User();
+		$user = new \Framework\Forums\User();
 		
 		$user->SetAccountId($this->loggedAcc->getId());
-		$user->SetPlayerId($character->getId());
+		$user->SetPlayerId($player->getId());
 		$user->Save();
 		
-		$this->_message = Lang::Message(LMSG_FORUM_ACCOUNT_REGISTERED);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_ACCOUNT_REGISTERED);
 		return true;
 	}
 	

@@ -1,3 +1,3 @@
 <?
-Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_SQL_INJECTION, $_SERVER['REMOTE_ADDR']));
+\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->SQL_INJECTION, $_SERVER['REMOTE_ADDR']));
 ?>

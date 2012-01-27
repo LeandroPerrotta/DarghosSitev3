@@ -1,14 +1,14 @@
 <?
 if($_POST)
 {
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$checkName = Ajax_account::checkName();
+	$checkName = \Framework\Account::checkName();
 	
-	if($account->getPassword() != Strings::encrypt($_POST['account_password']))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST['account_password']))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}
 	elseif($checkName["error"])
 	{
@@ -16,26 +16,26 @@ if($_POST)
 	}	
 	elseif($account->getName() == $_POST['account_name'])
 	{
-		$error = Lang::Message(LMSG_ACCOUNT_SETNAME_SAME_ID);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_SETNAME_SAME_ID);
 	}	
 	else
 	{		
 		$account->setName($_POST['account_name']);
 		$account->save();
 		
-		$success = Lang::Message(LMSG_ACCOUNT_SETNAME_SUCCESS);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_SETNAME_SUCCESS);
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .= '

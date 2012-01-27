@@ -1,4 +1,4 @@
 <?
 unset($_SESSION['login']);
-Core::redirect("index.php");
+\Core\Main::redirect("index.php");
 ?>

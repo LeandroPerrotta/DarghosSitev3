@@ -1,14 +1,15 @@
 <?php
-if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
+use \Core\Configs;
+if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";	
 
 	function proccessPost(&$message, Account $account, Guilds $guild)
 	{
-		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
-			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}			
 
@@ -16,7 +17,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		
 		if(!$member)
 		{
-			$message = Lang::Message(LMSG_GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
 			return false;			
 		}
 		
@@ -24,7 +25,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		
 		if($member->GetGuildLevel() != GUILD_RANK_VICE)
 		{
-			$message = Lang::Message(LMSG_GUILD_PERMISSION);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 			return false;
 		}
 		
@@ -34,7 +35,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		$member->setGuildRankId($leader_rank->GetId());
 		$member->save();		
 		
-		$old_owner = new Character();
+		$old_owner = new \Framework\Player();
 		$old_owner->load($guild->GetOwnerId());
 		$old_owner->LoadGuild();
 		$old_owner->setGuildRankId($vice_rank->GetId());
@@ -43,22 +44,22 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		$guild->SetOwnerId($member->getId());
 		$guild->Save();		
 		
-		$message = Lang::Message(LMSG_GUILD_PASSLEADERSHIP, $_GET['name'], $old_owner->getName(), $_POST["member_candidate"]);
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PASSLEADERSHIP, $_GET['name'], $old_owner->getName(), $_POST["member_candidate"]);
 		return true;
 	}
 	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$guild = new Guilds();
+	$guild = new \Framework\Guilds();
 	
 	if(!$guild->LoadByName($_GET['name']))
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
 	}	
 	else
 	{		
@@ -69,13 +70,13 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			
 		if($result)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
 		}
 		else
 		{
 			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}			
 						
 			$vices = $guild->SearchRankByLevel(GUILD_RANK_VICE);

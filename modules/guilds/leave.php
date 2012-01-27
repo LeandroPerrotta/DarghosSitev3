@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//html fields
@@ -12,37 +13,37 @@ class View
 	
 	function View()
 	{
-		if(!$_GET['name'] || ENABLE_GUILD_READ_ONLY)
+		if(!$_GET['name'] || !Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		{
 			return;
 		}
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		
-		$this->_character = new HTML_SelectBox();
+		$this->_character = new \Framework\HTML\SelectBox();
 		$this->_character->SetName("character_name");
 		
-		$char_list = $this->loggedAcc->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
+		$char_list = $this->loggedAcc->getCharacterList(Account::PLAYER_LIST_BY_ID);
 		
 		//listing all account characters and adding to options box the guild members
 		foreach($char_list as $player_id)
 		{
 			if($this->guild->IsMember($player_id))
 			{
-				$character = new Character();
-				$character->load($player_id);
+				$player = new \Framework\Player();
+				$player->load($player_id);
 				
-				$this->_character->AddOption($character->getName());
+				$this->_character->AddOption($player->getName());
 			}
 		}	
 
 		$this->_character->SelectedIndex(0);
 		
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();		
 		
@@ -50,11 +51,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -65,20 +66,20 @@ class View
 	
 	function Prepare()
 	{
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$this->guild = new Guilds();
+		$this->guild = new \Framework\Guilds();
 		
 		if(!$this->guild->LoadByName($_GET['name']))
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
 			return false;
 		}	
 
 		if($this->guild->OnWar())
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_IS_ON_WAR, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_ON_WAR, $_GET['name']);
 			return false;			
 		}
 		
@@ -87,33 +88,33 @@ class View
 	
 	function Post()
 	{
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}
 		
-		$character = new Character();
-		$character->loadByName($this->_character->GetPost());
+		$player = new \Framework\Player();
+		$player->loadByName($this->_character->GetPost());
 		
-		if(!$this->guild->IsMember($character->getId()))
+		if(!$this->guild->IsMember($player->getId()))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}
 		
-		$character->LoadGuild();
+		$player->LoadGuild();
 		
-		if($character->GetGuildLevel() == GUILD_RANK_LEADER)
+		if($player->GetGuildLevel() == GUILD_RANK_LEADER)
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_CANNOT_LEAVE, $_GET['name']);	
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CANNOT_LEAVE, $_GET['name']);	
 			return false;			
 		}
 						
-		$character->setGuildRankId( GUILD_RANK_NO_MEMBER );
-		$character->save();
+		$player->setGuildRankId( GUILD_RANK_NO_MEMBER );
+		$player->save();
 		
-		$this->_message = Lang::Message(LMSG_GUILD_LEAVE, $this->_character->GetPost(), $_GET['name']);		
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LEAVE, $this->_character->GetPost(), $_GET['name']);		
 		return true;		
 	}
 	

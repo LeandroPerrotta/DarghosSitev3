@@ -115,7 +115,7 @@ function createCharacter()
 	{
 		$("#character_name").text(characterName.val());
 		fogLoading();
-		sendPost({action: "character_create", character_name: characterName.val(), character_genre: characterGenre.val(), character_vocation: characterVocation.val()}, $("input[name='account_email']"));
+		sendPost({action: "player_create", character_name: characterName.val(), character_genre: characterGenre.val(), character_vocation: characterVocation.val()}, $("input[name='account_email']"));
 		return true;			
 	}
 	

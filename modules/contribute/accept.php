@@ -1,32 +1,33 @@
 <?
-$contribute = new Contribute();
+use \Core\Configs;
+$contribute = new \Framework\Contribute();
 
-if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status, generated_in") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
+if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status, generated_in") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
 {
 	if($_POST)
 	{
-		$chkAccount = new Account();
+		$chkAccount = new \Framework\Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
+		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
 		
 		$error = NULL;
 		
-		if(Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
+		if(\Core\Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
-			$error = Lang::Message(LMSG_WRONG_PASSWORD);
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 		}
 		elseif($_POST["accept_terms"] != "1")
 		{
-			$error = Lang::Message(LMSG_CONTR_TERMS);
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_TERMS);
 		}
-		elseif($premium["onAccept"] && !call_user_func("Contribute::{$premium["onAccept"]}", $contribute, &$error))
+		elseif($premium["onAccept"] && !call_user_func("\Framework\Contribute::{$premium["onAccept"]}", $contribute, &$error))
 		{
 			//
 		}
 		else
 		{
-			$account = new Account();
+			$account = new \Framework\Account();
 			$account->load($contribute->get("target_account"));
 			
 			$premdays = $contribute->get("period");			   
@@ -38,28 +39,28 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 			$contribute->set("lastupdate_in", time());
 			$contribute->save();
 		
-			$success = Lang::Message(LMSG_CONTR_ACTIVATED, CONFIG_SITENAME);
+			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_ACTIVATED, Configs::Get(Configs::eConf()->WEBSITE_NAME));
 		}
 	}
 
 	if($success)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 		}
 
-	$contrato['premium'] = "Este é um documento informativo das clausulas e regras referente ao funcionamento, deveres e limitações entre outros referente aos jogadores contribuintes com o ".CONFIG_SITENAME.". Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribuições.\" e assim dar continuidade ao sistema de contribuição.
+	$contrato['premium'] = "Este é um documento informativo das clausulas e regras referente ao funcionamento, deveres e limitações entre outros referente aos jogadores contribuintes com o ".Configs::Get(Configs::eConf()->WEBSITE_NAME).". Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribuições.\" e assim dar continuidade ao sistema de contribuição.
 
 1. A estabilidade e mantimento do servidor no ar.
-- A UltraxSoft e(ou) ".CONFIG_SITENAME." não tem a obrigação de manter o servidor sempre ligado, podendo o mesmo ser desligado a qualquer momento e por qualquer motivo, sem prévio aviso, devolução de quantias em dinheiro ou danos morais.
+- A UltraxSoft e(ou) ".Configs::Get(Configs::eConf()->WEBSITE_NAME)." não tem a obrigação de manter o servidor sempre ligado, podendo o mesmo ser desligado a qualquer momento e por qualquer motivo, sem prévio aviso, devolução de quantias em dinheiro ou danos morais.
 
 2. Conectividade.
-- A UltraxSoft e(ou) ".CONFIG_SITENAME." não são responsáveis por qualquer problema de conectividade entre o jogador e o \"game-server\", tanto por parte do jogador, provedor de internet ou \"datacenter\" (empresa que hospeda o nosso game-server).
+- A UltraxSoft e(ou) ".Configs::Get(Configs::eConf()->WEBSITE_NAME)." não são responsáveis por qualquer problema de conectividade entre o jogador e o \"game-server\", tanto por parte do jogador, provedor de internet ou \"datacenter\" (empresa que hospeda o nosso game-server).
 
 3. Seguir regras sem exceções.
 - Caso você contribua com o serviço você estará sujeito a todas as regras do jogo, não possuindo nenhum direito ou vantagem extra dentro ou fora do jogo.
@@ -68,7 +69,7 @@ if(Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, ta
 - Caso você contribua com o serviço, cabe a nós decidirmos sobre as vantagens recebidas, podendo as mesmas serem retiradas a qualquer momento sem prévio aviso nem devolução em dinheiro.
 
 5. Direitos autorais.
-- O ".CONFIG_SITENAME." não apóia a modificações de \"softwares\" sem autorização dos fabricantes ou desenvolvedores, e não cobre nenhum tipo de dano a seu computador que os programas podem causar.
+- O ".Configs::Get(Configs::eConf()->WEBSITE_NAME)." não apóia a modificações de \"softwares\" sem autorização dos fabricantes ou desenvolvedores, e não cobre nenhum tipo de dano a seu computador que os programas podem causar.
 
 6. Recompensas dentro do jogo.
 - Perdas de itens, contas, ou características de personagens somente serão devolvidos se o problema foi de causa interna em nossos \"game-servers\" e em forma de ponto de restauração (efetuamos uma volta no tempo todo o servidor para um momento ou dia aonde a problemática não havia acontecido), e somente caso a UltraxSoft assim julgue necessário, perdas causadas por qualqueis outras causas (como problemas de conexão, desastres naturais, cuidados não eficientes com a sua conta (Hacking), entre outros) não são recompensados de maneira alguma.
@@ -80,15 +81,15 @@ IMPORTANTE: Após aceitar o serviço, receber e começar a desfrutar dos benefic
 
 A mudança deste documento pode ser efetuada sem aviso, ou prévio aviso, cabendo a você se manter atualizado as regras e ao contrato.";
 
-$premium = Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
+$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
 
 $character_name = "";
 
 if(is_numeric($contribute->get("target")))
 {
-	$character = new Character();
-	$character->load($contribute->get("target"));
-	$character_name = $character->getName();
+	$player = new \Framework\Player();
+	$player->load($contribute->get("target"));
+	$character_name = $player->getName();
 }
 else
 	$character_name = $contribute->get("target");
@@ -115,7 +116,7 @@ $module .= '
 		</p>	
 
 		<p>
-			<input name="accept_terms" type="checkbox" value="1" /> Eu aceito com as clausulas e termos de contrato de contribuições do '.CONFIG_SITENAME.'.
+			<input name="accept_terms" type="checkbox" value="1" /> Eu aceito com as clausulas e termos de contrato de contribuições do '.Configs::Get(Configs::eConf()->WEBSITE_NAME).'.
 		</p>			
 		
 		<div id="line1"></div>

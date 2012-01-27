@@ -1,65 +1,65 @@
 <?php
 if($_POST)
 {	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}	
 	elseif(!$account->getEmail())
 	{
-		$error = Lang::Message(LMSG_OPERATION_REQUIRE_VALIDATED_EMAIL);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_REQUIRE_VALIDATED_EMAIL);
 	}	
 	elseif($account->getSecretKey())
 	{
-		$error = Lang::Message(LMSG_SECRETKEY_ALREADY_EXISTS);	
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->SECRETKEY_ALREADY_EXISTS);	
 	}
 	elseif($_POST["recovery_usekey"] == "system")
 	{
 		$account->setSecretKey($_POST["recovery_keysystem"], "default");
 		
-		$success = Lang::Message(LMSG_SECRETKEY_SUCCESS, $_POST["recovery_keysystem"]);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->SECRETKEY_SUCCESS, $_POST["recovery_keysystem"]);
 	}	
 	elseif($_POST["recovery_usekey"] == "custom")
 	{
 		if(!$_POST["recovery_key"] or !$_POST["recovery_lembrete"])
 		{
-			$error = Lang::Message(LMSG_FILL_FORM);
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 		}	
 		elseif(strlen($_POST["recovery_key"]) < 6 or strlen($_POST["recovery_key"]) > 15 or strlen($_POST["recovery_lembrete"]) < 5 or strlen($_POST["recovery_lembrete"]) > 25)		
 		{
-			$error = Lang::Message(LMSG_SECRETKEY_WRONG_SIZE);
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->SECRETKEY_WRONG_SIZE);
 		}
 		elseif($_POST["recovery_lembrete"] == $_POST["recovery_key"])
 		{
-			$error = Lang::Message(LMSG_SECRETKEY_MUST_BY_UNLIKE_REMINDER);
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->SECRETKEY_MUST_BY_UNLIKE_REMINDER);
 		}
 		elseif(!is_numeric($_POST["recovery_key"]))
 		{
-			$error = Lang::Message(LMSG_FILL_NUMERIC_FIELDS);
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_NUMERIC_FIELDS);
 		}
 		else
 		{
 			$account->setSecretKey($_POST["recovery_key"], $_POST["recovery_lembrete"]);			
-			$success = Lang::Message(LMSG_SECRETKEY_CUSTOM_SUCCESS, $_POST["recovery_key"], $_POST["recovery_lembrete"]);			
+			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->SECRETKEY_CUSTOM_SUCCESS, $_POST["recovery_key"], $_POST["recovery_lembrete"]);			
 		}
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 	
-$secretkey = Strings::randKey(5, 4, "number+upper");	
+$secretkey = \Core\Strings::randKey(5, 4, "number+upper");	
 	
 $module .= '	
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">

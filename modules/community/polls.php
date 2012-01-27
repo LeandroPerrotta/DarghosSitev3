@@ -2,9 +2,9 @@
 $module .= "
 <p>No Darghos costumamos sempre abrir enquetes sobre mudanças de certas caracteristicas do jogo, tornando o desenvolvimento do servidor mais democratico entre a equipe e os jogadores. Para votar em uma enquete é necessario apenas estar logado em sua conta e pessouir um char com level minimo (isto pode ser modificado de enquete para enquete).</p>";
 
-$pollList = Forum_Topics::ListPollTopics();
+$pollList = \Framework\Forums\Topics::ListPollTopics();
 
-$activeTable = new HTML_Table();
+$activeTable = new \Framework\HTML\Table();
 $activeTable->AddDataRow("Enquetes em atividade");
 
 $style = "font-weight: bold;";
@@ -14,7 +14,7 @@ $activeTable->AddField("Respostas", null, $style);
 $activeTable->AddField("Ultimo por", null, $style);	
 $activeTable->AddRow();
 
-$inactiveTable = new HTML_Table();
+$inactiveTable = new \Framework\HTML\Table();
 $inactiveTable->AddDataRow("Enquetes concluidas");
 
 $inactiveTable->AddField("Titulo / Detalhes", null, $style);	
@@ -39,8 +39,8 @@ if($pollList)
 			
 			$string = "
 				<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a><br/>
-				<i>Iniciado em " . Core::formatDate($poll->GetDate()) . ".
-				Termina em " . Core::formatDate($poll->GetPollEnd()) . ".</i><br>
+				<i>Iniciado em " . \Core\Main::formatDate($poll->GetDate()) . ".
+				Termina em " . \Core\Main::formatDate($poll->GetPollEnd()) . ".</i><br>
 				Premium: {$premium} Level: {$poll->GetPollMinLevel()}
 			";
 			
@@ -51,15 +51,15 @@ if($pollList)
 			
 			if($poll->GetPostCount() > 0)
 			{	
-				$user_post = new Forum_User();
+				$user_post = new \Framework\Forums\User();
 				$user_post->Load($lastPost["user_id"]);
 				
-				$user_character = new Character();
+				$user_character = new \Framework\Player();
 				$user_character->load($user_post->GetPlayerId());			
 				
 				$string = "
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					<i>" . Core::formatDate($lastPost["date"]) . "</i>
+					<i>" . \Core\Main::formatDate($lastPost["date"]) . "</i>
 				";
 			}
 			else
@@ -76,8 +76,8 @@ if($pollList)
 		{			
 			$string = "
 				<a href='?ref=forum.topic&v={$poll->GetId()}'>" . $poll->GetTitle() . "</a><br/>
-				<i>Iniciado em " . Core::formatDate($poll->GetDate()) . ".
-				Terminou em " . Core::formatDate($poll->GetPollEnd()) . ".</i>
+				<i>Iniciado em " . \Core\Main::formatDate($poll->GetDate()) . ".
+				Terminou em " . \Core\Main::formatDate($poll->GetPollEnd()) . ".</i>
 			";
 			
 			$inactiveTable->AddField($string);				
@@ -87,15 +87,15 @@ if($pollList)
 			
 			if($poll->GetPostCount() > 0)
 			{	
-				$user_post = new Forum_User();
+				$user_post = new \Framework\Forums\User();
 				$user_post->Load($lastPost["user_id"]);
 				
-				$user_character = new Character();
+				$user_character = new \Framework\Player();
 				$user_character->load($user_post->GetPlayerId());			
 				
 				$string = "
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					<i>" . Core::formatDate($lastPost["date"]) . "</i>
+					<i>" . \Core\Main::formatDate($lastPost["date"]) . "</i>
 				";
 			}
 			else

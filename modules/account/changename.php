@@ -14,26 +14,26 @@ class View
 	{		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();
 		
-		$this->_name = new HTML_Input();
+		$this->_name = new \Framework\HTML\Input();
 		$this->_name->SetName("account_name");			
 		
 		if($_POST)
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -44,12 +44,12 @@ class View
 	
 	function Prepare()
 	{		
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
 		if($this->loggedAcc->getPremDays() == 0)
 		{
-			$this->_message = Lang::Message(LMSG_NEED_PREMIUM);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->NEED_PREMIUM);
 			return false;
 		}
 		
@@ -58,12 +58,12 @@ class View
 	
 	function Post()
 	{
-		$newacc = new Account();
+		$newacc = new \Framework\Account();
 		
 		$password = $this->_password->GetPost();
 		$name = $this->_name->GetPost();
 		
-		$checkName = Ajax_account::checkName();
+		$checkName = \Framework\Account::checkName();
 		
 		if($checkName["error"])
 		{
@@ -71,15 +71,15 @@ class View
 			return false;				
 		}
 		
-		if($this->loggedAcc->getPassword() != Strings::encrypt($password))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($password))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;			
 		}
 		
 		if($this->loggedAcc->getPremDays() < 15)
 		{
-			$this->_message = Lang::Message(LMSG_OPERATION_NEED_PREMDAYS, 15);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_NEED_PREMDAYS, 15);
 			return false;	
 		}
 		
@@ -87,8 +87,8 @@ class View
 		$this->loggedAcc->updatePremDays(15, false);
 		$this->loggedAcc->save();
 		
-		Core::addChangeLog('acc_rename', $this->loggedAcc->getId(), $name);
-		$this->_message = Lang::Message(LMSG_ACCOUNT_CHANGENAME_SUCCESS, $name);
+		\Core\Main::addChangeLog('acc_rename', $this->loggedAcc->getId(), $name);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_CHANGENAME_SUCCESS, $name);
 		return true;
 	}
 	

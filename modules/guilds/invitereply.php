@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//html fields
@@ -12,22 +13,22 @@ class View
 	
 	function View()
 	{
-		if(!$_GET['name'] || ENABLE_GUILD_READ_ONLY)
+		if(!$_GET['name'] || !Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 			
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		
-		$this->_reply = new HTML_SelectBox();
+		$this->_reply = new \Framework\HTML\SelectBox();
 		$this->_reply->SetName("reply");
 		$this->_reply->AddOption("Aceitar");		
 		$this->_reply->AddOption("Rejeitar");		
 		$this->_reply->SelectedIndex(0);		
 			
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();			
 		
@@ -35,11 +36,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -50,22 +51,22 @@ class View
 	
 	function Prepare()
 	{
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$character_list = $this->loggedAcc->getCharacterList(ACCOUNT_CHARACTERLIST_BY_ID);
+		$character_list = $this->loggedAcc->getCharacterList(Account::PLAYER_LIST_BY_ID);
 		
-		$this->character = new Character();		
+		$this->player = new \Framework\Player();		
 		
 		if(!$this->character->loadByName($_GET['name']))
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
 			return false;
 		}
 		
 		if(!in_array($this->character->getId(), $character_list))
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			return false;
 		}	
 		
@@ -74,9 +75,9 @@ class View
 	
 	function Post()
 	{
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}	
 		
@@ -84,30 +85,30 @@ class View
 		
 		if(!$invite)
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_CHARACTER_NOT_INVITED, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CHARACTER_NOT_INVITED, $_GET['name']);
 			return false;
 		}		
 		
 		list($guild_id, $invite_date) = $invite;
 		
-		$guild = new Guilds();
+		$guild = new \Framework\Guilds();
 		$guild->Load($guild_id);	
 
 		if($guild->OnWar())
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_IS_ON_WAR, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_ON_WAR, $_GET['name']);
 			return false;			
 		}		
 		
 		if($this->_reply->GetPost() == "Aceitar")		
 		{			
 			$this->character->acceptInvite();	
-			$this->_message = Lang::Message(LMSG_GUILD_JOIN, $_GET['name'], $guild->GetName());
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_JOIN, $_GET['name'], $guild->GetName());
 		}
 		elseif($this->_reply->GetPost() == "Rejeitar")
 		{
 			$this->character->removeInvite();
-			$this->_message = Lang::Message(LMSG_GUILD_JOIN_REJECT, $guild->GetName(), $_GET['name']);		
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_JOIN_REJECT, $guild->GetName(), $_GET['name']);		
 		}	
 		
 		return true;

@@ -14,13 +14,13 @@ class View
 	{		
 		if($_SESSION["login"])
 		{
-			Core::redirect("index.php");
+			\Core\Main::redirect("index.php");
 			return;
 		}
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}		
 		
@@ -28,11 +28,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -44,34 +44,34 @@ class View
 	function Prepare()
 	{		
 		
-		$this->_account_name = new HTML_Input();
+		$this->_account_name = new \Framework\HTML\Input();
 		$this->_account_name->SetName("account_name");
-		$this->_account_name->SetSize(HTML_Input::SIZE_SMALL);
+		$this->_account_name->SetSize(\Framework\HTML\Input::SIZE_SMALL);
 				
-		$this->_account_password = new HTML_Input();
+		$this->_account_password = new \Framework\HTML\Input();
 		$this->_account_password->SetName("account_password");		
 		$this->_account_password->IsPassword();		
-		$this->_account_password->SetSize(HTML_Input::SIZE_SMALL);
+		$this->_account_password->SetSize(\Framework\HTML\Input::SIZE_SMALL);
 		
-		$this->_account_confirm_password = new HTML_Input();
+		$this->_account_confirm_password = new \Framework\HTML\Input();
 		$this->_account_confirm_password->SetName("account_confirm_password");		
 		$this->_account_confirm_password->IsPassword();		
-		$this->_account_confirm_password->SetSize(HTML_Input::SIZE_SMALL);
+		$this->_account_confirm_password->SetSize(\Framework\HTML\Input::SIZE_SMALL);
 
-		$this->_account_email = new HTML_Input();
+		$this->_account_email = new \Framework\HTML\Input();
 		$this->_account_email->SetName("account_email");	
-		$this->_account_email->SetSize(HTML_Input::SIZE_SMALL);
+		$this->_account_email->SetSize(\Framework\HTML\Input::SIZE_SMALL);
 		
-		$this->_char_name = new HTML_Input();
+		$this->_char_name = new \Framework\HTML\Input();
 		$this->_char_name->SetName("character_name");
-		$this->_char_name->SetSize(HTML_Input::SIZE_SMALL);
+		$this->_char_name->SetSize(\Framework\HTML\Input::SIZE_SMALL);
 		
-		$this->_char_genre = new HTML_SelectBox();
+		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
 		$this->_char_genre->AddOption("Masculino", "male");
 		$this->_char_genre->AddOption("Feminino", "female");
 		
-		$this->_char_vocation = new HTML_SelectBox();
+		$this->_char_vocation = new \Framework\HTML\SelectBox();
 		$this->_char_vocation->SetName("character_vocation");
 		$this->_char_vocation->SetSize(HTML_SELECTBOX_SIZE_BIG);
 		$this->_char_vocation->AddOption("");
@@ -221,7 +221,7 @@ class View
 	{
 		global $module;		
 		
-		Core::includeJavaScriptSource("account_register.js");
+		\Core\Main::includeJavaScriptSource("account_register.js");
 		
 		$module .= "		
 		<fieldset style='margin-top: 20px;'>

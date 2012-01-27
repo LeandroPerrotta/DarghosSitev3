@@ -1,29 +1,29 @@
 <?
 if($_POST)
 {	
-	$character = new Character();
+	$player = new \Framework\Player();
 	
 	$form_OrderName = $_POST["order_name"];
 	$form_OrderMail = $_POST["order_email"];
 	$form_OrderTarget = $_POST["order_target"];	
 	$form_OrderDays = $_POST["order_days"];
 	
-	$account = Account::loadLogged();
+	$account = \Framework\Account::loadLogged();
 	if(!$form_OrderName or !$form_OrderMail or !$form_OrderTarget or !$form_OrderDays)
 	{
-		$error = Lang::Message(LMSG_FILL_FORM);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 	}
 	elseif(!$account->getEmail())
 	{
-		$error = Lang::Message(LMSG_OPERATION_REQUIRE_VALIDATED_EMAIL);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_REQUIRE_VALIDATED_EMAIL);
 	}
-	elseif(!$character->loadByName($form_OrderTarget))
+	elseif(!$player->loadByName($form_OrderTarget))
 	{
-		$error = Lang::Message(LMSG_CHARACTER_WRONG);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 	}
-	elseif(!Contribute::isValidPeriod($form_OrderDays))
+	elseif(!\Framework\Contribute::isValidPeriod($form_OrderDays))
 	{
-		$error = Lang::Message(LMSG_REPORT);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 	}
 	else
 	{
@@ -34,7 +34,7 @@ if($_POST)
 		$_SESSION['contribute']["order_target"] = $form_OrderTarget;
 		$_SESSION['contribute']["order_period"] = $form_OrderDays;
 		
-		$premiumInfos =  Contribute::getPremiumInfoByPeriod($form_OrderDays);
+		$premiumInfos =  \Framework\Contribute::getPremiumInfoByPeriod($form_OrderDays);
 	
 		$module .= '	
 			<form action="?ref=contribute.confirm" method="post">
@@ -67,7 +67,7 @@ if($_POST)
 					
 					<p>
 						<label for="order_days">Detalhes da contribuição</label><br />
-						'.$premiumInfos["product"].' por '.Contribute::formatCost($premiumInfos["cost"]).'.
+						'.$premiumInfos["product"].' por '.\Framework\Contribute::formatCost($premiumInfos["cost"]).'.
 					</p>
 					
 					<div id="line1"></div>
@@ -84,7 +84,7 @@ if(!$success)
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 	
 $module .= '	
@@ -121,16 +121,16 @@ $module .= '
 				<ul style="list-style: none;">
 					';
 
-						foreach(Contribute::$premiums as $k => $premium)
+						foreach(\Framework\Contribute::$premiums as $k => $premium)
 						{
-							$premium = Contribute::getPremiumInfoByPeriod($premium["period"]);		
+							$premium = \Framework\Contribute::getPremiumInfoByPeriod($premium["period"]);		
 							$module .= "
 							
 								<li style='margin-left: 0px;'>	
 									<label style='margin-left: 6px; display: inline; line-height: 30px;'>					
 										<input style='margin-top: 0px;' name='order_days' type='radio' value='{$premium["period"]}'>
 										<span style='font-size: 12px;'>{$premium["text"]}</span> por
-										<span style='font-weight: bold;'>".Contribute::formatCost($premium["cost"])."</span>	
+										<span style='font-weight: bold;'>".\Framework\Contribute::formatCost($premium["cost"])."</span>	
 									</label>							
 								</li>
 							";
@@ -144,7 +144,7 @@ $module .= '
 			<ul>
 				';
 					
-				foreach(Contribute::$specialOffersNotes as $k => $info)
+				foreach(\Framework\Contribute::$specialOffersNotes as $k => $info)
 				{
 					list($start_day, $start_month, $start_year) = explode("/", $info["start"]);
 					list($end_day, $end_month, $end_year) = explode("/", $info["end"]);		

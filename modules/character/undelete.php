@@ -1,43 +1,43 @@
 <?php
 if($_POST)
 {
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
 	$list = $account->getCharacterList();	
 	
-	$character = new Character();
-	$character->loadByName($_POST["player_name"]);
+	$player = new \Framework\Player();
+	$player->loadByName($_POST["player_name"]);
 	
-	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}	
-	elseif(!$character->deletionStatus())
+	elseif(!$player->deletionStatus())
 	{
-		$error = Lang::Message(LMSG_CHARACTER_NOT_TO_DELETION);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_TO_DELETION);
 	}
 	elseif(!in_array($_POST["player_name"], $list))
 	{	
-		$error = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
 	else
 	{
-		$character->cancelDeletion();
+		$player->cancelDeletion();
 		
-		$success = Lang::Message(LMSG_CHARACTER_NO_MORE_DELETED, $_POST["player_name"]);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NO_MORE_DELETED, $_POST["player_name"]);
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .=	'

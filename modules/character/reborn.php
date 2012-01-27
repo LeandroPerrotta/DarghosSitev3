@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//html fields
@@ -29,11 +30,11 @@ class View
 			
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 			
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();		
 		
@@ -41,11 +42,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -57,25 +58,25 @@ class View
 	
 	function Prepare()
 	{
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		
 		if(!$this->loggedAcc->load($_SESSION['login'][0]))
 		{
-			$this->_message = Lang::Message(LMSG_NEED_LOGIN);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->NEED_LOGIN);
 			return false;			
 		}
 		
-		$this->character = new Character();
+		$this->player = new \Framework\Player();
 		
 		if(!$this->character->loadByName($_GET["name"]))
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_WRONG);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 			return false;
 		}
 		
 		if($this->character->getAccountId() != $this->loggedAcc->getId())
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			return false;
 		}
 		
@@ -95,9 +96,9 @@ class View
 			)
 		);
 		
-		if($this->character->getLevel() < FIRST_REBORN_LEVEL)
+		if($this->character->getLevel() < Configs::Get(Configs::eConf()->FIRST_REBORN_LEVEL))
 			$this->_talk[2] = array(
-				"text" => "Como se sabe, todos possuem uma alma. Eu tenho o poder de fortificar almas, entretanto para isto é necessario um terrivel sacrificio e você não possui força fisica sulficiente para aguentar isto. Você precisa se fortalecer fisicamente até o level ".FIRST_REBORN_LEVEL." para poder fortalecer sua alma.",
+				"text" => "Como se sabe, todos possuem uma alma. Eu tenho o poder de fortificar almas, entretanto para isto é necessario um terrivel sacrificio e você não possui força fisica sulficiente para aguentar isto. Você precisa se fortalecer fisicamente até o level ".Configs::Get(Configs::eConf()->FIRST_REBORN_LEVEL)." para poder fortalecer sua alma.",
 				"options" => array(
 					array("text" => "Ir embora.", "topic" => "leave")
 				)			

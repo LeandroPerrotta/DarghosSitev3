@@ -1,61 +1,62 @@
 <?
-if(!ENABLE_GUILD_READ_ONLY)
+use \Core\Configs;
+if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";
 	
 	function proccessPost(&$message)
 	{
-		$account = new Account();
+		$account = new \Framework\Account();
 		$account->load($_SESSION["login"][0]);
 		
-		if(Strings::encrypt($_POST["account_password"]) != $account->getPassword())
+		if(\Core\Strings::encrypt($_POST["account_password"]) != $account->getPassword())
 		{
-			$message = Lang::Message(LMSG_WRONG_PASSWORD);	
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);	
 			return false;
 		}
 		
 		if(!in_array($_POST["guild_owner"], $account->getCharacterList()))
 		{
-			$message = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);	
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);	
 			return false;
 		}
 		
-		$guild = new Guilds();
+		$guild = new \Framework\Guilds();
 		
 		if($guild->LoadByName($_POST["guild_name"]))
 		{
-			$message = Lang::Message(LMSG_GUILD_NAME_ALREADY_USED, $_POST["guild_name"]);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NAME_ALREADY_USED, $_POST["guild_name"]);
 			return false;
 		}
 		
 		if($account->getGuildLevel() >= GUILD_RANK_VICE)
 		{
-			$message = Lang::Message(LMSG_GUILD_ONLY_ONE_VICE_PER_ACCOUNT);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_ONLY_ONE_VICE_PER_ACCOUNT);
 			return false;
 		}
 		
-		if(!Strings::canUseName($_POST["guild_name"]))
+		if(!\Core\Strings::canUseName($_POST["guild_name"]))
 		{
-			$message = Lang::Message(LMSG_WRONG_NAME);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_NAME);
 			return false;
 		}
 		
-		$character = new Character();
-		$character->loadByName($_POST["guild_owner"]);
+		$player = new \Framework\Player();
+		$player->loadByName($_POST["guild_owner"]);
 	
-		if($character->LoadGuild())
+		if($player->LoadGuild())
 		{
-			$message = Lang::Message(LMSG_CHARACTER_ALREADY_MEMBER_GUILD);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_ALREADY_MEMBER_GUILD);
 			return false;
 		}
 		
 		$guild->SetName($_POST["guild_name"]);
-		$guild->SetOwnerId($character->getId());
+		$guild->SetOwnerId($player->getId());
 		$guild->SetCreationDate(time());
 		$guild->SetMotd("Esta é uma guilda recem criada!");
 		$guild->SetStatus(GUILD_STATUS_IN_FORMATION);
-		$guild->SetFormationTime(time() + 60 * 60 * 24 * GUILDS_FORMATION_DAYS);
+		$guild->SetFormationTime(time() + 60 * 60 * 24 * Configs::Get(Configs::eConf()->GUILDS_FORMATION_WAIT_DAYS));
 		$guild->SetImage(GUILD_DEFAULT_IMAGE);
 		
 		$guild->Save();
@@ -71,13 +72,13 @@ if(!ENABLE_GUILD_READ_ONLY)
 			$member_rank_id = $rank->GetId();
 		}
 		
-		$character->setGuildRankId($member_rank_id);
-		$character->setGuildNick("");
-		$character->setGuildJoinIn(time());
+		$player->setGuildRankId($member_rank_id);
+		$player->setGuildNick("");
+		$player->setGuildJoinIn(time());
 		
-		$character->save();
+		$player->save();
 		
-		$message = Lang::Message(LMSG_GUILD_CREATED, $_POST["guild_name"], GUILDS_VICELEADERS_NEEDED, GUILDS_FORMATION_DAYS);
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CREATED, $_POST["guild_name"], Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION), Configs::Get(Configs::eConf()->GUILDS_FORMATION_WAIT_DAYS));
 		
 		return true;
 	}
@@ -89,16 +90,16 @@ if(!ENABLE_GUILD_READ_ONLY)
 	
 	if($result)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
 	}
 	else
 	{	
 		if($_POST)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 		}
 	
-		$account = new Account();
+		$account = new \Framework\Account();
 		$account->load($_SESSION["login"][0]);
 		
 		$char_list = $account->getCharacterList();

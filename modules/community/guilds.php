@@ -1,8 +1,9 @@
 <?php
-$guildsActived = Guilds::ActivedGuildsList();
+use \Core\Configs;
+$guildsActived = \Framework\Guilds::ActivedGuildsList();
 
-if(ENABLE_GUILD_FORMATION)
-	$guildsForming = Guilds::FormingGuildsList();
+if(Configs::Get(Configs::eConf()->ENABLE_GUILD_IN_FORMATION))
+	$guildsForming = \Framework\Guilds::FormingGuildsList();
 
 /*
  * Guilds List
@@ -11,7 +12,7 @@ if(ENABLE_GUILD_FORMATION)
 $guild_list = "
 <div title='guild_list' class='viewable' style='margin: 0px; padding: 0px;'>";
 	
-	$_guildsTable = new HTML_Table();	
+	$_guildsTable = new \Framework\HTML\Table();	
 	
 	$_guildsTable->AddDataRow("Guildas em Atividade");
 
@@ -23,14 +24,14 @@ $guild_list = "
 		
 		$_guildsTable->AddField("Descrição", null, $style);
 		
-		if(ENABLE_GUILD_POINTS)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_POINTS))
 			$_guildsTable->AddField("Pontos", null, $style);
 			
 		$_guildsTable->AddRow();
 		
 		foreach($guildsActived as $guild)
 		{			
-			$_guildsTable->AddField("<img src='".GUILD_IMAGE_DIR."{$guild->GetImage()}'' height='100' width='100' />");
+			$_guildsTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}'' height='100' width='100' />");
 			
 			$string = "
 				<a href='?ref=guilds.details&name={$guild->GetName()}'>{$guild->GetName()}</a><br>
@@ -41,7 +42,7 @@ $guild_list = "
 				
 			$_guildsTable->AddField($string, null, $style, null);
 			
-			if(ENABLE_GUILD_POINTS)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_POINTS))
 			{
 				$string = "{$guild->GetBetterPoints()}/{$guild->GetPoints()}";
 				$_guildsTable->AddField($string);
@@ -58,9 +59,9 @@ $guild_list = "
 	
 	$guild_list .= $_guildsTable->Draw();
 	
-	if(ENABLE_GUILD_FORMATION)
+	if(Configs::Get(Configs::eConf()->ENABLE_GUILD_IN_FORMATION))
 	{
-		$_formingTable = new HTML_Table();
+		$_formingTable = new \Framework\HTML\Table();
 		$_formingTable->AddDataRow("Guildas em Formação");
 		
 		if($guildsForming)
@@ -74,7 +75,7 @@ $guild_list = "
 			
 			foreach($guildsForming as $guild)
 			{	
-				$_formingTable->AddField("<img src='".GUILD_IMAGE_DIR."{$guild->GetImage()}'' height='100' width='100' />");
+				$_formingTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}'' height='100' width='100' />");
 				
 				$string = "
 					<a href='?ref=guilds.details&name={$guild->GetName()}'>{$guild->GetName()}</a><br>
@@ -108,12 +109,12 @@ $guild_wars = "";
 $end_wars = "";
 $negotiation_wars = "";
 
-if(ENABLE_GUILD_WARS)
+if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 {	
-	$_warsTable = new HTML_Table();
+	$_warsTable = new \Framework\HTML\Table();
 	$_warsTable->AddDataRow("Guerras em andamento");	
 	
-	$warsStarted = Guild_War::ListStartedWars();
+	$warsStarted = \Framework\Guilds\War::ListStartedWars();
 	
 	if($warsStarted)
 	{
@@ -128,16 +129,16 @@ if(ENABLE_GUILD_WARS)
 		
 		foreach($warsStarted as $guild_war)
 		{
-			$guild = new Guilds();
+			$guild = new \Framework\Guilds();
 			$guild->Load($guild_war->GetGuildId());
 			
-			$opponent = new Guilds();
+			$opponent = new \Framework\Guilds();
 			$opponent->Load($guild_war->GetOpponentId());
 			
 			$_warsTable->AddField($guild->GetName());	
 			$_warsTable->AddField($opponent->GetName());
-			$_warsTable->AddField(Core::formatDate($guild_war->GetDeclarationDate()));
-			$_warsTable->AddField(Core::formatDate($guild_war->GetEndDate()));
+			$_warsTable->AddField(\Core\Main::formatDate($guild_war->GetDeclarationDate()));
+			$_warsTable->AddField(\Core\Main::formatDate($guild_war->GetEndDate()));
 			
 			$string = "<a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a>";
 			
@@ -161,10 +162,10 @@ if(ENABLE_GUILD_WARS)
 	 * Ended Wars List
 	 */	
 		
-	$_warsTable = new HTML_Table();
+	$_warsTable = new \Framework\HTML\Table();
 	$_warsTable->AddDataRow("Guerras terminadas");	
 	
-	$warsEnded = Guild_War::ListEndedWars();
+	$warsEnded = \Framework\Guilds\War::ListEndedWars();
 	
 	if($warsEnded)
 	{
@@ -179,15 +180,15 @@ if(ENABLE_GUILD_WARS)
 		
 		foreach($warsEnded as $guild_war)
 		{
-			$guild = new Guilds();
+			$guild = new \Framework\Guilds();
 			$guild->Load($guild_war->GetGuildId());
 			
-			$opponent = new Guilds();
+			$opponent = new \Framework\Guilds();
 			$opponent->Load($guild_war->GetOpponentId());
 			
 			$_warsTable->AddField($guild->GetName());	
 			$_warsTable->AddField($opponent->GetName());
-			$_warsTable->AddField(Core::formatDate($guild_war->GetDeclarationDate()));
+			$_warsTable->AddField(\Core\Main::formatDate($guild_war->GetDeclarationDate()));
 	
 			$winner = $guild->GetName();
 			
@@ -218,10 +219,10 @@ if(ENABLE_GUILD_WARS)
 	 * Negotiation Wars List
 	 */	
 		
-	$_warsTable = new HTML_Table();
+	$_warsTable = new \Framework\HTML\Table();
 	$_warsTable->AddDataRow("Guerras em negociação");	
 	
-	$warsNegotiation = Guild_War::ListNegotiationWars();
+	$warsNegotiation = \Framework\Guilds\War::ListNegotiationWars();
 	
 	if($warsNegotiation)
 	{
@@ -235,15 +236,15 @@ if(ENABLE_GUILD_WARS)
 		
 		foreach($warsNegotiation as $guild_war)
 		{
-			$guild = new Guilds();
+			$guild = new \Framework\Guilds();
 			$guild->Load($guild_war->GetGuildId());
 			
-			$opponent = new Guilds();
+			$opponent = new \Framework\Guilds();
 			$opponent->Load($guild_war->GetOpponentId());
 			
 			$_warsTable->AddField($guild->GetName());	
 			$_warsTable->AddField($opponent->GetName());
-			$_warsTable->AddField(Core::formatDate($guild_war->GetDeclarationDate()));
+			$_warsTable->AddField(\Core\Main::formatDate($guild_war->GetDeclarationDate()));
 	
 			$string = "<a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a>";
 			
@@ -267,7 +268,7 @@ if(ENABLE_GUILD_WARS)
 	$module .= "
 	<br>";
 	
-	if(!ENABLE_GUILD_READ_ONLY)
+	if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	$module .= "<p>
 		<a class='buttonstd' href='?ref=guilds.create'>Criar nova Guild</a>
 	</p>";
@@ -278,7 +279,7 @@ if(ENABLE_GUILD_WARS)
 			<select>
 				<option value='guild_list'>Lista de Guildas</option>";
 				
-				if(ENABLE_GUILD_WARS)
+				if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 				{
 					$module .= "	
 					<option value='guild_wars'>Guerras em andamento</option>

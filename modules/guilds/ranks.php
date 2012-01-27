@@ -1,14 +1,15 @@
 <?php
-if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
+use \Core\Configs;
+if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {	
 	$result = false;
 	$message = "";	
 	
 	function proccessPost(&$message, Account $account, Guilds $guild)
 	{			
-		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
-			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}		
 		
@@ -16,13 +17,13 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		
 		if(!$_POST["leader"] || !$_POST["vice"] || !$_POST["member_1"])
 		{
-			$message = Lang::Message(LMSG_GUILD_RANK_MIMINUM_NEEDED);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_MIMINUM_NEEDED);
 			return false;
 		}		
 		
 		if(strlen($_POST["leader"]) > 35 || strlen($_POST["vice"]) > 35 || strlen($_POST["member_1"]) > 35 )
 		{
-			$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
 			return false;
 		}
 		
@@ -31,13 +32,13 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		{
 			if(strlen($_POST["member_2"]) > 35)
 			{
-				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
 				return false;			
 			}
 			
 			if(!$rank_opt_3)
 			{
-				$rank_opt_3 = new Guild_Rank();
+				$rank_opt_3 = new \Framework\Guilds\Rank();
 				$rank_opt_3->SetGuildId($guild->GetId());			
 			}			
 			
@@ -50,7 +51,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			{
 				if($rank_opt_3->MemberCount() > 0)
 				{
-					$message = Lang::Message(LMSG_GUILD_RANK_IN_USE);
+					$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_IN_USE);
 					return false;
 				}
 				
@@ -63,19 +64,19 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		{
 			if(strlen($_POST["member_3"]) > 35)
 			{
-				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
 				return false;					
 			}
 			
 			if(!$_POST["member_2"])
 			{
-				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_ORDER);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_ORDER);
 				return false;					
 			}
 			
 			if(!$rank_opt_2)
 			{
-				$rank_opt_2 = new Guild_Rank();
+				$rank_opt_2 = new \Framework\Guilds\Rank();
 				$rank_opt_2->SetGuildId($guild->GetId());			
 			}			
 			
@@ -88,7 +89,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			{
 				if($rank_opt_2->MemberCount() > 0)
 				{
-					$message = Lang::Message(LMSG_GUILD_RANK_IN_USE);
+					$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_IN_USE);
 					return false;
 				}
 				
@@ -101,19 +102,19 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		{
 			if(strlen($_POST["member_4"]) > 35)
 			{
-				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_SIZE);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
 				return false;					
 			}
 			
 			if(!$_POST["member_2"] || !$_POST["member_3"])
 			{
-				$message = Lang::Message(LMSG_GUILD_RANK_WRONG_ORDER);
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_ORDER);
 				return false;					
 			}
 			
 			if(!$rank_opt_1)
 			{
-				$rank_opt_1 = new Guild_Rank();
+				$rank_opt_1 = new \Framework\Guilds\Rank();
 				$rank_opt_1->SetGuildId($guild->GetId());			
 			}
 			
@@ -126,7 +127,7 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			{
 				if($rank_opt_1->MemberCount() > 0)
 				{
-					$message = Lang::Message(LMSG_GUILD_RANK_IN_USE);
+					$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_IN_USE);
 					return false;
 				}
 				
@@ -161,23 +162,23 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		if($_POST["member_4"])
 			$rank_opt_1->Save();
 		
-		$message = Lang::Message(LMSG_GUILD_RANKS_EDITED);
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANKS_EDITED);
 		return true;	
 	}
 	
 	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$guild = new Guilds();
+	$guild = new \Framework\Guilds();
 	
 	if(!$guild->LoadByName($_GET['name']))
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));	
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < GUILD_RANK_VICE)
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
 	}	
 	else
 	{		
@@ -188,18 +189,20 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			
 		if($result)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
 		}
 		else
 		{
 			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}
 				
 			$rank_pos = 3;
 			$rank_n = 0;
 			$member_n = 0;
+			
+			$memberLevel = \Framework\Guilds::GetAccountLevel($account, $guild->GetId());
 			
 			//pegamos os ranks existentes na guilda e montamos o view
 			foreach($guild->Ranks as $rank)

@@ -1,36 +1,37 @@
 <?
+use \Core\Configs;
 if($_POST["player_name"] || $_GET['name'])
 {		
 	$name = ($_POST) ? $_POST["player_name"] : $_GET['name'];
 
-	$character = new Character();
+	$player = new \Framework\Player();
 	
-	if(!$character->loadByName($name))
+	if(!$player->loadByName($name))
 	{	
-		$error = Lang::Message(LMSG_CHARACTER_WRONG);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 	}
 	else
 	{			
-		$account = new Account();
-		$account->load($character->get("account_id"));
+		$account = new \Framework\Account();
+		$account->load($player->get("account_id"));
 		
-		$deaths = new Deaths();
+		$deaths = new \Framework\Deaths();
 		
 		//$bans = $account->getBans();
-		$bans = new Bans();
+		$bans = new \Framework\Bans();
 		
-		$houseid = $character->getHouse();
-		$lastlogin = ($character->getLastLogin()) ? Core::formatDate($character->getLastLogin()) : "Nunca entrou.";
-		$creation = Core::formatDate($character->getCreation());
+		$houseid = $player->getHouse();
+		$lastlogin = ($player->getLastLogin()) ? \Core\Main::formatDate($player->getLastLogin()) : "Nunca entrou.";
+		$creation = \Core\Main::formatDate($player->getCreation());
 		
 		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
 		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "não configurado";
 		$location = ($account->get("location") != "") ? $account->get("location") : "não configurado";
 		$url = ($account->get("url") != "") ? $account->get("url") : "não configurado";
 		
-		$deathlist = $deaths->getDeathListOfPlayer($character->getId());
+		$deathlist = $deaths->getDeathListOfPlayer($player->getId());
 		$list = $account->getCharacterList();
-		$oldnames = $character->loadOldNames();
+		$oldnames = $player->loadOldNames();
 	
 		$module .= "
 		<br>
@@ -51,21 +52,22 @@ if($_POST["player_name"] || $_GET['name'])
 				<th colspan='2'>Personagem</th>
 			</tr>";		
 
-			if($character->deletionStatus())
+			if($player->deletionStatus())
 			{		
 				$module .= "
 				<tr>
-					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia ". Core::formatDate($character->deletionStatus()) . ".</font></td>
+					<td colspan='2'><font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia ". \Core\Main::formatDate($player->deletionStatus()) . ".</font></td>
 				</tr>";				
 			}
 		
 			$module .= "
 			<tr>
-				<td width='25%'><b>Nome:</b></td> <td>{$character->getName()}</td>
+				<td width='25%'><b>Nome:</b></td> <td>{$player->getName()}</td>
 			</tr>";
 			
 			if($oldnames)
 			{		
+				$i = 0;
 				foreach($oldnames as $name => $time)
 				{
 					$i++;
@@ -84,14 +86,14 @@ if($_POST["player_name"] || $_GET['name'])
 			
 			$module .= "
 			<tr>
-				<td><b>Level:</b></td> <td>{$character->getLevel()}</td>
+				<td><b>Level:</b></td> <td>{$player->getLevel()}</td>
 			</tr>	
 			
 			";
 			
-			if(ENABLE_PVP_SWITCH)
+			if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH))
 			{
-				$pvp_str = $character->isPvpEnabled() ? "<span class='pvpEnabled'>Agressivo</span>" : "<span class='pvpDisabled'>Pacifico</span>";
+				$pvp_str = $player->isPvpEnabled() ? "<span class='pvpEnabled'>Agressivo</span>" : "<span class='pvpDisabled'>Pacifico</span>";
 				
 				$module .= "
 				<tr>
@@ -99,39 +101,43 @@ if($_POST["player_name"] || $_GET['name'])
 				</tr>";			
 			}
 			
+			$_vocation = new t_Vocation($player->getVocation());
+			$_town = new t_Towns($player->getTownId());
+			$_genre = new t_Genre($player->getSex());
+			
 			$module .= "
 			<tr>
-				<td><b>Magic Level:</b></td> <td>{$character->getMagicLevel()}</td>
+				<td><b>Magic Level:</b></td> <td>{$player->getMagicLevel()}</td>
 			</tr>			
 
 			<tr>
-				<td><b>Battleground Rating:</b></td> <td>{$character->getBattlegroundRating()}</td>
+				<td><b>Battleground Rating:</b></td> <td>{$player->getBattlegroundRating()}</td>
 			</tr>			
 			
 			<tr>
-				<td><b>Sexo:</b></td> <td>{$_sexid[$character->getSex()]}</td>
+				<td><b>Sexo:</b></td> <td>{$_genre->GetType()}</td>
 			</tr>	
 
 			<tr>
-				<td><b>Vocação:</b></td> <td>{$_vocationid[$character->getVocation()]}</td>
+				<td><b>Vocação:</b></td> <td>{$_vocation->GetByName()}</td>
 			</tr>	
 
 			<tr>
-				<td><b>Residencia:</b></td> <td>{$_townid[$character->getTownId()]["name"]}</td>
+				<td><b>Residencia:</b></td> <td>{$_town->GetType()}</td>
 			</tr>";	
 
 			if($houseid)
 			{
-				$houses = new Houses();
+				$houses = new \Framework\Houses();
 				$houses->load($houseid);				
 				
 				if($houses->get("warnings") == 0)
 				{
-					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) com pagamento no dia  ".Core::formatDate($houses->get("paid")).".";
+					$housemsg = "{$houses->get("name")} ({$_town->getName()}) com pagamento no dia  ".\Core\Main::formatDate($houses->get("paid")).".";
 				}
 				else
 				{
-					$housemsg = "{$houses->get("name")} ({$_townid[$houses->get("townid")]["name"]}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
+					$housemsg = "{$houses->get("name")} ({$_town->getName()}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
 				}
 				
 				$module .= "
@@ -140,19 +146,19 @@ if($_POST["player_name"] || $_GET['name'])
 				</tr>";						
 			}
 			
-			if($character->LoadGuild())
+			if($player->LoadGuild())
 			{
 				$module .= "
 				<tr>
-					<td><b>Membro da Guild</b></td> <td>{$character->GetGuildRank()} da <a href='?ref=guilds.details&name={$character->GetGuildName()}'>{$character->GetGuildName()}</a></td>
+					<td><b>Membro da Guild</b></td> <td>{$player->GetGuildRank()} da <a href='?ref=guilds.details&name={$player->GetGuildName()}'>{$player->GetGuildName()}</a></td>
 				</tr>";					
 			}
 			
-			if($character->get("comment"))
+			if($player->get("comment"))
 			{
 				$module .= "
 				<tr>
-					<td><b>Comentario</b></td> <td>".nl2br(stripslashes($character->getComment()))."</td>
+					<td><b>Comentario</b></td> <td>".nl2br(stripslashes($player->getComment()))."</td>
 				</tr>";					
 			}
 			
@@ -168,11 +174,11 @@ if($_POST["player_name"] || $_GET['name'])
 		</table>
 		";
 
-		$_gmAcc = new Account();
-		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == GROUP_ADMINISTRATOR)
+		$_gmAcc = new \Framework\Account();
+		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == e_Groups::Administrator)
 		{
 			include_once("classes/contribute.php");
-			$contribute = new Contribute();
+			$contribute = new \Framework\Contribute();
 			$oders = $contribute->getOrdersListByAccount($account->getId());
 			
 			$alreadyIsPremium = false;
@@ -199,7 +205,7 @@ if($_POST["player_name"] || $_GET['name'])
 				$alreadyIsPremiumHTML .= " ({$numberOfPremiums}x)";
 			}
 			
-			$character->loadSkills();
+			$player->loadSkills();
 			
 			$module .= "
 			<table cellspacing='0' cellpadding='0'>
@@ -207,7 +213,7 @@ if($_POST["player_name"] || $_GET['name'])
 					<th colspan='2'>Informações Avançadas</th>
 				</tr>
 				<tr>
-					<td width='25%'><b>Horas de Stamina</b></td><td>".(($character->getStamina() > 0) ? round($character->getStamina() / 1000 / 60 / 60) : "Nenhuma")."</td>
+					<td width='25%'><b>Horas de Stamina</b></td><td>".(($player->getStamina() > 0) ? round($player->getStamina() / 1000 / 60 / 60) : "Nenhuma")."</td>
 				</tr>	
 				<tr>
 					<td width='25%'><b>Numero da Conta</b></td><td>{$account->getId()}</td>
@@ -222,25 +228,25 @@ if($_POST["player_name"] || $_GET['name'])
 					<td><b>Alguma vez Premium?</b></td><td>{$alreadyIsPremiumHTML}</td>
 				</tr>					
 				<tr>
-					<td><b>Posição</b></td><td>x:{$character->getPosX()} y:{$character->getPosY()} z:{$character->getPosZ()}</td>
+					<td><b>Posição</b></td><td>x:{$player->getPosX()} y:{$player->getPosY()} z:{$player->getPosZ()}</td>
 				</tr>
 				<tr>
-					<td><b>Player ID</b></td><td>{$character->getId()}</td>
+					<td><b>Player ID</b></td><td>{$player->getId()}</td>
 				</tr>	
 				<tr>
-					<td><b>Skill sword</b></td><td>{$character->getSkill($_skill['sword'])}</td>
+					<td><b>Skill sword</b></td><td>{$player->getSkill(e_Skills::SWORD)}</td>
 				</tr>
 				<tr>
-					<td><b>Skill axe</b></td><td>{$character->getSkill($_skill['axe'])}</td>
+					<td><b>Skill axe</b></td><td>{$player->getSkill(e_Skills::AXE)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill club</b></td><td>{$character->getSkill($_skill['club'])}</td>
+					<td><b>Skill club</b></td><td>{$player->getSkill(e_Skills::CLUB)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill shield</b></td><td>{$character->getSkill($_skill['shield'])}</td>
+					<td><b>Skill shield</b></td><td>{$player->getSkill(e_Skills::SHIELD)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill distance</b></td><td>{$character->getSkill($_skill['distance'])}</td>
+					<td><b>Skill distance</b></td><td>{$player->getSkill(e_Skills::DISTANCE)}</td>
 				</tr>										
 			</table>														
 				";			
@@ -264,12 +270,12 @@ if($_POST["player_name"] || $_GET['name'])
 					
 					if($ban['type'] == 3)
 					{
-						$banstring .= "Banido por: <b>".Tools::getBanReason($ban['reason'])."</b><br>
-								   	   Duração: Até ".Core::formatDate($ban['expires']).".";
+						$banstring .= "Banido por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
+								   	   Duração: Até ".\Core\Main::formatDate($ban['expires']).".";
 					}
 					elseif($ban['type'] == 5)	
 					{
-						$banstring .= "Deletado por: <b>".Tools::getBanReason($ban['reason'])."</b><br>
+						$banstring .= "Deletado por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
 								   	   Duração: permanentemente.";		
 					}			   	   				   	   
 								   
@@ -308,13 +314,13 @@ if($_POST["player_name"] || $_GET['name'])
 				<th colspan='2'>Battlegrounds</th>
 			</tr>	
 			<tr>
-				<td>Venceu {$character->getBattlegroundsWon()} partidas.</td>
+				<td>Venceu {$player->getBattlegroundsWon()} partidas.</td>
 			</tr>	
 			<tr>
-				<td>Empatou {$character->getBattlegroundsDraw()} partidas.</td>
+				<td>Empatou {$player->getBattlegroundsDraw()} partidas.</td>
 			</tr>	
 			<tr>
-				<td>Perdeu {$character->getBattlegroundsLose()} partidas.</td>
+				<td>Perdeu {$player->getBattlegroundsLose()} partidas.</td>
 			</tr>
 		</table>		
 		
@@ -323,16 +329,16 @@ if($_POST["player_name"] || $_GET['name'])
 				<th colspan='2'>Mortes Causadas</th>
 			</tr>	
 			<tr>
-				<td>Matou {$character->getTotalKills()} jogadores.</td>
+				<td>Matou {$player->getTotalKills()} jogadores.</td>
 			</tr>	
 			<tr>
-				<td>Participou da morte de {$character->getTotalAssists()} jogadores.</td>
+				<td>Participou da morte de {$player->getTotalAssists()} jogadores.</td>
 			</tr>				
 			<tr>
-				<td>Matou {$character->getTotalBgKills()} jogadores em battlegrounds.</td>
+				<td>Matou {$player->getTotalBgKills()} jogadores em battlegrounds.</td>
 			</tr>						
 			<tr>
-				<td>Participou da morte de {$character->getTotalBgAssists()} jogadores em battlegrounds.</td>
+				<td>Participou da morte de {$player->getTotalBgAssists()} jogadores em battlegrounds.</td>
 			</tr>
 		</table>
 
@@ -341,16 +347,16 @@ if($_POST["player_name"] || $_GET['name'])
 				<th colspan='2'>Mortes Sofridas</th>
 			</tr>	
 			<tr>
-				<td>Foi morto {$character->getTotalDeaths()} vezes (total).</td>
+				<td>Foi morto {$player->getTotalDeaths()} vezes (total).</td>
 			</tr>	
 			<tr>
-				<td>Foi morto {$character->getTotalDeathsPlayers()} vezes com participação de jogadores.</td>
+				<td>Foi morto {$player->getTotalDeathsPlayers()} vezes com participação de jogadores.</td>
 			</tr>				
 			<tr>
-				<td>Foi morto {$character->getTotalDeathsEnv()} vezes com participação de criaturas.</td>
+				<td>Foi morto {$player->getTotalDeathsEnv()} vezes com participação de criaturas.</td>
 			</tr>						
 			<tr>
-				<td>Foi morto {$character->getTotalBgDeaths()} vezes em battlegrounds.</td>
+				<td>Foi morto {$player->getTotalBgDeaths()} vezes em battlegrounds.</td>
 			</tr>						
 		</table>		
 		";	
@@ -370,7 +376,7 @@ if($_POST["player_name"] || $_GET['name'])
 			{
 				$death_values = $deaths->load($death_id);
 				
-				$date = Core::formatDate($death_values['date']);
+				$date = \Core\Main::formatDate($death_values['date']);
 				
 				$death = "Morto no Nivel {$death_values['level']} por ";
 				
@@ -421,7 +427,7 @@ if($_POST["player_name"] || $_GET['name'])
 						}
 						else
 						{
-							$_killer = new Character();	
+							$_killer = new \Framework\Player();	
 							$_killer->load($killer['killer']);	
 
 							$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
@@ -442,11 +448,11 @@ if($_POST["player_name"] || $_GET['name'])
 			</table>";		
 		}		
 		
-		$_gmAcc = new Account();
+		$_gmAcc = new \Framework\Account();
 		
-		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= GROUP_GAMEMASTER)))
+		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= e_Groups::GameMaster)))
 		{
-			$kills = $deaths->getKillsOfPlayer($character->getId());
+			$kills = $deaths->getKillsOfPlayer($player->getId());
 
 			if(is_array($kills))
 			{
@@ -459,10 +465,10 @@ if($_POST["player_name"] || $_GET['name'])
 				
 				foreach($kills as $kill)
 				{
-					$killed = new Character();
+					$killed = new \Framework\Player();
 					$killed->load($kill["killed"]);
 					
-					$date = Core::formatDate($kill['date']);
+					$date = \Core\Main::formatDate($kill['date']);
 					$isInjust = ($kill["injust"] == 1) ? "<font color='#ec0404'><b>injustificada</b></font>" : "<font color='#00ff00'><b>justificada</b></font>";
 					
 					$module .= "
@@ -501,22 +507,22 @@ if($_POST["player_name"] || $_GET['name'])
 				<th colspan='2'>Battlegrounds</th>
 			</tr>	
 			<tr>
-				<td><span class='".($character->hasAchievBattlegroundRating1500() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 1.500 pontos de classificação (rating).</span></td>
+				<td><span class='".($player->hasAchievBattlegroundRating1500() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 1.500 pontos de classificação (rating).</span></td>
 			</tr>	
 			<tr>
-				<td><span class='".($character->hasAchievBattlegroundRating2000() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 2.000 pontos de classificação (rating).</span></td>
+				<td><span class='".($player->hasAchievBattlegroundRating2000() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 2.000 pontos de classificação (rating).</span></td>
 			</tr>
 			<tr>
-				<td><span class='".($character->hasAchievBattlegroundInsaneKiller() ? "hasAchiev" : "notHasAchiev")."'>Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez em uma Battleground.</span></td>
+				<td><span class='".($player->hasAchievBattlegroundInsaneKiller() ? "hasAchiev" : "notHasAchiev")."'>Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez em uma Battleground.</span></td>
 			</tr>
 			<tr>
-				<td><span class='".($character->hasAchievBattlegroundPerfect() ? "hasAchiev" : "notHasAchiev")."'>Partida Perfeita! Esmagou os oponentes em uma battleground com o magnifico resultado final de 50x0.</span></td>
+				<td><span class='".($player->hasAchievBattlegroundPerfect() ? "hasAchiev" : "notHasAchiev")."'>Partida Perfeita! Esmagou os oponentes em uma battleground com o magnifico resultado final de 50x0.</span></td>
 			</tr>								
 		</table>		
 		</div>
 		";		
 		
-		if($character->get("hide") == 0)
+		if($player->get("hide") == 0)
 		{
 			$module .= "
 			<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
@@ -528,7 +534,7 @@ if($_POST["player_name"] || $_GET['name'])
 			
 			foreach($list as $player_name)
 			{
-				$character_list = new Character();
+				$character_list = new \Framework\Player();
 				$character_list->loadByName($player_name);
 				
 				if($character_list->get("hide") == 0)
@@ -558,7 +564,7 @@ if($_POST["player_name"] || $_GET['name'])
 
 if($error)	
 {
-	Core::sendMessageBox("Erro!", $error);
+	\Core\Main::sendMessageBox("Erro!", $error);
 }
 
 $module .= '

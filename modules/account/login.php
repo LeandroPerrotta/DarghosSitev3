@@ -1,31 +1,31 @@
 <?
 if($_POST)
 {
-	$account = new Account();
+	$account = new \Framework\Account();
 	
-	if(($account->loadByName($_POST["account_name"])) and ($account->getPassword() == Strings::encrypt($_POST["account_password"])))
+	if(($account->loadByName($_POST["account_name"])) and ($account->getPassword() == \Core\Strings::encrypt($_POST["account_password"])))
 	{
 		$_SESSION['login'][] = $account->getId();
-		$_SESSION['login'][] = Strings::encrypt($_POST["account_password"]);
+		$_SESSION['login'][] = \Core\Strings::encrypt($_POST["account_password"]);
 		
 		if(!$_SESSION["login_redirect"])
-			Core::redirect("index.php?ref=account.main");	
+			\Core\Main::redirect("index.php?ref=account.main");	
 		else
 		{
 			$url = trim($_SESSION["login_redirect"], "/");
 			unset($_SESSION["login_redirect"]);
-			Core::redirect($url);
+			\Core\Main::redirect($url);
 		}
 	}
 	else
 	{
-		$error = Lang::Message(LMSG_FAIL_LOGIN);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_LOGIN);
 	}
 }
 
 if($error)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 }
 
 $require_login_str = "";
@@ -39,6 +39,7 @@ if($_SESSION["login_redirect"] != "")
 	";
 }
 
+global $pages, $buttons;
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>

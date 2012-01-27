@@ -1,15 +1,15 @@
 <?
 
-$emailmarketing = Core::getGlobalValue("emailmarketing");
+$emailmarketing = \Core\Main::getGlobalValue("emailmarketing");
 
 if(!$emailmarketing)
 {
-	Core::setGlobalValue("emailmarketing", 1);
+	\Core\Main::setGlobalValue("emailmarketing", 1);
 }
 else
 {
-	Core::setGlobalValue("emailmarketing", (int)$emailmarketing + 1);
+	\Core\Main::setGlobalValue("emailmarketing", (int)$emailmarketing + 1);
 }
 
-Core::redirect("index.php");	
+\Core\Main::redirect("index.php");	
 ?>

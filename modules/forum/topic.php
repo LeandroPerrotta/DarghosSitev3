@@ -1,4 +1,7 @@
 <?php
+use \Core\Configs;
+use \Framework\Forums\Topics;
+use \Framework\Forums\User;
 class View
 {
 	//variables
@@ -17,70 +20,70 @@ class View
 			return;
 		}
 		
-		$this->loggedAcc = Account::loadLogged();
+		$this->loggedAcc = \Framework\Account::loadLogged();
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		else
 		{
 			if($_GET['removemsg'] || $_GET['delete'])
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;					
 			}
 		}	
 		
 		if($_GET['banuser'])
 		{
-			$this->_bantype = new HTML_SelectBox();
+			$this->_bantype = new \Framework\HTML\SelectBox();
 			$this->_bantype->SetName("bantype");
 			$this->_bantype->SetSize(250);
-			$this->_bantype->AddOption("24 horas sem postar", FORUM_BAN_DAY);
-			$this->_bantype->AddOption("7 dias sem postar", FORUM_BAN_7_DAYS);
-			$this->_bantype->AddOption("30 dias sem postar", FORUM_BAN_30_DAYS);
-			$this->_bantype->AddOption("Proibido de postar para sempre", FORUM_BAN_PERSISTENT);
+			$this->_bantype->AddOption("24 horas sem postar", Topics::BAN_DAY);
+			$this->_bantype->AddOption("7 dias sem postar", Topics::BAN_WEEK);
+			$this->_bantype->AddOption("30 dias sem postar", Topics::BAN_MONTH);
+			$this->_bantype->AddOption("Proibido de postar para sempre", Topics::BAN_PERSISTENT);
 			
-			$this->_banreason = new HTML_Input();
+			$this->_banreason = new \Framework\HTML\Input();
 			$this->_banreason->IsTextArea();
 			$this->_banreason->SetName("banreason");		
 		}
 		
 		if($_POST)
 		{
-			if($this->loggedAcc && $_GET['banuser'] && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+			if($this->loggedAcc && $_GET['banuser'] && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
 			{
 				if(!$this->PostBanUser())
 				{
-					Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+					\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 				}			
 
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				
 				return true;
 			}
 			
-			if($this->loggedAcc && $_GET['edit'] && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+			if($this->loggedAcc && $_GET['edit'] && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
 			{
 				if(!$this->PostEditTopic())
 				{
-					Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+					\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 				}			
 
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				
 				return true;
 			}			
 			
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}			
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				
 				global $module;
 				$module .= "<p><a class='buttonstd' href='?ref=forum.topic&v={$_GET['v']}'>Voltar</a></p>";				
@@ -88,13 +91,13 @@ class View
 			}
 		}	
 
-		if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER && $_GET['banuser'])
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager && $_GET['banuser'])
 		{
 			$this->DrawBanUser();
 			return true;
 		}	
 		
-		if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER && $_GET['edit'])
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager && $_GET['edit'])
 		{
 			$this->DrawEditTopic();
 			return true;
@@ -106,11 +109,11 @@ class View
 	
 	function Prepare()
 	{
-		$this->user = new Forum_User();
+		$this->user = new User();
 		
 		if($_GET['v'])
 		{
-			$this->topic = new Forum_Topics();
+			$this->topic = new Topics();
 			
 			$page = 0;
 			
@@ -123,23 +126,23 @@ class View
 			
 			if(!$this->topic->Load($_GET['v']))
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
 			}
 			
-			if($this->topic->IsNotice() && !ENABLE_NEW_COMMENTS)
+			if($this->topic->IsNotice() && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS))
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
 			}
 			
 			if($this->loggedAcc && $_GET['edit'] && $_GET['edit'] == "1")
 			{
-				$this->_title = new HTML_Input();
+				$this->_title = new \Framework\HTML\Input();
 				$this->_title->SetName("topic_title");
 				$this->_title->SetValue($this->topic->GetTitle());
 				
-				$this->_topic = new HTML_Input();
+				$this->_topic = new \Framework\HTML\Input();
 				$this->_topic->IsTextArea(25, 80);
 				$this->_topic->SetName("topic_content");
 				$this->_topic->SetId("topic_content");	
@@ -147,9 +150,9 @@ class View
 			}	
 			elseif($this->loggedAcc && $_GET['delete'] && $_GET['delete'] == "1")
 			{
-				if($this->loggedAcc->getGroup() < GROUP_COMMUNITYMANAGER)
+				if($this->loggedAcc->getGroup() < e_Groups::CommunityManager)
 				{
-					$this->_message = Lang::Message(LMSG_REPORT);
+					$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 					return false;				
 				}
 				
@@ -161,13 +164,13 @@ class View
 		}
 		elseif($_GET['removemsg'])
 		{
-			if($this->loggedAcc && $this->loggedAcc->getGroup() < GROUP_COMMUNITYMANAGER)
+			if($this->loggedAcc && $this->loggedAcc->getGroup() < e_Groups::CommunityManager)
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;				
 			}
 			
-			Forum_Topics::DeletePost($_GET['removemsg']);
+			Topics::DeletePost($_GET['removemsg']);
 			$this->_message = "Post removido com sucesso!";
 		}	
 		
@@ -178,13 +181,13 @@ class View
 	{
 		if(!$this->loggedAcc)
 		{
-			Core::requireLogin();
+			\Core\Main::requireLogin();
 			return false;
 		}
 		
 		if(!$this->user->LoadByAccount($_SESSION['login'][0]))
 		{			
-			$this->_message = Lang::Message(LMSG_FORUM_ACCOUNT_NOT_HAVE_USER);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_ACCOUNT_NOT_HAVE_USER);
 			return false;			
 		}		
 		
@@ -197,7 +200,7 @@ class View
 		{
 			if(strlen($_POST["user_post"]) > 2048)
 			{
-				$this->_message = Lang::Message(LMSG_FORUM_POST_TOO_LONG);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POST_TOO_LONG);
 				return false;				
 			}
 			
@@ -207,18 +210,18 @@ class View
 			{
 				$t_BanType = new t_ForumBans($ban["type"]);
 				
-				$bannisher = new Forum_User();
+				$bannisher = new User();
 				$bannisher->Load($ban["author"]);
-				$bannisher_p = new Character();
+				$bannisher_p = new \Framework\Player();
 				$bannisher_p->load($bannisher->GetPlayerId());
 				
-				$this->_message = Lang::Message(LMSG_FORUM_USER_BANNISHED, Core::formatDate($ban["date"]), $t_BanType->GetByName(), $bannisher_p->getName(), $ban["reason"]);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_USER_BANNISHED, \Core\Main::formatDate($ban["date"]), $t_BanType->GetByName(), $bannisher_p->getName(), $ban["reason"]);
 				return false;					
 			}
 			
 			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetId());
 			
-			$this->_message = Lang::Message(LMSG_FORUM_POST_SENT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POST_SENT);
 			return true;
 		}
 	}
@@ -228,34 +231,34 @@ class View
 		$options = $this->topic->GetPollOptions();
 		if(!array_key_exists($_POST["poll_option"], $options))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
 		}
 		
 		if($this->user->GetPollVote($this->topic->GetPollId()))
 		{
-			$this->_message = Lang::Message(LMSG_FORUM_POLL_ALREADY_VOTED);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POLL_ALREADY_VOTED);
 			return false;
 		}
 		
 		if(time() > $this->topic->GetPollEnd())
 		{
-			$this->_message = Lang::Message(LMSG_FORUM_POLL_TIME_EXPIRED);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POLL_TIME_EXPIRED);
 			return false;			
 		}
 		
-		$userAcc = new Account();
+		$userAcc = new \Framework\Account();
 		$userAcc->load($this->user->GetAccountId());
 		
 		if($this->topic->PollIsOnlyForPremiums() && $userAcc->getPremDays() == 0)
 		{
-			$this->_message = Lang::Message(LMSG_FORUM_POLL_ONLY_FOR_PREMIUM);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POLL_ONLY_FOR_PREMIUM);
 			return false;			
 		}
 		
 		if($userAcc->getHighLevel() < $this->topic->GetPollMinLevel())
 		{
-			$this->_message = Lang::Message(LMSG_FORUM_POLL_NEED_MIN_LEVEL, $this->topic->GetPollMinLevel());
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POLL_NEED_MIN_LEVEL, $this->topic->GetPollMinLevel());
 			return false;			
 		}
 		
@@ -265,13 +268,13 @@ class View
 			$visible = 1;
 		
 		$this->user->SetPollVote($_POST["poll_option"], $visible);
-		$this->_message = Lang::Message(LMSG_FORUM_POLL_VOTE_DONE);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POLL_VOTE_DONE);
 		return true;
 	}
 	
 	function PostBanUser()
 	{
-		$user = new Forum_User();
+		$user = new User();
 		if(!$user->Load($_GET["banuser"]))
 		{
 			$this->_message = "Usuario não encontrado!";
@@ -344,7 +347,7 @@ class View
 				
 				<p>
 					<label for='{$this->_topic->GetName()}'>Conteudo do topico</label><br />
-					".Core::CKEditor($this->_topic->GetName(), $this->_topic->GetValue())."
+					".\Core\Main::CKEditor($this->_topic->GetName(), $this->_topic->GetValue())."
 				</p>				
 				
 				<p id='line'></p>
@@ -360,18 +363,18 @@ class View
 	{
 		global $module;
 		
-		$table = new HTML_Table();
+		$table = new \Framework\HTML\Table();
 		
 		$module .= "<p><span style='font-weight: bold;'>Topico:</span> <span style='font-size: 14px; font-weight: bold;'><a href='?ref=forum.topic&v={$this->topic->GetId()}'>{$this->topic->GetTitle()}</a></span></p>";
 		
 		if($this->topic->IsPoll())
 		{
-			$pollTable = new HTML_Table();
+			$pollTable = new \Framework\HTML\Table();
 			
 			if(time() > $this->topic->GetPollEnd())
-				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Terminou em: ".Core::formatDate($this->topic->GetPollEnd())."</span>");
+				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Terminou em: ".\Core\Main::formatDate($this->topic->GetPollEnd())."</span>");
 			else
-				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Termina em: ".Core::formatDate($this->topic->GetPollEnd())."</span>");
+				$pollTable->AddDataRow("<span style='float:left;'>Enquete</span> <span style='float: right;'>Termina em: ".\Core\Main::formatDate($this->topic->GetPollEnd())."</span>");
 			
 			$pollTable->AddField(nl2br($this->topic->GetPollText()));
 			$pollTable->AddRow();
@@ -384,7 +387,7 @@ class View
 			
 			foreach($options as $optionid => $option)
 			{
-				$field = new HTML_Input();
+				$field = new \Framework\HTML\Input();
 				$field->SetName("poll_option");
 				
 				/* Por enquanto não iremos suportas multiplas seleções devido a complexidade de implementação do recurso no codigo */
@@ -405,7 +408,7 @@ class View
 				
 				$optVotes = null;
 				
-				if(time() > $this->topic->GetPollEnd() || ($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER))
+				if(time() > $this->topic->GetPollEnd() || ($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager))
 					$optVotes = " - {$option["votes"]} voto(s) ou ".round(($option["votes"] / $this->topic->GetTotalVotes()) * 100, 2)."%";
 					
 				$optString .= "{$field->Draw()} {$option["option"]} {$optVotes}<br>";
@@ -416,7 +419,7 @@ class View
 			
 			if(!$vote)
 			{
-				$isVisible = new HTML_Input();
+				$isVisible = new \Framework\HTML\Input();
 				$isVisible->SetName("visibility");
 				$isVisible->IsCheackeable();
 				$isVisible->SetValue("true");
@@ -425,7 +428,7 @@ class View
 				$pollTable->AddRow();
 			}						
 			
-			$button = new HTML_Input();
+			$button = new \Framework\HTML\Input();
 			$button->IsButton();
 			$button->SetValue("Votar");
 			
@@ -444,19 +447,19 @@ class View
 			</form>";
 		}
 		
-		$table->AddDataRow("<span style='float: right; font-weight: normal;'>".Core::formatDate($this->topic->GetDate())."</span>");
+		$table->AddDataRow("<span style='float: right; font-weight: normal;'>".\Core\Main::formatDate($this->topic->GetDate())."</span>");
 		
-		$author = new Forum_User();
+		$author = new User();
 		$author->Load($this->topic->GetAuthorId());
 		
-		$character = new Character();
-		$character->load($author->GetPlayerId());
+		$player = new \Framework\Player();
+		$player->load($author->GetPlayerId());
 		
-		$group = new t_Group($character->getGroup());
+		$group = new t_Group($player->getGroup());
 		
 		$string = "
-		<a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a><br>
-		{$group->GetByName()}
+		<a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a><br>
+		{$group->getType()}
 		";
 		
 		$table->AddField($string, 20, "height: 90px; vertical-align: top;");
@@ -466,7 +469,7 @@ class View
 		<p><span style='font-size: 12px; font-weight: bold;'>{$this->topic->GetTitle()}</span></p>
 		<p class='line'></p>";
 
-		if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
 		{
 			$string .= "					
 			<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o topico {$this->topic->GetTitle()} com id #{$this->topic->GetId()}?\")' href='?ref=forum.topic&v={$this->topic->GetId()}&delete=1'>Excluir</a> - <a href='?ref=forum.topic&v={$this->topic->GetId()}&edit=1'>Editar</a></div>";
@@ -479,7 +482,7 @@ class View
 		
 		$module .= "{$table->Draw()}";
 		
-		$table = new HTML_Table();
+		$table = new \Framework\HTML\Table();
 		
 		if($this->topic->GetPostCount() != 0)
 		{			
@@ -494,16 +497,16 @@ class View
 			foreach($this->topic->GetPosts() as $key => $post)
 			{
 				//header
-				$string = "<span style='float: left; font-weight: bold;'>#{$i}</span> <span style='float: right; font-weight: normal;'>".Core::formatDate($post["date"])."</span>";				
+				$string = "<span style='float: left; font-weight: bold;'>#{$i}</span> <span style='float: right; font-weight: normal;'>".\Core\Main::formatDate($post["date"])."</span>";				
 				
 				$table->addField($string, null, null, 2, true);
 				$table->AddRow();
 				
 				//body user
-				$user_post = new Forum_User();
+				$user_post = new User();
 				$user_post->Load($post["user_id"]);
 				
-				$user_character = new Character();
+				$user_character = new \Framework\Player();
 				
 				$nochar = false;
 				
@@ -528,7 +531,7 @@ class View
 				{
 					$string = "
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					{$group->GetByName()}
+					{$group->GetType()}
 					";
 				}
 				else
@@ -552,7 +555,7 @@ class View
 					$string .= "<div style='border: 1px #9f9d9d solid; line-height:200%; padding: 0px; padding-left: 5px;'>Meu voto: <span style='font-weight: bold;'>{$vote["option"]}</span></div>";
 				}
 				
-				if($this->loggedAcc && $this->loggedAcc->getGroup() >= GROUP_COMMUNITYMANAGER)
+				if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
 				{
 					$string .= "					
 					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a> - <a href='?ref=forum.topic&banuser={$user_post->GetId()}'>Punir</a></div>";
@@ -614,17 +617,17 @@ class View
 		$module .= "</div>";
 		$module .= "{$table->Draw()}";
 		
-		$post = new HTML_Input();
+		$post = new \Framework\HTML\Input();
 		$post->SetName("user_post");
 		$post->SetId("user_post");
 		$post->IsTextArea(7, 65);
 		$post->OnKeyPress("countCharacters(2048);");
 		
-		$button = new HTML_Input();
+		$button = new \Framework\HTML\Input();
 		$button->IsButton();
 		$button->SetValue("Enviar");
 		
-		$table = new HTML_Table();
+		$table = new \Framework\HTML\Table();
 		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
 		$table->IsDropDownHeader();
 		

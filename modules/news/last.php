@@ -1,5 +1,6 @@
 <?
-$query = $db->query("SELECT topics.id, topics.title, polls.end_date FROM ".DB_WEBSITE_PREFIX."forum_topics as topics, ".DB_WEBSITE_PREFIX."forum_polls as polls WHERE polls.end_date > UNIX_TIMESTAMP() AND topics.id = polls.topic_id ORDER by topics.id DESC LIMIT 5");
+use \Core\Configs;
+$query = \Core\Main::$DB->query("SELECT topics.id, topics.title, polls.end_date FROM ".\Core\Tools::getSiteTable("forum_topics")." as topics, ".\Core\Tools::getSiteTable("forum_polls")." as polls WHERE polls.end_date > UNIX_TIMESTAMP() AND topics.id = polls.topic_id ORDER by topics.id DESC LIMIT 5");
 
 if($query->numRows() != 0)
 {
@@ -9,7 +10,7 @@ if($query->numRows() != 0)
 	{
 		$polls .= "
 		<tr>
-			<td><span style='float:left;'><a href='?ref=forum.topic&v={$fetch->id}'>{$fetch->title}</a></span> <span style='float:right;'>Termina em ".Core::formatDate($fetch->end_date)."</span></td>
+			<td><span style='float:left;'><a href='?ref=forum.topic&v={$fetch->id}'>{$fetch->title}</a></span> <span style='float:right;'>Termina em ".\Core\Main::formatDate($fetch->end_date)."</span></td>
 		</tr>
 		";
 	}
@@ -26,7 +27,7 @@ if($query->numRows() != 0)
 	</table>";	
 }
 
-$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."fastnews ORDER by post_data DESC LIMIT 5");
+$query = \Core\Main::$DB->query("SELECT * FROM ".\Core\Tools::getSiteTable("fastnews")." ORDER by post_data DESC LIMIT 5");
 $fastnews = "";
 
 while($fetch = $query->fetch())
@@ -44,8 +45,8 @@ while($fetch = $query->fetch())
 	$fastnews .= "
 	<tr>
 		<td>
-			<span class='littleFastNew' style='width: 90%; float: left;'>".Core::formatDate($fetch->post_data)." - {$resumo}</span>
-			<span class='fullFastNew' style='width: 90%; float: left; display: none; visibility: hidden;'>".Core::formatDate($fetch->post_data)." - {$fetch->post}</span>
+			<span class='littleFastNew' style='width: 90%; float: left;'>".\Core\Main::formatDate($fetch->post_data)." - {$resumo}</span>
+			<span class='fullFastNew' style='width: 90%; float: left; display: none; visibility: hidden;'>".\Core\Main::formatDate($fetch->post_data)." - {$fetch->post}</span>
 
 			<span class='tooglePlus' style='float: right; vertical-align: top;'></span>		
 			<br>
@@ -66,17 +67,17 @@ $module .= "
 </table>";
 
 $page = 1;
-$lastpage = ceil(Forum_Topics::TotalNoticeTopics() / SHOW_NEWS);
+$lastpage = ceil(\Framework\Forums\Topics::TotalNoticeTopics() / Configs::Get(Configs::eConf()->NEWS_PER_PAGE));
 
 if($_GET["page"] && is_numeric($_GET["page"]))
 	$page = min($_GET["page"], $lastpage);	
 	
-$last = $page * SHOW_NEWS;
-$first = $last - SHOW_NEWS;
+$last = $page * Configs::Get(Configs::eConf()->NEWS_PER_PAGE);
+$first = $last - Configs::Get(Configs::eConf()->NEWS_PER_PAGE);
 
 //echo  $first . " /  "  . $last;
 	
-$notices = Forum_Topics::ListNoticeTopics($first);
+$notices = \Framework\Forums\Topics::ListNoticeTopics($first);
 
 $news = 0;
 
@@ -90,7 +91,7 @@ if($notices)
 	
 	foreach($notices as $topic)
 	{	
-		$topic instanceof Forum_Topics;
+		$topic instanceof \Framework\Forums\Topics;
 		libxml_use_internal_errors(true);
 		/*$xml = new SimpleXMLElement("<?xml version=\"1.0\" ?><root>" . htmlspecialchars($topic->GetTopic()) . "</root>");*/
 
@@ -114,12 +115,12 @@ $xmlStr = "
 			$summary = $topic->GetTopic();
 		}
 		
-		$comment = (ENABLE_NEW_COMMENTS == 1) ? '<a id="new-comments" href="?ref=forum.topic&v='.$topic->GetId().'">'.$topic->GetPostCount().'</a>' : null;
+		$comment = Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS) ? '<a id="new-comments" href="?ref=forum.topic&v='.$topic->GetId().'">'.$topic->GetPostCount().'</a>' : null;
 		
-		$user = new Forum_User();
+		$user = new \Framework\Forums\User();
 		$user->Load($topic->GetAuthorId());
 		
-		$author = new Character();
+		$author = new \Framework\Player();
 		$author->load($user->GetPlayerId());
 		
 		$module .= "
@@ -128,18 +129,18 @@ $xmlStr = "
 				{$topic->GetTitle()}
 			</h3>
 			<div id='infos-line'>
-			por <a href='?ref=character.view&name={$author->getName()}'>{$author->getName()}</a>, <span>".Core::formatDate($topic->GetDate())."</span> {$comment}
+			por <a href='?ref=character.view&name={$author->getName()}'>{$author->getName()}</a>, <span>".\Core\Main::formatDate($topic->GetDate())."</span> {$comment}
 			</div>	
 		</div>
 		<div id='new-summary'>{$summary}</div>
 		";
 		
-		//Core::sendMessageBox("<span id='newtitle'>".$topic->GetTitle()."</span> <span style='float: right;'>".Core::formatDate($topic->GetDate())."</span>", $summary." {$comment}"); 	
+		//\Core\Main::sendMessageBox("<span id='newtitle'>".$topic->GetTitle()."</span> <span style='float: right;'>".\Core\Main::formatDate($topic->GetDate())."</span>", $summary." {$comment}"); 	
 	}
 }
 else
 {
-	Core::sendMessageBox("Erro", "Não há mais noticias.");
+	\Core\Main::sendMessageBox("Erro", "Não há mais noticias.");
 }
 
 $module .= "
@@ -161,19 +162,4 @@ if($page < $lastpage)
 
 $module .= "
 </div>";
-
-/*
-if($news < 3)
-{
-	$limit = 3 - $news;
-	
-	$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."news ORDER by post_data DESC LIMIT {$limit}");
-	
-	while($fetch = $query->fetch())
-	{
-		$showcomment = (ENABLE_NEW_COMMENTS == 1) ? '<p style="text-align: right;"><a href="'.$fetch->forum_url.'">Comentar está notícia</a></p>' : '';
-		Core::sendMessageBox("<span style='float: left;'>".$fetch->topic."</span> <span style='float: right;'>".Core::formatDate($fetch->post_data)."</span>", "{$fetch->post} {$showcomment}"); 
-	}
-}
-*/
 ?>

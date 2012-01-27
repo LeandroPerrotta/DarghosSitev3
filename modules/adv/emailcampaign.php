@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//html fields
@@ -14,37 +15,37 @@ class View
 	{		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;
 		}
 		
 		if($_SESSION['login'])
 		{
-			$this->loggedAcc = new Account();
+			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 		}		
 		
-		$this->_subject = new HTML_Input();
+		$this->_subject = new \Framework\HTML\Input();
 		$this->_subject->SetName("subject");
 		
-		$this->_content = new HTML_Input();
+		$this->_content = new \Framework\HTML\Input();
 		$this->_content->IsTextArea(7, 50);
 		$this->_content->SetName("content");
 		
-		$this->_sendToAccounts = new HTML_Input();
+		$this->_sendToAccounts = new \Framework\HTML\Input();
 		$this->_sendToAccounts->IsCheackeable();
 		$this->_sendToAccounts->SetValue("true");
 		$this->_sendToAccounts->SetName("sendToAccounts");
 		
-		$this->_accountsQuanty = new HTML_Input();
+		$this->_accountsQuanty = new \Framework\HTML\Input();
 		$this->_accountsQuanty->SetName("accountsQuanty");
 		$this->_accountsQuanty->SetSize(10);
 		
-		$this->_inactiveDays = new HTML_Input();
+		$this->_inactiveDays = new \Framework\HTML\Input();
 		$this->_inactiveDays->SetName("inactiveDays");
 		$this->_inactiveDays->SetSize(10);	
 
-		$this->_extraEmails = new HTML_Input();
+		$this->_extraEmails = new \Framework\HTML\Input();
 		$this->_extraEmails->IsTextArea(7, 50);
 		$this->_extraEmails->SetName("extraEmails");		
 		
@@ -52,11 +53,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -67,19 +68,22 @@ class View
 	
 	function Prepare()
 	{
-		$this->user = new Forum_User();
+		$this->user = new \Framework\Forums\User();
 		
 		if(!$this->user->LoadByAccount($_SESSION['login'][0]))
 		{
-			$this->_message = Lang::Message(LMSG_FORUM_ACCOUNT_NOT_HAVE_USER);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_ACCOUNT_NOT_HAVE_USER);
 			return false;			
 		}
 		
 		return true;
 	}
 	
-	function sendEmail($subject, $content, $to, $from = CONFIG_SITEEMAIL) 
+	function sendEmail($subject, $content, $to, $from = NULL) 
 	{		
+		if(!$from)
+			$from = Configs::Get(Configs::eConf()->WEBSITE_URL);
+		
 		$mail = new PHPMailer();
 		
 		$mail->IsHTML(true);
@@ -87,14 +91,14 @@ class View
 		//$mail->SMTPDebug = true;
 
 		$mail->SMTPAuth   = true;
-		$mail->Host       = SMTP_HOST;
-		$mail->Port       = SMTP_PORT;
+		$mail->Host       = Configs::Get(Configs::eConf()->SMTP_HOST);
+		$mail->Port       = Configs::Get(Configs::eConf()->SMTP_PORT);
 
-		$mail->Username   = SMTP_USER;
-		$mail->Password   = SMTP_PASS;
+		$mail->Username   = Configs::Get(Configs::eConf()->SMTP_USER);
+		$mail->Password   = Configs::Get(Configs::eConf()->SMTP_PASSWORD);
 			
-		$mail->FromName = CONFIG_SITENAME;
-		$mail->From = SMTP_USER;
+		$mail->FromName = Configs::Get(Configs::eConf()->WEBSITE_NAME);
+		$mail->From = Configs::Get(Configs::eConf()->SMTP_USER);
 			
 		$mail->AddAddress($to);
 

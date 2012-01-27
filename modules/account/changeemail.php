@@ -1,43 +1,45 @@
 <?
 if($_POST)
 {
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->get("password") != Strings::encrypt($_POST["account_password"]))
+	if($account->get("password") != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}
 	elseif($account->loadByEmail($_POST["account_newemail"]))
 	{
-		$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_EMAIL_ALREADY_USED);
 	}			
-	elseif(!Strings::validEmail($_POST["account_newemail"]))
+	elseif(!\Core\Strings::validEmail($_POST["account_newemail"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_EMAIL);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_EMAIL);
 	}
 	elseif(is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = Lang::Message(LMSG_CHANGEEMAIL_ALREADY_HAVE_REQUEST);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_ALREADY_HAVE_REQUEST);
 	}
 	else
 	{		
 		$account->addEmailToChange($_POST["account_newemail"]);
 		$newemail = $account->getEmailToChange();
-		$success = Lang::Message(LMSG_CHANGEEMAIL_SCHEDULED);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_SCHEDULED);
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
+
+global $pages, $buttons;
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">

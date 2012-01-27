@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//html fields
@@ -14,60 +15,60 @@ class View
 	
 	function View()
 	{
-		if(!$_GET["value"] || !is_numeric($_GET["value"]) || !ENABLE_GUILD_WARS)
+		if(!$_GET["value"] || !is_numeric($_GET["value"]) || !Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 		{	
 			return;
 		}
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}		
 		
 		//repply
-		$this->_replywaroptions = new HTML_SelectBox();
+		$this->_replywaroptions = new \Framework\HTML\SelectBox();
 		$this->_replywaroptions->SetName("replywar_options");
 		$this->_replywaroptions->AddOption("Responder", "war_reply");
 		$this->_replywaroptions->AddOption("Negociar", "war_negotiate");		
 		$this->_replywaroptions->SelectedIndex(0);		
 		
-		$this->_replywar = new HTML_SelectBox();
+		$this->_replywar = new \Framework\HTML\SelectBox();
 		$this->_replywar->SetName("reply_war");
 		$this->_replywar->AddOption("Aceitar");
 		$this->_replywar->AddOption("Rejeitar");
 		$this->_replywar->SelectedIndex(0);
 		
 		//negotiate
-		$this->_warfraglimit = new HTML_Input();
+		$this->_warfraglimit = new \Framework\HTML\Input();
 		$this->_warfraglimit->SetName("war_frag_limit");
 		$this->_warfraglimit->SetSize(10);
 		$this->_warfraglimit->SetLenght(4);
 		$this->_warfraglimit->SetValue($this->guild_war->GetFragLimit());
 		
-		$this->_warenddate = new HTML_Input();
+		$this->_warenddate = new \Framework\HTML\Input();
 		$this->_warenddate->SetName("war_end_date");
 		$this->_warenddate->SetSize(10);
 		$this->_warenddate->SetLenght(3);
 
-		$this->_warguildfee = new HTML_Input();
+		$this->_warguildfee = new \Framework\HTML\Input();
 		$this->_warguildfee->SetName("war_guild_fee");
 		$this->_warguildfee->SetSize(10);
 		$this->_warguildfee->SetLenght(9);
 		$this->_warguildfee->SetValue($this->guild_war->GetGuildFee());
 		
-		/*$this->_waropponentfee = new HTML_Input();
+		/*$this->_waropponentfee = new \Framework\HTML\Input();
 		$this->_waropponentfee->SetName("war_opponent_fee");
 		$this->_waropponentfee->SetSize(10);
 		$this->_waropponentfee->SetLenght(9);
 		$this->_waropponentfee->SetValue($this->guild_war->GetOpponentFee());*/
 		
-		$this->_warcomment = new HTML_Input();
+		$this->_warcomment = new \Framework\HTML\Input();
 		$this->_warcomment->SetName("war_comment");
 		$this->_warcomment->IsTextArea();
 		
 		//geneneral
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();		
 		
@@ -75,11 +76,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -90,31 +91,31 @@ class View
 	
 	function Prepare()
 	{
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);					
 		
-		$this->guild_war = new Guild_War();
+		$this->guild_war = new \Framework\Guilds\War();
 		
 		if(!$this->guild_war->Load($_GET['value']))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}
 		
-		$this->guild = new Guilds();
-		$this->opponent = new Guilds();
+		$this->guild = new \Framework\Guilds();
+		$this->opponent = new \Framework\Guilds();
 		
 		if($this->guild_war->GetReply() == 0)
 		{
 			if( !$this->guild->Load( $this->guild_war->GetOpponentId() ) )
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;			
 			}			
 			
 			if(!$this->opponent->Load($this->guild_war->GetGuildId()))
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;						
 			}					
 		}
@@ -124,31 +125,31 @@ class View
 			
 			if( !$this->guild->Load( $this->guild_war->GetGuildId() ) )
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;			
 			}		
 
 			if(!$this->opponent->Load($this->guild_war->GetOpponentId()))
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;						
 			}				
 		}
 		else
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
 		}
 		
-		if(Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
+		if(\Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}
 		
 		if( $this->guild_war->GetStatus() != GUILD_WAR_DISABLED )
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
 		}		
 		
@@ -157,9 +158,9 @@ class View
 	
 	function Post()
 	{
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}		
 		
@@ -170,7 +171,7 @@ class View
 			{
 				if($this->guild->GetBalance() < $this->guild_war->GetGuildFee())
 				{
-					$this->_message = Lang::Message(LMSG_GUILD_BALANCE_TOO_LOW);
+					$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_BALANCE_TOO_LOW);
 					return false;						
 				}
 				
@@ -181,7 +182,7 @@ class View
 				$this->guild->SetBalance($this->guild->GetBalance() - $this->guild_war->GetGuildFee());
 				$this->guild->Save();
 				
-				$this->_message = Lang::Message(LMSG_GUILD_WAR_ACCEPTED, $this->guild->GetName(), $this->opponent->GetName());
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_ACCEPTED, $this->guild->GetName(), $this->opponent->GetName());
 				
 				return true;
 			}
@@ -193,7 +194,7 @@ class View
 				$this->opponent->SetBalance($this->opponent->GetBalance() + $this->guild_war->GetGuildFee());
 				$this->opponent->Save();
 				
-				$this->_message = Lang::Message(LMSG_GUILD_WAR_REJECTED, $this->opponent->GetName());
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_REJECTED, $this->opponent->GetName());
 				
 				return true;
 			}
@@ -202,19 +203,19 @@ class View
 		{
 			if(!$this->_warfraglimit->GetPost() || !$this->_warguildfee->GetPost() /*|| !$this->_waropponentfee->GetPost()*/)
 			{
-				$this->_message = Lang::Message(LMSG_FILL_FORM);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 				return false;
 			}		
 		
 			if(!is_numeric($this->_warfraglimit->GetPost()) || !is_numeric($this->_warguildfee->GetPost()) /*|| !is_numeric($this->_waropponentfee->GetPost())*/)
 			{
-				$this->_message = Lang::Message(LMSG_FILL_NUMERIC_FIELDS);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_NUMERIC_FIELDS);
 				return false;
 			}
 			
 			if($this->_warfraglimit->GetPost() < 10  || $this->_warfraglimit->GetPost() > 1000)
 			{
-				$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_FRAG_LIMIT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_WRONG_FRAG_LIMIT);
 				return false;
 			}
 
@@ -222,14 +223,14 @@ class View
 			{
 				if($this->_warenddate->GetPost() < 7 || $this->_warenddate->GetPost() > 360)
 				{
-					$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_END_DATE);
+					$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_WRONG_END_DATE);
 					return false;
 				}
 			}
 			
 			if($this->_warguildfee->GetPost() < 0  || $this->_warguildfee->GetPost() > 100000000 /*|| $this->_waropponentfee->GetPost() < 0 || $this->_waropponentfee->GetPost() > 100000000*/)
 			{
-				$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_FEE);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_WRONG_FEE);
 				return false;
 			}
 			
@@ -237,14 +238,14 @@ class View
 			{
 				if(strlen($this->_warcomment->GetPost()) > 500)
 				{
-					$this->_message = Lang::Message(LMSG_GUILD_WAR_WRONG_COMMENT_LENGTH);
+					$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_WRONG_COMMENT_LENGTH);
 					return false;				
 				}
 			}				
 	
 			if($this->guild->GetBalance() < $this->_warguildfee->GetPost())
 			{
-				$this->_message = Lang::Message(LMSG_GUILD_BALANCE_TOO_LOW);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_BALANCE_TOO_LOW);
 				return false;						
 			}				
 			
@@ -278,12 +279,12 @@ class View
 				
 			$this->guild_war->Save();	
 			
-			$this->_message = Lang::Message(LMSG_GUILD_WAR_NEGOTIATE_SEND);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_WAR_NEGOTIATE_SEND);
 			
 			return true;
 		}
 
-		$this->_message = Lang::Message(LMSG_REPORT);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 		return false;	
 	}
 	

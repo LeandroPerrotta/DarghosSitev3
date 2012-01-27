@@ -1,7 +1,8 @@
 <?php
-$pageDb = new PagesDB();
+use \Core\Consts;
+$pageDb = new \Core\PagesDB();
 
-$pageDb->load(DBPAGES_HOWPLAY);
+$pageDb->load(Consts::PAGE_HOW_PLAY);
 
 if(!$_SESSION['login'])
 {
@@ -9,23 +10,23 @@ if(!$_SESSION['login'])
 }
 if($_SESSION['login'])
 {	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getGroup() >= GROUP_COMMUNITYMANAGER)
+	if($account->getGroup() >= e_Groups::CommunityManager)
 	{
 		if($_POST)
 		{
 			$pageDb->setContent($_POST['Page']);
-			$pageDb->save(DBPAGES_HOWPLAY);
+			$pageDb->save(Consts::PAGE_HOW_PLAY);
 			
-			Core::sendMessageBox("Sucesso!", "A pagina foi editada com sucesso!");
-			$pageDb->load(DBPAGES_HOWPLAY);
+			\Core\Main::sendMessageBox("Sucesso!", "A pagina foi editada com sucesso!");
+			$pageDb->load(Consts::PAGE_HOW_PLAY);
 		}		
 		
 		$module .= "<br><form action='{$_SERVER['REQUEST_URI']}' method='post'>";
 		
-		$FCKEditor = Core::FCKEditor("Page");
+		$FCKEditor = \Core\Main::FCKEditor("Page");
 		
 		$FCKEditor->BasePath = "libs/fckeditor/";
 		$FCKEditor->Height = "800";

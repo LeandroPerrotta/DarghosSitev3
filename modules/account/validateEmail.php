@@ -14,7 +14,7 @@ class View
 	{		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}		
 		
@@ -23,21 +23,21 @@ class View
 			$success = false;
 			if(!$this->loggedAcc || !$this->loggedAcc->activateEmailByCode($_GET['code']))
 			{
-				$this->_message = Lang::Message(LMSG_CAN_NOT_VALIDATE_EMAIL);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CAN_NOT_VALIDATE_EMAIL);
 			}
 			else
 			{	
-				$this->_message = Lang::Message(LMSG_VALIDATE_EMAIL_SUCCESSFULY, $this->loggedAcc->getEmail());
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->VALIDATE_EMAIL_SUCCESSFULY, $this->loggedAcc->getEmail());
 				$success = true;
 			}
 			
 			if($success)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}	
 			
 			return true;
@@ -47,11 +47,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -62,20 +62,20 @@ class View
 	
 	function Prepare()
 	{						
-		$this->_account_password = new HTML_Input();
+		$this->_account_password = new \Framework\HTML\Input();
 		$this->_account_password->SetName("account_password");		
 		$this->_account_password->IsPassword();		
-		$this->_account_password->SetSize(HTML_Input::SIZE_SMALL);
+		$this->_account_password->SetSize(\Framework\HTML\Input::SIZE_SMALL);
 
-		$this->_account_email = new HTML_Input();
+		$this->_account_email = new \Framework\HTML\Input();
 		$this->_account_email->SetName("account_email");	
-		$this->_account_email->SetSize(HTML_Input::SIZE_SMALL);	
+		$this->_account_email->SetSize(\Framework\HTML\Input::SIZE_SMALL);	
 		
-		$this->loggedAcc = Account::loadLogged();
+		$this->loggedAcc = \Framework\Account::loadLogged();
 		
 		if($this->loggedAcc->getEmail())
 		{
-			$this->_message = Lang::Message(LMSG_ACCOUNT_ALREADY_VALIDATED_EMAIL);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_ALREADY_VALIDATED_EMAIL);
 			return false;
 		}
 		
@@ -87,43 +87,43 @@ class View
 		$email = $this->_account_email->GetPost();
 		$password = $this->_account_password->GetPost();		
 	
-		if(Strings::isNull($email) || Strings::isNull($password))
+		if(\Core\Strings::isNull($email) || \Core\Strings::isNull($password))
 		{
-			$this->_message = Lang::Message(LMSG_FILL_FORM);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 			return false;
 		}
 		
-		if($this->loggedAcc->getPassword() != Strings::encrypt($password))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($password))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}
 		
-		if(!Strings::validEmail($email))
+		if(!\Core\Strings::validEmail($email))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_EMAIL);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_EMAIL);
 			return false;
 		}
 		
-		$account = new Account();
+		$account = new \Framework\Account();
 		
 		if($account->loadByEmail($email))
 		{
-			$this->_message = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_EMAIL_ALREADY_USED);
 			return false;
 		}
 		
-		$code = Strings::randKey(12, 1, "lower+number");
+		$code = \Core\Strings::randKey(12, 1, "lower+number");
 		
-		if(!Emails::send($email, Emails::EMSG_VALIDATE_EMAIL, array($code)))
+		if(!\Core\Emails::send($email, \Core\Emails::EMSG_VALIDATE_EMAIL, array($code)))
 		{
-			$this->_message = Lang::Message(LMSG_FAIL_SEND_EMAIL);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_SEND_EMAIL);
 			return false;
 		}	
 		
 		$this->loggedAcc->addEmailValidate($email, $code);		
 		
-		$this->_message = Lang::Message(LMSG_ACCOUNT_VALIDATING_EMAIL_SEND, $email);		
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_VALIDATING_EMAIL_SEND, $email);		
 		return true;
 	}
 	

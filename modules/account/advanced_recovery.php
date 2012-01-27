@@ -1,13 +1,13 @@
 <?php
 if($_SESSION['recovery'])
 {	
-	$character = new Character();
-	$character->loadByName($_SESSION['recovery']); 
+	$player = new \Framework\Player();
+	$player->loadByName($_SESSION['recovery']); 
 	
-	$chkEmail = new Account();
+	$chkEmail = new \Framework\Account();
 	
-	$account = new Account();
-	$account->load($character->get("account_id"));
+	$account = new \Framework\Account();
+	$account->load($player->get("account_id"));
 	$secretkey = $account->getSecretKey();
 	
 	if($secretkey)
@@ -17,46 +17,48 @@ if($_SESSION['recovery'])
 			$postSecretKey = $_POST['recovery_secretkey'];
 			$postEmail = $_POST['recovery_email'];
 		
-			if(Core::getIpTries() >= 3)
+			if(\Core\Main::getIpTries() >= 3)
 			{
-				$error = Lang::Message(LMSG_OPERATION_ARE_BLOCKED);
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_ARE_BLOCKED);
 			}
 			elseif($postSecretKey != $secretkey['key'])
 			{
-				Core::increaseIpTries();
+				\Core\Main::increaseIpTries();
 				
-				if(Core::getIpTries() < 3)
-					$error = Lang::Message(LMSG_RECOVERY_WRONG_SECRET_KEY);
+				if(\Core\Main::getIpTries() < 3)
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_WRONG_SECRET_KEY);
 				else
-					$error = Lang::Message(LMSG_OPERATION_HAS_BLOCKED);
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_HAS_BLOCKED);
 			}
 			elseif($chkEmail->loadByEmail($postEmail))
 			{
-				$error = Lang::Message(LMSG_ACCOUNT_EMAIL_ALREADY_USED);
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_EMAIL_ALREADY_USED);
 			}
-			elseif(!Strings::validEmail($postEmail))
+			elseif(!\Core\Strings::validEmail($postEmail))
 			{
-				$error = Lang::Message(LMSG_WRONG_EMAIL);
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_EMAIL);
 			}
 			else
 			{
 				$account->setEmail($postEmail);
 				$account->save();
 				
-				$success = Lang::Message(LMSG_RECOVERY_EMAIL_CHANGED);	
+				$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_EMAIL_CHANGED);	
 			}
 		}
 	
 		if($success)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 			}
+			
+		global $pages, $buttons;	
 			
 		$module .= '	
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
@@ -100,7 +102,7 @@ if($_SESSION['recovery'])
 	}
 	else
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_RECOVERY_DISABLED));		
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_DISABLED));		
 	}		
 }
 ?>

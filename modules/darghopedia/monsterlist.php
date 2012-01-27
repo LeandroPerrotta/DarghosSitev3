@@ -1,6 +1,6 @@
 <?php
-$monster = Monsters::GetInstance();
-$monster instanceof Monsters;
+$monster = \Framework\Monsters::GetInstance();
+$monster instanceof \Framework\Monsters;
 
 $it = $monster->getList()->getIterator();
 $it instanceof ArrayIterator;

@@ -14,10 +14,10 @@ class View
 	{					
 		if($_SESSION['login'])
 		{
-			$this->loggedAcc = new Account();
+			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 			
-			if($this->loggedAcc->getGroup() == GROUP_ADMINISTRATOR)
+			if($this->loggedAcc->getGroup() == e_Groups::Administrator)
 			{
 				$this->isAdmin = true;
 				
@@ -27,13 +27,13 @@ class View
 		}
 		else
 		{
-			Core::requireLogin();
+			\Core\Main::requireLogin();
 			return false;
 		}		
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;
 		}	
 		
@@ -41,7 +41,7 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 		}			
 		
@@ -59,16 +59,16 @@ class View
 	{				
 		if($this->isAdmin)
 		{
-			$this->_character = new HTML_Input();
+			$this->_character = new \Framework\HTML\Input();
 			$this->_character->SetName("character_name");
 			
-			$this->_daysago = new HTML_Input();
+			$this->_daysago = new \Framework\HTML\Input();
 			$this->_daysago->SetName("days_ago");
 			
 			return true;
 		}
 		
-		$this->_daysago = new HTML_SelectBox();
+		$this->_daysago = new \Framework\HTML\SelectBox();
 		$this->_daysago->SetName("days_ago");
 		
 		foreach($this->playerDaysAgo as $key => $days)
@@ -82,7 +82,7 @@ class View
 	
 	function markAsUsed($id)
 	{
-		Core::$DB->query("INSERT INTO `".Tools::getSiteTable("itemshop_use_log")."` VALUES ('{$id}', '0', '".time()."')");
+		\Core\Main::$DB->query("INSERT INTO `".\Core\Tools::getSiteTable("itemshop_use_log")."` VALUES ('{$id}', '0', '".time()."')");
 	}
 	
 	function getPurchases($daysago = null)
@@ -92,7 +92,7 @@ class View
 			$limit = "WHERE `log`.`date` >= UNIX_TIMESTAMP() - (60 * 60 * 24 * {$daysago})";
 		}
 		
-		$query = Core::$DB->query("
+		$query = \Core\Main::$DB->query("
 		SELECT 
 			`log`.`id`,
 			`log`.`date`,
@@ -103,9 +103,9 @@ class View
 			`player_use`.`name` as `player_use`,
 			`use`.`player_id` as `id_use`
 		FROM 
-			`".Tools::getSiteTable("itemshop_log")."` `log` 
+			`".\Core\Tools::getSiteTable("itemshop_log")."` `log` 
 		LEFT JOIN
-			`".Tools::getSiteTable("itemshop")."` `shop`
+			`".\Core\Tools::getSiteTable("itemshop")."` `shop`
 		ON
 			`shop`.`id` = `log`.`shop_id`
 		LEFT JOIN
@@ -113,7 +113,7 @@ class View
 		ON
 			`players`.`id` = `log`.`player_id`
 		LEFT JOIN
-			`".Tools::getSiteTable("itemshop_use_log")."` `use`
+			`".\Core\Tools::getSiteTable("itemshop_use_log")."` `use`
 		ON
 			`use`.`log_id` = `log`.`id`
 		LEFT JOIN
@@ -124,15 +124,15 @@ class View
 		ORDER BY 
 			`log`.`date` DESC");
 		
-		$query instanceof Query;
+		$query instanceof \Core\Query;
 		return $query;			
 	}
 	
 	function buildTable($query)
 	{
-		$query instanceof Query;
+		$query instanceof \Core\Query;
 		
-		$this->_log_table = new HTML_Table();
+		$this->_log_table = new \Framework\HTML\Table();
 		$this->_log_table->AddField("Historico Item Shop");
 		$this->_log_table->AddRow();	
 		
@@ -167,13 +167,13 @@ class View
 				else
 				{
 					$item .= " usado por:
-					<br><a href='?ref=character.view&name={$row["player_use"]}'>{$row["player_use"]}</a><br> em ".Core::formatDate($row["use_date"])."";
+					<br><a href='?ref=character.view&name={$row["player_use"]}'>{$row["player_use"]}</a><br> em ".\Core\Main::formatDate($row["use_date"])."";
 				}
 			}
 			
 			$this->_log_table->AddField($item);
 			$this->_log_table->AddField($row["price"]);
-			$this->_log_table->AddField(Core::formatDate($row["date"]));
+			$this->_log_table->AddField(\Core\Main::formatDate($row["date"]));
 			
 			if($this->isAdmin)
 				$this->_log_table->AddField("<a href='?ref=itemshop.history&use={$row["id"]}'>Usar</a>");		
@@ -190,7 +190,7 @@ class View
 		$daysago = $this->_daysago->GetPost();
 		if(!in_array($daysago, $this->playerDaysAgo))
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
 		}
 		
@@ -204,7 +204,7 @@ class View
 		
 		if(!$tmp_char)
 		{
-			$this->_message = Lang::Message(LMSG_FILL_FORM);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 			return false;
 		}
 		
@@ -212,16 +212,16 @@ class View
 		
 		if($tmp_char != "*")
 		{
-			$character = new Character();
+			$player = new \Framework\Player();
 					
-			if(!$character->loadByName($tmp_char))
+			if(!$player->loadByName($tmp_char))
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
 			}
 			
-			$tmp_account = new Account();
-			$tmp_account->load($character->getAccountId());
+			$tmp_account = new \Framework\Account();
+			$tmp_account->load($player->getAccountId());
 			
 			$query = $tmp_account->getItemShopPurchasesQuery($daysago);
 		}

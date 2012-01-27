@@ -1,26 +1,26 @@
 <?
 if($_POST)
 {
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$checkPassword = Ajax_account::checkPassword();
+	$checkPassword = \Framework\Account::checkPassword();
 	
-	if($account->getPassword() != Strings::encrypt($_POST["account_password_current"]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password_current"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}
 	elseif($checkPassword["error"])
 	{
 		$error = $checkPassword["text"];
 	}
-	elseif(Strings::encrypt($_POST["account_password"]) == $account->getPassword())
+	elseif(\Core\Strings::encrypt($_POST["account_password"]) == $account->getPassword())
 	{
-		$error = Lang::Message(LMSG_CHANGEPASS_SAME_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEPASS_SAME_PASSWORD);
 	}
 	else
 	{
-		$account->setPassword(Strings::encrypt($_POST["account_password"]));
+		$account->setPassword(\Core\Strings::encrypt($_POST["account_password"]));
 		$account->save();
 		
 		$_SESSION["login"] = array();
@@ -28,21 +28,21 @@ if($_POST)
 		$_SESSION["login"][] = $account->getId();
 		$_SESSION["login"][] = $account->getPassword();
 		
-		$success = Lang::Message(LMSG_ACCOUNT_PASSWORD_CHANGED);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_PASSWORD_CHANGED);
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
-
+global $pages, $buttons;
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>

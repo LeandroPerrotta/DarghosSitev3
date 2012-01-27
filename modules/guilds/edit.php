@@ -1,5 +1,6 @@
 <?php
-if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
+use \Core\Configs;
+if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";	
@@ -13,39 +14,39 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			$image_infos = getimagesize($guild_image["tmp_name"]);
 		}
 		
-		if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
-			$message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}			
 		
 		if(strlen($_POST["guild_motd"]) > 500)
 		{
-			$message = Lang::Message(LMSG_GUILD_COMMENT_SIZE);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_COMMENT_SIZE);
 			return false;
 		}
 		
 		if($guild_image["name"] and $guild_image["size"] > 100000)
 		{
-			$message = Lang::Message(LMSG_GUILD_LOGO_SIZE);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LOGO_SIZE);
 			return false;
 		}
 		
 		if($guild_image["name"] and !$image_infos)
 		{
-			$message = Lang::Message(LMSG_GUILD_FILE_WRONG);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_FILE_WRONG);
 			return false;
 		}
 		
 		if($guild_image["name"] and ($image_infos[0] != 100 or $image_infos[1] != 100))
 		{
-			$message = Lang::Message(LMSG_GUILD_LOGO_DIMENSION_WRONG);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LOGO_DIMENSION_WRONG);
 			return false;
 		}
 			
 		if($guild_image["name"] and $image_infos[2] > 3)
 		{
-			$message = Lang::Message(LMSG_GUILD_LOGO_EXTENSION_WRONG);
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LOGO_EXTENSION_WRONG);
 			return false;
 		}						
 
@@ -55,10 +56,10 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		if($guild_image)
 		{
 			$extension = null;
-			preg_match("/\.(gif|jpg|jpeg|png){1}$/i", $guild_image["name"], $extension);
+			preg_match("/\\.(gif|jpg|jpeg|png){1}$/i", $guild_image["name"], $extension);
 			
-			$name = Strings::randKey(10, 1, "lower+number").$extension[0];
-			$file = GUILD_IMAGE_DIR.$name;
+			$name = \Core\Strings::randKey(10, 1, "lower+number").$extension[0];
+			$file = Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS).$name;
 			
 			if(move_uploaded_file($guild_image["tmp_name"], $file))
 			{
@@ -68,22 +69,22 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 		
 		$guild->Save();
 		
-		$message = Lang::Message(LMSG_GUILD_DESC_CHANGED);		
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_DESC_CHANGED);		
 		return true;
 	}
 	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$guild = new Guilds();
+	$guild = new \Framework\Guilds();
 	
 	if(!$guild->LoadByName($_GET['name']))
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']));
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));
 	}
-	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != GUILD_RANK_LEADER)
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), Lang::Message(LMSG_REPORT));	
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));	
 	}	
 	else
 	{		
@@ -94,13 +95,13 @@ if($_GET['name'] && !ENABLE_GUILD_READ_ONLY)
 			
 		if($result)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
 		}
 		else
 		{
 			if($_POST)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}
 			
 			$module .=	'

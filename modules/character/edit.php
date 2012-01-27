@@ -1,10 +1,12 @@
 <?php
+use \Core\Configs;
+
 if(isset($_POST['character_name']))
 {
-	Core::redirect("?ref=character.edit&name={$_POST['character_name']}");
+	\Core\Main::redirect("?ref=character.edit&name={$_POST['character_name']}");
 }
 
-$account = new Account();
+$account = new \Framework\Account();
 $account->load($_SESSION['login'][0]);
 
 $list = $account->getCharacterList();
@@ -13,115 +15,116 @@ if($_GET['name'])
 {
 	if(in_array($_GET['name'], $list))
 	{
-		$character = new Character();
-		$character->loadByName($_GET['name']);
+		$player = new \Framework\Player();
+		$player->loadByName($_GET['name']);
 
 		if($_POST)
 		{			
-			if($account->get("password") != Strings::encrypt($_POST["account_password"]))
+			if($account->get("password") != \Core\Strings::encrypt($_POST["account_password"]))
 			{
-				$error = Lang::Message(LMSG_WRONG_PASSWORD);
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			}			
 			elseif($_POST["edit_action"] == "edit_information")
 			{			
 				if(strlen($_POST["character_comment"]) > 500)
 				{
-					$error = Lang::Message(LMSG_CHARACTER_COMMENT_WRONG_SIZE);
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_COMMENT_WRONG_SIZE);
 				}
 				else
 				{		
 					$hide = ($_POST["character_hide"] == 1) ? "1" : "0";
-					$character->setComment(strip_tags($_POST["character_comment"]));
-					$character->setHidden($hide);
+					$player->setComment(strip_tags($_POST["character_comment"]));
+					$player->setHidden($hide);
 					
-					$character->save();
+					$player->save();
 					
-					$success = Lang::Message(LMSG_CHARACTER_COMMENT_CHANGED);
+					$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_COMMENT_CHANGED);
 				}
 			}
 			elseif($_POST["edit_action"] == "edit_name")
 			{	
-				if(SHOW_SHOPFEATURES != 0)
+				if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 				{
-					$account = $character->loadAccount();
+					$account = $player->loadAccount();
 					
-					$newname_character = new Character();
+					$newname_character = new \Framework\Player();
 					
 					if(!$_POST["character_newname"])
 					{
-						$error = Lang::Message(LMSG_FILL_FORM);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 					}			
 					elseif(!$_POST["confirm_changename"])
 					{
-						$error = Lang::Message(LMSG_CHARACTER_CHANGE_THING_CONFIRM);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGE_THING_CONFIRM);
 					}			
-					elseif(!Strings::canUseName($_POST["character_newname"]))
+					elseif(!\Core\Strings::canUseName($_POST["character_newname"]))
 					{
-						$error = Lang::Message(LMSG_WRONG_NAME);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_NAME);
 					}
 					elseif($newname_character->loadByName($_POST["character_newname"]))
 					{
-						$error = Lang::Message(LMSG_CHARACTER_NAME_ALREADY_USED);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NAME_ALREADY_USED);
 					}	
-					elseif($character->getOnline() == 1)	
+					elseif($player->getOnline() == 1)	
 					{
-						$error = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 					}			
-					elseif($account->getPremDays() < PREMDAYS_TO_CHANGENAME)
+					elseif($account->getPremDays() < Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME))
 					{
-						$error = Lang::Message(LMSG_CHARACTER_PREMDAYS_COST, PREMDAYS_TO_CHANGENAME);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_PREMDAYS_COST, Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME));
 					}
 					else
 					{		
-						$oldName = $character->getName();
+						$oldName = $player->getName();
 						
-						$character->set("name", $_POST["character_newname"]);
-						$character->save();
+						$player->set("name", $_POST["character_newname"]);
+						$player->save();
 								
 						//remove premdays da conta do jogador
-						$account->updatePremDays(PREMDAYS_TO_CHANGENAME, false /* false to decrement days */);						
+						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME), false /* false to decrement days */);						
 						$account->save();				
 						
-						Core::addChangeLog('name', $character->get("id"), $_POST["character_newname"]);
-						$success = Lang::Message(LMSG_CHARACTER_NAME_CHANGED, $oldName, $_POST["character_newname"]);
+						\Core\Main::addChangeLog('name', $player->get("id"), $_POST["character_newname"]);
+						$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NAME_CHANGED, $oldName, $_POST["character_newname"]);
 					}
 				}			
 			}
 			elseif($_POST["edit_action"] == "edit_sex")
 			{	
-				if(SHOW_SHOPFEATURES != 0)
+				if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 				{				
-					$account = $character->loadAccount();	
+					$account = $player->loadAccount();	
 					
 					if(!$_POST["confirm_changesex"])
 					{
-						$error = Lang::Message(LMSG_CHARACTER_CHANGE_THING_CONFIRM);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGE_THING_CONFIRM);
 					}	
 					elseif($account->get("type") > 2 AND $account->get("type") < 5)
 					{
-						$error = Lang::Message(LMSG_REPORT);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 					}						
-					elseif($character->getOnline() == 1)
+					elseif($player->getOnline() == 1)
 					{
-						$error = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 					}			
-					elseif($account->getPremDays() < PREMDAYS_TO_CHANGESEX)
+					elseif($account->getPremDays() < Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX))
 					{
-						$error = Lang::Message(LMSG_CHARACTER_CHANGESEX_COST, PREMDAYS_TO_CHANGESEX);
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGESEX_COST, Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX));
 					}
 					else
 					{		
-						$sexo = $_sex[$_POST['character_sex']];
-						$character->set("sex", $sexo);
-						$character->save();
+						$_genre = new t_Genre();
+						$genre_id = $_genre->SetDataByType($_POST['character_sex']);
+						$player->set("sex", $genre_id);
+						$player->save();
 						
 						//remove premdays da conta do jogador
-						$account->updatePremDays(PREMDAYS_TO_CHANGESEX, false /* false to decrement days */);	
+						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX), false /* false to decrement days */);	
 						
 						$account->save();		
 		
-						Core::addChangeLog('sex', $character->get("id"), $sexo);
-						$success = Lang::Message(LMSG_CHARACTER_SEX_CHANGED, $character->getName());
+						\Core\Main::addChangeLog('sex', $player->get("id"), $sexo);
+						$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_SEX_CHANGED, $player->getName());
 					}		
 				}		
 			}
@@ -129,20 +132,20 @@ if($_GET['name'])
 		
 		if($success)	
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 			}
 			
-			$sex_option = ($character->get("sex") == 1) ? '<option value="female">Feminino</option>' : '<option value="male">Masculino</option>';
+			$sex_option = ($player->get("sex") == 1) ? '<option value="female">Feminino</option>' : '<option value="male">Masculino</option>';
 			
 			$editOptions .= '<option value="edit_information">Modificar Informações</option>';
 			
-			if(SHOW_SHOPFEATURES != 0)
+			if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 			{
 				$editOptions .= '<option value="edit_name">Modificar Nome</option>';
 				$editOptions .= '<option value="edit_sex">Modificar Sexo</option>';
@@ -169,18 +172,18 @@ if($_GET['name'])
 					<div title="edit_information" class="viewable" style="margin: 0px; padding: 0px;">
 						<p>
 							<label for="character_comment">Comentario</label><br />
-							<textarea name="character_comment" rows="10" wrap="physical" cols="55">'.$character->get("comment").'</textarea>
+							<textarea name="character_comment" rows="10" wrap="physical" cols="55">'.$player->get("comment").'</textarea>
 							<em><br>Limpe para deletar.</em>
 						</p>	
 	
 						<p>
-							<input '.(($character->get("hide") == "1") ? "checked=\"checked\"" : null).' name="character_hide" type="checkbox" value="1" /> Marque esta opção para esconder este personagem.
+							<input '.(($player->get("hide") == "1") ? "checked=\"checked\"" : null).' name="character_hide" type="checkbox" value="1" /> Marque esta opção para esconder este personagem.
 						</p>
 					</div>		
 
 					';
 			
-				if(SHOW_SHOPFEATURES != 0)
+				if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 				{
 					
 					$module .=	'
@@ -238,7 +241,7 @@ if($_GET['name'])
 	}
 	else
 	{			
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);	
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);	
 	}
 }
 else

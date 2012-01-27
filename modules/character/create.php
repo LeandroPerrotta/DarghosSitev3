@@ -1,32 +1,32 @@
 <?
 if($_POST)
 {	
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);		
 	
-	$character = new Character();
+	$player = new \Framework\Player();
 
-	$monsters = Monsters::GetInstance();
+	$monsters = \Framework\Monsters::GetInstance();
 	
 	if(!$_POST["player_name"] or !$_POST["player_vocation"] or !$_POST["player_sex"])
 	{
-		$error = Lang::Message(LMSG_FILL_FORM);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 	}
-	elseif(!Strings::canUseName($_POST["player_name"]))
+	elseif(!\Core\Strings::canUseName($_POST["player_name"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_NAME);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_NAME);
 	}
-	elseif($character->loadByName($_POST["player_name"]))
+	elseif($player->loadByName($_POST["player_name"]))
 	{
-		$error = Lang::Message(LMSG_CHARACTER_NAME_ALREADY_USED);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NAME_ALREADY_USED);
 	}
 	elseif($monsters->loadByName($_POST["player_name"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_NAME);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_NAME);
 	}
 	elseif(count($account->getCharacterList()) == 10)
 	{
-		$error = Lang::Message(LMSG_ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS);
 	}
 	else
 	{
@@ -44,38 +44,38 @@ if($_POST)
 		else
 			$outfitType = 136;
 			
-		$character->setName($_POST["player_name"]);
-		$character->setAccountId($_SESSION['login'][0]);
-		$character->setGroup(GROUP_PLAYERS);
-		$character->setSex($sex->Get());
-		$character->setVocation($vocation->Get());
-		$character->setExperience(4200);
-		$character->setLevel(8);
-		$character->setMagLevel(0);
-		$character->setHealth(185);
-		$character->setMana(35);
-		$character->setCap(470);
-		$character->setTownId(6);
-		$character->setLookType($outfitType);
-		$character->setConditions(null);
-		$character->setComment("");
-		$character->setCreation(time());
+		$player->setName($_POST["player_name"]);
+		$player->setAccountId($_SESSION['login'][0]);
+		$player->setGroup(e_Groups::Player);
+		$player->setSex($sex->Get());
+		$player->setVocation($vocation->Get());
+		$player->setExperience(4200);
+		$player->setLevel(8);
+		$player->setMagLevel(0);
+		$player->setHealth(185);
+		$player->setMana(35);
+		$player->setCap(470);
+		$player->setTownId(6);
+		$player->setLookType($outfitType);
+		$player->setConditions(null);
+		$player->setComment("");
+		$player->setCreation(time());
 		
-		$character->save();
+		$player->save();
 	
-		$success = Lang::Message(LMSG_CHARACTER_CREATED, $_POST["player_name"]);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CREATED, $_POST["player_name"]);
 	}
 } 
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 	
 $module .= '

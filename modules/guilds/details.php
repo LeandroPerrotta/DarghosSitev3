@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//variables
@@ -16,16 +17,16 @@ class View
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		
 		if($_SESSION['login'])
 		{
-			$this->loggedAcc = new Account();
+			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 			
-			$this->memberLevel = Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId());
+			$this->memberLevel = \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId());
 		}		
 		
 		$this->Draw();
@@ -34,11 +35,11 @@ class View
 	
 	function Prepare()
 	{
-		$this->guild = new Guilds();
+		$this->guild = new \Framework\Guilds();
 		
 		if(!$this->guild->LoadByName($_GET['name']))
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
 			return false;
 		}
 		
@@ -50,7 +51,7 @@ class View
 		global $module;
 		
 		
-		if(ENABLE_GUILD_WARS)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 		{
 			if($this->guild->OnWar())
 				$warStatus = "<span style='color: red;'>Esta guilda está em guerra com outra(s) guilda(s).</span>";
@@ -59,7 +60,7 @@ class View
 		}
 		
 		//guild info header
-		$guildTable = new HTML_Table();
+		$guildTable = new \Framework\HTML\Table();
 		$guildTable->AddField("Logotipo", null, null, 3);
 		$guildTable->AddRow();
 		
@@ -67,23 +68,23 @@ class View
 			<p><h3>{$this->guild->GetName()}</h3></p>
 			<p>{$this->guild->GetMotd()}</p>";
 		
-		$guildTable->AddField("<img src='".GUILD_IMAGE_DIR."{$this->guild->GetImage()}' height='100' width='100' />");
+		$guildTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$this->guild->GetImage()}' height='100' width='100' />");
 		$guildTable->AddField($guildDesc, 90);
-		$guildTable->AddField("<img src='".GUILD_IMAGE_DIR."{$this->guild->GetImage()}' height='100' width='100' />");
+		$guildTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$this->guild->GetImage()}' height='100' width='100' />");
 		$guildTable->AddRow();
 		
-		$guildInfoTable = new HTML_Table();
+		$guildInfoTable = new \Framework\HTML\Table();
 		$guildInfoTable->AddField("Informações da Guilda");
 		$guildInfoTable->AddRow();
 		
-		if(ENABLE_GUILD_FORMATION)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_IN_FORMATION))
 		{
-			$guildFormStatus = ($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> até <b>".Core::formatDate($this->guild->GetFormationTime())."</b>.";
+			$guildFormStatus = ($this->guild->GetStatus() == GUILD_STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de formação e será disbandada se não possuir <b>".Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION)." vice-lideres</b> até <b>".\Core\Main::formatDate($this->guild->GetFormationTime())."</b>.";
 			$guildInfoTable->AddField($guildFormStatus);
 			$guildInfoTable->AddRow();
 		}
 		
-		$guildInfoTable->AddField("Esta guilda foi criada em <b>".Core::formatDate($this->guild->GetCreationDate())."</b>.");
+		$guildInfoTable->AddField("Esta guilda foi criada em <b>".\Core\Main::formatDate($this->guild->GetCreationDate())."</b>.");
 		$guildInfoTable->AddRow();
 		
 		if($this->loggedAcc and $this->memberLevel > GUILD_RANK_NO_MEMBER)
@@ -92,13 +93,13 @@ class View
 			$guildInfoTable->AddRow();			
 		}	
 		
-		if(ENABLE_GUILD_POINTS)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_POINTS))
 		{
 			$guildInfoTable->AddField("Pontos da guilda (força / total): <b>{$this->guild->GetBetterPoints()}/{$this->guild->GetPoints()}</b>");
 			$guildInfoTable->AddRow();	
 		}
 		
-		if(ENABLE_GUILD_WARS)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 		{
 			$guildInfoTable->AddField("Estado de Guerra: <b>{$warStatus}</b>");
 			$guildInfoTable->AddRow();	
@@ -111,7 +112,7 @@ class View
 		
 			{$guildInfoTable->Draw()}";				
 
-		if(!ENABLE_GUILD_READ_ONLY && $this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel == GUILD_RANK_LEADER)
 		{			
 			$guildPage .= "
 			<p>
@@ -122,7 +123,7 @@ class View
 		}					
 		
 		//loading guild members and preparing table to draw
-		$membersTable = new HTML_Table();
+		$membersTable = new \Framework\HTML\Table();
 		$membersTable->AddField("Rank", 25);
 		$membersTable->AddField("Nome e apelido");
 		$membersTable->AddField("Membro desde");
@@ -152,7 +153,7 @@ class View
 				
 				$membersTable->AddField($rankToWrite);
 				$membersTable->AddField($nick);
-				$membersTable->AddField(Core::formatDate($member->getGuildJoinIn()));
+				$membersTable->AddField(\Core\Main::formatDate($member->getGuildJoinIn()));
 				$membersTable->AddRow();		
 			}
 			
@@ -171,19 +172,19 @@ class View
 		{
 			$guildPage .= "<p>";
 			
-			if(!ENABLE_GUILD_READ_ONLY && $this->memberLevel >= GUILD_RANK_VICE)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= GUILD_RANK_VICE)
 			$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.members&name={$this->guild->GetName()}'>Editar Membros</a>				
 			";
 				
-			if(!ENABLE_GUILD_READ_ONLY && $this->memberLevel == GUILD_RANK_LEADER)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel == GUILD_RANK_LEADER)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.ranks&name={$this->guild->GetName()}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$this->guild->GetName()}'>Passar Liderança</a>				
 				";	
 			}
 			
-			if(!ENABLE_GUILD_READ_ONLY && $this->memberLevel >= GUILD_RANK_MEMBER_OPT_3)
+			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= GUILD_RANK_MEMBER_OPT_3)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.leave&name={$this->guild->GetName()}'>Sair da Guild</a>				
@@ -207,13 +208,13 @@ class View
 		{						
 			foreach($this->guild->Invites as $invite)
 			{
-				list($character, $date) = $invite;
+				list($player, $date) = $invite;
 				
-				$cancelInvite = ($this->memberLevel == GUILD_RANK_LEADER) ? " [<a href='?ref=guilds.invite&name={$character->getName()}&c=t'>Cancelar convite</a>]" : "";
+				$cancelInvite = ($this->memberLevel == GUILD_RANK_LEADER) ? " [<a href='?ref=guilds.invite&name={$player->getName()}&c=t'>Cancelar convite</a>]" : "";
 				
 				$guildPage .= "
 					<tr>
-						<td><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> {$cancelInvite}</td> <td>".Core::formatDate($date)."</td>
+						<td><a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a> {$cancelInvite}</td> <td>".\Core\Main::formatDate($date)."</td>
 					</tr>	
 				";	
 			}	
@@ -231,7 +232,7 @@ class View
 		</table>
 		";			
 		
-		if(!ENABLE_GUILD_READ_ONLY && $this->loggedAcc and $this->memberLevel >= GUILD_RANK_VICE)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel >= GUILD_RANK_VICE)
 		{
 			$guildPage .= "
 				<p>
@@ -254,7 +255,7 @@ class View
 		
 		$warPage = "";
 		
-		if(ENABLE_GUILD_WARS)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 		{
 			$warPage = "
 			<div title='guild_wars' style='margin: 0px; padding: 0px;'>";
@@ -277,7 +278,7 @@ class View
 			{			
 				foreach($warsList as $guild_war)
 				{
-					$opponent = new Guilds();
+					$opponent = new \Framework\Guilds();
 					
 					if($guild_war->GetGuildId() == $this->guild->GetId())
 						$opponent->Load($guild_war->GetOpponentId());
@@ -288,7 +289,7 @@ class View
 						
 					$warPage .= "
 					<tr>
-						<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+						<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
 					</tr>";
 				}
 			}			
@@ -309,7 +310,7 @@ class View
 	
 				foreach($warsWaitingList as $guild_war)
 				{
-					$opponent = new Guilds();
+					$opponent = new \Framework\Guilds();
 					
 					if($guild_war->GetGuildId() == $this->guild->GetId())
 						$opponent->Load($guild_war->GetOpponentId());
@@ -320,7 +321,7 @@ class View
 						
 					$warPage .= "
 					<tr>
-						<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+						<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
 					</tr>";				
 				}
 			}
@@ -359,7 +360,7 @@ class View
 				{			
 					if($guild_war->GetReply() != -1)
 					{					
-						$opponent = new Guilds();				
+						$opponent = new \Framework\Guilds();				
 						
 						if($guild_war->GetGuildId() == $this->guild->GetId())
 						{
@@ -372,7 +373,7 @@ class View
 							
 							$byGuild .= "
 							<tr>
-								<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
+								<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
 							</tr>";	
 						}
 						elseif($guild_war->GetOpponentId() == $this->guild->GetId())
@@ -386,7 +387,7 @@ class View
 							
 							$againstGuild .= "
 							<tr>
-								<td>{$opponent->GetName()}</td> <td>".Core::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
+								<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
 							</tr>";							
 						}
 					}
@@ -442,7 +443,7 @@ class View
 				<select>
 					<option value='guild_page'>Pagina da Guilda</option>";
 		
-					if(ENABLE_GUILD_WARS)
+					if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 					{
 						$module .= "
 						<option value='guild_wars'>Guerras da Guilda</option>";

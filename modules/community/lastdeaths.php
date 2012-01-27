@@ -1,5 +1,5 @@
 <?php
-$query = $db->query("SELECT id, player_id FROM player_deaths WHERE date > '".(time() - 60 * 60 * 2)."' ORDER BY date DESC");
+$query = \Core\Main::$DB->query("SELECT id, player_id FROM player_deaths WHERE date > '".(time() - 60 * 60 * 2)."' ORDER BY date DESC");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
@@ -11,14 +11,14 @@ if($query->numRows() != 0)
 {
 	while($fetch = $query->fetch())
 	{
-		$deaths = new Deaths();
+		$deaths = new \Framework\Deaths();
 		
 		$death_values = $deaths->load($fetch->id);
 		
-		$deathPlayer = new Character();
+		$deathPlayer = new \Framework\Player();
 		$deathPlayer->load($fetch->player_id);		
 				
-		$date = Core::formatDate($death_values['date']);
+		$date = \Core\Main::formatDate($death_values['date']);
 		
 		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
 		
@@ -69,7 +69,7 @@ if($query->numRows() != 0)
 				}
 				else
 				{
-					$_killer = new Character();	
+					$_killer = new \Framework\Player();	
 					$_killer->load($killer['killer']);	
 
 					$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";

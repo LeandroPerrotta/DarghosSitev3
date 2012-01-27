@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class View
 {
 	//html fields
@@ -12,7 +13,7 @@ class View
 	
 	function View()
 	{
-		if(!$_GET['name'] || ENABLE_GUILD_READ_ONLY)
+		if(!$_GET['name'] || !Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 			
 		if($_GET["c"] && $_GET["c"] == "t")
@@ -22,11 +23,11 @@ class View
 			
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}
 		
-		$this->_invites = new HTML_Input();
+		$this->_invites = new \Framework\HTML\Input();
 		$this->_invites->SetName("invites_list");	
 		
 		if($this->cancel)
@@ -39,7 +40,7 @@ class View
 			$this->_invites->IsTextArea();	
 		}
 			
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("account_password");
 		$this->_password->IsPassword();			
 		
@@ -47,11 +48,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}
@@ -66,21 +67,21 @@ class View
 	
 	function Prepare()
 	{
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$this->guild = new Guilds();
+		$this->guild = new \Framework\Guilds();
 		
 		if($this->cancel)
 		{
-			$character = new Character();
-			$character->loadByName($_GET['name']);
+			$player = new \Framework\Player();
+			$player->loadByName($_GET['name']);
 			
-			$invite = $character->getInvite();
+			$invite = $player->getInvite();
 			
 			if(!$invite)
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;				
 			}
 			
@@ -88,7 +89,7 @@ class View
 			
 			if(!$this->guild->Load($guild_id))
 			{
-				$this->_message = Lang::Message(LMSG_REPORT);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
 			}			
 		}
@@ -96,26 +97,26 @@ class View
 		{
 			if(!$this->guild->LoadByName($_GET['name']))
 			{
-				$this->_message = Lang::Message(LMSG_GUILD_NOT_FOUND, $_GET['name']);
+				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
 				return false;
 			}			
 		}
 		
-		if(!$this->cancel && Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) < GUILD_RANK_VICE)
+		if(!$this->cancel && \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) < GUILD_RANK_VICE)
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}	
 		
-		if($this->cancel && Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
+		if($this->cancel && \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId()) != GUILD_RANK_LEADER)
 		{
-			$this->_message = Lang::Message(LMSG_REPORT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;
 		}	
 
 		if($this->guild->OnWar())
 		{
-			$this->_message = Lang::Message(LMSG_GUILD_IS_ON_WAR, $_GET['name']);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_ON_WAR, $_GET['name']);
 			return false;			
 		}		
 		
@@ -124,17 +125,17 @@ class View
 	
 	function PostCancel()
 	{
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}	
 
-		$character = new Character();
-		$character->loadByName($_GET['name']);
-		$character->removeInvite();
+		$player = new \Framework\Player();
+		$player->loadByName($_GET['name']);
+		$player->removeInvite();
 		
-		$this->_message = Lang::Message(LMSG_GUILD_INVITE_CANCEL, $character->getName());
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_CANCEL, $player->getName());
 		return true;		
 	}
 	
@@ -161,32 +162,32 @@ class View
 			
 			foreach($invites_list as $player_name)
 			{
-				$character = new Character();
+				$player = new \Framework\Player();
 				
-				if(!$character->loadByName($player_name))
+				if(!$player->loadByName($player_name))
 				{
 					$dontExists[] = $player_name;	
 				}	
 				else
 				{	
-					if($character->LoadGuild())
+					if($player->LoadGuild())
 						$wasGuild[] = $player_name;
 						
-					if($character->getInvite())
+					if($player->getInvite())
 						$wasInvited[] = $player_name;	
 				}	
 			}
 		}
 		
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->GetPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
 		{
-			$this->_message = Lang::Message(LMSG_WRONG_PASSWORD);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			return false;
 		}
 		
 		if($invites_limit)
 		{				
-			$this->_message = Lang::Message(LMSG_GUILD_INVITE_LIMIT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_LIMIT);
 			return false;
 		}					
 		
@@ -197,7 +198,7 @@ class View
 				$wasGuild_list .= $name."<br>";
 			}
 			
-			$this->_message = Lang::Message(LMSG_GUILD_INVITE_ALREADY_MEMBER, $wasGuild_list);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_ALREADY_MEMBER, $wasGuild_list);
 			return false;
 		}
 		
@@ -208,7 +209,7 @@ class View
 				$wasInvited_list .= $name."<br>";
 			}
 			
-			$this->_message = Lang::Message(LMSG_GUILD_INVITE_ALREADY_INVITED, $wasInvited_list);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_ALREADY_INVITED, $wasInvited_list);
 			return false;
 		}		
 		
@@ -219,19 +220,19 @@ class View
 				$dontExists_list .= $name."<br>";
 			}
 			
-			$this->_message = Lang::Message(LMSG_GUILD_INVITE_CHARACTER_NOT_FOUNDS, $dontExists_list);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_CHARACTER_NOT_FOUNDS, $dontExists_list);
 			return false;
 		}					
 
 		foreach($invites_list as $player_name)
 		{
-			$character = new Character();
+			$player = new \Framework\Player();
 			
-			$character->loadByName($player_name);
-			$character->inviteToGuild($this->guild->GetId());
+			$player->loadByName($player_name);
+			$player->inviteToGuild($this->guild->GetId());
 		}
 		
-		$this->_message = Lang::Message(LMSG_GUILD_INVITEDS);		
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITEDS);		
 
 		return true;
 	}

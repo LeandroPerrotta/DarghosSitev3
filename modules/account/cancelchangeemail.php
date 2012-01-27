@@ -1,34 +1,34 @@
 <?
 if($_POST)
 {
-	$account = new Account();
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}		
 	elseif(!is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = Lang::Message(LMSG_CHANGEEMAIL_NOTHING);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_NOTHING);
 	}
 	else
 	{		
 		$account->cancelEmailToChange();
 		
-		$success = Lang::Message(LMSG_CHANGEEMAIL_CANCELED);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_CANCELED);
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .= '

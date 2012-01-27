@@ -1,5 +1,8 @@
 <?php
-$status_query = Core::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
+use \Core\Configs as g_Configs;
+use \Core\Consts;
+
+$status_query = \Core\Main::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
 $stats_fetch = $status_query->fetch();
 
 $module .= "
@@ -25,10 +28,10 @@ else
 		
 	if($_SESSION['login'])
 	{
-		$_loginacc = new Account();
+		$_loginacc = new \Framework\Account();
 		$_loginacc->load($_SESSION['login'][0]);
 		
-		if($_loginacc->getGroup() == GROUP_ADMINISTRATOR)
+		if($_loginacc->getGroup() == e_Groups::Administrator)
 		{
 			$_isadmin = true;
 		}
@@ -41,8 +44,8 @@ else
 		$spoofPlayers = 0;
 	}
 	
-	if(SERVER_DISTRO == DISTRO_TFS)
-		$query = $db->query("
+	if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
+		$query = \Core\Main::$DB->query("
 		SELECT 
 			name, 
 			vocation, 
@@ -59,7 +62,7 @@ else
 			`online` = '1'
 		ORDER BY name");
 	else
-		$query = $db->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
+		$query = \Core\Main::$DB->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
 	
 	$_totalplayers = $stats_fetch->players + $stats_fetch->afk;
 	$_afkPlayers = $stats_fetch->afk;
@@ -93,7 +96,7 @@ else
 		else	
 			$playersonmsg = "Nós temos {$_totalplayers} jogadores conectados em nosso servidor.";	
 			
-		if(REMOVE_AFK_FROM_STATUS)
+		if(g_Configs::Get(g_Configs::eConf()->STATUS_IGNORE_AFK))
 		{
 			if($_afkPlayers == 1)
 				$playersonmsg .= " Destes, 1 está treinando.";
@@ -105,9 +108,7 @@ else
 
 		while($fetch = $query->fetch())
 		{							
-			$town = $_townid[$fetch->town_id];
-
-			$_characc = new Account();
+			$_characc = new \Framework\Account();
 			$_characc->load($fetch->account_id);		
 
 			$spoofStyle = "";
@@ -131,26 +132,22 @@ else
 					else
 						$_pvp_disabled++;						
 						
-					if($town["name"] == "Island of Peace")
-						$_islandofpeace++;
-					elseif($town["name"] == "Quendor")
-						$_quendor++;
-					elseif($town["name"] == "Aaragon")
-						$_aaragon++;
-					elseif($town["name"] == "Salazart")
-						$_salazart++;
-					elseif($town["name"] == "Northrend")
-						$_northrend++;
-					elseif($town["name"] == "Kashmir")
-						$_kashmir++;
-					elseif($town["name"] == "Aracura")
-						$_aracura++;		
+					switch($fetch->town_id)
+					{
+						case e_Towns::IslandOfPeace: $_islandofpeace++; break;
+						case e_Towns::Quendor: $_quendor++; break;
+						case e_Towns::Aaragon: $_aaragon++; break;
+						case e_Towns::Salazart: $_salazart++; break;
+						case e_Towns::Northrend: $_salazart++; break;
+						case e_Towns::Kashmir: $_kashmir++; break;
+						case e_Towns::Aracura: $_aracura++; break;
+					}		
 
-					if(Tools::isSorcerer($fetch->vocation))
+					if(\Core\Tools::isSorcerer($fetch->vocation))
 						$_sorcerers++;
-					elseif(Tools::isDruid($fetch->vocation))
+					elseif(\Core\Tools::isDruid($fetch->vocation))
 						$_druids++;				
-					elseif(Tools::isPaladin($fetch->vocation))
+					elseif(\Core\Tools::isPaladin($fetch->vocation))
 						$_paladins++;				
 					else
 						$_knights++;							
@@ -158,36 +155,32 @@ else
 			}
 			else
 			{				
-				if(Tools::isSorcerer($fetch->vocation))
+				if(\Core\Tools::isSorcerer($fetch->vocation))
 					$_sorcerers++;
-				elseif(Tools::isDruid($fetch->vocation))
+				elseif(\Core\Tools::isDruid($fetch->vocation))
 					$_druids++;				
-				elseif(Tools::isPaladin($fetch->vocation))
+				elseif(\Core\Tools::isPaladin($fetch->vocation))
 					$_paladins++;				
 				else
 					$_knights++;	
 
-				if($town["name"] == "Island of Peace")
-					$_islandofpeace++;
-				elseif($town["name"] == "Quendor")
-					$_quendor++;
-				elseif($town["name"] == "Aaragon")
-					$_aaragon++;
-				elseif($town["name"] == "Salazart")
-					$_salazart++;
-				elseif($town["name"] == "Northrend")
-					$_northrend++;
-				elseif($town["name"] == "Kashmir")
-					$_kashmir++;
-				elseif($town["name"] == "Aracura")
-					$_aracura++;					
+				switch($fetch->town_id)
+				{
+					case e_Towns::IslandOfPeace: $_islandofpeace++; break;
+					case e_Towns::Quendor: $_quendor++; break;
+					case e_Towns::Aaragon: $_aaragon++; break;
+					case e_Towns::Salazart: $_salazart++; break;
+					case e_Towns::Northrend: $_salazart++; break;
+					case e_Towns::Kashmir: $_kashmir++; break;
+					case e_Towns::Aracura: $_aracura++; break;
+				}					
 			}
 			
 			$isAfk = $fetch->afk;
 			
 			$vocation_id = $fetch->vocation;
 			
-			if(SERVER_DISTRO == DISTRO_TFS && $fetch->promotion == 1 && $_characc->getPremDays() > 0)
+			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion == 1 && $_characc->getPremDays() > 0)
 			{
 				$vocation_id += 4;
 			}
@@ -197,9 +190,11 @@ else
 			if(!$fetch->pvpEnabled)
 				$pvpStr = "<span class='pvpDisabled'>Pacifico</span>";	
 			
+			$_vocation = new t_Vocation($vocation_id);
+			
 			$players_list .= "
 			<tr>
-				<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocationid[$vocation_id]}</td> <td>{$fetch->level}</td> <td>{$pvpStr}</td>
+				<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> <td>{$pvpStr}</td>
 			</tr>";		
 		}			
 	}
@@ -221,28 +216,28 @@ else
 			<td colspan='4'><b>Destes, são das vocações:</b></td>
 		</tr>
 		<tr>
-			<td>Sorcerer's:</td><td>".Tools::getPercentOf($_sorcerers, $_totalplayers)."%</td><td>Druid's:</td><td>".Tools::getPercentOf($_druids, $_totalplayers)."%</td>
+			<td>Sorcerer's:</td><td>".\Core\Tools::getPercentOf($_sorcerers, $_totalplayers)."%</td><td>Druid's:</td><td>".\Core\Tools::getPercentOf($_druids, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Paladin's:</td><td>".Tools::getPercentOf($_paladins, $_totalplayers)."%</td><td>Knight's:</td><td>".Tools::getPercentOf($_knights, $_totalplayers)."%</td>
+			<td>Paladin's:</td><td>".\Core\Tools::getPercentOf($_paladins, $_totalplayers)."%</td><td>Knight's:</td><td>".\Core\Tools::getPercentOf($_knights, $_totalplayers)."%</td>
 		</tr>
 		<tr>
 			<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
 		</tr>
 		<tr>
-			<td>Island of Peace:</td><td>".Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
-			<td>Quendor:</td><td>".Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
+			<td>Island of Peace:</td><td>".\Core\Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
+			<td>Quendor:</td><td>".\Core\Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Aracura:</td><td>".Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
-			<td>Aaragon:</td><td>".Tools::getPercentOf($_aaragon, $_totalplayers)."%</td>
+			<td>Aracura:</td><td>".\Core\Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
+			<td>Aaragon:</td><td>".\Core\Tools::getPercentOf($_aaragon, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Salazart:</td><td>".Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
-			<td>Northrend:</td><td>".Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
+			<td>Salazart:</td><td>".\Core\Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
+			<td>Northrend:</td><td>".\Core\Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
 		</tr>
 		<tr>
-			<td>Kashmir:</td><td>".Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
+			<td>Kashmir:</td><td>".\Core\Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
 		</tr>";
 		
 		if($_isadmin)
@@ -252,10 +247,10 @@ else
 				<td colspan='4'><b>Estatisticas:</b></td>
 			</tr>
 			<tr>
-				<td>Free Account's:</td><td>".Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
+				<td>Free Account's:</td><td>".\Core\Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".\Core\Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
 			</tr>
 			<tr>
-				<td>Agressivos:</td><td>".Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>Pacificos:</td><td>".Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
+				<td>Agressivos:</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>Pacificos:</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
 			</tr>					
 			<tr>
 				<td colspan='2'>Level médio:</td><td colspan='2'>".(ceil($levelSum / $_totalplayers))."</td>

@@ -1,16 +1,16 @@
 <?
-$account = new Account();
+$account = new \Framework\Account();
 $account->load($_SESSION['login'][0]);
 
 if($_POST)
 {
-	if($account->getPassword() != Strings::encrypt($_POST["account_password"]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = Lang::Message(LMSG_WRONG_PASSWORD);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}			
 	elseif(strlen($_POST["account_realname"]) > 25 or strlen($_POST["account_location"]) > 25 or strlen($_POST["account_url"]) > 50)
 	{
-		$error = Lang::Message(LMSG_CHANGEINFOS_WRONG_SIZE);
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEINFOS_WRONG_SIZE);
 	}
 	else
 	{		
@@ -20,19 +20,19 @@ if($_POST)
 		
 		$account->save();
 		
-		$success = Lang::Message(LMSG_CHANGEINFOS_SUCCESS);
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEINFOS_SUCCESS);
 	}
 }
 
 if($success)	
 {
-	Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		Core::sendMessageBox(Lang::Message(LMSG_ERROR), $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .= '

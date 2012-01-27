@@ -1,22 +1,24 @@
 <?
-$account = new Account();
+use \Core\Configs;
+
+$account = new \Framework\Account();
 $account->load($_SESSION['login'][0]);
 $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
 
-$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes (expira em ".Core::formatDate($account->getPremEnd()).")" : "Você não possui dias de conta premium.";	
+$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes (expira em ".\Core\Main::formatDate($account->getPremEnd()).")" : "Você não possui dias de conta premium.";	
 $warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
 $email = ($account->getEmail()) ? $account->getEmail() : "<span style='color: red; font-weight: bold'>Nenhum e-mail registrado!</span>";	
-$creation = ($account->getCreation() != 0) ? Core::formatDate($account->getCreation()) : "Indisponível";	
+$creation = ($account->getCreation() != 0) ? \Core\Main::formatDate($account->getCreation()) : "Indisponível";	
 $realname = ($account->getRealName()) ?	$account->getRealName() : "<i>Sem Nome</i>";
 $location = ($account->getLocation()) ?	$account->getLocation() : "<i>Sem Localidade</i>";
 $url = ($account->getUrl()) ?	$account->getUrl() : "<i>Sem Endereço</i>";
 
-$contribute = new Contribute();
+$contribute = new \Framework\Contribute();
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
-$bans = new Bans();
+$bans = new \Framework\Bans();
 
 $invitesList = "";
 
@@ -34,56 +36,56 @@ if(is_array($oders))
 
 if(is_array($player_list))
 {
-	foreach($player_list as $player)
+	foreach($player_list as $player_name)
 	{
-		$character = new Character();
-		$character->loadByName($player);
+		$player = new \Framework\Player();
+		$player->loadByName($player_name);
 		
 		unset($charStatus);
 		unset($statusString);
 		unset($charOptions);
 		unset($npcOptions);
 		
-		$invite = $character->getInvite();
+		$invite = $player->getInvite();
 		
 		if($invite)
 		{
 			list($guild_id, $invite_date) = $invite;
 			
-			$guild = new Guilds();
+			$guild = new \Framework\Guilds();
 			$guild->Load($guild_id);
 			
 			$invitesList .= "
-				<p><font style='font-weight: bold;'>Convite de Guild:</font> O seu personagem {$character->getName()} foi convidado em ".Core::formatDate($invite_date)." para se tornar membro da guilda {$guild->GetName()}! Clique <a href='?ref=guilds.invitereply&name={$character->getName()}'>aqui</a> para responder este convite. Obs: Esta mensagem desaparecerá automaticamente quando o convite for respondido.</p>
+				<p><font style='font-weight: bold;'>Convite de Guild:</font> O seu personagem {$player->getName()} foi convidado em ".\Core\Main::formatDate($invite_date)." para se tornar membro da guilda {$guild->GetName()}! Clique <a href='?ref=guilds.invitereply&name={$player->getName()}'>aqui</a> para responder este convite. Obs: Esta mensagem desaparecerá automaticamente quando o convite for respondido.</p>
 			";
 		}
 		
 		$charStatus = array();
-		$charOptions = "<a href='?ref=character.edit&name={$character->getName()}'>Editar</a>";
+		$charOptions = "<a href='?ref=character.edit&name={$player->getName()}'>Editar</a>";
 		
-		if(SHOW_SHOPFEATURES == 1)
+		if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 		{
-			$charOptions .= " - <a href='?ref=itemshop.purchase&name={$character->getName()}'>Item Shop</a>";
-			if(ENABLE_BUY_STAMINA) $charOptions .= " - <a href='?ref=character.stamina&name={$character->getName()}'>Regenerar Stamina</a>";
+			$charOptions .= " - <a href='?ref=itemshop.purchase&name={$player->getName()}'>Item Shop</a>";
+			if(Configs::Get(Configs::eConf()->ENABLE_STAMINA_REFILER)) $charOptions .= " - <a href='?ref=character.stamina&name={$player->getName()}'>Regenerar Stamina</a>";
 		}
 		
-		if(ENABLE_REBORN_SYSTEM == 1)
+		if(Configs::Get(Configs::eConf()->ENABLE_REBORN))
 		{
-			$npcOptions .= "<a href='?ref=character.reborn&name={$character->getName()}'>Baron Samedi</a>";
+			$npcOptions .= "<a href='?ref=character.reborn&name={$player->getName()}'>Baron Samedi</a>";
 		}
 		
-		if($character->deletionStatus())
+		if($player->deletionStatus())
 		{
-			$charStatus[] = "<font color='red'>será deletado em: ".Core::formatDate($character->deletionStatus())."</font>";
-			$charOptions .= " - <a href='?ref=character.undelete&name={$character->getName()}'>Cancelar Exclusão</a>";
+			$charStatus[] = "<font color='red'>será deletado em: ".\Core\Main::formatDate($player->deletionStatus())."</font>";
+			$charOptions .= " - <a href='?ref=character.undelete&name={$player->getName()}'>Cancelar Exclusão</a>";
 		}
 		
-		if($character->get("hide") == 1)
+		if($player->get("hide") == 1)
 		{
 			$charStatus[] = "escondido";
 		}
 		
-		if($bans->isNameLocked($character->getid()))
+		if($bans->isNameLocked($player->getid()))
 		{
 			$charStatus[] = "<font color='red'>nome bloqueado</font>";
 		}
@@ -107,7 +109,7 @@ if(is_array($player_list))
 		$charList .= "
 		<tr>
 			<td>
-				<a style='float: left' href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> <span class='tooglePlus'></span>
+				<a style='float: left' href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a> <span class='tooglePlus'></span>
 				<br />
 				<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>
 					<table cellspacing='0' cellpadding='0'>
@@ -135,7 +137,7 @@ $module .= "
 if(is_array($newemail = $account->getEmailToChange()))
 {
 	$module .= '
-	<p><span id="notify">Atenção:</span> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.Core::formatDate($newemail['date']).'. Você pode cancelar esta mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
+	<p><span id="notify">Atenção:</span> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.\Core\Main::formatDate($newemail['date']).'. Você pode cancelar esta mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
 }
 
 if($confirmed and $confirmed >= 1)
@@ -169,7 +171,7 @@ if(isset($charDel))
 	foreach($charDel as $name => $deletion)
 	{
 		$module .= '
-		<p><span id="notify">Atenção:</span> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.Core::formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
+		<p><span id="notify">Atenção:</span> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.\Core\Main::formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
 	}
 }		
 
@@ -207,12 +209,12 @@ $module .= "
 				
 				if($ban['type'] == 3)
 				{
-					$banstring .= "Banido por: <b>".Tools::getBanReason($ban['reason'])."</b><br>
-							   	   Duração: Até ".Core::formatDate($ban['expires']).".";
+					$banstring .= "Banido por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
+							   	   Duração: Até ".\Core\Main::formatDate($ban['expires']).".";
 				}
 				elseif($ban['type'] == 5)	
 				{
-					$banstring .= "Deletado por: <b>".Tools::getBanReason($ban['reason'])."</b><br>
+					$banstring .= "Deletado por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
 							   	   Duração: permanentemente.";		
 				}			   	   				   	   
 							   

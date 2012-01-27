@@ -22,39 +22,39 @@ class View
 	{		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;
 		}
 		
-		$this->_item_type = new HTML_SelectBox();
+		$this->_item_type = new \Framework\HTML\SelectBox();
 		$this->_item_type->SetName("item_type");	
-		$this->_item_type->AddOption("Item", ItemShop::TYPE_ITEM);
+		$this->_item_type->AddOption("Item", \Framework\ItemShop::TYPE_ITEM);
 		
-		$this->_item_name = new HTML_Input();
+		$this->_item_name = new \Framework\HTML\Input();
 		$this->_item_name->SetName("item_name");
 		
-		$this->_item_id = new HTML_Input();
+		$this->_item_id = new \Framework\HTML\Input();
 		$this->_item_id->SetName("item_id");	
 		$this->_item_id->SetSize(10);	
 			
-		$this->_item_count = new HTML_Input();
+		$this->_item_count = new \Framework\HTML\Input();
 		$this->_item_count->SetName("item_count");	
 		$this->_item_count->SetSize(10);		
 		
-		$this->_item_action_id = new HTML_Input();
+		$this->_item_action_id = new \Framework\HTML\Input();
 		$this->_item_action_id->SetName("item_action_id");	
 		$this->_item_action_id->SetSize(10);		
 		
-		$this->_item_is_stackable = new HTML_Input();
+		$this->_item_is_stackable = new \Framework\HTML\Input();
 		$this->_item_is_stackable->IsCheackeable();
 		$this->_item_is_stackable->SetValue("true");
 		$this->_item_is_stackable->SetName("item_is_stackable");		
 		
-		$this->_item_description = new HTML_Input();
+		$this->_item_description = new \Framework\HTML\Input();
 		$this->_item_description->IsTextArea(7, 50);
 		$this->_item_description->SetName("item_description");	
 
-		$this->_item_price = new HTML_Input();
+		$this->_item_price = new \Framework\HTML\Input();
 		$this->_item_price->SetName("item_price");		
 		$this->_item_price->SetSize(10);			
 		
@@ -62,11 +62,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -79,16 +79,16 @@ class View
 	{				
 		if($_SESSION['login'])
 		{
-			$this->loggedAcc = new Account();
+			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 			
-			if($this->loggedAcc->getGroup() == GROUP_ADMINISTRATOR)
+			if($this->loggedAcc->getGroup() == e_Groups::Administrator)
 			{
 				return true;
 			}
 		}	
 		
-		$this->_message = Lang::Message(LMSG_REPORT);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 		return false;
 	}
 	
@@ -99,7 +99,7 @@ class View
 		$price = $this->_item_price->GetPost();
 		$type = $this->_item_type->GetPost();
 		
-		if($type == ItemShop::TYPE_ITEM)
+		if($type == \Framework\ItemShop::TYPE_ITEM)
 		{
 			
 			$item_id = $this->_item_id->GetPost();
@@ -128,19 +128,19 @@ class View
 				return false;						
 			}			
 			
-			$item = new ItemShop();
+			$item = new \Framework\ItemShop();
 			$item->setName($name);
 			$item->setType($type);
 			$item->setDescription($description);
 			$item->setPrice($price);
 			
 			$params = array();
-			$params[ItemShop::PARAM_ITEM_ID] = $item_id;
-			$params[ItemShop::PARAM_ITEM_COUNT] = $item_count;
-			$params[ItemShop::PARAM_ITEM_STACKABLE] = ($item_is_stack == "true") ? 1 : 0;
+			$params[\Framework\ItemShop::PARAM_ITEM_ID] = $item_id;
+			$params[\Framework\ItemShop::PARAM_ITEM_COUNT] = $item_count;
+			$params[\Framework\ItemShop::PARAM_ITEM_STACKABLE] = ($item_is_stack == "true") ? 1 : 0;
 			
 			if($item_action_id)
-				$params[ItemShop::PARAM_ITEM_ACTION_ID] = $item_action_id;
+				$params[\Framework\ItemShop::PARAM_ITEM_ACTION_ID] = $item_action_id;
 			
 			$item->setParams($params);
 			$item->setAddedIn(time());

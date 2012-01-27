@@ -1,0 +1,361 @@
+<?
+namespace Core;
+class Main
+{
+	static public $DB;
+	
+	static private $m_XMLRoot;
+	
+	static function Initialize()
+	{
+		//set_error_handler("Core\\Main::errorHandler", E_ALL^E_NOTICE);
+		spl_autoload_register("Core\\Main::autoLoad");
+		
+		//multiclass files
+		include_once "classes/Core/Enums.php";
+		
+		//configs handler
+		Configs::Init();
+		
+		//external libs
+		include_once "libs/phpmailer/class.phpmailer.php";		
+		
+		if(!Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
+		{
+			try
+			{
+				self::$DB = new MySQL();
+				self::$DB->connect(Configs::Get(Configs::eConf()->SQL_HOST), Configs::Get(Configs::eConf()->SQL_USER), Configs::Get(Configs::eConf()->SQL_PASSWORD), Configs::Get(Configs::eConf()->SQL_DATABASE));	
+			}
+			catch (\Exception $e)
+			{
+				echo "Impossivel se conectar ao banco de dados.";
+			}
+				
+			self::InitLanguage();
+			Emails::init();		
+			self::InitPOT();
+			
+			if(!$_SESSION["login_redirect"] && $_SESSION["login_post"])
+			{
+				$_POST = $_SESSION["login_post"];
+				unset($_SESSION["login_post"]);
+			}	
+		}	
+	}
+	
+	static function errorHandler($errno, $errstr, $errfile, $errline)
+	{
+		if(!self::$DB)
+			return false;
+		
+		self::$DB->ExecQuery("INSERT INTO `".Tools::getSiteTable("errors")."` VALUES ('{$errno}', '".self::$DB->escapeString($errstr)."', '".self::$DB->escapeString($errfile)."', '{$errline}', UNIX_TIMESTAMP())");
+	
+		die("Um erro foi encontrado e reportado ao Adminsitrador. Por favor, tente novamente mais tarde.");
+	}
+	
+	static function autoLoad($classname)
+	{
+		if(class_exists($classname))
+			return;
+		
+		$rep = str_replace("\\", "/", $classname);
+		
+		if(file_exists("classes/{$rep}.php"))		
+		{
+			require_once("classes/{$rep}.php");
+			return;
+		}
+	}	
+	
+	static function drawTemplate()
+	{
+		$layoutDir = "newlay/";
+		$patch = "{$layoutDir}index.html";
+		self::$m_XMLRoot = self::ParseXML($patch);
+		
+		self::$m_XMLRoot->head[0]->title[0] = Configs::Get(Configs::eConf()->WEBSITE_NAME);
+		
+		$focus = self::$m_XMLRoot->head[0];
+		$child = $focus->addChild("link");
+		$child->addAttribute("rel", "shotcurt icon");
+		$child->addAttribute("href", "favicon.ico");
+		$child->addAttribute("type", "image/x-icon");
+		
+		$child = $focus->addChild("link");
+		$child->addAttribute("href", "{$layoutDir}style.css");
+		$child->addAttribute("media", "screen");		
+		$child->addAttribute("rel", "stylesheet");		
+		$child->addAttribute("type", "text/css");		
+		
+		$child = $focus->addChild("link");
+		$child->addAttribute("href", "default.css");
+		$child->addAttribute("media", "screen");
+		$child->addAttribute("rel", "stylesheet");
+		$child->addAttribute("type", "text/css");		
+		
+		$child = $focus->addChild("script");
+		$child->addAttribute("src", "{$layoutDir}jquery.js");
+		$child->addAttribute("type", "text/javascript");	
+		
+		$child = $focus->addChild("script");
+		$child->addAttribute("src", "{$layoutDir}functions.js");
+		$child->addAttribute("type", "text/javascript");		
+		
+		$child = $focus->addChild("script");
+		$child->addAttribute("src", "{$layoutDir}lists.js");
+		$child->addAttribute("type", "text/javascript");	
+
+		$child = $focus->addChild("script");
+		$child->addAttribute("src", "{$layoutDir}ext.js");
+		$child->addAttribute("type", "text/javascript");		
+		
+		if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))
+		{
+			$child = $focus->addChild("script");
+			$child->addAttribute("src", "{$layoutDir}ping.js");
+			$child->addAttribute("type", "text/javascript");
+		}
+		
+		$xml = self::$m_XMLRoot->asXML();
+		
+		$xml = str_replace("%LEFT_MENU%", Menus::drawLeftMenu(), $xml);
+		$xml = str_replace("%RIGHT_MENU%", Menus::drawRightMenu(), $xml);
+		
+		global $module, $patch;
+		
+		$xml = str_replace("%MODULE%", $module, $xml);
+		
+		$url = ($patch['urlnavigation']) ? $patch['urlnavigation'] : "/";
+		$xml = str_replace("%URL_NAVIGATOR%", "<div id='nav-bar' style='padding: 0px'><span>{$url}</span></div>", $xml);		
+		
+		echo $xml;
+	}
+	
+	static function ParseXML($patch)
+	{
+		if(is_readable($patch))
+		{
+			libxml_use_internal_errors(true);
+			$load = simplexml_load_file($patch);
+			
+			if($load === false)
+			{
+				$error = "Falha ao carregar o XML ({$patch}):";		
+			    foreach(libxml_get_errors() as $error) {
+			    	echo "\t" . $error->message;
+    			}
+    			
+    			trigger_error($error, E_USER_ERROR);
+    			return false;
+			}
+			else
+				return $load;		
+		}
+		else
+		{
+			trigger_error("XML file {$patch} not found.", E_USER_ERROR);
+		}
+			
+		return false;
+	}
+	
+	static function FCKEditor($instance)
+	{
+		include "libs/fckeditor/fckeditor.php";
+		return new \FCKeditor($instance);
+	}
+	
+	static function CKEditor($element, $value)
+	{
+		include_once "libs/ckeditor/ckeditor.php";
+		$class = new \CKEditor();
+		$class->returnOutput = true;
+		$class->basePath = "libs/ckeditor/";
+		return $class->editor($element, $value);
+	}
+	
+	static function InitPOT()
+	{
+		// includes POT main file
+		include_once('libs/pot/OTS.php');
+		
+		$array = explode(":", Configs::Get(Configs::eConf()->SQL_HOST));
+		
+		if(count($array) == 2)
+		{
+			$ip = $array[0];
+			$port = $array[1];
+		}
+		else
+		{
+			$ip = Configs::Get(Configs::eConf()->SQL_HOST);
+			$port = 3306;
+		}
+		
+		// database configuration - can be simply moved to external file, eg. config.php
+		$config = array(
+		    'driver' => \POT::DB_MYSQL,
+		    'host' => $ip,
+		    'port' => $port,
+		    'user' => Configs::Get(Configs::eConf()->SQL_USER),
+		    'password' => Configs::Get(Configs::eConf()->SQL_PASSWORD),
+		    'database' => Configs::Get(Configs::eConf()->SQL_DATABASE)
+		);
+		
+		// creates POT instance (or get existing one)
+		// dont use POT::getInstance() anymore
+		\POT::connect(null, $config);
+		// could be: POT::connect(POT::DB_MYSQL, $config);		
+	}
+	
+	static function addChangeLog($type, $key, $value)
+	{
+		self::$DB->query("
+			INSERT INTO 
+				".Tools::getSiteTable("changelog")." 
+				(`type`,`key`,`value`,`time`) 
+			VALUES 
+			(
+				'{$type}',
+				'{$key}',
+				'{$value}',
+				'".time()."'
+			)");
+	}	
+	
+	static function InitLanguage()
+	{		
+		if(Configs::Get(Configs::eConf()->LANGUAGE) == Consts::LANGUAGE_PTBR)
+		{	
+			include_once "language/".Consts::LANGUAGE_PTBR."/menu.php";
+			include_once "language/".Consts::LANGUAGE_PTBR."/pages.php";
+			include_once "language/".Consts::LANGUAGE_PTBR."/buttons.php";
+			include_once "language/".Consts::LANGUAGE_PTBR."/Messages.php";			
+		}		
+		
+		Lang::Init();
+		\Lang_Messages::Load(Lang::GetMsgs());
+	}
+	
+	/* DEPRECATED FUNCTION */
+	static function extractPost()
+	{		
+		if($_POST)
+		{
+			$post = array();
+		
+			foreach($_POST as $field => $value)
+			{
+				$post[] = $value;
+			}
+			
+			return $post;
+		}		
+		else
+			return false;
+	}
+	
+	static function formatDate($date)
+	{
+		return date("d/m/y - H:i", $date);
+	}
+	
+	static function getHour()
+	{
+		return date("H", time());
+	}
+	
+	static function redirect($url, $local = true/*, $delay = false*/) 
+	{		
+		//if($local)
+			//$url = Configs::Get(Configs::eConf()->WEBSITE_URL)."/".$url;
+	
+		//header("Location: ".$url." ");	
+		$html =  "<script type='text/javascript'>window.location = \"http://{$_SERVER["HTTP_HOST"]}/{$url}\"</script>";
+		echo $html;
+	}
+	
+	static function requireLogin()
+	{
+		if($_POST)
+		{
+			$_SESSION["login_post"] = $_POST;
+		}
+		
+		$_SESSION["login_redirect"] = $_SERVER["REQUEST_URI"];
+		Main::redirect("?ref=account.login");
+	}
+	
+	static function getIpTries()
+	{
+		$query = self::$DB->query("SELECT COUNT(*) as `rows` FROM `".Tools::getSiteTable("iptries")."` WHERE `ip_addr` = '".$_SERVER['REMOTE_ADDR']."' AND `date` >= '".(time() - (60 * 60 * 24))."'");		
+		
+		if($query->numRows() != 0)
+		{
+			return $query->fetch()->rows;
+		}
+		else
+			return false;
+	}
+	
+	static function increaseIpTries()
+	{
+		self::$DB->query("INSERT INTO `".Tools::getSiteTable("iptries")."` (`ip_addr`, `date`) VALUES ('".$_SERVER['REMOTE_ADDR']."', '".time()."')");
+	}		
+	
+	static function getGlobalValue($field)
+	{
+		$query = self::$DB->query("SELECT value FROM ".Tools::getSiteTable("global")." WHERE field = '{$field}'");
+		
+		if($query->numRows() != 0)
+		{
+			$fetch = $query->fetch();
+			
+			return $fetch->value;
+		}
+		else
+			return false;
+	}
+	
+	static function setGlobalValue($field, $value)
+	{
+		$query = self::$DB->query("SELECT value FROM ".Tools::getSiteTable("global")." WHERE field = '{$field}'");
+		
+		if($query->numRows() != 0)
+			self::$DB->query("UPDATE ".Tools::getSiteTable("global")." SET value = '{$value}' WHERE field = '{$field}'");
+		else
+			self::$DB->query("INSERT INTO ".Tools::getSiteTable("global")." (`field`, `value`) values('{$field}', '{$value}')");
+	}	
+	
+	static function isLogged()
+	{
+		return $_SESSION["login"];
+	}
+	
+	static function sendMessageBox($title, $msg)
+	{
+		global $module;
+		
+		$module .= '
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+					<th>'.$title.'</th>
+				</tr>	
+				<tr>
+					<td>'.$msg.'</td>
+				</tr>		
+			</table>		
+		';
+	}
+	
+	static function includeJavaScriptSource($file)
+	{
+		global $module;
+		
+		$module .= '
+		<script type="text/javascript" src="javascript/'.$file.'"></script>
+		';		
+	}	
+}		
+?>

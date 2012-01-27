@@ -14,52 +14,52 @@ class View
 	{		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;
 		}
 		
 		if($_SESSION['login'])
 		{
-			$this->loggedAcc = new Account();
+			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 		}		
 		
-		$this->_title = new HTML_Input();
+		$this->_title = new \Framework\HTML\Input();
 		$this->_title->SetName("topic_title");
 		
-		$this->_topic = new HTML_Input();
+		$this->_topic = new \Framework\HTML\Input();
 		$this->_topic->IsTextArea(25, 80);
 		$this->_topic->SetName("topic_content");
 		$this->_topic->SetId("topic_content");
 		
-		$this->_ispoll = new HTML_Input();
+		$this->_ispoll = new \Framework\HTML\Input();
 		$this->_ispoll->IsCheackeable();
 		$this->_ispoll->SetValue("true");
 		$this->_ispoll->SetName("topic_ispoll");
 		
-		$this->_isnotice = new HTML_Input();
+		$this->_isnotice = new \Framework\HTML\Input();
 		$this->_isnotice->IsCheackeable();
 		$this->_isnotice->SetValue("true");
 		$this->_isnotice->SetName("topic_isnotice");
 		
-		$this->_poll_text = new HTML_Input();
+		$this->_poll_text = new \Framework\HTML\Input();
 		$this->_poll_text->IsTextArea(7, 50);
 		$this->_poll_text->SetName("topic_poll_text");
 		
-		$this->_poll_end_date = new HTML_Input();
+		$this->_poll_end_date = new \Framework\HTML\Input();
 		$this->_poll_end_date->SetName("topic_poll_enddays");
 		$this->_poll_end_date->SetSize(10);
 		
-		$this->_poll_onlypremium = new HTML_Input();
+		$this->_poll_onlypremium = new \Framework\HTML\Input();
 		$this->_poll_onlypremium->IsCheackeable();
 		$this->_poll_onlypremium->SetValue("true");	
 		$this->_poll_onlypremium->SetName("topic_poll_onlypremium");
 
-		$this->_poll_minlevel = new HTML_Input();
+		$this->_poll_minlevel = new \Framework\HTML\Input();
 		$this->_poll_minlevel->SetName("topic_poll_minlevel");		
 		$this->_poll_minlevel->SetSize(10);		
 		
-		$this->_poll_optioncount = new HTML_SelectBox();
+		$this->_poll_optioncount = new \Framework\HTML\SelectBox();
 		$this->_poll_optioncount->SetName("topic_poll_optioncount");
 		
 		for($i = 1; $i <= 10; $i++)
@@ -71,11 +71,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -86,11 +86,11 @@ class View
 	
 	function Prepare()
 	{
-		$this->user = new Forum_User();
+		$this->user = new \Framework\Forums\User();
 		
 		if(!$this->user->LoadByAccount($_SESSION['login'][0]))
 		{
-			$this->_message = Lang::Message(LMSG_FORUM_ACCOUNT_NOT_HAVE_USER);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_ACCOUNT_NOT_HAVE_USER);
 			return false;			
 		}
 		
@@ -141,7 +141,7 @@ class View
 			}
 		}
 		
-		$topic = new Forum_Topics();
+		$topic = new \Framework\Forums\Topics();
 		
 		$topic->SetTitle($this->_title->GetPost());
 		$topic->SetTopic($this->_topic->GetPost());
@@ -243,7 +243,7 @@ class View
 			  	
 				<p>
 					<label for='{$this->_topic->GetName()}'>Conteudo do topico</label><br />
-					".Core::CKEditor($this->_topic->GetName(), "")."
+					".\Core\Main::CKEditor($this->_topic->GetName(), "")."
 				</p>	
 
 				<p>

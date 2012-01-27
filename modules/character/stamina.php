@@ -17,7 +17,7 @@ class View
 		
 		if(!$this->Prepare())
 		{
-			Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			return false;			
 		}		
 		
@@ -25,11 +25,11 @@ class View
 		{
 			if(!$this->Post())
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_ERROR), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
 			{
-				Core::sendMessageBox(Lang::Message(LMSG_SUCCESS), $this->_message);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
 				return true;
 			}
 		}		
@@ -40,29 +40,29 @@ class View
 	
 	function Prepare()
 	{
-		$this->loggedAcc = new Account();
+		$this->loggedAcc = new \Framework\Account();
 		
 		if(!$this->loggedAcc->load($_SESSION['login'][0]))
 		{
-			Core::requireLogin();
+			\Core\Main::requireLogin();
 			return false;			
 		}		
 		
-		$this->character = new Character();
+		$this->player = new \Framework\Player();
 		
 		if(!$this->character->loadByName($_GET["name"]))
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_WRONG);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 			return false;
 		}
 		
 		if($this->character->getAccountId() != $this->loggedAcc->getId())
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_NOT_FROM_YOUR_ACCOUNT);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			return false;
 		}		
 		
-		$this->_password = new HTML_Input();
+		$this->_password = new \Framework\HTML\Input();
 		$this->_password->SetName("password");
 		$this->_password->IsPassword();
 		$this->_password->SetLabel("Confirmar senha");		
@@ -72,21 +72,21 @@ class View
 	
 	function Post()
 	{
-		if($this->loggedAcc->getPassword() != Strings::encrypt($this->_password->getPost()))
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->getPost()))
 		{
-			$this->_message = Lang::Message(LMSG_FAIL_LOGIN);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_LOGIN);
 			return false;			
 		}
 		
 		if(!$_POST["stamina-value"] || !is_numeric($_POST["stamina-value"]) || $_POST["stamina-value"] <= floor($this->character->getStamina() / 1000 / 60 / 60) || $_POST["stamina-value"] > 42)
 		{
-			$this->_message = Lang::Message(LMSG_STAMINA_VALUE_WRONG);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_VALUE_WRONG);
 			return false;			
 		}
 		
 		if($this->character->getOnline() == 1)
 		{
-			$this->_message = Lang::Message(LMSG_CHARACTER_NEED_OFFLINE);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 			return false;				
 		}
 		
@@ -106,7 +106,7 @@ class View
 		
 		if($this->loggedAcc->getPremEnd() == 0 || $this->loggedAcc->getPremEnd() <= time() || floor($this->loggedAcc->getPremEnd() - time()) / 60 / 60 < $cost)
 		{
-			$this->_message = Lang::Message(LMSG_STAMINA_NOT_HAVE_PREMDAYS);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_NOT_HAVE_PREMDAYS);
 			return false;			
 		}
 	
@@ -116,8 +116,8 @@ class View
 		$this->character->setStamina($_POST["stamina-value"] * 60 * 60 * 1000);
 		$this->character->save();
 				
-		Core::addChangeLog('stamina', $this->character->getId(), $cost);
-		$this->_message = Lang::Message(LMSG_STAMINA_SUCCESSFULY, $this->character->getName(), $_POST["stamina-value"]);		
+		\Core\Main::addChangeLog('stamina', $this->character->getId(), $cost);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_SUCCESSFULY, $this->character->getName(), $_POST["stamina-value"]);		
 		return true;
 	}
 	
