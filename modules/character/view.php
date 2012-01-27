@@ -102,8 +102,8 @@ if($_POST["player_name"] || $_GET['name'])
 			}
 			
 			$_vocation = new t_Vocation($player->getVocation());
-			$_town = new t_Towns($player->getTownId());
-			$_genre = new t_Genre($player->getSex());
+			$_town_str = t_Towns::GetString($player->getTownId());
+			$_genre_str = t_Genre::GetString($player->getSex());
 			
 			$module .= "
 			<tr>
@@ -115,7 +115,7 @@ if($_POST["player_name"] || $_GET['name'])
 			</tr>			
 			
 			<tr>
-				<td><b>Sexo:</b></td> <td>{$_genre->GetType()}</td>
+				<td><b>Sexo:</b></td> <td>{$_genre_str}</td>
 			</tr>	
 
 			<tr>
@@ -123,7 +123,7 @@ if($_POST["player_name"] || $_GET['name'])
 			</tr>	
 
 			<tr>
-				<td><b>Residencia:</b></td> <td>{$_town->GetType()}</td>
+				<td><b>Residencia:</b></td> <td>{$_town_str}</td>
 			</tr>";	
 
 			if($houseid)
@@ -175,7 +175,7 @@ if($_POST["player_name"] || $_GET['name'])
 		";
 
 		$_gmAcc = new \Framework\Account();
-		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == e_Groups::Administrator)
+		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == t_Group::Administrator)
 		{
 			$contribute = new \Framework\Contribute();
 			$oders = $contribute->getOrdersListByAccount($account->getId());
@@ -233,19 +233,19 @@ if($_POST["player_name"] || $_GET['name'])
 					<td><b>Player ID</b></td><td>{$player->getId()}</td>
 				</tr>	
 				<tr>
-					<td><b>Skill sword</b></td><td>{$player->getSkill(e_Skills::Sword)}</td>
+					<td><b>Skill sword</b></td><td>{$player->getSkill(t_Skills::Sword)}</td>
 				</tr>
 				<tr>
-					<td><b>Skill axe</b></td><td>{$player->getSkill(e_Skills::Axe)}</td>
+					<td><b>Skill axe</b></td><td>{$player->getSkill(t_Skills::Axe)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill club</b></td><td>{$player->getSkill(e_Skills::Club)}</td>
+					<td><b>Skill club</b></td><td>{$player->getSkill(t_Skills::Club)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill shield</b></td><td>{$player->getSkill(e_Skills::Shielding)}</td>
+					<td><b>Skill shield</b></td><td>{$player->getSkill(t_Skills::Shielding)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill distance</b></td><td>{$player->getSkill(e_Skills::Distance)}</td>
+					<td><b>Skill distance</b></td><td>{$player->getSkill(t_Skills::Distance)}</td>
 				</tr>										
 			</table>														
 				";			
@@ -449,7 +449,7 @@ if($_POST["player_name"] || $_GET['name'])
 		
 		$_gmAcc = new \Framework\Account();
 		
-		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= e_Groups::GameMaster)))
+		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= t_Group::GameMaster)))
 		{
 			$kills = $deaths->getKillsOfPlayer($player->getId());
 

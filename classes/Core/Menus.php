@@ -50,12 +50,12 @@ class Menus
 			"name" => "adminpanel",
 			"conditions" => Menu::CONDITION_MUST_LOGGED,
 			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"min_group" => \e_Groups::GameMaster,
+			"min_group" => \t_Group::GameMaster,
 			"items" => array(
 				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
-				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \e_Groups::CommunityManager)		
-				,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \e_Groups::CommunityManager)		
-				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \e_Groups::Administrator)		
+				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
+				,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
+				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
 			)		
 		)
 		,array(

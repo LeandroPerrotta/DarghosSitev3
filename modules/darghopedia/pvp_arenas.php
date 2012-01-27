@@ -13,7 +13,7 @@ if($_SESSION['login'])
 	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getGroup() >= e_Groups::CommunityManager)
+	if($account->getGroup() >= t_Group::CommunityManager)
 	{
 		if($_POST)
 		{

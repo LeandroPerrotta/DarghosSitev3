@@ -113,8 +113,7 @@ if($_GET['name'])
 					}
 					else
 					{		
-						$_genre = new t_Genre();
-						$genre_id = $_genre->SetDataByType($_POST['character_sex']);
+						$genre_id = t_Genre::GetByString($_POST['character_sex']);
 						$player->set("sex", $genre_id);
 						$player->save();
 						
@@ -141,7 +140,7 @@ if($_GET['name'])
 				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 			}
 			
-			$sex_option = ($player->get("sex") == 1) ? '<option value="female">Feminino</option>' : '<option value="male">Masculino</option>';
+			$sex_option = ($player->get("sex") == t_Genre::Male) ? '<option value="'.t_Genre::GetString(t_Genre::Female).'">Feminino</option>' : '<option value="'.t_Genre::GetString(t_Genre::Male).'">Masculino</option>';
 			
 			$editOptions .= '<option value="edit_information">Modificar Informações</option>';
 			

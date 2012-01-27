@@ -9,10 +9,10 @@ if(is_array($oders))
 	{
 		$contribute->load($orderId, "id, name, target, type, period, cost, generated_in, status");
 		
-		$_status = new t_PaymentStatus($contribute->get("status"));
-		$status = $_status->GetType();
+		$_status_str = t_PaymentStatus::GetString($contribute->get("status"));
+		$status = $_status_str;
 		
-		if($contribute->get("status") == 1)
+		if($contribute->get("status") == t_PaymentStatus::Confirmed)
 			$status .= " <a href='?ref=contribute.accept&id=".$contribute->get("id")."'>[aceitar]</a>";
 		
 		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));	

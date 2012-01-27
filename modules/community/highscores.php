@@ -154,8 +154,7 @@ else
 			$pvp_str = " AND `player`.`pvpEnabled` = 0";
 	}	
 	
-	$_skillT = new t_Skills();
-	$skillid = $_skillT->SetDataByType($skill);
+	$skillid = t_Skills::GetByString($skill);
 	
 	$query = \Core\Main::$DB->query("
 		SELECT 

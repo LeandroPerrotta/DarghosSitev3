@@ -68,8 +68,8 @@ class View
 		
 		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
-		$this->_char_genre->AddOption("Masculino", "male");
-		$this->_char_genre->AddOption("Feminino", "female");
+		$this->_char_genre->AddOption("Masculino", t_Genre::GetString(t_Genre::Male));
+		$this->_char_genre->AddOption("Feminino", t_Genre::GetString(t_Genre::Female));
 		
 		$this->_char_vocation = new \Framework\HTML\SelectBox();
 		$this->_char_vocation->SetName("character_vocation");

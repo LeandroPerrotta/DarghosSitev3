@@ -12,7 +12,7 @@ class View
 			$loggedAcc = new \Framework\Account();
 			$loggedAcc->load($_SESSION['login'][0]);	
 
-			if($loggedAcc->getGroup() >= e_Groups::CommunityManager)
+			if($loggedAcc->getGroup() >= t_Group::CommunityManager)
 			{
 				$this->_canSee = true;
 				

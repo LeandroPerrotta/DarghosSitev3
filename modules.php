@@ -408,7 +408,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				
 				case "newtopic":
 					$patch['file'] = $topic;
-					$needMinGroup = e_Groups::CommunityManager;			
+					$needMinGroup = t_Group::CommunityManager;			
 				break;					
 				
 				default:
@@ -458,27 +458,27 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			{
 				case "fastnews":
 					$patch['file'] = $topic;
-					$needMinGroup = e_Groups::CommunityManager;			
+					$needMinGroup = t_Group::CommunityManager;			
 				break;			
 
 				case "gold_check":
 					$patch['file'] = $topic;
-					$needMinGroup = e_Groups::CommunityManager;			
+					$needMinGroup = t_Group::CommunityManager;			
 				break;	
 				
 				case "bg_matches":
 					$patch['file'] = $topic;
-					$needMinGroup = e_Groups::CommunityManager;			
+					$needMinGroup = t_Group::CommunityManager;			
 				break;	
 
 				case "addprize":
 					$patch['file'] = $topic;
-					$needMinGroup = e_Groups::Administrator;			
+					$needMinGroup = t_Group::Administrator;			
 				break;				
 						
 				case "emailcampaign":
 					$patch['file'] = $topic;
-					$needMinGroup = e_Groups::Administrator;			
+					$needMinGroup = t_Group::Administrator;			
 				break;						
 				
 				default:
@@ -520,7 +520,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 	if($_GET)
 	{	
 		$_isPremium = false;
-		$_groupId = e_Groups::Player;
+		$_groupId = t_Group::Player;
 		
 		if($_SESSION['login'])
 		{

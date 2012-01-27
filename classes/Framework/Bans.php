@@ -3,12 +3,11 @@ namespace Framework;
 
 class Bans
 {
-	private $db, $banTypes;
+	private $db;
 
 	function __construct()
 	{
 		$this->db = \Core\Main::$DB;
-		$this->banTypes = new \e_BanTypes();
 	}	
 	
 	function isBannished($account_id)
@@ -23,7 +22,7 @@ class Bans
 	
 	function isNameLocked($player_id)
 	{
-		$query = $this->db->query("SELECT id FROM bans WHERE type = '{$this->banTypes->NAMELOCK}' AND value = '{$player_id}' AND active = '1'");
+		$query = $this->db->query("SELECT id FROM bans WHERE type = '".\e_BanTypes::NameLock."' AND value = '{$player_id}' AND active = '1'");
 		
 		if($query->numRows() != 0)
 			return true;

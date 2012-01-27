@@ -86,10 +86,9 @@ class Ajax_player
 		if($voc_t->Get() > 4)
 			$voc_t->Set(1);
 		
-		$sex = new t_Sex();
-		$sex->SetByName($genre);		
-		
-		if($sex->GetByName() == "male")
+		$_genre_id = t_Genre::GetByString($genre);
+				
+		if($_genre_id == t_Genre::Male)
 			$outfitType = 128;
 		else
 			$outfitType = 136;
@@ -98,8 +97,8 @@ class Ajax_player
 			
 		$player->setName($name);
 		$player->setAccountId($account->getId());
-		$player->setGroup(e_Groups::Player);
-		$player->setSex($sex->Get());
+		$player->setGroup(t_Group::Player);
+		$player->setSex($_genre_id);
 		$player->setVocation($voc_t->Get());
 		$player->setExperience(4200);
 		$player->setLevel(8);

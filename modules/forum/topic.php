@@ -53,7 +53,7 @@ class View
 		
 		if($_POST)
 		{
-			if($this->loggedAcc && $_GET['banuser'] && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
+			if($this->loggedAcc && $_GET['banuser'] && $this->loggedAcc->getGroup() >= t_Group::CommunityManager)
 			{
 				if(!$this->PostBanUser())
 				{
@@ -65,7 +65,7 @@ class View
 				return true;
 			}
 			
-			if($this->loggedAcc && $_GET['edit'] && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
+			if($this->loggedAcc && $_GET['edit'] && $this->loggedAcc->getGroup() >= t_Group::CommunityManager)
 			{
 				if(!$this->PostEditTopic())
 				{
@@ -91,13 +91,13 @@ class View
 			}
 		}	
 
-		if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager && $_GET['banuser'])
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= t_Group::CommunityManager && $_GET['banuser'])
 		{
 			$this->DrawBanUser();
 			return true;
 		}	
 		
-		if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager && $_GET['edit'])
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= t_Group::CommunityManager && $_GET['edit'])
 		{
 			$this->DrawEditTopic();
 			return true;
@@ -150,7 +150,7 @@ class View
 			}	
 			elseif($this->loggedAcc && $_GET['delete'] && $_GET['delete'] == "1")
 			{
-				if($this->loggedAcc->getGroup() < e_Groups::CommunityManager)
+				if($this->loggedAcc->getGroup() < t_Group::CommunityManager)
 				{
 					$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 					return false;				
@@ -164,7 +164,7 @@ class View
 		}
 		elseif($_GET['removemsg'])
 		{
-			if($this->loggedAcc && $this->loggedAcc->getGroup() < e_Groups::CommunityManager)
+			if($this->loggedAcc && $this->loggedAcc->getGroup() < t_Group::CommunityManager)
 			{
 				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;				
@@ -408,7 +408,7 @@ class View
 				
 				$optVotes = null;
 				
-				if(time() > $this->topic->GetPollEnd() || ($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager))
+				if(time() > $this->topic->GetPollEnd() || ($this->loggedAcc && $this->loggedAcc->getGroup() >= t_Group::CommunityManager))
 					$optVotes = " - {$option["votes"]} voto(s) ou ".round(($option["votes"] / $this->topic->GetTotalVotes()) * 100, 2)."%";
 					
 				$optString .= "{$field->Draw()} {$option["option"]} {$optVotes}<br>";
@@ -455,11 +455,11 @@ class View
 		$player = new \Framework\Player();
 		$player->load($author->GetPlayerId());
 		
-		$group = new t_Group($player->getGroup());
+		$group_str = t_Group::GetString($player->getGroup());
 		
 		$string = "
 		<a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a><br>
-		{$group->getType()}
+		{$group_str}
 		";
 		
 		$table->AddField($string, 20, "height: 90px; vertical-align: top;");
@@ -469,7 +469,7 @@ class View
 		<p><span style='font-size: 12px; font-weight: bold;'>{$this->topic->GetTitle()}</span></p>
 		<p class='line'></p>";
 
-		if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
+		if($this->loggedAcc && $this->loggedAcc->getGroup() >= t_Group::CommunityManager)
 		{
 			$string .= "					
 			<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o topico {$this->topic->GetTitle()} com id #{$this->topic->GetId()}?\")' href='?ref=forum.topic&v={$this->topic->GetId()}&delete=1'>Excluir</a> - <a href='?ref=forum.topic&v={$this->topic->GetId()}&edit=1'>Editar</a></div>";
@@ -525,13 +525,14 @@ class View
 					}
 				}
 
-				$group = new t_Group($user_character->getGroup());				
+				$group_str = t_Group::GetString($user_character->getGroup());	
+							
 				
 				if(!$nochar)
 				{
 					$string = "
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					{$group->GetType()}
+					{$group_str}
 					";
 				}
 				else
@@ -555,7 +556,7 @@ class View
 					$string .= "<div style='border: 1px #9f9d9d solid; line-height:200%; padding: 0px; padding-left: 5px;'>Meu voto: <span style='font-weight: bold;'>{$vote["option"]}</span></div>";
 				}
 				
-				if($this->loggedAcc && $this->loggedAcc->getGroup() >= e_Groups::CommunityManager)
+				if($this->loggedAcc && $this->loggedAcc->getGroup() >= t_Group::CommunityManager)
 				{
 					$string .= "					
 					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a> - <a href='?ref=forum.topic&banuser={$user_post->GetId()}'>Punir</a></div>";

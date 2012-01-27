@@ -35,25 +35,23 @@ while($fetch = $query->fetch())
 		continue;
 	}
 	
-	$_town = new t_Towns($houses->get("townid"));
+	$_town_str = t_Towns::GetString($houses->get("townid"));
 	
-	if($houses->get("owner") == 0)
-	{
-		$module .= "
-		<tr>
-			<td>{$houses->get("name")}</td> <td>{$_town->GetType()}</td> <td><font style='color: green; font-weight: bold;'>Vazia</font></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
-		</tr>";		
-	}	
-	else
+	$_owner_str = "<font style='color: green; font-weight: bold;'>Vazia</font>";
+	
+	if($houses->get("owner") != 0)
 	{
 		$player = new \Framework\Player();
-		$player->load($houses->get("owner"));		
-		
-		$module .= "
-		<tr>
-			<td>{$houses->get("name")}</td> <td>{$_town->getType()}</td> <td><a href='?ref=character.view&name={$player->get("name")}'>{$player->get("name")}</a></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
-		</tr>";			
-	}
+		$player->load($houses->get("owner"));
+				
+		$_owner_str = "<a href='?ref=character.view&name={$player->get("name")}'>{$player->get("name")}</a>";
+
+	}	
+
+	$module .= "
+	<tr>
+		<td>{$houses->get("name")}</td> <td>{$_town_str}</td> <td>{$_owner_str}</td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
+	</tr>";			
 }
 
 $module .= "

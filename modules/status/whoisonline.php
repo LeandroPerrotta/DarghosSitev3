@@ -31,7 +31,7 @@ else
 		$_loginacc = new \Framework\Account();
 		$_loginacc->load($_SESSION['login'][0]);
 		
-		if($_loginacc->getGroup() == e_Groups::Administrator)
+		if($_loginacc->getGroup() == t_Group::Administrator)
 		{
 			$_isadmin = true;
 		}
@@ -134,13 +134,13 @@ else
 						
 					switch($fetch->town_id)
 					{
-						case e_Towns::IslandOfPeace: $_islandofpeace++; break;
-						case e_Towns::Quendor: $_quendor++; break;
-						case e_Towns::Aaragon: $_aaragon++; break;
-						case e_Towns::Salazart: $_salazart++; break;
-						case e_Towns::Northrend: $_salazart++; break;
-						case e_Towns::Kashmir: $_kashmir++; break;
-						case e_Towns::Aracura: $_aracura++; break;
+						case t_Towns::IslandOfPeace: $_islandofpeace++; break;
+						case t_Towns::Quendor: $_quendor++; break;
+						case t_Towns::Aaragon: $_aaragon++; break;
+						case t_Towns::Salazart: $_salazart++; break;
+						case t_Towns::Northrend: $_salazart++; break;
+						case t_Towns::Kashmir: $_kashmir++; break;
+						case t_Towns::Aracura: $_aracura++; break;
 					}		
 
 					if(\Core\Tools::isSorcerer($fetch->vocation))
@@ -166,13 +166,13 @@ else
 
 				switch($fetch->town_id)
 				{
-					case e_Towns::IslandOfPeace: $_islandofpeace++; break;
-					case e_Towns::Quendor: $_quendor++; break;
-					case e_Towns::Aaragon: $_aaragon++; break;
-					case e_Towns::Salazart: $_salazart++; break;
-					case e_Towns::Northrend: $_salazart++; break;
-					case e_Towns::Kashmir: $_kashmir++; break;
-					case e_Towns::Aracura: $_aracura++; break;
+					case t_Towns::IslandOfPeace: $_islandofpeace++; break;
+					case t_Towns::Quendor: $_quendor++; break;
+					case t_Towns::Aaragon: $_aaragon++; break;
+					case t_Towns::Salazart: $_salazart++; break;
+					case t_Towns::Northrend: $_salazart++; break;
+					case t_Towns::Kashmir: $_kashmir++; break;
+					case t_Towns::Aracura: $_aracura++; break;
 				}					
 			}
 			

@@ -36,18 +36,18 @@ if($_POST)
 		if($vocation->Get() > 4)
 			$vocation->Set(1);
 		
-		$sex = new t_Sex();
-		$sex->SetByName($_POST["player_sex"]);		
 		
-		if($sex->GetByName() == "male")
+		$_genre_id = t_Genre::GetByString($_POST["player_sex"]);
+		
+		if($_genre_id == t_Genre::Male)
 			$outfitType = 128;
 		else
 			$outfitType = 136;
 			
 		$player->setName($_POST["player_name"]);
 		$player->setAccountId($_SESSION['login'][0]);
-		$player->setGroup(e_Groups::Player);
-		$player->setSex($sex->Get());
+		$player->setGroup(t_Group::Player);
+		$player->setSex($_genre_id);
 		$player->setVocation($vocation->Get());
 		$player->setExperience(4200);
 		$player->setLevel(8);
@@ -89,8 +89,8 @@ $module .= '
 		
 		<p>
 			<label for="player_sex">Sexo</label><br />			
-				<input type="radio" name="player_sex" value="female" /> Feminino<br>
-				<input type="radio" name="player_sex" value="male" /> Masculino<br>
+				<input type="radio" name="player_sex" value="'.t_Genre::GetString(t_Genre::Female).'" /> Feminino<br>
+				<input type="radio" name="player_sex" value="'.t_Genre::GetString(t_Genre::Male).'" /> Masculino<br>
 		</p>		
 		
 		<p>

@@ -17,7 +17,7 @@ class View
 			$this->loggedAcc = new \Framework\Account();
 			$this->loggedAcc->load($_SESSION['login'][0]);
 			
-			if($this->loggedAcc->getGroup() == e_Groups::Administrator)
+			if($this->loggedAcc->getGroup() == t_Group::Administrator)
 			{
 				$this->isAdmin = true;
 			}

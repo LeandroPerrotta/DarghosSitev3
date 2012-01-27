@@ -1,74 +1,4 @@
 <?php 
-class e_PaymentStatus
-{
-	const
-		WaitingPayment = 0
-		,Confirmed = 1
-		,Finished = 2
-		,Canceled = 3
-		;
-}
-
-class e_Groups
-{
-	const
-		Player = 1
-		,NonPvpPlayers = 2 //deprecated?
-		,Tutor = 3
-		,SeniorTutor = 4
-		,GameMaster = 5
-		,CommunityManager = 6
-		,Administrator = 7
-		;
-}
-
-class e_Genre
-{
-	const	
-		Female = 0
-		,Male = 1
-		;
-}
-
-class e_Skills
-{
-	const
-		Fist = 0
-		,Club = 1
-		,Sword = 2
-		,Axe = 3
-		,Distance = 4
-		,Shielding = 5
-		,Fishing = 5
-	;
-}
-
-class e_BanTypes
-{
-	const
-		IpAddress = 0
-		,NameLock = 1
-		,Banishment = 2
-		,Notation = 3
-		,Deletion = 4
-		;
-}
-
-class e_Towns
-{	
-	const
-		Quendor = 1
-		,Aaragon = 2
-		,Rookgaard = 3
-		,Thorn = 4
-		,Salazart = 5
-		,IslandOfPeace = 6
-		,Northrend = 7
-		,Kashmir = 9
-		,Aracura = 10
-	;	
-}
-
 class e_Configs extends \Core\Enumerators
 {
 	public
@@ -375,108 +305,123 @@ class e_MenuType
 		;
 }
 
+class e_BanTypes
+{
+	const
+		IpAddress = 0
+		,NameLock = 1
+		,Banishment = 2
+		,Notation = 3
+		,Deletion = 4
+	;
+}
+
 class t_PaymentStatus extends \Core\Structs
 {
-	function __construct($status_id = NULL)
-	{
-		parent::__construct($status_id);
-	}
+	const
+		WaitingPayment = 0
+		,Confirmed = 1
+		,Finished = 2
+		,Canceled = 3
+	;	
 	
-	static function LoadTypes()
-	{
-		return
-		array(
-				e_PaymentStatus::WaitingPayment => "Aguardando Pagamento"
-				,e_PaymentStatus::Confirmed => "Confirmado"
-				,e_PaymentStatus::Finished => "Concluido"
-				,e_PaymentStatus::Canceled => "Cancelado"
+	static protected
+		$m_typeStrings = array(
+			self::WaitingPayment => "Aguardando Pagamento"
+			,self::Confirmed => "Confirmado"
+			,self::Finished => "Concluido"
+			,self::Canceled => "Cancelado"				
 		);
-	}	
 }
 
 class t_Skills extends \Core\Structs
 {
-	function __construct($skill_id = NULL)
-	{
-		parent::__construct($skill_id);
-	}
+	const
+		Fist = 0
+		,Club = 1
+		,Sword = 2
+		,Axe = 3
+		,Distance = 4
+		,Shielding = 5
+		,Fishing = 6
+	;
 	
-	static function LoadTypes()
-	{
-		return 
-		array(
-			e_Skills::Fist => "fist"
-			,e_Skills::Club => "club"
-			,e_Skills::Sword => "sword"
-			,e_Skills::Axe => "axe"
-			,e_Skills::Distance => "distance"
-			,e_Skills::Shielding => "shielding"
-			,e_Skills::Fishing => "fishing"
-				);
-	}
+	static protected
+		$m_typeStrings = array(
+			self::Fist => "fist"
+			,self::Club => "club"
+			,self::Sword => "sword"
+			,self::Axe => "axe"
+			,self::Distance => "distance"
+			,self::Shielding => "shielding"
+			,self::Fishing => "fishing"		
+		);
 }
 
 class t_Towns extends \Core\Structs
 {
-	function __construct($town_id = NULL)
-	{
-		parent::__construct($town_id);
-	}
+	const
+		Quendor = 1
+		,Aaragon = 2
+		,Rookgaard = 3
+		,Thorn = 5
+		,Salazart = 5
+		,IslandOfPeace = 6
+		,Northrend = 7
+		,Kashmir = 9
+		,Aracura = 10
+	;
 	
-	static function LoadTypes()
-	{
-		return
-		array(
-			e_Towns::Quendor => "Quendor",
-			e_Towns::Aaragon => "Aaragon",
-			e_Towns::Rookgaard => "Rookgaard",
-			e_Towns::Thorn => "Thorn",
-			e_Towns::Salazart => "Salazart",
-			e_Towns::IslandOfPeace => "Island of Peace",
-			e_Towns::Northrend => "Northrend",
-			e_Towns::Kashmir => "Kashmir",
-			e_Towns::Aracura => "Aracura"
+	static protected
+		$m_typeStrings = array(
+			self::Quendor => "Quendor",
+			self::Aaragon => "Aaragon",
+			self::Rookgaard => "Rookgaard",
+			self::Thorn => "Thorn",
+			self::Salazart => "Salazart",
+			self::IslandOfPeace => "Island of Peace",
+			self::Northrend => "Northrend",
+			self::Kashmir => "Kashmir",
+			self::Aracura => "Aracura"				
 		);
-	}
 }
 
 class t_Group extends \Core\Structs
 {
-	function __construct($group_id = NULL)
-	{
-		parent::__construct($group_id);
-	}	
+	const
+		Player = 1
+		,PlayerNonPvp = 2
+		,Tutor = 3
+		,SeniorTutor = 4
+		,GameMaster = 5
+		,CommunityManager = 6
+		,Administrator = 7
+	;	
 	
-	static function LoadTypes()
-	{
-		return
-		array(
-			e_Groups::Player => "Jogador",
-			e_Groups::NonPvpPlayers => "Jogador",
-			e_Groups::Tutor => "Tutor",
-			e_Groups::SeniorTutor => "Senior Tutor",
-			e_Groups::GameMaster => "Game Master",
-			e_Groups::CommunityManager => "Community Manager",
-			e_Groups::Administrator => "Administrador"
-		);
-	}
+	static protected
+		$m_typeStrings = array(
+			self::Player => "Jogador",
+			self::PlayerNonPvp => "Jogador",
+			self::Tutor => "Tutor",
+			self::SeniorTutor => "Senior Tutor",
+			self::GameMaster => "Game Master",
+			self::CommunityManager => "Community Manager",
+			self::Administrator => "Administrador"				
+		);		
 }
 
 class t_Genre extends \Core\Structs
-{
-	function __construct($town_id = NULL)
-	{
-		parent::__construct($town_id);
-	}	
+{	
+	const
+		Female = 0
+		,Male = 1
+	;	
 	
-	static function LoadTypes()
-	{
-		return
-			array(
-				e_Genre::Female => "Feminino"
-				,e_Genre::Male => "Masculino"			
-			);
-	}	
+	static protected
+		$m_typeStrings = array(
+			self::Female => "Feminino"
+			,self::Male => "Masculino"				
+		);
 }
 
 class t_Vocation
