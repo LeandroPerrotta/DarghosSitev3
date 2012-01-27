@@ -177,7 +177,6 @@ if($_POST["player_name"] || $_GET['name'])
 		$_gmAcc = new \Framework\Account();
 		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == e_Groups::Administrator)
 		{
-			include_once("classes/contribute.php");
 			$contribute = new \Framework\Contribute();
 			$oders = $contribute->getOrdersListByAccount($account->getId());
 			
@@ -234,19 +233,19 @@ if($_POST["player_name"] || $_GET['name'])
 					<td><b>Player ID</b></td><td>{$player->getId()}</td>
 				</tr>	
 				<tr>
-					<td><b>Skill sword</b></td><td>{$player->getSkill(e_Skills::SWORD)}</td>
+					<td><b>Skill sword</b></td><td>{$player->getSkill(e_Skills::Sword)}</td>
 				</tr>
 				<tr>
-					<td><b>Skill axe</b></td><td>{$player->getSkill(e_Skills::AXE)}</td>
+					<td><b>Skill axe</b></td><td>{$player->getSkill(e_Skills::Axe)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill club</b></td><td>{$player->getSkill(e_Skills::CLUB)}</td>
+					<td><b>Skill club</b></td><td>{$player->getSkill(e_Skills::Club)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill shield</b></td><td>{$player->getSkill(e_Skills::SHIELD)}</td>
+					<td><b>Skill shield</b></td><td>{$player->getSkill(e_Skills::Shield)}</td>
 				</tr>										
 				<tr>
-					<td><b>Skill distance</b></td><td>{$player->getSkill(e_Skills::DISTANCE)}</td>
+					<td><b>Skill distance</b></td><td>{$player->getSkill(e_Skills::Distance)}</td>
 				</tr>										
 			</table>														
 				";			
