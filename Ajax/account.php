@@ -1,4 +1,5 @@
 <?php
+use Framework\Account;
 class Ajax_account
 {
 	static function checkName()
@@ -104,7 +105,7 @@ class Ajax_account
 			return $result;		
 		}
 		
-		if(!Strings::validEmail($email))
+		if(!\Core\Strings::validEmail($email))
 		{
 			$result["text"] = "Este não parece ser um formato de e-mail valido.";		
 			return $result;
@@ -153,7 +154,7 @@ class Ajax_account
 		
 		$account->setCreation(time());
 		$account->setName($name);
-		$account->setPassword(Strings::encrypt($password));
+		$account->setPassword(\Core\Strings::encrypt($password));
 		$account->save();
 		
 		$_SESSION["login"][] = $account->getId();
@@ -179,9 +180,9 @@ class Ajax_account
 		}	
 		
 		$account = Account::loadLogged();
-		$code = Strings::randKey(12, 1, "lower+number");
+		$code = \Core\Strings::randKey(12, 1, "lower+number");
 		
-		if(!Emails::send($email, Emails::EMSG_VALIDATE_EMAIL, array($code)))
+		if(!\Core\Emails::send($email, \Core\Emails::EMSG_VALIDATE_EMAIL, array($code)))
 		{
 			$result["error"] = true;
 			return $result;
