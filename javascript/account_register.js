@@ -41,7 +41,7 @@ function checkCharacterName()
 {
 	var characterName = $("input[name='character_name']").val();
 	notifyLoading($("input[name='character_name']"));
-	sendPost({action: "character_checkName", character_name: characterName}, $("input[name='character_name']"));	
+	sendPost({action: "player_checkName", character_name: characterName}, $("input[name='character_name']"));	
 }
 
 function checkEmail()
