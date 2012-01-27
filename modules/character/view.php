@@ -131,13 +131,15 @@ if($_POST["player_name"] || $_GET['name'])
 				$houses = new \Framework\Houses();
 				$houses->load($houseid);				
 				
+				$_house_town_str = t_Towns::GetString($houses->get("town"));
+				
 				if($houses->get("warnings") == 0)
 				{
-					$housemsg = "{$houses->get("name")} ({$_town->GetType()}) com pagamento no dia  ".\Core\Main::formatDate($houses->get("paid")).".";
+					$housemsg = "{$houses->get("name")} ({$_house_town_str}) com pagamento no dia  ".\Core\Main::formatDate($houses->get("paid")).".";
 				}
 				else
 				{
-					$housemsg = "{$houses->get("name")} ({$_town->GetType()}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
+					$housemsg = "{$houses->get("name")} ({$_house_town_str}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
 				}
 				
 				$module .= "

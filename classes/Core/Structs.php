@@ -28,7 +28,7 @@ class Structs
 	
 	static function GetByString($string)
 	{
-		foreach(static::$m_types as $k => $v)
+		foreach(static::$m_typeStrings as $k => $v)
 		{
 			if(strtolower($k) == strtolower($string))
 			{
