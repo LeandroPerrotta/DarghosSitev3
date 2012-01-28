@@ -27,7 +27,7 @@ class View
 		$this->_character = new \Framework\HTML\SelectBox();
 		$this->_character->SetName("character_name");
 		
-		$char_list = $this->loggedAcc->getCharacterList(Account::PLAYER_LIST_BY_ID);
+		$char_list = $this->loggedAcc->getCharacterList(\Framework\Account::PLAYER_LIST_BY_ID);
 		
 		//listing all account characters and adding to options box the guild members
 		foreach($char_list as $player_id)

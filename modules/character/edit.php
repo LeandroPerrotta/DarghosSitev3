@@ -122,7 +122,7 @@ if($_GET['name'])
 						
 						$account->save();		
 		
-						\Core\Main::addChangeLog('sex', $player->get("id"), $sexo);
+						\Core\Main::addChangeLog('sex', $player->get("id"), $genre_id);
 						$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_SEX_CHANGED, $player->getName());
 					}		
 				}		

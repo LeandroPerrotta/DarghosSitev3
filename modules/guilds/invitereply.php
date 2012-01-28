@@ -54,7 +54,7 @@ class View
 		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$character_list = $this->loggedAcc->getCharacterList(Account::PLAYER_LIST_BY_ID);
+		$character_list = $this->loggedAcc->getCharacterList(\Framework\Account::PLAYER_LIST_BY_ID);
 		
 		$this->player = new \Framework\Player();		
 		
