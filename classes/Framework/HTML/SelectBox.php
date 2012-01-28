@@ -3,16 +3,16 @@ namespace Framework\HTML;
 class SelectBox
 {
 	private $_options = array();
-	private $_name, $_size = HTML_SELECTBOX_SIZE_NORMAL, $_selectedIndex = 0, $onChangeSubmit = false;
+	private $_name, $_size = Consts::SELECTBOX_SIZE_NORMAL, $_selectedIndex = 0, $onChangeSubmit = false;
 	
 	function __construct()
 	{
-		
+
 	}
 	
 	function SelectedIndex($index)
 	{
-		$this->_options[$index]["selected"] = 1;
+		$this->_selectedIndex = $index;
 	}
 	
 	function SetName($name)
@@ -30,7 +30,7 @@ class SelectBox
 		$this->_size = $size;
 	}
 	
-	function AddOption($label, $value = "")
+	function AddOption($label, $value = "", $selected = false)
 	{		
 		$option = array();
 		
@@ -42,9 +42,16 @@ class SelectBox
 			$option["value"] = $value;
 		}
 		
-		$option["selected"] = 0;
+		array_push($this->_options, $option);
 		
-		return array_push($this->_options, $option);
+		$key = count($this->_options) - 1;
+		
+		if($selected)
+		{
+			$this->SelectedIndex($key);
+		}
+		
+		return $key;
 	}
 	
 	function onChangeSubmit()
@@ -68,7 +75,7 @@ class SelectBox
 
 		foreach($this->_options as $key => $option)
 		{
-			if($option["selected"] == 1 || ($_POST && $this->GetPost() == $option["value"]))
+			if($key == $this->_selectedIndex || ($_POST && $this->GetPost() == $option["value"]))
 				$string .= "<option selected='selected' value='{$option["value"]}'>{$option["label"]}</option>";
 			else
 				$string .= "<option value='{$option["value"]}'>{$option["label"]}</option>";	

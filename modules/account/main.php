@@ -15,6 +15,8 @@ $realname = ($account->getRealName()) ?	$account->getRealName() : "<i>Sem Nome</
 $location = ($account->getLocation()) ?	$account->getLocation() : "<i>Sem Localidade</i>";
 $url = ($account->getUrl()) ?	$account->getUrl() : "<i>Sem Endereço</i>";
 
+$playerDeletionList = array();
+
 $contribute = new \Framework\Contribute();
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
@@ -74,8 +76,10 @@ if(is_array($player_list))
 			$npcOptions .= "<a href='?ref=character.reborn&name={$player->getName()}'>Baron Samedi</a>";
 		}
 		
-		if($player->deletionStatus())
+		$playerDeletionStatus = $player->deletionStatus();
+		if($playerDeletionStatus)
 		{
+			$playerDeletionList[$player->getName()] = $playerDeletionStatus;
 			$charStatus[] = "<font color='red'>será deletado em: ".\Core\Main::formatDate($player->deletionStatus())."</font>";
 			$charOptions .= " - <a href='?ref=character.undelete&name={$player->getName()}'>Cancelar Exclusão</a>";
 		}
@@ -166,13 +170,10 @@ if($invitesList)
 	$module .= $invitesList;
 }
 
-if(isset($charDel))
+foreach($playerDeletionList as $name => $deletion)
 {
-	foreach($charDel as $name => $deletion)
-	{
-		$module .= '
-		<p><span id="notify">Atenção:</span> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.\Core\Main::formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
-	}
+	$module .= '
+	<p><span id="notify">Atenção:</span> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.\Core\Main::formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
 }		
 
 $module .= "

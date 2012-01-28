@@ -1,42 +1,13 @@
 <?
 use \Core\Configs;
-$filter_onlyOnIOP = false;
 
-if(Configs::Get(Configs::eConf()->ENABLE_REBORN))
-	$filter_hideRebornPlayers = false;
+//var_dump($_SERVER);
+$filter_onlyOnIOP = ($_GET["onlyPeacers"] == "1") ? true : false;
+$filter_hideRebornPlayers = ($_GET["hideReborned"] == "1") ? true : false;
+$filter_showInactivePlayers = ($_GET["showInactives"] == "1") ? true : false;
+$filter_pvp = ($_GET["pvpType"] != "") ? $_GET["pvpType"] : "both";
 	
-if($_GET["p"] && $_GET["p"] > 24)
-	$_GET["p"] = 24;
-
-($_POST['show_onlyPeacers'] == 1) ? setCookie("filter_onlyOnIOP", 1) : setCookie("filter_onlyOnIOP", 0);
-($_COOKIE['filter_onlyOnIOP'] == 1) ? $filter_onlyOnIOP = true : null;
-
-if(Configs::Get(Configs::eConf()->ENABLE_REBORN))
-{
-	($_POST['hide_rebornPlayers'] == 1) ? setCookie("filter_hideRebornPlayers", 1) : setCookie("filter_hideRebornPlayers", 0);
-	($_COOKIE['filter_hideRebornPlayers'] == 1) ? $filter_hideRebornPlayers = true : null;
-}
-
-$filter_showInactivePlayers = true;
-
 $charactersActiveDays = Configs::Get(Configs::eConf()->HIGHSCORE_ACTIVE_CHARACTER_DAYS);
-
-if($charactersActiveDays > 0)
-{		
-	($_POST['show_inactivePlayers'] == 1) ? setCookie("showInactivePlayers", 1) : setCookie("showInactivePlayers", 0);
-	$filter_showInactivePlayers = ($_COOKIE['showInactivePlayers'] == 1) ? true : false;
-}
-
-if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH))
-{	
-	if($_POST['pvp']) setCookie("filter_pvp", $_POST['pvp']);
-	$filter_pvp = ($_COOKIE['filter_pvp']) ? $_COOKIE['filter_pvp'] : "both";
-}
-
-if(isset($_POST['skill']))
-{
-	\Core\Main::redirect("?ref=community.highscores&skill={$_POST['skill']}");
-}
 
 $skill = isset($_GET['skill']) ? $_GET['skill'] : "experience";
 
@@ -46,22 +17,46 @@ if($charactersActiveDays != 0 && !$filter_showInactivePlayers)
 	<p> <b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos ' .$charactersActiveDays. ' dias.';
 }
 
+$select = new \Framework\HTML\SelectBox();
+$select->SetName("skill");
+
+$selected = $skill == "experience" ? true : false;
+$select->AddOption("Nível de Experiência", "experience", $selected);
+
+$selected = $skill == "maglevel" ? true : false;
+$select->AddOption("Nível Mágico", "maglevel", $selected);
+
+$selected = $skill == "bgrating" ? true : false;
+$select->AddOption("Battlegrond Rating", "bgrating", $selected);
+
+$skillNames = array(
+	t_Skills::Fist => "Batalha com Mãos"
+	,t_Skills::Club => "Batalha com Martelo"
+	,t_Skills::Axe => "Batalha com Machado"
+	,t_Skills::Sword => "Batalha com Espada"
+	,t_Skills::Fist => "Batalha com Mãos"
+	,t_Skills::Distance => "Pontaria a Distancia"
+	,t_Skills::Shielding => "Habilidade com Escudo"
+	,t_Skills::Fishing => "Habilidade de Pesca"
+);
+
+while(t_Skills::ItValid())
+{
+	$selected = $skill == t_Skills::GetString(t_Skills::It()) ? true : false;
+	$select->AddOption($skillNames[t_Skills::It()], t_Skills::GetString(t_Skills::It()), $selected);
+	t_Skills::ItNext();
+}
+
 $module .= '
-<form action="'.$_SERVER['REQUEST_URI'].'" method="POST">
+<form action="'.$_SERVER["REQUEST_URI"].'" method="GET">
 	<fieldset>
+	
+		<input type="hidden" name="ref" value="community.highscores"/>
+		<input type="hidden" name="p" value="'.($_GET["p"] ? $_GET["p"] : null).'"/>
+	
 		<p>		
 			<label for="skill">Tipo de Habilidade</label><br />
-			<select name="skill">
-				<option '.(($skill == "experience") ? 'selected' : null).' value="experience">Nível de Experiência</option>
-				<option '.(($skill == "maglevel") ? 'selected' : null).' value="maglevel">Nível Mágico</option>
-				<option '.(($skill == "sword") ? 'selected' : null).' value="sword">Batalha com Espada</option>
-				<option '.(($skill == "axe") ? 'selected' : null).' value="axe">Batalha com Machado</option>
-				<option '.(($skill == "club") ? 'selected' : null).' value="club">Batalha com Martelo</option>
-				<option '.(($skill == "fist") ? 'selected' : null).' value="fist">Batalha com Mãos</option>
-				<option '.(($skill == "shielding") ? 'selected' : null).' value="shielding">Habilidade com Escudo</option>
-				<option '.(($skill == "distance") ? 'selected' : null).' value="distance">Pontaria à Distancia</option>
-				<option '.(($skill == "fishing") ? 'selected' : null).' value="fishing">Habilidade de Pesca</option>
-			</select>
+			'.$select->Draw().'
 		</p>';
 
 		if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH))
@@ -69,7 +64,7 @@ $module .= '
 			$module .= '
 			<p>		
 				<label for="skill">Tipo de PvP</label><br />
-				<select name="pvp">
+				<select name="pvpType">
 					<option '.(($filter_pvp == "both") ? 'selected' : null).' value="both">Todos</option>
 					<option '.(($filter_pvp == "enabled") ? 'selected' : null).' value="enabled">Agressivos apénas</option>
 					<option '.(($filter_pvp == "disabled") ? 'selected' : null).' value="disabled">Pacificos apénas</option>
@@ -80,14 +75,14 @@ $module .= '
 		$module .= '
 		<p>		
 			<label for="filter">Filtros</label><br />
-			<input '.(($filter_onlyOnIOP) ? 'checked="checked"' : null).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace. <br>
-			'.((Configs::Get(Configs::eConf()->ENABLE_REBORN)) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hide_rebornPlayers" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).' :  '');
+			<input '.(($filter_onlyOnIOP) ? 'checked="checked"' : null).' name="onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace. <br>
+			'.((Configs::Get(Configs::eConf()->ENABLE_REBORN)) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hideReborned" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).' :  '');
 			
 			if($charactersActiveDays > 0)
 			{
 				$check = ($filter_showInactivePlayers) ? 'checked="checked"' : '';
 				
-				$module .= '<input type="checkbox" name="show_inactivePlayers" '.$check.' value="1" /> Exibir mesmo os personagens inativos.';
+				$module .= '<input type="checkbox" name="showInactives" '.$check.' value="1" /> Exibir mesmo os personagens inativos.';
 			}
 			
 			$module .= '
@@ -143,6 +138,41 @@ if($skill == "experience" or $skill == "maglevel")
 		
 	$query = \Core\Main::$DB->query($query_str);
 }
+elseif($skill == "bgrating")
+{
+	$query_str = "
+	SELECT
+	`id`
+	FROM
+	`players`
+	WHERE
+	group_id < 3";
+	
+	if($filter_onlyOnIOP)
+		$query_str .= " AND `town_id` = 6";
+	
+	if(!$filter_showInactivePlayers)
+		$query_str .= " AND `lastlogin` > UNIX_TIMESTAMP() - ({$charactersActiveDays} * 60 * 60 * 24)";
+	
+	if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH))
+	{
+		if($filter_pvp == "enabled")
+			$query_str .= " AND `pvpEnabled` = 1";
+		elseif($filter_pvp == "disabled")
+		$query_str .= " AND `pvpEnabled` = 0";
+	}
+	
+	$query_str .= "
+	ORDER BY
+	";
+	
+	if(Configs::Get(Configs::eConf()->ENABLE_REBORN) && !$filter_hideRebornPlayers && $skill == "experience")
+		$query_str .= "`reborn_level` DESC, ";
+	
+	$query_str .= "`battleground_rating` DESC LIMIT {$start}, 20";
+	
+	$query = \Core\Main::$DB->query($query_str);	
+}
 else
 {
 	$pvp_str = "";
@@ -189,18 +219,18 @@ else
 	
 $ultima = 24;
 
-$_skill = "";	
-	
-if($_GET['skill'])	
-	$_skill = "&skill={$_GET['skill']}";
+$pattern = array();
+$pattern[0] = '/&p=([0-9]{1,})/';
 
-if($_GET['only_peacers'])
-	$_filter = "&filter={$_GET["only_peacers"]}";	
+$replace = array();
+$replace[0] = "";
+
+$regex_query = preg_replace($pattern, $replace, $_SERVER["QUERY_STRING"]);
 	
 $module .= "<div>";
 
 if($now > 0)
-	$module .= "<span style='margin-top: 10px; float: left;'><a href='?ref=community.highscores{$_skill}{$_filter}'>Primeira</a> | <a href='?ref=community.highscores{$_skill}{$_filter}&p=".($now - 1)."'>Anterior</a></span>";
+	$module .= "<span style='margin-top: 10px; float: left;'><a href='?{$regex_query}'>Primeira</a> | <a href='?{$regex_query}&p=".($now - 1)."'>Anterior</a></span>";
 
 $module .= "<span style='margin-top: 10px; float: right;'>";	
 
@@ -208,7 +238,7 @@ $havenext = false;
 
 if($now != $ultima)
 {
-	$module .= "<a href='?ref=community.highscores{$_skill}{$_filter}&p=".($now + 1)."'>Proximo</a>";
+	$module .= "<a href='?{$regex_query}&p=".($now + 1)."'>Proximo</a>";
 	$havenext = true;
 }		
 
@@ -219,7 +249,7 @@ if($now < $ultima)
 		$module .= " | ";
 	}			
 	
-	$module .= "<a href='?ref=community.highscores{$_skill}{$_filter}&p={$ultima}'>Ultima</a>";
+	$module .= "<a href='?{$regex_query}&p={$ultima}'>Ultima</a>";
 }
 
 $module .= "</span>";
@@ -252,6 +282,10 @@ while($fetch = $query->fetch())
 	elseif($skill == "maglevel")
 	{
 		$skill_value = $player->getMagLevel();
+	}
+	elseif($skill == "bgrating")
+	{
+		$skill_value = $player->getBattlegroundRating();
 	}
 	else
 	{

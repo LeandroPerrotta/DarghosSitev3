@@ -32,8 +32,7 @@ if(file_exists("Ajax/{$class}.php"))
 	include_once("Ajax/{$class}.php");
 	if(method_exists($_class, $function))
 	{
-		eval("\$ret = Ajax_{$class}::{$function}();");
-		
+		$ret = call_user_func(array("Ajax_{$class}", $function));		
 		if(is_array($ret))
 		{
 			echo json_encode($ret);

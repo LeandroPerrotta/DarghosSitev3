@@ -73,7 +73,7 @@ class View
 		
 		$this->_char_vocation = new \Framework\HTML\SelectBox();
 		$this->_char_vocation->SetName("character_vocation");
-		$this->_char_vocation->SetSize(HTML_SELECTBOX_SIZE_BIG);
+		$this->_char_vocation->SetSize(\Framework\HTML\Consts::SELECTBOX_SIZE_BIG);
 		$this->_char_vocation->AddOption("");
 		$this->_char_vocation->AddOption("Knight (Cavaleiro)", "knight");
 		$this->_char_vocation->AddOption("Paladin (Paladino)", "paladin");		

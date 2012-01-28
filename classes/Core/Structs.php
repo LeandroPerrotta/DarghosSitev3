@@ -2,15 +2,28 @@
 namespace Core;
 class Structs
 {
-	protected $m_data;
-	protected $m_dataTypes = array();
+	private static $m_position = 0;
 	
-	function __construct($data = NULL)
+	static function ItValid($reset = true)
 	{
-		if($data)
-			$this->m_data = $data;
+		if(static::$m_typeStrings[self::$m_position])
+			return true;
 		
-		$this->m_dataTypes = static::LoadTypes();
+		if($reset)
+			self::$m_position = 0;
+		
+		return false;
+	}
+	
+	static function ItNext()
+	{
+		self::$m_position++;
+	}
+	
+	static function It()
+	{
+		$keys = array_keys(static::$m_typeStrings);
+		return $keys[self::$m_position];
 	}
 	
 	static function Get($id)
@@ -30,7 +43,7 @@ class Structs
 	{
 		foreach(static::$m_typeStrings as $k => $v)
 		{
-			if(strtolower($k) == strtolower($string))
+			if(strtolower($v) == strtolower($string))
 			{
 				return $k;
 			}
