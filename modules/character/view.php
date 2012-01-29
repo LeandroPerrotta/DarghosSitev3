@@ -525,7 +525,7 @@ if($_POST["player_name"] || $_GET['name'])
 		</div>
 		";		
 		
-		if($player->get("hide") == 0 || $logged_acc->getGroup() >= t_Group::GameMaster)
+		if($player->get("hide") == 0 || ($logged_acc && $logged_acc->getGroup() >= t_Group::GameMaster))
 		{
 			$module .= "
 			<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
