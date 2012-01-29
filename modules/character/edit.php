@@ -77,7 +77,7 @@ if($_GET['name'])
 					{		
 						$oldName = $player->getName();
 						
-						$player->set("name", $_POST["character_newname"]);
+						$player->setName($_POST["character_newname"]);
 						$player->save();
 								
 						//remove premdays da conta do jogador
@@ -120,7 +120,7 @@ if($_GET['name'])
 						//remove premdays da conta do jogador
 						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX), false /* false to decrement days */);	
 						
-						$account->save();		
+						$account->save();
 		
 						\Core\Main::addChangeLog('sex', $player->get("id"), $genre_id);
 						$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_SEX_CHANGED, $player->getName());
