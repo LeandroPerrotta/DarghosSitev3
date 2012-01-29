@@ -15,6 +15,11 @@ if($_POST["player_name"] || $_GET['name'])
 		$account = new \Framework\Account();
 		$account->load($player->get("account_id"));
 		
+		$logged_acc = \Framework\Account::loadLogged();
+		
+		
+		if($_SESSION)
+		
 		$deaths = new \Framework\Deaths();
 		
 		//$bans = $account->getBans();
@@ -176,8 +181,7 @@ if($_POST["player_name"] || $_GET['name'])
 		</table>
 		";
 
-		$_gmAcc = new \Framework\Account();
-		if($_SESSION['login'] and $_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() == t_Group::Administrator)
+		if($logged_acc && $logged_acc->getGroup() == t_Group::Administrator)
 		{
 			$contribute = new \Framework\Contribute();
 			$oders = $contribute->getOrdersListByAccount($account->getId());
@@ -221,7 +225,10 @@ if($_POST["player_name"] || $_GET['name'])
 				</tr>	
 				<tr>
 					<td><b>Nome da Conta</b></td><td>{$account->getName()}</td>
-				</tr>							
+				</tr>
+				<tr>
+					<td><b>Email da Conta</b></td><td>{$account->getEmail()}</td>
+				</tr>				
 				<tr>
 					<td><b>Dias de Premium</b></td><td>{$account->getPremDays()}</td>
 				</tr>			
@@ -449,9 +456,7 @@ if($_POST["player_name"] || $_GET['name'])
 			</table>";		
 		}		
 		
-		$_gmAcc = new \Framework\Account();
-		
-		if(($_SESSION['login']) and (($account->getId() == $_SESSION['login'][0]) or ($_gmAcc->load($_SESSION['login'][0]) and $_gmAcc->getGroup() >= t_Group::GameMaster)))
+		if($logged_acc && ($account->getId() == $logged_acc->getId() || $logged_acc->getGroup() >= t_Group::GameMaster))
 		{
 			$kills = $deaths->getKillsOfPlayer($player->getId());
 
@@ -523,7 +528,7 @@ if($_POST["player_name"] || $_GET['name'])
 		</div>
 		";		
 		
-		if($player->get("hide") == 0)
+		if($player->get("hide") == 0 || $logged_acc->getGroup() >= t_Group::GameMaster)
 		{
 			$module .= "
 			<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
@@ -538,7 +543,7 @@ if($_POST["player_name"] || $_GET['name'])
 				$character_list = new \Framework\Player();
 				$character_list->loadByName($player_name);
 				
-				if($character_list->get("hide") == 0)
+				if($character_list->get("hide") == 0 || $logged_acc->getGroup() >= t_Group::GameMaster)
 				{
 					$character_status = ($character_list->getOnline() == 1) ? "<font style='color: green; font-weight: bold;'>On-line</font>" : "<font style='color: red; font-weight: bold;'>Off-line</font>";
 					

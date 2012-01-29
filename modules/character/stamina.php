@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $character, $_password;
+	private $player, $_password;
 	
 	//variables
 	private $_message;	
@@ -50,13 +50,13 @@ class View
 		
 		$this->player = new \Framework\Player();
 		
-		if(!$this->character->loadByName($_GET["name"]))
+		if(!$this->player->loadByName($_GET["name"]))
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 			return false;
 		}
 		
-		if($this->character->getAccountId() != $this->loggedAcc->getId())
+		if($this->player->getAccountId() != $this->loggedAcc->getId())
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			return false;
@@ -78,20 +78,20 @@ class View
 			return false;			
 		}
 		
-		if(!$_POST["stamina-value"] || !is_numeric($_POST["stamina-value"]) || $_POST["stamina-value"] <= floor($this->character->getStamina() / 1000 / 60 / 60) || $_POST["stamina-value"] > 42)
+		if(!$_POST["stamina-value"] || !is_numeric($_POST["stamina-value"]) || $_POST["stamina-value"] <= floor($this->player->getStamina() / 1000 / 60 / 60) || $_POST["stamina-value"] > 42)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_VALUE_WRONG);
 			return false;			
 		}
 		
-		if($this->character->getOnline() == 1)
+		if($this->player->getOnline() == 1)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 			return false;				
 		}
 		
-		$staminachange = $_POST["stamina-value"] - floor($this->character->getStamina() / 1000 / 60 / 60);
-		$newstamina = floor($this->character->getStamina() / 1000 / 60 / 60);
+		$staminachange = $_POST["stamina-value"] - floor($this->player->getStamina() / 1000 / 60 / 60);
+		$newstamina = floor($this->player->getStamina() / 1000 / 60 / 60);
 		$cost = 0;
 		
 		while($newstamina < $_POST["stamina-value"])
@@ -113,11 +113,11 @@ class View
 		$this->loggedAcc->setPremEnd($this->loggedAcc->getPremEnd() - ($cost * 60 * 60));
 		$this->loggedAcc->save();
 		
-		$this->character->setStamina($_POST["stamina-value"] * 60 * 60 * 1000);
-		$this->character->save();
+		$this->player->setStamina($_POST["stamina-value"] * 60 * 60 * 1000);
+		$this->player->save();
 				
-		\Core\Main::addChangeLog('stamina', $this->character->getId(), $cost);
-		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_SUCCESSFULY, $this->character->getName(), $_POST["stamina-value"]);		
+		\Core\Main::addChangeLog('stamina', $this->player->getId(), $cost);
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_SUCCESSFULY, $this->player->getName(), $_POST["stamina-value"]);		
 		return true;
 	}
 	
@@ -325,7 +325,7 @@ class View
 		<form action='".$_SERVER['REQUEST_URI']."' method='POST'>
 			<fieldset>
 				
-				<span>Quantidade de stamina (em horas) que o personagem <b>{$this->character->getName()}</b> possui agora:</span> <input type='text' readonly value='".floor($this->character->getStamina() / 1000 / 60 / 60)."' id='stamina-min'/>
+				<span>Quantidade de stamina (em horas) que o personagem <b>{$this->player->getName()}</b> possui agora:</span> <input type='text' readonly value='".floor($this->character->getStamina() / 1000 / 60 / 60)."' id='stamina-min'/>
 			
 				<div style='height: 25px; width: 490px; margin: 10px auto;'>
 					<input id='stamina-minus' class='button' type='button' value='-'/>

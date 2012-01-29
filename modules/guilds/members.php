@@ -5,7 +5,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	$result = false;
 	$message = "";		
 	
-	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
+	function proccessPost(&$message, \Framework\Account $account, \Framework\Guilds $guild)
 	{
 		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{

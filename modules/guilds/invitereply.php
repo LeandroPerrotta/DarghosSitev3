@@ -9,7 +9,7 @@ class View
 	private $_message;	
 
 	//custom variables
-	private $loggedAcc, $character;	
+	private $loggedAcc, $player;	
 	
 	function View()
 	{
@@ -58,13 +58,13 @@ class View
 		
 		$this->player = new \Framework\Player();		
 		
-		if(!$this->character->loadByName($_GET['name']))
+		if(!$this->player->loadByName($_GET['name']))
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
 			return false;
 		}
 		
-		if(!in_array($this->character->getId(), $character_list))
+		if(!in_array($this->player->getId(), $character_list))
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			return false;
@@ -81,7 +81,7 @@ class View
 			return false;
 		}	
 		
-		$invite = $this->character->getInvite();
+		$invite = $this->player->getInvite();
 		
 		if(!$invite)
 		{
@@ -102,12 +102,12 @@ class View
 		
 		if($this->_reply->GetPost() == "Aceitar")		
 		{			
-			$this->character->acceptInvite();	
+			$this->player->acceptInvite();	
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_JOIN, $_GET['name'], $guild->GetName());
 		}
 		elseif($this->_reply->GetPost() == "Rejeitar")
 		{
-			$this->character->removeInvite();
+			$this->player->removeInvite();
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_JOIN_REJECT, $guild->GetName(), $_GET['name']);		
 		}	
 		

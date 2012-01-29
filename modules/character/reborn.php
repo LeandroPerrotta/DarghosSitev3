@@ -21,7 +21,7 @@ class View
 	private $_talk = array();
 	
 	//custom variables
-	private $loggedAcc, $character;	
+	private $loggedAcc, $player;	
 	
 	function View()
 	{
@@ -68,19 +68,19 @@ class View
 		
 		$this->player = new \Framework\Player();
 		
-		if(!$this->character->loadByName($_GET["name"]))
+		if(!$this->player->loadByName($_GET["name"]))
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 			return false;
 		}
 		
-		if($this->character->getAccountId() != $this->loggedAcc->getId())
+		if($this->player->getAccountId() != $this->loggedAcc->getId())
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 			return false;
 		}
 		
-		switch($this->character->getVocation())
+		switch($this->player->getVocation())
 		{
 			case 5: $this->_newVoc = "Warmaster Sorcerer"; break;
 			case 6: $this->_newVoc = "Warden Druid"; break;
@@ -96,21 +96,21 @@ class View
 			)
 		);
 		
-		if($this->character->getLevel() < Configs::Get(Configs::eConf()->FIRST_REBORN_LEVEL))
+		if($this->player->getLevel() < Configs::Get(Configs::eConf()->FIRST_REBORN_LEVEL))
 			$this->_talk[2] = array(
 				"text" => "Como se sabe, todos possuem uma alma. Eu tenho o poder de fortificar almas, entretanto para isto é necessario um terrivel sacrificio e você não possui força fisica sulficiente para aguentar isto. Você precisa se fortalecer fisicamente até o level ".Configs::Get(Configs::eConf()->FIRST_REBORN_LEVEL)." para poder fortalecer sua alma.",
 				"options" => array(
 					array("text" => "Ir embora.", "topic" => "leave")
 				)			
 			);
-		elseif($this->character->getVocation() <= 4)
+		elseif($this->player->getVocation() <= 4)
 			$this->_talk[2] = array(
 				"text" => "Vejo que você sequer possui a promoção recebida do Rei de Aracura. Você ainda não é digno de fortificar sua alma!",
 				"options" => array(
 					array("text" => "Ir embora.", "topic" => "leave")
 				)			
 			);
-		elseif($this->character->getVocation() > 8)
+		elseif($this->player->getVocation() > 8)
 			$this->_talk[2] = array(
 				"text" => "Você já fortificou sua alma! Não é necessario, por enquanto, fortificar novamente sua alma!",
 				"options" => array(
