@@ -540,7 +540,7 @@ if($_POST["player_name"] || $_GET['name'])
 				$character_list = new \Framework\Player();
 				$character_list->loadByName($player_name);
 				
-				if($character_list->get("hide") == 0 || $logged_acc->getGroup() >= t_Group::GameMaster)
+				if($character_list->get("hide") == 0 || ($logged_acc && $logged_acc->getGroup() >= t_Group::GameMaster))
 				{
 					$character_status = ($character_list->getOnline() == 1) ? "<font style='color: green; font-weight: bold;'>On-line</font>" : "<font style='color: red; font-weight: bold;'>Off-line</font>";
 					
