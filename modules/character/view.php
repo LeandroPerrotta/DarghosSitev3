@@ -17,9 +17,6 @@ if($_POST["player_name"] || $_GET['name'])
 		
 		$logged_acc = \Framework\Account::loadLogged();
 		
-		
-		if($_SESSION)
-		
 		$deaths = new \Framework\Deaths();
 		
 		//$bans = $account->getBans();
