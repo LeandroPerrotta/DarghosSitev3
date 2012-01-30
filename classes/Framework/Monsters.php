@@ -108,8 +108,10 @@ class Monsters
 		
 		$info = $this->list->offsetGet(strtolower($name));
 		
+		$dataPatch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA);
+		
 		$this->monster = new \DOMDocument();
-		$this->monster->load(g_Configs::Get(g_Configs::eConf()->FOLDER_DATA)."monster/".$info["patch"]);
+		$this->monster->load($dataPatch . "monster/".$info["patch"]);
 		$this->loadMonsterInfo();
 		return true;
 	}
