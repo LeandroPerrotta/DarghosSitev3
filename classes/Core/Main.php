@@ -291,7 +291,6 @@ class Main
 	{
 		$select = new \Framework\HTML\SelectBox();
 		$select->SetName("world");
-		$select->SetSize(\Framework\HTML\Consts::SELECTBOX_SIZE_BIG);
 		$select->onChangeSubmit();
 		
 		$select->AddOption("", null, null, true);
