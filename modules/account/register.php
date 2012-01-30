@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_genre, $_char_vocation;
+	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, $_char_genre, $_char_vocation;
 	
 	//variables
 	private $_message;		
@@ -65,6 +65,12 @@ class View
 		$this->_char_name = new \Framework\HTML\Input();
 		$this->_char_name->SetName("character_name");
 		$this->_char_name->SetSize(\Framework\HTML\Input::SIZE_SMALL);
+		
+		$this->_char_world = new \Framework\HTML\SelectBox();
+		$this->_char_world->SetName("character_world");
+		$this->_char_world->AddOption("");
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::RealMap), t_Worlds::RealMap);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Darghos), t_Worlds::Darghos);
 		
 		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
@@ -146,6 +152,27 @@ class View
 				<label>Nome do personagem:</label>
 				{$this->_char_name->Draw()}			
 			</p>
+			
+			<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos completamente diferentes e com suas proprias caractéristicas para você se divertir. Selecione abaixo qual mundo você deseja fazer parte:</p>
+			<p>
+				<label>Mundo do personagem:</label>
+				{$this->_char_world->Draw()}
+				
+				<div class='character_world'>
+					<div class='1' style='display: none;'>
+						<p>
+							<p><b>Mapa:</b><br> Global.</p>
+							<p><b>Caracteristicas:</b><br> Segue rigorosamente as caracteristica do Tibia, contando com todas as cidades, quests, criaturas, etc. Porem com uma facilidade mais amigavel.</p>
+						</p>
+					</div>
+					<div class='0' style='display: none;'>
+						<p>
+							<p><b>Mapa:</b><br> Darghos (próprio).</p>
+							<p><b>Caracteristicas:</b><br> Nosso objetivo no Darghos é fazer coisas diferentes, por isso possui uma grande quantidade de inovações como: Liberdade para escolher seu pvp, sistema de Battlegrounds & Arena, 7 cidades entre outras, e está recebendo constantemente mais novidades.</p>
+						</p>
+					</div>								
+				</div>
+			</p>			
 			
 			<p class='long-margin-top'>Os personagens podem ser do genero masculino ou feminino, selecione abaixo o genero desejado para seu personagem.</p>
 			<p>

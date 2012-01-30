@@ -84,6 +84,9 @@ class View
 			$guildInfoTable->AddRow();
 		}
 		
+		$guildInfoTable->AddField("Esta guilda pertence ao mundo de <b>".\t_Worlds::GetString($this->guild->GetWorldId())."</b>.");
+		$guildInfoTable->AddRow();
+		
 		$guildInfoTable->AddField("Esta guilda foi criada em <b>".\Core\Main::formatDate($this->guild->GetCreationDate())."</b>.");
 		$guildInfoTable->AddRow();
 		

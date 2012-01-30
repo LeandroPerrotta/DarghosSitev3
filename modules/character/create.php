@@ -44,7 +44,10 @@ if($_POST)
 		else
 			$outfitType = 136;
 			
+		$_world_id = t_Worlds::GetByString($_POST["player_world"]);
+		
 		$player->setName($_POST["player_name"]);
+		$player->setWorldId($_world_id);
 		$player->setAccountId($_SESSION['login'][0]);
 		$player->setGroup(t_Group::Player);
 		$player->setSex($_genre_id);
@@ -78,6 +81,29 @@ else
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 	
+$genre_str = "";
+$genreNames = array(
+		t_Genre::Female => "Feminino"
+		,t_Genre::Male => "Masculino"
+);
+
+while(t_Genre::ItValid())
+{
+	$genre_str .= "<input type=\"radio\" name=\"player_sex\" value=\"".t_Genre::GetString(t_Genre::It())."\" /> {$genreNames[t_Genre::It()]}<br>";
+	t_Genre::ItNext();
+}
+
+$worlds_str = "";
+$worldNames = array(
+		t_Worlds::Darghos => "Darghos (customizado, ideal se você quer ter novas experiências)"
+		,t_Worlds::RealMap => "Real Map (rigorosamente baseado em Tibia)"
+);
+while(t_Worlds::ItValid())
+{
+	$worlds_str .= "<input type=\"radio\" name=\"player_world\" value=\"".t_Worlds::GetString(t_Genre::It())."\" /> {$worldNames[t_Worlds::It()]}<br>";
+	t_Worlds::ItNext();
+}
+	
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
@@ -86,11 +112,15 @@ $module .= '
 			<label for="player_name">Nome</label><br />
 			<input name="player_name" size="40" type="text" value="" />
 		</p>
+
+		<p>
+			<label for="player_world">Mundo</label><br />			
+				'.$worlds_str.'
+		</p>		
 		
 		<p>
 			<label for="player_sex">Sexo</label><br />			
-				<input type="radio" name="player_sex" value="'.t_Genre::GetString(t_Genre::Female).'" /> Feminino<br>
-				<input type="radio" name="player_sex" value="'.t_Genre::GetString(t_Genre::Male).'" /> Masculino<br>
+				'.$genre_str.'
 		</p>		
 		
 		<p>

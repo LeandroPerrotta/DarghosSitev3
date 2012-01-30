@@ -2,6 +2,10 @@
 namespace Core;
 class Configs
 {
+	const
+		__GLOBAL__ = "default"
+	;
+	
 	private static $m_configs;
 	private static $e_Configs;
 		
@@ -10,14 +14,24 @@ class Configs
 		return self::$e_Configs;
 	}
 	
-	static function Get($configType)
-	{
-		return self::$m_configs[$configType];
+	static function Get($configType, $world_id = NULL)
+	{		
+		if($world_id && isset(self::$m_configs[$configType][$world_id]))
+		{
+			return self::$m_configs[$configType][$world_id];
+		}
+		
+		return self::$m_configs[$configType][self::__GLOBAL__];
 	}
 	
 	static function Set($configType, $value, $default)
 	{
-		self::$m_configs[$configType] = ($value) ? $value : $default;
+		$value = ($value) ? $value : $default;
+		
+		if(!is_array($value))
+			self::$m_configs[$configType][self::__GLOBAL__] = $value;
+		else
+			self::$m_configs[$configType] = $value;
 	}
 	
 	static function IsConfigType($configType)
@@ -66,9 +80,9 @@ class Configs
 				
 				case self::$e_Configs->USE_DISTRO: self::Set($i, $__configs[$i], Consts::SERVER_DISTRO_TFS); break;
 				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/darghos/tfs/"); break;
-				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->PATCH_SERVER) . "data/"); break;
-				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->FOLDER_DATA) . "world/-house.xml"); break;
-				case self::$e_Configs->FILE_MONSTERS: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->FOLDER_DATA) . "monster/monsters.xml"); break;
+				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "data/", \t_Worlds::RealMap => "global/")); break;
+				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "world/-house.xml", \t_Worlds::RealMap => "World/house.xml")); break;
+				case self::$e_Configs->FILE_MONSTERS: self::Set($i, $__configs[$i], "monster/monsters.xml"); break;
 				case self::$e_Configs->USE_ENCRYPT: self::Set($i, $__configs[$i], Consts::ENCRYPT_TYPE_MD5); break;
 				
 				case self::$e_Configs->ENABLE_SEND_EMAILS: self::Set($i, $__configs[$i], true); break;
@@ -87,7 +101,7 @@ class Configs
 				case self::$e_Configs->ENABLE_PLAYERS_COMMENT_NEWS: self::Set($i, $__configs[$i], true); break;
 				
 				case self::$e_Configs->DISABLE_ALL_PREMDAYS_FEATURES: self::Set($i, $__configs[$i], false); break;
-				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], true); break;
+				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;
 				case self::$e_Configs->ENABLE_STAMINA_REFILER: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->PREMCOST_CHANGENAME: self::Set($i, $__configs[$i], 15); break;
 				case self::$e_Configs->PREMCOST_CHANGESEX: self::Set($i, $__configs[$i], 10); break;
@@ -102,8 +116,9 @@ class Configs
 				case self::$e_Configs->ENABLE_REBORN: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->FIRST_REBORN_LEVEL: self::Set($i, $__configs[$i], 200); break;
 				
-				case self::$e_Configs->ENABLE_PVP_SWITCH: self::Set($i, $__configs[$i], true); break;					
+				case self::$e_Configs->ENABLE_PVP_SWITCH: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;					
 				case self::$e_Configs->AJAX_SEARCH_PLAYERS_COUNT: self::Set($i, $__configs[$i], 5); break;					
+				case self::$e_Configs->ENABLE_BATTLEGROUND_FEATURES: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;					
 			}
 		}
 	}

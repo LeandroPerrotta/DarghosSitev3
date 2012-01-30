@@ -37,12 +37,12 @@ class War
 		return $_wars;
 	}
 	
-	static function ListStartedWars()
+	static function ListStartedWars($world_id)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guild_wars` WHERE `status` = '".\Framework\Guilds::WAR_STARTED."' AND `end_date` >= '".time()."' ORDER BY `declaration_date`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guild_wars` WHERE `status` = '".\Framework\Guilds::WAR_STARTED."' AND `end` >= '".time()."' ORDER BY `begin`";
+			$query_str = "SELECT `guild_wars`.`id` FROM `guild_wars` LEFT JOIN `guilds` ON `guilds`.`id` = `guild_wars`.`guild_id` WHERE `guilds`.`world_id` = {$world_id} AND `guild_wars`.`status` = '".\Framework\Guilds::WAR_STARTED."' AND `guild_wars`.`end` >= '".time()."' ORDER BY `guild_wars`.`begin`";
 					
 		$query = \Core\Main::$DB->query($query_str);
 		
@@ -66,7 +66,7 @@ class War
 		return $warList;
 	}
 	
-	static function ListEndedWars()
+	static function ListEndedWars($world_id)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "
@@ -89,21 +89,26 @@ class War
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 			$query_str = "
 			SELECT 
-				`id` 
+				`guild_wars`.`id` 
 			FROM 
 				`guild_wars` 
+			LEFT JOIN
+				`guilds`
+			ON
+				`guilds`.`id` = `guild_wars`.`guild_id`
 			WHERE 
-				`status` = '".GUILD_WAR_DISABLED."' OR 
-				(`end` <= '".time()."' OR 
-					(`frags` > 0 AND 
+				`guild_wars`.`status` = '".GUILD_WAR_DISABLED."' OR 
+				(`guild_wars`.`end` <= '".time()."' OR 
+					(`guild_wars`.`frags` > 0 AND 
 						(
-							`guild_kills` >= `frags` OR 
-							`enemy_kills` >= `frags`
+							`guild_wars`.`guild_kills` >= `guild_wars`.`frags` OR 
+							`guild_wars`.`enemy_kills` >= `guild_wars`.`frags`
 						)
 					)
 				) 
+				AND `guilds`.`world_id` = {$world_id}
 			ORDER BY 
-				`begin`";			
+				`guild_wars`.`begin`";			
 		
 		$query = \Core\Main::$DB->query($query_str);
 		
@@ -127,7 +132,7 @@ class War
 		return $warList;
 	}
 	
-	static function ListNegotiationWars()
+	static function ListNegotiationWars($world_id)
 	{
 		/*if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "
@@ -157,6 +162,10 @@ class War
 				`".\Core\Tools::getSiteTable("guild_wars")."` as `guild_wars_site`
 			ON
 				`guild_wars`.`id` = `guild_wars_site`.`war_id` 
+			LEFT JOIN
+				`guilds`
+			ON
+				`guilds`.`id` = `guild_wars`.`guild_id`
 			WHERE 
 				(
 					(
@@ -164,6 +173,7 @@ class War
 						AND `guild_wars_site`.`reply` >= '0'
 					) 
 				) 
+				AND `guilds`.`world_id` = {$world_id}
 				AND `guild_wars`.`end` > UNIX_TIMESTAMP()
 			ORDER BY 
 				`guild_wars`.`begin`";		

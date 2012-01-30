@@ -287,6 +287,59 @@ class Main
 		Main::redirect("?ref=account.login");
 	}
 	
+	static function requireWorldSelection()
+	{
+		$select = new \Framework\HTML\SelectBox();
+		$select->SetName("world");
+		$select->SetSize(\Framework\HTML\Consts::SELECTBOX_SIZE_BIG);
+		$select->onChangeSubmit();
+		
+		$select->AddOption("", null, null, true);
+		
+		while(\t_Worlds::ItValid())
+		{
+			$selected = false;
+			if(isset($_GET["world"]) && $_GET["world"] == \t_Worlds::It())
+				$selected = true;
+			
+			$select->AddOption(\t_Worlds::GetString(\t_Worlds::It()), \t_Worlds::It(), $selected);
+			\t_Worlds::ItNext();
+		}
+		
+		$hidden_inputs = "";
+		
+		foreach($_GET as $k => $v)
+		{
+			if($k == "world")
+				continue;
+		
+			$input = new \Framework\HTML\Input();
+			$input->IsHidden();
+			$input->SetName($k);
+			$input->SetValue($v);
+			$hidden_inputs .= $input->Draw();
+		}	
+		
+		global $module;
+		
+		$str = "
+		<form action='{$_SERVER["REQUEST_URI"]}' method='GET'>
+			<fieldset>
+				{$hidden_inputs}
+			
+				<p>		
+					<label for='world'>Selecione um mundo</label>
+					{$select->Draw()}
+				</p>		
+				
+				<p class='line'></p>
+			</fieldset>
+		</form>
+		";
+
+		$module .= $str;
+	}
+	
 	static function getIpTries()
 	{
 		$query = self::$DB->query("SELECT COUNT(*) as `rows` FROM `".Tools::getSiteTable("iptries")."` WHERE `ip_addr` = '".$_SERVER['REMOTE_ADDR']."' AND `date` >= '".(time() - (60 * 60 * 24))."'");		

@@ -30,17 +30,22 @@ class SelectBox
 		$this->_size = $size;
 	}
 	
-	function AddOption($label, $value = "", $selected = false)
+	function AddOption($label, $value = null, $selected = false, $disabled = false)
 	{		
 		$option = array();
 		
 		$option["label"] = $label;
 		$option["value"] = $label;
 		
-		if($value)
+		if(isset($value))
 		{
 			$option["value"] = $value;
 		}
+
+		if($disabled)
+		{
+			$option["disabled"] = true;
+		}		
 		
 		array_push($this->_options, $option);
 		
@@ -75,10 +80,15 @@ class SelectBox
 
 		foreach($this->_options as $key => $option)
 		{
+			$string .= "<option ";
+				
 			if($key == $this->_selectedIndex || ($_POST && $this->GetPost() == $option["value"]))
-				$string .= "<option selected='selected' value='{$option["value"]}'>{$option["label"]}</option>";
-			else
-				$string .= "<option value='{$option["value"]}'>{$option["label"]}</option>";	
+				$string .= "selected='selected' ";
+
+			if($option["disabled"])
+				$string .= "disabled='disabled' ";
+			
+			$string .= "value='{$option["value"]}'>{$option["label"]}</option>";	
 		}
 		
 		$string .= "</select>";

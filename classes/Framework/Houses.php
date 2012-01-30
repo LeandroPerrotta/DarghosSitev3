@@ -8,13 +8,14 @@ class Houses
 	
 	static private $xml;
 
-	function __construct()
+	function __construct($world_id)
 	{
 		$this->db = \Core\Main::$DB;
 		
 		if(!self::$xml)
 		{
-			self::$xml = \Core\Main::ParseXML(g_Configs::Get(g_Configs::eConf()->FILE_HOUSES));
+			$patch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA, $world_id) . g_Configs::Get(g_Configs::eConf()->FILE_HOUSES, $world_id);
+			self::$xml = \Core\Main::ParseXML($patch);
 		}
 	}
 
@@ -62,10 +63,12 @@ class Houses
 		return $this->data[$field];
 	}
 	
-	static function deleteOldHouses()
+	static function deleteOldHouses($world_id)
 	{
 		$xml = new \DOMDocument();
-		$xml->load(g_Configs::Get(g_Configs::eConf()->FILE_HOUSES));		
+		
+		$patch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA, $world_id) . g_Configs::Get(g_Configs::eConf()->FILE_HOUSES, $world_id);
+		$xml->load($patch);		
 		
 		$exists = array();
 		

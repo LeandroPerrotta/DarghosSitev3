@@ -1,5 +1,6 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 class View
 {
 	//html fields
@@ -64,12 +65,18 @@ class View
 			}
 		}
 		
-		$opponent = new \Framework\Guilds();
+		$opponent = new Guilds();
 		
 		if(!$opponent->LoadByName($this->_waropponent->GetPost()) || $opponent->GetStatus() == \Framework\Guilds::STATUS_FORMATION || $opponent->GetName() == $_GET['name'])
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 			return false;			
+		}
+		
+		if(!Guilds::isAtSameWorld($this->guild, $opponent))
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_SAME_WORLD);
+			return false;
 		}
 		
 		if($this->guild->IsAtWarAgainst($opponent->GetId()))
@@ -81,7 +88,7 @@ class View
 		$this->guild->SetBalance($this->guild->GetBalance() - $this->_warguildfee->GetPost());
 		$this->guild->Save();
 		
-		$guild_war = new \Framework\Guilds\War();
+		$guild_war = new Guilds\War();
 		
 		$guild_war->SetGuildId($this->guild->GetId());
 		$guild_war->SetOpponentId($opponent->GetId());
@@ -103,7 +110,7 @@ class View
 		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);
 		
-		$this->guild = new \Framework\Guilds();
+		$this->guild = new Guilds();
 		
 		if(!$this->guild->LoadByName($_GET['name']))
 		{
@@ -157,6 +164,9 @@ class View
 			foreach($this->guildList as $guild)
 			{
 				if($guild->GetName() == $_GET["name"])
+					continue;
+				
+				if(!Guilds::isAtSameWorld($this->guild, $guild))
 					continue;
 				
 				if($first)

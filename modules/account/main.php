@@ -113,7 +113,7 @@ if(is_array($player_list))
 		$charList .= "
 		<tr>
 			<td>
-				<a style='float: left' href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a> <span class='tooglePlus'></span>
+				<a style='float: left' href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a><span style='size: 9px; font-style: italic; margin-left: 5px;'>(".t_Worlds::GetString($player->getWorldId()).")</span> <span class='tooglePlus'></span>
 				<br />
 				<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>
 					<table cellspacing='0' cellpadding='0'>
@@ -305,7 +305,7 @@ $module .= "
 	<table cellspacing='0' cellpadding='0' class='dropdowntable'>
 	
 		<tr>
-			<th colspan='3'>Meus Personagens</th>
+			<th colspan='2'>Meus Personagens</th>
 		</tr>
 					
 		$charList

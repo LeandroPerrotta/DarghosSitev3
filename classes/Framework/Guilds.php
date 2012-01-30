@@ -22,7 +22,7 @@ class Guilds
 		,WAR_DISABLED = 0
 		;
 		
-	private $_id, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
+	private $_id, $_worldId, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
 	public $Ranks = array(), $Invites = array(), $Wars = array();
 	private $_trash_ranks = array();
 	
@@ -30,6 +30,24 @@ class Guilds
 	{
 	}
 
+	static function isAtSameWorld(Guilds $guild, $comp_guild)
+	{
+		if(!is_array($comp_guild))
+		{
+			return $guild->getWorldId() == $comp_guild->getWorldId();
+		}
+	
+		foreach($comp_guild as $g)
+		{
+			$g instanceof Guilds;
+				
+			if($g->getWorldId() != $guild->getWorldId())
+				return false;
+		}
+	
+		return true;
+	}	
+	
 	/**
 	 * Analisa todos personagens membros de uma guild de uma determinada conta em busca do guild level mais alto.
 	 * @param Account account <p>Conta a ser verificada.</p>
@@ -54,12 +72,12 @@ class Guilds
 		return $level;
 	}
 	
-	static function ActivedGuildsList()
+	static function ActivedGuildsList($world_id)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `status` = '".self::STATUS_FORMED."' ORDER BY `creationdate`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `guilds`.`id` FROM `guilds` LEFT JOIN `".\Core\Tools::getSiteTable("guilds")."` as `guild_site` ON `guild_site`.`guild_id` = `guilds`.`id` WHERE `guild_site`.`status` = '".self::STATUS_FORMED."' ORDER BY `guilds`.`creationdata`";
+			$query_str = "SELECT `guilds`.`id` FROM `guilds` LEFT JOIN `".\Core\Tools::getSiteTable("guilds")."` as `guild_site` ON `guild_site`.`guild_id` = `guilds`.`id` WHERE `guilds`.`world_id` = {$world_id} AND `guild_site`.`status` = '".self::STATUS_FORMED."' ORDER BY `guilds`.`creationdata`";
 			
 		$query = \Core\Main::$DB->query($query_str);
 		
@@ -83,12 +101,12 @@ class Guilds
 		return $guildList;
 	}
 	
-	static function FormingGuildsList()
+	static function FormingGuildsList($world_id)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdate`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdata`";
+			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `world_id` = {$world_id} AND `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdata`";
 			
 		$query = \Core\Main::$DB->query($query_str);		
 
@@ -139,6 +157,7 @@ class Guilds
 			$query_str = "
 			SELECT 
 				`guilds`.`id`, 
+				`guilds`.`world_id`, 				
 				`guilds`.`name`, 
 				`guilds`.`ownerid`, 
 				`guilds`.`creationdata`, 
@@ -178,6 +197,7 @@ class Guilds
 		
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 		{
+			$this->_worldId = $fetch->world_id;
 			$this->_ownerid = $fetch->ownerid;
 			$this->_creationdate = $fetch->creationdata;
 			$this->_balance = $fetch->balance;
@@ -261,6 +281,7 @@ class Guilds
 				UPDATE 
 					`guilds`
 				SET 
+					`world_id` = '{$this->_worldId}', 
 					`name` = '{$this->_name}', 
 					`ownerid` = '{$this->_ownerid}', 
 					`creationdata` = '{$this->_creationdate}', 
@@ -297,9 +318,9 @@ class Guilds
 				$query_str = "				
 				INSERT INTO
 					`guilds`
-					(`name`, `ownerid`, `creationdata`, `motd`, `balance`, `checkdata`)
+					(`world_id`, `name`, `ownerid`, `creationdata`, `motd`, `balance`, `checkdata`)
 					values
-					('{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '0', '".(time() + (60 * 60 * 24 * 7))."')";		
+					('{$this->_worldId}', '{$this->_name}', '{$this->_ownerid}', '{$this->_creationdate}', '{$this->_motd}', '0', '".(time() + (60 * 60 * 24 * 7))."')";		
 				
 			\Core\Main::$DB->query($query_str);
 			
@@ -539,6 +560,11 @@ class Guilds
 		$this->_id = $id;
 	}
 	
+	function SetWorldId($world_id)
+	{
+		$this->_worldId = $world_id;
+	}
+	
 	function SetName($name)
 	{
 		$this->_name = $name;
@@ -582,6 +608,11 @@ class Guilds
 	function GetId()
 	{
 		return $this->_id;
+	}
+	
+	function GetWorldId()
+	{
+		return $this->_worldId;
 	}
 	
 	function GetName()
@@ -634,4 +665,5 @@ class Guilds
 		return $this->_guildBetterPoints;
 	}		
 }
+
 ?>

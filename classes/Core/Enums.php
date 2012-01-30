@@ -107,6 +107,7 @@ class e_Configs extends \Core\Enumerators
 		 * Others
 		 */
 		,$ENABLE_PVP_SWITCH
+		,$ENABLE_BATTLEGROUND_FEATURES
 		,$AJAX_SEARCH_PLAYERS_COUNT
 	;
 	
@@ -185,6 +186,8 @@ class e_LangMsg extends \Core\Enumerators
 	,$GUILD_JOIN_REJECT
 	,$GUILD_NAME_ALREADY_USED
 	,$GUILD_ONLY_ONE_VICE_PER_ACCOUNT
+	,$GUILD_INVITE_CHARACTER_NOT_SAME_WORLD
+	,$GUILD_NOT_SAME_WORLD
 	,$CHARACTER_ALREADY_MEMBER_GUILD
 	,$GUILD_CREATED
 	,$CHARACTER_ALREADY_TO_DELETE
@@ -314,6 +317,20 @@ class e_BanTypes
 		,Notation = 3
 		,Deletion = 4
 	;
+}
+
+class t_Worlds extends \Core\Structs
+{
+	const
+		Darghos = 0
+		,RealMap = 1
+		;
+		
+	static protected
+		$m_typeStrings = array(
+			self::Darghos => "Darghos"
+			,self::RealMap => "Real Map"
+		);
 }
 
 class t_PaymentStatus extends \Core\Structs

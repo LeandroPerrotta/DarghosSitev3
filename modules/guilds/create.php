@@ -51,6 +51,7 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
+		$guild->SetWorldId($player->getWorldId());
 		$guild->SetName($_POST["guild_name"]);
 		$guild->SetOwnerId($player->getId());
 		$guild->SetCreationDate(time());

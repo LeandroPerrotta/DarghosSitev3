@@ -64,6 +64,7 @@ class Ajax_player
 	static function create()
 	{
 		$name = $_POST["character_name"];
+		$world = $_POST["character_world"];
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
 		
@@ -86,6 +87,7 @@ class Ajax_player
 		if($voc_t->Get() > 4)
 			$voc_t->Set(1);
 		
+		$_world_id = t_Worlds::Get($world);
 		$_genre_id = t_Genre::GetByString($genre);
 				
 		if($_genre_id == t_Genre::Male)
@@ -96,6 +98,7 @@ class Ajax_player
 		$player = new \Framework\Player();	
 			
 		$player->setName($name);
+		$player->setWorldId($_world_id);
 		$player->setAccountId($account->getId());
 		$player->setGroup(t_Group::Player);
 		$player->setSex($_genre_id);

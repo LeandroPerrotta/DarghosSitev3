@@ -37,7 +37,25 @@ class Player
 				LIMIT 5");
 	
 		return $query;
-	}		
+	}
+
+	static function isAtSameWorld(Player $player, $comp_player)
+	{
+		if(!is_array($comp_player))
+		{
+			return $player->getWorldId() == $comp_player->getWorldId();
+		}
+		
+		foreach($comp_player as $p)
+		{
+			$p instanceof Player;
+			
+			if($p->getWorldId() != $player->getWorldId())
+				return false;
+		}
+		
+		return true;
+	}
 		
 	private $db, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
 	
@@ -177,7 +195,14 @@ class Player
 			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, online, skull_time FROM players WHERE id = '".$player_id."'";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 		{
-			$query_str = "SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, online, promotion, battleground_rating";
+			$query_str = "
+			SELECT 
+				id, name, world_id, group_id, account_id, level, vocation, maglevel, health, healthmax
+				, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons
+				, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions
+				, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina
+				, direction, loss_experience, loss_mana, loss_skills, loss_items, description
+				, online, promotion, battleground_rating";
 		
 			if(g_Configs::Get(g_Configs::eConf()->ENABLE_PVP_SWITCH))
 				$query_str .= ", pvpEnabled";
@@ -651,7 +676,8 @@ class Player
 	
 	
 	function setId($value){ $this->data['id'] = $value; }	
-	function setName($value){ $this->data['name'] = $value; }	
+	function setName($value){ $this->data['name'] = $value; }
+	function setWorldId($value){ $this->data['world_id'] = $value; }
 	function setGroup($value){ $this->data['group_id'] = $value; }	
 	function setAccountId($value){ $this->data['account_id'] = $value; }	
 	function setLevel($value){ $this->data['level'] = $value; }	
@@ -713,6 +739,7 @@ class Player
 	
 	function getId(){ return $this->data['id']; }
 	function getName(){ return $this->data['name'];	}
+	function getWorldId(){ return $this->data['world_id'];	}
 	function getGroup(){ return $this->data['group_id']; }
 	function getAccountId(){ return $this->data['account_id']; }
 	function getLevel(){ return $this->data['level']; }

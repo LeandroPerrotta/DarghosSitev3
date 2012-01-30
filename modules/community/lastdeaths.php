@@ -1,43 +1,62 @@
 <?php
-$query = \Core\Main::$DB->query("SELECT id, player_id FROM player_deaths WHERE date > '".(time() - 60 * 60 * 2)."' ORDER BY date DESC");
+\Core\Main::requireWorldSelection();
 
-$module .= "
-<table cellspacing='0' cellpadding='0' id='table'>
-	<tr>
-		<th colspan='2'>Últimas Mortes</th>
-	</tr>";		
-
-if($query->numRows() != 0)
+if(isset($_GET["world"]))
 {
-	while($fetch = $query->fetch())
-	{
-		$deaths = new \Framework\Deaths();
-		
-		$death_values = $deaths->load($fetch->id);
-		
-		$deathPlayer = new \Framework\Player();
-		$deathPlayer->load($fetch->player_id);		
-				
-		$date = \Core\Main::formatDate($death_values['date']);
-		
-		$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
-		
-		if(count($death_values['killers']) != 0)
-		{
-			$k = 0;
-			foreach($death_values['killers'] as $killer)
-			{
-				$k++;
+	$world_id = (int)$_GET["world"];
 
-				if($k > 1)
+	if(!t_Worlds::Get($world_id))
+		$world_id = t_Worlds::Darghos;	
+	
+	$query = \Core\Main::$DB->query("SELECT `player_deaths`.`id`, `player_deaths`.`player_id` FROM `player_deaths` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `players`.`world_id` = {$world_id} AND `player_deaths`.`date` > '".(time() - 60 * 60 * 2)."' ORDER BY `player_deaths`.`date` DESC");
+	
+	$module .= "
+	<table cellspacing='0' cellpadding='0' id='table'>
+		<tr>
+			<th colspan='2'>Últimas Mortes</th>
+		</tr>";		
+	
+	if($query->numRows() != 0)
+	{
+		while($fetch = $query->fetch())
+		{
+			$deaths = new \Framework\Deaths();
+			
+			$death_values = $deaths->load($fetch->id);
+			
+			$deathPlayer = new \Framework\Player();
+			$deathPlayer->load($fetch->player_id);		
+					
+			$date = \Core\Main::formatDate($death_values['date']);
+			
+			$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
+			
+			if(count($death_values['killers']) != 0)
+			{
+				$k = 0;
+				foreach($death_values['killers'] as $killer)
 				{
-					if(count($death_values['killers']) > 2)
+					$k++;
+	
+					if($k > 1)
 					{
-						if($k < count($death_values['killers']))
+						if(count($death_values['killers']) > 2)
 						{
-							$death .= ", ";
+							if($k < count($death_values['killers']))
+							{
+								$death .= ", ";
+							}
+							elseif($k == count($death_values['killers']))
+							{
+								if($killer["isEnv"] == 1)
+								{			
+									$death .= " e por um(a) ";
+								}	
+								else	
+									$death .= " e por ";
+							}
 						}
-						elseif($k == count($death_values['killers']))
+						else
 						{
 							if($killer["isEnv"] == 1)
 							{			
@@ -45,56 +64,47 @@ if($query->numRows() != 0)
 							}	
 							else	
 								$death .= " e por ";
-						}
+						}	
+					}		
+					
+					if($killer["isEnv"] == 1)
+					{
+						if($k == 1)
+							$death .= "um(a) ";
+						
+						$explodeKiller = explode(" ", $killer['killer'], 2);
+						
+						$death .= "".$explodeKiller[1];
 					}
 					else
 					{
-						if($killer["isEnv"] == 1)
-						{			
-							$death .= " e por um(a) ";
-						}	
-						else	
-							$death .= " e por ";
-					}	
-				}		
-				
-				if($killer["isEnv"] == 1)
-				{
-					if($k == 1)
-						$death .= "um(a) ";
-					
-					$explodeKiller = explode(" ", $killer['killer'], 2);
-					
-					$death .= "".$explodeKiller[1];
+						$_killer = new \Framework\Player();	
+						$_killer->load($killer['killer']);	
+	
+						$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
+					}
 				}
-				else
-				{
-					$_killer = new \Framework\Player();	
-					$_killer->load($killer['killer']);	
-
-					$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
-				}
-			}
-		}	
-
-		$death .= ".";
-		
-		$module .= "
-			<tr>
-				<td witdh='30%'>{$date}</td> <td>{$death}</td>
-			</tr>					
-		";			
+			}	
+	
+			$death .= ".";
+			
+			$module .= "
+				<tr>
+					<td witdh='30%'>{$date}</td> <td>{$death}</td>
+				</tr>					
+			";			
+		}
 	}
-}
-else
-{
+	else
+	{
+		$module .= "
+		<tr>
+			<td colspan='2'>Não foi registrada nenhuma morte no servidor nas últimas 2 horas.</td>
+		</tr>";		
+	}
+	
 	$module .= "
-	<tr>
-		<td colspan='2'>Não foi registrada nenhuma morte no servidor nas últimas 2 horas.</td>
-	</tr>";		
+	</table>";
 }
-
-$module .= "
-</table>";		
 
 ?>

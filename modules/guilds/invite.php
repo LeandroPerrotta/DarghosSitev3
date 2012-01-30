@@ -1,5 +1,6 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 class View
 {
 	//html fields
@@ -70,7 +71,7 @@ class View
 		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$this->guild = new \Framework\Guilds();
+		$this->guild = new Guilds();
 		
 		if($this->cancel)
 		{
@@ -155,10 +156,13 @@ class View
 		$dontExists = array();
 		$wasGuild = array();
 		$wasInvited = array();
+		$notSameWorld = array();
 		
 		if(count($invites_list) < 20)
 		{
 			$invites_limit = false;
+			$owner = new \Framework\Player();
+			$owner->load($this->guild->GetOwnerId());
 			
 			foreach($invites_list as $player_name)
 			{
@@ -174,7 +178,10 @@ class View
 						$wasGuild[] = $player_name;
 						
 					if($player->getInvite())
-						$wasInvited[] = $player_name;	
+						$wasInvited[] = $player_name;
+								
+					if(!\Framework\Player::isAtSameWorld($owner, $player))
+						$notSameWorld[] = $player_name;
 				}	
 			}
 		}
@@ -222,7 +229,18 @@ class View
 			
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_CHARACTER_NOT_FOUNDS, $dontExists_list);
 			return false;
-		}					
+		}		
+
+		if(count($notSameWorld) != 0)
+		{
+			foreach($notSameWorld as $name)
+			{
+				$string .= $name."<br>";
+			}
+				
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_CHARACTER_NOT_SAME_WORLD, $string);
+			return false;
+		}
 
 		foreach($invites_list as $player_name)
 		{
@@ -273,13 +291,13 @@ class View
 			<fieldset>
 				
 				<p>
-					<label for='guild_invites'>Personagem(s)</label><br />
+					<label for='guild_invites'>Personagem(s)</label>
 					{$this->_invites->Draw()}
 					<em><br><b>Instruções:</b> Lista de personagens a serem convidados a sua guild, ultilize um ; (ponto e virgula) para separar cada personagem. (ex: Slash;Fawkes;Baracs)</em>
 				</p>					
 				
 				<p>
-					<label for='account_password'>Senha</label><br />
+					<label for='account_password'>Senha</label>
 					{$this->_password->Draw()}
 				</p>						
 				
