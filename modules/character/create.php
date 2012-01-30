@@ -44,7 +44,12 @@ if($_POST)
 		else
 			$outfitType = 136;
 			
-		$_world_id = t_Worlds::GetByString($_POST["player_world"]);
+		$_world_id = t_Worlds::Get($_POST["player_world"]);
+		
+		if($_world_id == t_Worlds::Darghos)
+			$town_id = t_Towns::IslandOfPeace;
+		else
+			$town_id = t_Towns::Get($_POST["player_town"]);		
 		
 		$player->setName($_POST["player_name"]);
 		$player->setWorldId($_world_id);
@@ -58,7 +63,7 @@ if($_POST)
 		$player->setHealth(185);
 		$player->setMana(35);
 		$player->setCap(470);
-		$player->setTownId(6);
+		$player->setTownId($town_id);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
@@ -100,31 +105,55 @@ $worldNames = array(
 );
 while(t_Worlds::ItValid())
 {
-	$worlds_str .= "<input type=\"radio\" name=\"player_world\" value=\"".t_Worlds::GetString(t_Genre::It())."\" /> {$worldNames[t_Worlds::It()]}<br>";
+	$worlds_str .= "<input type=\"radio\" name=\"player_world\" value=\"".t_Genre::It()."\" /> {$worldNames[t_Worlds::It()]}<br>";
 	t_Worlds::ItNext();
 }
 	
+
+$townsGlobal_str = "";
+
+$townsSelect = new \Framework\HTML\SelectBox();
+$townsSelect->SetName("player_town");
+
+$townsSelect->AddOption("");
+$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Thais), t_TownsGlobal::Thais);
+$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Carlin), t_TownsGlobal::Carlin);
+$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Venore), t_TownsGlobal::Venore);
+$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::AbDendriel), t_TownsGlobal::AbDendriel);
+$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Kazordoon), t_TownsGlobal::Kazordoon);
+
+\Core\Main::includeJavaScriptSource("character_create.js");
+
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
 		<p>
-			<label for="player_name">Nome</label><br />
+			<label for="player_name">Nome</label>
 			<input name="player_name" size="40" type="text" value="" />
 		</p>
 
 		<p>
-			<label for="player_world">Mundo</label><br />			
+			<label for="player_world">Mundo</label>	
 				'.$worlds_str.'
+				
+			<div class="player_world">
+				<div class="1" style="display: none;">
+					<p>
+						<label for="player_town">Cidade</label>
+						'.$townsSelect->Draw().'
+					</p>
+				</div>						
+			</div>				
 		</p>		
 		
 		<p>
-			<label for="player_sex">Sexo</label><br />			
+			<label for="player_sex">Sexo</label>		
 				'.$genre_str.'
 		</p>		
 		
 		<p>
-			<label for="player_vocation">Vocação</label><br />			
+			<label for="player_vocation">Vocação</label>	
 				<input type="radio" name="player_vocation" value="Sorcerer" /> Sorcerer<br>
 				<input type="radio" name="player_vocation" value="Druid" /> Druid<br>
 				<input type="radio" name="player_vocation" value="Paladin" /> Paladin<br>

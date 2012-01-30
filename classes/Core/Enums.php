@@ -375,6 +375,44 @@ class t_Skills extends \Core\Structs
 		);
 }
 
+class t_TownsGlobal extends \Core\Structs
+{
+	const
+		Venore = 1
+		,Thais = 2	
+		,Kazordoon = 3	
+		,Carlin = 4	
+		,AbDendriel = 5	
+		,Rookgaard = 6	
+		,LibertyBay = 7	
+		,PortHope = 8	
+		,Ankrahmun = 9	
+		,Darashia = 10	
+		,Edron = 11	
+		,Svarground = 12	
+		,Yalahar = 12	
+		,Farmine = 13	
+	;
+	
+	static protected
+	$m_typeStrings = array(
+			self::Venore => "Venore",
+			self::Thais => "Thais",
+			self::Kazordoon => "Kazordoon",
+			self::Carlin => "Carlin",
+			self::AbDendriel => "Ab'Dendriel",
+			self::Rookgaard => "Rookgaard",
+			self::LibertyBay => "Liberty Bay",
+			self::PortHope => "Port Hope",
+			self::Ankrahmun => "Ankrahmun",
+			self::Darashia => "Darashia",
+			self::Edron => "Edron",
+			self::Svarground => "Svarground",
+			self::Yalahar => "Yalahar",
+			self::Farmine => "Farmine"
+	);	
+}
+
 class t_Towns extends \Core\Structs
 {
 	const

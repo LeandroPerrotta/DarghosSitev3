@@ -45,7 +45,7 @@ class SelectBox
 		if($disabled)
 		{
 			$option["disabled"] = true;
-		}		
+		}
 		
 		array_push($this->_options, $option);
 		

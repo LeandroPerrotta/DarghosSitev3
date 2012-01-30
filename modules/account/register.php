@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, $_char_genre, $_char_vocation;
+	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, $_char_town, $_char_genre, $_char_vocation;
 	
 	//variables
 	private $_message;		
@@ -71,6 +71,15 @@ class View
 		$this->_char_world->AddOption("");
 		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::RealMap), t_Worlds::RealMap);
 		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Darghos), t_Worlds::Darghos);
+		
+		$this->_char_town = new \Framework\HTML\SelectBox();
+		$this->_char_town->SetName("character_town");
+		$this->_char_town->AddOption("");
+		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Thais), t_TownsGlobal::Thais);	
+		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Carlin), t_TownsGlobal::Carlin);
+		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Venore), t_TownsGlobal::Venore);
+		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::AbDendriel), t_TownsGlobal::AbDendriel);
+		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Kazordoon), t_TownsGlobal::Kazordoon);
 		
 		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
@@ -163,6 +172,10 @@ class View
 						<p>
 							<p><b>Mapa:</b><br> Global.</p>
 							<p><b>Caracteristicas:</b><br> Segue rigorosamente as caracteristica do Tibia, contando com todas as cidades, quests, criaturas, etc. Porem com uma facilidade mais amigavel.</p>
+						</p>
+						<p>
+							<label>Cidade natal do personagem:</label>
+							{$this->_char_town->Draw()}
 						</p>
 					</div>
 					<div class='0' style='display: none;'>

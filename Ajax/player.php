@@ -67,6 +67,7 @@ class Ajax_player
 		$world = $_POST["character_world"];
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
+		$town = $_POST["character_town"];
 		
 		$result = array();
 		$result["response"] = RESPONSE_NEXT_STEP;	
@@ -94,6 +95,13 @@ class Ajax_player
 			$outfitType = 128;
 		else
 			$outfitType = 136;
+		
+		$town_id = null;
+		
+		if($_world_id == t_Worlds::Darghos)
+			$town_id = t_Towns::IslandOfPeace;
+		else
+			$town_id = t_Towns::Get($town);
 			
 		$player = new \Framework\Player();	
 			
@@ -109,7 +117,7 @@ class Ajax_player
 		$player->setHealth(185);
 		$player->setMana(35);
 		$player->setCap(470);
-		$player->setTownId(6);
+		$player->setTownId($town_id);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");

@@ -14,8 +14,10 @@ class Monsters
 		
 		$this->monsterList = new \DOMDocument();
 		
-		$monsters_patch = g_Configs::Get(g_Configs::eConf()->FILE_MONSTERS);
-		$respawns_patch = g_Configs::Get(g_Configs::eConf()->FOLDER_DATA)."world/-spawn.xml";
+		$dataPatch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA);
+		
+		$monsters_patch = $dataPatch . g_Configs::Get(g_Configs::eConf()->FILE_MONSTERS);
+		$respawns_patch = $dataPatch . "world/-spawn.xml";
 		
 		if(file_exists($monsters_patch) && file_exists($respawns_patch))
 		{

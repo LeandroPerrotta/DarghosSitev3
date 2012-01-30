@@ -105,6 +105,7 @@ function createCharacter()
 	var characterWorld = $("select[name='character_world']");
 	var characterGenre = $("select[name='character_genre']");
 	var characterVocation = $("select[name='character_vocation']");	
+	var characterTown = $("select[name='character_town']");	
 	
 	if(characterVocation.val() == "")
 	{	
@@ -118,11 +119,17 @@ function createCharacter()
 		return false;
 	}	
 	
+	if(characterWorld.val() == 1 && characterTown.val() == "")
+	{
+		fogAlert("Por favor, para criar seu primeiro personagem escolha uma cidade de sua preferencia antes de prosseguir.");
+		return false;		
+	}
+	
 	if(characterName.next("#notify-correct").length == 1)
 	{
 		$("#character_name").text(characterName.val());
 		fogLoading();
-		sendPost({action: "player_create", character_name: characterName.val(), character_world: characterWorld.val(), character_genre: characterGenre.val(), character_vocation: characterVocation.val()}, $("input[name='account_email']"));
+		sendPost({action: "player_create", character_name: characterName.val(), character_world: characterWorld.val(), character_town: characterTown.val(), character_genre: characterGenre.val(), character_vocation: characterVocation.val()}, $("input[name='account_email']"));
 		return true;			
 	}
 	
