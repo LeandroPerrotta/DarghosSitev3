@@ -45,7 +45,7 @@ if(isset($_GET["world"]))
 			continue;
 		}
 		
-		$_town_str = ($world_id == t_Worlds::Darghos) ? t_Towns::GetString($houses->get("town")) : t_TownsGlobal::GetString($houses->get("town"));
+		$_town_str = ($world_id == t_Worlds::Darghos) ? t_Towns::GetString($houses->getTown()) : t_TownsGlobal::GetString($houses->getTown());
 		
 		$_owner_str = "<font style='color: green; font-weight: bold;'>Vazia</font>";
 		

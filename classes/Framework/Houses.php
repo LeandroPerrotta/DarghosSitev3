@@ -63,6 +63,11 @@ class Houses
 		return $this->data[$field];
 	}
 	
+	function getTown()
+	{
+		return $this->data["townid"];
+	}
+	
 	static function deleteOldHouses($world_id)
 	{
 		$xml = new \DOMDocument();
