@@ -15,6 +15,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		$memberLevel = \Framework\Guilds::GetAccountLevel($account, $guild->GetId());
 		$player = $guild->SearchMemberByName($_POST["guild_member"]);
+		$player instanceof \Framework\Player;
 		
 		if(!$player)
 		{

@@ -765,7 +765,7 @@ class Player
 	function GetGuildRankId(){ return $this->_guild_rank_id; }
 	function GetGuildName(){ return $this->_guild_name;	}
 	function GetGuildId(){ return $this->_guild_id; }
-	function GetGuildLevel(){ return $this->_guild_level; }	
+	function GetGuildLevel(){ if($this->getGroup() == \t_Group::Administrator) return \Framework\Guilds::RANK_LEADER; $this->_guild_level; }	
 	function getGuildNick(){ return stripslashes($this->_guild_nick); }	
 	function getGuildJoinIn(){ return $this->_guild_join_in; }		
 	function getOnline(){ return $this->data['online']; }	

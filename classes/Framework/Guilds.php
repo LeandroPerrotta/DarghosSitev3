@@ -56,6 +56,9 @@ class Guilds
 	 */		
 	static function GetAccountLevel(Account $account, $guild_id)
 	{
+		if($account->getGroup() == \t_Group::Administrator)
+			return self::RANK_LEADER;
+		
 		$char_list = $account->getCharacterList(Account::PLAYER_LIST_BY_ID);
 		$level = 0;
 		

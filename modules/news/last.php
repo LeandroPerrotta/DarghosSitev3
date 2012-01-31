@@ -31,22 +31,12 @@ $query = \Core\Main::$DB->query("SELECT * FROM ".\Core\Tools::getSiteTable("fast
 $fastnews = "";
 
 while($fetch = $query->fetch())
-{
-	$resumoArray = explode(" ", $fetch->post);
-	$resumo = "";
-	
-	for($x = 0; $x <= 10; $x++)
-	{
-		$resumo .= $resumoArray[$x]." ";
-	}
-	
-	$resumo .= "...";
-	
+{	
 	$fastnews .= "
 	<tr>
-		<td>
-			<span class='littleFastNew' style='width: 90%; float: left;'>".\Core\Main::formatDate($fetch->post_data)." - {$resumo}</span>
-			<span class='fullFastNew' style='width: 90%; float: left; display: none; visibility: hidden;'>".\Core\Main::formatDate($fetch->post_data)." - {$fetch->post}</span>
+		<td >
+			<span class='littleFastNew' style='width: 559px; text-overflow:ellipsis; overflow: hidden; white-space: nowrap; float: left;'>".\Core\Main::formatDate($fetch->post_data)." - {$fetch->post}</span>
+			<span class='fullFastNew' style='width: 559px; float: left; display: none; visibility: hidden;'>".\Core\Main::formatDate($fetch->post_data)." - {$fetch->post}</span>
 
 			<span class='tooglePlus' style='float: right; vertical-align: top;'></span>		
 			<br>
