@@ -23,8 +23,6 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
-		$player->LoadGuild();
-		
 		if($player->GetGuildLevel() < \Framework\Guilds::RANK_LEADER)
 		{
 			if($player->GetGuildLevel() >= $memberLevel)

@@ -103,15 +103,13 @@ class View
 			return false;
 		}
 		
-		$player->LoadGuild();
-		
 		if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CANNOT_LEAVE, $_GET['name']);	
 			return false;			
 		}
 						
-		$player->setGuildRankId( GUILD_RANK_NO_MEMBER );
+		$player->setGuildRankId( \Framework\Guilds::RANK_NO_MEMBER );
 		$player->save();
 		
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LEAVE, $this->_character->GetPost(), $_GET['name']);		

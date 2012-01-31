@@ -341,7 +341,7 @@ class Account
 		{		
 			while($fetch = $query->fetch())
 			{
-				$list[] = $fetch->$toReturn;
+				$list[] = $fetch->{$toReturn};
 			}			
 		}
 

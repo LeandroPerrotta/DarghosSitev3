@@ -14,7 +14,7 @@ class Guilds
 		,RANK_MEMBER_OPT_1 = 3
 		,RANK_MEMBER_OPT_2 = 2
 		,RANK_MEMBER_OPT_3 = 1
-		,RANK_MEMBER_NO_MEMBER = 0
+		,RANK_NO_MEMBER = 0
 		
 		,DEFAULT_IMAGE = "default_logo.gif"
 		
@@ -28,6 +28,7 @@ class Guilds
 	
 	function __construct()
 	{
+
 	}
 
 	static function isAtSameWorld(Guilds $guild, $comp_guild)
@@ -55,22 +56,24 @@ class Guilds
 	 * @return guild level.
 	 */		
 	static function GetAccountLevel(Account $account, $guild_id)
-	{
-		if($account->getGroup() == \t_Group::Administrator)
-			return self::RANK_LEADER;
-		
+	{		
 		$char_list = $account->getCharacterList(Account::PLAYER_LIST_BY_ID);
 		$level = 0;
 		
 		foreach($char_list as $player_id)
 		{
-			$player = new \Framework\Player();
+			$player = new Player();
 			$player->load($player_id);
 			$player->LoadGuild();
 			
 			if($player->GetGuildId() == $guild_id && $player->GetGuildLevel() > $level)
 				$level = $player->GetGuildLevel();
 		}
+		
+		if($level != self::RANK_LEADER && $account->getGroup() == \t_Group::Administrator)
+		{
+			return self::RANK_LEADER;	
+		}	
 		
 		return $level;
 	}

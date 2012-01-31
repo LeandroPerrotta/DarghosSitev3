@@ -90,7 +90,7 @@ class View
 		$guildInfoTable->AddField("Esta guilda foi criada em <b>".\Core\Main::formatDate($this->guild->GetCreationDate())."</b>.");
 		$guildInfoTable->AddRow();
 		
-		if($this->loggedAcc and $this->memberLevel > GUILD_RANK_NO_MEMBER)
+		if($this->loggedAcc and $this->memberLevel > \Framework\Guilds::RANK_NO_MEMBER)
 		{	
 			$guildInfoTable->AddField("Saldo do banco: <b>{$this->guild->GetBalance()} moedas de ouro.</b>");
 			$guildInfoTable->AddRow();			
@@ -115,7 +115,7 @@ class View
 		
 			{$guildInfoTable->Draw()}";				
 
-		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel == \Framework\Guilds::RANK_LEADER)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
 		{			
 			$guildPage .= "
 			<p>
@@ -171,23 +171,23 @@ class View
 		{$membersTable->Draw()}	
 		";
 		
-		if($this->loggedAcc and $this->memberLevel > GUILD_RANK_NO_MEMBER)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel > \Framework\Guilds::RANK_NO_MEMBER)
 		{
 			$guildPage .= "<p>";
 			
-			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= \Framework\Guilds::RANK_VICE)
+			if($this->memberLevel >= \Framework\Guilds::RANK_VICE)
 			$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.members&name={$this->guild->GetName()}'>Editar Membros</a>				
 			";
 				
-			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
+			if($this->memberLevel == \Framework\Guilds::RANK_LEADER)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.ranks&name={$this->guild->GetName()}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$this->guild->GetName()}'>Passar Liderança</a>				
 				";	
 			}
 			
-			if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->memberLevel >= \Framework\Guilds::RANK_MEMBER_OPT_3)
+			if($this->memberLevel >= \Framework\Guilds::RANK_MEMBER_OPT_3)
 			{	
 				$guildPage .= "
 					<a class='buttonstd' href='?ref=guilds.leave&name={$this->guild->GetName()}'>Sair da Guild</a>				
