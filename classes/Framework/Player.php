@@ -257,8 +257,6 @@ class Player
 		{			
 			$fetch = $query->fetch();
 			
-			var_dump($fetch);
-			
 			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 			{
 				$this->_guild_nick = $fetch->guildnick;
