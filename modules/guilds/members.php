@@ -80,6 +80,10 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			
 			$player->setGuildNick($_POST["member_nick"]);
 		}
+		elseif($_POST["guild_action"] == "eraseNick")
+		{			
+			$player->setGuildNick("");
+		}
 		elseif($_POST["guild_action"] == "exclude")
 		{
 			if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
@@ -166,6 +170,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 						<ul id="pagelist">
 							<li><input name="guild_action" type="radio" value="setRank" checked="checked"> Configurar rank para <select name="member_rank">'.$option_ranks.'</select></li>
 							<li><input name="guild_action" type="radio" value="setNick"> Configurar titulo para <input name="member_nick" size="25" type="text" value="" /></li>
+							<li><input name="guild_action" type="radio" value="eraseNick"> Apagar titulo</li>
 							<li><input name="guild_action" type="radio" value="exclude"> Dispençar da Guilda </li>
 						</ul>	
 					</p>					
