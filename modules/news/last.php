@@ -35,7 +35,7 @@ while($fetch = $query->fetch())
 	$resumoArray = explode(" ", $fetch->post);
 	$resumo = "";
 	
-	for($x = 0; $x <= 6; $x++)
+	for($x = 0; $x <= 10; $x++)
 	{
 		$resumo .= $resumoArray[$x]." ";
 	}
