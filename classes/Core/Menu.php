@@ -331,7 +331,7 @@ class Menu
 		{
 			//$callback = array(__NAMESPACE__ . '\Menus', $this->functionCallback);
 			$callback = __NAMESPACE__ . '\Menus::' . $this->functionCallback;
-			if(method_exists('Core\Menus', $this->functionCallback) && !call_user_func($callback, &$li))
+			if(method_exists('Core\Menus', $this->functionCallback) && !call_user_func_array($callback, array(&$li)))
 			{
 				return "";
 			}

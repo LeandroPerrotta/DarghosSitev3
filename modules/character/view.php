@@ -97,7 +97,7 @@ $infos[] = array("Residencia", $town_str);
 
 if($houseid)
 {
-	$houses = new \Framework\Houses();
+	$houses = new \Framework\Houses($player->getWorldId());
 	$houses->load($houseid);
 	
 	$_house_town_str = ($player->getWorldId() == t_Worlds::Darghos) ? t_Towns::GetString($houses->get("town")) : t_TownsGlobal::GetString($houses->get("town"));
