@@ -775,7 +775,7 @@ class Player
 		if(!$this->_loadGuild)
 			$this->LoadGuild();
 		
-		$this->_guild_level; 
+		return $this->_guild_level; 
 	}	
 	function getGuildNick(){ return stripslashes($this->_guild_nick); }	
 	function getGuildJoinIn(){ return $this->_guild_join_in; }		
