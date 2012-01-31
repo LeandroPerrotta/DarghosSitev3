@@ -8,7 +8,7 @@ if(isset($_GET["world"]))
 	if(!t_Worlds::Get($world_id))
 		$world_id = t_Worlds::Darghos;	
 	
-	$query = \Core\Main::$DB->query("SELECT `player_deaths`.`id`, `player_deaths`.`player_id` FROM `player_deaths` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `players`.`world_id` = {$world_id} AND `player_deaths`.`date` > '".(time() - 60 * 60 * 2)."' ORDER BY `player_deaths`.`date` DESC");
+	$query = \Core\Main::$DB->query("SELECT `player_deaths`.`id`, `player_deaths`.`player_id` FROM `player_deaths` LEFT JOIN `players` ON `players`.`id` = `player_deaths`.`player_id` WHERE `players`.`deleted` = 0 AND `players`.`world_id` = {$world_id} AND `player_deaths`.`date` > '".(time() - 60 * 60 * 2)."' ORDER BY `player_deaths`.`date` DESC");
 	
 	$module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>

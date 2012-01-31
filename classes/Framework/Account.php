@@ -115,7 +115,7 @@ class Account
 	
 	function loadByCharacterName($name)
 	{
-		$query = $this->db->query("SELECT `account_id` FROM `players` WHERE name = '".$name."'");
+		$query = $this->db->query("SELECT `account_id` FROM `players` WHERE name = '".$name."' AND deleted = 0");
 		
 		if($query->numRows() != 0)
 		{
@@ -333,7 +333,7 @@ class Account
 		if($returnValue == self::PLAYER_LIST_BY_ID)
 			$toReturn = "id";
 		
-		$query = $this->db->query("SELECT {$toReturn} FROM players WHERE account_id = '".$this->data['id']."'");
+		$query = $this->db->query("SELECT {$toReturn} FROM players WHERE account_id = '".$this->data['id']."' AND deleted = 0");
 		
 		$list= array();
 		
@@ -659,7 +659,7 @@ class Account
 	
 	function getHighCharacter($returnId = false)
 	{
-		$query = $this->db->query("SELECT id, name FROM players WHERE account_id = '{$this->data[id]}' ORDER BY level DESC LIMIT 1");
+		$query = $this->db->query("SELECT id, name FROM players WHERE account_id = '{$this->data[id]}' AND deleted = 0 ORDER BY level DESC LIMIT 1");
 		
 		if($query->numRows() != 0)
 		{
@@ -676,7 +676,7 @@ class Account
 	
 	function getHighLevel()
 	{
-		$query = $this->db->query("SELECT `level` FROM `players` WHERE `account_id` = '{$this->data[id]}' ORDER BY `level` DESC LIMIT 1");
+		$query = $this->db->query("SELECT `level` FROM `players` WHERE `account_id` = '{$this->data[id]}' AND deleted = 0 ORDER BY `level` DESC LIMIT 1");
 		
 		if($query->numRows() != 0)
 		{
@@ -689,7 +689,7 @@ class Account
 	
 	function getCharMinLevel()
 	{
-		$query = $this->db->query("SELECT level FROM players WHERE account_id = '{$this->data[id]}' ORDER BY level DESC LIMIT 1");
+		$query = $this->db->query("SELECT level FROM players WHERE account_id = '{$this->data[id]}' AND deleted = 0 ORDER BY level DESC LIMIT 1");
 		
 		if($query->numRows() != 0)
 		{
@@ -746,7 +746,7 @@ class Account
 		ON
 			`player_use`.`id` = `use`.`player_id`			
 		WHERE 
-			`log`.`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}') 
+			`log`.`player_id` IN (SELECT `id` FROM `players` WHERE `account_id` = '{$this->getId()}' AND `deleted` = 0) 
 			{$limit}
 		ORDER BY 
 			`log`.`date` DESC");

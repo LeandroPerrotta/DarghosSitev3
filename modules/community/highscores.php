@@ -133,7 +133,8 @@ if(isset($_GET["world"]))
 			`players` 
 		WHERE 	
 			group_id < 3
-			AND world_id = {$world_id}";
+			AND world_id = {$world_id}
+			AND deleted = 0";
 			
 		if(!$filter_showInactivePlayers)
 			$query_str .= " AND `lastlogin` > UNIX_TIMESTAMP() - ({$charactersActiveDays} * 60 * 60 * 24)";
@@ -166,7 +167,8 @@ if(isset($_GET["world"]))
 			`players`
 		WHERE
 			group_id < 3
-			AND world_id = {$world_id}";
+			AND world_id = {$world_id}
+			AND deleted = 0";
 		
 		if(!$filter_showInactivePlayers)
 			$query_str .= " AND `lastlogin` > UNIX_TIMESTAMP() - ({$charactersActiveDays} * 60 * 60 * 24)";
@@ -209,6 +211,7 @@ if(isset($_GET["world"]))
 			FROM 
 				players as player, player_skills as skill 
 			WHERE 
+				player.deleted = 0 AND
 				player.world_id = {$world_id} AND
 				".((!$filter_showInactivePlayers) ? 
 					"player.lastlogin + (60 * 60 * 24 * {$charactersActiveDays}) > ".time()." AND " : null)."				

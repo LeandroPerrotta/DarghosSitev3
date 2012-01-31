@@ -201,13 +201,13 @@ class Player
 				, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons
 				, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions
 				, cap, sex, lastlogin, lastip, save, skull, skulltime, lastlogout, balance, stamina
-				, direction, loss_experience, loss_mana, loss_skills, loss_items, description
+				, direction, loss_experience, loss_mana, loss_skills, loss_items, deleted, description
 				, online, promotion, battleground_rating";
 		
 			if(g_Configs::Get(g_Configs::eConf()->ENABLE_PVP_SWITCH))
 				$query_str .= ", pvpEnabled";
 			
-			$query_str .= " FROM players WHERE id = '{$player_id}'";
+			$query_str .= " FROM players WHERE id = '{$player_id}' AND deleted = 0";
 		}
 			
 		$query = $this->db->query($query_str);		
@@ -325,7 +325,7 @@ class Player
 	
 	function loadByName($player_name)
 	{
-		$query = $this->db->query("SELECT id FROM players WHERE name = '".$player_name."'");
+		$query = $this->db->query("SELECT id FROM players WHERE name = '".$player_name."' AND deleted = 0");
 		
 		if($query->numRows() != 0)
 		{
@@ -712,6 +712,8 @@ class Player
 	function setStamina($value){ $this->data['stamina'] = $value; }	
 	function setHidden($value){	$this->site_data['visible'] = $value; }	
 	
+	function setDeleted($bool){ $this->data['deleted'] = $bool; }
+	
 	function get($field)
 	{
 		switch($field)
@@ -778,5 +780,6 @@ class Player
 	function getStamina(){ return $this->data['stamina']; }	
 	function getBattlegroundRating() { return $this->data['battleground_rating']; }
 	function isPvpEnabled() { return (bool)$this->data['pvpEnabled']; }
+	function isDeleted(){ return (bool)$this->data['deleted']; }
 }
 ?>

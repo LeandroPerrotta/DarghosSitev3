@@ -1,4 +1,5 @@
 <?php
+use \Core\Configs;
 class Lang_Messages
 {		
 	static protected $messages = array();
@@ -38,6 +39,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_NAME_ALREADY_USED] = "O nome escolhido já esta em uso por outro personagem no jogo. Escolha outro nome.";
 		self::$messages[$e_Msg->CHARACTER_NOT_TO_DELETION] = "Este personagem não está marcado para ser deletado.";
 		self::$messages[$e_Msg->CHARACTER_ALREADY_TO_DELETE] = "Este personagem já está marcado para ser deletado.";
+		self::$messages[$e_Msg->CHARACTER_MUST_AWARE_INSTANT_DELETION] = "Você precisa confirmar que tem certeza que o seu personagem será deletado instantânamente caso ele seja level " . Configs::Get(Configs::eConf()->INSTANT_DELETION_MAX_LEVEL)." ou menos.";
 		self::$messages[$e_Msg->CHARACTER_NOT_FROM_YOUR_ACCOUNT] = "Este personagem não existe ou não pertence a sua conta e portanto esta operação não pode ser concluida.";
 		self::$messages[$e_Msg->ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS] = "A sua conta já possui 10 personagens criados. Para criar um novo personagem é necessario se desfazer de um já existente deletando-o.";
 		self::$messages[$e_Msg->CHANGEINFOS_WRONG_SIZE] = "Os campos Nome Real e Localidade devem possuir no maximo 25 caracteres enquanto Website deve conter no maximo 50 caracteres.";
@@ -270,6 +272,12 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_DELETION_SCHEDULED] = "
 			<p>Caro jogador,</p>
 			<p>Foi agendado com sucesso a exclusão de seu personagem @v1@ para o dia @v2@!</p>
+			<p>Tenha um bom jogo!</p>
+		";			
+			
+		self::$messages[$e_Msg->CHARACTER_DELETED] = "
+			<p>Caro jogador,</p>
+			<p>O seu personagem @v1@ foi deletado com sucesso e agora não existe mais!</p>
 			<p>Tenha um bom jogo!</p>
 		";				
 		

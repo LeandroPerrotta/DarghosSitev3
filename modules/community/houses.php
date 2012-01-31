@@ -55,7 +55,6 @@ if(isset($_GET["world"]))
 			$player->load($houses->get("owner"));
 					
 			$_owner_str = "<a href='?ref=character.view&name={$player->get("name")}'>{$player->get("name")}</a>";
-	
 		}	
 	
 		$module .= "

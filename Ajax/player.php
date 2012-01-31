@@ -10,7 +10,7 @@ class Ajax_player
 			return;
 		
 		//Faz a query e retorna codigo html
-		$query = \Core\Main::$DB->query("SELECT `name` FROM `players` WHERE `name` LIKE '" . \Core\Main::$DB->escapeString($name) . "%' LIMIT " . Configs::Get(Configs::eConf()->AJAX_SEARCH_PLAYERS_COUNT));
+		$query = \Core\Main::$DB->query("SELECT `name` FROM `players` WHERE `name` LIKE '" . \Core\Main::$DB->escapeString($name) . "%' AND `deleted` = 0 LIMIT " . Configs::Get(Configs::eConf()->AJAX_SEARCH_PLAYERS_COUNT));
 		if($query && $query->numRows() > 0){
 			$msg = "";
 			

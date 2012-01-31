@@ -35,6 +35,7 @@ class Deaths
 		WHERE
 			`player_deaths`.`date` >= {$startdate} 
 			AND `player_deaths`.`date` <= {$enddate} 
+			AND `players`.`deleted` = 0
 		GROUP BY 
 			`player_killers`.`player_id` 
 		ORDER BY 
