@@ -132,6 +132,9 @@ class Menus
 	
 	static function drawTestServerStatus(&$xml)
 	{
+		if(!Configs::Get(Configs::eConf()->STATUS_SHOW_TEST_SERVER))
+			return false;
+		
 		$testIp = "testserver.darghos.com.br";
 		$testPort = "7171";
 		

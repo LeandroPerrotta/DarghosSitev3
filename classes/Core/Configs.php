@@ -74,6 +74,7 @@ class Configs
 				case self::$e_Configs->STATUS_PORT: self::Set($i, $__configs[$i], "7171"); break;
 				case self::$e_Configs->STATUS_SHOW_PING: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->STATUS_IGNORE_AFK: self::Set($i, $__configs[$i], false); break;
+				case self::$e_Configs->STATUS_SHOW_TEST_SERVER: self::Set($i, $__configs[$i], false); break;
 				
 				case self::$e_Configs->WEBSITE_FOLDER_FILES: self::Set($i, $__configs[$i], "files/"); break;
 				case self::$e_Configs->WEBSITE_FOLDER_GUILDS: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->WEBSITE_FOLDER_FILES) . "guildImages/"); break;

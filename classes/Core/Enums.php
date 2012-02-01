@@ -36,6 +36,7 @@ class e_Configs extends \Core\Enumerators
 		,$STATUS_PORT
 		,$STATUS_SHOW_PING
 		,$STATUS_IGNORE_AFK
+		,$STATUS_SHOW_TEST_SERVER
 		
 		/*
 		 * Website folding
