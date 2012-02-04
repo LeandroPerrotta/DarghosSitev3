@@ -161,7 +161,7 @@ class View
 		
 		if($player->getWorldId() == t_Worlds::RealMap)
 		{
-			$this->_message = \Core\Lang::Message("O nosso item shop não está habilitado para este mundo por enquanto.");
+			$this->_message = "O nosso item shop não está habilitado para este mundo por enquanto.";
 			return false;			
 		}
 		
