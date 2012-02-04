@@ -203,7 +203,7 @@ if(isset($_GET["world"]))
 				
 				$players_list .= "
 				<tr>
-					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> " . ($world_id == t_Worlds::Darghos) ? '<td>'.$pvpStr.'</td>' : null . "
+					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> " .(($world_id == t_Worlds::Darghos) ? "<td>{$pvpStr}</td>" : null ). "
 				</tr>";		
 			}			
 		}
@@ -305,7 +305,7 @@ if(isset($_GET["world"]))
 			$module .= "
 			<table cellspacing='0' cellpadding='0' id='table'>
 				<tr>
-					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> " . ($world_id == t_Worlds::Darghos) ? '<td>'.$pvpStr.'</td>' : null . "
+					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> " .(($world_id == t_Worlds::Darghos) ? "<td>{$pvpStr}</td>" : null ). "
 				</tr>
 	
 				{$players_list}

@@ -394,8 +394,8 @@ class t_TownsGlobal extends \Core\Structs
 		,Darashia = 10	
 		,Edron = 11	
 		,Svarground = 12	
-		,Yalahar = 12	
-		,Farmine = 13	
+		,Yalahar = 13	
+		,Farmine = 14	
 	;
 	
 	static protected
