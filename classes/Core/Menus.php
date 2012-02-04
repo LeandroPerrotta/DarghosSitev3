@@ -188,7 +188,8 @@ class Menus
 				continue;
 			}
 			
-			$status[$world_id] = $fetch->players;		
+			$status[$world_id] = $fetch->players;
+			\t_Worlds::ItNext();
 		}
 		
 
