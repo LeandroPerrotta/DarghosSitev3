@@ -11,7 +11,7 @@ class Menus
 				,array("name" => "Sobre o Darghos", "url" => "?ref=general.about")
 				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
 				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
-				,array("name" => "Fansites", "url" => "?ref=general.fansites")			
+				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
 			)
 		)
 		,array(
@@ -171,8 +171,27 @@ class Menus
 		if(Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
 			return false;
 		
-		$query = Main::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
-		$fetch = $query->fetch();		
+		$status = array();
+		$allOnline = true;
+		
+		while(\t_Worlds::ItValid())
+		{
+			$world_id = \t_Worlds::It();
+
+			$query = Main::$DB->query("SELECT `players`, `online`, `date` FROM `serverstatus` WHERE `server_id` = {$world_id} ORDER BY `date` DESC LIMIT 1");
+			$fetch = $query->fetch();			
+			
+			if((bool)!$fetch->online || $fetch->date < time - 60 * 5)
+			{
+				$allOnline = false;
+				\t_Worlds::ItNext();
+				continue;
+			}
+			
+			$status[$world_id] = $fetch->players;		
+		}
+		
+
 		
 		$ul = $xml->addChild("ul");
 		$ul->addAttribute("class", "always_viewable");	
@@ -183,28 +202,18 @@ class Menus
 		$p = $div->addChild("p");
 		$p->addChild("em", "Status: ");	
 		
-		if($fetch->online == 0 || $fetch->date < time - 60 * 5)
+		if(count($status) == 0)
 		{
 			$span = $p->addChild("span", "offline");
 			$span->addAttribute("style", "color: #ec0404; font-weight: bold;");
 		}
 		else
-		{
-			$seconds = $fetch->uptime % 60;
-			$uptime = floor($fetch->uptime / 60);
-	
-			$minutes = $uptime % 60;
-			$uptime = floor($uptime / 60);
-	
-			$hours = $uptime % 24;
-			$uptime = floor($uptime / 24);
-	
-			$days = $uptime % 365;
-			
-			$uptime = ($days >= 1) ? "{$days}d {$hours}h {$minutes}m" : "{$hours}h {$minutes}m";
-			
+		{			
 			$span = $p->addChild("span", "online");
-			$span->addAttribute("style", "color: #00ff00; font-weight: bold;");			
+			if($allOnline)
+				$span->addAttribute("style", "color: #00ff00; font-weight: bold;");
+			else
+				$span->addAttribute("style", "color: #e1dc48; font-weight: bold;");
 
 			$p = $div->addChild("p");
 			$p->addChild("em", "IP: ");
@@ -234,12 +243,8 @@ class Menus
 			{
 				$p = $div->addChild("p");
 				$p->addChild("em", "Players online: ");
-				$span = $p->addChild("span", $fetch->players);
+				$span = $p->addChild("span", array_sum($status));
 			}
-
-			$p = $div->addChild("p");
-			$p->addChild("em", "Uptime: ");
-			$span = $p->addChild("span", $uptime);		
 				
 			if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))
 			{

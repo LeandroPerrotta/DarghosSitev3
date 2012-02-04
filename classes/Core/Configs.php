@@ -82,7 +82,7 @@ class Configs
 				case self::$e_Configs->USE_DISTRO: self::Set($i, $__configs[$i], Consts::SERVER_DISTRO_TFS); break;
 				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/darghos/tfs/"); break;
 				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "data/", \t_Worlds::RealMap => "global/")); break;
-				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "world/-house.xml", \t_Worlds::RealMap => "World/house.xml")); break;
+				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "world/-house.xml", \t_Worlds::RealMap => "world/house.xml")); break;
 				case self::$e_Configs->FILE_MONSTERS: self::Set($i, $__configs[$i], "monster/monsters.xml"); break;
 				case self::$e_Configs->USE_ENCRYPT: self::Set($i, $__configs[$i], Consts::ENCRYPT_TYPE_MD5); break;
 				

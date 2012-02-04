@@ -216,11 +216,27 @@ if(isset($_GET["world"]))
 				$playersonmsg .= " ({$_totalplayers} / {$spoofPlayers})";
 				
 			}	
+
+			$seconds = $stats_fetch->uptime % 60;
+			$uptime = floor($stats_fetch->uptime / 60);
+			
+			$minutes = $uptime % 60;
+			$uptime = floor($uptime / 60);
+			
+			$hours = $uptime % 24;
+			$uptime = floor($uptime / 24);
+			
+			$days = $uptime % 365;
+				
+			$uptime = ($days >= 1) ? "{$days} dias {$hours} horas e {$minutes} minutos" : "{$hours}horas e {$minutes}minutos";			
 			
 			$module .= "
 			<tr>
 				<td colspan='4'>{$playersonmsg}</td>
 			</tr>
+			<tr>
+				<td colspan='4'><b>O servidor está ligado a:</b> {$uptime}</td>
+			</tr>			
 			<tr>
 				<td colspan='4'><b>Destes, são das vocações:</b></td>
 			</tr>
