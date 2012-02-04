@@ -71,7 +71,7 @@ if(isset($_GET["world"]))
 				`online` = '1'
 			ORDER BY name");
 		else
-			$query = \Core\Main::$DB->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' ORDER BY name");
+			$query = \Core\Main::$DB->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' AND world_id = {$world_id} ORDER BY name");
 		
 		$_totalplayers = $stats_fetch->players + $stats_fetch->afk;
 		$_afkPlayers = $stats_fetch->afk;
@@ -203,7 +203,7 @@ if(isset($_GET["world"]))
 				
 				$players_list .= "
 				<tr>
-					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> <td>{$pvpStr}</td>
+					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> " . ($world_id == t_Worlds::Darghos) ? "<td>{$pvpStr}</td>" : null . "
 				</tr>";		
 			}			
 		}
@@ -246,24 +246,30 @@ if(isset($_GET["world"]))
 			<tr>
 				<td>Paladin's:</td><td>".\Core\Tools::getPercentOf($_paladins, $_totalplayers)."%</td><td>Knight's:</td><td>".\Core\Tools::getPercentOf($_knights, $_totalplayers)."%</td>
 			</tr>
-			<tr>
-				<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
-			</tr>
-			<tr>
-				<td>Island of Peace:</td><td>".\Core\Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
-				<td>Quendor:</td><td>".\Core\Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
-			</tr>
-			<tr>
-				<td>Aracura:</td><td>".\Core\Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
-				<td>Aaragon:</td><td>".\Core\Tools::getPercentOf($_aaragon, $_totalplayers)."%</td>
-			</tr>
-			<tr>
-				<td>Salazart:</td><td>".\Core\Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
-				<td>Northrend:</td><td>".\Core\Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
-			</tr>
-			<tr>
-				<td>Kashmir:</td><td>".\Core\Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
-			</tr>";
+			";
+			
+			if($world_id == t_Worlds::Darghos)
+			{		
+				$module .= "			
+				<tr>
+					<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
+				</tr>
+				<tr>
+					<td>Island of Peace:</td><td>".\Core\Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
+					<td>Quendor:</td><td>".\Core\Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
+				</tr>
+				<tr>
+					<td>Aracura:</td><td>".\Core\Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
+					<td>Aaragon:</td><td>".\Core\Tools::getPercentOf($_aaragon, $_totalplayers)."%</td>
+				</tr>
+				<tr>
+					<td>Salazart:</td><td>".\Core\Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
+					<td>Northrend:</td><td>".\Core\Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
+				</tr>
+				<tr>
+					<td>Kashmir:</td><td>".\Core\Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
+				</tr>";	
+			}
 			
 			if($_isadmin)
 			{
@@ -299,7 +305,7 @@ if(isset($_GET["world"]))
 			$module .= "
 			<table cellspacing='0' cellpadding='0' id='table'>
 				<tr>
-					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> <th>PvP</th>
+					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> " . ($world_id == t_Worlds::Darghos) ? " <th>PvP</th>" : null . "
 				</tr>
 	
 				{$players_list}
