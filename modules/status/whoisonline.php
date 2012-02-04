@@ -69,6 +69,7 @@ if(isset($_GET["world"]))
 				`players`
 			WHERE
 				`online` = '1'
+				AND `world_id` = {$world_id}
 			ORDER BY name");
 		else
 			$query = \Core\Main::$DB->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' AND world_id = {$world_id} ORDER BY name");
