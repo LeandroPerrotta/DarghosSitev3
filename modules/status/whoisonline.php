@@ -11,7 +11,7 @@ if(isset($_GET["world"]))
 	if(!t_Worlds::Get($world_id))
 		$world_id = t_Worlds::Darghos;
 
-	$status_query = \Core\Main::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` ORDER BY `date` DESC LIMIT 1");
+	$status_query = \Core\Main::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` WHERE `world_id` = {$world_id} ORDER BY `date` DESC LIMIT 1");
 	$stats_fetch = $status_query->fetch();
 	
 	$module .= "
