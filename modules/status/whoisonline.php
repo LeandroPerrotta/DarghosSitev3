@@ -20,7 +20,7 @@ if(isset($_GET["world"]))
 			<th colspan='4'>Server Status</th>
 		</tr>";	
 	
-	if($world_id == t_Worlds::RealMap || $stats_fetch->online == 0 || $stats_fetch->date < time - 60 * 5)
+	if($stats_fetch->online == 0 || $stats_fetch->date < time - 60 * 5)
 	{
 		$module .= "
 		<tr>
