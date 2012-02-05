@@ -228,8 +228,10 @@ class Menus
 			if(Configs::Get(Configs::eConf()->STATUS_IGNORE_AFK))
 			{
 				$p = $div->addChild("p");
-				$p->addChild("em", "Players online: ");
-				$span = $p->addChild("span", $fetch->players + $fetch->afk);		
+				$em = $p->addChild("em");
+				$a = $em->addChild("a", "Players online:");
+				$a->addAttribute("href", "?ref=status.whoisonline");
+				$span = $p->addChild("span", " " . $fetch->players + $fetch->afk);		
 
 				$p = $div->addChild("p");
 				$p->addChild("em", "Playing: ");
@@ -243,8 +245,10 @@ class Menus
 			else
 			{
 				$p = $div->addChild("p");
-				$p->addChild("em", "Players online: ");
-				$span = $p->addChild("span", array_sum($status));
+				$em = $p->addChild("em");
+				$a = $em->addChild("a", "Players online:");
+				$a->addAttribute("href", "?ref=status.whoisonline");
+				$span = $p->addChild("span", " " . array_sum($status));
 			}
 				
 			if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))

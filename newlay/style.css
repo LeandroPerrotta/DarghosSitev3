@@ -149,7 +149,7 @@ ul li {
 
 
 
-#left ul li a, #left ul li div, #left ul li table, #right-menu ul li a, #right-menu ul li div, #right-menu ul li table{
+#left ul li a, #left ul li div, #left ul li table, #right-menu ul > li > a, #right-menu ul li div, #right-menu ul li table{
 	background: #333 url(images/subitem.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
@@ -179,7 +179,7 @@ ul li {
 	cursor: pointer;
 }
 
-#left ul li a:hover, #right-menu ul li a:hover{
+#left ul li a:hover, #right-menu ul > li > a:hover{
 	background: #333 url(images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
 }
@@ -224,6 +224,10 @@ ul li {
 #left ul li div p em, #right-menu ul li div p em{
 	font-style: normal;
 	font-weight: bold;
+}
+
+#right-menu ul li div p em a{
+	color: white;
 }
 
 #right {

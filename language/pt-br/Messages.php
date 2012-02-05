@@ -40,6 +40,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_NOT_TO_DELETION] = "Este personagem não está marcado para ser deletado.";
 		self::$messages[$e_Msg->CHARACTER_ALREADY_TO_DELETE] = "Este personagem já está marcado para ser deletado.";
 		self::$messages[$e_Msg->CHARACTER_MUST_AWARE_INSTANT_DELETION] = "Você precisa confirmar que tem certeza que o seu personagem será deletado instantânamente caso ele seja level " . Configs::Get(Configs::eConf()->INSTANT_DELETION_MAX_LEVEL)." ou menos.";
+		self::$messages[$e_Msg->CHARACTER_MUST_BE_RED_OR_BLACK_SKULL] = "Para esta operação é necessario que o seu personagem possua uma caveira vermelha ou preta.";
 		self::$messages[$e_Msg->CHARACTER_NOT_FROM_YOUR_ACCOUNT] = "Este personagem não existe ou não pertence a sua conta e portanto esta operação não pode ser concluida.";
 		self::$messages[$e_Msg->ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS] = "A sua conta já possui 10 personagens criados. Para criar um novo personagem é necessario se desfazer de um já existente deletando-o.";
 		self::$messages[$e_Msg->CHANGEINFOS_WRONG_SIZE] = "Os campos Nome Real e Localidade devem possuir no maximo 25 caracteres enquanto Website deve conter no maximo 50 caracteres.";
@@ -62,6 +63,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_ALREADY_MEMBER_GUILD] = "Este personagem já é membro de uma guild. Para criar uma nova guilda é necessario primeiro deixar a guilda atual.";
 		self::$messages[$e_Msg->CHARACTER_COMMENT_WRONG_SIZE] = "O comentário de seu personagem não deve possuir mais de 500 caracteres.";
 		self::$messages[$e_Msg->CHARACTER_CHANGE_THING_CONFIRM] = "Para modificar o nome ou sexo de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
+		self::$messages[$e_Msg->CHARACTER_REMOVE_SKILLS_CONFIRM] = "Para a skull de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
 		self::$messages[$e_Msg->CHARACTER_NEED_OFFLINE] = "Para efetuar esta operação é necessario que você faça um \"log-out\" no jogo.";
 		self::$messages[$e_Msg->CHARACTER_CHANGENAME_COST] = "Você não possui os @v1@ dias de conta premium necessarios para modificar o nome de seu personagem.";
 		self::$messages[$e_Msg->CHARACTER_CHANGESEX_COST] = "Você não possui os @v1@ dias de conta premium necessarios para modificar o sexo de seu personagem.";
@@ -411,6 +413,13 @@ class Lang_Messages
 			<p>Caro usuario,</p>
 			<p>A recuperação de stamina do personagem de sua conta @v1@ foi concluida com sucesso! Agora ele possui <b>@v2@</b> horas de stamina!</p>
 			<p>Tenha um bom jogo! Agora mais descançado!</p>
+		";
+		
+		self::$messages[$e_Msg->REMOVE_SKULL_SUCCESSFULY] = "
+			<p>Caro usuario,</p>
+			<p>A caveira de seu personagem @v1@ foi removida com sucesso ao custo de @v2@ dos dias de sua conta premium!</p>
+			<p>Evite mortes injustificadas para não obter a caveira novamente!</p>
+			<p>Tenha um bom jogo!</p>
 		";		
 
 		self::$messages[$e_Msg->VALIDATE_EMAIL_SUCCESSFULY] = "

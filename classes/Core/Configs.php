@@ -104,8 +104,11 @@ class Configs
 				case self::$e_Configs->DISABLE_ALL_PREMDAYS_FEATURES: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;
 				case self::$e_Configs->ENABLE_STAMINA_REFILER: self::Set($i, $__configs[$i], false); break;
+				case self::$e_Configs->ENABLE_REMOVE_SKULLS: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->PREMCOST_CHANGENAME: self::Set($i, $__configs[$i], 15); break;
 				case self::$e_Configs->PREMCOST_CHANGESEX: self::Set($i, $__configs[$i], 10); break;
+				case self::$e_Configs->PREMCOST_REMOVE_RED_SKULL: self::Set($i, $__configs[$i], 4); break;
+				case self::$e_Configs->PREMCOST_REMOVE_BLACK_SKULL: self::Set($i, $__configs[$i], 10); break;
 				
 				case self::$e_Configs->ENABLE_GUILD_MANAGEMENT: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->ENABLE_GUILD_WARS: self::Set($i, $__configs[$i], true); break;

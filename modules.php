@@ -199,7 +199,15 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 						}
 				break;
 								
-	
+				case "removeSkull":
+					if(g_Configs::Get(g_Configs::eConf()->ENABLE_REMOVE_SKULLS))
+					{
+						$needPremium = true;
+						$needLogin = true;
+						$patch['file'] = $topic;
+					}
+				break;
+									
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";

@@ -69,6 +69,7 @@ if(is_array($player_list))
 		{
 			$charOptions .= " - <a href='?ref=itemshop.purchase&name={$player->getName()}'>Item Shop</a>";
 			if(Configs::Get(Configs::eConf()->ENABLE_STAMINA_REFILER)) $charOptions .= " - <a href='?ref=character.stamina&name={$player->getName()}'>Regenerar Stamina</a>";
+			if(Configs::Get(Configs::eConf()->ENABLE_REMOVE_SKULLS) && in_array($player->getSkull(), array(t_Skulls::Red, t_Skulls::Black))) $charOptions .= " - <a href='?ref=character.removeSkull&name={$player->getName()}'>Remover Skulls</a>";
 		}
 		
 		if(Configs::Get(Configs::eConf()->ENABLE_REBORN))

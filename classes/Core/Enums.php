@@ -84,8 +84,11 @@ class e_Configs extends \Core\Enumerators
 		,$DISABLE_ALL_PREMDAYS_FEATURES
 		,$ENABLE_ITEM_SHOP
 		,$ENABLE_STAMINA_REFILER
+		,$ENABLE_REMOVE_SKULLS
 		,$PREMCOST_CHANGENAME
 		,$PREMCOST_CHANGESEX
+		,$PREMCOST_REMOVE_RED_SKULL
+		,$PREMCOST_REMOVE_BLACK_SKULL
 		
 		/*
 		 * Guilds related
@@ -172,6 +175,7 @@ class e_LangMsg extends \Core\Enumerators
 	,$CHARACTER_NOT_TO_DELETION
 	,$CHARACTER_NOT_FROM_YOUR_ACCOUNT
 	,$CHARACTER_NO_MORE_DELETED
+	,$CHARACTER_MUST_BE_RED_OR_BLACK_SKULL
 	,$CONTR_TERMS
 	,$CONTR_ACTIVATED
 	,$CONTR_ORDER_NUMBER_DUPLICATED
@@ -199,6 +203,7 @@ class e_LangMsg extends \Core\Enumerators
 	,$CHARACTER_COMMENT_WRONG_SIZE
 	,$CHARACTER_COMMENT_CHANGED
 	,$CHARACTER_CHANGE_THING_CONFIRM
+	,$CHARACTER_REMOVE_SKILLS_CONFIRM
 	,$CHARACTER_NEED_OFFLINE
 	,$CHARACTER_CHANGENAME_COST
 	,$CHARACTER_NAME_CHANGED
@@ -262,6 +267,7 @@ class e_LangMsg extends \Core\Enumerators
 	,$STAMINA_NOT_HAVE_PREMDAYS
 	,$STAMINA_VALUE_WRONG
 	,$STAMINA_SUCCESSFULY
+	,$REMOVE_SKULL_SUCCESSFULY
 	,$DARGHOSPOINTS_NEED_ACCEPT_TERMS
 	,$MONSTER_NOT_FOUND
 	,$OPERATION_NEED_PREMDAYS
@@ -337,6 +343,20 @@ class t_Worlds extends \Core\Structs
 		);
 }
 
+class t_PremdaysServices extends \Core\Structs
+{
+	const
+		ChangeCharacterName = 1
+		,ChangeCharacterSex = 2
+		,RechargeCharacterStamina = 3
+		,AccountRename = 4
+		,ChangeCharacterPvp = 5
+		,ClearChangePvpDebuff = 6
+		,ClearSkullRed = 7
+		,ClearSkullBlack = 7
+		;
+}
+
 class t_PaymentStatus extends \Core\Structs
 {
 	const
@@ -353,6 +373,18 @@ class t_PaymentStatus extends \Core\Structs
 			,self::Finished => "Concluido"
 			,self::Canceled => "Cancelado"				
 		);
+}
+
+class t_Skulls extends \Core\Structs
+{
+	const
+		None = 0
+		,Yellow = 1
+		,Green = 2
+		,White = 3
+		,Red = 4
+		,Black = 5
+		;
 }
 
 class t_Skills extends \Core\Structs

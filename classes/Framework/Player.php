@@ -713,6 +713,8 @@ class Player
 	function setComment($value){ $this->site_data['comment'] = $value; }	
 	function setCreation($value){ $this->site_data['creation'] = $value; }	
 	function setStamina($value){ $this->data['stamina'] = $value; }	
+	function setSkull($value){	$this->data['skull'] = $value; }	
+	function setSkullTime($value){	$this->data['skulltime'] = $value; }	
 	function setHidden($value){	$this->site_data['visible'] = $value; }	
 	
 	function setDeleted($bool){ $this->data['deleted'] = $bool; }
@@ -789,6 +791,8 @@ class Player
 	function getPosY(){ return $this->data['posy']; }
 	function getPosZ(){	return $this->data['posz'];	}	
 	function getStamina(){ return $this->data['stamina']; }	
+	function getSkull(){ return $this->data['skull']; }	
+	function getSkullTime(){ return $this->data['skulltime']; }	
 	function getBattlegroundRating() { return $this->data['battleground_rating']; }
 	function isPvpEnabled() { return (bool)$this->data['pvpEnabled']; }
 	function isDeleted(){ return (bool)$this->data['deleted']; }
