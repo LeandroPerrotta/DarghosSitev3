@@ -154,10 +154,10 @@ if(isset($_GET["world"]))
 		if(Configs::Get(Configs::eConf()->ENABLE_REBORN) && !$filter_hideRebornPlayers && $skill == "experience")
 			$query_str .= "`reborn_level` DESC, ";
 			
-		$query_str .= "`{$skill}` DESC, ";
+		$query_str .= "`{$skill}` DESC ";
 		
 		if($skill == "maglevel")
-			$query_str .= "`manaspent` DESC ";
+			$query_str .= ", `manaspent` DESC ";
 		
 		$query_str .= "LIMIT {$start}, 20";
 			
