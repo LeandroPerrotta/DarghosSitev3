@@ -154,10 +154,10 @@ if(isset($_GET["world"]))
 		if(Configs::Get(Configs::eConf()->ENABLE_REBORN) && !$filter_hideRebornPlayers && $skill == "experience")
 			$query_str .= "`reborn_level` DESC, ";
 			
-		$query_str .= "`{$skill}` DESC";
+		$query_str .= "`{$skill}` DESC, ";
 		
 		if($skill == "maglevel")
-			$query_str .= "`manaspent` DESC";
+			$query_str .= "`manaspent` DESC ";
 		
 		$query_str .= "LIMIT {$start}, 20";
 			
@@ -227,7 +227,7 @@ if(isset($_GET["world"]))
 				`player`.`id` = `skill`.`player_id` AND `skill`.`skillid` = {$skillid} AND `player`.`group_id` < 3
 				{$pvp_str}
 			ORDER BY 
-				`skill`.`value` DESC
+				`skill`.`value` DESC,
 				`skill`.`count` DESC
 			LIMIT 
 				{$start}, 20");
