@@ -24,7 +24,7 @@ if(isset($_GET["world"]))
 		<p> <b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos ' .$charactersActiveDays. ' dias.';
 	}
 	
-	$validSkills = array("experience", "level");
+	$validSkills = array("experience", "maglevel");
 	$select = new \Framework\HTML\SelectBox();
 	$select->SetName("skill");
 	
