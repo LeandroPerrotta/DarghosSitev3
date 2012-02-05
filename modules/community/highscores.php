@@ -154,7 +154,12 @@ if(isset($_GET["world"]))
 		if(Configs::Get(Configs::eConf()->ENABLE_REBORN) && !$filter_hideRebornPlayers && $skill == "experience")
 			$query_str .= "`reborn_level` DESC, ";
 			
-		$query_str .= "`{$skill}` DESC LIMIT {$start}, 20";
+		$query_str .= "`{$skill}` DESC";
+		
+		if($skill == "maglevel")
+			$query_str .= "`manaspent` DESC";
+		
+		$query_str .= "LIMIT {$start}, 20";
 			
 		$query = \Core\Main::$DB->query($query_str);
 	}
@@ -166,9 +171,9 @@ if(isset($_GET["world"]))
 		FROM
 			`players`
 		WHERE
-			group_id < 3
-			AND world_id = {$world_id}
-			AND deleted = 0";
+			`group_id` < 3
+			AND `world_id` = {$world_id}
+			AND `deleted` = 0";
 		
 		if(!$filter_showInactivePlayers)
 			$query_str .= " AND `lastlogin` > UNIX_TIMESTAMP() - ({$charactersActiveDays} * 60 * 60 * 24)";
@@ -207,18 +212,23 @@ if(isset($_GET["world"]))
 		
 		$query = \Core\Main::$DB->query("
 			SELECT 
-				player.id 
+				`player`.`id`
 			FROM 
-				players as player, player_skills as skill 
+				`players` as `player`
+			LEFT JOIN
+				`player_skills` as `skill`
+			ON
+				`skill`.`player_id` = `player`.`id`
 			WHERE 
-				player.deleted = 0 AND
-				player.world_id = {$world_id} AND
+				`player`.`deleted` = 0 AND
+				`player`.`world_id` = {$world_id} AND
 				".((!$filter_showInactivePlayers) ? 
-					"player.lastlogin + (60 * 60 * 24 * {$charactersActiveDays}) > ".time()." AND " : null)."				
-				player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3
+					"`player`.`lastlogin` + (60 * 60 * 24 * {$charactersActiveDays}) > ".time()." AND " : null)."				
+				`player`.`id` = `skill`.`player_id` AND `skill`.`skillid` = {$skillid} AND `player`.`group_id` < 3
 				{$pvp_str}
 			ORDER BY 
-				skill.value DESC 
+				`skill`.`value` DESC
+				`skill`.`count` DESC
 			LIMIT 
 				{$start}, 20");
 	}

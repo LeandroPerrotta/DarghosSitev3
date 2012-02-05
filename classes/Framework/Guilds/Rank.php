@@ -59,7 +59,7 @@ class Rank
 		$this->_level = $fetch->level;
 		
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `players` WHERE `rank_id` = '{$this->_id}'";
+			$query_str = "SELECT `id` FROM `players` WHERE `rank_id` = '{$this->_id}' AND `deleted` = 0";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "SELECT `player_id` FROM `guild_members` WHERE `rank_id` = '{$this->_id}'";
 			

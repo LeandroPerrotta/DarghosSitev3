@@ -455,6 +455,11 @@ class Player
 		return true;
 	}
 	
+	function onDelete()
+	{
+		$this->data["rank_id"] = 0;
+	}
+	
 	function getTotalKills()
 	{
 		$query = $this->db->query("
@@ -717,7 +722,11 @@ class Player
 	function setSkullTime($value){	$this->data['skulltime'] = $value; }	
 	function setHidden($value){	$this->site_data['visible'] = $value; }	
 	
-	function setDeleted($bool){ $this->data['deleted'] = $bool; }
+	function setDeleted($bool){ 
+		$this->data['deleted'] = $bool; 
+		if($bool)
+			$this->onDelete();
+	}
 	
 	function get($field)
 	{
