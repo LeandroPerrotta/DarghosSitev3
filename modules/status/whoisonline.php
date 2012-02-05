@@ -229,7 +229,7 @@ if(isset($_GET["world"]))
 			
 			$days = $uptime % 365;
 				
-			$uptime = ($days >= 1) ? "{$days} dias {$hours} horas e {$minutes} minutos" : "{$hours}horas e {$minutes}minutos";			
+			$uptime = ($days >= 1) ? "{$days} dias {$hours} horas e {$minutes} minutos" : "{$hours} horas e {$minutes} minutos";			
 			
 			$module .= "
 			<tr>
@@ -306,7 +306,7 @@ if(isset($_GET["world"]))
 			$module .= "
 			<table cellspacing='0' cellpadding='0' id='table'>
 				<tr>
-					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> " .(($world_id == t_Worlds::Darghos) ? "<td>PvP</td>" : null ). "
+					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> " .(($world_id == t_Worlds::Darghos) ? "<th>PvP</th>" : null ). "
 				</tr>
 	
 				{$players_list}
