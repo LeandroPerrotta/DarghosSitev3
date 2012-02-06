@@ -83,25 +83,25 @@ class Player
 
 	function save()
 	{		
-		$i = 0;
 		
 		if(isset($this->data['id']))
-		{
+		{			
+			$hasUpdate = false;
+			$temp = array();
 			foreach($this->data as $field => $value)
-			{
-				$i++;
-				
+			{			
 				if($this->temp_data[$field] == $value)
 					continue;
-				
-				$update .= "`".$field."` = '".$value."'";
-				
-				if($i <= count($this->data))
-					$update .= ", ";		
+							
+				$temp[] = "`{$field}` = '{$value}'";
 			}
 			
-			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");
 			
+			if(count($temp) > 0)
+			{
+				$update = implode(", ", $temp);
+				$this->db->query("UPDATE players SET {$update} WHERE id = '".$this->data['id']."'");
+			}
 			
 			$query_str = "
 			UPDATE 
