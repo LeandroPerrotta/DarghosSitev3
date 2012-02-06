@@ -417,7 +417,7 @@ class t_TownsGlobal extends \Core\Structs
 		Venore = 1
 		,Thais = 2	
 		,Kazordoon = 3	
-		,Carlin = 4	
+		,Carlin = 4
 		,AbDendriel = 5	
 		,Rookgaard = 6	
 		,LibertyBay = 7	

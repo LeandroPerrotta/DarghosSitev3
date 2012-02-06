@@ -49,7 +49,7 @@ if($_POST)
 		if($_world_id == t_Worlds::Darghos)
 			$town_id = t_Towns::IslandOfPeace;
 		else
-			$town_id = t_Towns::Get($_POST["player_town"]);		
+			$town_id = t_TownsGlobal::Get($_POST["player_town"]);
 		
 		$player->setName($_POST["player_name"]);
 		$player->setWorldId($_world_id);
