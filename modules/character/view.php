@@ -247,6 +247,7 @@ $infos[] = array("Tipo de Conta", $premium);
 $infos[] = array("Nome Real", $realname);
 $infos[] = array("Localização", $location);
 $infos[] = array("Website", $url);
+$infos[] = array("Criação", \Core\Main::formatDate($account->getCreation()));
 
 $module .= "
 <div title='accounts' style='display: none; margin: 0px; padding: 0px;'>";
