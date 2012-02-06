@@ -17,7 +17,8 @@ a:hover {
 body {
 	background: #000 url(images/body.jpg) repeat;
 	color: #FFF;
-	font: normal 11px Verdana, sans-serif;
+	font-family: Verdana, Arial, Times New Roman, sans-serif;
+	font-size: 10pt;
 	padding: 20px 0;
 }	
 
