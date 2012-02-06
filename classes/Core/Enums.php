@@ -353,7 +353,7 @@ class t_PremdaysServices extends \Core\Structs
 		,ChangeCharacterPvp = 5
 		,ClearChangePvpDebuff = 6
 		,ClearSkullRed = 7
-		,ClearSkullBlack = 7
+		,ClearSkullBlack = 8
 		;
 }
 
