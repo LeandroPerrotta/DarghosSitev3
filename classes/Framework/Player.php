@@ -57,7 +57,7 @@ class Player
 		return true;
 	}
 		
-	private $db, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
+	private $db, $temp_data, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
 	
 	private $site_data = array(
 		"visible" => 1
@@ -91,14 +91,13 @@ class Player
 			{
 				$i++;
 				
-				if($i == count($this->data))
-				{
-					$update .= "".$field." = '".$value."'";
-				}
-				else
-				{
-					$update .= "".$field." = '".$value."', ";
-				}			
+				if($this->temp_data[$field] == $value)
+					continue;
+				
+				$update .= "`".$field."` = '".$value."'";
+				
+				if($i <= count($this->data))
+					$update .= ", ";		
 			}
 			
 			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");
@@ -218,6 +217,7 @@ class Player
 		}	
 			
 		$this->data = $query->fetchAssocArray();
+		$this->temp_data = $this->data; //usaremos para posterioremente identificar valores modificados
 		
 		$query = $this->db->query("SELECT `creation`, `visible`, `comment` FROM `".\Core\Tools::getSiteTable("players")."` WHERE `player_id` = '{$this->data["id"]}'");
 		
