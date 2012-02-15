@@ -84,6 +84,12 @@ class View
 				$db->ExecQuery("UPDATE `players` SET `balance` = `balance` + {$house->price} WHERE `id` = {$house->owner}");
 			}
 		}
+		
+		$db->query("DELETE FROM `houses` WHERE `world_id` = ".t_Worlds::Aaragon."");
+		$db->query("DELETE FROM `house_lists` WHERE `world_id` = ".t_Worlds::Aaragon."");
+		$db->query("DELETE FROM `house_data` WHERE `world_id` = ".t_Worlds::Aaragon."");
+		
+		$db->ExecQuery("UPDATE players SET `town_id` = ".t_Towns::Quendor.", posx = 0, posy = 0, posz = 0 WHERE world_id = ".t_Worlds::Aaragon."");
 	}
 	
 	function draw()
