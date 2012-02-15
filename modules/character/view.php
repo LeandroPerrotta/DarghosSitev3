@@ -479,10 +479,13 @@ if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorl
 	$table->AddField("Battlegrounds", null, null, null, true);
 	$table->AddRow();
 	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundRating1500() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 1.500 pontos de classificação (rating).</span>");
+	$table->AddField("<span class='".($player->hasAchievBattlegroundRankBrave() ? "hasAchiev" : "notHasAchiev")."'>Rank - Bravo: Conquistou 1.000 pontos de classificação (rating).</span>");
 	$table->AddRow();
 	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundRating2000() ? "hasAchiev" : "notHasAchiev")."'>Conquistou 2.000 pontos de classificação (rating).</span>");
+	$table->AddField("<span class='".($player->hasAchievBattlegroundRankVeteran() ? "hasAchiev" : "notHasAchiev")."'>Rank - Veterano: Conquistou 1.500 pontos de classificação (rating).</span>");
+	$table->AddRow();
+	
+	$table->AddField("<span class='".($player->hasAchievBattlegroundRankLegend() ? "hasAchiev" : "notHasAchiev")."'>Rank - Lenda: Conquistou 2.000 pontos de classificação (rating).</span>");
 	$table->AddRow();
 	
 	$table->AddField("<span class='".($player->hasAchievBattlegroundInsaneKiller() ? "hasAchiev" : "notHasAchiev")."'>Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez em uma Battleground.</span>");

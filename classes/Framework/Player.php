@@ -16,10 +16,11 @@ class Player
 		;
 		
 	const
-		PH_ACHIEV_BATTLEGROUND_GET_1500_RATING = 1
-		, PH_ACHIEV_BATTLEGROUND_GET_2000_RATING = 2
+		PH_ACHIEV_BATTLEGROUND_RANK_VETERAN = 1
+		, PH_ACHIEV_BATTLEGROUND_RANK_LEGEND = 2
 		, PH_ACHIEV_BATTLEGROUND_ISANE_KILLER = 3
 		, PH_ACHIEV_BATTLEGROUND_PERFECT = 4
+		, PH_ACHIEV_BATTLEGROUND_RANK_BRAVE = 5
 		;
 	
 		
@@ -633,14 +634,19 @@ class Player
 		return $query->numRows() > 0;
 	}
 	
-	function hasAchievBattlegroundRating1500()
+	function hasAchievBattlegroundRankVeteran()
 	{
-		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_GET_1500_RATING);
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_RANK_VETERAN);
 	}
 	
-	function hasAchievBattlegroundRating2000()
+	function hasAchievBattlegroundRankLegend()
 	{
-		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_GET_2000_RATING);
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_RANK_LEGEND);
+	}
+	
+	function hasAchievBattlegroundRankBrave()
+	{
+		return $this->hasAchievement(self::PH_ACHIEV_BATTLEGROUND_RANK_BRAVE);
 	}
 	
 	function hasAchievBattlegroundInsaneKiller()
