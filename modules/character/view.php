@@ -92,7 +92,7 @@ $infos[] = array("Sexo", t_Genre::GetString($player->getSex()));
 $_vocation = new t_Vocation($player->getVocation());
 $infos[] = array("Vocação", $_vocation->GetByName($player->getVocation()));
 
-$town_str = ($player->getWorldId() == t_Worlds::Darghos) ? t_Towns::GetString($player->getTownId()) : t_TownsGlobal::GetString($player->getTownId());
+$town_str = t_Towns::GetString($player->getTownId());
 $infos[] = array("Residencia", $town_str);
 
 if($houseid)
@@ -100,7 +100,7 @@ if($houseid)
 	$houses = new \Framework\Houses($player->getWorldId());
 	$houses->load($houseid);
 	
-	$_house_town_str = ($player->getWorldId() == t_Worlds::Darghos) ? t_Towns::GetString($houses->get("town")) : t_TownsGlobal::GetString($houses->get("town"));
+	$_house_town_str = t_Towns::GetString($houses->get("town"));
 	
 	$housemsg = "";
 	if($houses->get("warnings") == 0)

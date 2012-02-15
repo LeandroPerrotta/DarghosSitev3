@@ -81,8 +81,8 @@ class Configs
 				
 				case self::$e_Configs->USE_DISTRO: self::Set($i, $__configs[$i], Consts::SERVER_DISTRO_TFS); break;
 				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/darghos/tfs/"); break;
-				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "data/", \t_Worlds::RealMap => "global/")); break;
-				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => "world/-house.xml", \t_Worlds::RealMap => "world/house.xml")); break;
+				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], "data/"); break;
+				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], "world/-house.xml"); break;
 				case self::$e_Configs->FILE_MONSTERS: self::Set($i, $__configs[$i], "monster/monsters.xml"); break;
 				case self::$e_Configs->USE_ENCRYPT: self::Set($i, $__configs[$i], Consts::ENCRYPT_TYPE_MD5); break;
 				
@@ -102,7 +102,7 @@ class Configs
 				case self::$e_Configs->ENABLE_PLAYERS_COMMENT_NEWS: self::Set($i, $__configs[$i], true); break;
 				
 				case self::$e_Configs->DISABLE_ALL_PREMDAYS_FEATURES: self::Set($i, $__configs[$i], false); break;
-				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;
+				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::Aaragon => false)); break;
 				case self::$e_Configs->ENABLE_STAMINA_REFILER: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->ENABLE_REMOVE_SKULLS: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->PREMCOST_CHANGENAME: self::Set($i, $__configs[$i], 15); break;
@@ -121,9 +121,9 @@ class Configs
 				case self::$e_Configs->FIRST_REBORN_LEVEL: self::Set($i, $__configs[$i], 200); break;
 				
 				case self::$e_Configs->INSTANT_DELETION_MAX_LEVEL: self::Set($i, $__configs[$i], 50); break;					
-				case self::$e_Configs->ENABLE_PVP_SWITCH: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;					
+				case self::$e_Configs->ENABLE_PVP_SWITCH: self::Set($i, $__configs[$i], true); break;					
 				case self::$e_Configs->AJAX_SEARCH_PLAYERS_COUNT: self::Set($i, $__configs[$i], 5); break;					
-				case self::$e_Configs->ENABLE_BATTLEGROUND_FEATURES: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::RealMap => false)); break;					
+				case self::$e_Configs->ENABLE_BATTLEGROUND_FEATURES: self::Set($i, $__configs[$i], true); break;					
 			}
 		}
 	}

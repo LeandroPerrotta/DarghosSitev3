@@ -69,17 +69,14 @@ class View
 		$this->_char_world = new \Framework\HTML\SelectBox();
 		$this->_char_world->SetName("character_world");
 		$this->_char_world->AddOption("");
-		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::RealMap), t_Worlds::RealMap);
-		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Darghos), t_Worlds::Darghos);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Ordon), t_Worlds::Ordon);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Aaragon), t_Worlds::Aaragon);
 		
 		$this->_char_town = new \Framework\HTML\SelectBox();
 		$this->_char_town->SetName("character_town");
 		$this->_char_town->AddOption("");
-		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Thais), t_TownsGlobal::Thais);	
-		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Carlin), t_TownsGlobal::Carlin);
-		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Venore), t_TownsGlobal::Venore);
-		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::AbDendriel), t_TownsGlobal::AbDendriel);
-		$this->_char_town->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Kazordoon), t_TownsGlobal::Kazordoon);
+		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);	
+		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);	
 		
 		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
@@ -162,7 +159,7 @@ class View
 				{$this->_char_name->Draw()}			
 			</p>
 			
-			<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos completamente diferentes e com suas proprias caractéristicas para você se divertir. Selecione abaixo qual mundo você deseja fazer parte:</p>
+			<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos, que apesar de possuirem o mesmo conteudo possuem caracteristicas diferentes, selecione de qual você deseja participar:</p>
 			<p>
 				<label>Mundo do personagem:</label>
 				{$this->_char_world->Draw()}
@@ -170,8 +167,9 @@ class View
 				<div class='character_world'>
 					<div class='1' style='display: none;'>
 						<p>
-							<p><b>Mapa:</b><br> Global.</p>
-							<p><b>Caracteristicas:</b><br> Segue rigorosamente as caracteristica do Tibia, contando com todas as cidades, quests, criaturas, etc. Porem com uma facilidade mais amigavel.</p>
+							<p><b>Tipo PvP:</b><br> somente aberto.</p>
+							<p><b>Inauguração:</b><br> fev/2012.</p>
+							<p><b>Dificuldade & Rates:</b><br> Moderada.</p>
 						</p>
 						<p>
 							<label>Cidade natal do personagem:</label>
@@ -180,9 +178,14 @@ class View
 					</div>
 					<div class='0' style='display: none;'>
 						<p>
-							<p><b>Mapa:</b><br> Darghos (próprio).</p>
-							<p><b>Caracteristicas:</b><br> Nosso objetivo no Darghos é fazer coisas diferentes, por isso possui uma grande quantidade de inovações como: Liberdade para escolher seu pvp, sistema de Battlegrounds & Arena, 7 cidades entre outras, e está recebendo constantemente mais novidades.</p>
+							<p><b>Tipo PvP:</b><br> mudança permitida.</p>
+							<p><b>Inauguração:</b><br> fev/2011.</p>
+							<p><b>Dificuldade & Rates:</b><br> Facil.</p>
 						</p>
+						<p>
+							<label>Cidade natal do personagem:</label>
+							{$this->_char_town->Draw()}
+						</p>						
 					</div>								
 				</div>
 			</p>			

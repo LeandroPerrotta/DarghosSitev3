@@ -36,7 +36,6 @@ class e_Configs extends \Core\Enumerators
 		,$STATUS_PORT
 		,$STATUS_SHOW_PING
 		,$STATUS_IGNORE_AFK
-		,$STATUS_SHOW_TEST_SERVER
 		
 		/*
 		 * Website folding
@@ -84,11 +83,8 @@ class e_Configs extends \Core\Enumerators
 		,$DISABLE_ALL_PREMDAYS_FEATURES
 		,$ENABLE_ITEM_SHOP
 		,$ENABLE_STAMINA_REFILER
-		,$ENABLE_REMOVE_SKULLS
 		,$PREMCOST_CHANGENAME
 		,$PREMCOST_CHANGESEX
-		,$PREMCOST_REMOVE_RED_SKULL
-		,$PREMCOST_REMOVE_BLACK_SKULL
 		
 		/*
 		 * Guilds related
@@ -110,9 +106,7 @@ class e_Configs extends \Core\Enumerators
 		/*
 		 * Others
 		 */
-		,$INSTANT_DELETION_MAX_LEVEL
 		,$ENABLE_PVP_SWITCH
-		,$ENABLE_BATTLEGROUND_FEATURES
 		,$AJAX_SEARCH_PLAYERS_COUNT
 	;
 	
@@ -175,7 +169,6 @@ class e_LangMsg extends \Core\Enumerators
 	,$CHARACTER_NOT_TO_DELETION
 	,$CHARACTER_NOT_FROM_YOUR_ACCOUNT
 	,$CHARACTER_NO_MORE_DELETED
-	,$CHARACTER_MUST_BE_RED_OR_BLACK_SKULL
 	,$CONTR_TERMS
 	,$CONTR_ACTIVATED
 	,$CONTR_ORDER_NUMBER_DUPLICATED
@@ -192,18 +185,13 @@ class e_LangMsg extends \Core\Enumerators
 	,$GUILD_JOIN_REJECT
 	,$GUILD_NAME_ALREADY_USED
 	,$GUILD_ONLY_ONE_VICE_PER_ACCOUNT
-	,$GUILD_INVITE_CHARACTER_NOT_SAME_WORLD
-	,$GUILD_NOT_SAME_WORLD
 	,$CHARACTER_ALREADY_MEMBER_GUILD
 	,$GUILD_CREATED
 	,$CHARACTER_ALREADY_TO_DELETE
-	,$CHARACTER_MUST_AWARE_INSTANT_DELETION
-	,$CHARACTER_DELETED
 	,$CHARACTER_DELETION_SCHEDULED
 	,$CHARACTER_COMMENT_WRONG_SIZE
 	,$CHARACTER_COMMENT_CHANGED
 	,$CHARACTER_CHANGE_THING_CONFIRM
-	,$CHARACTER_REMOVE_SKILLS_CONFIRM
 	,$CHARACTER_NEED_OFFLINE
 	,$CHARACTER_CHANGENAME_COST
 	,$CHARACTER_NAME_CHANGED
@@ -267,7 +255,6 @@ class e_LangMsg extends \Core\Enumerators
 	,$STAMINA_NOT_HAVE_PREMDAYS
 	,$STAMINA_VALUE_WRONG
 	,$STAMINA_SUCCESSFULY
-	,$REMOVE_SKULL_SUCCESSFULY
 	,$DARGHOSPOINTS_NEED_ACCEPT_TERMS
 	,$MONSTER_NOT_FOUND
 	,$OPERATION_NEED_PREMDAYS
@@ -329,34 +316,6 @@ class e_BanTypes
 	;
 }
 
-class t_Worlds extends \Core\Structs
-{
-	const
-		Ordon = 0
-		,Aaragon = 1
-		;
-		
-	static protected
-		$m_typeStrings = array(
-			self::Ordon => "Ordon"
-			,self::Aaragon => "Aaragon"
-		);
-}
-
-class t_PremdaysServices extends \Core\Structs
-{
-	const
-		ChangeCharacterName = 1
-		,ChangeCharacterSex = 2
-		,RechargeCharacterStamina = 3
-		,AccountRename = 4
-		,ChangeCharacterPvp = 5
-		,ClearChangePvpDebuff = 6
-		,ClearSkullRed = 7
-		,ClearSkullBlack = 8
-		;
-}
-
 class t_PaymentStatus extends \Core\Structs
 {
 	const
@@ -373,18 +332,6 @@ class t_PaymentStatus extends \Core\Structs
 			,self::Finished => "Concluido"
 			,self::Canceled => "Cancelado"				
 		);
-}
-
-class t_Skulls extends \Core\Structs
-{
-	const
-		None = 0
-		,Yellow = 1
-		,Green = 2
-		,White = 3
-		,Red = 4
-		,Black = 5
-		;
 }
 
 class t_Skills extends \Core\Structs
@@ -409,44 +356,6 @@ class t_Skills extends \Core\Structs
 			,self::Shielding => "shielding"
 			,self::Fishing => "fishing"		
 		);
-}
-
-class t_TownsGlobal extends \Core\Structs
-{
-	const
-		Venore = 1
-		,Thais = 2	
-		,Kazordoon = 3	
-		,Carlin = 4
-		,AbDendriel = 5	
-		,Rookgaard = 6	
-		,LibertyBay = 7	
-		,PortHope = 8	
-		,Ankrahmun = 9	
-		,Darashia = 10	
-		,Edron = 11	
-		,Svarground = 12	
-		,Yalahar = 13	
-		,Farmine = 14	
-	;
-	
-	static protected
-	$m_typeStrings = array(
-			self::Venore => "Venore",
-			self::Thais => "Thais",
-			self::Kazordoon => "Kazordoon",
-			self::Carlin => "Carlin",
-			self::AbDendriel => "Ab'Dendriel",
-			self::Rookgaard => "Rookgaard",
-			self::LibertyBay => "Liberty Bay",
-			self::PortHope => "Port Hope",
-			self::Ankrahmun => "Ankrahmun",
-			self::Darashia => "Darashia",
-			self::Edron => "Edron",
-			self::Svarground => "Svarground",
-			self::Yalahar => "Yalahar",
-			self::Farmine => "Farmine"
-	);	
 }
 
 class t_Towns extends \Core\Structs

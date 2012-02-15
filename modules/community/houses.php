@@ -9,7 +9,7 @@ if(isset($_GET["world"]))
 	$world_id = (int)$_GET["world"];
 	
 	if(!t_Worlds::Get($world_id))
-		$world_id = t_Worlds::Darghos;	
+		$world_id = t_Worlds::Ordon;	
 	
 	if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 		$query_str = "SELECT * FROM houses WHERE world_id = {$world_id} ORDER BY `town`";
@@ -45,7 +45,7 @@ if(isset($_GET["world"]))
 			continue;
 		}
 		
-		$_town_str = ($world_id == t_Worlds::Darghos) ? t_Towns::GetString($houses->getTown()) : t_TownsGlobal::GetString($houses->getTown());
+		$_town_str = ($world_id == t_Worlds::Darghos) ? t_Towns::GetString($houses->getTown()) : t_Towns::GetString($houses->getTown());
 		
 		$_owner_str = "<font style='color: green; font-weight: bold;'>Vazia</font>";
 		

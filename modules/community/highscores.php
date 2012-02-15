@@ -8,7 +8,7 @@ if(isset($_GET["world"]))
 	$world_id = (int)$_GET["world"];
 	
 	if(!t_Worlds::Get($world_id))
-		$world_id = t_Worlds::Darghos;
+		$world_id = t_Worlds::Ordon;
 	
 	$filter_hideRebornPlayers = ($_GET["hideReborned"] == "1") ? true : false;
 	$filter_showInactivePlayers = ($_GET["showInactives"] == "1") ? true : false;

@@ -487,7 +487,12 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "emailcampaign":
 					$patch['file'] = $topic;
 					$needMinGroup = t_Group::Administrator;			
-				break;						
+				break;			
+
+				case "depot_merger":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;				
 				
 				default:
 					$patch['dir'] = "errors";

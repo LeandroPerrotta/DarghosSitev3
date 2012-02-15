@@ -98,10 +98,7 @@ class Ajax_player
 		
 		$town_id = null;
 		
-		if($_world_id == t_Worlds::Darghos)
-			$town_id = t_Towns::IslandOfPeace;
-		else
-			$town_id = t_Towns::Get($town);
+		$town_id = t_Towns::Get($town);
 			
 		$player = new \Framework\Player();	
 			

@@ -46,10 +46,7 @@ if($_POST)
 			
 		$_world_id = t_Worlds::Get($_POST["player_world"]);
 		
-		if($_world_id == t_Worlds::Darghos)
-			$town_id = t_Towns::IslandOfPeace;
-		else
-			$town_id = t_TownsGlobal::Get($_POST["player_town"]);
+		$town_id = t_Towns::Get($_POST["player_town"]);
 		
 		$player->setName($_POST["player_name"]);
 		$player->setWorldId($_world_id);
@@ -100,8 +97,8 @@ while(t_Genre::ItValid())
 
 $worlds_str = "";
 $worldNames = array(
-		t_Worlds::Darghos => "Darghos (customizado, ideal se você quer ter novas experiências)"
-		,t_Worlds::RealMap => "Real Map (rigorosamente baseado em Tibia)"
+		t_Worlds::Ordon => "Ordon (permitida mudança pvp, inaugurado fev/2011)"
+		,t_Worlds::Aaragon => "Aaragon (somente pvp aberto, inaugurado fev/2012)"
 );
 while(t_Worlds::ItValid())
 {
@@ -116,11 +113,8 @@ $townsSelect = new \Framework\HTML\SelectBox();
 $townsSelect->SetName("player_town");
 
 $townsSelect->AddOption("");
-$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Thais), t_TownsGlobal::Thais);
-$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Carlin), t_TownsGlobal::Carlin);
-$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Venore), t_TownsGlobal::Venore);
-$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::AbDendriel), t_TownsGlobal::AbDendriel);
-$townsSelect->AddOption(t_TownsGlobal::GetString(t_TownsGlobal::Kazordoon), t_TownsGlobal::Kazordoon);
+$townsSelect->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);
+$townsSelect->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);
 
 \Core\Main::includeJavaScriptSource("character_create.js");
 
@@ -135,16 +129,12 @@ $module .= '
 
 		<p>
 			<label for="player_world">Mundo</label>	
-				'.$worlds_str.'
-				
-			<div class="player_world">
-				<div class="1" style="display: none;">
-					<p>
-						<label for="player_town">Cidade</label>
-						'.$townsSelect->Draw().'
-					</p>
-				</div>						
-			</div>				
+				'.$worlds_str.'		
+		</p>		
+
+		<p>
+			<label for="player_town">Cidade</label>
+			'.$townsSelect->Draw().'
 		</p>		
 		
 		<p>
