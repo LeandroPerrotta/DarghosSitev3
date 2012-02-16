@@ -287,54 +287,87 @@ class Main
 		Main::redirect("?ref=account.login");
 	}
 	
-	static function requireWorldSelection()
+	static function requireWorldSelection($asTable = false)
 	{
-		$select = new \Framework\HTML\SelectBox();
-		$select->SetName("world");
-		$select->onChangeSubmit();
-		
-		$select->AddOption("", null, null, true);
-		
-		while(\t_Worlds::ItValid())
-		{
-			$selected = false;
-			if(isset($_GET["world"]) && $_GET["world"] == \t_Worlds::It())
-				$selected = true;
-			
-			$select->AddOption(\t_Worlds::GetString(\t_Worlds::It()), \t_Worlds::It(), $selected);
-			\t_Worlds::ItNext();
-		}
-		
-		$hidden_inputs = "";
-		
-		foreach($_GET as $k => $v)
-		{
-			if($k == "world")
-				continue;
-		
-			$input = new \Framework\HTML\Input();
-			$input->IsHidden();
-			$input->SetName($k);
-			$input->SetValue($v);
-			$hidden_inputs .= $input->Draw();
-		}	
-		
 		global $module;
 		
-		$str = "
-		<form action='{$_SERVER["REQUEST_URI"]}' method='GET'>
-			<fieldset>
-				{$hidden_inputs}
+		if(!$asTable)
+		{
+			$select = new \Framework\HTML\SelectBox();
+			$select->SetName("world");
+			$select->onChangeSubmit();
 			
-				<p>		
-					<label for='world'>Selecione um mundo</label>
-					{$select->Draw()}
-				</p>		
+			$select->AddOption("", null, null, true);
+			
+			while(\t_Worlds::ItValid())
+			{
+				$selected = false;
+				if(isset($_GET["world"]) && $_GET["world"] == \t_Worlds::It())
+					$selected = true;
 				
-				<p class='line'></p>
-			</fieldset>
-		</form>
-		";
+				$select->AddOption(\t_Worlds::GetString(\t_Worlds::It()), \t_Worlds::It(), $selected);
+				\t_Worlds::ItNext();
+			}
+			
+			$hidden_inputs = "";
+			
+			foreach($_GET as $k => $v)
+			{
+				if($k == "world")
+					continue;
+			
+				$input = new \Framework\HTML\Input();
+				$input->IsHidden();
+				$input->SetName($k);
+				$input->SetValue($v);
+				$hidden_inputs .= $input->Draw();
+			}	
+			
+			$str = "
+			<form action='{$_SERVER["REQUEST_URI"]}' method='GET'>
+				<fieldset>
+					{$hidden_inputs}
+				
+					<p>		
+						<label for='world'>Selecione um mundo</label>
+						{$select->Draw()}
+					</p>		
+					
+					<p class='line'></p>
+				</fieldset>
+			</form>
+			";
+		}
+		else
+		{
+			$table = new \Framework\HTML\Table();
+			
+			$table->AddField("Selecione um mundo", null, null, null, true);
+			$table->AddRow();
+			
+			$table->AddField("<strong>Mundo</strong>", "75%");
+			$table->AddField("<strong>Jogadores</strong>");
+			$table->AddRow();
+			
+			$status = \Core\Main::$DB->query("SELECT `server_id`, `players`, `online` FROM `serverstatus` ORDER BY `date` DESC LIMIT 2");
+			
+			$total = 0;
+			
+			while($s = $status->fetch())
+			{
+				$table->AddField("<a href='{$_SERVER["REQUEST_URI"]}&world={$s->server_id}'>" . \t_Worlds::GetString($s->server_id) . "</a>");
+				$table->AddField($s->online == 1 ? $s->players : "<span style='color: red;'>Fora do ar<span>");
+				$table->AddRow();		
+				
+				$total += $s->players;
+			}
+			
+			$table->AddField("<strong>Total</strong>" . \t_Worlds::GetString($s->server_id) . "</a>");
+			$table->AddField($total);
+			$table->AddRow();			
+			
+			$str = $table->Draw();
+		}
 
 		$module .= $str;
 	}

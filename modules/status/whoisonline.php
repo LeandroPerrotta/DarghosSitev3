@@ -2,10 +2,10 @@
 use \Core\Configs as g_Configs;
 use \Core\Consts;
 
-\Core\Main::requireWorldSelection();
-
 if(isset($_GET["world"]))
 {
+	\Core\Main::requireWorldSelection();
+	
 	$world_id = (int)$_GET["world"];
 
 	if(!t_Worlds::Get($world_id))
@@ -313,6 +313,8 @@ if(isset($_GET["world"]))
 	}
 
 }
+else
+	\Core\Main::requireWorldSelection(true);
 	
 	
 
