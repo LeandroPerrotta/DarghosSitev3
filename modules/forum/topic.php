@@ -535,7 +535,7 @@ class View
 					$accountType = "Conta Gratuita";
 					
 					if($user_character->isPremium())
-						$accountType = "<font style='color: green; font-weight: bold;'>Conta Premium</font>";
+						$accountType = "<font style='color: #00ff00; font-weight: bold;'>Conta Premium</font>";
 					
 					$string = "
 					<span style='font-size: 8pt;'>
