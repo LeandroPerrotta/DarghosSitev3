@@ -538,12 +538,14 @@ class View
 						$accountType = "<font style='color: green; font-weight: bold;'>Conta Premium</font>";
 					
 					$string = "
+					<span style='font-size: 8pt;'>
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					{$group_str}{$group_str}
+					{$group_str}
 					<strong>Mundo:</strong> ".t_Worlds::GetString($user_character->getWorldId())."<br>
 					<strong>Level:</strong> {$user_character->getLevel()}<br>
 					<strong>Vocação:</strong> {$voc->GetByName()}<br>
 					{$accountType}
+					</span>
 					";
 				}
 				else
