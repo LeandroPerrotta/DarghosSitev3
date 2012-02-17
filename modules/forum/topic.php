@@ -540,10 +540,10 @@ class View
 					$string = "
 					<span style='font-size: 8pt;'>
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					{$group_str}
+					{$group_str}<br>
+					<strong>{$voc->GetByName()}</strong><br>
 					Mundo: <strong>".t_Worlds::GetString($user_character->getWorldId())."</strong><br>
 					Level: <strong>{$user_character->getLevel()}</strong><br>
-					Vocação: <strong>{$voc->GetByName()}</strong><br>
 					{$accountType}
 					</span>
 					";
