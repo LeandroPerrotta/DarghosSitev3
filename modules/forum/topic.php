@@ -530,9 +530,19 @@ class View
 				
 				if(!$nochar)
 				{
+					$voc = new t_Vocation($user_character->getVocation());
+					
+					$accountType = "Conta Gratuita";
+					
+					if($user_character->isPremium())
+						$accountType = "<font style='color: green; font-weight: bold;'>Conta Premium</font>";
+					
 					$string = "
 					<a href='?ref=character.view&name={$user_character->getName()}'>{$user_character->getName()}</a><br>
-					{$group_str}
+					{$group_str}{$group_str}
+					<strong>Level:</strong> {$user_character->getLevel()}<br>
+					<strong>Vocação:</strong> {$voc->GetByName()}<br>
+					{$accountType}
 					";
 				}
 				else
