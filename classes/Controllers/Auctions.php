@@ -186,6 +186,7 @@ class Auctions
 		{
 			$ret["error"] = true;
 			$ret["msg"] = "Você possui {$logged->getPremDays()} dias de conta premium, insulficientes para o lançe de {$bid_value}. Por favor, diminua seu lançe ou adquira mais dias de conta premium.";
+			return $ret;
 		}
 		
 		$newbid = new AuctionsModel\Bid();
