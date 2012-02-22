@@ -41,10 +41,6 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$patch['file'] = $topic;
 				break;			
 
-				case "premium":
-					$patch['file'] = $topic;
-				break;
-
 				case "changeemail":
 					$needLogin = true;
 					$patch['file'] = $topic;
@@ -117,33 +113,13 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 		
 			switch($topic)
 			{
-				case "world":
-					$patch['file'] = $topic;
-				break;				
-				
-				case "reborn":
-					$patch['file'] = $topic;
-				break;
-				
-				case "quests":
-					$patch['file'] = $topic;
-				break;						
-				
 				case "monsterlist":
 					$patch['file'] = $topic;
 				break;						
 				
 				case "monster":
 					$patch['file'] = $topic;
-				break;		
-
-				case "pvp_arenas":
-					$patch['file'] = $topic;
-				break;			
-						
-				case "week_events":
-					$patch['file'] = $topic;
-				break;					
+				break;	
 	
 				default:
 					$patch['dir'] = "errors";
@@ -433,18 +409,6 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 		
 			switch($topic)
 			{
-				case "howplay":
-					$patch['file'] = $topic;
-				break;	
-				
-				case "about":
-					$patch['file'] = $topic;
-				break;	
-
-				case "emailmarketing":
-					$patch['file'] = $topic;
-				break;					
-
 				case "fansites":
 					$patch['file'] = $topic;
 				break;					
@@ -535,11 +499,10 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 		$_isPremium = false;
 		$_groupId = t_Group::Player;
 		
-		if($_SESSION['login'])
-		{
-			$checkAccount = new Framework\Account();	
-			$checkAccount->load($_SESSION["login"][0]);
-			
+		$checkAccount = \Framework\Account::loadLogged();
+		
+		if($checkAccount)
+		{			
 			if($checkAccount->get("premdays") != 0)
 			{
 				$_isPremium = true;
@@ -565,7 +528,19 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			if($patch['dir'] != "errors")
 				$patch['urlnavigation'] = "/ ".$patch['dir']." / <a href='?ref=".$patch['dir'].".".$patch['file']."'>".$patch['file']."</a>";
 				
-			include("modules/".$patch['dir']."/".$patch['file'].".php");			
+			if($patch['dir'] == "errors")
+			{
+				if(!$checkAccount || ($checkAccount && $checkAccount->getAccess() < t_Access::Administrator))
+				{
+					include("modules/".$patch['dir']."/".$patch['file'].".php");		
+					\Core\Main::$FoundController = true;
+				}
+			}
+			else
+			{
+				include("modules/".$patch['dir']."/".$patch['file'].".php");
+				\Core\Main::$FoundController = true;				
+			}
 		}
 	}	
 	else	

@@ -5,6 +5,25 @@ class Items
 {
 	static private $_instance;
 	
+	static function LoadById($item_id)
+	{
+		$patch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA). "items/items.xml";
+		$xml = new \SimpleXMLElement($patch, null, true);
+		
+		$result = $xml->xpath("//*[@id=\"".(int)$item_id."\"]");
+		
+		if(!$result)
+			return false;
+		
+		$attr = $result[0]->attributes();
+		
+		$item = new Item();
+		$item->SetId($attr["id"]);
+		$item->SetName($attr["name"]);
+		
+		return $item;
+	}
+	
 	function __construct()
 	{
 		$query = \Core\Main::$DB->query("SELECT name FROM ".\Core\Tools::getSiteTable("items")."");

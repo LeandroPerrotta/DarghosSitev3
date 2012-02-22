@@ -11,35 +11,6 @@ ALTER TABLE `darghos`.`wb_iptries` MODIFY COLUMN `id` INTEGER UNSIGNED NOT NULL 
  CHANGE COLUMN `tries` `date` INTEGER UNSIGNED NOT NULL,
  DROP COLUMN `last_trie`;
 
-
-/*
- * AUCTION ITEMS
- */
-
-CREATE TABLE `wb_auction_bids` (
-  `id` INTEGER  NOT NULL AUTO_INCREMENT,
-  `auction_id` INTEGER  NOT NULL,
-  `player_id` INTEGER  NOT NULL,
-  `bid` INTEGER  NOT NULL,
-  `date` INTEGER  NOT NULL,
-  `enabled` INTEGER  NOT NULL,
-  PRIMARY KEY (`id`)
-)
-ENGINE = InnoDB;
-
-CREATE TABLE `wb_auction_products` (
-  `id` INTEGER  NOT NULL AUTO_INCREMENT,
-  `type` INTEGER  NOT NULL,
-  `name` VARCHAR(255)  NOT NULL,
-  `description` TEXT  NOT NULL,
-  `params` TEXT  NOT NULL,
-  `min_bid` INTEGER  NOT NULL DEFAULT 0,
-  `creation` INTEGER  NOT NULL,
-  `start_in` INTEGER  NOT NULL,
-  `end_in` INTEGER  NOT NULL,
-  PRIMARY KEY (`id`)
-)
-
 /*
  * END
  */

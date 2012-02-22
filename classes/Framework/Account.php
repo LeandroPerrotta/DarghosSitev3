@@ -30,6 +30,8 @@ class Account
 	
 	private $real_name = "", $location = "", $url = "", $creation, $load_personal = false;
 	
+	private $_group;
+	
 	static function loadLogged()
 	{
 		if(!\Core\Main::isLogged())
@@ -325,6 +327,17 @@ class Account
 			return $highGroup;
 		}
 	}	
+	
+	function getAccess()
+	{
+		if(!$this->_group)
+		{
+			$group_id = $this->getGroup();
+			$this->_group = \Framework\Group::LoadById($group_id);
+		}
+		
+		return $this->_group->access;
+	}
 	
 	function getCharacterList($returnValue = self::PLAYER_LIST_BY_NAME)
 	{

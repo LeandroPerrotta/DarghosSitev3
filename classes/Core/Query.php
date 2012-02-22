@@ -25,9 +25,28 @@ class Query
 		return mysql_num_rows($this->queryResource);
 	}
 	
-	public function fetch() 
+	public function fetch($obj = NULL, $params = NULL) 
 	{
-		return mysql_fetch_object($this->queryResource);
+		$ret = NULL;
+		
+		if($obj)
+		{
+			$ret = mysql_fetch_object($this->queryResource, $obj, $params);
+		}
+		else
+		{
+			$ret = mysql_fetch_object($this->queryResource);
+		}
+		
+		return $ret;
+	}
+	
+	public function fetchAsArrayObject(&$array, $objectName, $params = NULL)
+	{
+		while($obj = $this->fetch($objectName, $params))
+		{
+			array_push($array, $obj);
+		}
 	}
 	
 	public function fetchArray() 
@@ -48,6 +67,11 @@ class Query
 	public function getData()
 	{
 		return mysql_fetch_assoc($this->queryResource);
+	}
+	
+	public function getResultIterator()
+	{
+		return new ResultIterator($this);
 	}
 }
 ?>

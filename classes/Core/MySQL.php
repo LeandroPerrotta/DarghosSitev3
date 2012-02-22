@@ -21,7 +21,7 @@ class MySQL
 		
 		if(!$query)
 		{
-			echo mysql_error($this->connection)."<br>{$queryStr}<br><br>";
+			throw new \Exception("".mysql_error($this->connection)."\n query: {$queryStr}");
 			return false;		
 		}	
 		else
@@ -35,10 +35,19 @@ class MySQL
 	
 	public function ExecQuery($queryStr) 
 	{
-		return mysql_unbuffered_query($queryStr, $this->connection);
+		
+		$ret = mysql_unbuffered_query($queryStr, $this->connection);
+		
+		if(!$ret)
+		{
+			throw new \Exception("".mysql_error($this->connection)."\n query: {$queryStr}");
+			return false;			
+		}
+		
+		return true;
 	}	
 	
-	public function lastInsertId() 
+	public function lastInsertId()
 	{
 		return mysql_insert_id($this->connection);
 	}

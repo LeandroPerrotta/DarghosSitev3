@@ -123,6 +123,8 @@ $(document).ready(function() {
 		$("#horizontalSelector").nextAll('div[title!="' + valueSelected + '"]').hide();
 		$("#horizontalSelector").nextAll("div[title='" + valueSelected + "']").slideDown();	
 	});
+	
+	$(".datepicker").datepicker();
 });
 
 function onChange()

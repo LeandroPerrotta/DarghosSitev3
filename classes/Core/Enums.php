@@ -501,6 +501,18 @@ class t_Group extends \Core\Structs
 		);		
 }
 
+class t_Access
+{
+	const
+		Player = 0
+		,Tutor = 1
+		,SeniorTutor = 2
+		,GameMaster = 3
+		,CommunityManager = 4
+		,Administrator = 5
+	;
+}
+
 class t_Genre extends \Core\Structs
 {	
 	const

@@ -41,8 +41,9 @@ class Menus
 			"items" => array(
 				array("name" => "Vantagens", "url" => "?ref=account.premium")
 				,array("name" => "Comprar!", "style" => "font-weight: bold", "url" => "?ref=contribute.order")		
-				,array("name" => "Item Shop", "style" => "font-weight: bold", "url" => "?ref=itemshop.purchase")		
-				,array("name" => "Minhas Compras", "url" => "?ref=contribute.myorders")		
+				,array("name" => "Item Shop", "url" => "?ref=itemshop.purchase")		
+				,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")		
+				,array("name" => "Minhas Compras", "url" => "?ref=contribute.myorders")
 			)		
 		)
 		,array(

@@ -161,6 +161,8 @@ fieldset select option{
 	border-right: 1px solid #000;
 	margin: 0;
 	width: 60px;
+	display: block;
+	margin-top: 6px;
 }
 
 .button:hover {

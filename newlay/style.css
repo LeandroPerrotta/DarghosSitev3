@@ -282,6 +282,11 @@ ul li {
 	padding: 6px;
 }
 
+#fog-alert a.buttonstd{
+	
+	margin-right: 5px;
+}
+
 #fog-loading{
 	width: 16px;
 	height: 16px;
@@ -293,13 +298,28 @@ ul li {
 	position: fixed;
 }
 
-#fog-alert-title{
-	background: url(images/icon_right.png) -15px no-repeat;
-	padding-left: 19px;
+#fog-alert-title-error, #fog-alert-title-success{
 	font-size: 16px;
-	display: block;
 	font-weight: bold;
 	margin-top: 10px;
+}
+
+#fog-alert-title-error span, #fog-alert-title-success span{
+	background: url(images/icon_right.png) no-repeat;
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#fog-alert-title-error span {
+	background-position: -15px 0;
+}
+
+#fog-alert-title-error h3, #fog-alert-title-success h3{
+	margin-left: 5px;
+	display: inline-block;
+	line-height: 20px;
 }
 
 #fog-alert-content{
@@ -308,9 +328,9 @@ ul li {
 	margin-bottom: 15px;
 }
 
-#fog-alert span{
+/*#fog-alert span{
 	display: block;
-}
+}*/
 
 #wrapper_b {
 	background: #333 url(images/wrapper_b.jpg) repeat;

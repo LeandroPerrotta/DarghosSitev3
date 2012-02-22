@@ -1,8 +1,10 @@
 <?
 namespace Core;
+use Framework\Pages;
+
 class Main
 {
-	static public $DB;
+	static public $DB, $FoundController = false, $isAjax = false;
 	
 	static private $m_XMLRoot;
 	
@@ -41,7 +43,130 @@ class Main
 				$_POST = $_SESSION["login_post"];
 				unset($_SESSION["login_post"]);
 			}	
+			
+			self::loadTemplate();
+			self::routeToController();
 		}	
+	}
+	
+	static function routeToController()
+	{
+		$data = explode(".", $_GET["ref"]);
+		
+		$class = array();
+		
+		
+		foreach($data as $k => $v)
+		{
+			$data[$k] = strtolower($v);
+			$data[$k] = ucfirst($v);
+		}
+		
+		array_unshift($data, "Controllers");
+		
+		array_push($class, $data[0]);
+		array_push($class, $data[1]);
+		
+		$class_str = implode("\\", $class);
+		$method = $data[2];
+		
+		if(self::autoLoad($class_str))
+		{
+			$obj = new $class_str();
+			if(method_exists($obj, $method))
+			{
+				$ret = $obj->$method();
+								
+				if(self::$isAjax)
+					echo json_encode($ret);
+				else
+				{
+					if($ret)
+						self::$FoundController = true;
+				}		
+			}
+		}
+	}
+	
+	static function onEnd()
+	{		
+		if(self::$FoundController || Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
+			return;
+		
+		//após tudo, se nao conseguimos achar nada para carregar a pagina, iremos tentar carregar uma pagina simples, ou então criar uma...
+		
+		$data = explode(".", $_GET["ref"]);		
+		
+		foreach($data as $k => $v)
+		{
+			$data[$k] = strtolower($v);
+			$data[$k] = ucfirst($v);
+		}		
+		
+		array_unshift($data, "Pages");
+		
+		$logged = \Framework\Account::loadLogged();
+		
+		$patch = implode("/", $data);
+		
+		$exists = file_exists($patch . ".xml");
+		
+		if($exists || ($logged && $logged->getAccess() == \t_Access::Administrator))
+		{
+			$page = new \Core\Pages($patch . ".xml");
+				
+			global $module;
+				
+			if($logged && $logged->getAccess() == \t_Access::Administrator)
+			{
+				$module .= "<p style='text-align: right;'>";
+				if(!(bool)$_GET["edit"])
+				{
+					$module .= "<a href='{$_SERVER["REQUEST_URI"]}&edit=true'>Editar</a>";
+					if($exists)
+						$module .= $page->GetContent();
+				}
+				else
+				{
+					if($_POST)
+					{
+						$page->SetContent(trim($_POST["page_content"]));
+						$b = $page->save();
+						$exists = true;
+						
+						self::sendMessageBox("Sucesso!", "Pagina editada com sucesso! {$b} bytes.");
+					}
+						
+					unset($_GET["edit"]);
+						
+					$str = "?";
+					$first = true;
+					foreach($_GET as $k => $v)
+					{
+						if($first)
+							$first = false;
+						else
+							$str .= "&";
+							
+						$str .= "{$k}={$v}";
+					}
+					$module .= "<a href='{$str}'>Voltar</a>";
+						
+					$content = $exists ? $page->GetContent() : "";
+					
+					$module .= "<form action='{$_SERVER["REQUEST_URI"]}' method='POST'>
+					<p>".\Core\Main::CKEditor("page_content", $content)."</p>
+					</form>
+					";
+				}
+		
+					$module .= "</p>";
+			}
+			else
+			{
+				$module .= $page->GetContent();
+			}
+		}		
 	}
 	
 	static function errorHandler($errno, $errstr, $errfile, $errline)
@@ -51,24 +176,37 @@ class Main
 		
 		self::$DB->ExecQuery("INSERT INTO `".Tools::getSiteTable("errors")."` VALUES ('{$errno}', '".self::$DB->escapeString($errstr)."', '".self::$DB->escapeString($errfile)."', '{$errline}', UNIX_TIMESTAMP())");
 	
-		die("Um erro foi encontrado e reportado ao Adminsitrador. Por favor, tente novamente mais tarde.");
+		die("Um erro foi encontrado e reportado ao Administrador. Por favor, tente novamente mais tarde.");
 	}
 	
 	static function autoLoad($classname)
 	{
 		if(class_exists($classname))
-			return;
+			return true;
 		
 		$rep = str_replace("\\", "/", $classname);
-		
-		if(file_exists("classes/{$rep}.php"))		
-		{
+			
+		if(is_dir("classes/{$rep}"))
+		{			
+			$explode = explode("/", $rep);
+			$last = count($explode) - 1;
+			
+			if(is_file("classes/{$rep}/".$explode[$last].".php"))
+			{
+				require_once("classes/{$rep}/".$explode[$last].".php");
+				return true;				
+			}
+		}	
+		elseif(is_file("classes/{$rep}.php"))		
+		{			
 			require_once("classes/{$rep}.php");
-			return;
+			return true;
 		}
+		
+		return false;
 	}	
 	
-	static function drawTemplate()
+	static function loadTemplate()
 	{
 		$layoutDir = "newlay/";
 		$patch = "{$layoutDir}index.html";
@@ -77,6 +215,7 @@ class Main
 		self::$m_XMLRoot->head[0]->title[0] = Configs::Get(Configs::eConf()->WEBSITE_NAME);
 		
 		$focus = self::$m_XMLRoot->head[0];
+		
 		$child = $focus->addChild("link");
 		$child->addAttribute("rel", "shotcurt icon");
 		$child->addAttribute("href", "favicon.ico");
@@ -84,38 +223,39 @@ class Main
 		
 		$child = $focus->addChild("link");
 		$child->addAttribute("href", "{$layoutDir}style.css");
-		$child->addAttribute("media", "screen");		
-		$child->addAttribute("rel", "stylesheet");		
-		$child->addAttribute("type", "text/css");		
+		$child->addAttribute("media", "screen");
+		$child->addAttribute("rel", "stylesheet");
+		$child->addAttribute("type", "text/css");
 		
 		$child = $focus->addChild("link");
 		$child->addAttribute("href", "default.css");
 		$child->addAttribute("media", "screen");
 		$child->addAttribute("rel", "stylesheet");
+		$child->addAttribute("type", "text/css");
+		
+		/* JQuery UI theme */
+		$child = $focus->addChild("link");
+		$child->addAttribute("href", "javascript/libs/jquery-ui.css");
+		$child->addAttribute("media", "screen");
+		$child->addAttribute("rel", "stylesheet");
 		$child->addAttribute("type", "text/css");		
 		
-		$child = $focus->addChild("script");
-		$child->addAttribute("src", "{$layoutDir}jquery.js");
-		$child->addAttribute("type", "text/javascript");	
-		
-		$child = $focus->addChild("script");
-		$child->addAttribute("src", "{$layoutDir}functions.js");
-		$child->addAttribute("type", "text/javascript");		
-		
-		$child = $focus->addChild("script");
-		$child->addAttribute("src", "{$layoutDir}lists.js");
-		$child->addAttribute("type", "text/javascript");	
-
-		$child = $focus->addChild("script");
-		$child->addAttribute("src", "{$layoutDir}ext.js");
-		$child->addAttribute("type", "text/javascript");		
+		self::includeJavaScriptSource("libs/jquery.js");
+		self::includeJavaScriptSource("libs/jquery-ui.js");
+		self::includeJavaScriptSource("libs/ext.js");
+		self::includeJavaScriptSource("functions.js");
+		self::includeJavaScriptSource("lists.js");
 		
 		if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))
 		{
-			$child = $focus->addChild("script");
-			$child->addAttribute("src", "{$layoutDir}ping.js");
-			$child->addAttribute("type", "text/javascript");
-		}
+			self::includeJavaScriptSource("ping.js");
+		}		
+	}
+	
+	static function drawTemplate()
+	{		
+		if(self::$isAjax)
+			return;
 		
 		$xml = self::$m_XMLRoot->asXML();
 		
@@ -158,12 +298,6 @@ class Main
 		}
 			
 		return false;
-	}
-	
-	static function FCKEditor($instance)
-	{
-		include "libs/fckeditor/fckeditor.php";
-		return new \FCKeditor($instance);
 	}
 	
 	static function CKEditor($element, $value)
@@ -436,11 +570,14 @@ class Main
 	
 	static function includeJavaScriptSource($file)
 	{
-		global $module;
+		if(!file_exists("javascript/{$file}"))
+			return;
 		
-		$module .= '
-		<script type="text/javascript" src="javascript/'.$file.'"></script>
-		';		
+		$focus = self::$m_XMLRoot->head[0];
+		
+		$child = $focus->addChild("script");
+		$child->addAttribute("src", "javascript/{$file}");
+		$child->addAttribute("type", "text/javascript");			
 	}	
 }		
 ?>

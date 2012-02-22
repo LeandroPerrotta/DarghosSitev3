@@ -19,14 +19,5 @@ class Consts
 		
 		,URLS_PAGSEGURO = "https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx"
 		,PAGSEGURO_EMAIL = "admin@darghos.com"
-		
-		,PAGE_HOW_PLAY = 1
-		,PAGE_ABOUT = 2
-		,PAGE_PREMIUM_FEATURES = 3
-		,PAGE_DARGHOPEDIA_REBORN = 4
-		,PAGE_DARGHOPEDIA_QUESTS = 5
-		,PAGE_DARGHOPEDIA_WORLD = 6
-		,PAGE_DARGHOPEDIA_PVP_ARENA = 7
-		,PAGE_DARGHOPEDIA_WEEK_EVENTS = 8
 	;
 }

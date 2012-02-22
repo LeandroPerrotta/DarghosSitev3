@@ -175,18 +175,57 @@ function onFogLoaded()
 	$("#fog-screen").hide();
 }
 
-function fogAlert(message)
+function fogAlert(message, success)
 {
+	var msg = "Atenção:";
+	var id = "fog-alert-title-error";
+	var reflesh = "";
+	
+	if(success)
+	{
+		msg = "Sucesso!";
+		id = "fog-alert-title-success";
+		reflesh = true;
+	}
+	
 	showFogScreen();
 	
-	var _html = "<div id='fog-alert'> <span id='fog-alert-title'>AVISO!</span> <span id='fog-alert-content'>" + message + " </span> <p class='line'></p> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Ok</span></a></div>";
+	var _html = "<div id='fog-alert'> <div id='" + id + "'><span></span><h3>" + msg + "</h3></div> <span id='fog-alert-content'>" + message + " </span> <p class='line'></p> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick(" + reflesh + ")'> <span>Ok</span></a></div>";
 	$("#fog-screen").html(_html);
 }
 
-function onFogAlertClick()
+function fogDialog(message, callback)
 {
-	$("#fog-screen").children("#fog-alert").remove();
-	$("#fog-screen").hide();
+	showFogScreen();
+	
+	var _html = "<div id='fog-alert'> <div id='fog-alert-title-error'><span></span><h3>Atenção:</h3></div> <span id='fog-alert-content'>" + message + " </span> <p class='line'></p> <a class='buttonstd' style='float: right;' onclick='onFogConfirm(" + callback + ")'> <span>Sim</span></a> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Não</span></a></div>";
+	$("#fog-screen").html(_html);
+}
+
+function onFogConfirm(callback)
+{
+	callback();
+	onFogAlertClick();
+}
+
+function onFogAlertClick(reflesh)
+{
+	if(reflesh)
+	{
+		location.reload(true);
+	}
+	else{
+		$("#fog-screen").children("#fog-alert").remove();
+		$("#fog-screen").hide();
+	}
+}
+
+function filterOnlyNumbers(element)
+{
+	if(!element.value.match(/^[\-\+]?[\d\,]*\.?[\d]*$/))
+	{
+		element.value = "";
+	}
 }
 
 function countCharacters(limit)
