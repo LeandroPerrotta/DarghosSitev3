@@ -102,7 +102,7 @@ class Configs
 				case self::$e_Configs->ENABLE_PLAYERS_COMMENT_NEWS: self::Set($i, $__configs[$i], true); break;
 				
 				case self::$e_Configs->DISABLE_ALL_PREMDAYS_FEATURES: self::Set($i, $__configs[$i], false); break;
-				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], array(self::__GLOBAL__ => true, \t_Worlds::Aaragon => false)); break;
+				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->ENABLE_STAMINA_REFILER: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->ENABLE_REMOVE_SKULLS: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->PREMCOST_CHANGENAME: self::Set($i, $__configs[$i], 15); break;
