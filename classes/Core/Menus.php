@@ -22,6 +22,7 @@ class Menus
 				array("name" => "Criar Conta", "style" => "font-weight: bold",  "url" => "?ref=account.register")
 				,array("name" => "Login", "url" => "?ref=account.login")
 				,array("name" => "Recuperar Conta", "url" => "?ref=account.recovery")
+				,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
 				,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
 			)		
 		)

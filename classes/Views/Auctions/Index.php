@@ -55,7 +55,7 @@ class Index extends \Core\Views
 				
 				$items = $auction->GetItems();
 				
-				$key = rand(0, count(items) - 1);
+				$key = rand(0, count($items) - 1);		
 				
 				$item = $items[$key];
 				$item instanceof Item;
@@ -203,7 +203,7 @@ class Index extends \Core\Views
 		
 		$admin_buttons = "";
 		
-		if($logged->getAccess() == \t_Access::Administrator)
+		if($logged && $logged->getAccess() == \t_Access::Administrator)
 		{
 			$admin_buttons .= "<a class='buttonstd' href='?ref=auctions.create'>Novo Leilão</a>";
 		}
