@@ -116,7 +116,7 @@ $townsSelect->AddOption("");
 $townsSelect->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);
 $townsSelect->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);
 
-\Core\Main::includeJavaScriptSource("character_create.js");
+\Core\Main::includeJavaScriptSource("views/character_create.js");
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
