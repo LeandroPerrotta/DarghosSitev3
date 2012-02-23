@@ -12,7 +12,7 @@ class Table
 		
 	}
 	
-	function AddField($value, $width = null, $style = null, $colspan = null, $isheader = null)
+	function &AddField($value, $width = null, $style = null, $colspan = null, $isheader = null)
 	{
 		$field = array();
 		
@@ -30,7 +30,8 @@ class Table
 		if($isheader)	
 			$field["class"] = "header";
 			
-		$this->_fields[] = $field;
+		$this->_fields[] =& $field;
+		return $field;
 	}
 	
 	function AddRow()

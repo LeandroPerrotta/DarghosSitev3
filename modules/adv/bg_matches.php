@@ -177,12 +177,6 @@ class View
 				$matche = $it->current();
 				$matche instanceof \Framework\Battlegrounds\Match;
 				
-				$string = "#{$matche->id} " . \Core\Main::formatDate($matche->begin) . " ~ " . \Core\Main::formatDate($matche->end) . " <span class='tooglePlus'></span><br/>";
-				
-				$string .= "(Time A) {$matche->teams[\Framework\Battlegrounds\Match::TEAM_ONE]["points"]} X {$matche->teams[\Framework\Battlegrounds\Match::TEAM_TWO]["points"]} (Time B)"; 
-				
-				$string .= "<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>";
-				
 				$subTable = new \Framework\HTML\Table();
 				
 				$subTable->AddField("Stats");
@@ -192,8 +186,7 @@ class View
 				if($_GET["page"])
 					$args = "&page={$_GET["page"]}";				
 				
-				$subTable->AddField("Nome");
-				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=ip_address'>IP</a>");
+				$subTable->AddField("Nome | <a href='?ref=adv.bg_matches{$args}&order=ip_address'>IP</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=frags'>Frags</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=assists'>Assists</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=deaths'>Deaths</a>");
@@ -203,6 +196,8 @@ class View
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=gainHonor'>Honor</a>");
 				$subTable->AddField("<a href='?ref=adv.bg_matches{$args}&order=changeRating'>Rating</a>");
 				$subTable->AddRow();
+				
+				$bg_world = 0;
 				
 				if(count($matche->teams["players"]) > 0)
 				{
@@ -214,6 +209,8 @@ class View
 						$p = new \Framework\Player();
 						$p->load($pInfo["player_id"]);
 						
+						$bg_world = $p->getWorldId();
+						
 						$team_str = array(
 							\Framework\Battlegrounds\Match::TEAM_ONE => "A"
 							,\Framework\Battlegrounds\Match::TEAM_TWO => "B"
@@ -221,8 +218,7 @@ class View
 						
 						$voc = new t_Vocation($p->getVocation());
 						
-						$subTable->AddField(($pInfo["deserter"] ? "(<-) " : "") . $p->getName() . "<br>Time {$team_str[$pInfo["team_id"]]}<br>lv {$p->getLevel()}<br>{$voc->GetByAbrev()} <br>rating {$p->getBattlegroundRating()}");
-						$subTable->AddField($pInfo["ip_address"]);
+						$subTable->AddField("<span style='font-size: 10px;'>". ($pInfo["deserter"] ? "(<-) " : "") . $p->getName() . "<br>Time {$team_str[$pInfo["team_id"]]}<br>" .\Core\Tools::ip_long2string($pInfo["ip_address"]). "<br>lv {$p->getLevel()}<br>{$voc->GetByAbrev()} <br>rating {$p->getBattlegroundRating()}</span>");
 						$subTable->AddField($pInfo["frags"]);
 						$subTable->AddField($pInfo["assists"]);
 						$subTable->AddField($pInfo["deaths"]);
@@ -236,6 +232,11 @@ class View
 					}
 				}
 				
+				$string = "#{$matche->id} ".\t_Worlds::GetString($bg_world)." - " . \Core\Main::formatDate($matche->begin) . " ~ " . \Core\Main::formatDate($matche->end) . " <span class='tooglePlus'></span><br/>";
+				
+				$string .= "(Time A) {$matche->teams[\Framework\Battlegrounds\Match::TEAM_ONE]["points"]} X {$matche->teams[\Framework\Battlegrounds\Match::TEAM_TWO]["points"]} (Time B)";
+				
+				$string .= "<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>";				
 				$string .= $subTable->Draw();
 				
 				$string .= "</div>";	

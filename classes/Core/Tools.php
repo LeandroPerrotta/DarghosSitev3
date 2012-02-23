@@ -103,6 +103,13 @@ class Tools
 		return false;
 	}
 	
+	static function ip_long2string($long)
+	{
+		$string = long2ip($long);
+		$exp = explode(".", $string);
+		return implode(".", array_reverse($exp));
+	}
+	
 	static function getSiteTable($tablename)
 	{
 		return Configs::Get(Configs::eConf()->SQL_WEBSITE_TABLES_PREFIX).$tablename;
