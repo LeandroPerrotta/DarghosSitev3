@@ -51,7 +51,7 @@
 							<ul>								
 						
 							<li><a href="?ref=account.main">Main</a></li>
-							<li><a href="?ref=account.changepassword">Mudar Senha</a></li>
+							<li><a href="?ref=accounts.changepassword">Mudar Senha</a></li>
 							<li><a href="?ref=account.changeemail">Mudar E-mail</a></li>
 							<li><a href="?ref=account.changeinfos">Mudar Informações</a></li>
 							<li><a href="?ref=account.logout">Log-out</a></li>';

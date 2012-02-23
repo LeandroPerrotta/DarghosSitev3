@@ -31,11 +31,6 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$patch['file'] = $topic;
 				break;		
 
-				case "changepassword":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;		
-
 				case "logout":
 					$needLogin = true;
 					$patch['file'] = $topic;

@@ -4,6 +4,7 @@ namespace Controllers;
 use Core\Configs;
 use Core\Consts;
 use Framework\Account as AccountModel;
+use Views\Accounts as AccountViews;
 
 class Accounts
 {
@@ -51,9 +52,9 @@ class Accounts
 		return $result;
 	}
 	
-	static function Checkpassword()
+	function Checkpassword($isAjax = true)
 	{
-		\Core\Main::$isAjax = true;
+		\Core\Main::$isAjax = $isAjax;
 		$password = $_POST["account_password"];
 		$confirm = $_POST["account_confirm_password"];
 	
@@ -98,7 +99,7 @@ class Accounts
 		return $result;
 	}
 	
-	static function Checkemail()
+	function Checkemail()
 	{
 		\Core\Main::$isAjax = true;
 		$email = $_POST["account_email"];
@@ -133,7 +134,7 @@ class Accounts
 		return $result;
 	}
 	
-	static function Create()
+	function Create()
 	{
 		\Core\Main::$isAjax = true;
 		$name = $_POST["account_name"];
@@ -173,7 +174,7 @@ class Accounts
 		return $result;
 	}
 	
-	static function Registeremail()
+	function Registeremail()
 	{
 		\Core\Main::$isAjax = true;
 		$email = $_POST["account_email"];
@@ -203,5 +204,58 @@ class Accounts
 		$result["error"] = false;
 		return $result;
 	}	
+	
+	function Changepassword()
+	{
+		$data = array();
+		$showView = true;
+		
+		$logged = AccountModel::loadLogged();
+		if(!$logged)
+			return false;
+		
+		if($_POST)
+		{			
+			$data["message"] = array();
+			$data["message"]["title"] = "Falha!";
+			
+			$checkPassword = $this->Checkpassword(false);
+			
+			if($logged->getPassword() != \Core\Strings::encrypt($_POST["account_password_current"]))
+			{
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
+			}
+			elseif($checkPassword["error"])
+			{
+				$data["message"]["body"] = $checkPassword["text"];
+			}
+			elseif(\Core\Strings::encrypt($_POST["account_password"]) == $logged->getPassword())
+			{
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEPASS_SAME_PASSWORD);
+			}
+			else
+			{
+				$logged->setPassword(\Core\Strings::encrypt($_POST["account_password"]));
+				$logged->save();
+			
+				$_SESSION["login"] = array();
+			
+				$_SESSION["login"][] = $logged->getId();
+				$_SESSION["login"][] = $logged->getPassword();
+			
+				$data["message"]["title"] = "Sucesso!";
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_PASSWORD_CHANGED);
+				$showView = false;
+			}		
+		}
+		
+		if($data["message"])
+			\Core\Main::sendMessageBox($data["message"]["title"], $data["message"]["body"]);	
+		
+		if($showView)
+			$view = new AccountViews\Changepassword($data);
+		
+		return true;
+	}
 }
 ?>
