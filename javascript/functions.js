@@ -119,7 +119,7 @@ function requestSearchBox(value)
 	if(value.length == 0){
 		$("#player_suggestions").hide("slow");
 	} else {
-		$.post("ajax.php", {action: "player_search", name: value},
+		$.post("index.php?ref=players.search", {name: value},
 			function(info){
 				if(info.length > 0){
 					$("#player_suggestions_list").html(info);
@@ -129,13 +129,14 @@ function requestSearchBox(value)
 					$("#player_suggestions").hide("slow");
 				}
 			}
+			,"html"
 		);
 	}
 }
 
 function requestRebornPlayer(value)
 {	
-	$.post("../Ajax/rebornplayer.php", {inputValue: value},
+	$.post("index.php?ref=players.reborn", {inputValue: value},
 		function(info){
 		
 			if(Number(info) == 1){

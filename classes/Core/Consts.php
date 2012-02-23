@@ -19,5 +19,8 @@ class Consts
 		
 		,URLS_PAGSEGURO = "https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx"
 		,PAGSEGURO_EMAIL = "admin@darghos.com"
+		
+		,AJAX_RESPONSE_FIELD_VERIFY = 1
+		,AJAX_RESPONSE_NEXT_STEP = 2		
 	;
 }

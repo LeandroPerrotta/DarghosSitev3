@@ -264,7 +264,7 @@ class View
 	{
 		global $module;		
 		
-		\Core\Main::includeJavaScriptSource("account_register.js");
+		\Core\Main::includeJavaScriptSource("views/account_register.js");
 		
 		$module .= "		
 		<fieldset style='margin-top: 20px;'>

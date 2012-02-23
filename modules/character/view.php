@@ -550,7 +550,7 @@ $module .= '
 		
 		<p>
 			<label for="player_name">Nome</label><br />
-			<input id="player_name" name="player_name" size="40" type="text" value="" autocomplete="off" onkeyup="requestSearchBox(event, this)" />
+			<input id="player_name" name="player_name" size="40" type="text" value="" autocomplete="off" onkeyup="requestSearchBox(this.value)" />
 
 			<div id="player_suggestions">
 				<div id="player_suggestions_list">

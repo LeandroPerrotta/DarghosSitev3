@@ -41,21 +41,21 @@ function checkCharacterName()
 {
 	var characterName = $("input[name='character_name']").val();
 	notifyLoading($("input[name='character_name']"));
-	sendPost({action: "player_checkName", character_name: characterName}, $("input[name='character_name']"));	
+	sendPost("players.checkname", {character_name: characterName}, $("input[name='character_name']"));	
 }
 
 function checkEmail()
 {
 	var accountEmail = $("input[name='account_email']").val();
 	notifyLoading($("input[name='account_email']"));
-	sendPost({action: "account_checkEmail", account_email: accountEmail}, $("input[name='account_email']"));
+	sendPost("accounts.checkemail", {account_email: accountEmail}, $("input[name='account_email']"));
 }
 
 function checkAccountName()
 {
 	var accountName = $("input[name='account_name']").val();
 	notifyLoading($("input[name='account_name']"));
-	sendPost({action: "account_checkName", account_name: accountName}, $("input[name='account_name']"));
+	sendPost("accounts.checkname", {account_name: accountName}, $("input[name='account_name']"));
 }
 
 function checkPassword()
@@ -63,7 +63,7 @@ function checkPassword()
 	var password = $("input[name='account_password']").val();
 	var confirm = $("input[name='account_confirm_password']").val();
 	notifyLoading($("input[name='account_confirm_password']"));
-	sendPost({action: "account_checkPassword", account_password: password, account_confirm_password: confirm}, $("input[name='account_confirm_password']"));
+	sendPost("accounts.checkpassword", {account_password: password, account_confirm_password: confirm}, $("input[name='account_confirm_password']"));
 }
 
 function createAccount()
@@ -76,7 +76,7 @@ function createAccount()
 	{
 		$("#account_name").text(accountName.val());
 		fogLoading();
-		sendPost({action: "account_create", account_name: accountName.val(), account_password: password.val(), account_confirm_password: confirm.val()}, $("input[name='account_confirm_password']"));
+		sendPost("accounts.create", {account_name: accountName.val(), account_password: password.val(), account_confirm_password: confirm.val()}, $("input[name='account_confirm_password']"));
 		return true;
 	}
 	
@@ -91,7 +91,7 @@ function registerEmail()
 	{	
 		$("#account_email").text(accountEmail.val());
 		fogLoading();
-		sendPost({action: "account_registerEmail", account_email: accountEmail.val()}, $("input[name='account_email']"));
+		sendPost("accounts.checkeemail", {account_email: accountEmail.val()}, $("input[name='account_email']"));
 		return true;		
 	}
 
@@ -129,7 +129,7 @@ function createCharacter()
 	{
 		$("#character_name").text(characterName.val());
 		fogLoading();
-		sendPost({action: "player_create", character_name: characterName.val(), character_world: characterWorld.val(), character_town: characterTown.val(), character_genre: characterGenre.val(), character_vocation: characterVocation.val()}, $("input[name='account_email']"));
+		sendPost("players.create", {character_name: characterName.val(), character_world: characterWorld.val(), character_town: characterTown.val(), character_genre: characterGenre.val(), character_vocation: characterVocation.val()}, $("input[name='account_email']"));
 		return true;			
 	}
 	
@@ -137,9 +137,9 @@ function createCharacter()
 	return false;		
 }
 
-function sendPost(data, handler)
+function sendPost(get, data, handler)
 {	
-	$.post("ajax.php", data, 
+	$.post("index.php?ref=" + get, data, 
 		function(info){
 				
 			if(info.response == RESPONSE_FIELD_VERIFY)

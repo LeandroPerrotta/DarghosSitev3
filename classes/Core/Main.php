@@ -78,7 +78,10 @@ class Main
 				$ret = $obj->$method();
 								
 				if(self::$isAjax)
-					echo json_encode($ret);
+					if(is_array($ret))
+						echo json_encode($ret);
+					else
+						echo $ret;
 				else
 				{
 					if($ret)
