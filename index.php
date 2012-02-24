@@ -34,7 +34,6 @@ use \Core\Configs as g_Configs;
 if(!Core\Main::$FoundController)
 	include "modules.php";
 
-Core\Main::onEnd();
 Core\Main::drawTemplate();
 
 if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))	

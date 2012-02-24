@@ -22,4 +22,9 @@ class Item extends \Core\DBTable
 	function __construct(){
 		parent::__construct(\Core\Tools::getSiteTable("auction_items"));
 	}
+	
+	function Delete()
+	{
+		$query = \Core\Main::$DB->ExecQuery("DELETE FROM `{$this->m_tableName}` WHERE `auction_id` = {$this->auction_id} AND `itemtype` = {$this->itemtype} AND `count` = {$this->count}");
+	}
 }

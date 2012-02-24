@@ -92,12 +92,8 @@ class Main
 	}
 	
 	static function onEnd()
-	{		
-		if(self::$FoundController || Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
-			return;
-		
+	{				
 		//após tudo, se nao conseguimos achar nada para carregar a pagina, iremos tentar carregar uma pagina simples, ou então criar uma...
-		
 		$data = explode(".", $_GET["ref"]);		
 		
 		foreach($data as $k => $v)
@@ -169,7 +165,11 @@ class Main
 			{
 				$module .= $page->GetContent();
 			}
-		}		
+		}
+		else
+			return false;
+
+		return true;
 	}
 	
 	static function errorHandler($errno, $errstr, $errfile, $errline)

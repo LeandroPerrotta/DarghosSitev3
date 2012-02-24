@@ -108,14 +108,20 @@ class Detail extends \Core\Views
 		$itemsTable->AddField("Fazem parte deste leilão os seguintes itens:", null, null, 2);
 		$itemsTable->AddRow();		
 		
-		foreach($items as $item)
+		foreach($items as $k => $item)
 		{
 			$item instanceof AuctionsModel\Item;
 			
 			$_item = \Framework\Items::LoadById($item->itemtype);
 			
-			$itemsTable->AddField("<img src='files/items/{$item->itemtype}.gif'/>", null, "text-align: right; vertical-align: bottom; width: 32px; height: 32px;");
-			$itemsTable->AddField("{$item->count}x {$_item->GetName()}");
+			$itemsTable->AddField("<img id='item_{$item->itemtype}' class='requestItemInfo' src='files/items/{$item->itemtype}.gif'/>", null, "text-align: right; vertical-align: bottom; width: 32px; height: 32px;");
+			
+			$string = "<span id='item_{$item->itemtype}' class='requestItemInfo'>{$item->count}x {$_item->GetName()}</span>";
+			
+			if($logged && $logged->getAccess() == \t_Access::Administrator)
+				$string .= " <a onclick='onDeleteItem({$auction->id}, {$k})' href='#'>[deletar]</a>";
+			
+			$itemsTable->AddField($string);
 			$itemsTable->AddRow();			
 		}
 		
@@ -243,7 +249,7 @@ class Detail extends \Core\Views
 		
 		if($logged && $logged->getAccess() == \t_Access::Administrator)
 			$module .= "
-			<a class='buttonstd' id='delete'>Remover</a>
+			<a class='buttonstd' id='delete'>Remover</a> <a class='buttonstd' href='?ref=auctions.edit&id={$auction->id}'>Editar</a>
 			";			
 		
 		if($auction->GetStatus() == AuctionsModel\Auction::STATUS_BEGIN)

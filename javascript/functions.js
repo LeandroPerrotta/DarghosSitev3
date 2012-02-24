@@ -134,6 +134,28 @@ function requestSearchBox(value)
 	}
 }
 
+function requestItemInfo(e, itemtype)
+{	
+	$.post("index.php?ref=misc.iteminfo", {itemtype: $(this).attr("id")},
+		function(info){
+			if($("#iteminfo").length == 0)
+			{
+				$("body").append("<div id='iteminfo' style='left: " + (e.pageX + 3) + "px; top: " + (e.pageY + 3) + "px'>" + info + "</div>");
+			}
+			else{
+				$("#iteminfo").html(info);
+				$("#iteminfo").show();
+			}
+		}
+		,"html"
+	);
+}
+
+function ereaseItemInfo()
+{
+	$("#iteminfo").hide();
+}
+
 function requestRebornPlayer(value)
 {	
 	$.post("index.php?ref=players.reborn", {inputValue: value},
@@ -195,7 +217,7 @@ function fogAlert(message, success)
 	$("#fog-screen").html(_html);
 }
 
-function fogDialog(message, callback)
+function fogDialog(message, callback, args)
 {
 	showFogScreen();
 	

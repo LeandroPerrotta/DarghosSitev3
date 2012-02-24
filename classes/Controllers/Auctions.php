@@ -53,7 +53,28 @@ class Auctions
 		
 		$ret["error"] = false;
 		$ret["msg"] = "O lançe foi removido com sucesso!";
-		return $ret;	
+		return $ret;
+	}
+	
+	function Deleteitem()
+	{
+		$logged = \Framework\Account::loadLogged();
+		
+		if(!$logged || $logged->getAccess() < \t_Access::Administrator)
+			return false;
+		
+		\Core\Main::$isAjax = true;
+		
+		$auction = AuctionsModel\Auction::Load($_POST["auction_id"]);
+		$items = $auction->GetItems();
+		$pos = $_POST["pos"];
+		$item = $items[$pos];
+		$item instanceof AuctionsModel\Item;
+		$item->Delete();
+		
+		$ret["error"] = false;
+		$ret["msg"] = "O item foi removido com sucesso!";
+		return $ret;		
 	}
 
 	function Additem()
@@ -91,10 +112,52 @@ class Auctions
 		return true;
 	}	
 	
+	function Edit()
+	{		
+		$logged = \Framework\Account::loadLogged();
+		
+		if(!$logged || $logged->getAccess() < \t_Access::Administrator)
+			return false;
+
+		$auction_id = $_GET["id"];
+		
+		$data = array();
+		
+		$auction = AuctionsModel\Auction::Load($auction_id);
+		
+		if($_POST)
+		{
+			list($month, $day, $year) = explode("/", $_POST["auction_begin"]);
+			$begin = mktime(10, 0, 0, $month, $day, $year);
+				
+			list($month, $day, $year) = explode("/", $_POST["auction_end"]);
+			$end = mktime(10, 0, 0, $month, $day, $year);			
+			
+			$auction->title = $_POST["auction_title"];
+			$auction->description = $_POST["auction_description"];
+			$auction->min_bid = $_POST["auction_min_bid"];
+			$auction->begin = $begin;
+			$auction->end = $end;
+			
+			$auction->Update();
+			
+			\Core\Main::sendMessageBox("Sucesso!", "Leilão modificado com sucesso!");
+			return true;			
+		}
+		
+		$data["auction_title"] = $auction->title;
+		$data["auction_description"] = $auction->description;
+		$data["auction_min_bid"] = $auction->min_bid;
+		$data["auction_begin"] = date("m/d/Y", $auction->begin);
+		$data["auction_end"] = date("m/d/Y", $auction->end);
+		
+		$view = new AuctionsView\Edit($data);
+		return true;		
+	}
+	
 	function Create()
 	{
 		$data = array();
-		$data["created"] = false;
 		
 		$logged = \Framework\Account::loadLogged();
 		
@@ -119,9 +182,12 @@ class Auctions
 			$auction->Insert();			
 			
 			$data["created"] = true;
+			
+			\Core\Main::sendMessageBox("Sucesso!", "O novo leilão foi criado com sucesso!");
+			return true;
 		}
 		
-		$view = new AuctionsView\Create($data);
+		$view = new AuctionsView\Edit($data);
 		return true;
 	}
 	

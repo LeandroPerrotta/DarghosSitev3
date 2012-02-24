@@ -15,12 +15,7 @@ class Items
 		if(!$result)
 			return false;
 		
-		$attr = $result[0]->attributes();
-		
-		$item = new Item();
-		$item->SetId($attr["id"]);
-		$item->SetName($attr["name"]);
-		
+		$item = new Item($result);		
 		return $item;
 	}
 	

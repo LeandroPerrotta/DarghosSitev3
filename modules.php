@@ -519,20 +519,17 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			include("modules/errors/notfound.php");
 		}	
 		else
-		{
-			if($patch['dir'] != "errors")
-				$patch['urlnavigation'] = "/ ".$patch['dir']." / <a href='?ref=".$patch['dir'].".".$patch['file']."'>".$patch['file']."</a>";
-				
+		{			
 			if($patch['dir'] == "errors")
 			{
-				if(!$checkAccount || ($checkAccount && $checkAccount->getAccess() < t_Access::Administrator))
+				if((!$checkAccount || ($checkAccount && $checkAccount->getAccess() < t_Access::Administrator)) && !Core\Main::onEnd())
 				{
-					include("modules/".$patch['dir']."/".$patch['file'].".php");		
-					\Core\Main::$FoundController = true;
+					include("modules/".$patch['dir']."/".$patch['file'].".php");
 				}
 			}
 			else
 			{
+				$patch['urlnavigation'] = "/ ".$patch['dir']." / <a href='?ref=".$patch['dir'].".".$patch['file']."'>".$patch['file']."</a>";
 				include("modules/".$patch['dir']."/".$patch['file'].".php");
 				\Core\Main::$FoundController = true;				
 			}

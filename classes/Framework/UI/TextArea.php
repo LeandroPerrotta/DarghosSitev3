@@ -19,4 +19,10 @@ class TextArea extends Shared
 	function SetColumns($cols){
 		$this->setAttribute("cols", $cols);
 	}	
+	
+	function SetText($text)
+	{
+		$text = new \DOMText($text);
+		$this->appendChild($text);
+	}
 }

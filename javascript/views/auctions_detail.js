@@ -4,6 +4,8 @@ $(document).ready(function() {
 	$("#delete").click(onDelete);
 });
 
+var params;
+
 function checkBid()
 {
 	var value = $("#bid_value").val();
@@ -33,18 +35,30 @@ function onSubmit()
 
 function onDelete()
 {	
-	fogDialog("Você tem certeza que deseja excluir este leilão?", _delete);
+	fogDialog("Você tem certeza que deseja excluir este leilão?", deleteCallback);
 	return true;
 }
 
-function _delete()
+function onDeleteItem(auction_id, pos)
+{	
+	params = {auction_id: auction_id, pos: pos};
+	fogDialog("Você tem certeza que deseja excluir este item?", deleteItemCallback);
+	return true;
+}
+
+function deleteCallback()
 {
 	var auction = $("#bid_auction").val();
 	var data = {
-		id: auction
+			id: auction
 	};	
 	
 	sendPost("index.php?ref=auctions.delete", data);
+}
+
+function deleteItemCallback()
+{	
+	sendPost("index.php?ref=auctions.deleteitem", params);
 }
 
 function submit()

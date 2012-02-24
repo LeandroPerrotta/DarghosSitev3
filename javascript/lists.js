@@ -125,6 +125,11 @@ $(document).ready(function() {
 	});
 	
 	$(".datepicker").datepicker();
+	$(".requestItemInfo").hover(requestItemInfo, ereaseItemInfo);
+	$(".requestItemInfo").mousemove(function(e){
+		$("#iteminfo").css("left", (e.pageX + 3) + "px");
+		$("#iteminfo").css("top", (e.pageY + 3) + "px");
+	});
 });
 
 function onChange()
