@@ -72,7 +72,11 @@ class Item
 			
 			$key = $attr->key;
 			
-			if(strtolower($key) == "absorbpercentelements")
+			if(strtolower($key) == "magicpoints" || strtolower($key) == "magiclevelpoints")
+			{
+				$this->magicLevelPoints = $attr->value;
+			}
+			elseif(strtolower($key) == "absorbpercentelements")
 			{
 				$this->absorbPercentEarth = $attr->value;
 				$this->absorbPercentEnergy = $attr->value;
