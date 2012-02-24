@@ -79,11 +79,16 @@ class Misc
 			elseif($item->weaponType == "shield")
 			{
 				$type_name = "Tipo de equipamento";
+				$type_str = "Escudo";
 			}
 			elseif($item->weaponType == "ammunition" || $item->weaponType == "ammo")
 			{
 				$type_name = "Tipo de munição";
-				$type_str = "Escudo";
+				
+				if($item->ammoType == "bolt")
+					$type_str = "para bestas";
+				if($item->ammoType == "arrow")
+					$type_str = "para arcos";		
 			}
 			else
 			{
@@ -176,7 +181,7 @@ class Misc
 		
 		if($item->healthGain)
 		{
-			$string .= "<p>Regeneração (mana): <strong>+{$item->healthGain}/".(floor($item->healthTicks / 1000))."s</strong></p>";
+			$string .= "<p>Regeneração (life): <strong>+{$item->healthGain}/".(floor($item->healthTicks / 1000))."s</strong></p>";
 		}
 		
 		if($item->duration)

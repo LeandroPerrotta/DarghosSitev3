@@ -296,8 +296,8 @@ class View
 		{
 			$goldStr = "
 			<tr>
-				<td style='text-align: right; vertical-align: bottom; width: 32px; height: 32px;'><img src='files/items/2148.gif'/></td>
-				<td>0 a {$totalmoney} gold coins</td>
+				<td style='text-align: right; vertical-align: bottom; width: 32px; height: 32px;'><img id='item_2148' class='requestItemInfo' src='files/items/2148.gif'/></td>
+				<td><span id='item_2148' class='requestItemInfo'>0 a {$totalmoney} gold coins<span></td>
 				<td>Sempre</td>
 			</tr>";		
 		}

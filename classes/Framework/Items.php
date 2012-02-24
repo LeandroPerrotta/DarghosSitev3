@@ -65,13 +65,10 @@ class Items
 
 	function getNameById($itemid)
 	{
-		$query = \Core\Main::$DB->query("SELECT `name` FROM ".\Core\Tools::getSiteTable("items")." WHERE `id` = '{$itemid}'");
-		
-		if($query->numRows() == 0)
+		$item = self::LoadById($itemid);
+		if(!$item)
 			return false;
-			
-		$fetch = $query->fetch();
 		
-		return stripcslashes($fetch->name);
+		return $item->GetName();
 	}
 }

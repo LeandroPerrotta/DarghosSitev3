@@ -43,6 +43,7 @@ span.requestItemInfo{
 
 span.requestItemInfo:hover{
 	text-decoration: underline;
+	cursor: pointer;
 }
 
 .notHasAchiev{
