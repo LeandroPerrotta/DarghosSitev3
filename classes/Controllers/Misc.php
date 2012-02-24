@@ -148,7 +148,7 @@ class Misc
 			$string .= "<p>Velocidade: <strong>+{$item->speed} leveis</strong></p>";		
 		
 		if($item->weight)
-			$string .= "<p>Peso: <strong>".round($item->weight / 1000, 2)." oz</strong></p>";
+			$string .= "<p>Peso: <strong>".round($item->weight / 100, 2)." oz</strong></p>";
 		
 		if($item->skillAxe)
 			$string .= "<p>Skill axe: <strong>+{$item->skillAxe}</strong></p>";
