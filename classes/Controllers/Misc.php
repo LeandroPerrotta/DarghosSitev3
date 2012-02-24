@@ -33,6 +33,11 @@ class Misc
 		if(!$item)
 			return "<p>Item not found</p>";
 		
+		$temp = $item->GetTransformableItem();
+		
+		if($temp)
+			$item = $temp;
+		
 		$string = "
 			<h3>{$item->GetName()}
 		";
@@ -45,44 +50,62 @@ class Misc
 		if($item->attack || $item->defense)
 		{
 			$isAmmo = false;
-			$isShield = false;
 			
 			$type_str = "";
+			$type_name = "Tipo de arma";
 			$effect_type = "";
 			$defense_str = $item->defense;
 			$attack_str = $item->attack;
 			
-			if(\t_Skills::GetByString($item->weaponType) == \t_Skills::Distance)
+			if($item->weaponType == "distance")
 			{			
 				$type_str = "a distancia";
 				
 				if($item->ammoType == "bolt")
 				{
 					$isAmmo = true;
-					$type_str .= " (besta)";
+					$type_str .= " (besta), 2 mãos";
 				}
 				elseif($item->ammoType == "arrow")
 				{
 					$isAmmo = true;
-					$type_str .= " (arco)";
+					$type_str .= " (arco), 2 mãos";
+				}
+				else
+				{
+					$type_str .= " 1 mão";
 				}
 			}
-			elseif(\t_Skills::GetByString($item->weaponType) == \t_Skills::Shielding)
+			elseif($item->weaponType == "shield")
 			{
-				$isShield = true;
+				$type_name = "Tipo de equipamento";
+			}
+			elseif($item->weaponType == "ammunition" || $item->weaponType == "ammo")
+			{
+				$type_name = "Tipo de munição";
+				$type_str = "Escudo";
 			}
 			else
 			{
+				if($item->weaponType == "axe")
+					$type_str .= "machado";
+				elseif($item->weaponType == "sword")
+					$type_str .= "espada";
+				elseif($item->weaponType == "club")
+					$type_str .= "martelo";
+				elseif($item->weaponType == "wand")
+					$type_str .= "vara magica";
+				elseif($item->weaponType == "rod")
+					$type_str .= "cajado magico";
+				
 				if($item->slotType == "two-handed")
-					$type_str = "de duas mãos";
+					$type_str .= " de duas mãos";
 				else
-					$type_str = "de uma mão";
+					$type_str .= " de uma mão";
 			}
 			
-			if(!$isShield)
-				$string .= "<p>Tipo de arma: <strong>{$type_str}</strong></p>";
-			else
-				$string .= "<p>Tipo de equipamento: <strong>escudo</strong></p>";
+
+			$string .= "<p>{$type_name}: <strong>{$type_str}</strong></p>";
 			
 			if($item->range)
 				$string .= "<p>Distancia do alvo: <strong>{$item->range} sqm</strong></p>";	
@@ -145,54 +168,50 @@ class Misc
 		if($item->magicLevelPoints)
 			$string .= "<p>Magic level: <strong>+{$item->magicLevelPoints}</strong></p>";
 		
-		if($item->absorbPercentAll)
-			$string .= "<p>Absorve danos (tudo): <strong>{$item->absorbPercentAll}%</strong></p>";
 		
-		if($item->absorbPercentElements)
-			$string .= "<p>Absorve danos (elementos): <strong>{$item->absorbPercentElements}%</strong></p>";
-		
-		if($item->absorbPercentMagic)
-			$string .= "<p>Absorve danos (magicos): <strong>{$item->absorbPercentMagic}%</strong></p>";
-		
-		if($item->absorbPercentDeath)
-			$string .= "<p>Absorve danos (death): <strong>{$item->absorbPercentDeath}%</strong></p>";
-		
-		if($item->absorbPercentDrown)
-			$string .= "<p>Absorve danos (em baixo d'agua): <strong>{$item->absorbPercentDrown}%</strong></p>";
-		
-		if($item->absorbPercentEnergy)
-			$string .= "<p>Absorve danos (energy): <strong>{$item->absorbPercentEnergy}%</strong></p>";
-		
-		if($item->absorbPercentFire)
-			$string .= "<p>Absorve danos (fire): <strong>{$item->absorbPercentFire}%</strong></p>";
-		
-		if($item->absorbPercentHoly)
-			$string .= "<p>Absorve danos (holy): <strong>{$item->absorbPercentHoly}%</strong></p>";
-		
-		if($item->absorbPercentIce)
-			$string .= "<p>Absorve danos (ice): <strong>{$item->absorbPercentIce}%</strong></p>";
-		
-		if($item->absorbPercentPhysical)
-			$string .= "<p>Absorve danos (fisico): <strong>{$item->absorbPercentPhysical}%</strong></p>";
-		
-		if($item->absorbPercentPoison || $item->absorbPercentEarth)
-		{			
-			$string .= "<p>Absorve danos (earth): <strong>".($item->absorbPercentPoison) ? $item->absorbPercentPoison : $item->absorbPercentEarth."%</strong></p>";
-		}
-
 		if($item->manaGain)
 		{
 			$string .= "<p>Regeneração (mana): <strong>+{$item->manaGain}/".(floor($item->manaTicks / 1000))."s</strong></p>";
-		}		
-
+		}
+		
 		if($item->healthGain)
 		{
 			$string .= "<p>Regeneração (mana): <strong>+{$item->healthGain}/".(floor($item->healthTicks / 1000))."s</strong></p>";
-		}		
+		}
 		
 		if($item->duration)
-		{			
+		{
 			$string .= "<p>Duração: <strong>".($item->duration / 60)." minutos</strong></p>";
+		}		
+		
+		if($item->absorbPercentDeath || $item->absorbPercentDrown || $item->absorbPercentEnergy || $item->absorbPercentFire || $item->absorbPercentHoly || $item->absorbPercentIce
+			|| $item->absorbPercentPhysical	|| $item->absorbPercentEarth)
+		{
+			$string .= "<p class='spaced'>Resistencias & Fraquezas:</p>";
+			
+			if($item->absorbPercentDeath)
+				$string .= "<p>Death: <strong>{$item->absorbPercentDeath}%</strong></p>";
+			
+			if($item->absorbPercentDrown)
+				$string .= "<p>Em baixo d'agua: <strong>{$item->absorbPercentDrown}%</strong></p>";		
+				
+			if($item->absorbPercentEnergy)
+				$string .= "<p>Energy: <strong>{$item->absorbPercentEnergy}%</strong></p>";	
+			
+			if($item->absorbPercentFire)
+				$string .= "<p>Fire: <strong>{$item->absorbPercentFire}%</strong></p>";
+			
+			if($item->absorbPercentEarth)
+				$string .= "<p>Earth: <strong>{$item->absorbPercentEarth}%</strong></p>";		
+			
+			if($item->absorbPercentHoly)
+				$string .= "<p>Holy: <strong>{$item->absorbPercentHoly}%</strong></p>";
+			
+			if($item->absorbPercentIce)
+				$string .= "<p>Ice: <strong>{$item->absorbPercentIce}%</strong></p>";
+			
+			if($item->absorbPercentPhysical)
+				$string .= "<p>Fisico: <strong>{$item->absorbPercentPhysical}%</strong></p>";			
 		}		
 		
 		return $string;

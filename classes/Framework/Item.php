@@ -3,6 +3,7 @@ namespace Framework;
 class Item
 {
 	private $m_element;
+	private $m_itemtransform;
 	
 	public 
 		$skillClub
@@ -12,6 +13,9 @@ class Item
 		,$skillShield
 		,$magicLevelPoints
 
+		,$transformEquipTo
+		,$stopDuration
+		
 		,$manaGain
 		,$manaTicks
 		,$healthGain
@@ -34,12 +38,8 @@ class Item
 		,$attackSpeed
 		,$hitChance
 	
-		,$absorbPercentAll
-		,$absorbPercentElements
-		,$absorbPercentMagic
 		,$absorbPercentEnergy
 		,$absorbPercentFire
-		,$absorbPercentPoison
 		,$absorbPercentEarth
 		,$absorbPercentIce
 		,$absorbPercentHoly
@@ -53,8 +53,13 @@ class Item
 	function __isset($att)
 	{
 		$props = get_object_vars($this);
-		$keys = array_keys($props);
-		return array_search($att, $keys);
+		foreach($props as $key => $value)
+		{
+			if(strtolower($key) == strtolower($att))
+				return $key;
+		}
+
+		return false;
 	}	
 	
 	function __construct($element){
@@ -67,13 +72,62 @@ class Item
 			
 			$key = $attr->key;
 			
-			if($this->__isset($key))
+			if(strtolower($key) == "absorbpercentelements")
 			{
-				$this->$key = $attr->value;
+				$this->absorbPercentEarth = $attr->value;
+				$this->absorbPercentEnergy = $attr->value;
+				$this->absorbPercentFire = $attr->value;
+				$this->absorbPercentIce = $attr->value;
+			}
+			elseif(strtolower($key) == "absorbpercentmagic")
+			{
+				$this->absorbPercentEarth = $attr->value;
+				$this->absorbPercentEnergy = $attr->value;
+				$this->absorbPercentFire = $attr->value;
+				$this->absorbPercentIce = $attr->value;
+				$this->absorbPercentHoly = $attr->value;
+				$this->absorbPercentDeath = $attr->value;
+			}
+			elseif(strtolower($key) == "absorbpercentall")
+			{
+				$this->absorbPercentEarth = $attr->value;
+				$this->absorbPercentEnergy = $attr->value;
+				$this->absorbPercentFire = $attr->value;
+				$this->absorbPercentIce = $attr->value;
+				$this->absorbPercentHoly = $attr->value;
+				$this->absorbPercentDeath = $attr->value;
+				$this->absorbPercentLifeDrain = $attr->value;
+				$this->absorbPercentManaDrain = $attr->value;
+				$this->absorbPercentDrown = $attr->value;
+				$this->absorbPercentPhysical = $attr->value;
+				$this->absorbPercent = $attr->value;
+			}
+			elseif(strtolower($key) == "absorbpercentearth" || strtolower($key) == "absorbpercentpoison")
+			{
+				$this->absorbPercentEarth = $attr->value;
+			}		
+			else
+			{
+				$key = $this->__isset($key);
+				if($key)
+					$this->$key = $attr->value;
 			}
 		}
 	}
 	
 	function GetId(){ return $this->m_element[0]->attributes()->id; }
-	function GetName(){ return $this->m_element[0]->attributes()->name; }	
+	function GetName(){ return $this->m_element[0]->attributes()->name; }
+	
+	function GetTransformableItem()
+	{
+		if($this->stopDuration && $this->transformEquipTo)
+		{
+			$item = Items::LoadById($this->transformEquipTo);
+			$this->m_itemtransform = $item;
+			
+			return $this->m_itemtransform;
+		}
+		
+		return false;
+	}
 }

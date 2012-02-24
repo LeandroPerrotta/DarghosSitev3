@@ -60,7 +60,7 @@ class Index extends \Core\Views
 				$item = $items[$key];
 				$item instanceof Item;
 				
-				$table_begun->AddField("<center><img src='files/items/{$item->itemtype}.gif'/></center>");
+				$table_begun->AddField("<center><img id='item_{$item->itemtype}' class='requestItemInfo' src='files/items/{$item->itemtype}.gif'/></center>");
 				
 				$timeleft_str = "";
 				
@@ -113,7 +113,7 @@ class Index extends \Core\Views
 				$item = $items[$key];
 				$item instanceof Item;
 		
-				$table_starting->AddField("<center><img src='files/items/{$item->itemtype}.gif'/></center>");
+				$table_starting->AddField("<center><img id='item_{$item->itemtype}' class='requestItemInfo' src='files/items/{$item->itemtype}.gif'/></center>");
 		
 				$timeleft_str = "";
 		
@@ -186,7 +186,7 @@ class Index extends \Core\Views
 				$item = $items[$key];
 				$item instanceof Item;
 		
-				$table_ended->AddField("<center><img src='files/items/{$item->itemtype}.gif'/></center>");
+				$table_ended->AddField("<center><img id='item_{$item->itemtype}' class='requestItemInfo' src='files/items/{$item->itemtype}.gif'/></center>");
 		
 				$table_ended->AddField("<center><h3>{$auction->title}</h3>{$auction->description}</center>");
 				$table_ended->AddField($bid_str);

@@ -2,7 +2,7 @@
 
 #iteminfo{
 	position: absolute;
-	width: 180px;
+	width: 210px;
 	display: block;
 	border: 1px solid black;
 	border-radius: 20%;
@@ -28,6 +28,12 @@
 	font-size: 10px;
 	margin-top: 3px;
 	font-weight: bold;
+}
+
+#iteminfo p.spaced{
+	margin-top: 6px;
+	margin-bottom: 4px;
+	font-size: 12px;
 }
 
 .notHasAchiev{
