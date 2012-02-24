@@ -192,7 +192,7 @@ class Misc
 		
 		if($item->duration)
 		{			
-			$string .= "<p>Duração: <strong>{$item->duration} minutos</strong></p>";
+			$string .= "<p>Duração: <strong>".($item->duration / 60)." minutos</strong></p>";
 		}		
 		
 		return $string;
