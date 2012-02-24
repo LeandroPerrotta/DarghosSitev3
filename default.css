@@ -36,6 +36,15 @@
 	font-size: 12px;
 }
 
+span.requestItemInfo{
+	color: #EFECCA;
+	font-weight: bold;
+}
+
+span.requestItemInfo:hover{
+	text-decoration: underline;
+}
+
 .notHasAchiev{
 	color: #7e7e7e;
 	font-size: 9px;
