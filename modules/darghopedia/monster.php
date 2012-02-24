@@ -260,7 +260,7 @@ class View
 			$items = \Framework\Items::GetInstance();
 			$items instanceof \Framework\Items;
 			
-			$name = "<span id='item_{{$lot->offsetGet("id")}' class='requestItemInfo'> " . $items->getNameById($lot->offsetGet("id")) . "</span>";
+			$name = "<span id='item_{$lot->offsetGet("id")}' class='requestItemInfo'> " . $items->getNameById($lot->offsetGet("id")) . "</span>";
 			$chance = $lot->offsetGet("chance") * \Framework\Monsters::LOT_RATE;
 			$chance = min($chance, 100000);
 			$chanceStr = "";
@@ -278,7 +278,7 @@ class View
 			elseif($chance == 100000){ $chanceStr = "<span style='color: #dcdcdc;'>Sempre</span>"; }
 			
 			$quanty = ($lot->offsetExists("countmax") && $lot->offsetGet("countmax") > 0) ? "{$lot->offsetGet("countmax")}x" : "";
-			$img = "<img id='item_{{$lot->offsetGet("id")}' class='requestItemInfo' src='files/items/{$lot->offsetGet("id")}.gif'/>";
+			$img = "<img id='item_{$lot->offsetGet("id")}' class='requestItemInfo' src='files/items/{$lot->offsetGet("id")}.gif'/>";
 			
 			$itemsStr .= "
 			<tr>
