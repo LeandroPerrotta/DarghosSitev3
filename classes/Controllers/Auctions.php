@@ -20,8 +20,10 @@ class Auctions
 		
 		$id = (int)$_GET["id"];
 		
+		$canNonVisible = ($logged->getAccess() == \t_Access::Administrator) ? true : false;
+		
 		$data = array();
-		$data["auction"] = AuctionsModel\Auction::Load($id);		
+		$data["auction"] = AuctionsModel\Auction::Load($id, $canNonVisible);		
 		
 		$view = new AuctionsView\Detail($data);
 		return true;
@@ -29,10 +31,13 @@ class Auctions
 	
 	function Index()
 	{
+		$logged = \Framework\Account::loadLogged();
+		$canNonVisible = ($logged && $logged->getAccess() == \t_Access::Administrator) ? true : false;
+		
 		$data = array();
-		$data["auctions_begun"] = AuctionsModel\Auction::ListBegun();
-		$data["auctions_ended"] = AuctionsModel\Auction::ListEnded();
-		$data["auctions_starting"] = AuctionsModel\Auction::ListStarting();
+		$data["auctions_begun"] = AuctionsModel\Auction::ListBegun($canNonVisible);
+		$data["auctions_ended"] = AuctionsModel\Auction::ListEnded($canNonVisible);
+		$data["auctions_starting"] = AuctionsModel\Auction::ListStarting($canNonVisible);
 		
 		$view = new AuctionsView\Index($data);
 		return true;
@@ -123,7 +128,8 @@ class Auctions
 		
 		$data = array();
 		
-		$auction = AuctionsModel\Auction::Load($auction_id);
+		$canNonVisible = ($logged->getAccess() == \t_Access::Administrator) ? true : false;		
+		$auction = AuctionsModel\Auction::Load($auction_id, $canNonVisible);
 		
 		if($_POST)
 		{
@@ -131,13 +137,15 @@ class Auctions
 			$begin = mktime(10, 0, 0, $month, $day, $year);
 				
 			list($month, $day, $year) = explode("/", $_POST["auction_end"]);
-			$end = mktime(10, 0, 0, $month, $day, $year);			
+			list($hour, $minutes) = explode(":", $_POST["auction_end_time"]);
+			$end = mktime($hour, $minutes, 0, $month, $day, $year);			
 			
 			$auction->title = $_POST["auction_title"];
 			$auction->description = $_POST["auction_description"];
 			$auction->min_bid = $_POST["auction_min_bid"];
 			$auction->begin = $begin;
 			$auction->end = $end;
+			$auction->visible = $_POST["auction_visible"];
 			
 			$auction->Update();
 			
@@ -150,6 +158,8 @@ class Auctions
 		$data["auction_min_bid"] = $auction->min_bid;
 		$data["auction_begin"] = date("m/d/Y", $auction->begin);
 		$data["auction_end"] = date("m/d/Y", $auction->end);
+		$data["auction_end_time"] = date("H:i", $auction->end);
+		$data["auction_visible"] = (bool)$auction->visible;
 		
 		$view = new AuctionsView\Edit($data);
 		return true;		

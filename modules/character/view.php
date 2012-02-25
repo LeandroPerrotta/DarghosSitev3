@@ -549,11 +549,11 @@ $module .= '
 	<fieldset>
 		
 		<p>
-			<label for="player_name">Nome</label><br />
-			<input id="player_name" name="player_name" size="40" type="text" value="" autocomplete="off" onkeyup="requestSearchBox(this.value)" />
+			<label for="search_value">Nome</label><br />
+			<input id="search_value" name="player_name" size="40" type="text" value="" autocomplete="off" onkeyup="requestSearchBoxPlayer(this.value)" />
 
-			<div id="player_suggestions">
-				<div id="player_suggestions_list">
+			<div id="search_suggestions">
+				<div id="search_suggestions_list">
 				</div>
 			</div>
 		</p>		

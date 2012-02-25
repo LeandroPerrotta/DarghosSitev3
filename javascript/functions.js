@@ -114,24 +114,42 @@ function usleep(microseconds) {
     return true;
 }
 
-function requestSearchBox(value)
+function requestSearchBoxPlayer(value)
+{
+	requestSearchBox("players.search", value);
+}
+
+function requestSearchBoxItemName(value)
+{
+	requestSearchBox("misc.searchitembyname", value, 3);
+}
+
+function requestSearchBox(url, value, minlength)
 {	
-	if(value.length == 0){
-		$("#player_suggestions").hide("slow");
+	minlength = (!minlength) ? 1 : minlength;
+	
+	if(value.length < minlength){
+		$("#search_suggestions").hide("slow");
 	} else {
-		$.post("index.php?ref=players.search", {name: value},
+		$.post("index.php?ref=" + url, {value: value},
 			function(info){
 				if(info.length > 0){
-					$("#player_suggestions_list").html(info);
-					$("#player_suggestions").show("slow");
+					$("#search_suggestions_list").html(info);
+					$("#search_suggestions").show("slow");
 				}
 				else{
-					$("#player_suggestions").hide("slow");
+					$("#search_suggestions").hide("slow");
 				}
 			}
 			,"html"
 		);
 	}
+}
+
+function fillSearchBox(value)
+{
+	$("#search_value").val(value);
+	$("#search_suggestions").hide();
 }
 
 function requestItemInfo(e, itemtype)
@@ -169,12 +187,6 @@ function requestRebornPlayer(value)
 			}
 		}
 	);
-}
-
-function fillSearchBox(value)
-{
-	$("#player_name").val(value);
-	$("#player_suggestions").hide();
 }
 
 function showFogScreen()

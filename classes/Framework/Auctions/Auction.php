@@ -18,6 +18,7 @@ class Auction extends \Core\DBTable
 		,$current_bid = 0
 		,$begin
 		,$end
+		,$visible = 0
 	;
 		
 	private
@@ -25,15 +26,18 @@ class Auction extends \Core\DBTable
 		,$m_bid
 	;
 	
-	static function Load($id)
+	static function Load($id, $canNonVisible = false)
 	{
 		$obj = parent::Load(\Core\Tools::getSiteTable("auctions"), $id);
 		$obj instanceof Auction;
 		
+		if(!$canNonVisible && !$obj->visible)
+			return false;
+		
 		return $obj;
 	}
 	
-	static function ListBegun()
+	static function ListBegun($canNonVisible = false)
 	{
 		$query = \Core\Main::$DB->query("
 		SELECT 
@@ -43,6 +47,7 @@ class Auction extends \Core\DBTable
 		WHERE 
 			`begin` < UNIX_TIMESTAMP()
 			AND `end` > UNIX_TIMESTAMP()
+			".((!$canNonVisible) ? "AND `visible` = 1" : null)."
 		ORDER BY
 			`end` ASC					
 		");
@@ -56,7 +61,7 @@ class Auction extends \Core\DBTable
 		return $array;
 	}
 	
-	static function ListEnded()
+	static function ListEnded($canNonVisible = false)
 	{
 		$query = \Core\Main::$DB->query("
 				SELECT
@@ -65,6 +70,7 @@ class Auction extends \Core\DBTable
 					`".\Core\Tools::getSiteTable("auctions")."`
 				WHERE
 					`end` < UNIX_TIMESTAMP()
+					".((!$canNonVisible) ? "AND `visible` = 1" : null)."
 				ORDER BY
 					`end` DESC			
 				LIMIT 10
@@ -79,7 +85,7 @@ class Auction extends \Core\DBTable
 		return $array;
 	}
 	
-	static function ListStarting()
+	static function ListStarting($canNonVisible = false)
 	{
 		$query = \Core\Main::$DB->query("
 				SELECT
@@ -88,6 +94,7 @@ class Auction extends \Core\DBTable
 					`".\Core\Tools::getSiteTable("auctions")."`
 				WHERE
 					`begin` > UNIX_TIMESTAMP()
+					".((!$canNonVisible) ? "AND `visible` = 1" : null)."
 				ORDER BY
 					`begin` DESC
 				");

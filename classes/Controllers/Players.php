@@ -12,7 +12,7 @@ class Players
 		\Core\Main::$isAjax = true;
 		
 		//Cancela se nada foi escrito no campo de busca
-		$name = $_POST["name"];
+		$name = $_POST["value"];
 		if(empty($name))
 			return;
 	

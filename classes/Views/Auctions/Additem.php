@@ -14,7 +14,19 @@ class Additem extends \Core\Views
 		new UI\Label($form->GetFieldSet(), "Item ID:");
 		$itemtype = new UI\Input($form->GetFieldSet());
 		$itemtype->SetName("itemtype");
-		$itemtype->IsOnlyNumeric();
+		$itemtype->SetId("search_value");
+		$itemtype->EventOnKeyUp("requestSearchBoxItemName(this.value)");
+		
+		$focus = $form->GetFieldSet();
+		$focus instanceof \DOMElement;
+		
+		$div = new \DOMElement("div");
+		$focus->appendChild($div);
+		$div->setAttribute("id", "search_suggestions");
+		
+		$child = new \DOMElement("div");
+		$div->appendChild($child);
+		$child->setAttribute("id", "search_suggestions_list");
 		
 		new UI\Label($form->GetFieldSet(), "Quantidade:");
 		$count = new UI\Input($form->GetFieldSet());

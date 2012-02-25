@@ -22,6 +22,62 @@ class Misc
 		}
 	}
 	
+	function Searchitembyname()
+	{
+		\Core\Main::$isAjax = true;
+		
+		if(empty($_POST["value"]) || strlen($_POST["value"]) < 3)
+			return "";
+		
+		$limit = 100;
+		
+		$result = \Framework\Items::LoadByName($_POST["value"]);
+		
+		if(!$result)
+		{
+			return "";
+		}
+		elseif($result instanceof \Framework\Item)
+		{
+			return "<li onclick='fillSearchBox(\"{$result->GetId()}\")'><span id='item_{$result->GetId()}' class='requestItemInfo'>{$result->GetName()}</span></li>";
+		}
+		else
+		{			
+			$string = "";
+			
+			$string .= '
+				<script>
+				$(".requestItemInfo").on({mouseenter: requestItemInfo, mouseleave: ereaseItemInfo});
+				$(".requestItemInfo").on({
+					mousemove: function(e){
+						$("#iteminfo").css("left", (e.pageX + 3) + "px");
+						$("#iteminfo").css("top", (e.pageY + 3) + "px");
+					}
+				});			
+				</script>
+			';
+			
+			$i = 0;
+			foreach($result as $element)
+			{
+				
+				if($element)
+				{
+					//onclick='fillSearchBox(\"{$attr->id}\")'
+					$attr = $element->attributes();
+					$string .= "<span id='item_{$attr->id}' class='requestItemInfo'>{$attr->name}</span>";
+				}
+				$i++;
+				
+				if($i > $limit)
+					break;
+			}
+			
+			return $string;
+		}
+			
+	}
+	
 	function Iteminfo()
 	{
 		\Core\Main::$isAjax = true;

@@ -373,7 +373,7 @@ ul li {
 	font-weight: bold;
 }
 
-#player_suggestions {
+#search_suggestions {
 	display: none;
 	position: relative;
 	left: 30px;
@@ -384,19 +384,23 @@ ul li {
 	color: #FFF000;
 }
 
-#player_suggestions_list {
+#search_suggestions_list {
 	margin: 0px;
 	padding: 0px;
 }
 
-#player_suggestions_list li {
+#search_suggestions_list li {
 	margin: 0px 0px 3px 0px;
 	padding: 3px;
 	cursor: pointer;
 }
 
-#player_suggestions_list li:hover {
+#search_suggestions_list li:hover {
 	background-color: #659CD8;
+}
+
+#search_suggestions_list span {
+	display: block;
 }
 
 #tileList{

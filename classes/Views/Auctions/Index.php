@@ -10,8 +10,7 @@ class Index extends \Core\Views
 	{
 		parent::__construct($data);
 		
-		$logged = \Framework\Account::loadLogged();
-		
+		$logged = \Framework\Account::loadLogged();		
 		/*
 		 * Leilões iniciados
 		 */

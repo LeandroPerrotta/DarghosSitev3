@@ -92,7 +92,7 @@ class Main
 	}
 	
 	static function onEnd()
-	{				
+	{						
 		//após tudo, se nao conseguimos achar nada para carregar a pagina, iremos tentar carregar uma pagina simples, ou então criar uma...
 		$data = explode(".", $_GET["ref"]);		
 		

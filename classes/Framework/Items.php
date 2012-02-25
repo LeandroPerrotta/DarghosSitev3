@@ -15,8 +15,29 @@ class Items
 		if(!$result)
 			return false;
 		
-		$item = new Item($result);		
+		$item = new Item($result);
 		return $item;
+	}
+	
+	static function LoadByName($item_name)
+	{
+		$patch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA). "items/items.xml";
+		$xml = new \SimpleXMLElement($patch, null, true);
+		
+		$result = $xml->xpath("//item[starts-with(@name, \"".strtolower($item_name)."\")]");
+		
+		if(!$result)
+			return false;
+		
+		if(count($result) == 1)
+		{
+			$item = new Item($result);
+			return $item;			
+		}
+		else
+		{
+			return $result;
+		}
 	}
 	
 	function __construct()

@@ -522,9 +522,12 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 		{			
 			if($patch['dir'] == "errors")
 			{
-				if((!$checkAccount || ($checkAccount && $checkAccount->getAccess() < t_Access::Administrator)) && !Core\Main::onEnd())
+				if(!\Core\Main::onEnd())
 				{
-					include("modules/".$patch['dir']."/".$patch['file'].".php");
+					if(!$checkAccount || ($checkAccount && $checkAccount->getAccess() < t_Access::Administrator))
+					{
+						include("modules/".$patch['dir']."/".$patch['file'].".php");
+					}
 				}
 			}
 			else

@@ -11,6 +11,23 @@ class Edit extends \Core\Views
 		
 		$form = new UI\Form($this);
 		
+		new UI\Label($form->GetFieldSet(), "Visivel:");
+		$visible = new UI\Select($form->GetFieldSet());
+		$visible->SetName("auction_visible");
+		
+		$isVisible = $data[$visible->GetName()] ? true : false;
+
+		if($isVisible)
+		{
+			$visible->AddOption("Sim", "1", true);
+			$visible->AddOption("Não", "0");	
+		}
+		else
+		{
+			$visible->AddOption("Sim", "1");
+			$visible->AddOption("Não", "0", true);			
+		}
+		
 		new UI\Label($form->GetFieldSet(), "Titulo:");
 		$title = new UI\Input($form->GetFieldSet());
 		$title->SetName("auction_title");
@@ -42,7 +59,15 @@ class Edit extends \Core\Views
 		$end->IsDatepick();
 		$end->SetName("auction_end");
 		if($data[$end->GetName()]);
-			$end->SetValue($data[$end->GetName()]);		
+			$end->SetValue($data[$end->GetName()]);
+			
+		new UI\Label($form->GetFieldSet(), "Termina as (hh:mm):");
+		$end_time = new UI\Input($form->GetFieldSet());
+		$end_time->SetName("auction_end_time");
+		if($data[$end->GetName()])
+			$end_time->SetValue($data[$end_time->GetName()]);
+		else
+			$end_time->SetValue("10:00");
 		
 		$submit = new UI\Input($form->GetFieldSet());
 		$submit->SetName("submit");			
