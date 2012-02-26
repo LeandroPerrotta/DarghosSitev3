@@ -127,6 +127,14 @@ $(document).ready(function() {
 	$(".datepicker").datepicker();
 });
 
+$(".requestItemInfo").on({mouseenter: requestItemInfo, mouseleave: ereaseItemInfo});
+$(".requestItemInfo").on({
+	mousemove: function(e){
+		$("#iteminfo").css("left", (e.pageX + 3) + "px");
+		$("#iteminfo").css("top", (e.pageY + 3) + "px");
+	}
+});	
+
 function onChange()
 {
 	var valueSelected = $(this).val();
