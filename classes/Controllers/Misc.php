@@ -33,48 +33,47 @@ class Misc
 		
 		$result = \Framework\Items::LoadByName($_POST["value"]);
 		
+		$string = "";
+			
+		$string .= '
+		<script>
+		$(".requestItemInfo").on({mouseenter: requestItemInfo, mouseleave: ereaseItemInfo});
+		$(".requestItemInfo").on({
+		mousemove: function(e){
+		$("#iteminfo").css("left", (e.pageX + 3) + "px");
+		$("#iteminfo").css("top", (e.pageY + 3) + "px");
+		}
+		});
+		</script>
+		';		
+		
 		if(!$result)
 		{
 			return "";
 		}
 		elseif($result instanceof \Framework\Item)
 		{
-			return "<li onclick='fillSearchBox(\"{$result->GetId()}\")'><span id='item_{$result->GetId()}' class='requestItemInfo'>{$result->GetName()}</span></li>";
+			$string .= "<span onclick='fillSearchBox(\"{$result->GetId()}\")' id='item_{$attr->id}' class='requestItemInfo'><img src='files/items/{$attr->id}.gif'/> {$result->GetName()}</span>";
 		}
 		else
-		{			
-			$string = "";
-			
-			$string .= '
-				<script>
-				$(".requestItemInfo").on({mouseenter: requestItemInfo, mouseleave: ereaseItemInfo});
-				$(".requestItemInfo").on({
-					mousemove: function(e){
-						$("#iteminfo").css("left", (e.pageX + 3) + "px");
-						$("#iteminfo").css("top", (e.pageY + 3) + "px");
-					}
-				});			
-				</script>
-			';
-			
+		{					
 			$i = 0;
 			foreach($result as $element)
 			{
 				
 				if($element)
 				{
-					//onclick='fillSearchBox(\"{$attr->id}\")'
 					$attr = $element->attributes();
-					$string .= "<span id='item_{$attr->id}' class='requestItemInfo'>{$attr->name}</span>";
+					$string .= "<span onclick='fillSearchBox(\"{$attr->id}\")' id='item_{$attr->id}' class='requestItemInfo'><img src='files/items/{$attr->id}.gif'/> {$attr->name}</span>";
 				}
 				$i++;
 				
 				if($i > $limit)
 					break;
 			}
-			
-			return $string;
 		}
+		
+		return $string;
 			
 	}
 	
