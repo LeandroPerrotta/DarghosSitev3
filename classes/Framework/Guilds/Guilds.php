@@ -470,14 +470,10 @@ class Guilds
 	}
 	
 	function EreaseInvites()
-	{
-		$invites = 
-		
-		list($player, $invite_date) = $this->Invites;
-		
+	{				
 		foreach($this->Invites as $invite)
 		{
-			list($character, $invite_date) = $invite;
+			list($player, $invite_date) = $invite;
 			$player->removeInvite();
 		}
 	}

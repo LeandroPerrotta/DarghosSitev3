@@ -8,7 +8,7 @@ class Main
 	
 	static private $m_XMLRoot;
 	
-	static function Initialize()
+	static function Initialize($isCLI = false, $cliArgs = array())
 	{
 		//set_error_handler("Core\\Main::errorHandler", E_ALL^E_NOTICE);
 		spl_autoload_register("Core\\Main::autoLoad");
@@ -22,7 +22,7 @@ class Main
 		//external libs
 		include_once "libs/phpmailer/class.phpmailer.php";		
 		
-		if(!Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
+		if(!Configs::Get(Configs::eConf()->ENABLE_MANUTENTION) || $isCLI)
 		{
 			try
 			{
@@ -34,19 +34,93 @@ class Main
 				echo "Impossivel se conectar ao banco de dados.";
 			}
 				
-			self::InitLanguage();
-			Emails::init();		
-			self::InitPOT();
-			
-			if(!$_SESSION["login_redirect"] && $_SESSION["login_post"])
+			if(!$isCLI)
 			{
-				$_POST = $_SESSION["login_post"];
-				unset($_SESSION["login_post"]);
-			}	
+				self::InitLanguage();
+				Emails::init();		
+				self::InitPOT();
+				
+				if(!$_SESSION["login_redirect"] && $_SESSION["login_post"])
+				{
+					$_POST = $_SESSION["login_post"];
+					unset($_SESSION["login_post"]);
+				}
+					
+				self::loadTemplate();
+				self::routeToController();				
+			}
+			else
+				self::runCLI($cliArgs);
+		}
+	}
+	
+	static function runCLI($cliArgs = array())
+	{		
+		if(count($cliArgs) == 1)
+		{
+			echo "Atenção, você deve digitar este comando com algum argumento, use o -h ou --help para ler a lista de argumentos\n";
+			return;
+		}
+		
+		$loadModule = false;
+		$loadedModule = NULL;
+		
+		foreach($cliArgs as $key => $arg)
+		{
+			if($key == 0)
+				continue;
 			
-			self::loadTemplate();
-			self::routeToController();
-		}	
+			switch($arg)
+			{
+				case "-h":
+				case "--help":
+echo "Uso: {$cliArgs[0]} [args...]\n
+	-h | --help	... Exibe esta mensagem\n
+	-m [modulename] | --module [modulename] ... Carrega um modulo
+";
+					return true;
+					break;
+					
+				case "-m":
+				case "--module":
+					$loadModule = true;
+					break;
+					
+				default:
+					if($loadModule)
+					{
+						$loadedModule = $arg;
+						$loadModule = false;
+					}
+					else
+					{
+						echo "Argumento {$arg} desconhecido. Use o {$cliArgs[0]} --help para maiores informações.\n";
+						return true;
+					}
+					break;
+			}
+		}
+		
+		if(!$loadedModule)
+		{
+			echo "Este comando requer que você carregue um modulo. Use o {$cliArgs[0]} --help para maiores informações.\n";
+			return true;
+		}
+		
+		$classStr = "CLIModules\\{$loadedModule}";
+		
+		if(self::autoLoad($classStr))
+		{
+			$obj = new $classStr();
+			$obj->Run();
+			
+			return true;
+		}
+		else
+		{
+			echo "Modulo {$loadedModule} inexistente. Use o {$cliArgs[0]} --help para maiores informações.\n";
+			return true;
+		}
 	}
 	
 	static function routeToController()
