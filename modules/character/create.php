@@ -24,7 +24,7 @@ if($_POST)
 	{
 		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_NAME);
 	}
-	elseif(count($account->getCharacterList()) == 10)
+	elseif(count($account->getCharacterList()) == 10 && $account->getGroup() != t_Group::PlayerNonLogout)
 	{
 		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_CANNOT_HAVE_MORE_CHARACTERS);
 	}

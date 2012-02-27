@@ -132,8 +132,7 @@ if(isset($_GET["world"]))
 		FROM 
 			`players` 
 		WHERE 	
-			group_id < 3
-			AND world_id = {$world_id}
+			world_id = {$world_id}
 			AND deleted = 0";
 			
 		if(!$filter_showInactivePlayers)
@@ -171,8 +170,7 @@ if(isset($_GET["world"]))
 		FROM
 			`players`
 		WHERE
-			`group_id` < 3
-			AND `world_id` = {$world_id}
+			`world_id` = {$world_id}
 			AND `deleted` = 0";
 		
 		if(!$filter_showInactivePlayers)
@@ -224,7 +222,7 @@ if(isset($_GET["world"]))
 				`player`.`world_id` = {$world_id} AND
 				".((!$filter_showInactivePlayers) ? 
 					"`player`.`lastlogin` + (60 * 60 * 24 * {$charactersActiveDays}) > ".time()." AND " : null)."				
-				`player`.`id` = `skill`.`player_id` AND `skill`.`skillid` = {$skillid} AND `player`.`group_id` < 3
+				`player`.`id` = `skill`.`player_id` AND `skill`.`skillid` = {$skillid}
 				{$pvp_str}
 			ORDER BY 
 				`skill`.`value` DESC,
@@ -303,6 +301,9 @@ if(isset($_GET["world"]))
 	while($fetch = $query->fetch())
 	{		
 		$player->load($fetch->id);
+		
+		if($player->getAccess() > t_Access::SeniorTutor)
+			continue;
 		
 		if($skill == "experience")
 		{

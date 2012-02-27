@@ -58,7 +58,14 @@ class Player
 		return true;
 	}
 		
-	private $db, $temp_data, $data = array(), $skills = array(), $guild = array() /* deprecated? */;
+	private 
+		$db
+		,$temp_data
+		,$data = array()
+		,$skills = array()
+		,$guild = array() /* deprecated? */
+		,$_group
+	;
 	
 	private $site_data = array(
 		"visible" => 1
@@ -763,6 +770,15 @@ class Player
 	function getName(){ return $this->data['name'];	}
 	function getWorldId(){ return $this->data['world_id'];	}
 	function getGroup(){ return $this->data['group_id']; }
+	function getAccess(){
+		if(!$this->_group)
+		{
+			$group_id = $this->getGroup();
+			$this->_group = \Framework\Group::LoadById($group_id);
+		}
+		
+		return $this->_group->access;		
+	}
 	function getAccountId(){ return $this->data['account_id']; }
 	function getLevel(){ return $this->data['level']; }
 	function getMagicLevel(){ return $this->data['maglevel']; }	

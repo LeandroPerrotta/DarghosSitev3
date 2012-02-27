@@ -487,6 +487,7 @@ class t_Group extends \Core\Structs
 		,GameMaster = 5
 		,CommunityManager = 6
 		,Administrator = 7
+		,PlayerNonLogout = 8
 	;	
 	
 	static protected
@@ -497,7 +498,8 @@ class t_Group extends \Core\Structs
 			self::SeniorTutor => "Senior Tutor",
 			self::GameMaster => "Game Master",
 			self::CommunityManager => "Community Manager",
-			self::Administrator => "Administrador"				
+			self::Administrator => "Administrador",	
+			self::PlayerNonLogout => "Jogador"				
 		);		
 }
 
