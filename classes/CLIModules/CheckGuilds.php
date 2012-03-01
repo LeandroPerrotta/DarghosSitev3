@@ -50,7 +50,7 @@ class CheckGuilds
 				$guild->SetStatus(Guilds::STATUS_FORMATION);
 				$formingGuilds++;
 			}
-			elseif(time() > $result_guild->formationTime && !$hasVices)
+			elseif(time() > $guild->GetFormationTime() && !$hasVices)
 			{
 				$toDelete = true;
 				$terminatedGuilds++;
