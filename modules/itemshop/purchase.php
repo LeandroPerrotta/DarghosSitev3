@@ -159,7 +159,7 @@ class View
 			return false;			
 		}
 		
-		if($player->getWorldId() == t_Worlds::Aaragon)
+		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_ITEM_SHOP, $player->getWorldId()))
 		{
 			$this->_message = "O nosso item shop não está habilitado para este mundo por enquanto.";
 			return false;			
