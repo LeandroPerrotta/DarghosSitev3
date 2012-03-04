@@ -19,9 +19,9 @@ class Houses
 		}
 	}
 
-	function load($id)
+	function load($id, $world_id)
 	{		
-		$query = $this->db->query("SELECT `name`, `rent`, `size`, `town`, `owner`, `paid`, `warnings` FROM `houses` WHERE `id` = '{$id}'");
+		$query = $this->db->query("SELECT `name`, `rent`, `size`, `town`, `owner`, `paid`, `warnings` FROM `houses` WHERE `id` = '{$id}' AND `world_id` = {$world_id} ");
 		
 		while($fetch = $query->fetch())
 		{

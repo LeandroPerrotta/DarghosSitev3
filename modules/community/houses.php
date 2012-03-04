@@ -9,10 +9,10 @@ if(isset($_GET["world"]))
 	$world_id = (int)$_GET["world"];
 	
 	if(!t_Worlds::Get($world_id))
-		$world_id = t_Worlds::Ordon;	
+		$world_id = t_Worlds::Ordon;
 	
 	if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-		$query_str = "SELECT * FROM houses WHERE world_id = {$world_id} ORDER BY `town`";
+		$query_str = "SELECT `id` FROM houses WHERE `world_id` = {$world_id} ORDER BY `town` ASC, `name` ASC";
 	elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 		$query_str = "SELECT * FROM houses ORDER BY `townid`";
 	
@@ -35,9 +35,9 @@ if(isset($_GET["world"]))
 		</tr>";
 	
 	while($fetch = $query->fetch())
-	{
+	{		
 		$houses = new \Framework\Houses($world_id);
-		$houses->load($fetch->id);
+		$houses->load($fetch->id, $world_id);
 		
 		if(!$houses->isValid())
 		{
