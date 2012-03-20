@@ -541,11 +541,11 @@ class t_Vocation
 			5 => array("name" => "master sorcerer", "abrev" => "ms"),
 			6 => array("name" => "elder druid", "abrev" => "ed"),
 			7 => array("name" => "royal paladin", "abrev" => "rp"),
-			8 => array("name" => "elite knight", "abrev" => "ek")/*,
-			9 => "Warmaster Sorcerer",
-	10 => "Warden Druid",
-	11 => "Holy Paladin",
-	12 => "Berserk Warrior",*/
+			8 => array("name" => "elite knight", "abrev" => "ek"),
+			9 => array("name" => "warmaster sorcerer", "abrev" => "ws"),
+			10 => array("name" => "warden druid", "abrev" => "wd"),
+			11 => array("name" => "holy paladin", "abrev" => "hp"),
+			12 => array("name" => "berserk knight", "abrev" => "bk"),
 	);
 
 	function t_Vocation($vocation_id = null)
