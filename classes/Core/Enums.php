@@ -110,6 +110,7 @@ class e_Configs extends \Core\Enumerators
 		/*
 		 * Others
 		 */
+		,$SHOW_LAST_DEATHS_LIMIT
 		,$INSTANT_DELETION_MAX_LEVEL
 		,$ENABLE_PVP_SWITCH
 		,$ENABLE_BATTLEGROUND_FEATURES

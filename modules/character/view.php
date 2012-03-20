@@ -301,6 +301,9 @@ $table->AddRow();
 $table->AddField("Matou {$player->getTotalKills()} jogadores.");
 $table->AddRow();
 
+$table->AddField("Participou da morte de {$player->getTotalAssists()} jogadores.");
+$table->AddRow();
+
 if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorldId()))
 {
 	$table->AddField("Matou {$player->getTotalBgKills()} jogadores em battlegrounds.");

@@ -205,7 +205,10 @@ class Misc
 		}
 
 		if($item->speed)
-			$string .= "<p>Velocidade: <strong>+{$item->speed} leveis</strong></p>";		
+			$string .= "<p>Velocidade: <strong>+{$item->speed} leveis</strong></p>";
+		
+		if($item->criticalChance)
+			$string .= "<p>Critico: <strong>+{$item->criticalChance}%</strong></p>";		
 		
 		if($item->weight)
 			$string .= "<p>Peso: <strong>".round($item->weight / 100, 2)." oz</strong></p>";

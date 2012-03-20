@@ -116,7 +116,7 @@ class Player
 				`".\Core\Tools::getSiteTable("players")."` 
 			SET 
 				`creation` = '{$this->site_data["creation"]}',
-				`comment` = '{$this->site_data["comment"]}',
+				`comment` = '" . \Core\Main::$DB->escapeString($this->site_data["comment"]) . "',
 				`visible` = '{$this->site_data["visible"]}',";
 			
 			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)

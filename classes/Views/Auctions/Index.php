@@ -16,7 +16,7 @@ class Index extends \Core\Views
 		 */
 		$table_begun = new \Framework\HTML\Table();
 		
-		$table_begun->AddField("Leilões de items em andamento", null, null, 5, true);
+		$table_begun->AddField("Leilões de itens em andamento", null, null, 5, true);
 		$table_begun->AddRow();
 		
 		if(count($this->data["auctions_begun"]) > 0)

@@ -120,6 +120,7 @@ class Configs
 				case self::$e_Configs->ENABLE_REBORN: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->FIRST_REBORN_LEVEL: self::Set($i, $__configs[$i], 200); break;
 				
+				case self::$e_Configs->SHOW_LAST_DEATHS_LIMIT: self::Set($i, $__configs[$i], 100); break;					
 				case self::$e_Configs->INSTANT_DELETION_MAX_LEVEL: self::Set($i, $__configs[$i], 50); break;					
 				case self::$e_Configs->ENABLE_PVP_SWITCH: self::Set($i, $__configs[$i], true); break;					
 				case self::$e_Configs->AJAX_SEARCH_PLAYERS_COUNT: self::Set($i, $__configs[$i], 5); break;					
