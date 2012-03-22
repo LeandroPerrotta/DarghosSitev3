@@ -190,9 +190,13 @@ if(isset($_GET["world"]))
 				
 				$vocation_id = $fetch->vocation;
 				
-				if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion == 1 && $_characc->getPremDays() > 0)
+				if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion == 1)
 				{
 					$vocation_id += 4;
+				}
+				elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion == 2 && $_characc->getPremDays() > 0)
+				{
+					$vocation_id += 8;
 				}
 				
 				$pvpStr = "<span class='pvpEnabled'>Agressivo</span>";
