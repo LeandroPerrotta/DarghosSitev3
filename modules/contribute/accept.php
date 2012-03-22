@@ -12,6 +12,7 @@ if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "
 		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
 		
 		$error = NULL;
+		$callbackFunc = "\Framework\Contribute::{$premium["onAccept"]}";
 		
 		if(\Core\Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
@@ -21,7 +22,7 @@ if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "
 		{
 			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_TERMS);
 		}
-		elseif($premium["onAccept"] && !call_user_func("\Framework\Contribute::{$premium["onAccept"]}", $contribute, &$error))
+		elseif($premium["onAccept"] && !call_user_func_array($callbackFunc, array($contribute, &$error)))
 		{
 			//
 		}
