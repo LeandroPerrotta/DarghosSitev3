@@ -64,9 +64,9 @@ class Configs
 				case self::$e_Configs->WEBSITE_TEAM: self::Set($i, $__configs[$i], "UltraxSoft Team"); break;
 				case self::$e_Configs->LANGUAGE: self::Set($i, $__configs[$i], Consts::LANGUAGE_PTBR); break;
 				
-				case self::$e_Configs->SQL_HOST: self::Set($i, $__configs[$i], "174.37.203.162"); break;
-				case self::$e_Configs->SQL_USER: self::Set($i, $__configs[$i], "darghos_wb"); break;
-				case self::$e_Configs->SQL_PASSWORD: self::Set($i, $__configs[$i], "***REMOVED***"); break;
+				case self::$e_Configs->SQL_HOST: self::Set($i, $__configs[$i], "72.8.150.74"); break;
+				case self::$e_Configs->SQL_USER: self::Set($i, $__configs[$i], "darghos"); break;
+				case self::$e_Configs->SQL_PASSWORD: self::Set($i, $__configs[$i], "zlabia7r"); break;
 				case self::$e_Configs->SQL_DATABASE: self::Set($i, $__configs[$i], "darghos"); break;
 				case self::$e_Configs->SQL_WEBSITE_TABLES_PREFIX: self::Set($i, $__configs[$i], "wb_"); break;
 				
