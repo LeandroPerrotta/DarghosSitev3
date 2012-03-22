@@ -80,7 +80,7 @@ class Configs
 				case self::$e_Configs->WEBSITE_FOLDER_GUILDS: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->WEBSITE_FOLDER_FILES) . "guildImages/"); break;
 				
 				case self::$e_Configs->USE_DISTRO: self::Set($i, $__configs[$i], Consts::SERVER_DISTRO_TFS); break;
-				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/darghos/tfs/"); break;
+				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/darghos/"); break;
 				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], "data/"); break;
 				case self::$e_Configs->FILE_HOUSES: self::Set($i, $__configs[$i], "world/-house.xml"); break;
 				case self::$e_Configs->FILE_MONSTERS: self::Set($i, $__configs[$i], "monster/monsters.xml"); break;
