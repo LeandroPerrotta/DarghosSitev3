@@ -115,6 +115,8 @@ class e_Configs extends \Core\Enumerators
 		,$ENABLE_PVP_SWITCH
 		,$ENABLE_BATTLEGROUND_FEATURES
 		,$AJAX_SEARCH_PLAYERS_COUNT
+		,$ENABLE_MULTIWORLD
+		,$DEFAULT_WORLD
 	;
 	
 	function __construct(){

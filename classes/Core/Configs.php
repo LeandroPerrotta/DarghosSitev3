@@ -124,7 +124,10 @@ class Configs
 				case self::$e_Configs->INSTANT_DELETION_MAX_LEVEL: self::Set($i, $__configs[$i], 50); break;					
 				case self::$e_Configs->ENABLE_PVP_SWITCH: self::Set($i, $__configs[$i], true); break;					
 				case self::$e_Configs->AJAX_SEARCH_PLAYERS_COUNT: self::Set($i, $__configs[$i], 5); break;					
-				case self::$e_Configs->ENABLE_BATTLEGROUND_FEATURES: self::Set($i, $__configs[$i], true); break;					
+				case self::$e_Configs->ENABLE_BATTLEGROUND_FEATURES: self::Set($i, $__configs[$i], true); break;	
+						
+				case self::$e_Configs->ENABLE_MULTIWORLD: self::Set($i, $__configs[$i], false); break;			
+				case self::$e_Configs->DEFAULT_WORLD: self::Set($i, $__configs[$i], 0); break;			
 			}
 		}
 	}

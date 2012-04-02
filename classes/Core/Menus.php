@@ -186,7 +186,9 @@ class Menus
 			
 			if((bool)!$fetch->online || $fetch->date < time - 60 * 5)
 			{
-				$allOnline = false;
+				if(Configs::Get(Configs::eConf()->ENABLE_MULTIWORLD))
+					$allOnline = false;
+				
 				\t_Worlds::ItNext();
 				continue;
 			}

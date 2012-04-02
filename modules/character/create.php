@@ -44,6 +44,9 @@ if($_POST)
 		else
 			$outfitType = 136;
 			
+		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
+			$_POST["player_world"] = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);
+		
 		$_world_id = t_Worlds::Get($_POST["player_world"]);
 		
 		$town_id = t_Towns::Get($_POST["player_town"]);
@@ -100,10 +103,20 @@ $worldNames = array(
 		t_Worlds::Ordon => "Ordon (permitida mudança pvp, inaugurado fev/2011)"
 		,t_Worlds::Aaragon => "Aaragon (somente pvp aberto, inaugurado fev/2012)"
 );
-while(t_Worlds::ItValid())
+if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 {
-	$worlds_str .= "<input type=\"radio\" name=\"player_world\" value=\"".t_Genre::It()."\" /> {$worldNames[t_Worlds::It()]}<br>";
-	t_Worlds::ItNext();
+	while(t_Worlds::ItValid())
+	{
+		$worlds_str .= "<input type=\"radio\" name=\"player_world\" value=\"".t_Genre::It()."\" /> {$worldNames[t_Worlds::It()]}<br>";
+		t_Worlds::ItNext();
+	}
+	
+	$world_str = '
+	<p>
+		<label for="player_world">Mundo</label>	
+			'.$worlds_str.'		
+	</p>	
+	';
 }
 	
 
@@ -126,11 +139,6 @@ $module .= '
 			<label for="player_name">Nome</label>
 			<input name="player_name" size="40" type="text" value="" />
 		</p>
-
-		<p>
-			<label for="player_world">Mundo</label>	
-				'.$worlds_str.'		
-		</p>		
 
 		<p>
 			<label for="player_town">Cidade</label>

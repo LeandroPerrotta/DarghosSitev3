@@ -77,6 +77,9 @@ class Players
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
 		$town = $_POST["character_town"];
+		
+		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
+			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		
 	
 		$result = array();
 		$result["response"] = Consts::AJAX_RESPONSE_NEXT_STEP;

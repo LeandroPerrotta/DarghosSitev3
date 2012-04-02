@@ -500,6 +500,12 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 	
 	static function requireWorldSelection($asTable = false)
 	{
+		if(!Configs::Get(Configs::eConf()->ENABLE_MULTIWORLD))
+		{
+			$_GET["world"] = Configs::Get(Configs::eConf()->DEFAULT_WORLD);
+			return;
+		}
+		
 		global $module;
 		
 		if(!$asTable)

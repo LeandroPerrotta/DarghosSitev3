@@ -147,6 +147,42 @@ class View
 			",
 		);
 		
+		$world_str = "";
+
+		if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
+			$world_str = "
+				<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos, que apesar de possuirem o mesmo conteudo possuem caracteristicas diferentes, selecione de qual você deseja participar:</p>
+				<p>
+					<label>Mundo do personagem:</label>
+					{$this->_char_world->Draw()}
+					
+					<div class='character_world'>
+						<div class='1' style='display: none;'>
+							<p>
+								<p><b>Tipo PvP:</b><br> somente aberto.</p>
+								<p><b>Inauguração:</b><br> fev/2012.</p>
+								<p><b>Dificuldade & Rates:</b><br> Moderada.</p>
+							</p>
+							<p>
+								<label>Cidade natal do personagem:</label>
+								{$this->_char_town->Draw()}
+							</p>
+						</div>
+						<div class='0' style='display: none;'>
+							<p>
+								<p><b>Tipo PvP:</b><br> mudança permitida.</p>
+								<p><b>Inauguração:</b><br> fev/2011.</p>
+								<p><b>Dificuldade & Rates:</b><br> Facil.</p>
+							</p>
+							<p>
+								<label>Cidade natal do personagem:</label>
+								{$this->_char_town->Draw()}
+							</p>						
+						</div>								
+					</div>
+				</p>		
+			";
+							
 		$this->steps[] = array(
 			"step" => "3",
 			"title" => "Seu primeiro personagem",
@@ -159,36 +195,7 @@ class View
 				{$this->_char_name->Draw()}			
 			</p>
 			
-			<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos, que apesar de possuirem o mesmo conteudo possuem caracteristicas diferentes, selecione de qual você deseja participar:</p>
-			<p>
-				<label>Mundo do personagem:</label>
-				{$this->_char_world->Draw()}
-				
-				<div class='character_world'>
-					<div class='1' style='display: none;'>
-						<p>
-							<p><b>Tipo PvP:</b><br> somente aberto.</p>
-							<p><b>Inauguração:</b><br> fev/2012.</p>
-							<p><b>Dificuldade & Rates:</b><br> Moderada.</p>
-						</p>
-						<p>
-							<label>Cidade natal do personagem:</label>
-							{$this->_char_town->Draw()}
-						</p>
-					</div>
-					<div class='0' style='display: none;'>
-						<p>
-							<p><b>Tipo PvP:</b><br> mudança permitida.</p>
-							<p><b>Inauguração:</b><br> fev/2011.</p>
-							<p><b>Dificuldade & Rates:</b><br> Facil.</p>
-						</p>
-						<p>
-							<label>Cidade natal do personagem:</label>
-							{$this->_char_town->Draw()}
-						</p>						
-					</div>								
-				</div>
-			</p>			
+			{$world_str}	
 			
 			<p class='long-margin-top'>Os personagens podem ser do genero masculino ou feminino, selecione abaixo o genero desejado para seu personagem.</p>
 			<p>
