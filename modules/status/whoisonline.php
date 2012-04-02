@@ -2,7 +2,7 @@
 use \Core\Configs as g_Configs;
 use \Core\Consts;
 
-if(isset($_GET["world"]))
+if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORLD))
 {
 	\Core\Main::requireWorldSelection();
 	
