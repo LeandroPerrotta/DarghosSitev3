@@ -4,10 +4,11 @@ use \Core\Consts;
 class Contribute extends \Core\MySQL
 {	
 	static public $premiums = array(
-		array("period" => 30, "product" => "Contribuicao para 30 dias de Conta Premium", "text" => "30 dias.", "cost" => 7.50),
-		array("period" => 60, "product" => "Contribuicao para 60 dias de Conta Premium", "text" => "60 dias (2 meses).", "cost" => 15.00),
-		array("period" => 90, "product" => "Contribuicao para 90 dias de Conta Premium", "text" => "90 dias (3 meses).", "cost" => 22.50),
-		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium", "text" => "180 dias (6 meses).", "cost" => 44.90)
+		array("period" => 30, "product" => "Contribuicao para 10 dias de Conta Premium", "text" => "10 dias.", "cost" => 3.90),
+		array("period" => 30, "product" => "Contribuicao para 30 dias de Conta Premium", "text" => "30 dias.", "cost" => 11.90),
+		array("period" => 60, "product" => "Contribuicao para 60 dias de Conta Premium", "text" => "60 dias (2 meses).", "cost" => 22.50),
+		array("period" => 90, "product" => "Contribuicao para 90 dias de Conta Premium", "text" => "90 dias (3 meses).", "cost" => 31.90),
+		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium", "text" => "180 dias (6 meses).", "cost" => 59.90)
 	);
 	
 	static public $premiumsPromotions = array(
