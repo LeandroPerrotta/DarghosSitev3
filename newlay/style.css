@@ -84,13 +84,106 @@ ul li {
 	padding: 10px;
 }
 
-#announcement, #footer {
+#top-menu, #footer {
 	background: #333 url(images/announcement.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	margin: 0;
 	text-align: center;
 	height: 40px;
+}
+
+#top-menu ul
+{
+	margin: 0px;
+	paddin: 0px;
+}
+
+#top-menu ul li
+{
+	margin: 0px;
+	paddin: 0px;
+	display: inline-block;
+	list-style-type: none;
+	width: 194px;
+	height: 40px;
+}
+
+#top-menu ul li a
+{
+	display: block;
+	width: 194px;
+	height: 40px;
+}
+
+#top-menu #lastnews:hover
+{
+	background: url(images/bt_lastnews.png);
+}
+
+#top-menu #lastnews
+{
+	background: url(images/bt_lastnews_hover.png);
+}
+
+#top-menu #login:hover
+{
+	background: url(images/bt_login.png);
+}
+
+#top-menu #login
+{
+	background: url(images/bt_login_hover.png);
+}
+
+#top-menu #logout:hover
+{
+	background: url(images/bt_logout.png);
+}
+
+#top-menu #logout
+{
+	background: url(images/bt_logout_hover.png);
+}
+
+#top-menu #register:hover
+{
+	background: url(images/bt_register.png);
+}
+
+#top-menu #register
+{
+	background: url(images/bt_register_hover.png);
+}
+
+#top-menu #account:hover
+{
+	background: url(images/bt_account.png);
+}
+
+#top-menu #account
+{
+	background: url(images/bt_account_hover.png);
+}
+
+#top-menu #highscores:hover
+{
+	background: url(images/bt_highscores.png);
+}
+
+#top-menu #highscores
+{
+	background: url(images/bt_highscores_hover.png);
+}
+
+#top-menu #auctions:hover
+{
+	background: url(images/bt_auctions.png);
+}
+
+#top-menu #auctions
+{
+	background: url(images/bt_auctions_hover.png);
 }
 
 #content_wrapper {

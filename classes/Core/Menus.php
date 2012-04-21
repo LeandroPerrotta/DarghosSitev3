@@ -359,6 +359,58 @@ class Menus
 		return new ResultIterator($query);		
 	}
 	
+	static function drawTopMenu()
+	{
+		$xml = new \SimpleXMLElement("
+				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+				<root>
+				</root>");
+
+		$ul = $xml->addChild("ul");
+		
+		$li = $ul->addChild("li");
+		$li->addAttribute("id", "lastnews");
+		$link = $li->addChild("a");
+		$link->addAttribute("href", "?ref=news.last");
+		
+		if(!Main::isLogged())
+		{
+			$li = $ul->addChild("li");
+			$li->addAttribute("id", "login");
+			$link = $li->addChild("a");
+			$link->addAttribute("href", "?ref=account.login");			
+
+			$li = $ul->addChild("li");
+			$li->addAttribute("id", "register");
+			$link = $li->addChild("a");
+			$link->addAttribute("href", "?ref=account.register");				
+		}
+		else
+		{
+			$li = $ul->addChild("li");
+			$li->addAttribute("id", "logout");
+			$link = $li->addChild("a");
+			$link->addAttribute("href", "?ref=account.logout");
+
+			$li = $ul->addChild("li");
+			$li->addAttribute("id", "account");
+			$link = $li->addChild("a");
+			$link->addAttribute("href", "?ref=account.main");			
+		}
+		
+		$li = $ul->addChild("li");
+		$li->addAttribute("id", "highscores");
+		$link = $li->addChild("a");
+		$link->addAttribute("href", "?ref=community.highscores");		
+		
+		$li = $ul->addChild("li");
+		$li->addAttribute("id", "auctions");
+		$link = $li->addChild("a");
+		$link->addAttribute("href", "?ref=auctions.index");
+
+		return $xml->asXML();
+	}
+	
 	static function drawLeftMenu()
 	{		
 		$string = "";

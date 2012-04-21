@@ -336,6 +336,7 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		
 		$xml = self::$m_XMLRoot->asXML();
 		
+		$xml = str_replace("%TOP_MENU%", Menus::drawTopMenu(), $xml);
 		$xml = str_replace("%LEFT_MENU%", Menus::drawLeftMenu(), $xml);
 		$xml = str_replace("%RIGHT_MENU%", Menus::drawRightMenu(), $xml);
 		
