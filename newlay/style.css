@@ -123,7 +123,8 @@ ul li {
 
 #top-menu #lastnews
 {
-	background: url(images/bt_lastnews_hover.png);
+	background: url(images/bt_lastnews.png);
+	background-position: -192px 0px;
 }
 
 #top-menu #login:hover
@@ -133,7 +134,8 @@ ul li {
 
 #top-menu #login
 {
-	background: url(images/bt_login_hover.png);
+	background: url(images/bt_login.png);
+	background-position: -192px 0px;
 }
 
 #top-menu #logout:hover
@@ -143,7 +145,8 @@ ul li {
 
 #top-menu #logout
 {
-	background: url(images/bt_logout_hover.png);
+	background: url(images/bt_logout.png);
+	background-position: -192px 0px;
 }
 
 #top-menu #register:hover
@@ -153,7 +156,8 @@ ul li {
 
 #top-menu #register
 {
-	background: url(images/bt_register_hover.png);
+	background: url(images/bt_register.png);
+	background-position: -192px 0px;
 }
 
 #top-menu #account:hover
@@ -163,7 +167,8 @@ ul li {
 
 #top-menu #account
 {
-	background: url(images/bt_account_hover.png);
+	background: url(images/bt_account.png);
+	background-position: -192px 0px;
 }
 
 #top-menu #highscores:hover
@@ -173,7 +178,8 @@ ul li {
 
 #top-menu #highscores
 {
-	background: url(images/bt_highscores_hover.png);
+	background: url(images/bt_highscores.png);
+	background-position: -192px 0px;
 }
 
 #top-menu #auctions:hover
@@ -183,7 +189,8 @@ ul li {
 
 #top-menu #auctions
 {
-	background: url(images/bt_auctions_hover.png);
+	background: url(images/bt_auctions.png);
+	background-position: -192px 0px;
 }
 
 #content_wrapper {
