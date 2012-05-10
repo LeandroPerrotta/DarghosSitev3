@@ -52,8 +52,12 @@ span.requestItemInfo:hover{
 }
 
 .hasAchiev{
-	font-size: 9px;
+	font-size: 12px;
 	font-weight: bold;
+}
+
+.gotAchiev{
+	font-size: 9px;
 }
 
 #new-title-bar{

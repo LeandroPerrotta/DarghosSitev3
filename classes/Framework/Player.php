@@ -13,6 +13,8 @@ class Player
 		PH_LOG_BATTLEGROUND_WIN = 1
 		, PH_LOG_BATTLEGROUND_LOST = 2
 		, PH_LOG_BATTLEGROUND_DRAW = 3
+		, PH_LOG_DUNGEON_ARIADNE_TROLLS_ATTEMPS = 4
+		, PH_LOG_DUNGEON_ARIADNE_TROLLS_COMPLETED = 5
 		;
 		
 	const
@@ -21,6 +23,17 @@ class Player
 		, PH_ACHIEV_BATTLEGROUND_ISANE_KILLER = 3
 		, PH_ACHIEV_BATTLEGROUND_PERFECT = 4
 		, PH_ACHIEV_BATTLEGROUND_RANK_BRAVE = 5
+		
+		, PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_ALL_TOTEMS = 1000
+		, PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_GHAZRAN_TONGUE = 1001
+		, PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_IN_ONLY_ONE_ATTEMP = 1002
+		, PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_WITHOUT_ANYONE_DIE = 1003
+		
+		, PH_ACHIEV_MISC_GOT_LEVEL_100 = 2000
+		, PH_ACHIEV_MISC_GOT_LEVEL_200 = 2001
+		, PH_ACHIEV_MISC_GOT_LEVEL_300 = 2002
+		, PH_ACHIEV_MISC_GOT_LEVEL_400 = 2003
+		, PH_ACHIEV_MISC_GOT_LEVEL_500 = 2004
 		;
 	
 		
@@ -633,13 +646,42 @@ class Player
 	{
 		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_DRAW."");
 		return $query->numRows();
-	}	
+	}
+	
+	function getDungeonAriadneTrollsAttemps()
+	{
+		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_DUNGEON_ARIADNE_TROLLS_ATTEMPS."");
+		return $query->numRows();
+	}
+	
+	function getDungeonAriadneTrollsCompleted()
+	{
+		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_DUNGEON_ARIADNE_TROLLS_COMPLETED."");
+		return $query->numRows();
+	}
 	
 	function hasAchievement($history)
 	{
 		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_ACHIEVEMENT." AND `history` = {$history}");
 		return $query->numRows() > 0;
 	}
+	
+	function getAchievementInfo($history)
+	{
+		$query = \Core\Main::$DB->query("SELECT `date`, `params` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_ACHIEVEMENT." AND `history` = {$history}");
+
+		$info = array();
+		
+		if($query->numRows() == 0)
+			$info["has"] = false;
+		else	
+		{
+			$info = $query->fetchArray();
+			$info["has"] = true;
+		}
+		
+		return $info;
+	}	
 	
 	function hasAchievBattlegroundRankVeteran()
 	{

@@ -1,10 +1,12 @@
 <?
 use \Core\Configs;
+use \Framework\Player;
+
 if($_POST["player_name"] || $_GET['name'])
 {		
 	$name = ($_POST) ? $_POST["player_name"] : $_GET['name'];
 
-	$player = new \Framework\Player();
+	$player = new Player();
 	
 	if(!$player->loadByName($name))
 	{	
@@ -295,6 +297,15 @@ if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorl
 }
 
 $table = new \Framework\HTML\Table();
+$table->AddField("Participação em Dungeons", null, null, null, true);
+$table->AddRow();
+
+$table->AddField("Ariadne - Trolls Wing: {$player->getDungeonAriadneTrollsAttemps()} tentativas e {$player->getDungeonAriadneTrollsCompleted()} completadas.");
+$table->AddRow();
+
+$module .= $table->Draw();
+
+$table = new \Framework\HTML\Table();
 $table->AddField("Mortes Causadas", null, null, null, true);
 $table->AddRow();
 
@@ -402,7 +413,7 @@ if(is_array($deathlist))
 				}
 				else
 				{
-					$_killer = new \Framework\Player();	
+					$_killer = new Player();	
 					$_killer->load($killer['killer']);	
 
 					$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
@@ -438,7 +449,7 @@ if($logged_acc && ($account->getId() == $logged_acc->getId() || $logged_acc->get
 		
 		foreach($kills as $kill)
 		{
-			$killed = new \Framework\Player();
+			$killed = new Player();
 			$killed->load($kill["killed"]);
 			
 			$date = \Core\Main::formatDate($kill['date']);
@@ -476,26 +487,78 @@ $module .= "
 		
 <div title='achievements' style='display: none; margin: 0px; padding: 0px;'>";
 
+$battleground_achievements = array(
+	array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_BRAVE, text => "Rank - Bravo: Conquistou 1.000 pontos de classificação (rating).")
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_VETERAN, text => "Rank - Bravo: Conquistou 1.500 pontos de classificação (rating).")
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_LEGEND, text => "Rank - Bravo: Conquistou 2.000 pontos de classificação (rating).")
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_ISANE_KILLER, text => "Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez.")
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_PERFECT, text => "Partida Perfeita! Venceu uma partida com o magnifico resultado de 50x0.")
+);
+
+$dungeon_achievements = array(
+	array( "name" => "Ariadne: Trolls Wing", "list" => array(
+		array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_ALL_TOTEMS, text => "Obteve os 12 totems para acessar o lar do Ghazran." )
+		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_GHAZRAN_TONGUE, text => "Derrotou e obteve a lingua do Ghazran, o boss." )
+		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_WITHOUT_ANYONE_DIE, text => "Derrotou o Ghazran sem que ninguem do time morresse nesta tentativa inteira." )
+		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_IN_ONLY_ONE_ATTEMP, text => "Obteve os 12 totems e derrotou o Ghazran em apénas uma tentativa." )
+	))	
+);
+
+$misc_achievements = array(
+	array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_100, text => "Atingiu level 100." )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_200, text => "Atingiu level 200." )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_300, text => "Atingiu level 300." )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_400, text => "Atingiu level 400." )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_500, text => "Atingiu level 500." )
+);
+
+function showAchievement(&$table, &$player, $achiev)
+{
+	$achievInfo = $player->getAchievementInfo($achiev["achiev"]);
+	$string = "<span class='".($achievInfo["has"] ? "hasAchiev" : "notHasAchiev")."'>{$achiev["text"]}</span>";
+
+	if($achievInfo["has"])
+		$string .= "<br><span class='gotAchiev'>Adquirido em ".\Core\Main::formatDate($achievInfo["date"])."</span>";
+
+	$table->AddField($string);
+	$table->AddRow();
+}
+
+$table = new \Framework\HTML\Table();
+$table->AddField("Variados", null, null, null, true);
+$table->AddRow();
+
+foreach($misc_achievements as $achiev)
+{
+	showAchievement($table, $player, $achiev);
+}
+
+$module .= $table->Draw();
+
 if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorldId()))
 {
 	$table = new \Framework\HTML\Table();
 	$table->AddField("Battlegrounds", null, null, null, true);
-	$table->AddRow();
+	$table->AddRow();	
 	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundRankBrave() ? "hasAchiev" : "notHasAchiev")."'>Rank - Bravo: Conquistou 1.000 pontos de classificação (rating).</span>");
-	$table->AddRow();
+	foreach($battleground_achievements as $achiev)
+	{
+		showAchievement($table, $player, $achiev);
+	}
 	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundRankVeteran() ? "hasAchiev" : "notHasAchiev")."'>Rank - Veterano: Conquistou 1.500 pontos de classificação (rating).</span>");
+	$module .= $table->Draw();
+}
+
+foreach($dungeon_achievements as $dungeon)
+{
+	$table = new \Framework\HTML\Table();
+	$table->AddField($dungeon["name"], null, null, null, true);
 	$table->AddRow();
-	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundRankLegend() ? "hasAchiev" : "notHasAchiev")."'>Rank - Lenda: Conquistou 2.000 pontos de classificação (rating).</span>");
-	$table->AddRow();
-	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundInsaneKiller() ? "hasAchiev" : "notHasAchiev")."'>Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez em uma Battleground.</span>");
-	$table->AddRow();
-	
-	$table->AddField("<span class='".($player->hasAchievBattlegroundPerfect() ? "hasAchiev" : "notHasAchiev")."'>Partida Perfeita! Esmagou os oponentes em uma battleground com o magnifico resultado final de 50x0.</span>");
-	$table->AddRow();
+
+	foreach($dungeon["list"] as $achiev)
+	{
+		showAchievement($table, $player, $achiev);
+	}	
 	
 	$module .= $table->Draw();
 }
@@ -514,7 +577,7 @@ $module .= "</div>";
 			
 			foreach($list as $player_name)
 			{
-				$character_list = new \Framework\Player();
+				$character_list = new Player();
 				$character_list->loadByName($player_name);
 				
 				if($character_list->get("hide") == 0 || ($logged_acc && $logged_acc->getGroup() >= t_Group::GameMaster))
