@@ -518,7 +518,10 @@ function showAchievement(&$table, &$player, $achiev)
 	$string = "<span class='".($achievInfo["has"] ? "hasAchiev" : "notHasAchiev")."'>{$achiev["text"]}</span>";
 
 	if($achievInfo["has"])
-		$string .= "<br><span class='gotAchiev'>Adquirido em ".\Core\Main::formatDate($achievInfo["date"])."</span>";
+	{
+		if($achievInfo["date"] > 0)
+			$string .= "<br><span class='gotAchiev'>Adquirido em ".\Core\Main::formatDate($achievInfo["date"])."</span>";
+	}
 
 	$table->AddField($string);
 	$table->AddRow();
