@@ -106,7 +106,7 @@ class UpdateExp
 			
 			if($exp > $normalExpStage)
 			{
-				$newExp += $stage["to"] * $stage["multipler"];
+				$newExp += $stage["to"];
 				$exp -= $normalExpStage;
 			}
 			else
@@ -123,14 +123,15 @@ class UpdateExp
 	
 	function Run()
 	{
-		$query = $this->db->query("SELECT `id`, `name`, `experience` FROM `darghos_bkp`.`players` WHERE `level` > 20 AND `world_id` = '1'");
+		$query = $this->db->query("SELECT `id`, `name`, `experience` FROM `darghos_bkp`.`players` WHERE `level` > 20 AND `world_id` = '1' ORDER BY `experience` ASC");
 		
 		while($player = $query->fetch())
 		{
 			$realExp = $this->NormalizeExp($player->experience);
 			$newExp = $this->UpdateExp($realExp);
 			
-			echo "{[$player->name}] Aaragon Exp: {$player->experience}, Normalized Exp: {$realExp}, New Exp: {$newExp}\n";
+			echo "[{$player->name}] Aaragon Exp: {$player->experience}, Normalized Exp: {$realExp}, New Exp: {$newExp}\n";
+			$this->db->ExecQuery("UPDATE `players` SET `experience` = {$newExp} WHERE `id` = {$player->id}");
 		}
 	}
 }

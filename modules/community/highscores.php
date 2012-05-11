@@ -231,8 +231,6 @@ if(isset($_GET["world"]))
 				{$start}, 20");
 	}
 	
-	$player = new \Framework\Player();
-	
 	$now = 0;
 	$page = 0;
 	
@@ -300,6 +298,7 @@ if(isset($_GET["world"]))
 	
 	while($fetch = $query->fetch())
 	{		
+		$player = new \Framework\Player();
 		$player->load($fetch->id);
 		
 		if($player->getAccess() > t_Access::SeniorTutor)
