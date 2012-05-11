@@ -35,20 +35,26 @@ class CheckGuilds
 			$guild->Load($result_guild->id);
 			
 			$vices = $guild->SearchRankByLevel(Guilds::RANK_VICE);
+			$vices instanceof Rank;
 			$hasVices = false;
 			$toDelete = false;
 			
 			//guild já ativa não possui membros sulficientes para ser uma guild ativa
-			if(count($vices) >= \Core\Configs::Get(\Core\Configs::eConf()->GUILDS_VICES_TO_FORMATION))
+			if($vices->MemberCount() >= \Core\Configs::Get(\Core\Configs::eConf()->GUILDS_VICES_TO_FORMATION))
 			{
 				$hasVices = true;
 			}			
 			
-			if($guild->GetFormationTime() == 0 && !$hasVices)
+			if($guild->GetFormationTime() == 0)
 			{
-				$guild->SetFormationTime(time() + 60 * 60 * 24 * 5);
-				$guild->SetStatus(Guilds::STATUS_FORMATION);
-				$formingGuilds++;
+				if(!$hasVices)
+				{
+					$guild->SetFormationTime(time() + 60 * 60 * 24 * 5);
+					$guild->SetStatus(Guilds::STATUS_FORMATION);
+					$formingGuilds++;
+				}
+				else
+					continue;
 			}
 			elseif(time() > $guild->GetFormationTime() && !$hasVices)
 			{

@@ -28,7 +28,7 @@ class Houses
 			$this->data['id'] = $id;
 			$this->data['name'] = $fetch->name;
 			$this->data['rent'] = $fetch->rent;
-			$this->data['size'] = $fetch->tiles;
+			$this->data['size'] = $fetch->size;
 			
 			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
 				$this->data['townid'] = $fetch->town;		
