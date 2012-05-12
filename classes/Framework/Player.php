@@ -840,6 +840,16 @@ class Player
 		return $vocation;
 	}
 	
+	function getOnlineTime($hourAgo = 24)
+	{
+		$query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." AND login >= UNIX_TIMESTAMP() - (60 * 60 * {$hourAgo}) GROUP BY `player_id`");
+	
+		if($query->numRows() == 0)
+			return 0;
+			
+		return $query->fetch()->online_ticks;
+	}
+	
 	function getExperience(){ return $this->data['experience']; }
 	function getMagLevel(){	return $this->data['maglevel'];	}
 	function getTownId(){ return $this->data['town_id']; }

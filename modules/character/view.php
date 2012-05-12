@@ -89,6 +89,9 @@ $infos[] = array("Magic Level", $player->getMagLevel());
 if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorldId()))
 	$infos[] = array("Battleground Rating", $player->getBattlegroundRating());
 
+$onlineTicks = $player->getOnlineTime();
+$infos[] = array("Atividade Online", \Core\Tools::getPercentOf($onlineTicks, 60*60*24) . "% das últimas 24h.");
+
 $infos[] = array("Sexo", t_Genre::GetString($player->getSex()));
 
 $_vocation = new t_Vocation($player->getVocation());
