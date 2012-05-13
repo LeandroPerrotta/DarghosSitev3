@@ -290,7 +290,7 @@ class Menus
 		$make_stamp->_day = $end_day;
 		$end_stamp = $make_stamp->makeDate();
 		
-		$query = Main::$DB->query("SELECT `p`.`name`, `p`.`level`, SUM(`a`.`experience_logout`) - SUM(`a`.`experience`) as `change_exp` FROM `player_activities` `a` LEFT JOIN `players` `p` ON `p`.`id` = `a`.`player_id` WHERE `a`.`login` >= {$start_stamp} AND `a`.`logout` < {$end_stamp} GROUP BY `a`.`player_id` ORDER BY `change_exp` DESC LIMIT 5");
+		$query = Main::$DB->query("SELECT `p`.`name`, `p`.`level`, SUM(`a`.`experience_logout`) - SUM(`a`.`experience`) as `change_exp` FROM `player_activities` `a` LEFT JOIN `players` `p` ON `p`.`id` = `a`.`player_id` WHERE `a`.`login` >= {$start_stamp} AND `a`.`login` < {$end_stamp} GROUP BY `a`.`player_id` ORDER BY `change_exp` DESC LIMIT 5");
 		
 		if($query->numRows() == 0)
 			return false;
