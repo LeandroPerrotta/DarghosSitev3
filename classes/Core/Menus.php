@@ -108,6 +108,12 @@ class Menus
 			"onDraw" => "drawTestServerStatus"
 		)
 		,array(
+				"title" => "Power Gammers",
+				"color" => \e_menuColor::Red,
+				"name" => "powergammers",
+				"onDraw" => "drawPowerGammers"
+		)			
+		,array(
 			"title" => "Top 5 Matadores",
 			"color" => \e_menuColor::Red,
 			"name" => "topkillers",
@@ -268,6 +274,46 @@ class Menus
 		return true;
 	}
 	
+	static function drawPowerGammers(&$xml)
+	{
+		$today = new CustomDate();
+		$end_day = null;
+		
+		if($today->getHour() > 10) $end_day = $today->getDay();
+		else $end_day = $today->getDay() - 1;	
+
+		$start_day = $end_day - 1;
+		
+		$make_stamp = new CustomDate(); $make_stamp->_hour = 10; $make_stamp->_month = $today->getMonth(); $make_stamp->_day = $start_day; $make_stamp->_year = $today->getYear();
+		$start_stamp = $make_stamp->makeDate();
+		
+		$make_stamp->_day = $end_day;
+		$end_stamp = $make_stamp->makeDate();
+		
+		$query = Main::$DB->query("SELECT `p`.`name`, `p`.`level`, SUM(`a`.`experience_logout`) - SUM(`a`.`experience`) as `change_exp` FROM `player_activities` `a` LEFT JOIN `players` `p` ON `p`.`id` = `a`.`player_id` WHERE `a`.`login` >= {$start_stamp} AND `a`.`logout` < {$end_stamp} GROUP BY `a`.`player_id` ORDER BY `change_exp` DESC LIMIT 5");
+		
+		if($query->numRows() == 0)
+			return false;
+		
+		$ul = $xml->addChild("ul");
+		$ul->addAttribute("class", "always_viewable");
+		
+		$pos = 1;
+		while($fetch = $query->fetch())
+		{
+			$size = (strlen($fetch->name) > 15) ? "8px" : "9px";
+				
+			$li = $ul->addChild("li");
+			$a = $li->addChild("a", "{$pos}. {$fetch->name} ({$fetch->level}, +{$fetch->change_exp})");
+			$a->addAttribute("href", "?ref=character.view&name={$fetch->name}");
+			$a->addAttribute("style", "font-size: {$size}");
+				
+			$pos++;
+		}
+		
+		return true;		
+	}
+	
 	static function drawTopKillers(&$xml)
 	{
 		if(Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
@@ -283,7 +329,7 @@ class Menus
 										
 		$make_stamp = new CustomDate(); $make_stamp->_hour = 15; $make_stamp->_month = $today->getMonth(); $make_stamp->_day = $start_day; $make_stamp->_year = $today->getYear();
 		
-		$start_stamp = $make_stamp->makeDate();		
+		$start_stamp = $make_stamp->makeDate();
 		
 		$make_stamp->_day = $end_day;
 		
