@@ -15,6 +15,11 @@ class Player
 		, PH_LOG_BATTLEGROUND_DRAW = 3
 		, PH_LOG_DUNGEON_ARIADNE_TROLLS_ATTEMPS = 4
 		, PH_LOG_DUNGEON_ARIADNE_TROLLS_COMPLETED = 5
+		, PH_LOG_BATTLEGROUND_FLAGS_CAPTURED = 6
+		, PH_LOG_BATTLEGROUND_FLAGS_RETURNED = 7
+		, PH_LOG_BATTLEGROUND_FLAGS_KILLED = 8
+		, PH_LOG_BATTLEGROUND_FLAGS_DROPED = 9
+		, PH_LOG_BATTLEGROUND_PERFECT_MATCHES = 10
 		;
 		
 	const
@@ -23,6 +28,14 @@ class Player
 		, PH_ACHIEV_BATTLEGROUND_ISANE_KILLER = 3
 		, PH_ACHIEV_BATTLEGROUND_PERFECT = 4
 		, PH_ACHIEV_BATTLEGROUND_RANK_BRAVE = 5
+		, PH_ACHIEV_BATTLEGROUND_FLAG_CATCHER = 6
+		, PH_ACHIEV_BATTLEGROUND_FLAG_CAPTURED = 7
+		, PH_ACHIEV_BATTLEGROUND_MANY_FLAGS_RETUREND = 8
+		, PH_ACHIEV_BATTLEGROUND_FLAG_KILLER = 9
+		, PH_ACHIEV_BATTLEGROUND_MANY_FLAG_CAPTURED = 10
+		, PH_ACHIEV_BATTLEGROUND_SAVE_THE_DAY = 11
+		, PH_ACHIEV_BATTLEGROUND_EPIC_MATCH = 12
+		, PH_ACHIEV_BATTLEGROUND_PERFECT_COLLECTOR = 13
 		
 		, PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_ALL_TOTEMS = 1000
 		, PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_GHAZRAN_TONGUE = 1001
@@ -657,6 +670,30 @@ class Player
 	function getDungeonAriadneTrollsCompleted()
 	{
 		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_DUNGEON_ARIADNE_TROLLS_COMPLETED."");
+		return $query->numRows();
+	}
+	
+	function getBattlegroundFlagsCaptured()
+	{
+		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_FLAGS_CAPTURED."");
+		return $query->numRows();
+	}
+	
+	function getBattlegroundFlagsDroped()
+	{
+		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_FLAGS_DROPED."");
+		return $query->numRows();
+	}
+	
+	function getBattlegroundFlagsReturned()
+	{
+		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_FLAGS_RETURNED."");
+		return $query->numRows();
+	}
+	
+	function getBattlegroundFlagsKilled()
+	{
+		$query = \Core\Main::$DB->query("SELECT `history` FROM `player_history` WHERE `player_id` = ".$this->data["id"]." AND `type` = ".self::PH_TYPE_LOG." AND `history` = ".self::PH_LOG_BATTLEGROUND_FLAGS_KILLED."");
 		return $query->numRows();
 	}
 	

@@ -296,6 +296,18 @@ if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorl
 	$table->AddField("Perdeu {$player->getBattlegroundsLose()} partidas.");
 	$table->AddRow();
 	
+	$table->AddField("Capturou {$player->getBattlegroundFlagsCaptured()} bandeiras.");
+	$table->AddRow();
+	
+	$table->AddField("Foi morto carregando {$player->getBattlegroundFlagsDroped()} bandeiras.");
+	$table->AddRow();
+	
+	$table->AddField("Recuperou {$player->getBattlegroundFlagsReturned()} bandeiras.");
+	$table->AddRow();
+	
+	$table->AddField("Matou {$player->getBattlegroundFlagsKilled()} carregadores de bandeiras.");
+	$table->AddRow();
+	
 	$module .= $table->Draw();
 }
 
@@ -491,11 +503,57 @@ $module .= "
 <div title='achievements' style='display: none; margin: 0px; padding: 0px;'>";
 
 $battleground_achievements = array(
-	array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_BRAVE, text => "Rank - Bravo: Conquistou 1.000 pontos de classificação (rating).")
-	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_VETERAN, text => "Rank - Bravo: Conquistou 1.500 pontos de classificação (rating).")
-	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_LEGEND, text => "Rank - Bravo: Conquistou 2.000 pontos de classificação (rating).")
-	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_ISANE_KILLER, text => "Matador Insano! Derrotou 25 oponentes sem ser derrotado nenhuma vez.")
-	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_PERFECT, text => "Partida Perfeita! Venceu uma partida com o magnifico resultado de 50x0.")
+	array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_BRAVE
+			,title => "Rank - Bravo"
+			, text => "Conquistou 1.000 pontos de classificação (rating).")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_VETERAN
+			, title => "Rank - Veterano"
+			, text => "Conquistou 1.500 pontos de classificação (rating).")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_RANK_LEGEND
+			, title => "Rank - Lenda"
+			, text => "Conquistou 2.000 pontos de classificação (rating).")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_ISANE_KILLER
+			, title => "Matador insano!"
+			, text => "Derrotou 25 oponentes sem ser derrotado nenhuma vez.")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_FLAG_CAPTURED
+			, title => "Entregou uma bandeira!"
+			, text => " Capturou e entregou uma bandeira a sua base colaborando com o seu time!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_PERFECT
+			, title => "3x0, a partida perfeita!"
+			, text => "Venceu uma partida aonde o time entregou 3 vezes a bandeira adversária sem deixar que entregassem nenhuma!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_FLAG_CATCHER
+			, title => "Entregador de bandeiras!"
+			, text => "Levou o time a vitória capturando a bandeira adversária por três vezes e as entregando a base numa mesma partida!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_MANY_FLAGS_RETUREND
+			, title => "Recuperador de bandeiras!"
+			, text => "Recuperou mais de 50 bandeiras prestando grande ajuda aos times que participou!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_FLAG_KILLER
+			, title => "Matador preciso!"
+			, text => "Aterrorizou os adversários matando 50 carregadores de bandeiras prestando grande ajuda aos times que participou!")
+	
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_MANY_FLAG_CAPTURED
+			, title => "Trabalhador incansavel!"
+			, text => "Mostrou muita disposição capturando e entregando mais de 50 bandeiras prestando grande ajuda aos times que participou!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_SAVE_THE_DAY
+			, title => "O melhor do dia!"
+			, text => "Matou carregador da bandeira de seu time e a recuperou enquanto a partida estava em 2x2 contribuindo para a vitória de seu time na sequencia em grande estilo!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_EPIC_MATCH
+			, title => "Não desiste nunca!"
+			, text => "Estiveram perdendo por 0x2 mas em uma magnifica reação buscaram a virada e terminaram a partida vencendo por 3x2!")
+		
+	,array( "achiev" => Player::PH_ACHIEV_BATTLEGROUND_PERFECT_COLLECTOR
+			, title => "Colecionador de partidas perfeitas!"
+			, text => "Participou de mais de 10 partidas perfeitas, aonde venceram pelo resultado de 3x0!")
 );
 
 $dungeon_achievements = array(
@@ -518,7 +576,11 @@ $misc_achievements = array(
 function showAchievement(&$table, &$player, $achiev)
 {
 	$achievInfo = $player->getAchievementInfo($achiev["achiev"]);
-	$string = "<span class='".($achievInfo["has"] ? "hasAchiev" : "notHasAchiev")."'>{$achiev["text"]}</span>";
+	
+	if(!$achiev["title"])
+		$string = "<span class='".($achievInfo["has"] ? "hasAchiev" : "notHasAchiev")."'>{$achiev["text"]}</span>";
+	else
+		$string = "<span class='".($achievInfo["has"] ? "hasAchiev" : "notHasAchiev")."'><h3 class='achievTitle'>{$achiev["title"]}</h3>{$achiev["text"]}</span>";
 
 	if($achievInfo["has"])
 	{

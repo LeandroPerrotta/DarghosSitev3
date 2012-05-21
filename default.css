@@ -52,12 +52,22 @@ span.requestItemInfo:hover{
 }
 
 .hasAchiev{
-	font-size: 12px;
-	font-weight: bold;
+	font-size: 11px;
+	text-align: justify;
+	display: block;
 }
 
 .gotAchiev{
 	font-size: 9px;
+	display: block;
+	text-align: right;
+	margin-top: 4px;
+}
+
+.hasAchiev .achievTitle{
+	font-size: 14px;
+	font-weight: bold;
+	display: block;
 }
 
 #new-title-bar{
