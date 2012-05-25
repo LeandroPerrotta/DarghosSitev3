@@ -85,6 +85,7 @@ class Menu
 	private 
 		$id
 		, $title
+		, $description
 		, $position
 		, $color
 		, $visibility_style
@@ -146,6 +147,7 @@ class Menu
 	function loadByNode($node)
 	{					
 		$this->title = $node["title"];
+		$this->description = $node["desc"];
 		$this->color = $node["color"] | \e_MenuColor::Green;
 		$this->visibility_style = $node["visibility_style"] | \e_MenuVisibilityStyle::Normal;
 		$this->hide = $node["hide"] | false;
@@ -300,6 +302,9 @@ class Menu
 		//titulo
 		$div = $li->addChild("div");
 		$div->addAttribute("name", $this->name);
+		
+		if($this->description)
+			$div->addAttribute("title", $this->description);
 		
 		if($this->color != \e_MenuColor::Green)
 			$div->addAttribute("class", $this->getColorClass($this->color));
