@@ -34,7 +34,10 @@ class UpdateBgWinners
 		
 		if($query->numRows() > 0)
 		{
-			array_push($losses, array("player_id" => $fetch->player_id, "losses" => $fetch->losses));	
+			while(($fetch = $query->fetch()))
+			{
+				array_push($losses, array("player_id" => $fetch->player_id, "losses" => $fetch->losses));	
+			}
 		}
 		
 		$array = array_merge_recursive($wins, $losses);
