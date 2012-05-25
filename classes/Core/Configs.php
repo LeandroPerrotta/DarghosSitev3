@@ -78,6 +78,7 @@ class Configs
 				
 				case self::$e_Configs->WEBSITE_FOLDER_FILES: self::Set($i, $__configs[$i], "files/"); break;
 				case self::$e_Configs->WEBSITE_FOLDER_GUILDS: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->WEBSITE_FOLDER_FILES) . "guildImages/"); break;
+				case self::$e_Configs->WEBSITE_FOLDER_TEMP: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->WEBSITE_FOLDER_FILES) . "temp/"); break;
 				
 				case self::$e_Configs->USE_DISTRO: self::Set($i, $__configs[$i], Consts::SERVER_DISTRO_TFS); break;
 				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/darghos/"); break;

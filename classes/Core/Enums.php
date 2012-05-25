@@ -43,6 +43,7 @@ class e_Configs extends \Core\Enumerators
 		 */
 		,$WEBSITE_FOLDER_FILES
 		,$WEBSITE_FOLDER_GUILDS
+		,$WEBSITE_FOLDER_TEMP
 		
 		/*
 		 * Server related

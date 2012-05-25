@@ -120,10 +120,10 @@ class Menus
 			"onDraw" => "drawTopKillers"
 		)	
 		,array(
-			"title" => "Top Battleground Rating",
+			"title" => "Melhores na Battleground",
 			"color" => \e_menuColor::Red,
-			"name" => "topbgrating",
-			"onDraw" => "drawTopBgRating"
+			"name" => "bestbgplayers",
+			"onDraw" => "drawBgBest"
 		)	
 	);
 	
@@ -386,6 +386,37 @@ class Menus
 		
 		return true;
 	}
+	
+	static function drawBgBest(&$xml)
+	{
+		if(Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
+			return true;
+	
+		$array = json_decode(Main::readTempFile("bgbest.json"));
+	
+		if(count($array) < 5)
+			return false;
+			
+		$ul = $xml->addChild("ul");
+		$ul->addAttribute("class", "always_viewable");
+	
+		$pos = 1;
+		foreach($array as $info)
+		{
+			$player = new \Framework\Player();
+			$player->load($info["player_id"]).
+			$size = (strlen($player->getName()) > 15) ? "8px" : "9px";
+				
+			$li = $ul->addChild("li");
+			$a = $li->addChild("a", "{$pos}. {$player->getName()} ({$info["wins"]} / {$info["losses"]})");
+			$a->addAttribute("href", "?ref=character.view&name={$player->getName()}");
+			$a->addAttribute("style", "font-size: {$size}");
+				
+			$pos++;
+		}
+	
+		return true;
+	}	
 	
 	static function listLeftMenu()
 	{

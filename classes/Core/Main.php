@@ -663,5 +663,16 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		$child->addAttribute("src", "javascript/{$file}");
 		$child->addAttribute("type", "text/javascript");			
 	}	
+	
+	static function readTempFile($file)
+	{
+		$content = file_get_contents(Configs::Get(Configs::eConf()->WEBSITE_FOLDER_TEMP) . $file);
+		return $content;
+	}
+	
+	static function writeTempFile($file, $content)
+	{
+		file_put_contents(Configs::Get(Configs::eConf()->WEBSITE_FOLDER_TEMP) . $file, $content);
+	}
 }		
 ?>
