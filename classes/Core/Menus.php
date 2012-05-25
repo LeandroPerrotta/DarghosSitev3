@@ -113,21 +113,21 @@ class Menus
 			"color" => \e_menuColor::Red,
 			"name" => "powergammers",
 			"onDraw" => "drawPowerGammers"
-		)			
+		)
+		,array(
+				"title" => "Battlegrounds Semana",
+				"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
+				"color" => \e_menuColor::Red,
+				"name" => "bestbgplayers",
+				"onDraw" => "drawBgBest"
+		)					
 		,array(
 			"title" => "Top 5 Matadores",
 			"desc" => "Jogadores que mais mataram outros jogadores. Atualizado diariamente as 16:00.",
 			"color" => \e_menuColor::Red,
 			"name" => "topkillers",
 			"onDraw" => "drawTopKillers"
-		)	
-		,array(
-			"title" => "Battlegrounds Semana",
-			"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
-			"color" => \e_menuColor::Red,
-			"name" => "bestbgplayers",
-			"onDraw" => "drawBgBest"
-		)	
+		)		
 	);
 	
 	static function drawFacebook(&$xml)
