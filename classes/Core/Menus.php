@@ -120,7 +120,7 @@ class Menus
 			"onDraw" => "drawTopKillers"
 		)	
 		,array(
-			"title" => "Melhores na Battleground",
+			"title" => "Battleground Semana",
 			"color" => \e_menuColor::Red,
 			"name" => "bestbgplayers",
 			"onDraw" => "drawBgBest"
@@ -414,7 +414,7 @@ class Menus
 				
 			$pos++;
 			
-			if($pos == 5)
+			if($pos > 10)
 				break;
 		}
 	
