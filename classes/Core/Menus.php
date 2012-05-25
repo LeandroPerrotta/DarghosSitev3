@@ -404,11 +404,11 @@ class Menus
 		foreach($array as $info)
 		{
 			$player = new \Framework\Player();
-			$player->load($info["player_id"]).
+			$player->load($info->player_id).
 			$size = (strlen($player->getName()) > 15) ? "8px" : "9px";
 				
 			$li = $ul->addChild("li");
-			$a = $li->addChild("a", "{$pos}. {$player->getName()} ({$info["wins"]} / {$info["losses"]})");
+			$a = $li->addChild("a", "{$pos}. {$player->getName()} ({$info->wins} / {$info->losses})");
 			$a->addAttribute("href", "?ref=character.view&name={$player->getName()}");
 			$a->addAttribute("style", "font-size: {$size}");
 				
