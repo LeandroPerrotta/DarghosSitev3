@@ -413,6 +413,9 @@ class Menus
 			$a->addAttribute("style", "font-size: {$size}");
 				
 			$pos++;
+			
+			if($pos == 5)
+				break;
 		}
 	
 		return true;
