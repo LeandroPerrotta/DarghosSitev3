@@ -109,7 +109,7 @@ class Menus
 		)
 		,array(
 			"title" => "Power Gammers",
-			"desc" => "Jogadores que mais objetiveram expêriencia. Atualizado diariamente as 10:00.",
+			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
 			"color" => \e_menuColor::Red,
 			"name" => "powergammers",
 			"onDraw" => "drawPowerGammers"
@@ -123,7 +123,7 @@ class Menus
 		)	
 		,array(
 			"title" => "Battlegrounds Semana",
-			"desc" => "Jogadores com melhor desempenho Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
+			"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
 			"color" => \e_menuColor::Red,
 			"name" => "bestbgplayers",
 			"onDraw" => "drawBgBest"
