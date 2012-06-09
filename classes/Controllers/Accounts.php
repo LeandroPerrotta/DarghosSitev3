@@ -8,10 +8,10 @@ use Views\Accounts as AccountViews;
 
 class Accounts
 {
-	function Checkname()
+	function Checkname($isAjax = true, $name = NULL)
 	{
-		\Core\Main::$isAjax = true;
-		$name = $_POST["account_name"];
+		\Core\Main::$isAjax = $isAjax;
+		$name = ($name) ? $name : $_POST["account_name"];
 		$result = array();
 	
 		$result["response"] = Consts::AJAX_RESPONSE_FIELD_VERIFY;
@@ -256,6 +256,58 @@ class Accounts
 			$view = new AccountViews\Changepassword($data);
 		
 		return true;
+	}
+	
+	function Changename()
+	{
+		$data = array();
+		$showView = true;
+		
+		$logged = AccountModel::loadLogged();
+		if(!$logged)
+			return false;
+		
+		if($_POST)
+		{
+			$data["message"] = array();
+			$data["message"]["title"] = "Falha!";
+			
+			$checkName = $this->Checkname(false);
+				
+			if($logged->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
+			{
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
+			}
+			elseif($logged->getPremDays() < 15)
+			{
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_NEED_PREMDAYS, 15);
+			}
+			elseif($checkName["error"])
+			{
+				$data["message"]["body"] = $checkName["text"];
+			}
+			else
+			{
+		
+				$logged->setName($_POST["account_name"]);
+				$logged->updatePremDays(15, false);
+				$logged->save();
+				
+				\Core\Main::addChangeLog('acc_rename', $logged->getId(), $_POST["account_name"]);
+					
+				$data["message"]["title"] = "Sucesso!";
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_CHANGENAME_SUCCESS, $_POST["account_name"]);
+				$showView = false;
+			}
+		}
+		
+		if($data["message"])
+			\Core\Main::sendMessageBox($data["message"]["title"], $data["message"]["body"]);
+		
+		if($showView)
+			$view = new AccountViews\Changename($data);
+		
+		return true;		
 	}
 }
 ?>

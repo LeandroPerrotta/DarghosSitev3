@@ -267,7 +267,7 @@ else
 	}
 	
 	$module .= "
-	<a class='buttonstd' href='?ref=account.changename'>Renomear</a>
+	<a class='buttonstd' href='?ref=accounts.changename'>Renomear</a>
 	";
 	
 	

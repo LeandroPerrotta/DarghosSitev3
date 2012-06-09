@@ -82,12 +82,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "prize":
 					$needLogin = true;	
 					$patch['file'] = $topic;
-				break;			
-
-				case "changename":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;			
+				break;				
 
 				case "validateEmail":
 					$needLogin = true;
