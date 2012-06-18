@@ -3,6 +3,52 @@ namespace Framework;
 use \Core\Configs as g_Configs;;
 class Items
 {
+	static public $_gearBonus = array(
+		array("items" => array(12712, 12713, 12714), "name" => "Hot Death Set (Sorcerer's)"
+				, "2pieces" => array(
+					"Aumenta regeneração de pontos de mana padrão em 50%."
+					,"Aumenta a quantidade máxima de pontos de vida em 120."
+				)
+				, "3pieces" => array(
+					"Aumenta a absorção de danos de fogo em 4%."
+					,"Aumenta a quantidade máxima de pontos de mana em 325 pontos."
+					,"Aumenta a chance de causar dano crítico em 1%."
+				)
+			),		
+			array("items" => array(12715, 12716, 12717), "name" => "Magic Cold Set (Druid's)"
+					, "2pieces" => array(
+							"Aumenta regeneração de pontos de mana padrão em 50%."
+							,"Aumenta a quantidade máxima de pontos de vida em 120."
+					)
+					, "3pieces" => array(
+							"Aumenta a absorção de danos de gelo em 4%."
+							,"Aumenta a quantidade máxima de pontos de mana em 325 pontos."
+							,"Aumenta a chance de causar dano crítico em 1%."
+					)
+			),			
+			array("items" => array(12718, 12719, 12720), "name" => "Dream Archer's Set (Paladin's)"
+					, "2pieces" => array(
+							"Aumenta regeneração de pontos de vida padrão em 120%."
+							,"Aumenta a chance de causar dano crítico em 1%."
+					)
+					, "3pieces" => array(
+							"Aumenta a absorção de danos de morte em 2%."
+							,"Aumenta a chance de causar dano crítico em 2%."
+					)
+			),			
+			array("items" => array(12721, 12722, 12723), "name" => "Heavy Stomper Set (Knight's)"
+					, "2pieces" => array(
+							"Aumenta a quantidade máxima de pontos de vida em 215."
+							,"Buff: A cada dano sofrido existe 1% de chance de durante os proximos 6 segundos reduzir todos os danos sofridos em 50%."
+					)
+					, "3pieces" => array(
+							"Aumenta a quantidade máxima de pontos de vida em 330."
+							,"Buff: A cada dano sofrido existe 2% de chance de durante os proximos 8 segundos reduzir todos os danos sofridos em 75%."
+					)
+			),			
+	);
+	
+	
 	static private $_instance;
 	
 	static function LoadById($item_id)

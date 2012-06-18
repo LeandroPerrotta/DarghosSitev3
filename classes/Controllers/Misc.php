@@ -233,14 +233,13 @@ class Misc
 		
 		
 		if($item->manaGain)
-		{
 			$string .= "<p>Regeneração (mana): <strong>+{$item->manaGain}/".(floor($item->manaTicks / 1000))."s</strong></p>";
-		}
 		
 		if($item->healthGain)
-		{
 			$string .= "<p>Regeneração (life): <strong>+{$item->healthGain}/".(floor($item->healthTicks / 1000))."s</strong></p>";
-		}
+		
+		if($item->maxHealthPoints)
+			$string .= "<p>Pontos de vida: <strong>+{$item->maxHealthPoints}</strong></p>";
 		
 		if($item->duration)
 		{
@@ -275,7 +274,28 @@ class Misc
 			
 			if($item->absorbPercentPhysical)
 				$string .= "<p>Fisico: <strong>{$item->absorbPercentPhysical}%</strong></p>";			
-		}		
+		}
+		
+		$bonus = $item->GetGearBonus();
+		if($bonus)
+		{
+			$string .= "<p class='spaced'>Set Bônus:</p>";
+			$string .= "<p>Parte do <strong>{$bonus["name"]}</strong></p>";
+			
+			if($bonus["2pieces"])
+			{
+				$string .= "<p>Duas partes:</p>";
+				foreach($bonus["2pieces"] as $str)
+					$string .= "<p class='small'> • {$str}</p>";
+			}
+			
+			if($bonus["3pieces"])
+			{
+				$string .= "<p>Três partes:</p>";
+				foreach($bonus["3pieces"] as $str)
+					$string .= "<p class='small'> • {$str}</p>";
+			}			
+		}
 		
 		return $string;
 	}

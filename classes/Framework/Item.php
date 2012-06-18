@@ -20,7 +20,9 @@ class Item
 		,$manaGain
 		,$manaTicks
 		,$healthGain
-		,$healthTicks		
+		,$healthTicks
+
+		,$maxHealthPoints
 		
 		,$weaponType
 		,$slotType
@@ -134,5 +136,18 @@ class Item
 		}
 		
 		return false;
+	}
+	
+	function GetGearBonus()
+	{
+		foreach(Items::$_gearBonus as $bonus)
+		{
+			if(in_array($this->GetId(), $bonus["items"]))
+			{
+				return $bonus;
+			}
+		}
+		
+		return NULL;
 	}
 }
