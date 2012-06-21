@@ -130,7 +130,7 @@ class View
 			return false;
 		}
 		
-		$this->guildList = \Framework\Guilds::ActivedGuildsList();
+		$this->guildList = \Framework\Guilds::ActivedGuildsList($this->guild->GetWorldId());
 		
 		if(!$this->guildList)
 		{
