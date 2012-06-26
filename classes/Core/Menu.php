@@ -4,7 +4,7 @@ class Menu
 {	
 	const CONDITION_MUST_LOGGED = 1;
 	const CONDITION_CAN_NOT_LOGGED = 2;
-	const CONDITION_SHOWING_PLAYERS_ONLINE = 3;
+	const CONDITION_SHOWING_PLAYERS_ONLINE = 4;
 	
 	static function getPositionName($position)
 	{			
