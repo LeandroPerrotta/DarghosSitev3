@@ -40,7 +40,7 @@ class Structs
 		return $keys[0];
 	}
 	
-	static function GetByString($string)
+	static function GetByString($string, $returnDefault = true)
 	{
 		foreach(static::$m_typeStrings as $k => $v)
 		{
@@ -49,6 +49,9 @@ class Structs
 				return $k;
 			}
 		}
+		
+		if(!$returnDefault)
+			return false;
 		
 		$keys = array_keys(static::$m_typeStrings);
 		return $keys[0];

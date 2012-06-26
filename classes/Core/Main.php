@@ -484,7 +484,7 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 			//$url = Configs::Get(Configs::eConf()->WEBSITE_URL)."/".$url;
 	
 		//header("Location: ".$url." ");	
-		$html =  "<script type='text/javascript'>window.location = \"http://{$_SERVER["HTTP_HOST"]}/{$url}\"</script>";
+		$html =  '<script type="text/javascript">window.location = "' . Configs::Get(Configs::eConf()->WEBSITE_URL) . '/' . $url . '"</script>';
 		echo $html;
 	}
 	

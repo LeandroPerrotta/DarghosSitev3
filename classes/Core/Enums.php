@@ -459,7 +459,7 @@ class t_Towns extends \Core\Structs
 		Quendor = 1
 		,Aaragon = 2
 		,Rookgaard = 3
-		,Thorn = 5
+		,Thorn = 4
 		,Salazart = 5
 		,IslandOfPeace = 6
 		,Northrend = 7

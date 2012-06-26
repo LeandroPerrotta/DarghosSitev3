@@ -87,6 +87,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 		
 		$_islandofpeace = 0;
 		$_quendor = 0;
+		$_thorn = 0;
 		$_aaragon = 0;
 		$_salazart = 0;
 		$_northrend = 0;
@@ -146,6 +147,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 						{
 							case t_Towns::IslandOfPeace: $_islandofpeace++; break;
 							case t_Towns::Quendor: $_quendor++; break;
+							case t_Towns::Thorn: $_thorn++; break;
 							case t_Towns::Aaragon: $_aaragon++; break;
 							case t_Towns::Salazart: $_salazart++; break;
 							case t_Towns::Northrend: $_salazart++; break;
@@ -178,6 +180,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					{
 						case t_Towns::IslandOfPeace: $_islandofpeace++; break;
 						case t_Towns::Quendor: $_quendor++; break;
+						case t_Towns::Thorn: $_thorn++; break;
 						case t_Towns::Aaragon: $_aaragon++; break;
 						case t_Towns::Salazart: $_salazart++; break;
 						case t_Towns::Northrend: $_salazart++; break;
@@ -262,14 +265,15 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				<td>Quendor:</td><td>".\Core\Tools::getPercentOf($_quendor, $_totalplayers)."%</td>
 			</tr>
 			<tr>
-				<td>Aracura:</td><td>".\Core\Tools::getPercentOf($_aracura, $_totalplayers)."%</td>
+				<td>Thorn:</td><td>".\Core\Tools::getPercentOf($_thorn, $_totalplayers)."%</td>
+				<td>Aracura:</td><td>".\Core\Tools::getPercentOf($_aracura, $_totalplayers)."%</td>	
+			</tr>
+			<tr>
 				<td>Aaragon:</td><td>".\Core\Tools::getPercentOf($_aaragon, $_totalplayers)."%</td>
-			</tr>
-			<tr>
 				<td>Salazart:</td><td>".\Core\Tools::getPercentOf($_salazart, $_totalplayers)."%</td>		
-				<td>Northrend:</td><td>".\Core\Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
 			</tr>
 			<tr>
+				<td>Northrend:</td><td>".\Core\Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
 				<td>Kashmir:</td><td>".\Core\Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
 			</tr>";	
 			

@@ -21,7 +21,7 @@ class Houses
 
 	function load($id, $world_id)
 	{		
-		$query = $this->db->query("SELECT `name`, `rent`, `size`, `town`, `owner`, `paid`, `warnings` FROM `houses` WHERE `id` = '{$id}' AND `world_id` = {$world_id} ");
+		$query = $this->db->query("SELECT `name`, `rent`, `size`, `town`, `owner`, `paid`, `warnings`, `beds` FROM `houses` WHERE `id` = '{$id}' AND `world_id` = {$world_id} ");
 		
 		while($fetch = $query->fetch())
 		{
@@ -31,7 +31,11 @@ class Houses
 			$this->data['size'] = $fetch->size;
 			
 			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
+			{
 				$this->data['townid'] = $fetch->town;		
+				$this->data['beds'] = $fetch->beds;		
+				
+			}
 			elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 				$this->data['townid'] = $fetch->townid;		
 					
@@ -66,6 +70,16 @@ class Houses
 	function getTown()
 	{
 		return $this->data["townid"];
+	}
+	
+	function isEmpty()
+	{
+		return $this->data["owner"] == 0;
+	}
+	
+	function getOwner()
+	{
+		return $this->data["owner"];
 	}
 	
 	static function deleteOldHouses($world_id)

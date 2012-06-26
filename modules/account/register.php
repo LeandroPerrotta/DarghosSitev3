@@ -76,7 +76,8 @@ class View
 		$this->_char_town->SetName("character_town");
 		$this->_char_town->AddOption("");
 		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);	
-		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);	
+		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);
+		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Thorn), t_Towns::Thorn);
 		
 		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
@@ -147,7 +148,12 @@ class View
 			",
 		);
 		
-		$world_str = "";
+		$world_str = "
+		<p class='long-margin-top'>Selecione em qual cidade você deseja iniciar sua jornada. Note que Island of Peace é ideal para iniciantes aonde o PvP não é permitido e existem muitos respawns, quests e missões que auxiliaram você até o nivel 80. Já Quendor e Thorn são regiões de PvP permitido.</p>
+		<p>
+			<label>Cidade do personagem:</label>
+			{$this->_char_town->Draw()}
+		</p>";
 
 		if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world_str = "
