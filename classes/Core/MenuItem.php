@@ -27,6 +27,8 @@ class MenuItem
 			return "";		
 		elseif(Tools::hasFlag($this->conditions, Menu::CONDITION_CAN_NOT_LOGGED) && Main::isLogged())
 			return "";			
+		elseif(Tools::hasFlag($this->conditions, Menu::CONDITION_SHOWING_PLAYERS_ONLINE) && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_ONLINE))
+			return "";
 		
 		$li = $xml->addChild("li");
 		$a = $li->addChild("a");

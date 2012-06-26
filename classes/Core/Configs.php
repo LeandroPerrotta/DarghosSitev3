@@ -111,6 +111,8 @@ class Configs
 				case self::$e_Configs->PREMCOST_REMOVE_RED_SKULL: self::Set($i, $__configs[$i], 4); break;
 				case self::$e_Configs->PREMCOST_REMOVE_BLACK_SKULL: self::Set($i, $__configs[$i], 10); break;
 				
+				case self::$e_Configs->ENABLE_PLAYERS_ONLINE: self::Set($i, $__configs[$i], true); break;
+				
 				case self::$e_Configs->ENABLE_GUILD_MANAGEMENT: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->ENABLE_GUILD_WARS: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->ENABLE_GUILD_IN_FORMATION: self::Set($i, $__configs[$i], true); break;

@@ -118,6 +118,7 @@ class e_Configs extends \Core\Enumerators
 		,$AJAX_SEARCH_PLAYERS_COUNT
 		,$ENABLE_MULTIWORLD
 		,$DEFAULT_WORLD
+		,$ENABLE_PLAYERS_ONLINE
 	;
 	
 	function __construct(){

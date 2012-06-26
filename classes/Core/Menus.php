@@ -86,7 +86,7 @@ class Menus
 				,array("name" => "Casas", "url" => "?ref=community.houses")
 				,array("name" => "Mortes Recentes", "url" => "?ref=community.lastdeaths")			
 				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
-				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline")			
+				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline", "conditions" => Menu::CONDITION_SHOWING_PLAYERS_ONLINE)	
 			)		
 		)		
 		,array(
@@ -258,11 +258,14 @@ class Menus
 			}
 			else
 			{
-				$p = $div->addChild("p");
-				$em = $p->addChild("em");
-				$a = $em->addChild("a", "Players online:");
-				$a->addAttribute("href", "?ref=status.whoisonline");
-				$span = $p->addChild("span", " " . array_sum($status));
+				if(Configs::Get(Configs::eConf()->ENABLE_PLAYERS_ONLINE))
+				{
+					$p = $div->addChild("p");
+					$em = $p->addChild("em");
+					$a = $em->addChild("a", "Players online:");
+					$a->addAttribute("href", "?ref=status.whoisonline");
+					$span = $p->addChild("span", " " . array_sum($status));
+				}
 			}
 				
 			if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))
