@@ -26,7 +26,7 @@ class Configs
 	
 	static function Set($configType, $value, $default)
 	{
-		$value = ($value) ? $value : $default;
+		$value = isset($value) ? $value : $default;
 		
 		if(!is_array($value))
 			self::$m_configs[$configType][self::__GLOBAL__] = $value;
