@@ -61,7 +61,7 @@ class Accounts
 				$logged->updatePremDays($transferDays, false);
 				$logged->save();
 				
-				\Core\Main::$DB->query("UPDATE `darghos_ot`.`accounts` SET `premdays` = `premdays` + {$transferDays} WHERE `id` = {$ultraxAccountID}");
+				\Core\Main::$DB->query("UPDATE `darghos_ot`.`accounts` SET `premdays` = `premdays` + {$transferDays}, `lastday` = UNIX_TIMESTAMP() WHERE `id` = {$ultraxAccountID}");
 		
 				$data = array(
 					"ultrax_acc_id" => $ultraxAccountID,
