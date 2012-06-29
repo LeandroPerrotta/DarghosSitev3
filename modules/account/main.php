@@ -157,6 +157,12 @@ if($account->getEmail() && !$secretkey)
 	<p><span id="notify">Atenção:</span> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
 }
 
+if($account->getPremDays() > 0)
+{
+	$module .= '
+	<p><span id="notify">Leia!</span> Caro jogador, se você deseja transferir os dias de Conta Premium desta conta para uma conta sua no UltraX clique <a href="?ref=accounts.premiumtransfer">aqui</a>. Lembre-se de fazer isto o mais rapido possivel, pois este recurso estará disponivel somente até o dia 15 de julho!</p>';	
+}
+
 if(!$account->getEmail())
 {
 	$module .= '

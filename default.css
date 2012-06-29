@@ -183,6 +183,31 @@ fieldset input {
 	height: 22px;
 }
 
+#login fieldset label, #login p, #games-box fieldset label{
+	margin-top: 5px;
+	line-height: 8px;
+	font-size: 6.5pt;
+	text-align: center;
+}
+
+#login fieldset input{
+	height: 12px;
+}
+
+#games-box fieldset select{
+	height: 18px;
+	margin-left: 65px;
+	margin-top: 5px;
+}
+
+#login fieldset .button{
+	display: inline-block;
+	margin-top: 0px;
+	height: 20px;
+	width: 30px;
+	font-size: 5pt;
+}
+
 fieldset textarea{
 	background: #333;
 	border: 1px solid #000;

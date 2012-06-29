@@ -8,6 +8,83 @@ use Views\Accounts as AccountViews;
 
 class Accounts
 {
+	function Premiumtransfer()
+	{
+		$data = array();
+		$showView = true;
+		
+		$logged = AccountModel::loadLogged();
+		if(!$logged)
+			return false;
+		
+		if($_POST)
+		{
+			$data["message"] = array();
+			$data["message"]["title"] = "Não foi possivel concluir a operação!";
+			
+			$name = \Core\Main::$DB->escapeString($_POST["account_name"]);
+			$password = \Core\Strings::encrypt($_POST["account_password"]);
+			
+			$query = \Core\Main::$DB->query("SELECT `id`, `email` FROM `darghos_ot`.`accounts` WHERE `name` = '{$name}' AND `password` = '{$password}'");
+		
+			$foundUltraXAccount = false;
+			$ultraxAccountEmail = null;
+			$ultraxAccountID = null;
+			if($query->numRows() > 0)
+			{
+				$foundUltraXAccount = true;
+				$fetch = $query->fetch();
+				
+				$ultraxAccountEmail = $fetch->email;
+				$ultraxAccountID = $fetch->id;
+			}
+			
+			if($logged->getPassword() != \Core\Strings::encrypt($_POST["account_password_confirm"]))
+			{
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
+			}
+			elseif($logged->getPremDays() < 8)
+			{
+				$data["message"]["body"] = "Esta operação so está disponivel para contas que possuam 8 ou mais dias de Conta Premium.";
+			}
+			elseif(!$foundUltraXAccount)
+			{
+				$data["message"]["body"] = "Nenhuma conta encontrada no UltraX para o nome e senha informados.";
+			}
+			elseif(strtolower($ultraxAccountEmail) != strtolower($logged->getEmail()))
+			{
+				$data["message"]["body"] = "O conta informada no UltraX não pertence ao mesmo endereço de e-mail desta conta.";
+			}
+			else
+			{
+				$transferDays = $logged->getPremDays();
+				$logged->updatePremDays($transferDays, false);
+				$logged->save();
+				
+				\Core\Main::$DB->query("UPDATE `darghos_ot`.`accounts` SET `premdays` = `premdays` + {$transferDays} WHERE `id` = {$ultraxAccountID}");
+		
+				$data = array(
+					"ultrax_acc_id" => $ultraxAccountID,
+					"premdays" => $transferDays
+				);
+				
+				\Core\Main::addChangeLog('premday_ultrax_transfer', $logged->getId(), json_encode($data));
+					
+				$data["message"]["title"] = "Sucesso!";
+				$data["message"]["body"] = "Os dias de Conta Premium desta conta foram transferidos com sucesso para sua conta no UltraX! Bom jogo!";
+				$showView = false;
+			}
+		}
+		
+		if($data["message"])
+			\Core\Main::sendMessageBox($data["message"]["title"], $data["message"]["body"]);
+		
+		if($showView)
+			$view = new AccountViews\Premiumtransfer($data);
+		
+		return true;		
+	}
+	
 	function Checkname($isAjax = true, $name = NULL)
 	{
 		\Core\Main::$isAjax = $isAjax;

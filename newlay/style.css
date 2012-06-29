@@ -362,6 +362,36 @@ ul li {
 	padding: 10px;
 	overflow: hidden;
 	width: 1004px;
+	margin-top: 45px;
+}
+
+#top-bar{
+	height: 44px;
+	width: 100%;
+	position: fixed;
+	background-color:#3b3f3d;
+	border-bottom: 1px #79817c solid;
+	top: 0px;
+  	opacity:0.92;
+  	filter:alpha(opacity=92); /* For IE8 and earlier */
+}
+
+#bar-wrapper{
+	height: 1%;
+	width: 1002px;
+	margin: 0 auto;
+}
+
+#top-bar #login{
+	width: 274px;
+	display: block;
+	float: right;
+}
+
+#top-bar #games-box{
+	width: 274px;
+	display: block;
+	float: left;
 }
 
 #fog-screen {

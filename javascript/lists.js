@@ -3,6 +3,13 @@ $(document).ready(function() {
 	$("#left ul li div").next("ul[class!='always_viewable']").hide();
 	$("#left ul li div").next("ul[class='viewable']").show();
 	
+	$("#game_options").change(function(){
+		var selected = $(this).val();
+		if(selected){
+			window.location = selected;
+		}
+	})
+	
 	$("#left ul li div span").click(function() {	
 
 		var session = $(this).parent().attr("name");

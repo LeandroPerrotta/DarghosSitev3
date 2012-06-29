@@ -445,6 +445,69 @@ class Menus
 		return new ResultIterator($query);		
 	}
 	
+	static function drawTopBar()
+	{
+		$xml = new \SimpleXMLElement("
+				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+				<root>
+					<div id=\"games-box\">
+						<form action=\"?ref=account.login\" method=\"post\" >
+							<fieldset>
+								<label>Conheça também...</label>
+								<select name=\"game_options\" id=\"game_options\">
+									<option selected=\"selected\"></option>
+									<option value=\"http://ultraxsoft.com/ot\">UltraX (Open Tibia)</option>
+									<option value=\"http://www.darghos.com.br\">Darghos (MMORPG)</option>
+								</select>
+							</fieldset>
+						</form>
+					</div>							
+				</root>");
+		
+		$div = $xml->addChild("div");
+		$div->addAttribute("id", "login");		
+		
+		if(!Main::isLogged())
+		{			
+			$form = $div->addChild("form");
+			$form->addAttribute("action", "?ref=account.login");
+			$form->addAttribute("method", "post");
+			
+			$fieldset = $form->addChild("fieldset");
+			$label = $fieldset->addChild("label", "Acesse sua conta... Ou crie uma ");
+			$a = $label->addChild("a", "nova conta!");
+			$a->addAttribute("href", "?ref=account.register");
+			
+			$account_name = $fieldset->addChild("input");
+			$account_name->addAttribute("name", "account_name");
+			$account_name->addAttribute("size", "15");
+			$account_name->addAttribute("type", "password");
+			
+			$account_password = $fieldset->addChild("input");
+			$account_password->addAttribute("name", "account_password");
+			$account_password->addAttribute("size", "15");
+			$account_password->addAttribute("type", "password");
+			
+			$login = $fieldset->addChild("input");
+			$login->addAttribute("class", "button");
+			$login->addAttribute("value", "Entrar");
+			$login->addAttribute("type", "submit");
+		}
+		else
+		{
+			$div->addChild("p", "Você está conectado! ");
+			$p = $div->addChild("p");
+			$a = $p->addChild("a", "Sua Conta");
+			$a->addAttribute("href", "?ref=account.main");	
+
+			$p = $div->addChild("p");
+			$a = $p->addChild("a", "Desconectar");
+			$a->addAttribute("href", "?ref=account.logout");			
+		}
+		
+		return $xml->asXML();
+	}
+	
 	static function drawTopMenu()
 	{
 		$xml = new \SimpleXMLElement("
