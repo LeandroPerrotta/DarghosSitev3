@@ -394,6 +394,15 @@ ul li {
 	float: left;
 }
 
+#top-bar #ultraxsoft-box{
+	background: url(images/ultraxsoft_logo.png) no-repeat;
+	background-position: center center;
+	width: 454px;
+	height: 42px;
+	display: block;
+	float: left;
+}
+
 #fog-screen {
 	z-index: 100;
 	position: absolute;

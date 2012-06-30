@@ -461,7 +461,9 @@ class Menus
 								</select>
 							</fieldset>
 						</form>
-					</div>							
+					</div>
+					<div id=\"ultraxsoft-box\">
+					</div>				
 				</root>");
 		
 		$div = $xml->addChild("div");
