@@ -76,7 +76,8 @@ class View
 				
 			case t_Skulls::Black:
 				$this->_html_action->SetLabel("Desejo remover a black skull do personagem <b>{$this->player->getName()}</b> ao custo de ".Configs::Get(Configs::eConf()->PREMCOST_REMOVE_BLACK_SKULL)." dos dias de minha conta premium.");
-		
+				break;
+				
 			default:
 				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 				return false;
