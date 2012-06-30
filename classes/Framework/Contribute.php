@@ -304,7 +304,7 @@ class Contribute extends \Core\MySQL
 	{
 		$i = 0;
 	
-		$query = $this->db->query("SELECT `id` FROM {$this->tableStr} WHERE `id` = '".$this->data['id']."'");
+		$query = $this->db->query("SELECT `id` FROM {$this->tableStr} WHERE `id` = '".$this->id."'");
 		
 		//update
 		if($query->numRows() == 1)
@@ -335,7 +335,7 @@ class Contribute extends \Core\MySQL
 				`type` = '{$this->type}', `period` = '{$this->period}', `cost` = '{$this->cost}', `server` = '{$this->server}',
 				`generated_by` = '{$this->generated_by}', `generated_in` = '{$this->generated_in}', `status` = '{$this->status}', `lastupdate_in` = '{$this->lastupdate_in}',
 				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}', `email_vendor` = '{$this->email_vendor}'
-				WHERE `id` = '".$this->data['id']."'");
+				WHERE `id` = '".$this->id."'");
 		}
 		//new account
 		elseif($query->numRows() == 0)
@@ -452,7 +452,7 @@ class Contribute extends \Core\MySQL
 			';	
 		}
 		elseif($this->data['type'] == "PagSeguro")*/
-		if($this->data['type'] == "PagSeguro")
+		if($this->type == "PagSeguro")
 		{			
 			$premium = self::getPremiumInfoByPeriod($this->period);
 			
