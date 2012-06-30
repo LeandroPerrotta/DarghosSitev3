@@ -208,6 +208,7 @@ class Contribute extends \Core\MySQL
 		,$lastupdate_in
 		,$target_account
 		,$auth
+		,$email_vendor
 		;
 	
 	function __construct()
@@ -242,7 +243,7 @@ class Contribute extends \Core\MySQL
 	function load($id, $fields = null)
 	{	
 			
-		$query = $this->db->query("SELECT `id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`, `lastupdate_in`, `target_account`, `auth` FROM {$this->tableStr} WHERE `id` = '".$id."'");		
+		$query = $this->db->query("SELECT `id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`, `lastupdate_in`, `target_account`, `auth`, `email_vendor` FROM {$this->tableStr} WHERE `id` = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -252,7 +253,7 @@ class Contribute extends \Core\MySQL
 			$this->type = $fetch->type;	$this->period = $fetch->period;	$this->cost = $fetch->cost;	
 			$this->server = $fetch->server;	$this->generated_by = $fetch->generated_by;	$this->generated_in = $fetch->generated_in;	
 			$this->status = $fetch->status;	 $this->lastupdate_in = $fetch->lastupdate_in;	$this->target_account = $fetch->target_account;	
-			$this->auth = $fetch->auth;	
+			$this->auth = $fetch->auth; $this->email_vendor = $fetch->email_vendor;	
 
 			return true;	
 		}
@@ -333,7 +334,7 @@ class Contribute extends \Core\MySQL
 				`name` = '{$this->name}', `email` = '{$this->email}', `target` = '{$this->target}',
 				`type` = '{$this->type}', `period` = '{$this->period}', `cost` = '{$this->cost}', `server` = '{$this->server}',
 				`generated_by` = '{$this->generated_by}', `generated_in` = '{$this->generated_in}', `status` = '{$this->status}', `lastupdate_in` = '{$this->lastupdate_in}',
-				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}'
+				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}', `email_vendor` = {$this->email_vendor} 
 				WHERE `id` = '".$this->data['id']."'");
 		}
 		//new account
@@ -355,11 +356,11 @@ class Contribute extends \Core\MySQL
 
 			$this->db->query("INSERT INTO {$this->tableStr} (
 				`id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`,
-				`lastupdate_in`, `target_account`, `auth`
+				`lastupdate_in`, `target_account`, `auth`, `email_vendor`
 			) 
 			VALUES(
 				'{$this->id}', '{$this->name}', '{$this->email}', '{$this->target}', '{$this->type}', '{$this->period}', '{$this->cost}', '{$this->server}', 
-				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}'
+				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}', {$this->email_vendor}
 			)");			
 		}		
 	}
@@ -453,16 +454,16 @@ class Contribute extends \Core\MySQL
 		elseif($this->data['type'] == "PagSeguro")*/
 		if($this->data['type'] == "PagSeguro")
 		{			
-			$premium = self::getPremiumInfoByPeriod($this->data['period']);
+			$premium = self::getPremiumInfoByPeriod($this->period);
 			
 			$form = '
 				<form target="pagseguro" action="'.Consts::URLS_PAGSEGURO.'" method="post">
 				<input type="hidden" name="email_cobranca" value="'.Consts::PAGSEGURO_EMAIL.'">
 				<input type="hidden" name="tipo" value="CP">
 				<input type="hidden" name="moeda" value="BRL">
-				<input type="hidden" name="ref_transacao" value="'.$this->data['id'].'">
+				<input type="hidden" name="ref_transacao" value="'.$this->id.'">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="'.$premium["product"].'. (ref: '.$this->data['id'].')">
+				<input type="hidden" name="item_descr_1" value="'.$premium["product"].'. (ref: '.$this->id.')">
 				<input type="hidden" name="item_quant_1" value="1">
 				<input type="hidden" name="item_valor_1" value="'.self::formatCost($premium["cost"], false).'">
 				<input type="hidden" name="item_frete_1" value="000">
