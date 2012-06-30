@@ -334,7 +334,7 @@ class Contribute extends \Core\MySQL
 				`name` = '{$this->name}', `email` = '{$this->email}', `target` = '{$this->target}',
 				`type` = '{$this->type}', `period` = '{$this->period}', `cost` = '{$this->cost}', `server` = '{$this->server}',
 				`generated_by` = '{$this->generated_by}', `generated_in` = '{$this->generated_in}', `status` = '{$this->status}', `lastupdate_in` = '{$this->lastupdate_in}',
-				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}', `email_vendor` = {$this->email_vendor} 
+				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}', `email_vendor` = '{$this->email_vendor}'
 				WHERE `id` = '".$this->data['id']."'");
 		}
 		//new account
@@ -360,7 +360,7 @@ class Contribute extends \Core\MySQL
 			) 
 			VALUES(
 				'{$this->id}', '{$this->name}', '{$this->email}', '{$this->target}', '{$this->type}', '{$this->period}', '{$this->cost}', '{$this->server}', 
-				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}', {$this->email_vendor}
+				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}', '{$this->email_vendor}'
 			)");			
 		}		
 	}
