@@ -29,9 +29,9 @@ if(is_array($oders))
 {
 	foreach($oders as $orderId);
 	{
-		$contribute->load($orderId, "status");
+		$contribute->load($orderId);
 		
-		if($contribute->get("status") == 1)
+		if($contribute->status == 1)
 			$confirmed++;
 	}
 }

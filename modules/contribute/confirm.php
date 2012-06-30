@@ -16,17 +16,17 @@ if($_SESSION['contribute'])
 	
 	$premium = \Framework\Contribute::getPremiumInfoByPeriod($_SESSION['contribute']["order_period"]);
 	
-	$contribute->set("name", $_SESSION['contribute']["order_name"]);
-	$contribute->set("email", $_SESSION['contribute']["order_email"]);
-	$contribute->set("target", $player->getId());
-	$contribute->set("type", \Framework\Contribute::TYPE_PAGSEGURO);
-	$contribute->set("period", $_SESSION['contribute']["order_period"]);
-	$contribute->set("cost", \Framework\Contribute::formatCost($premium["cost"]));
-	$contribute->set("server", 1);
-	$contribute->set("generated_by", $_SESSION['login'][0]);
-	$contribute->set("generated_in", time());
-	$contribute->set("target_account", $target_account);
-	$contribute->set("email_vendor", Consts::PAGSEGURO_EMAIL);
+	$contribute->name = $_SESSION['contribute']["order_name"];
+	$contribute->email = $_SESSION['contribute']["order_email"];
+	$contribute->target = $player->getId();
+	$contribute->type = \Framework\Contribute::TYPE_PAGSEGURO;
+	$contribute->period = $_SESSION['contribute']["order_period"];
+	$contribute->cost = \Framework\Contribute::formatCost($premium["cost"]);
+	$contribute->server = \Core\Configs::Get(\Core\Configs::eConf()->SERVER_ID);
+	$contribute->generated_by = $_SESSION['login'][0];
+	$contribute->generated_in = time();
+	$contribute->target_account = $target_account;
+	$contribute->email_vendor = Consts::PAGSEGURO_EMAIL;
 	
 	$contribute->save();
 

@@ -162,9 +162,9 @@ if($logged_acc && $logged_acc->getGroup() == t_Group::Administrator)
 	{	
 		foreach($oders as $orderId)
 		{
-			$contribute->load($orderId, "id, name, target, type, period, cost, generated_in, status");
+			$contribute->load($orderId);
 			
-			if($contribute->get("status") == 1 OR $contribute->get("status") == 2)
+			if($contribute->status == 1 OR $contribute->status == 2)
 			{
 				$numberOfPremiums++;
 				$alreadyIsPremium = true;

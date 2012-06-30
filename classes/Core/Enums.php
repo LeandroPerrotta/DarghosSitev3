@@ -29,6 +29,8 @@ class e_Configs extends \Core\Enumerators
 		,$SQL_DATABASE
 		,$SQL_WEBSITE_TABLES_PREFIX
 		
+		,$SQL_ORDERS_DATABASE
+		
 		/*
 		 * Status
 		 */
@@ -48,6 +50,7 @@ class e_Configs extends \Core\Enumerators
 		/*
 		 * Server related
 		 */
+		,$SERVER_ID
 		,$USE_DISTRO
 		,$PATCH_SERVER
 		,$FOLDER_DATA
@@ -332,6 +335,20 @@ class e_BanTypes
 		,Notation = 3
 		,Deletion = 4
 	;
+}
+
+class t_Servers extends \Core\Structs
+{
+	const
+	Darghos = 1
+	,Ultrax = 2
+	;
+
+	static protected
+	$m_typeStrings = array(
+			self::Darghos => "Darghos"
+			,self::Ultrax => "UltraX"
+	);
 }
 
 class t_Worlds extends \Core\Structs

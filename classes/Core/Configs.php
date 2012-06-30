@@ -69,6 +69,7 @@ class Configs
 				case self::$e_Configs->SQL_PASSWORD: self::Set($i, $__configs[$i], "zlabia7r"); break;
 				case self::$e_Configs->SQL_DATABASE: self::Set($i, $__configs[$i], "darghos"); break;
 				case self::$e_Configs->SQL_WEBSITE_TABLES_PREFIX: self::Set($i, $__configs[$i], "wb_"); break;
+				case self::$e_Configs->SQL_ORDERS_DATABASE: self::Set($i, $__configs[$i], ""); break;
 				
 				case self::$e_Configs->STATUS_HOST: self::Set($i, $__configs[$i], "darghos.com.br"); break;
 				case self::$e_Configs->STATUS_PORT: self::Set($i, $__configs[$i], "7171"); break;
@@ -80,6 +81,7 @@ class Configs
 				case self::$e_Configs->WEBSITE_FOLDER_GUILDS: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->WEBSITE_FOLDER_FILES) . "guildImages/"); break;
 				case self::$e_Configs->WEBSITE_FOLDER_TEMP: self::Set($i, $__configs[$i], self::Get(self::$e_Configs->WEBSITE_FOLDER_FILES) . "temp/"); break;
 				
+				case self::$e_Configs->SERVER_ID: self::Set($i, $__configs[$i], \t_Servers::Darghos); break;
 				case self::$e_Configs->USE_DISTRO: self::Set($i, $__configs[$i], Consts::SERVER_DISTRO_TFS); break;
 				case self::$e_Configs->PATCH_SERVER: self::Set($i, $__configs[$i], "/home/leandro/darghos/"); break;
 				case self::$e_Configs->FOLDER_DATA: self::Set($i, $__configs[$i], "data/"); break;
@@ -130,7 +132,7 @@ class Configs
 				case self::$e_Configs->ENABLE_BATTLEGROUND_FEATURES: self::Set($i, $__configs[$i], true); break;	
 						
 				case self::$e_Configs->ENABLE_MULTIWORLD: self::Set($i, $__configs[$i], false); break;			
-				case self::$e_Configs->DEFAULT_WORLD: self::Set($i, $__configs[$i], 0); break;			
+				case self::$e_Configs->DEFAULT_WORLD: self::Set($i, $__configs[$i], 0); break;	
 			}
 		}
 	}

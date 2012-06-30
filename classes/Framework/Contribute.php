@@ -2,7 +2,7 @@
 namespace Framework;
 use \Core\Consts;
 class Contribute extends \Core\MySQL
-{	
+{		
 	static public $premiums = array(
 		array("period" => 10, "product" => "Contribuicao para 10 dias de Conta Premium", "text" => "10 dias.", "cost" => 4.50),
 		array("period" => 30, "product" => "Contribuicao para 30 dias de Conta Premium", "text" => "30 dias.", "cost" => 11.90),
@@ -55,8 +55,6 @@ class Contribute extends \Core\MySQL
 	const
 		TYPE_PAGSEGURO = "PagSeguro"
 		;
-	
-	private $db, $data = array();
 
 	static function natal(Contribute $contribute, &$error)
 	{
@@ -192,14 +190,39 @@ class Contribute extends \Core\MySQL
 		return false;
 	}
 	
+	private	$tableStr;
+	private $db, $data = array();	
+	
+	public	
+		$id
+		,$name
+		,$email
+		,$target
+		,$type
+		,$period
+		,$cost
+		,$server
+		,$generated_by
+		,$generated_in
+		,$status
+		,$lastupdate_in
+		,$target_account
+		,$auth
+		;
+	
 	function __construct()
 	{
+		if(\Core\Configs::Get(\Core\Configs::eConf()->SQL_ORDERS_DATABASE))
+			$this->tableStr = "`" . \Core\Configs::Get(\Core\Configs::eConf()->SQL_ORDERS_DATABASE) . "`.";
+		
+		$this->tableStr .= "`".\Core\Tools::getSiteTable("orders")."`";
+			
 		$this->db = \Core\Main::$DB;
 	}	
 	
 	function getOrdersListByAccount($account_id)
 	{
-		$query = $this->db->query("SELECT `id` FROM `".\Core\Tools::getSiteTable("orders")."` WHERE `target_account` = '".$account_id."' and `status` < 3 and `server` = '1' ORDER BY `generated_in` DESC");
+		$query = $this->db->query("SELECT `id` FROM {$this->tableStr} WHERE `target_account` = '".$account_id."' and `status` < 3 and `server` = '".\Core\Configs::Get(\Core\Configs::eConf()->SERVER_ID)."' ORDER BY `generated_in` DESC");
 		
 		if($query->numRows() != 0)
 		{
@@ -217,25 +240,19 @@ class Contribute extends \Core\MySQL
 	}		
 	
 	function load($id, $fields = null)
-	{
-		if($fields)
-			$query = $this->db->query("SELECT `id`, $fields FROM `".\Core\Tools::getSiteTable("orders")."` WHERE id = '".$id."'");
-		else
-			$query = $this->db->query("SELECT `id` FROM `".\Core\Tools::getSiteTable("orders")."` WHERE `id` = '".$id."'");		
+	{	
+			
+		$query = $this->db->query("SELECT `id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`, `lastupdate_in`, `target_account`, `auth` FROM {$this->tableStr} WHERE `id` = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
-			$this->data['id'] = $fetch->id;	
-					
-			if($fields)	
-			{	
-				$e = explode(", ", $fields);
-				foreach($e as $field)
-				{
-					$this->data[$field] = $fetch->$field;
-				}
-			}
+			$this->id = $fetch->id;
+			$this->name = $fetch->name;	$this->email = $fetch->email; $this->target = $fetch->target;
+			$this->type = $fetch->type;	$this->period = $fetch->period;	$this->cost = $fetch->cost;	
+			$this->server = $fetch->server;	$this->generated_by = $fetch->generated_by;	$this->generated_in = $fetch->generated_in;	
+			$this->status = $fetch->status;	 $this->lastupdate_in = $fetch->lastupdate_in;	$this->target_account = $fetch->target_account;	
+			$this->auth = $fetch->auth;	
 
 			return true;	
 		}
@@ -247,7 +264,7 @@ class Contribute extends \Core\MySQL
 	
 	function getNewOrderNumber()
 	{
-		$query = $this->db->query("SELECT `id` FROM `".\Core\Tools::getSiteTable("orders")."`");
+		$query = $this->db->query("SELECT `id` FROM {$this->tableStr}");
 		
 		$usedOrders = array();
 		
@@ -275,8 +292,8 @@ class Contribute extends \Core\MySQL
 		
 		if($success)
 		{
-			$this->data['id'] = $orderNumber;
-			return $this->data['id'];
+			$this->id = $orderNumber;
+			return $this->id;
 		}
 		else
 			return false;
@@ -286,7 +303,7 @@ class Contribute extends \Core\MySQL
 	{
 		$i = 0;
 	
-		$query = $this->db->query("SELECT `id` FROM `".\Core\Tools::getSiteTable("orders")."` WHERE `id` = '".$this->data['id']."'");
+		$query = $this->db->query("SELECT `id` FROM {$this->tableStr} WHERE `id` = '".$this->data['id']."'");
 		
 		//update
 		if($query->numRows() == 1)
@@ -304,8 +321,20 @@ class Contribute extends \Core\MySQL
 					$update .= "`{$field}` = '".$value."', ";
 				}			
 			}
+
+			$this->id = $fetch->id;
+			$this->name = $fetch->name;	$this->email = $fetch->email; $this->target = $fetch->target;
+			$this->type = $fetch->type;	$this->period = $fetch->period;	$this->cost = $fetch->cost;
+			$this->server = $fetch->server;	$this->generated_by = $fetch->generated_by;	$this->generated_in = $fetch->generated_in;
+			$this->status = $fetch->status;	 $this->lastupdate_in = $fetch->lastupdate_in;	$this->target_account = $fetch->target_account;
+			$this->auth = $fetch->auth;			
 			
-			$this->db->query("UPDATE `".\Core\Tools::getSiteTable("orders")."` SET {$update} WHERE `id` = '".$this->data['id']."'");
+			$this->db->query("UPDATE {$this->tableStr} SET 
+				`name` = '{$this->name}', `email` = '{$this->email}', `target` = '{$this->target}',
+				`type` = '{$this->type}', `period` = '{$this->period}', `cost` = '{$this->cost}', `server` = '{$this->server}',
+				`generated_by` = '{$this->generated_by}', `generated_in` = '{$this->generated_in}', `status` = '{$this->status}', `lastupdate_in` = '{$this->lastupdate_in}',
+				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}'
+				WHERE `id` = '".$this->data['id']."'");
 		}
 		//new account
 		elseif($query->numRows() == 0)
@@ -324,7 +353,15 @@ class Contribute extends \Core\MySQL
 				}		
 			}
 
-			$this->db->query("INSERT INTO `".\Core\Tools::getSiteTable("orders")."` ({$insert_fields}) values({$insert_values})");			
+			$this->db->query("
+			INSERT INTO (
+				`id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`,
+				`lastupdate_in`, `target_account`, `auth`
+			) 
+			VALUES(
+				'{$this->id}', '{$this->name}', '{$this->email}', '{$this->target}', '{$this->type}', '{$this->period}', '{$this->cost}', '{$this->server}', 
+				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}', 
+			)");			
 		}		
 	}
 	

@@ -2,14 +2,14 @@
 use \Core\Configs;
 $contribute = new \Framework\Contribute();
 
-if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status, generated_in") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
+if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id']) and $contribute->target_account == $_SESSION['login'][0] and $contribute->status == 1)
 {
 	if($_POST)
 	{
 		$chkAccount = new \Framework\Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
+		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->period, $contribute->generated_in);
 		
 		$error = NULL;
 		$callbackFunc = "\Framework\Contribute::{$premium["onAccept"]}";
@@ -29,15 +29,15 @@ if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "
 		else
 		{
 			$account = new \Framework\Account();
-			$account->load($contribute->get("target_account"));
+			$account->load($contribute->target_account);
 			
-			$premdays = $contribute->get("period");			   
+			$premdays = $contribute->period;			   
 			$account->updatePremDays($premdays);
 			
 			$account->save();
 			
-			$contribute->set("status", 2);
-			$contribute->set("lastupdate_in", time());
+			$contribute->status = 2;
+			$contribute->lastupdate_in = time();
 			$contribute->save();
 		
 			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_ACTIVATED, Configs::Get(Configs::eConf()->WEBSITE_NAME));
@@ -86,21 +86,21 @@ $premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("perio
 
 $character_name = "";
 
-if(is_numeric($contribute->get("target")))
+if(is_numeric($contribute->target))
 {
 	$player = new \Framework\Player();
-	$player->load($contribute->get("target"));
+	$player->load($contribute->target);
 	$character_name = $player->getName();
 }
 else
-	$character_name = $contribute->get("target");
+	$character_name = $contribute->target;
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 	
 		<ul id="charactersview">
-			<p>Pedido Numero: '.$contribute->get("id").'</p>
+			<p>Pedido Numero: '.$contribute->id.'</p>
 			<li><b>Personagem: </b> '.$character_name.'.</li>
 			<li><b>Descrição: </b> '.$premium["text"].'.</li>
 			
