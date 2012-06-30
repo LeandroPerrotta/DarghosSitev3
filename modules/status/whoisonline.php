@@ -209,17 +209,17 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					
 				if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
 				{
-					$pvpStr = "<span class='pvpEnabled'>Agressivo</span>";
+					$pvpStr = "<td><span class='pvpEnabled'>Agressivo</span>";
 					
 					if(!$fetch->pvpEnabled)
-						$pvpStr = "<span class='pvpDisabled'>Pacifico</span>";	
+						$pvpStr = "<td><span class='pvpDisabled'>Pacifico</span></td>";	
 				}
 				
 				$_vocation = new t_Vocation($vocation_id);
 				
 				$players_list .= "
 				<tr>
-					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> <td>{$pvpStr}</td>
+					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> {$pvpStr}
 				</tr>";		
 			}			
 		}
