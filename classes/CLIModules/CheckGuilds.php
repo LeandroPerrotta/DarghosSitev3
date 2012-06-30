@@ -4,6 +4,7 @@ namespace CLIModules;
 use \Framework\Guilds;
 use \Framework\Guilds\Rank;
 use \Framework\Guilds\War;
+use \Core\Configs;
 
 class CheckGuilds
 {
@@ -29,31 +30,61 @@ class CheckGuilds
 		$formedGuilds = 0;
 		$formingGuilds = 0;
 		
-		echo "Required vices: " . \Core\Configs::Get(\Core\Configs::eConf()->GUILDS_VICES_TO_FORMATION) . "\n\n";
+		echo "Required vices: " . Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION) . "\n\n";
 		
 		while($result_guild = $query_guilds->fetch())
 		{
 			$guild = new Guilds();
 			$guild->Load($result_guild->id);
 			
-			echo "Checking guild {$guild->GetName()}\n";
-			
-			$vices = $guild->SearchRankByLevel(Guilds::RANK_VICE);
-			$vices instanceof Rank;
-			$hasVices = false;
+			$guildOK = true;
 			$toDelete = false;
 			
-			echo "Vices: {$vices->MemberCount()}\n";
-			echo "Formation Time: {$guild->GetFormationTime()}\n\n";
-			//guild já ativa não possui membros sulficientes para ser uma guild ativa
-			if($vices->MemberCount() >= \Core\Configs::Get(\Core\Configs::eConf()->GUILDS_VICES_TO_FORMATION))
+			echo "Checking guild {$guild->GetName()}\n";
+			
+			$leader = new \Framework\Player(); 
+			$leader->load($guild->GetOwnerId());
+			
+			if(Configs::Get(Configs::eConf()->GUILD_LEADERS_MUST_BE_PREMIUM) && !$leader->isPremium())
 			{
-				$hasVices = true;
-			}			
+				echo "The guild leader has not premium and need it...\n";
+				$guildOK = false;
+			}
+			
+			if($guildOK)
+				$vices = $guild->SearchRankByLevel(Guilds::RANK_VICE);
+				$vices instanceof Rank;
+
+				echo "Vices: {$vices->MemberCount()}\n";
+				echo "Formation Time: {$guild->GetFormationTime()}\n\n";
+				//guild já ativa não possui membros sulficientes para ser uma guild ativa
+				if($vices->MemberCount() < Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION))
+					$guildOK = false;		
+			}
+			
+			if($guildOK && Configs::Get(Configs::eConf()->GUILD_VICE_LEADERS_MUST_BE_PREMIUM))
+			{
+				$guildOK = false;
+				$foundVices = 0;
+				
+				foreach($vices->Members as $player)
+				{
+					$player instanceof \Framework\Player;
+					
+					if($player->isPremium()){
+						$foundVices++;
+						
+						if($foundVices == Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION)){
+							$guildOK = true;
+							break;
+						}
+					}
+				}
+			}
 			
 			if($guild->GetFormationTime() == 0)
 			{
-				if(!$hasVices)
+				if(!$guildOK)
 				{
 					$guild->SetFormationTime(time() + 60 * 60 * 24 * 5);
 					$guild->SetStatus(Guilds::STATUS_FORMATION);
@@ -62,12 +93,12 @@ class CheckGuilds
 				else
 					continue;
 			}
-			elseif(time() > $guild->GetFormationTime() && !$hasVices)
+			elseif(time() > $guild->GetFormationTime() && !$guildOK)
 			{
 				$toDelete = true;
 				$terminatedGuilds++;
 			}
-			elseif($hasVices)
+			elseif($guildOK)
 			{
 				$guild->SetStatus(Guilds::STATUS_FORMED);
 				$guild->SetFormationTime(0);

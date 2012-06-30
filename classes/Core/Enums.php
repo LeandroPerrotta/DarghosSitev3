@@ -104,6 +104,8 @@ class e_Configs extends \Core\Enumerators
 		
 		,$GUILDS_FORMATION_WAIT_DAYS
 		,$GUILDS_VICES_TO_FORMATION
+		,$GUILD_LEADERS_MUST_BE_PREMIUM
+		,$GUILD_VICE_LEADERS_MUST_BE_PREMIUM
 		
 		/*
 		 * Reborn related

@@ -56,7 +56,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				return false;
 			}
 			
-			if($selectedRank->GetLevel() == \Framework\Guilds::RANK_VICE && !$player->isPremium())
+			if($selectedRank->GetLevel() == \Framework\Guilds::RANK_VICE && Configs::Get(Configs::eConf()->GUILD_VICE_LEADERS_MUST_BE_PREMIUM) && !$player->isPremium())
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_ONLY_PREMIUM);
 				return false;				

@@ -121,6 +121,9 @@ class Configs
 				case self::$e_Configs->ENABLE_GUILD_POINTS: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->GUILDS_FORMATION_WAIT_DAYS: self::Set($i, $__configs[$i], 5); break;
 				case self::$e_Configs->GUILDS_VICES_TO_FORMATION: self::Set($i, $__configs[$i], 4); break;
+				case self::$e_Configs->GUILD_LEADERS_MUST_BE_PREMIUM: self::Set($i, $__configs[$i], true); break;
+				case self::$e_Configs->GUILD_VICE_LEADERS_MUST_BE_PREMIUM: self::Set($i, $__configs[$i], true); break;
+				
 				
 				case self::$e_Configs->ENABLE_REBORN: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->FIRST_REBORN_LEVEL: self::Set($i, $__configs[$i], 200); break;

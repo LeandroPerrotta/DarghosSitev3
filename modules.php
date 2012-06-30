@@ -283,7 +283,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				break;
 				
 				case "create":
-					$needPremium = true;
+					$needPremium = g_Configs::Get(g_Configs::eConf()->GUILD_LEADERS_MUST_BE_PREMIUM);
 					$patch['file'] = $topic;
 				break;		
 
@@ -298,7 +298,6 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				break;		
 
 				case "invite":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;	
 
@@ -326,12 +325,10 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				break;	
 					
 				case "declarewar":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 				
 				case "replywar":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;
 				
