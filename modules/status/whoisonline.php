@@ -138,10 +138,13 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 						if($_characc->getPremDays() > 0)
 							$_premiums++;
 							
-						if($fetch->pvpEnabled)
-							$_pvp_enabled++;
-						else
-							$_pvp_disabled++;						
+						if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
+						{						
+							if($fetch->pvpEnabled)
+								$_pvp_enabled++;
+							else
+								$_pvp_disabled++;			
+						}			
 							
 						switch($fetch->town_id)
 						{
@@ -202,10 +205,15 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					$vocation_id += 8;
 				}
 				
-				$pvpStr = "<span class='pvpEnabled'>Agressivo</span>";
-				
-				if(!$fetch->pvpEnabled)
-					$pvpStr = "<span class='pvpDisabled'>Pacifico</span>";	
+				$pvpStr = "";
+					
+				if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
+				{
+					$pvpStr = "<span class='pvpEnabled'>Agressivo</span>";
+					
+					if(!$fetch->pvpEnabled)
+						$pvpStr = "<span class='pvpDisabled'>Pacifico</span>";	
+				}
 				
 				$_vocation = new t_Vocation($vocation_id);
 				
@@ -275,10 +283,21 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			<tr>
 				<td>Northrend:</td><td>".\Core\Tools::getPercentOf($_northrend, $_totalplayers)."%</td>
 				<td>Kashmir:</td><td>".\Core\Tools::getPercentOf($_kashmir, $_totalplayers)."%</td>	
-			</tr>";	
+			</tr>";				
 			
 			if($_isadmin)
 			{
+				$pvpStr = "";
+					
+				if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
+				{			
+					$pvpStr = "
+					<tr>
+						<td>Agressivos:</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>Pacificos:</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
+					</tr>					
+					";					
+				}	
+				
 				$module .= "
 				<tr>
 					<td colspan='4'><b>Estatisticas:</b></td>
@@ -286,9 +305,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				<tr>
 					<td>Free Account's:</td><td>".\Core\Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".\Core\Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
 				</tr>
-				<tr>
-					<td>Agressivos:</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>Pacificos:</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
-				</tr>					
+				{$pvpStr}	
 				<tr>
 					<td colspan='2'>Level médio:</td><td colspan='2'>".(ceil($levelSum / $_totalplayers))."</td>
 				</tr>			
@@ -308,10 +325,15 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 		
 		if($query->numRows() > 0)
 		{
+			$pvpStr = "";
+			
+			if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
+				$pvpStr = "<th>PvP</th>";
+			
 			$module .= "
 			<table cellspacing='0' cellpadding='0' id='table'>
 				<tr>
-					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> <th>PvP</th>
+					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> {$pvpStr}
 				</tr>
 	
 				{$players_list}
