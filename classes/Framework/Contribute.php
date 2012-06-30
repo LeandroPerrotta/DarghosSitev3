@@ -359,7 +359,7 @@ class Contribute extends \Core\MySQL
 			) 
 			VALUES(
 				'{$this->id}', '{$this->name}', '{$this->email}', '{$this->target}', '{$this->type}', '{$this->period}', '{$this->cost}', '{$this->server}', 
-				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}', 
+				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}'
 			)");			
 		}		
 	}
