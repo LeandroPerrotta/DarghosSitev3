@@ -3,10 +3,10 @@ if($_POST)
 {
 	$account = new \Framework\Account();
 	
-	if(($account->loadByName($_POST["account_name"])) and ($account->getPassword() == \Core\Strings::encrypt($_POST["account_password"])))
+	if(($account->loadByName($_POST["login_name"])) and ($account->getPassword() == \Core\Strings::encrypt($_POST["login_password"])))
 	{
 		$_SESSION['login'][] = $account->getId();
-		$_SESSION['login'][] = \Core\Strings::encrypt($_POST["account_password"]);
+		$_SESSION['login'][] = \Core\Strings::encrypt($_POST["login_password"]);
 		
 		if(!$_SESSION["login_redirect"])
 			\Core\Main::redirect("index.php?ref=account.main");	
@@ -48,12 +48,12 @@ $module .= '
 	
 		<p>
 			<label for="account_name">'.$pages["ACCOUNT.LOGIN.ACCOUNT_NAME"].'</label><br />
-			<input name="account_name" size="40" type="password" value="" />
+			<input name="login_name" size="40" type="password" value="" />
 		</p>
 		
 		<p>
 			<label for="account_password">'.$pages["ACCOUNT.LOGIN.PASSWORD"].'</label><br />
-			<input name="account_password" size="40" type="password" value="" />
+			<input name="login_password" size="40" type="password" value="" />
 		</p>		
 		
 		<div id="line1"></div>

@@ -479,12 +479,12 @@ class Menus
 			$a->addAttribute("href", "?ref=account.register");
 			
 			$account_name = $fieldset->addChild("input");
-			$account_name->addAttribute("name", "account_name");
+			$account_name->addAttribute("name", "login_name");
 			$account_name->addAttribute("size", "15");
 			$account_name->addAttribute("type", "password");
 			
 			$account_password = $fieldset->addChild("input");
-			$account_password->addAttribute("name", "account_password");
+			$account_password->addAttribute("name", "login_password");
 			$account_password->addAttribute("size", "15");
 			$account_password->addAttribute("type", "password");
 			
