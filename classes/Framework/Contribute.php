@@ -353,8 +353,7 @@ class Contribute extends \Core\MySQL
 				}		
 			}
 
-			$this->db->query("
-			INSERT INTO (
+			$this->db->query("INSERT INTO (
 				`id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`,
 				`lastupdate_in`, `target_account`, `auth`
 			) 
