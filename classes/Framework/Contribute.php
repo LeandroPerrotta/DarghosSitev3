@@ -309,26 +309,12 @@ class Contribute extends \Core\MySQL
 		//update
 		if($query->numRows() == 1)
 		{
-			foreach($this->data as $field => $value)
-			{
-				$i++;
-				
-				if($i == count($this->data))
-				{
-					$update .= "`{$field}` = '".$value."'";
-				}
-				else
-				{
-					$update .= "`{$field}` = '".$value."', ";
-				}			
-			}
-
-			$this->id = $fetch->id;
-			$this->name = $fetch->name;	$this->email = $fetch->email; $this->target = $fetch->target;
-			$this->type = $fetch->type;	$this->period = $fetch->period;	$this->cost = $fetch->cost;
-			$this->server = $fetch->server;	$this->generated_by = $fetch->generated_by;	$this->generated_in = $fetch->generated_in;
-			$this->status = $fetch->status;	 $this->lastupdate_in = $fetch->lastupdate_in;	$this->target_account = $fetch->target_account;
-			$this->auth = $fetch->auth;			
+			$this->id = $this->id;
+			$this->name = $this->name;	$this->email = $this->email; $this->target = $this->target;
+			$this->type = $this->type;	$this->period = $this->period;	$this->cost = $this->cost;
+			$this->server = $this->server;	$this->generated_by = $this->generated_by;	$this->generated_in = $this->generated_in;
+			$this->status = $this->status;	 $this->lastupdate_in = $this->lastupdate_in;	$this->target_account = $this->target_account;
+			$this->auth = $this->auth;			
 			
 			$this->db->query("UPDATE {$this->tableStr} SET 
 				`name` = '{$this->name}', `email` = '{$this->email}', `target` = '{$this->target}',
