@@ -51,7 +51,7 @@ class CheckGuilds
 				$guildOK = false;
 			}
 			
-			if($guildOK)
+			if($guildOK){
 				$vices = $guild->SearchRankByLevel(Guilds::RANK_VICE);
 				$vices instanceof Rank;
 
@@ -111,11 +111,11 @@ class CheckGuilds
 				$guild->Save();			
 		}
 		
-		echo 
-"Guilds Formadas: {$formedGuilds}\n
-Guilds aguardando novos vice-lideres: {$formingGuilds}\n
-Guilds encerradas: {$terminatedGuilds}\n
-";
+		echo "
+			Guilds Formadas: {$formedGuilds}\n
+			Guilds aguardando novos vice-lideres: {$formingGuilds}\n
+			Guilds encerradas: {$terminatedGuilds}\n
+		";
 	}
 }
 ?>
