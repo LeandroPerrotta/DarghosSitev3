@@ -141,7 +141,7 @@ class View
 			$item->setDescription($description);
 			$item->setPrice($price);
 			
-			if($require_days())
+			if($require_days)
 				$item->setRequireDays($require_days);
 			
 			$params = array();
