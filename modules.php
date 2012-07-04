@@ -351,6 +351,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			switch($topic)
 			{
 				case "whoisonline":
+					$needMinGroup = g_Configs::Get(g_Configs::eConf()->ENABLE_PLAYERS_ONLINE) ? null : t_Group::GameMaster;
 					$patch['file'] = $topic;
 				break;
 

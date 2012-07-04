@@ -27,7 +27,7 @@ class MenuItem
 			return "";		
 		elseif(Tools::hasFlag($this->conditions, Menu::CONDITION_CAN_NOT_LOGGED) && Main::isLogged())
 			return "";			
-		elseif(Tools::hasFlag($this->conditions, Menu::CONDITION_SHOWING_PLAYERS_ONLINE) && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_ONLINE))
+		elseif(Tools::hasFlag($this->conditions, Menu::CONDITION_SHOWING_PLAYERS_ONLINE) && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_ONLINE) && (!Main::isLogged() || \Framework\Account::loadLogged()->getAccess() < \t_Group::GameMaster))
 			return "";
 		
 		$li = $xml->addChild("li");

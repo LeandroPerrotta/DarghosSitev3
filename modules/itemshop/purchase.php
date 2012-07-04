@@ -180,6 +180,12 @@ class View
 			return false;
 		}
 		
+		if($item->getRequireDays() > 0 && $item->getRequireDays() > $this->loggedAcc->getPremDays())
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_REQUIRE_DAYS, $item->getPrice(), $item->getRequireDays());
+			return false;
+		}
+		
 		$this->loggedAcc->updatePremDays($item->getPrice(), false);
 		$this->loggedAcc->save();
 		

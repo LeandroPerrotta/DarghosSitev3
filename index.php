@@ -1,7 +1,7 @@
 <?
-ini_set("display_errors", "0");
-error_reporting(E_ALL^E_NOTICE);
-$date = date("d-m-y");
+ini_set("display_errors", "1");
+error_reporting(E_ERROR);
+/*$date = date("d-m-y");
 
 $patch = "/var/log/php/darghos_{$date}.log";
 
@@ -11,7 +11,7 @@ if(!file_exists($patch))
 	fwrite($handle, "Error file log generated.\n");
 }
 
-ini_set ("error_log", $patch);
+ini_set ("error_log", $patch);*/
 
 setlocale(LC_ALL, "pt_BR");
 date_default_timezone_set("America/Sao_Paulo");

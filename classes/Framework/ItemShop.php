@@ -16,7 +16,7 @@ class ItemShop
 	const LIST_ORDER_PRICE_DESC = 4;
 	const LIST_ORDER_PRICE_ASC = 5;
 	
-	private $id, $name, $description, $params, $price, $added_in, $enabled, $type;
+	private $id, $name, $description, $params, $price, $require_days = 0, $added_in, $enabled, $type;
 
 	static function getItemShopList($orderBy = LIST_ORDER_RELEVANCE)
 	{
@@ -24,7 +24,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -37,7 +37,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`shop`.`id`, `shop`.`name`, `shop`.`description`, `shop`.`params`, `shop`.`price`, `shop`.`added_in`, `shop`.`enabled`, `shop`.`type` 
+					`shop`.`id`, `shop`.`name`, `shop`.`description`, `shop`.`params`, `shop`.`price`, `shop`.`require_days`, `shop`.`added_in`, `shop`.`enabled`, `shop`.`type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` `shop`
 				LEFT JOIN
@@ -57,7 +57,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -70,7 +70,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -83,7 +83,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -96,7 +96,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -135,7 +135,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE id = {$id}
@@ -152,6 +152,7 @@ class ItemShop
 		$this->description = $fetch->description;
 		$this->params = $fetch->params;
 		$this->price = $fetch->price;
+		$this->require_days = $fetch->require_days;
 		$this->added_in = $fetch->added_in;
 		$this->type = $fetch->type;
 		
@@ -170,6 +171,7 @@ class ItemShop
 					`description` = '{$this->description}',
 					`params` = '{$this->params}',
 					`price` = '{$this->price}',
+					`require_days` = '{$this->require_days}',
 					`type` = '{$this->type}'
 				WHERE
 					`id` = '{$this->id}'
@@ -181,13 +183,14 @@ class ItemShop
 			\Core\Main::$DB->query("
 				INSERT INTO
 					`".\Core\Tools::getSiteTable("itemshop")."`
-					(`name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`)
+					(`name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type`)
 				VALUES
 					(
 						'{$this->name}',
 						'{$this->description}',
 						'{$this->params}',
 						'{$this->price}',
+						'{$this->require_days}',
 						'{$this->added_in}',
 						'{$this->enabled}',
 						'{$this->type}'
@@ -348,6 +351,7 @@ class ItemShop
 	function getDescription() { return $this->description; }
 	function getParams() { return json_decode($this->params, true); }
 	function getPrice() { return $this->price; }
+	function getRequireDays() { return $this->require_days; }
 	function getAddedIn() { return $this->added_in; }
 	function getType() { return $this->type; }
 	function isEnabled() { return $this->enabled; }
@@ -357,6 +361,7 @@ class ItemShop
 	function setDescription($str) { $this->description = $str; }
 	function setParams($array) { $this->params = json_encode($array); }
 	function setPrice($int) { $this->price = $int; }
+	function setRequireDays($int) { $this->require_days = $int; }
 	function setAddedIn($int) { $this->added_in = $int; }
 	function setType($int) { $this->type = $int; }
 	function setEnabled($bool) { $this->enabled = $bool; }

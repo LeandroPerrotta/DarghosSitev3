@@ -9,7 +9,8 @@ class View
 			$_item_action_id,
 			$_item_is_stackable,
 			$_item_description,
-			$_item_price
+			$_item_price,
+			$_item_require_days
 			;
 	
 	//variables
@@ -58,6 +59,10 @@ class View
 		$this->_item_price->SetName("item_price");		
 		$this->_item_price->SetSize(10);			
 		
+		$this->_item_require_days = new \Framework\HTML\Input();
+		$this->_item_require_days->SetName("item_require_days");		
+		$this->_item_require_days->SetSize(10);			
+		
 		if($_POST)
 		{
 			if(!$this->Post())
@@ -97,6 +102,7 @@ class View
 		$name = $this->_item_name->GetPost();
 		$description = $this->_item_description->GetPost();
 		$price = $this->_item_price->GetPost();
+		$require_days = $this->_item_require_days->GetPost();
 		$type = $this->_item_type->GetPost();
 		
 		if($type == \Framework\ItemShop::TYPE_ITEM)
@@ -121,10 +127,11 @@ class View
 			if(!is_numeric($item_id) 
 				|| !is_numeric($item_count)
 				|| !is_numeric($price)
+				|| ($require_days && !is_numeric($require_days))
 				|| ($item_action_id && !is_numeric($item_action_id))
 			)
 			{
-				$this->_message = "Os campos de id do item, quantidade, action id e preço precisam ser numericos.";
+				$this->_message = "Os campos de id do item, quantidade, action id e preço e requer dias precisam ser numericos.";
 				return false;						
 			}			
 			
@@ -133,6 +140,9 @@ class View
 			$item->setType($type);
 			$item->setDescription($description);
 			$item->setPrice($price);
+			
+			if($require_days())
+				$item->setRequireDays($require_days);
 			
 			$params = array();
 			$params[\Framework\ItemShop::PARAM_ITEM_ID] = $item_id;
@@ -204,6 +214,11 @@ class View
 				<p>
 					<label for='item_price'>Preço (premdays)</label><br />
 					{$this->_item_price->Draw()}
+				</p>
+							
+				<p>
+					<label for='item_price'>Requer (dias minimos na conta para comprar)</label><br />
+					{$this->_item_require_days->Draw()}
 				</p>
 				
 				<p id='line'></p>
