@@ -96,7 +96,7 @@ class View
 		$owner = new \Framework\Player();
 		$owner->load($this->guild->GetOwnerId());
 		
-		$guildInfoTable->AddField("O personagem <b>{$owner}</b> é o atual dono desta guild.");
+		$guildInfoTable->AddField("O personagem <b>{$owner->getName()}</b> é o atual dono desta guild.");
 		$guildInfoTable->AddRow();		
 		
 		if($this->loggedAcc and $this->memberLevel > \Framework\Guilds::RANK_NO_MEMBER)
