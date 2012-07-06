@@ -165,7 +165,7 @@ class View
 		$guildInfoTable->AddField("Esta guilda possui <b>{$membersCount} membros</b> no total.");
 		$guildInfoTable->AddRow();		
 		
-		$guildInfoTable->AddField("O nível médio dos personagens desta guilda é <b>{$totalLevel}</b>.");
+		$guildInfoTable->AddField("O nível médio dos personagens desta guilda é <b>". ceil($totalLevel / $membersCount) ."</b>.");
 		$guildInfoTable->AddRow();		
 		
 		$guildPage = "
