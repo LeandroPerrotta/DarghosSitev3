@@ -172,10 +172,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			
 			foreach($guild->Ranks as $rank)
 			{
-				if($rank->GetLevel() != \Framework\Guilds::RANK_LEADER)
-				{
-					$option_ranks .= "<option ".(($rank->GetId() == $lowerRank->GetId()) ? "selected='selected'" : "")." value='{$rank->GetLevel()}'>{$rank->GetName()}</option>";
-				}	
+				$option_ranks .= "<option ".(($rank->GetId() == $lowerRank->GetId()) ? "selected='selected'" : "")." value='{$rank->GetLevel()}'>{$rank->GetName()}</option>";
 				
 				foreach($rank->Members as $member)
 				{
