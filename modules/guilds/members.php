@@ -54,7 +54,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			
 			$selectedRank = $guild->SearchRankByLevel($_POST["member_rank"]);
 			
-			if(!$selectedRank || $selectedRank->GetLevel() == \Framework\Guilds::RANK_LEADER)
+			if(!$selectedRank)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
