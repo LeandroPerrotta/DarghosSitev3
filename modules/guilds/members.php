@@ -1,11 +1,15 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
+use \Framework\Guilds\Rank;
+use \Framework\Accounts;
+
 if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";		
 	
-	function proccessPost(&$message, \Framework\Account $account, \Framework\Guilds $guild)
+	function proccessPost(&$message, Account $account, Guilds $guild)
 	{
 		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
@@ -13,7 +17,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}			
 		
-		$memberLevel = \Framework\Guilds::GetAccountLevel($account, $guild->GetId());
+		$memberLevel = Guilds::GetAccountLevel($account, $guild->GetId());
 		$player = $guild->SearchMemberByName($_POST["guild_member"]);
 		$player instanceof \Framework\Player;
 		
@@ -23,7 +27,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
-		if($player->GetGuildLevel() < \Framework\Guilds::RANK_LEADER)
+		if($player->GetGuildLevel() < Guilds::RANK_LEADER)
 		{
 			if($player->GetGuildLevel() >= $memberLevel)
 			{
@@ -33,7 +37,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		}
 		else
 		{
-			if($memberLevel != \Framework\Guilds::RANK_LEADER)
+			if($memberLevel != Guilds::RANK_LEADER)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;				
@@ -42,7 +46,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		if($_POST["guild_action"] == "setRank")
 		{
-			if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
+			if($player->GetGuildLevel() == Guilds::RANK_LEADER && !Guilds::IsAccountGuildOwner($account, $guild))
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
@@ -72,6 +76,14 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		}
 		elseif($_POST["guild_action"] == "setNick")
 		{
+			/* lideres não podem alterar nick de outros lideres, exepto seus proprios personagens... */
+			/* donos podem alterar o nick de todos... */
+			if($player->getAccountId() != $account->getId() && $player->GetGuildLevel() == Guilds::RANK_LEADER && !Guilds::IsAccountGuildOwner($account, $guild))
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
+				return false;
+			}			
+			
 			if(strlen($_POST["member_nick"]) < 3 or strlen($_POST["member_nick"]) > 15)
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_TITLE_SIZE);
@@ -81,15 +93,31 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			$player->setGuildNick($_POST["member_nick"]);
 		}
 		elseif($_POST["guild_action"] == "eraseNick")
-		{			
+		{	
+			/* lideres não podem alterar nick de outros lideres, exepto seus proprios personagens... */
+			/* donos podem alterar o nick de todos... */
+			if($player->getAccountId() != $account->getId() && $player->GetGuildLevel() == Guilds::RANK_LEADER && !Guilds::IsAccountGuildOwner($account, $guild))
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
+				return false;
+			}
+			
 			$player->setGuildNick("");
 		}
 		elseif($_POST["guild_action"] == "exclude")
 		{
-			if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
+			/* lideres não podem alterar nick de outros lideres, exepto seus proprios personagens... */
+			/* donos podem alterar o nick de todos... */
+			if($player->getAccountId() != $account->getId() && $player->GetGuildLevel() == Guilds::RANK_LEADER && !Guilds::IsAccountGuildOwner($account, $guild))
 			{
 				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 				return false;
+			}		
+
+			if($player->getId() == $guild->GetOwnerId())
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
+				return false;				
 			}
 			
 			if($guild->OnWar())

@@ -103,7 +103,7 @@ class View
 			return false;
 		}
 		
-		if($player->GetGuildLevel() == \Framework\Guilds::RANK_LEADER)
+		if($this->guild->GetOwnerId() == $player->getId())
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CANNOT_LEAVE, $_GET['name']);	
 			return false;			

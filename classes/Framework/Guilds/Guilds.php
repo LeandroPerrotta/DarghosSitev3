@@ -78,6 +78,18 @@ class Guilds
 		return $level;
 	}
 	
+	static function IsAccountGuildOwner(Account $account, Guilds $guild)
+	{
+		$char_list = $account->getCharacterList(Account::PLAYER_LIST_BY_ID);
+		foreach($char_list as $player_id)
+		{
+			if($guild->GetOwnerId() == $player_id)
+				return true;
+		}
+		
+		return false;
+	}
+	
 	static function ActivedGuildsList($world_id)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)

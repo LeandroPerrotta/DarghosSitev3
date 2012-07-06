@@ -23,7 +23,8 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		$member->LoadGuild();
 		
-		if($member->GetGuildLevel() != \Framework\Guilds::RANK_VICE)
+		$level = $member->GetGuildLevel();
+		if($level != \Framework\Guilds::RANK_VICE && $level != \Framework\Guilds::RANK_LEADER)
 		{
 			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 			return false;
@@ -79,12 +80,26 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}			
 						
-			$vices = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
 			
+			
+			$options = "";
+			
+			$leaders = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER);
+			foreach($leaders->Members as $member)
+			{
+				if($guild->GetOwnerId() == $member->getId())
+					continue;
+				
+				$options .= "<option value='{$member->getName()}'>{$member->getName()}</option>";
+			}			
+			
+			$vices = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
 			foreach($vices->Members as $member)
 			{
 				$options .= "<option value='{$member->getName()}'>{$member->getName()}</option>";
-			}			
+			}
+			
+			
 			
 			$module .=	'
 			<form action="" method="post">
@@ -92,7 +107,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 
 			';
 
-			if(count($vices->Members) != 0)
+			if(count($vices->Members) + count($leaders->Members) > 1)
 			{
 				$module .=	'
 				<p>
@@ -116,7 +131,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			{
 				$module .=	'
 				<p>
-					É necessario possuir ao menos 1 vice lider disponivel para que seja possivel a  transferencia a liderança de uma guilda.
+					É necessario possuir ao menos 1 lider ou vice lider disponivel para que seja possivel a  transferencia de propriedade de uma guilda.
 				</p>	
 				';			
 			}

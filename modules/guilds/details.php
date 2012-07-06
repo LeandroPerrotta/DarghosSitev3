@@ -84,11 +84,20 @@ class View
 			$guildInfoTable->AddRow();
 		}
 		
-		$guildInfoTable->AddField("Esta guilda pertence ao mundo de <b>".\t_Worlds::GetString($this->guild->GetWorldId())."</b>.");
-		$guildInfoTable->AddRow();
+		if(Configs::Get(Configs::eConf()->ENABLE_MULTIWORLD))
+		{
+			$guildInfoTable->AddField("Esta guilda pertence ao mundo de <b>".\t_Worlds::GetString($this->guild->GetWorldId())."</b>.");
+			$guildInfoTable->AddRow();
+		}
 		
 		$guildInfoTable->AddField("Esta guilda foi criada em <b>".\Core\Main::formatDate($this->guild->GetCreationDate())."</b>.");
 		$guildInfoTable->AddRow();
+		
+		$owner = new \Framework\Player();
+		$owner->load($this->guild->GetOwnerId());
+		
+		$guildInfoTable->AddField("O personagem <b>{$owner}</b> é o atual dono desta guild.");
+		$guildInfoTable->AddRow();		
 		
 		if($this->loggedAcc and $this->memberLevel > \Framework\Guilds::RANK_NO_MEMBER)
 		{	
@@ -106,24 +115,7 @@ class View
 		{
 			$guildInfoTable->AddField("Estado de Guerra: <b>{$warStatus}</b>");
 			$guildInfoTable->AddRow();	
-		}	
-				
-		$guildPage = "
-		<div title='guild_page' class='viewable' style='margin: 0px; padding: 0px;'>
-		
-			{$guildTable->Draw()}
-		
-			{$guildInfoTable->Draw()}";				
-
-		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
-		{			
-			$guildPage .= "
-			<p>
-				<a class='buttonstd' href='?ref=guilds.edit&name={$this->guild->GetName()}'>Editar Descrições</a>
-			    <a class='buttonstd' href='?ref=guilds.disband&name={$this->guild->GetName()}'>Desmanchar Guild</a>
-			</p>				
-			";	
-		}					
+		}				
 		
 		//loading guild members and preparing table to draw
 		$membersTable = new \Framework\HTML\Table();
@@ -134,6 +126,9 @@ class View
 		
 		$lastRankName = "";
 		$first = true;
+		
+		$totalLevel = 0;
+		$membersCount = 0;
 		
 		foreach($this->guild->Ranks as $rank)
 		{			
@@ -154,6 +149,9 @@ class View
 				
 				$nick = "<a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick} {$online}";
 				
+				$totalLevel += $member->getLevel();
+				$membersCount++;
+				
 				$membersTable->AddField($rankToWrite);
 				$membersTable->AddField($nick);
 				$membersTable->AddField(\Core\Main::formatDate($member->getGuildJoinIn()));
@@ -163,6 +161,29 @@ class View
 			$lastRankName = $rank->GetName();
 			$first = false;
 		}			
+		
+		$guildInfoTable->AddField("Esta guilda possui <b>{$membersCount} membros</b> no total.");
+		$guildInfoTable->AddRow();		
+		
+		$guildInfoTable->AddField("O nível médio dos personagens desta guilda é <b>{$totalLevel}</b>.");
+		$guildInfoTable->AddRow();		
+		
+		$guildPage = "
+		<div title='guild_page' class='viewable' style='margin: 0px; padding: 0px;'>
+		
+		{$guildTable->Draw()}
+		
+		{$guildInfoTable->Draw()}";
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
+		{
+		$guildPage .= "
+		<p>
+			<a class='buttonstd' href='?ref=guilds.edit&name={$this->guild->GetName()}'>Editar Descrições</a>
+			<a class='buttonstd' href='?ref=guilds.disband&name={$this->guild->GetName()}'>Desmanchar Guild</a>
+			</p>
+			";
+			}	
 		
 		$guildPage .= "					
 				

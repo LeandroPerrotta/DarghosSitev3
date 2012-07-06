@@ -216,7 +216,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 					$rank_name = "leader";
 					$rank_pos--;
 					
-					if($memberLevel == \Framework\Guilds::RANK_VICE)
+					if(!\Framework\Guilds::IsAccountGuildOwner($account, $guild))
 						$readOnly = "readonly='readonly'";
 				}
 				elseif($rank_pos == 2)
