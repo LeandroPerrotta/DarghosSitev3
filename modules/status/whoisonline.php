@@ -72,7 +72,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				AND `world_id` = {$world_id}
 			ORDER BY name");
 		else
-			$query = \Core\Main::$DB->query("SELECT name, vocation, level, town_id, account_id FROM players WHERE online = '1' AND world_id = {$world_id} ORDER BY name");
+			$query = \Core\Main::$DB->query("SELECT name, vocation, level, group_id, town_id, account_id FROM players WHERE online = '1' AND world_id = {$world_id} ORDER BY name");
 		
 		$_totalplayers = $stats_fetch->players + $stats_fetch->afk;
 		$_afkPlayers = $stats_fetch->afk;
@@ -126,7 +126,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					
 				if($_isadmin)
 				{						
-					if($fetch->is_spoof == 1)
+					if($fetch->is_spoof == 1 || $fetch->group_id == t_Group::PlayerNonLogout)
 					{
 						$spoofPlayers++;
 						$spoofStyle = "style='font-weight: normal;'";						
