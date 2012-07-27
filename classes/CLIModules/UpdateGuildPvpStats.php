@@ -18,6 +18,8 @@ class UpdateGuildPvpStats
 	
 	function Run()
 	{
+		echo "Running UpdateGuildPvpStats...\n";
+		
 		$values = json_decode(Main::readTempFile("values.json"));
 		
 		$lastUpdateDate = $values["lastUpdateGuildPvpStats"];
