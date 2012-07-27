@@ -83,7 +83,8 @@ class Guilds
 		if($query->numRows() == 0)
 			return false;
 	
-		return $query->fetch()->guild_id;
+		$fetch = $query->fetch();
+		return $fetch->guild_id;
 	}	
 	
 	static function IsAccountGuildOwner(Account $account, Guilds $guild)
