@@ -78,6 +78,14 @@ class Guilds
 		return $level;
 	}
 	
+	static function GetGuildIdByRankId($rank_id){
+		$query = \Core\Main::$DB->query("SELECT `guild_id` FROM `guild_ranks` WHERE `id` = `{$rank_id}`");
+		if($query->numRows() == 0)
+			return false;
+	
+		return $query->fetch()->guild_id;
+	}	
+	
 	static function IsAccountGuildOwner(Account $account, Guilds $guild)
 	{
 		$char_list = $account->getCharacterList(Account::PLAYER_LIST_BY_ID);
