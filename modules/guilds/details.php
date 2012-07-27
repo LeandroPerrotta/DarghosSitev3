@@ -479,6 +479,10 @@ class View
 		foreach($guilds as $g)
 		{
 			$g instanceof \Framework\Guilds;
+			
+			if($g->GetId() == $this->guild->GetId())
+				continue;
+			
 			$frags = $this->guild->KillsCountAgainst($g->GetId(), time() - (60 * 60 * 24 * 7));
 			$enemyFrags = $g->KillsCountAgainst($this->guild->GetId(), time() - (60 * 60 * 24 * 7));
 			
@@ -527,7 +531,7 @@ class View
 			</div>
 			";		
 
-			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."$winning->GetImage()}' height='100' width='100' />");
+			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$winning->GetImage()}' height='100' width='100' />");
 			$fightTable->AddField($guild_result, 90);
 			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' />");
 			$fightTable->AddRow();			
