@@ -467,9 +467,6 @@ class View
 		/*
 		 * FIGHTS
 		*/
-		$fightPage = "
-		<p>Confrontos ocorrem quando um personagem de uma guilda é morto por um ou mais jogadores de outra guilda. Os confrontos são rastreados automaticamente, sem necessitar por exemplo que as guilds em questão estejam em guerra.</p>
-		";		
 		
 		//guild info header
 		$fightTodayTable = new \Framework\HTML\Table();
@@ -567,6 +564,7 @@ class View
 		<div title='guild_fights' style='margin: 0px; padding: 0px;'>";
 			
 		$fightPage .= "
+		<p>Confrontos ocorrem quando um personagem de uma guilda é morto por um ou mais jogadores de outra guilda. Os confrontos são rastreados automaticamente, sem necessitar por exemplo que as guilds em questão estejam em guerra.</p>
 		<p><h3>Confrontos</h3></p>
 			
 		{$fightTodayTable->Draw()}
