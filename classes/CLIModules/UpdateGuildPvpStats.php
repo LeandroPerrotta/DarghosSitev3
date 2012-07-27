@@ -57,6 +57,11 @@ class UpdateGuildPvpStats
 				}			
 			}
 		}
+		
+		$values["lastUpdateGuildPvpStats"] = time();
+		$json = json_encode ($values);
+		
+		Main::writeTempFile ("values.json", $json);		
 	}
 }
 ?>
