@@ -467,12 +467,35 @@ class View
 		/*
 		 * FIGHTS
 		*/
-		$fightPage = "";
+		$fightPage = "
+		<p>Confrontos ocorrem quando um personagem de uma guilda é morto por um ou mais jogadores de outra guilda. Os confrontos são rastreados automaticamente, sem necessitar por exemplo que as guilds em questão estejam em guerra.</p>
+		";		
 		
 		//guild info header
+		$fightTodayTable = new \Framework\HTML\Table();
+		$fightTodayTable->AddField("Ultimas 24h", null, null, 3);
+		$fightTodayTable->AddRow();
+		
+		$fightWeekTable = new \Framework\HTML\Table();
+		$fightWeekTable->AddField("Ultimos 7 dias", null, null, 3);
+		$fightWeekTable->AddRow();		
+		
+		$fightMontlyTable = new \Framework\HTML\Table();
+		$fightMontlyTable->AddField("Ultimos 30 dias", null, null, 3);
+		$fightMontlyTable->AddRow();	
+			
 		$fightTable = new \Framework\HTML\Table();
-		$fightTable->AddField("Ultimos 7 dias", null, null, 3);
-		$fightTable->AddRow();
+		$fightTable->AddField("Geral", null, null, 3);
+		$fightTable->AddRow();		
+		
+		$fightData = array(
+				
+				array("timestamp" => time() - (60 * 60 * 24), "table" => &$fightTodayTable)
+				,array("timestamp" => time() - (60 * 60 * 24 * 7), "table" => &$fightWeekTable)
+				,array("timestamp" => time() - (60 * 60 * 24 * 30), "table" => &$fightMontlyTable)
+				,array("timestamp" => 0, "table" => &$fightTable)
+		);
+		
 				
 		$guilds = \Framework\Guilds::ActivedGuildsList($this->guild->GetWorldId());
 		
@@ -483,66 +506,72 @@ class View
 			if($g->GetId() == $this->guild->GetId())
 				continue;
 			
-			$frags = $this->guild->KillsCountAgainst($g->GetId(), time() - (60 * 60 * 24 * 7));
-			$enemyFrags = $g->KillsCountAgainst($this->guild->GetId(), time() - (60 * 60 * 24 * 7));
-			
-			if($frags == 0 && $enemyFrags == 0)
+			foreach($fightTable as $f)
 			{
-				continue;
-			}
-			
-			$winning = $frags > $enemyFrags ? $this->guild : $g;			
-			$loosing = $winning == $this->guild ? $g : $this->guild;
-			
-			$winningPoints = $frags;
-			$loosingPoints = $enemyFrags;
-			
-			if($enemyFrags > $frags){
-				$winningPoints = $enemyFrags;
-				$loosingPoints = $frags;
-			}
-			
-			$guild_result = "
-			<div>
-			<div style='display: inline-block; width: 157px; text-align: right;'>
-			<a style='line-height: 22px;' href='?ref=guilds.details&name={$winning->GetName()}'>{$winning->GetName()}</a>
-			</div>
-			
-			<div style='display: inline-block;'>
-			<span style='font-weight: bold; font-size: 18px; margin-left: 5px; margin-right: 5px;'>vs</span>
-			</div>
-			
-			<div style='display: inline-block;  width: 157px;'>
-			<a style='line-height: 22px;' href='?ref=guilds.details&name={$loosing->GetName()}'>{$loosing->GetName()}</a>
-			</div>
-			</div>
-			<div style='text-align: center;'>
-			<div style='float: left; width: 165px; text-align: right;'>
-			<h3 style='font-size: 40px;'>{$winningPoints}</h3>
-			</div>
-			
-			<div style='display: inline-block;'>
-			<span style='display: table-cell; font-weight: bold; height: 50px; width: 15px; font-size: 14px; vertical-align: middle; text-align: center;'>X</span>
-			</div>
-			
-			<div style='float: right; width: 165px;  text-align: left;'>
-			<h3 style='font-size: 40px;'>{$loosingPoints}</h3>
-			</div>
-			</div>
-			";		
-
-			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$winning->GetImage()}' height='100' width='100' />");
-			$fightTable->AddField($guild_result, 90);
-			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' />");
-			$fightTable->AddRow();			
+				$frags = $this->guild->KillsCountAgainst($g->GetId(), $f["timestamp"]);
+				$enemyFrags = $g->KillsCountAgainst($this->guild->GetId(), $f["timestamp"]);
+				
+				if($frags == 0 && $enemyFrags == 0)
+				{
+					continue;
+				}
+				
+				$winning = $frags > $enemyFrags ? $this->guild : $g;			
+				$loosing = $winning == $this->guild ? $g : $this->guild;
+				
+				$winningPoints = $frags;
+				$loosingPoints = $enemyFrags;
+				
+				if($enemyFrags > $frags){
+					$winningPoints = $enemyFrags;
+					$loosingPoints = $frags;
+				}
+				
+				$guild_result = "
+				<div>
+				<div style='display: inline-block; width: 157px; text-align: right;'>
+				<a style='line-height: 22px;' href='?ref=guilds.details&name={$winning->GetName()}'>{$winning->GetName()}</a>
+				</div>
+				
+				<div style='display: inline-block;'>
+				<span style='font-weight: bold; font-size: 18px; margin-left: 5px; margin-right: 5px;'>vs</span>
+				</div>
+				
+				<div style='display: inline-block;  width: 157px;'>
+				<a style='line-height: 22px;' href='?ref=guilds.details&name={$loosing->GetName()}'>{$loosing->GetName()}</a>
+				</div>
+				</div>
+				<div style='text-align: center;'>
+				<div style='float: left; width: 165px; text-align: right;'>
+				<h3 style='font-size: 40px;'>{$winningPoints}</h3>
+				</div>
+				
+				<div style='display: inline-block;'>
+				<span style='display: table-cell; font-weight: bold; height: 50px; width: 15px; font-size: 14px; vertical-align: middle; text-align: center;'>X</span>
+				</div>
+				
+				<div style='float: right; width: 165px;  text-align: left;'>
+				<h3 style='font-size: 40px;'>{$loosingPoints}</h3>
+				</div>
+				</div>
+				";		
+	
+				$f["table"]->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$winning->GetImage()}' height='100' width='100' />");
+				$f["table"]->AddField($guild_result, 90);
+				$f["table"]->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' />");
+				$f["table"]->AddRow();	
+			}		
 		}	
 		
 		$fightPage = "
 		<div title='guild_fights' style='margin: 0px; padding: 0px;'>";
 			
 		$fightPage .= "
-		<p><h3>Confrontos Recentes</h3></p>
+		<p><h3>Confrontos</h3></p>
 			
+		{$fightTodayTable->Draw()}
+		{$fightWeekTable->Draw()}
+		{$fightMontlyTable->Draw()}
 		{$fightTable->Draw()}
 		
 		</div>
