@@ -25,8 +25,8 @@ class UpdateGuildPvpStats
 			$values = json_decode($temp);
 		}
 		
-		if($values["lastUpdateGuildPvpStats"])
-			$lastUpdateDate = $values["lastUpdateGuildPvpStats"];
+		if($values->lastUpdateGuildPvpStats)
+			$lastUpdateDate = $values->lastUpdateGuildPvpStats;
 		else
 			$lastUpdateDate = 0;
 		
@@ -81,7 +81,7 @@ class UpdateGuildPvpStats
 			}
 		}
 		
-		$values["lastUpdateGuildPvpStats"] = time();
+		$values->lastUpdateGuildPvpStats = time();
 		$json = json_encode ($values);
 		
 		Main::writeTempFile ("values.json", $json);		
