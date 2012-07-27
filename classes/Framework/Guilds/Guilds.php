@@ -576,6 +576,12 @@ class Guilds
 		return false;
 	}
 	
+	function KillsCountAgainst($guild_id, $timestamp = 0)
+	{		
+		$query = \Core\Main::$DB->query("SELECT COUNT(*) as `count` FROM `guild_pvp_deaths` `d` LEFT JOIN `guild_pvp_kills` `k` ON `k`.`guild_pvp_death_id` = `d`.`id` LEFT JOIN `player_deaths` `pd` ON `pd`.`id` = `d`.`death_id` WHERE `d`.`guild_id` = {$guild_id} AND `k`.`guild_id` = {$this->_id} AND `pd`.`date` >= {$timestamp}");
+		return $query->fetch()->count;
+	}
+	
 	//setter & getters
 	
 	function SetId($id)

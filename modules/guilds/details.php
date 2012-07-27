@@ -277,6 +277,9 @@ class View
 		</div>
 		";
 		
+		/*
+		 * WARS
+		 */
 		$warPage = "";
 		
 		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
@@ -461,11 +464,92 @@ class View
 			";
 		}
 		
+		/*
+		 * FIGHTS
+		*/
+		$fightPage = "";
+		
+		//guild info header
+		$fightTable = new \Framework\HTML\Table();
+		$fightTable->AddField("Ultimos 7 dias", null, null, 3);
+		$fightTable->AddRow();
+				
+		$guilds = \Framework\Guilds::ActivedGuildsList($this->guild->GetWorldId());
+		
+		foreach($guilds as $g)
+		{
+			$g instanceof \Framework\Guilds;
+			$frags = $this->guild->KillsCountAgainst($g->GetId(), time() - (60 * 60 * 24 * 7));
+			$enemyFrags = $g->KillsCountAgainst($this->guild->GetId(), time() - (60 * 60 * 24 * 7));
+			
+			if($frags == 0 && $enemyFrags == 0)
+			{
+				continue;
+			}
+			
+			$winning = $frags > $enemyFrags ? $this->guild : $g;			
+			$loosing = $winning == $this->guild ? $g : $this->guild;
+			
+			$winningPoints = $frags;
+			$loosingPoints = $enemyFrags;
+			
+			if($enemyFrags > $frags){
+				$winningPoints = $enemyFrags;
+				$loosingPoints = $frags;
+			}
+			
+			$guild_result = "
+			<div>
+			<div style='display: inline-block; width: 157px; text-align: right;'>
+			<a style='line-height: 22px;' href='?ref=guilds.details&name={$winning->GetName()}'>{$winning->GetName()}</a>
+			</div>
+			
+			<div style='display: inline-block;'>
+			<span style='font-weight: bold; font-size: 18px; margin-left: 5px; margin-right: 5px;'>vs</span>
+			</div>
+			
+			<div style='display: inline-block;  width: 157px;'>
+			<a style='line-height: 22px;' href='?ref=guilds.details&name={$loosing->GetName()}'>{$loosing->GetName()}</a>
+			</div>
+			</div>
+			<div style='text-align: center;'>
+			<div style='float: left; width: 165px; text-align: right;'>
+			<h3 style='font-size: 40px;'>{$winningPoints}</h3>
+			</div>
+			
+			<div style='display: inline-block;'>
+			<span style='display: table-cell; font-weight: bold; height: 50px; width: 15px; font-size: 14px; vertical-align: middle; text-align: center;'>X</span>
+			</div>
+			
+			<div style='float: right; width: 165px;  text-align: left;'>
+			<h3 style='font-size: 40px;'>{$loosingPoints}</h3>
+			</div>
+			</div>
+			";		
+
+			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."$winning->GetImage()}' height='100' width='100' />");
+			$fightTable->AddField($guild_result, 90);
+			$fightTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' />");
+			$fightTable->AddRow();			
+		}	
+		
+		$fightPage = "
+		<div title='guild_fights' style='margin: 0px; padding: 0px;'>";
+			
+		$fightPage .= "
+		<p><h3>Confrontos Recentes</h3></p>
+			
+		{$fightTable->Draw()}
+		
+		</div>
+		";		
+		
 		$module .= "
 		<fieldset>
 			<div class='autoaction' style='margin: 0px; margin-top: 20px; padding: 0px;'>
 				<select>
-					<option value='guild_page'>Pagina da Guilda</option>";
+					<option value='guild_page'>Pagina da Guilda</option>
+					<option value='guild_fights'>Confrontos</option>";
 		
 					if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 					{
@@ -479,6 +563,7 @@ class View
 			
 			{$guildPage}
 			{$warPage}
+			{$fightPage}
 		</fieldset>	
 		";
 	}

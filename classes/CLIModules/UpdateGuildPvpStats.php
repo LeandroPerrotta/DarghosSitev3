@@ -40,8 +40,12 @@ class UpdateGuildPvpStats
 			while ($fetch = $query->fetch()) {
 				$guild_id = Guilds::GetGuildIdByRankId($fetch->rank_id);
 				
-				$this->db->ExecQuery("INSERT INTO `guild_pvp_deaths` (`guild_id`, `death_id`) VALUES ({$guild_id}, {$fetch->id})");
-				$guild_pvp_death_id = $this->db->lastInsertId();
+				if(!$guild_id){
+					echo "Guild id for rank {$fetch->rank_id} of player {$fetch->player_id} not found!\n";
+					continue;
+				}
+				
+				$guild_pvp_death_id = 0;
 				
 				$death = new Deaths();
 				$deathList = $death->load($fetch->id);
@@ -58,11 +62,18 @@ class UpdateGuildPvpStats
 							$killer->load($killerEntry["killer"]);
 											
 							if($killer->LoadGuild()){
-								if(in_array($killer->getGuildId, $guildKillers))
+								if(in_array($killer->getGuildId(), $guildKillers))
 									continue;
+								else
+								{
+									if($guild_pvp_death_id == 0){
+										$this->db->ExecQuery("INSERT INTO `guild_pvp_deaths` (`guild_id`, `death_id`) VALUES ({$guild_id}, {$fetch->id})");
+										$guild_pvp_death_id = $this->db->lastInsertId();
+									}									
+								}									
 								
-								$this->db->ExecQuery("INSERT INTO `guild_pvp_kills` (`guild_id`, `guild_pvp_death_id`) VALUES ({$killer->getGuildId}, {$guild_pvp_death_id})");
-								$guildKillers[] = $guild_pvp_death_id;
+								$this->db->ExecQuery("INSERT INTO `guild_pvp_kills` (`guild_id`, `guild_pvp_death_id`) VALUES ({$killer->getGuildId()}, {$guild_pvp_death_id})");
+								$guildKillers[] = $killer->getGuildId();
 							}
 						}
 					}
