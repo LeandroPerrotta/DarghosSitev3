@@ -18,17 +18,27 @@ class UpdateGuildPvpStats
 	
 	function Run()
 	{
+		$values = array();
+		
+		$temp = Main::readTempFile("values.json") ;
+		if($temp){
+			$values = json_decode($temp);
+		}
+		
+		if($values["lastUpdateGuildPvpStats"])
+			$lastUpdateDate = $values["lastUpdateGuildPvpStats"];
+		else
+			$lastUpdateDate = 0;
+		
 		echo "Running UpdateGuildPvpStats...\n";
+		echo "LastUpdateDate: {$lastUpdateDate}\n";
 		
-		$values = json_decode(Main::readTempFile("values.json"));
-		
-		$lastUpdateDate = $values["lastUpdateGuildPvpStats"];
-		
-		$query = $this->db->query("SELECT `d`.`id`, `d`.`player_id`. `p`.`guild_rank` FROM `player_deaths` `d` LEFT JOIN `players` `p` ON `p`.`id` = `d`.`player_id` WHERE `d`.`date` > {$lastUpdateDate} AND `p`.`guild_rank` != 0");
-		
+		$query = $this->db->query("SELECT `d`.`id`, `d`.`player_id`, `p`.`rank_id` FROM `player_deaths` `d` LEFT JOIN `players` `p` ON `p`.`id` = `d`.`player_id` WHERE `d`.`date` > {$lastUpdateDate} AND `p`.`rank_id` != 0");
+
+		echo "Checking for {$query->numRows()} player deaths entries...\n";
 		if($query->numRows() > 0){
-			while ( ($fetch = $query->fetch ()) ) {
-				$guild_id = Guilds::GetGuildIdByRankId($fetch->guild_rank);
+			while ($fetch = $query->fetch()) {
+				$guild_id = Guilds::GetGuildIdByRankId($fetch->rank_id);
 				
 				$this->db->ExecQuery("INSERT INTO `guild_pvp_deaths` (`guild_id`, `death_id`) VALUES ({$guild_id}, {$fetch->id})");
 				$guild_pvp_death_id = $this->db->lastInsertId();

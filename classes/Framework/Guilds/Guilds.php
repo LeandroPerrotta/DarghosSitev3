@@ -79,7 +79,7 @@ class Guilds
 	}
 	
 	static function GetGuildIdByRankId($rank_id){
-		$query = \Core\Main::$DB->query("SELECT `guild_id` FROM `guild_ranks` WHERE `id` = `{$rank_id}`");
+		$query = \Core\Main::$DB->query("SELECT `guild_id` FROM `guild_ranks` WHERE `id` = {$rank_id}");
 		if($query->numRows() == 0)
 			return false;
 	
