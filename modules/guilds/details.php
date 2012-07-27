@@ -506,7 +506,7 @@ class View
 			if($g->GetId() == $this->guild->GetId())
 				continue;
 			
-			foreach($fightTable as $f)
+			foreach($fightData as $f)
 			{
 				$frags = $this->guild->KillsCountAgainst($g->GetId(), $f["timestamp"]);
 				$enemyFrags = $g->KillsCountAgainst($this->guild->GetId(), $f["timestamp"]);
