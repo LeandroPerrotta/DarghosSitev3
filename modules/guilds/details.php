@@ -586,7 +586,7 @@ class View
 					if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 					{
 						$module .= "
-						<li name='guild_fights'><span>Guerras</span></li>";
+						<li name='guild_wars'><span>Guerras</span></li>";
 					}				
 				
 					$module .= "

@@ -38,7 +38,6 @@ if($_POST["player_name"] || $_GET['name'])
 		$oldnames = $player->loadOldNames();
 	
 		$module .= "
-		<br>
 		<div id='horizontalSelector'>
 			<span name='left_corner'></span>
 			<ul>

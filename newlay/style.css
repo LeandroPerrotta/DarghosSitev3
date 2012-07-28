@@ -589,7 +589,7 @@ ul li {
 }
 
 #horizontalSelector {
-
+	margin-top: 25px;
 }
 
 #horizontalSelector span[name='left_corner']{
