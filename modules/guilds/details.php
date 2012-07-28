@@ -553,9 +553,9 @@ class View
 				</div>
 				";		
 	
-				$f["table"]->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$winning->GetImage()}' height='100' width='100' />");
+				$f["table"]->AddField("<a href='?ref=guilds.details&name={$winning->GetName()}'><img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$winning->GetImage()}' height='100' width='100' /></a>");
 				$f["table"]->AddField($guild_result, 90);
-				$f["table"]->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' />");
+				$f["table"]->AddField("<a href='?ref=guilds.details&name={$loosing->GetName()}'><img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' /></a>");
 				$f["table"]->AddRow();	
 			}		
 		}	

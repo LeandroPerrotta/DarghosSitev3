@@ -41,7 +41,7 @@ if(isset($_GET["world"]))
 			
 			foreach($guildsActived as $guild)
 			{			
-				$_guildsTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}'' height='100' width='100' />");
+				$_guildsTable->AddField("<a href='?ref=guilds.details&name={$guild->GetName()}'><img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}'' height='100' width='100' /></a>");
 				
 				$string = "
 					<a href='?ref=guilds.details&name={$guild->GetName()}'>{$guild->GetName()}</a><br>
@@ -85,7 +85,7 @@ if(isset($_GET["world"]))
 				
 				foreach($guildsForming as $guild)
 				{	
-					$_formingTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}'' height='100' width='100' />");
+					$_formingTable->AddField("<a href='?ref=guilds.details&name={$guild->GetName()}'><img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}'' height='100' width='100' /></a>");
 					
 					$string = "
 						<a href='?ref=guilds.details&name={$guild->GetName()}'>{$guild->GetName()}</a><br>
