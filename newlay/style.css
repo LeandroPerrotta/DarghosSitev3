@@ -632,7 +632,7 @@ ul li {
 	font-weight: bold;
 }
 
-#horizontalSelector ul li span:hover, #horizontalSelector ul li[checked="true"]{
+#horizontalSelector ul li span:hover, #horizontalSelector ul li[checked="checked"]{
 	cursor: pointer;
 	background: #333 url(images/tileitem_over2.png) repeat-x;
 }

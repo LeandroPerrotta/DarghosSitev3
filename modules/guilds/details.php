@@ -577,20 +577,22 @@ class View
 		
 		$module .= "
 		<fieldset>
-			<div class='autoaction' style='margin: 0px; margin-top: 20px; padding: 0px;'>
-				<select>
-					<option value='guild_page'>Pagina da Guilda</option>
-					<option value='guild_fights'>Confrontos</option>";
-		
+			<div id='horizontalSelector'>
+				<span name='left_corner'></span>
+				<ul>
+					<li name='guild_page' checked='checked'><span>Profile</span></li>
+					<li name='guild_fights'><span>Confrontos</span></li>";
+				
 					if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 					{
 						$module .= "
-						<option value='guild_wars'>Guerras da Guilda</option>";
-					}
-					
-				$module .= "
-				</select>
-			</div>		
+						<li name='guild_fights'><span>Guerras</span></li>";
+					}				
+				
+					$module .= "
+				</ul>
+				<span name='right_corner'></span>
+			</div>			
 			
 			{$guildPage}
 			{$warPage}

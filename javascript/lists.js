@@ -118,14 +118,15 @@ $(document).ready(function() {
 	$("#horizontalSelector").nextAll("div[class!='viewable']").hide();
 	
 	$("#horizontalSelector ul li").click(function(){
-			
-		$(this).parent().children().each(function(){
-			if($(this).attr("checked") == "true" || $(this).attr("checked") == "checked")
-				$(this).attr("checked", "");
+		
+		$("#horizontalSelector ul li").each(function(index){
+			if($(this).attr("checked") == "checked")
+				$(this).removeAttr("checked");
 		});
 		
 		$(this).attr("checked", "checked");
-		var valueSelected = $(this).attr("name");
+		var valueSelected = $(this).attr("name");		
+		
 		
 		$("#horizontalSelector").nextAll('div[title!="' + valueSelected + '"]').hide();
 		$("#horizontalSelector").nextAll("div[title='" + valueSelected + "']").slideDown();	

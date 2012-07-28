@@ -42,7 +42,7 @@ if($_POST["player_name"] || $_GET['name'])
 		<div id='horizontalSelector'>
 			<span name='left_corner'></span>
 			<ul>
-				<li name='profile' checked='true'><span>Profile</span></li>
+				<li name='profile' checked='checked'><span>Profile</span></li>
 				<li name='statistics'><span>Estatisticas</span></li>
 				<li name='achievements'><span>Façanhas</span></li>
 				<li name='accounts'><span>Conta</span></li>
