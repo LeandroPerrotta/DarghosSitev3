@@ -541,7 +541,7 @@ else
 		$module .= "
 		<div style='margin-top: 16px;' id='new-title-bar'>
 			<h3 id='new-title'>
-				".g_Configs::Get(g_Configs::eConf()->MANUTENTION_TITLE)."
+				".g_Configs::Get(g_Configs::eConf()->MENUTENTION_TITLE)."
 			</h3>
 			<div id='infos-line'>
 			</div>	
