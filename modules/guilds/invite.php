@@ -136,6 +136,7 @@ class View
 		$player->loadByName($_GET['name']);
 		$player->removeInvite();
 		
+		Guilds::LogMessage("Guild {$this->guild->GetName()} ({$this->guild->GetId()}) has canceled the invite to player {$player->getName()} ({$player->getId()}) by account id {$this->loggedAcc->getId()}.");
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITE_CANCEL, $player->getName());
 		return true;		
 	}
