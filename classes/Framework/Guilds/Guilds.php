@@ -20,7 +20,13 @@ class Guilds
 		
 		,WAR_STARTED = 1
 		,WAR_DISABLED = 0
+		
+		,LOG_LEVEL_NONE = 0
+		,LOG_LEVEL_NORMAL = 1
+		,LOG_LEVEL_ALL = 2
 		;
+		
+	private static $LOG_LEVEL = self::LOG_LEVEL_NORMAL;
 		
 	private $_id, $_worldId, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
 	public $Ranks = array(), $Invites = array(), $Wars = array();
@@ -29,6 +35,17 @@ class Guilds
 	function __construct()
 	{
 
+	}
+	
+	static function LogMessage($message, $level = self::LOG_LEVEL_NORMAL)
+	{
+		if($level <= self::$LOG_LEVEL)
+		{
+			$date = date("d-m-y");
+			$mins = date("G:i:s");
+			
+			error_log("[{$mins}] {$message}", 3, "/var/www/darghos/logs/guilds_{$date}.log");
+		}	
 	}
 
 	static function isAtSameWorld(Guilds $guild, $comp_guild)

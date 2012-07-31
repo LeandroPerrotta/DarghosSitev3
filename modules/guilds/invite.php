@@ -242,14 +242,25 @@ class View
 			return false;
 		}
 
+		$logStr = "Guild {$this->guild->GetName()} ({$this->guild->GetId()}) has invited the followed player list to join by {$this->loggedAcc->getId()}:\n";
+		
+		$f = true;
 		foreach($invites_list as $player_name)
 		{
 			$player = new \Framework\Player();
 			
 			$player->loadByName($player_name);
+			
+			if($f)
+				$f = false;
+			else
+				$logStr .= ", ";
+			
+			$logStr .= "{$player->getName()} ({$player->getId()})";
 			$player->inviteToGuild($this->guild->GetId());
 		}
 		
+		Guilds::LogMessage($logStr);
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_INVITEDS);		
 
 		return true;

@@ -1,11 +1,15 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";		
 	
-	function proccessPost(&$message, \Framework\Account $account, \Framework\Guilds $guild)
+	$account = new \Framework\Account();
+	$account->load($_SESSION['login'][0]);	
+	
+	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
 	{		
 		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
@@ -19,16 +23,14 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 					
+		Guilds::LogMessage("Guild {$guild->GetName()} ({$guild->GetId()}) disbanded account id {$account->getId()}.");
 		$guild->Delete();
 		
 		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_DISBANDED, $_GET['name']);	
 		return true;
 	}
 	
-	$account = new \Framework\Account();
-	$account->load($_SESSION['login'][0]);
-	
-	$guild = new \Framework\Guilds();
+	$guild = new Guilds();
 
 	if(!$guild->LoadByName($_GET['name']))
 	{	

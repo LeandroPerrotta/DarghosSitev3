@@ -1,5 +1,6 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 class View
 {
 	//html fields
@@ -91,7 +92,7 @@ class View
 		
 		list($guild_id, $invite_date) = $invite;
 		
-		$guild = new \Framework\Guilds();
+		$guild = new Guilds();
 		$guild->Load($guild_id);	
 
 		if($guild->OnWar())
@@ -103,10 +104,12 @@ class View
 		if($this->_reply->GetPost() == "Aceitar")		
 		{			
 			$this->player->acceptInvite();	
+			Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has joined to guild {$guild->GetName()} ({$guild->GetId()}).");
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_JOIN, $_GET['name'], $guild->GetName());
 		}
 		elseif($this->_reply->GetPost() == "Rejeitar")
 		{
+			Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has declined to join to guild {$guild->GetName()} ({$guild->GetId()}).");
 			$this->player->removeInvite();
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_JOIN_REJECT, $guild->GetName(), $_GET['name']);		
 		}	

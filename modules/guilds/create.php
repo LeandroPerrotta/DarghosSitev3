@@ -1,5 +1,6 @@
 <?
 use \Core\Configs;
+use \Framework\Guilds;
 if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
@@ -22,7 +23,7 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
-		$guild = new \Framework\Guilds();
+		$guild = new Guilds();
 		
 		if($guild->LoadByName($_POST["guild_name"]))
 		{
@@ -79,6 +80,7 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		
 		$player->save();
 		
+		Guilds::LogMessage("Guild {$guild->GetName()} ({$guild->GetId()}) created by {$player->getName()} ({$player->getId()}).");
 		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CREATED, $_POST["guild_name"], Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION), Configs::Get(Configs::eConf()->GUILDS_FORMATION_WAIT_DAYS));
 		
 		return true;

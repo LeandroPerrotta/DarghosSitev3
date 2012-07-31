@@ -1,12 +1,13 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";	
 
-	function proccessPost(&$message, \Framework\Account $account, \Framework\Guilds $guild)
-	{
+	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
+	{		
 		$guild_image = isset($_FILES['guild_image']) ? $_FILES['guild_image'] : false;
 		
 		if($guild_image["name"])
@@ -37,7 +38,6 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_FILE_WRONG);
 			return false;
 		}
-		
 		if($guild_image["name"] and ($image_infos[0] != 100 or $image_infos[1] != 100))
 		{
 			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LOGO_DIMENSION_WRONG);
@@ -50,8 +50,9 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}						
 
-		
+		$logStr = "Guild {$guild->GetName()} ({$guild->GetId()}) has informations modified by account id {$account->getId()}:\n Motd:\n{$guild->GetMotd()}\n\nTo:\n{$_POST["guild_motd"]}";
 		$guild->SetMotd(strip_tags($_POST["guild_motd"]));
+		
 		
 		if($guild_image)
 		{
@@ -61,12 +62,16 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			$name = \Core\Strings::randKey(10, 1, "lower+number").$extension[0];
 			$file = Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS).$name;
 			
+			
 			if(move_uploaded_file($guild_image["tmp_name"], $file))
 			{
+				$logStr .= "\n\nImage:\n{$guild->GetImage()}\n\n To: {$name}";
 				$guild->SetImage($name);
-			}		
+			}			
 		}
 		
+		
+		Guilds::LogMessage($logStr);
 		$guild->Save();
 		
 		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_DESC_CHANGED);		

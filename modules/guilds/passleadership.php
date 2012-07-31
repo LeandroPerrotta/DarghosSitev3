@@ -1,11 +1,12 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
 	$result = false;
 	$message = "";	
 
-	function proccessPost(&$message, \Framework\Account $account, \Framework\Guilds $guild)
+	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
 	{
 		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
@@ -24,15 +25,15 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		$member->LoadGuild();
 		
 		$level = $member->GetGuildLevel();
-		if($level != \Framework\Guilds::RANK_VICE && $level != \Framework\Guilds::RANK_LEADER)
+		if($level != Guilds::RANK_VICE && $level != Guilds::RANK_LEADER)
 		{
 			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
 			return false;
 		}
 		
-		$leader_rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER);
-		$vice_rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
-
+		$leader_rank = $guild->SearchRankByLevel(Guilds::RANK_LEADER);
+		$vice_rank = $guild->SearchRankByLevel(Guilds::RANK_VICE);
+		
 		$member->setGuildRankId($leader_rank->GetId());
 		$member->save();		
 		
@@ -41,6 +42,8 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		$old_owner->LoadGuild();
 		$old_owner->setGuildRankId($vice_rank->GetId());
 		$old_owner->save();
+		
+		Guilds::LogMessage("The owner {$old_owner->getName()} ({$old_owner->getId()}) has transfered the guild leadership of {$guild->GetName()} ({$guild->GetId()}) to {$member->getName()} ({$member->getId()}) by account id {$account->getId()}.");
 		
 		$guild->SetOwnerId($member->getId());
 		$guild->Save();		

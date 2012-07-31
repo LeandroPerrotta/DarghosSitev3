@@ -1,11 +1,12 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {	
 	$result = false;
 	$message = "";	
 	
-	function proccessPost(&$message, \Framework\Account $account, \Framework\Guilds $guild)
+	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
 	{			
 		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
@@ -27,7 +28,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			return false;
 		}
 		
-		$rank_opt_3 = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER_OPT_3);
+		$rank_opt_3 = $guild->SearchRankByLevel(Guilds::RANK_MEMBER_OPT_3);
 		if($_POST["member_2"])
 		{
 			if(strlen($_POST["member_2"]) > 35)
@@ -43,7 +44,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}			
 			
 			$rank_opt_3->SetName($_POST["member_2"]);
-			$rank_opt_3->SetLevel(\Framework\Guilds::RANK_MEMBER_OPT_3);
+			$rank_opt_3->SetLevel(Guilds::RANK_MEMBER_OPT_3);
 		}
 		else
 		{			
@@ -59,7 +60,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}		
 		}
 		
-		$rank_opt_2 = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER_OPT_2);
+		$rank_opt_2 = $guild->SearchRankByLevel(Guilds::RANK_MEMBER_OPT_2);
 		if($_POST["member_3"])
 		{
 			if(strlen($_POST["member_3"]) > 35)
@@ -81,7 +82,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}			
 			
 			$rank_opt_2->SetName($_POST["member_3"]);
-			$rank_opt_2->SetLevel(\Framework\Guilds::RANK_MEMBER_OPT_2);
+			$rank_opt_2->SetLevel(Guilds::RANK_MEMBER_OPT_2);
 		}
 		else
 		{
@@ -97,7 +98,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}			
 		}
 		
-		$rank_opt_1 = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER_OPT_1);
+		$rank_opt_1 = $guild->SearchRankByLevel(Guilds::RANK_MEMBER_OPT_1);
 		if($_POST["member_4"])
 		{
 			if(strlen($_POST["member_4"]) > 35)
@@ -119,7 +120,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			}
 			
 			$rank_opt_1->SetName($_POST["member_4"]);
-			$rank_opt_1->SetLevel(\Framework\Guilds::RANK_MEMBER_OPT_1);				
+			$rank_opt_1->SetLevel(Guilds::RANK_MEMBER_OPT_1);				
 		}
 		else
 		{		
@@ -140,16 +141,21 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		//deletamos os ranks marcados para serem deletados (que não foram preenchidos)
 		$guild->DeleteRanks();
 		
+		$logStr = "The guild {$guild->GetName()} ({$guild->GetId()}) has following ranks changed by account id {$account->getId()}:\n";
+		
 		//alteramos os nomes dos ranks primarios
-		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER);
+		$rank = $guild->SearchRankByLevel(Guilds::RANK_LEADER);
+		$logStr .= "{$rank->GetName()} ({$rank->GetId()}) to {$_POST["leader"]}\n";
 		$rank->SetName($_POST["leader"]);
 		$rank->Save();
 		
-		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
+		$rank = $guild->SearchRankByLevel(Guilds::RANK_VICE);
+		$logStr .= "{$rank->GetName()} ({$rank->GetId()}) to {$_POST["vice"]}\n";
 		$rank->SetName($_POST["vice"]);	
 		$rank->Save();	
 		
-		$rank = $guild->SearchRankByLevel(\Framework\Guilds::RANK_MEMBER);
+		$rank = $guild->SearchRankByLevel(Guilds::RANK_MEMBER);
+		$logStr .= "{$rank->GetName()} ({$rank->GetId()}) to {$_POST["member_1"]}\n";
 		$rank->SetName($_POST["member_1"]);	
 		$rank->Save();
 
@@ -162,6 +168,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		if($_POST["member_4"])
 			$rank_opt_1->Save();
 		
+		Guilds::LogMessage($logStr);
 		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANKS_EDITED);
 		return true;	
 	}
@@ -170,13 +177,13 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	$guild = new \Framework\Guilds();
+	$guild = new Guilds();
 	
 	if(!$guild->LoadByName($_GET['name']))
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
 	}
-	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) < \Framework\Guilds::RANK_VICE)
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) < Guilds::RANK_VICE)
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
 	}	
@@ -202,7 +209,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 			$rank_n = 0;
 			$member_n = 0;
 			
-			$memberLevel = \Framework\Guilds::GetAccountLevel($account, $guild->GetId());
+			$memberLevel = Guilds::GetAccountLevel($account, $guild->GetId());
 			
 			//pegamos os ranks existentes na guilda e montamos o view
 			foreach($guild->Ranks as $rank)
@@ -216,7 +223,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 					$rank_name = "leader";
 					$rank_pos--;
 					
-					if(!\Framework\Guilds::IsAccountGuildOwner($account, $guild))
+					if(!Guilds::IsAccountGuildOwner($account, $guild))
 						$readOnly = "readonly='readonly'";
 				}
 				elseif($rank_pos == 2)
@@ -224,7 +231,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 					$rank_name = "vice";
 					$rank_pos--;
 					
-					if($memberLevel == \Framework\Guilds::RANK_VICE)
+					if($memberLevel == Guilds::RANK_VICE)
 						$readOnly = "readonly='readonly'";				
 				}
 				elseif($rank_pos == 1)

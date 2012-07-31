@@ -1,5 +1,6 @@
 <?php
 use \Core\Configs;
+use \Framework\Guilds;
 class View
 {
 	//html fields
@@ -69,7 +70,7 @@ class View
 		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-		$this->guild = new \Framework\Guilds();
+		$this->guild = new Guilds();
 		
 		if(!$this->guild->LoadByName($_GET['name']))
 		{
@@ -109,7 +110,8 @@ class View
 			return false;			
 		}
 						
-		$player->setGuildRankId( \Framework\Guilds::RANK_NO_MEMBER );
+		Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has left from guild {$this->guild->GetName()} ({$this->guild->GetId()}).");
+		$player->setGuildRankId( Guilds::RANK_NO_MEMBER );
 		$player->save();
 		
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LEAVE, $this->_character->GetPost(), $_GET['name']);		
