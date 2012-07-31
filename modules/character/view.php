@@ -123,7 +123,11 @@ if($player->LoadGuild())
 	$infos[] = array("Membro da Guild", "{$player->GetGuildRank()} da <a href='?ref=guilds.details&name={$player->GetGuildName()}'>{$player->GetGuildName()}");			
 		
 if($player->getComment())
-	$infos[] = array("Comentario", nl2br($player->getComment()));
+{
+	$str = str_replace('\\r', "", $player->getComment());
+	$str = str_replace('\\n', "<br>", $str);
+	$infos[] = array("Comentario", nl2br($str));
+}
 	
 $infos[] = array("Criado em", $creation);
 $infos[] = array("Último Login:", $lastlogin);
