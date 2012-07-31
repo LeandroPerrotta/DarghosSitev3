@@ -44,7 +44,7 @@ class Guilds
 			$date = date("d-m-y");
 			$mins = date("G:i:s");
 			
-			error_log("[{$mins}] {$message}", 3, "/var/www/darghos/logs/guilds_{$date}.log");
+			error_log("\n[{$mins}] {$message}", 3, "/var/www/darghos/logs/guilds_{$date}.log");
 		}	
 	}
 
