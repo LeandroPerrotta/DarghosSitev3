@@ -331,7 +331,7 @@ class Guilds
 					`ownerid` = '{$this->_ownerid}', 
 					`creationdata` = '{$this->_creationdate}', 
 					`motd` = '{$this->_motd}',
-					`balance` = '{$this->_balance}'
+					`balance` = '{$this->_balance}',
 					`status` = '{$this->_status}'
 				WHERE 
 					`id` = '{$this->_id}'";
