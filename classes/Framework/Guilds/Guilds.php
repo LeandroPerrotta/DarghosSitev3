@@ -121,7 +121,7 @@ class Guilds
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `status` = '".self::STATUS_FORMED."' ORDER BY `creationdate`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `guilds`.`id` FROM `guilds` LEFT JOIN `".\Core\Tools::getSiteTable("guilds")."` as `guild_site` ON `guild_site`.`guild_id` = `guilds`.`id` WHERE `guilds`.`world_id` = {$world_id} AND `guild_site`.`status` = '".self::STATUS_FORMED."' ORDER BY `guilds`.`creationdata`";
+			$query_str = "SELECT `id` FROM `guilds` WHERE `world_id` = {$world_id} AND `status` = '".self::STATUS_FORMED."' ORDER BY `creationdata`";
 			
 		$query = \Core\Main::$DB->query($query_str);
 		
@@ -150,7 +150,7 @@ class Guilds
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
 			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdate`";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` WHERE `world_id` = {$world_id} AND `id` = `guild_id` AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdata`";
+			$query_str = "SELECT `id` FROM `guilds` WHERE `world_id` = {$world_id} AND `status` = '".self::STATUS_FORMATION."' ORDER BY `creationdata`";
 			
 		$query = \Core\Main::$DB->query($query_str);		
 
@@ -184,8 +184,8 @@ class Guilds
 				`guilds`.`owner_id`, 
 				`guilds`.`creationdate`, 
 				`guilds`.`motd`, 
+				`guilds`.`status`, 
 				`guilds_site`.`image`, 
-				`guilds_site`.`status`, 
 				`guilds_site`.`guilds`.`formationTime`, 
 				`guilds_site`.`guild_points`, 
 				`guilds_site`.`guild_better_points` 
@@ -207,8 +207,8 @@ class Guilds
 				`guilds`.`creationdata`, 
 				`guilds`.`motd`, 
 				`guilds`.`balance`, 
+				`guilds`.`status`, 
 				`guilds_site`.`image`, 
-				`guilds_site`.`status`, 
 				`guilds_site`.`formationTime`, 
 				`guilds_site`.`guild_points`, 
 				`guilds_site`.`guild_better_points` 
@@ -331,6 +331,7 @@ class Guilds
 					`creationdata` = '{$this->_creationdate}', 
 					`motd` = '{$this->_motd}',
 					`balance` = '{$this->balance}'
+					`status` = '{$this->status}'
 				WHERE 
 					`id` = '{$this->_id}'";
 				
@@ -343,7 +344,6 @@ class Guilds
 					`".\Core\Tools::getSiteTable("guilds")."`
 				SET 
 					`image` = '{$this->_image}', 
-					`status` = '{$this->_status}', 
 					`formationTime` = '{$this->_formationTime}' 
 				WHERE 
 					`guild_id` = '{$this->_id}'
@@ -373,9 +373,9 @@ class Guilds
 			\Core\Main::$DB->query("
 			INSERT INTO
 					`".\Core\Tools::getSiteTable("guilds")."`
-					(`guild_id`,`image`, `status`, `formationTime`)
+					(`guild_id`,`image`, `formationTime`)
 					values
-					('{$this->_id}', '{$this->_image}', '{$this->_status}', '{$this->_formationTime}')");
+					('{$this->_id}', '{$this->_image}', '{$this->_formationTime}')");
 			
 			$this->Ranks = Guilds\Rank::RankList($this->_id);
 		}
