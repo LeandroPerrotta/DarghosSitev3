@@ -73,7 +73,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				return false;
 			}			
 			
-			Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has your rank changed from {$player->GetGuildRank()} ({$player->GetGuildRankId()}) to {$selectedRank->GetName()} ({$selectedRank->GetId()}) by account id {$account->getId()}.");
+			Guilds::LogMessage("The player {$player->getName()} ({$player->getId()}) has your rank changed from {$player->GetGuildRank()} ({$player->GetGuildRankId()}) to {$selectedRank->GetName()} ({$selectedRank->GetId()}) by account id {$account->getId()}.");
 			$player->setGuildRankId($selectedRank->GetId());
 		}
 		elseif($_POST["guild_action"] == "setNick")
@@ -92,7 +92,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				return false;
 			}
 			
-			Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has your nick changed from \"{$player->getGuildNick()}\" to \"{$_POST["member_nick"]}\" by account id {$account->getId()}.");
+			Guilds::LogMessage("The player {$player->getName()} ({$player->getId()}) has your nick changed from \"{$player->getGuildNick()}\" to \"{$_POST["member_nick"]}\" by account id {$account->getId()}.");
 			$player->setGuildNick($_POST["member_nick"]);
 		}
 		elseif($_POST["guild_action"] == "eraseNick")
@@ -105,7 +105,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				return false;
 			}
 			
-			Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has your nick ereased by account id {$account->getId()}.");
+			Guilds::LogMessage("The player {$player->getName()} ({$player->getId()}) has your nick ereased by account id {$account->getId()}.");
 			$player->setGuildNick("");
 		}
 		elseif($_POST["guild_action"] == "exclude")
@@ -130,7 +130,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 				return false;			
 			}			
 			
-			Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has been kicked of guild id {$player->GetGuildId()} at rank {$player->GetGuildRank()} ({$player->GetGuildRankId()}) by account id {$account->getId()}.");
+			Guilds::LogMessage("The player {$player->getName()} ({$player->getId()}) has been kicked of guild id {$player->GetGuildId()} at rank {$player->GetGuildRank()} ({$player->GetGuildRankId()}) by account id {$account->getId()}.");
 			$player->setGuildRankId( null );
 		}
 		
