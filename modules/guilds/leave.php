@@ -110,7 +110,7 @@ class View
 			return false;			
 		}
 						
-		Guilds::LogMessage("The player {$this->player->getName()} ({$this->player->getId()}) has left from guild {$this->guild->GetName()} ({$this->guild->GetId()}).");
+		Guilds::LogMessage("The player {$player->getName()} ({$player->getId()}) has left from guild {$this->guild->GetName()} ({$this->guild->GetId()}).");
 		$player->setGuildRankId( Guilds::RANK_NO_MEMBER );
 		$player->save();
 		
