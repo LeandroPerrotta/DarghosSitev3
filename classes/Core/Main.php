@@ -487,15 +487,18 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		//header("Location: ".$url." ");	
 		if($delay)
 		{
-			$html =  '
+			global $module;
+			
+			$module =  '
 			<script type="text/javascript">
 				setTimeout(\'window.location.href="' . Configs::Get(Configs::eConf()->WEBSITE_URL) . '/' . $url . '"\', 5000);
 			</script>';
 		}
 		else
+		{
 			$html =  '<script type="text/javascript">window.location = "' . Configs::Get(Configs::eConf()->WEBSITE_URL) . '/' . $url . '"</script>';
-		
-		echo $html;
+			echo $html;
+		}
 	}
 	
 	static function requireLogin()
