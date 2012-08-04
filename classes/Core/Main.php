@@ -479,13 +479,22 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		return date("H", time());
 	}
 	
-	static function redirect($url, $local = true/*, $delay = false*/) 
+	static function redirect($url, $local = true, $delay = false) 
 	{		
 		//if($local)
 			//$url = Configs::Get(Configs::eConf()->WEBSITE_URL)."/".$url;
 	
 		//header("Location: ".$url." ");	
-		$html =  '<script type="text/javascript">window.location = "' . Configs::Get(Configs::eConf()->WEBSITE_URL) . '/' . $url . '"</script>';
+		if($delay)
+		{
+			$html =  '
+			<script type="text/javascript">
+				setTimeout(\'window.location.href="' . Configs::Get(Configs::eConf()->WEBSITE_URL) . '/' . $url . '"\', 5000);
+			</script>';
+		}
+		else
+			$html =  '<script type="text/javascript">window.location = "' . Configs::Get(Configs::eConf()->WEBSITE_URL) . '/' . $url . '"</script>';
+		
 		echo $html;
 	}
 	

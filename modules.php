@@ -399,6 +399,10 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			{
 				case "fansites":
 					$patch['file'] = $topic;
+				break;			
+						
+				case "download":
+					$patch['file'] = $topic;
 				break;					
 				
 				default:
