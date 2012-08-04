@@ -231,13 +231,10 @@ class Menus
 				$span->addAttribute("style", "color: #e1dc48; font-weight: bold;");
 
 			$p = $div->addChild("p");
-			$p->addChild("em", "IP: ");
-			$span = $p->addChild("span", Configs::Get(Configs::eConf()->STATUS_HOST));
-
-			$p = $div->addChild("p");
-			$p->addChild("em", "Porta: ");
-			$span = $p->addChild("span", Configs::Get(Configs::eConf()->STATUS_PORT));
-			
+			$p->addChild("em");
+			$a = $p->addChild("a", "Cliente para Jogar!");
+			$a->addAttribute("href", "?ref=general.download&file=setup.exe");
+			$a->addAttribute("target", "_blank");			
 			
 			if(Configs::Get(Configs::eConf()->STATUS_IGNORE_AFK))
 			{
