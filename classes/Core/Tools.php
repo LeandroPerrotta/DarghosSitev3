@@ -62,9 +62,9 @@ class Tools
 		return $ticketName;
 	}
 	
-	static function getPercentOf($value, $total)
+	static function getPercentOf($value, $total , $precision = 0)
 	{
-		return round(ceil(($value / $total) * 100));
+		return round(ceil(($value / $total) * 100), $precision);
 	}
 	
 	static function isSorcerer($vocation)
