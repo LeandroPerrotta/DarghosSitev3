@@ -64,7 +64,7 @@ class Tools
 	
 	static function getPercentOf($value, $total , $precision = 0)
 	{
-		return round(ceil(($value / $total) * 100), $precision);
+		return round(($value / $total) * 100, $precision);
 	}
 	
 	static function isSorcerer($vocation)
