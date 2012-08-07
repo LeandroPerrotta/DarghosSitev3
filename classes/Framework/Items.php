@@ -97,7 +97,7 @@ class Items
 		
 		$itemsXML = new \DOMDocument();
 		
-		$patch = g_Configs::Get(g_Configs::eConf()->FOLDER_DATA)."items/items.xml";
+		$patch = g_Configs::Get(g_Configs::eConf()->PATCH_SERVER) . g_Configs::Get(g_Configs::eConf()->FOLDER_DATA)."items/items.xml";
 		
 		if(file_exists($patch))
 		{

@@ -263,19 +263,19 @@ class View
 			$name = "<span id='item_{$lot->offsetGet("id")}' class='requestItemInfo'> " . $items->getNameById($lot->offsetGet("id")) . "</span>";
 			$chance = $lot->offsetGet("chance") * \Framework\Monsters::LOT_RATE;
 			$chance = min($chance, 100000);
-			$chanceStr = "";
+			$chanceStr = Core\Tools::getPercentOf($chance, 100000) . "% (";
 			
-			if($chance <= 50){ $chanceStr = "<span style='color: #ff921d; font-weight: bold;'>Item lendário</span>"; }
-			elseif($chance <= 200){ $chanceStr = "<span style='color: #c001ff; font-weight: bold;'>Item épico</span>"; }
-			elseif($chance <= 500){ $chanceStr = "<span style='color: #4925ff; font-weight: bold;'>Extremamente raro</span>"; }
-			elseif($chance <= 1000){ $chanceStr = "<span style='color: #18b515; font-weight: bold;'>Raro</span>"; }
-			elseif($chance <= 2500){ $chanceStr = "<span style='font-weight: bold;'>Pouco raro</span>"; }
-			elseif($chance <= 5000){ $chanceStr = "<span style='color: #dcdcdc;'>Um pouco frequente</span>";	}
-			elseif($chance <= 10000){ $chanceStr = "<span style='color: #dcdcdc;'>Muito frequente</span>"; }
-			elseif($chance <= 20000){ $chanceStr = "<span style='color: #dcdcdc;'>Frequente</span>"; }
-			elseif($chance <= 50000){ $chanceStr = "<span style='color: #dcdcdc;'>Abundante</span>"; }
-			elseif($chance <= 99999){ $chanceStr = "<span style='color: #dcdcdc;'>Quase sempre</span>"; }
-			elseif($chance == 100000){ $chanceStr = "<span style='color: #dcdcdc;'>Sempre</span>"; }
+			if($chance <= 50){ $chanceStr .= "<span style='color: #ff921d; font-weight: bold;'>Item lendário</span>)"; }
+			elseif($chance <= 200){ $chanceStr .= "<span style='color: #c001ff; font-weight: bold;'>Item épico</span>)"; }
+			elseif($chance <= 500){ $chanceStr .= "<span style='color: #4925ff; font-weight: bold;'>Extremamente raro</span>)"; }
+			elseif($chance <= 1000){ $chanceStr .= "<span style='color: #18b515; font-weight: bold;'>Raro</span>)"; }
+			elseif($chance <= 2500){ $chanceStr .= "<span style='font-weight: bold;'>Pouco raro</span>)"; }
+			elseif($chance <= 5000){ $chanceStr .= "<span style='color: #dcdcdc;'>Um pouco frequente</span>)";	}
+			elseif($chance <= 10000){ $chanceStr .= "<span style='color: #dcdcdc;'>Muito frequente</span>)"; }
+			elseif($chance <= 20000){ $chanceStr .= "<span style='color: #dcdcdc;'>Frequente</span>"; }
+			elseif($chance <= 50000){ $chanceStr .= "<span style='color: #dcdcdc;'>Abundante</span>)"; }
+			elseif($chance <= 99999){ $chanceStr .= "<span style='color: #dcdcdc;'>Quase sempre</span>)"; }
+			elseif($chance == 100000){ $chanceStr .= "<span style='color: #dcdcdc;'>Sempre</span>)"; }
 			
 			$quanty = ($lot->offsetExists("countmax") && $lot->offsetGet("countmax") > 0) ? "{$lot->offsetGet("countmax")}x" : "";
 			$img = "<img id='item_{$lot->offsetGet("id")}' class='requestItemInfo' src='files/items/{$lot->offsetGet("id")}.gif'/>";
