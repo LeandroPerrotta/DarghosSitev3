@@ -298,7 +298,7 @@ class View
 			<tr>
 				<td style='text-align: right; vertical-align: bottom; width: 32px; height: 32px;'><img id='item_2148' class='requestItemInfo' src='files/items/2148.gif'/></td>
 				<td><span id='item_2148' class='requestItemInfo'>0 a {$totalmoney} gold coins<span></td>
-				<td>Sempre</td>
+				<td></td>
 			</tr>";		
 		}
 		
