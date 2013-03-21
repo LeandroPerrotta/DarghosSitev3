@@ -102,7 +102,7 @@ class Configs
 				
 				case self::$e_Configs->NEWS_PER_PAGE: self::Set($i, $__configs[$i], 6); break;
 				case self::$e_Configs->FAST_NEWS_PER_PAGE: self::Set($i, $__configs[$i], 5); break;
-				case self::$e_Configs->ENABLE_PLAYERS_COMMENT_NEWS: self::Set($i, $__configs[$i], true); break;
+				case self::$e_Configs->ENABLE_PLAYERS_COMMENT_NEWS: self::Set($i, $__configs[$i], false); break;
 				
 				case self::$e_Configs->DISABLE_ALL_PREMDAYS_FEATURES: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], true); break;
