@@ -185,13 +185,13 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		
 		$exists = file_exists($patch . ".xml");
 		
-		if($exists || ($logged && $logged->getAccess() == \t_Access::Administrator))
+		if($exists || ($logged && $logged->getAccess() >= \t_Access::CommunityManager))
 		{
 			$page = new \Core\Pages($patch . ".xml");
 				
 			global $module;
 				
-			if($logged && $logged->getAccess() == \t_Access::Administrator)
+			if($logged && $logged->getAccess() >= \t_Access::CommunityManager)
 			{
 				$module .= "<p style='text-align: right;'>";
 				if(!(bool)$_GET["edit"])
