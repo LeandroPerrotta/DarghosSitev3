@@ -10,6 +10,7 @@ class Menus
 				array("name" => "Ultimas Notícias", "url" => "?ref=news.last")
 				,array("name" => "Sobre o Darghos", "url" => "?ref=general.about")
 				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
+				,array("name" => "Downloads", "url" => "?ref=general.downloads")
 				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
 				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
 			)
