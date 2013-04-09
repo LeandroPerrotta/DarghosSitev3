@@ -146,6 +146,10 @@ class Emails
 		//$mail->SMTPDebug = true;
 
 		$mail->SMTPAuth   = true;
+		
+		if(Configs::Get(Configs::eConf()->SMTP_USE_SSL))
+		    $mail->SMTPSecure = 'ssl';
+		    
 		$mail->Host       = Configs::Get(Configs::eConf()->SMTP_HOST);
 		$mail->Port       = Configs::Get(Configs::eConf()->SMTP_PORT);
 

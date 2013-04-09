@@ -66,6 +66,7 @@ class e_Configs extends \Core\Enumerators
 		,$SMTP_PORT
 		,$SMTP_USER
 		,$SMTP_PASSWORD	
+		,$SMTP_USE_SSL
 		
 		/*
 		 * Days related
