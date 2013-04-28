@@ -55,7 +55,7 @@ class Emails
 	Nome da Conta: <b>%value_1%</b>.<br>
 </p>
 
-<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.login'><b>aqui</b></a>.</p>
+<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.login'><b>aqui</b></a>.</p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
 ".Configs::Get(Configs::eConf()->WEBSITE_TEAM).".</p>	
@@ -70,7 +70,7 @@ class Emails
 <p>O processo do pedido para gerar uma nova senha para sua conta foi efetuado com sucesso. Clique no link abaixo para receber o e-mail com a sua nova senha.</p>
 
 <p>
-	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_1%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.recovery&key=%value_1%</a><br>
+	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_1%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.recovery&key=%value_1%</a><br>
 </p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
@@ -87,7 +87,7 @@ class Emails
 
 <p>
 	Nome da Conta: <b>%value_1%</b>.<br>
-	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_2%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.recovery&key=%value_2%</a><br>
+	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_2%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.recovery&key=%value_2%</a><br>
 </p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
@@ -106,7 +106,7 @@ class Emails
 	Nova Senha: <b>%value_1%</b>.<br>
 </p>
 
-<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.login'><b>aqui</b></a>.</p>
+<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.login'><b>aqui</b></a>.</p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
 ".Configs::Get(Configs::eConf()->WEBSITE_TEAM).".</p>

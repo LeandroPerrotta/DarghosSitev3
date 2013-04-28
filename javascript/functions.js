@@ -131,7 +131,7 @@ function requestSearchBox(url, value, minlength)
 	if(value.length < minlength){
 		$("#search_suggestions").hide("slow");
 	} else {
-		$.post("index.php?ref=" + url, {value: value},
+		$.post("?ref=" + url, {value: value},
 			function(info){
 				if(info.length > 0){
 					$("#search_suggestions_list").html(info);
@@ -154,7 +154,7 @@ function fillSearchBox(value)
 
 function requestItemInfo(e, itemtype)
 {	
-	$.post("index.php?ref=misc.iteminfo", {itemtype: $(this).attr("id")},
+	$.post("?ref=misc.iteminfo", {itemtype: $(this).attr("id")},
 		function(info){
 			if($("#iteminfo").length == 0)
 			{
@@ -176,7 +176,7 @@ function ereaseItemInfo()
 
 function requestRebornPlayer(value)
 {	
-	$.post("index.php?ref=players.reborn", {inputValue: value},
+	$.post("?ref=players.reborn", {inputValue: value},
 		function(info){
 		
 			if(Number(info) == 1){

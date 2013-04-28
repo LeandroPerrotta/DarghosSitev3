@@ -9,7 +9,7 @@ if($_POST)
 		$_SESSION['login'][] = \Core\Strings::encrypt($_POST["login_password"]);
 		
 		if(!$_SESSION["login_redirect"])
-			\Core\Main::redirect("index.php?ref=account.main");	
+			\Core\Main::redirect("?ref=account.main");	
 		else
 		{
 			$url = trim($_SESSION["login_redirect"], "/");

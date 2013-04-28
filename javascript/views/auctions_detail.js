@@ -53,12 +53,12 @@ function deleteCallback()
 			id: auction
 	};	
 	
-	sendPost("index.php?ref=auctions.delete", data);
+	sendPost("?ref=auctions.delete", data);
 }
 
 function deleteItemCallback()
 {	
-	sendPost("index.php?ref=auctions.deleteitem", params);
+	sendPost("?ref=auctions.deleteitem", params);
 }
 
 function submit()
@@ -73,7 +73,7 @@ function submit()
 		,bid_auction: auction
 	};
 	
-	sendPost("index.php?ref=auctions.makebid", data);
+	sendPost("?ref=auctions.makebid", data);
 }
 
 function sendPost(url, data, handler)
