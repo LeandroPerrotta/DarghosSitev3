@@ -14,7 +14,7 @@ class View
 	{		
 		if($_SESSION["login"])
 		{
-			\Core\Main::redirect("index.php");
+			\Core\Main::redirect("");
 			return;
 		}
 		
