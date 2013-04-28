@@ -75,7 +75,7 @@ class View
 		$this->_char_town = new \Framework\HTML\SelectBox();
 		$this->_char_town->SetName("character_town");
 		$this->_char_town->AddOption("");
-		//$this->_char_town->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);	
+		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);	
 		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);
 		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Thorn), t_Towns::Thorn);
 		
