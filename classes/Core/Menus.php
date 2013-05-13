@@ -11,6 +11,7 @@ class Menus
 				,array("name" => "Sobre o Darghos", "url" => "?ref=general.about")
 				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
 				,array("name" => "Downloads", "url" => "?ref=general.downloads")
+				,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
 				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
 				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
 			)
@@ -108,6 +109,12 @@ class Menus
 			"name" => "testserverstatus",
 			"onDraw" => "drawTestServerStatus"
 		)
+        /*,array(
+                "title" => "Eventos",
+                "desc" => "Confira todos eventos que estão rolando no Darghos.",
+                "name" => "events",
+                "onDraw" => "drawEvents"
+        )*/
 		,array(
 			"title" => "Power Gammers",
 			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
@@ -276,6 +283,29 @@ class Menus
 		}		
 		
 		return true;
+	}
+	
+	static function drawEvents(\SimpleXMLElement &$xml){
+	    
+	    $today = \Framework\Events::getToday();
+	    
+	    $ul = $xml->addChild("ul");
+	    $ul->addAttribute("class", "always_viewable");
+	    
+	    $li = $ul->addChild("li"); 
+	    
+	    $div = $li->addChild("div");
+	    $div->addAttribute("class", "events");
+	    $div->addChild("h3", "Hoje");
+	    
+	    if($today->numRows() > 0){
+
+	    }
+	    else{
+	        $div->addChild("p", "Nenhum evento programado :(");
+	    }
+	    
+	    return true;
 	}
 	
 	static function drawPowerGammers(&$xml)
