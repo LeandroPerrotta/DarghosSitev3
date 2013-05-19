@@ -130,7 +130,7 @@ class View
 				return false;
 			}
 			
-			if($this->topic->IsNotice() && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS))
+			if($this->topic->IsNotice() && ((!$this->loggedAcc || $this->loggedAcc->getGroup() < t_Group::GameMaster) && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS)))
 			{
 				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
