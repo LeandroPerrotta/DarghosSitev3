@@ -105,7 +105,8 @@ $xmlStr = "
 			$summary = $topic->GetTopic();
 		}
 		
-		$comment = Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS) ? '<a id="new-comments" href="?ref=forum.topic&v='.$topic->GetId().'">'.$topic->GetPostCount().'</a>' : null;
+		$logged_acc = Framework\Account::loadLogged();
+		$comment = (($logged_acc && $logged_acc->getGroup() >= t_Group::GameMaster) || Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS)) ? '<a id="new-comments" href="?ref=forum.topic&v='.$topic->GetId().'">'.$topic->GetPostCount().'</a>' : null;
 		
 		$user = new \Framework\Forums\User();
 		$user->Load($topic->GetAuthorId());
