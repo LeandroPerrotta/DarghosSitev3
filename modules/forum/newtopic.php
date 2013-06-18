@@ -146,7 +146,7 @@ class View
 		$topic->SetTitle($this->_title->GetPost());
 		$topic->SetTopic($this->_topic->GetPost());
 		$topic->SetDate(time());
-		$topic->SetAuthorId($this->user->GetId());
+		$topic->SetAuthorId($this->user->GetMemberId());
 		
 		if($this->_isnotice->GetPost() == "true")
 		{

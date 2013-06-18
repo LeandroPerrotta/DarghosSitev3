@@ -219,7 +219,7 @@ class View
 				return false;					
 			}
 			
-			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetId());
+			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetMemberId());
 			
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POST_SENT);
 			return true;
@@ -281,7 +281,7 @@ class View
 			return false;
 		}
 		
-		$user->AddBan($_POST['bantype'], time(), $_POST['banreason'], $this->user->GetId());
+		$user->AddBan($_POST['bantype'], time(), $_POST['banreason'], $this->user->GetMemberId());
 		$this->_message = "Punição aplicada ao usuario com sucesso!";
 
 		return true;
