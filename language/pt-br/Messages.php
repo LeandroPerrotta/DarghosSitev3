@@ -388,8 +388,9 @@ class Lang_Messages
 		
 		self::$messages[$e_Msg->FORUM_ACCOUNT_REGISTERED] = "
 			<p>Caro jogador,</p>
-			<p>Sua conta foi registrada no forum com sucesso!</p>
-			<p>Agora você já pode participar de nossos topicos e enquetes! Lembre-se de seguir as regras de uso do Forum.</p>
+			<p>Sua conta foi registrada no forum com sucesso! Para acessar use os mesmos dados de login do site principal!</p>
+			<p>Agora você já pode participar de topicos e enquetes! Lembre-se de seguir as regras de uso do Forum.</p>
+			<p><a href='http://darghos.com.br/forum/'>http://darghos.com.br/forum/</a></p>
 		";				
 		
 		self::$messages[$e_Msg->FORUM_POLL_VOTE_DONE] = "

@@ -79,6 +79,12 @@ if($_GET['name'])
 						
 						$player->setName($_POST["character_newname"]);
 						$player->save();
+						
+						//integration SMF onchangepassword
+						$user = new \Framework\Forums\User();
+						if($user->LoadByAccount($account->getId()))
+						    $user->UpdatePlayerNameExternalForum($_POST["character_newname"]);
+						//end						
 								
 						//remove premdays da conta do jogador
 						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME), false /* false to decrement days */);						

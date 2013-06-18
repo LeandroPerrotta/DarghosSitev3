@@ -14,6 +14,8 @@ $creation = ($account->getCreation() != 0) ? \Core\Main::formatDate($account->ge
 $realname = ($account->getRealName()) ?	$account->getRealName() : "<i>Sem Nome</i>";
 $location = ($account->getLocation()) ?	$account->getLocation() : "<i>Sem Localidade</i>";
 $url = ($account->getUrl()) ?	$account->getUrl() : "<i>Sem Endereço</i>";
+$forum_user = new \Framework\Forums\User();
+$forum = ($forum_user->LoadByAccount($account->getId())) ? "Ativo" : "<a href='?ref=forum.register'>Criar!</a>";
 
 $playerDeletionList = array();
 
@@ -210,6 +212,10 @@ $module .= "
 		
 		<tr>
 			<td><b>Criação:</b></td><td>".$creation."</td>
+		</tr>
+
+		<tr>
+			<td><b>Conta do Forum:</b></td><td>{$forum}</td>
 		</tr>";
 		
 		if($bans->isBannished($account->getId()))

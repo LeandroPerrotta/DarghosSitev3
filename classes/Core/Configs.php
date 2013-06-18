@@ -69,6 +69,7 @@ class Configs
 				case self::$e_Configs->SQL_PASSWORD: self::Set($i, $__configs[$i], "zlabia7r"); break;
 				case self::$e_Configs->SQL_DATABASE: self::Set($i, $__configs[$i], "darghos"); break;
 				case self::$e_Configs->SQL_WEBSITE_TABLES_PREFIX: self::Set($i, $__configs[$i], "wb_"); break;
+				case self::$e_Configs->SQL_FORUM_SCHEMA: self::Set($i, $__configs[$i], "forum"); break;
 				case self::$e_Configs->SQL_ORDERS_DATABASE: self::Set($i, $__configs[$i], ""); break;
 				
 				case self::$e_Configs->STATUS_HOST: self::Set($i, $__configs[$i], "darghos.com.br"); break;
@@ -115,6 +116,8 @@ class Configs
 				case self::$e_Configs->PREMCOST_REMOVE_BLACK_SKULL: self::Set($i, $__configs[$i], 10); break;
 				
 				case self::$e_Configs->ENABLE_PLAYERS_ONLINE: self::Set($i, $__configs[$i], true); break;
+				
+				case self::$e_Configs->INTEGRATED_FORUM: self::Set($i, $__configs[$i], false); break;
 				
 				case self::$e_Configs->ENABLE_GUILD_MANAGEMENT: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->ENABLE_GUILD_WARS: self::Set($i, $__configs[$i], true); break;

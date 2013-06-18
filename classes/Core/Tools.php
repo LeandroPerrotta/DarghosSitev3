@@ -114,5 +114,9 @@ class Tools
 	{
 		return Configs::Get(Configs::eConf()->SQL_WEBSITE_TABLES_PREFIX).$tablename;
 	}
+	
+	static function getForumTable($tablename){
+	    return Configs::Get(Configs::eConf()->SQL_FORUM_SCHEMA) . "`.`" . $tablename; 
+	}
 }
 ?>

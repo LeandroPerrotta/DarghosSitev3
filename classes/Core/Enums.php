@@ -28,6 +28,7 @@ class e_Configs extends \Core\Enumerators
 		,$SQL_PASSWORD
 		,$SQL_DATABASE
 		,$SQL_WEBSITE_TABLES_PREFIX
+		,$SQL_FORUM_SCHEMA
 		
 		,$SQL_ORDERS_DATABASE
 		
@@ -125,6 +126,7 @@ class e_Configs extends \Core\Enumerators
 		,$ENABLE_MULTIWORLD
 		,$DEFAULT_WORLD
 		,$ENABLE_PLAYERS_ONLINE
+		,$INTEGRATED_FORUM
 	;
 	
 	function __construct(){

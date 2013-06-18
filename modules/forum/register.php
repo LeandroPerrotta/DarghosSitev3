@@ -21,7 +21,7 @@ class View
 		$this->loggedAcc = new \Framework\Account();
 		$this->loggedAcc->load($_SESSION['login'][0]);
 		
-		$char_list = $this->loggedAcc->getCharacterList(ACCOUNT_CHARACTERLIST_BY_NAME);
+		$char_list = $this->loggedAcc->getCharacterList(Framework\Account::PLAYER_LIST_BY_NAME);
 		
 		if(count($char_list) == 0 || $this->loggedAcc->getHighLevel() < 20)
 		{
@@ -81,7 +81,7 @@ class View
 			return false;
 		}		
 		
-		$char_list = $this->loggedAcc->getCharacterList(ACCOUNT_CHARACTERLIST_BY_NAME);
+		$char_list = $this->loggedAcc->getCharacterList(Framework\Account::PLAYER_LIST_BY_NAME);
 		
 		if(!in_array($this->_character->GetPost(), $char_list))
 		{
@@ -94,6 +94,7 @@ class View
 		
 		$user = new \Framework\Forums\User();
 		
+		$user->InsertExternalForum($this->loggedAcc, $player, $this->_password->GetPost());
 		$user->SetAccountId($this->loggedAcc->getId());
 		$user->SetPlayerId($player->getId());
 		$user->Save();
@@ -110,7 +111,7 @@ class View
 		<form action='' method='post'>
 			<fieldset>
 				
-				<p>Atraves deste formulario você poderá registrar sua conta para ultilizar o Forum do Darghos, participando de topicos, respondendo enquetes e tudo mais. Você irá selecionar abaixo o personagem da sua conta que deverá ser usado como usuario, assim em seus posts aparecerá este personagem como autor, junto com um link para o profile de seu personagem.</p>
+				<p>Atraves deste formulario você poderá registrar sua conta para ultilizar o Forum do Darghos, participando de topicos, respondendo enquetes e tudo mais. Você irá selecionar abaixo o personagem da sua conta que deverá ser usado como usuario no Forum.</p>
 				
 				<p>
 					<label for='character'>Selecionar personagem</label><br />

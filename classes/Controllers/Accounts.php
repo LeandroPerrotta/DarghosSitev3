@@ -312,8 +312,16 @@ class Accounts
 			}
 			else
 			{
-				$logged->setPassword(\Core\Strings::encrypt($_POST["account_password"]));
+				$logged->setPassword(\Core\Strings::encrypt($_POST["account_password"]));				
 				$logged->save();
+				
+				//integration SMF onchangepassword
+				$user = new \Framework\Forums\User();
+				if($user->LoadByAccount($logged->getId()))
+				    $user->UpdateLoginInfoExternalForum($logged, $_POST["account_password"]);
+				else
+				    throw new \Exception("Cant load forum user entry?");
+				//end				
 			
 				$_SESSION["login"] = array();
 			
@@ -364,11 +372,16 @@ class Accounts
 				$data["message"]["body"] = $checkName["text"];
 			}
 			else
-			{
-		
+			{			    
 				$logged->setName($_POST["account_name"]);
 				$logged->updatePremDays(15, false);
 				$logged->save();
+				
+				//integration SMF onchangepassword
+				$user = new \Framework\Forums\User();
+				if($user->LoadByAccount($logged->getId()))
+				    $user->UpdateLoginInfoExternalForum($logged, $_POST["account_password"]);
+				//end				
 				
 				\Core\Main::addChangeLog('acc_rename', $logged->getId(), $_POST["account_name"]);
 					

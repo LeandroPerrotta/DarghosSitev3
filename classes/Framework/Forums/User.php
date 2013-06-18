@@ -2,7 +2,7 @@
 namespace Framework\Forums;
 class User
 {
-	private $_id, $_accountid, $_playerid;
+	private $_memberid, $_accountid, $_playerid;
 	private $_bans = array();
 	private $account;
 	
@@ -12,9 +12,9 @@ class User
 			$this->Load($id);
 	}
 	
-	function Save()
+	function Save($insert = true)
 	{
-		if($this->_id)
+		if(!$insert)
 		{
 			\Core\Main::$DB->query("
 				UPDATE 
@@ -23,7 +23,7 @@ class User
 					`account_id` = '{$this->_accountid}', 
 					`player_id` = '{$this->_playerid}'
 				WHERE 
-					`id` = '{$this->_id}'
+					`member_id` = '{$this->_memberid}'
 			");			
 		}
 		else
@@ -31,25 +31,88 @@ class User
 			\Core\Main::$DB->query("
 				INSERT INTO
 					`".\Core\Tools::getSiteTable("forum_users")."`
-					(`account_id`, `player_id`)
+					(`member_id`, `account_id`, `player_id`)
 					values
-					('{$this->_accountid}', '{$this->_playerid}')
-			");
-
-			$this->_id = \Core\Main::$DB->lastInsertId();				
+					('{$this->_memberid}', '{$this->_accountid}', '{$this->_playerid}')
+			");		
 		}
 	}
 	
-	function Load($id)
+	function UpdateLoginInfoExternalForum(\Framework\Account $account, $password){
+	    
+	    $passwd = sha1(strtolower($account->getName()) . $password);
+	    $password_salt = substr(md5(mt_rand()), 0, 4);	 
+
+	    \Core\Main::$DB->query("
+            UPDATE
+                `".\Core\Tools::getForumTable("members")."`
+            SET
+	            `passwd` = '{$passwd}',
+	            `member_name` = '{$account->getName()}'
+            WHERE
+                `id_member` = '{$this->_memberid}'
+        ");
+	}
+
+    function UpdatePlayerNameExternalForum($player_name){
+    
+        \Core\Main::$DB->query("
+            UPDATE
+                `".\Core\Tools::getForumTable("members")."`
+            SET
+                `real_name` = '{$player_name}'
+            WHERE
+                `id_member` = '{$this->_memberid}'
+        ");
+    }  
+	
+	function InsertExternalForum(\Framework\Account $account, \Framework\Player $player, $password){
+	    
+	    //From SFM engine @ Subs-Members.php
+	    //'passwd' => sha1(strtolower($regOptions['username']) . $regOptions['password']),
+	    //'password_salt' => substr(md5(mt_rand()), 0, 4) ,
+	    $passwd = sha1(strtolower($account->getName()) . $password);
+	    $password_salt = substr(md5(mt_rand()), 0, 4);
+	    
+	    \Core\Main::$DB->query("
+            INSERT INTO
+            `".\Core\Tools::getForumTable("members")."`
+            (`member_name`, `date_registered`, `real_name`, `passwd`, `email_address`, `hide_email`, `id_post_group`, `password_salt`, `buddy_list`, `message_labels`, `openid_uri`, `signature`, `ignore_boards`)
+            values
+            ('{$account->getName()}', UNIX_TIMESTAMP(), '{$player->getName()}', '{$passwd}', '{$account->getEmail()}', '1', '4', '{$password_salt}', '', '', '', '', '')
+    			");  
+	    
+	    $this->_memberid = \Core\Main::$DB->lastInsertId();
+	    
+	    \Core\Main::$DB->query("
+	            UPDATE
+	            `".\Core\Tools::getForumTable("settings")."`
+	            SET
+	                `value` = '{$player->getName()}'
+                WHERE
+                    `variable` = 'latestRealName'
+	       ");	   
+	     
+	    \Core\Main::$DB->query("
+	            UPDATE
+	            `".\Core\Tools::getForumTable("settings")."`
+	            SET
+	                `value` = '{$this->_memberid}'
+                WHERE
+                    `variable` = 'latestMember'
+	       ");	    
+	}
+	
+	function Load($member_id)
 	{
-		$query = \Core\Main::$DB->query("SELECT id, account_id, player_id FROM ".\Core\Tools::getSiteTable("forum_users")." WHERE `id` = '{$id}'");
+		$query = \Core\Main::$DB->query("SELECT member_id, account_id, player_id FROM ".\Core\Tools::getSiteTable("forum_users")." WHERE `member_id` = '{$member_id}'");
 		
 		if($query->numRows() != 1)
 			return false;
 			
 		$fetch = $query->fetch();
 		
-		$this->_id = $fetch->id;
+		$this->_memberid = $fetch->member_id;
 		$this->_accountid = $fetch->account_id;
 		$this->_playerid = $fetch->player_id;
 		
@@ -61,16 +124,14 @@ class User
 	
 	function LoadByAccount($account_id)
 	{
-		$query = \Core\Main::$DB->query("SELECT id FROM ".\Core\Tools::getSiteTable("forum_users")." WHERE `account_id` = '{$account_id}'");
+		$query = \Core\Main::$DB->query("SELECT `member_id` FROM ".\Core\Tools::getSiteTable("forum_users")." WHERE `account_id` = '{$account_id}'");
 		
 		if($query->numRows() != 1)
 			return false;
 			
 		$fetch = $query->fetch();		
 		
-		$this->Load($fetch->id);
-		
-		return true;
+		return $this->Load($fetch->member_id);
 	}
 	
 	function GetPlayerId()
@@ -88,10 +149,15 @@ class User
 		return $this->account;
 	}
 	
-	function GetId()
+	function GetMemberId()
 	{
-		return $this->_id;
+		return $this->_memberid;
 	}
+	
+	function SetMemberId($member_id)
+	{
+		$this->_memberid = $member_id;
+	}	
 	
 	function SetPlayerId($player_id)
 	{
