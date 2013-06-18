@@ -83,6 +83,7 @@ class Menus
 			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
 			"items" => array(
 				array("name" => "Buscar Personagem", "url" => "?ref=character.view")
+				,array("name" => "Forum", "url" => "http://darghos.com.br/forum")
 				,array("name" => "Highscores", "url" => "?ref=community.highscores")
 				,array("name" => "Guildas", "url" => "?ref=community.guilds")
 				,array("name" => "Casas", "url" => "?ref=community.houses")
@@ -601,7 +602,7 @@ class Menus
 			$string .= $menu->__toXML();
 		}
 		
-		$facebooktag = '<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Darghos/205124342834613" width="180" height="345" style="margin-top: 0px; border: none;" colorscheme="dark" show_faces="true" border_color="" stream="false" header="false"></fb:like-box>';
+		$facebooktag = '<div class="fb-like-box" data-href="https://www.facebook.com/DarghosOT" data-width="178" data-show-faces="false" data-colorscheme="light" data-stream="false" data-show-border="false" data-header="false"></div>';
 		$string = str_replace("<facebooktag></facebooktag>", $facebooktag, $string);
 		
 		return $string;
