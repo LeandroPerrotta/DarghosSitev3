@@ -602,7 +602,7 @@ class Menus
 			$string .= $menu->__toXML();
 		}
 		
-		$facebooktag = '<div class="fb-like-box" data-href="https://www.facebook.com/DarghosOT" data-width="178" data-show-faces="false" data-colorscheme="light" data-stream="false" data-show-border="false" data-header="false"></div>';
+		$facebooktag = '<a href="http://www.facebook.com/DarghosOT" target="_blank"><img srcsrc="http://profile.ak.fbcdn.net/hprofile-ak-prn2/187911_205124342834613_2503685_q.jpg" alt=""></a><iframe src="//www.facebook.com/plugins/like.php?href=http://facebook.com/DarghosOT&amp;send=false&amp;layout=standard&amp;width=180&amp;show_faces=false&amp;colorscheme=dark&amp;action=like&amp;height=75" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:180px; height:75px;" allowTransparency="true"></iframe>';
 		$string = str_replace("<facebooktag></facebooktag>", $facebooktag, $string);
 		
 		return $string;
