@@ -192,6 +192,7 @@ if($logged_acc && $logged_acc->getGroup() == t_Group::Administrator)
 	$infos[] = array("Email da Conta", $account->getEmail());
 	$infos[] = array("Dias de Premium", $account->getPremDays());
 	$infos[] = array("Alguma vez premium?", $alreadyIsPremiumHTML);
+	$infos[] = array("Ultimo IP", $player->getIpAddress());
 	$infos[] = array("Posição", "x:{$player->getPosX()} y:{$player->getPosY()} z:{$player->getPosZ()}");
 	$infos[] = array("Player ID", $player->getId());
 	$infos[] = array("Skill sword", $player->getSkill(t_Skills::Sword));

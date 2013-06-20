@@ -915,6 +915,7 @@ class Player
 	function getPosX(){ return $this->data['posx']; }
 	function getPosY(){ return $this->data['posy']; }
 	function getPosZ(){	return $this->data['posz'];	}	
+	function getIpAddress(){ return \Core\Tools::ip_long2string($this->data['lastip']); }	
 	function getStamina(){ return $this->data['stamina']; }	
 	function getSkull(){ return $this->data['skull']; }	
 	function getSkullTime(){ return $this->data['skulltime']; }	
