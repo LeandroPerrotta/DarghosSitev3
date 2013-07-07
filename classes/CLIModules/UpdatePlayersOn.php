@@ -48,7 +48,7 @@ class UpdatePlayersOn
 			    
 			    if(!$status){
 			        $this->db->ExecQuery("INSERT INTO `serverstatus` VALUES ('0', '0', '0', '0', UNIX_TIMESTAMP(), ".\t_Worlds::It().")");
-			        return false;
+			        continue;
 			    }
 			     
 			    $playerson = $status->getOnlinePlayers();
