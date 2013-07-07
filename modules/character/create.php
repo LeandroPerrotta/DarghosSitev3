@@ -100,8 +100,8 @@ while(t_Genre::ItValid())
 
 $worlds_str = "";
 $worldNames = array(
-		t_Worlds::Ordon => "Ordon (permitida mudança pvp, inaugurado fev/2011)"
-		,t_Worlds::Aaragon => "Aaragon (somente pvp aberto, inaugurado fev/2012)"
+		t_Worlds::Ordon => "Frostwave (Open PvP, inaugurado mar/2013)"
+		,t_Worlds::Aaragon => "Aaragon (Open PvP, novo, inaugurado jul/2013)"
 );
 if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 {
@@ -140,6 +140,8 @@ $module .= '
 			<label for="player_name">Nome</label>
 			<input name="player_name" size="40" type="text" value="" />
 		</p>
+		
+		'.$world_str.'
 
 		<p>
 			<label for="player_town">Cidade</label>
