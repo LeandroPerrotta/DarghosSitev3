@@ -373,7 +373,7 @@ class t_Worlds extends \Core\Structs
 	static public
 	    $m_worldPort = array(
             self::Ordon => 7171
-            ,self::Aaragon => 7173
+            ,self::Aaragon => 7174
         );
 }
 
