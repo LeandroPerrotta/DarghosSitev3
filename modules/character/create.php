@@ -101,7 +101,7 @@ while(t_Genre::ItValid())
 $worlds_str = "";
 $worldNames = array(
 		t_Worlds::Ordon => "Frostwave (Open PvP, inaugurado mar/2013)"
-		,t_Worlds::Aaragon => "Aaragon (Open PvP, novo, inaugurado jul/2013)"
+		,t_Worlds::Aaragon => "Chaostorm (Open PvP, novo, inaugurado jul/2013)"
 );
 if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 {
