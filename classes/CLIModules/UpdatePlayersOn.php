@@ -48,13 +48,13 @@ class UpdatePlayersOn
 			    
 			    if(!$status){
 			        $this->db->ExecQuery("INSERT INTO `serverstatus` VALUES ('0', '0', '0', '0', UNIX_TIMESTAMP(), ".\t_Worlds::It().")");
-			        continue;
 			    }
-			     
-			    $playerson = $status->getOnlinePlayers();
-			    $uptime = $status->getUptime();
-			    
-			    $this->db->ExecQuery("INSERT INTO `serverstatus` VALUES ('{$playerson}', '1', '{$uptime}', '0', UNIX_TIMESTAMP(), ".\t_Worlds::It().")");			    
+			    else{	     
+    			    $playerson = $status->getOnlinePlayers();
+    			    $uptime = $status->getUptime();
+    			    
+    			    $this->db->ExecQuery("INSERT INTO `serverstatus` VALUES ('{$playerson}', '1', '{$uptime}', '0', UNIX_TIMESTAMP(), ".\t_Worlds::It().")");		
+			    }	    
 			    
 				\t_Worlds::ItNext();
 			}
