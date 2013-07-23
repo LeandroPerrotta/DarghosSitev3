@@ -2,7 +2,7 @@
 /**
  * RetornoPagSeguro
  *
- * Classe de manipulação para o retorno do post do pagseguro
+ * Classe de manipulaï¿½ï¿½o para o retorno do post do pagseguro
  *
  * @package PagSeguro
  */
@@ -13,8 +13,8 @@ class RetornoPagSeguro {
    * Prepara os dados vindos do post e converte-os para url, adicionando
    * o token do usuario quando necessario.
    *
-   * @internal é usado pela {@see RetornoPAgSeguro::verifica} para gerar os,
-   * dados que serão enviados pelo PagSeguro
+   * @internal ï¿½ usado pela {@see RetornoPAgSeguro::verifica} para gerar os,
+   * dados que serï¿½o enviados pelo PagSeguro
    *
    * @access private
    *
@@ -40,24 +40,24 @@ class RetornoPagSeguro {
   /**
    * _tipoEnvio
    *
-   * Checa qual será a conexao de acordo com a versao do PHP
+   * Checa qual serï¿½ a conexao de acordo com a versao do PHP
    * preferencialmente em CURL ou via socket
    *
-   * em CURL o retorno será:
+   * em CURL o retorno serï¿½:
    * <code> array ('curl','https://pagseguro.uol.com.br/Security/NPI/Default.aspx') </code>
-   * já em socket o retorno será:
+   * jï¿½ em socket o retorno serï¿½:
    * <code> array ('fsocket', '/Security/NPI/Default.aspx', $objeto-de-conexao) </code>
-   * se não encontrar nenhum nem outro:
+   * se nï¿½o encontrar nenhum nem outro:
    * <code> array ('','') </code>
    *
    * @access private
    * @global string $_retPagSeguroErrNo   Numero de erro do pagseguro
    * @global string $_retPagSeguroErrStr  Texto descritivo do erro do pagseguro
-   * @return array                        Array com as configurações
+   * @return array                        Array com as configuraï¿½ï¿½es
    *
    */
   function _tipoEnvio() {
-    //Prefira utilizar a função CURL do PHP
+    //Prefira utilizar a funï¿½ï¿½o CURL do PHP
     //Leia mais sobre CURL em: http://us3.php.net/curl
     global $_retPagSeguroErrNo, $_retPagSeguroErrStr;
     if (function_exists('curl_exec'))
@@ -77,7 +77,7 @@ class RetornoPagSeguro {
    *
    * @access public
    *
-   * @param mixed $value        Variável a ser checada se é nula
+   * @param mixed $value        Variï¿½vel a ser checada se ï¿½ nula
    * @return bool
    */
   function not_null($value) {
@@ -99,7 +99,7 @@ class RetornoPagSeguro {
   /**
    * verifica
    *
-   * Verifica o tipo de conexão aberta e envia os dados vindos
+   * Verifica o tipo de conexï¿½o aberta e envia os dados vindos
    * do post
    *
    * @access public
@@ -158,7 +158,7 @@ class RetornoPagSeguro {
         fclose ($tipoEnvio[2]);
       }
     }
-    if ($confirma && function_exists('retorno_automatico')) {
+    if ($confirma && method_exists("Controllers\Balance", "retorno_automatico")) {
       $itens = array (
                 'VendedorEmail', 'TransacaoID', 'Referencia', 'TipoFrete',
                 'ValorFrete', 'Anotacao', 'DataTransacao', 'TipoPagamento',
@@ -184,7 +184,7 @@ class RetornoPagSeguro {
 	  
 	  $key = rand(0,9999999);
 	  
-      retorno_automatico (
+      Controllers\Balance::retorno_automatico (
         $post['VendedorEmail'], $post['TransacaoID'], $post['Referencia'], $post['TipoFrete'],
         $post['ValorFrete'], $post['Anotacao'], $post['DataTransacao'], $post['TipoPagamento'],
         $post['StatusTransacao'], $post['CliNome'], $post['CliEmail'], $post['CliEndereco'],
@@ -193,7 +193,7 @@ class RetornoPagSeguro {
       );
     }
     else
-    	trigger_error("Função retorno_automatico não encontrada ou dialogo nao autorizado...", E_WARNING);
+    	trigger_error("Funï¿½ï¿½o retorno_automatico nï¿½o encontrada ou dialogo nao autorizado...", E_WARNING);
     
     return $confirma;
   }
