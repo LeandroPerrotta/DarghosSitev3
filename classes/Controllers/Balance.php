@@ -20,10 +20,6 @@ class Balance
             $CliEstado, $CliCEP, $CliTelefone, $produtos, $NumItens, $key
     )
     {
-        $date = date("d-m-y");
-        $mins = date("G:i:s");
-    
-        error_log("\n[{$mins}] POST: ".var_dump($_POST), 3, "/var/log/php/pagseguro_{$date}.log");
     
         if($StatusTransacao == "Completo")
             exit();
@@ -35,7 +31,10 @@ class Balance
     
             if($StatusTransacao == "Aprovado" && $contr->status == 0){
                 if(($prod["ProdValor"] * 100) == $contr->balance){
-                    $contr->status = \t_PaymentStatus::Confirmed;
+                    $contr->status = \t_PaymentStatus::Finished;
+                    
+                    if(!$contr->auth)
+                        $contr->auth = $TransacaoID;
     
                     $account = new Account();
                     $account->load($contr->account_id);
@@ -65,19 +64,7 @@ class Balance
         }
     }    
     
-    function PagSeguro(){
-		$date = date("d-m-y");
-		$mins = date("G:i:s");
-		 
-		error_log("\n[{$mins}] Init session.", 3, "/var/log/php/pagseguro_{$date}.log");  
-
-		if($_POST){
-			$date = date("d-m-y");
-			$mins = date("G:i:s");
-			 
-			error_log("\n[{$mins}] Post message!", 3, "/var/log/php/pagseguro_{$date}.log");  		
-		}
-	
+    function PagSeguro(){	
         include_once('libs/pagseguro/retorno.class.php');		
 		
         if(!$_POST){
