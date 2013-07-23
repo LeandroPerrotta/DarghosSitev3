@@ -398,6 +398,7 @@ class t_PaymentStatus extends \Core\Structs
 		,Confirmed = 1
 		,Finished = 2
 		,Canceled = 3
+		,Analysis = 4
 	;	
 	
 	static protected
@@ -406,6 +407,7 @@ class t_PaymentStatus extends \Core\Structs
 			,self::Confirmed => "Confirmado"
 			,self::Finished => "Concluido"
 			,self::Canceled => "Cancelado"				
+			,self::Analysis => "Em análise"				
 		);
 }
 
