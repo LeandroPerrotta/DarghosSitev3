@@ -230,7 +230,7 @@ class Detail extends \Core\Views
 				<div style='text-align: center;'>
 					
 					<p>
-						Você ainda não possui uma <a href='?ref=contribute.order'>Conta Premium</a>. Adquira agora mesmo a sua e você poderá disputar itens em nosso leilão além de adquirir uma série de exclusividades no jogo!
+						Você ainda não possui uma <a href='?ref=balance.purchase'>Conta Premium</a>. Adquira agora mesmo a sua e você poderá disputar itens em nosso leilão além de adquirir uma série de exclusividades no jogo!
 					</p>
 					
 				</div>";	

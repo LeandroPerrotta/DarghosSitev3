@@ -176,7 +176,7 @@ class View
 			$this->_log_table->AddField(\Core\Main::formatDate($row["date"]));
 			
 			if($this->isAdmin)
-				$this->_log_table->AddField("<a href='?ref=itemshop.history&use={$row["id"]}'>Usar</a>");		
+				$this->_log_table->AddField("<a href='?ref=store.history&use={$row["id"]}'>Usar</a>");		
 							
 			$this->_log_table->AddRow();				
 		}		

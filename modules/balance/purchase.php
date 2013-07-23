@@ -23,7 +23,7 @@ if($_POST)
 		$_SESSION['contribute']["add_balance"] = $form_AddBalance;
 	
 		$module .= '	
-			<form action="?ref=contribute.confirm" method="post">
+			<form action="?ref=balance.confirm" method="post">
 				<fieldset>			
 					
 					<p><h3>Confirmação do Pedido</h3></p>
