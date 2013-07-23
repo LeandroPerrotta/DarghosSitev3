@@ -309,7 +309,7 @@ class Lang_Messages
 			
 		self::$messages[$e_Msg->ITEMSHOP_PURCHASE_SUCCESS] = "
 			<p>Caro jogador,</p>
-			<p>A compra de @v1@x @v2@ por @v3@ dias de sua conta premium foi efetuada com sucesso!</p>
+			<p>A compra de @v1@x @v2@ por R$ @v3@ de seus creditos foi efetuada com sucesso!</p>
 			<p>Você o receberá dentro de um present box em seu proximo log-in no jogo.</p>
 			<p>Tenha um bom jogo!</p>
 		";				

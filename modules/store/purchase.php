@@ -212,7 +212,7 @@ class View
 		        echo "\Framework\ItemShop {$params[\Framework\ItemShop::PARAM_FUNCTION]}";
 		}
 		
-		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_PURCHASE_SUCCESS, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT], $item->getName(), $item->getPrice());
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_PURCHASE_SUCCESS, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT], $item->getName(), number_format($item->getPrice() / 100, 2));
 		return true;		
 	}
 	
