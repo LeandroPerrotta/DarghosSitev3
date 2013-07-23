@@ -96,7 +96,7 @@ class View
 		$this->_itemlist_table->AddField("", "10%", null, 2);
 		$this->_itemlist_table->AddField("<b>Nome</b>", "20%");
 		$this->_itemlist_table->AddField("<b>Descrição</b>", "50%");
-		$this->_itemlist_table->AddField("<b>Premdays</b>", "15%");
+		$this->_itemlist_table->AddField("<b>Preço</b>", "15%");
 		$this->_itemlist_table->AddRow();		
 		
 		if($this->_itemlist)
@@ -105,29 +105,40 @@ class View
 			{
 				$item instanceof \Framework\ItemShop;
 				
+
 				$params = $item->getParams();
 				
 				$this->_selected_item->SetValue($item->getId());
 				$this->_itemlist_table->AddField($this->_selected_item->Draw());
 				
-				if($item->getType() == \Framework\ItemShop::TYPE_ITEM)
-				{
-					if($params[\Framework\ItemShop::PARAM_ITEM_STACKABLE])
-						$this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}_{$params[\Framework\ItemShop::PARAM_ITEM_COUNT]}.gif'/>");
-					else
-						$this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}.gif'/>");
-				}				
+				$type = $item->getType();
+	
+			    if($type == \Framework\ItemShop::TYPE_CALLBACK){
+			        
+			        $this->_itemlist_table->AddField("<img src='{$params[\Framework\ItemShop::PARAM_IMAGE_URL]}'/>");
+			        
+			        $this->_itemlist_table->AddField("1x " . $item->getName());
+			    }
+			    elseif($type == \Framework\ItemShop::TYPE_ITEM){
+			        
+                    if($params[\Framework\ItemShop::PARAM_ITEM_STACKABLE])
+			            $this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}_{$params[\Framework\ItemShop::PARAM_ITEM_COUNT]}.gif'/>");
+			        else
+			            $this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}.gif'/>");
+			        	
+			        $this->_itemlist_table->AddField($params[\Framework\ItemShop::PARAM_ITEM_COUNT]."x " . $item->getName());	
+			    }
+			
 				
-				$this->_itemlist_table->AddField($params[\Framework\ItemShop::PARAM_ITEM_COUNT]."x " . $item->getName());
 				$this->_itemlist_table->AddField($item->getDescription());
-				$this->_itemlist_table->AddField($item->getPrice());
+				$this->_itemlist_table->AddField($item->getPriceStr());
 
 				$this->_itemlist_table->AddRow();
 			}
 		}		
 		else
 		{		
-			$this->_itemlist_table->AddField("O nosso shop não possui nenhum item disponivel no momento.", null, null, 4);
+			$this->_itemlist_table->AddField("A nossa loja não possui nenhum item disponivel no momento.", null, null, 4);
 			$this->_itemlist_table->AddRow();	
 		}
 			
@@ -174,23 +185,32 @@ class View
 		
 		$item_prop = $item->getParams();
 		
-		if($item->getPrice() > $this->loggedAcc->getPremDays())
+		if($item->getPrice() > $this->loggedAcc->getBalance())
 		{
-			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_COST, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT]);
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_COST, "R$ " . number_format($item->getPrice() / 100, 2));
 			return false;
 		}
 		
-		if($item->getRequireDays() > 0 && $item->getRequireDays() > $this->loggedAcc->getPremDays())
-		{
-			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_REQUIRE_DAYS, $item->getPrice(), $item->getRequireDays());
-			return false;
-		}
-		
-		$this->loggedAcc->updatePremDays($item->getPrice(), false);
+		$this->loggedAcc->addBalance(-$item->getPrice());
 		$this->loggedAcc->save();
 		
 		//$item->doPlayerGiveThing($player->getId());
 		$item->logItemPurchase($player->getId());
+		
+		if($item->getType() == \Framework\ItemShop::TYPE_CALLBACK){
+		    
+		    $params = $item->getParams();
+		    
+		    $func_params = explode(",", $params[\Framework\ItemShop::PARAM_PARAMETERS]);
+		    array_unshift($func_params, $this->loggedAcc);
+		    
+		    $callback = '\Framework\ItemShop::' . $params[\Framework\ItemShop::PARAM_FUNCTION];
+		    if(method_exists('\Framework\ItemShop', $params[\Framework\ItemShop::PARAM_FUNCTION])){
+		        call_user_func_array($callback, $func_params);
+		    }
+		    else
+		        echo "\Framework\ItemShop {$params[\Framework\ItemShop::PARAM_FUNCTION]}";
+		}
 		
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_PURCHASE_SUCCESS, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT], $item->getName(), $item->getPrice());
 		return true;		
@@ -201,12 +221,12 @@ class View
 		global $module;		
 				
 		$module .= "		
-		<div style='margin-top: 5px; margin-bottom: 5px; display: block; width: 100%; text-align: right;'><a href='?ref=itemshop.history'>Ver Historico</a></div>
+		<div style='margin-top: 5px; margin-bottom: 5px; display: block; width: 100%; text-align: right;'><a href='?ref=store.history'>Ver Historico</a></div>
 		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
 			<fieldset>
 	
-				<p>Bem vindo ao item shop do Darghos, aqui você pode trocar dias de sua conta premium por itens especiais dentro do jogo.</p>
-				<p>O sistema funciona de maneira automatica e no instante em que você efetuar o log-in no jogo <b>irá receber o(s) itens obtidos</b>.</p>					
+				<p>Bem vindo a Loja do Darghos!</p>				
+				<p>O saldo atual de sua conta é de: <big><b>R$ ".number_format($this->loggedAcc->getBalance() / 100, 2)."</b></big></p>				
 				
 				<p>
 					<label>Personagem</label>
@@ -228,7 +248,7 @@ class View
 				<p id='line'></p>
 				
 				<p>
-					<input class='button' type='submit' value='Enviar' /> ".(($this->isAdmin) ? "<a class='buttonstd' href='?ref=itemshop.add'>Novo Item</a>" : null)."
+					<input class='button' type='submit' value='Enviar' /> ".(($this->isAdmin) ? "<a class='buttonstd' href='?ref=store.add'>Novo Item</a>" : null)."
 				</p>
 			</fieldset>
 		</form>";					

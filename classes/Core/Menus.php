@@ -24,8 +24,8 @@ class Menus
 				array("name" => "Criar Conta", "style" => "font-weight: bold",  "url" => "?ref=account.register")
 				,array("name" => "Login", "url" => "?ref=account.login")
 				,array("name" => "Recuperar Conta", "url" => "?ref=account.recovery")
-				,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
-				,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
+				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
+				//,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
 			)		
 		)
 		,array(
@@ -38,15 +38,15 @@ class Menus
 			)		
 		)
 		,array(
-			"title" => "Conta Premium",
+			"title" => "Loja Darghos",
 			"name" => "premium",
 			"conditions" => Menu::CONDITION_MUST_LOGGED,
 			"items" => array(
-				array("name" => "Vantagens", "url" => "?ref=account.premium")
-				,array("name" => "Comprar!", "style" => "font-weight: bold", "url" => "?ref=contribute.order")		
-				,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
-				,array("name" => "Item Shop", "url" => "?ref=itemshop.purchase")		
-				,array("name" => "Minhas Compras", "url" => "?ref=contribute.myorders")
+				array("name" => "Vantagens VIP", "url" => "?ref=account.vip")
+				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
+				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
+				,array("name" => "Loja Darghos", "url" => "?ref=store.purchase")		
+				,array("name" => "Historico", "url" => "?ref=balance.history")
 			)		
 		)
 		,array(

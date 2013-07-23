@@ -68,7 +68,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_CHANGENAME_COST] = "Você não possui os @v1@ dias de conta premium necessarios para modificar o nome de seu personagem.";
 		self::$messages[$e_Msg->CHARACTER_CHANGESEX_COST] = "Você não possui os @v1@ dias de conta premium necessarios para modificar o sexo de seu personagem.";
 		self::$messages[$e_Msg->ITEMSHOP_OLD_PURCHASE] = "Você deve fazer um \"log-in\" no jogo para receber sua antiga compra em nosso item shop antes de efetuar uma nova compra.";
-		self::$messages[$e_Msg->ITEMSHOP_COST] = "Você não possui os @v1@ dias de conta premium necessarios para obter este item.";
+		self::$messages[$e_Msg->ITEMSHOP_COST] = "Você não possui os @v1@ de saldo disponível necessarios para comprar isto.";
 		self::$messages[$e_Msg->ITEMSHOP_REQUIRE_DAYS] = "Este item tem um custo de @v1@ dias de conta premium, no entanto, você precisa ter mais de @v2@ dias de conta premium para comprar-lo.";
 		self::$messages[$e_Msg->GUILD_NEED_NO_MEMBERS_DISBAND] = "A sua guilda ainda possui membros ativos. Para desmanchar uma guilda é necessario só existir o líder da guilda.";
 		self::$messages[$e_Msg->GUILD_COMMENT_SIZE] = "O comentário de sua guilda não deve exceder 500 caracteres.";

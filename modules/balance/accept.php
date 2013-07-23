@@ -2,17 +2,14 @@
 use \Core\Configs;
 $contribute = new \Framework\Contribute();
 
-if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id']) and $contribute->target_account == $_SESSION['login'][0] and $contribute->status == 1)
+if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id']) and $contribute->account_id == $_SESSION['login'][0] and $contribute->status == 1)
 {
 	if($_POST)
 	{
-		$chkAccount = new \Framework\Account();
-		$chkAccount->load($_SESSION['login'][0]);		
-		
-		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->period, $contribute->generated_in);
+		$account = new \Framework\Account();
+		$account->load($_SESSION['login'][0]);		
 		
 		$error = NULL;
-		$callbackFunc = "\Framework\Contribute::{$premium["onAccept"]}";
 		
 		if(\Core\Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
@@ -22,17 +19,9 @@ if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id']) a
 		{
 			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_TERMS);
 		}
-		elseif($premium["onAccept"] && !call_user_func_array($callbackFunc, array($contribute, &$error)))
-		{
-			//
-		}
 		else
-		{
-			$account = new \Framework\Account();
-			$account->load($contribute->target_account);
-			
-			$premdays = $contribute->period;			   
-			$account->updatePremDays($premdays);
+		{				   
+			$account->addBalance($contribute->balance);
 			
 			$account->save();
 			
@@ -102,7 +91,7 @@ $module .= '
 		<ul id="charactersview">
 			<p>Pedido Numero: '.$contribute->id.'</p>
 			<li><b>Personagem: </b> '.$character_name.'.</li>
-			<li><b>Descrição: </b> '.$premium["text"].'.</li>
+			<li><b>Saldo adicionado: </b> '.$premium["text"].'.</li>
 			
 		</ul>	
 		

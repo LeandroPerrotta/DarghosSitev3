@@ -55,9 +55,9 @@ class Account
 	function load($id, $fields = null)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings`, `vipend`, `expend`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id`, `vipend`, `expend`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 			
 		$query = $this->db->query($query_str);		
 		
@@ -266,6 +266,32 @@ class Account
 	function getBlocked() { return $this->data['blocked']; }
 
 	function getWarnings() { return $this->data['warnings']; }
+	
+	function getBalance() { return $this->data['balance']; }
+	
+	function getVIPEnd() { return $this->data['vipend']; }
+	
+	function getExpEnd() { return $this->data['expend']; }
+	
+	function getVIPDaysLeft() {
+	    
+	    if($this->data["vipend"] == 0)
+	        return 0;
+	    	
+	    $leftDays = $this->data["vipend"] - time();
+	    $leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
+	    return $leftDays;	    
+	}
+	
+	function getExpDaysLeft() {
+	    
+	    if($this->data["expend"] == 0)
+	        return 0;
+	    	
+	    $leftDays = $this->data["expend"] - time();
+	    $leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
+	    return $leftDays;	    
+	}
 
 
 	/* Personal Infos */ 
@@ -508,6 +534,23 @@ class Account
 		$this->creation = $creation;
 	}	
 		
+	function addBalance($balance){
+	    $this->data['balance'] += $balance;
+	    
+	    if($this->data['balance'] < 0)
+	        $this->data['balance'] = 0;
+	}
+	
+	function addExpDays($expdays){
+	    
+	    if($this->data['expend'] > 0){
+	        $this->data['expend'] += 60 * 60 * 24 * $expdays;
+	    }
+	    else{
+	        $this->data['expend'] = time() + (60 * 60 * 24 * $expdays);
+	    }
+	}
+	
 	function updatePremDays($premdays, $increment = true)
 	{
 		if($increment)

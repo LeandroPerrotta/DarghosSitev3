@@ -182,13 +182,13 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			
 		break;		
 
-		case "contribute":
+		case "balance":
 		
 			$patch['dir'] = $module;
 		
 			switch($topic)
 			{
-				case "order":
+				case "purchase":
 					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;		
@@ -198,7 +198,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$patch['file'] = $topic;
 				break;				
 
-				case "myorders":
+				case "history":
 					$needLogin = true;
 					$patch['file'] = $topic;
 				break;		
@@ -459,7 +459,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 		break;	
 
 	
-		case "itemshop":
+		case "store":
 		{
 			$patch['dir'] = $module;		
 			

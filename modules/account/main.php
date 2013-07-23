@@ -8,6 +8,9 @@ $secretkey = $account->getSecretKey();
 $player_list = $account->getCharacterList();
 
 $premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes (expira em ".\Core\Main::formatDate($account->getPremEnd()).")" : "Você não possui dias de conta premium.";	
+$balance = ($account->getBalance() > 0) ? "R$ " . number_format($account->getBalance() / 100, 2).". <a href='?ref=balance.purchase'>[Adicionar mais saldo]</a>" : "R$ 0,00. <a href='?ref=balance.purchase'>[Adicionar saldo]</a>";	
+$vip = ($account->getVIPEnd() > 0) ? $account->getVIPDaysLeft()." dias restantes (expira em ".\Core\Main::formatDate($account->getVIPEnd()).")" : "Você não possui dias VIP restantes em sua conta.";	
+$exp = ($account->getExpDaysLeft() > 0) ? $account->getExpDaysLeft()." dias restantes (expira em ".\Core\Main::formatDate($account->getExpEnd()).")" : "Você não possui bônus de expêriencia em sua conta.";	
 $warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
 $email = ($account->getEmail()) ? $account->getEmail() : "<span style='color: red; font-weight: bold'>Nenhum e-mail registrado!</span>";	
 $creation = ($account->getCreation() != 0) ? \Core\Main::formatDate($account->getCreation()) : "Indisponível";	
@@ -204,6 +207,18 @@ $module .= "
 					
 		<tr>
 			<td><b>Conta premium:</b></td><td>{$premium}</td>
+		</tr>
+		
+		<tr>
+			<td><b>Saldo (Loja Darghos):</b></td><td>{$balance}</td>
+		</tr>
+		
+		<tr>
+			<td><b>VIP restante:</b></td><td>{$vip}</td>
+		</tr>
+		
+		<tr>
+			<td><b>Exp bônus restante:</b></td><td>{$exp}</td>
 		</tr>
 		
 		<tr>

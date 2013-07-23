@@ -143,10 +143,10 @@ class Player
 			SET 
 				`creation` = '{$this->site_data["creation"]}',
 				`comment` = '" . \Core\Main::$DB->escapeString($this->site_data["comment"]) . "',
-				`visible` = '{$this->site_data["visible"]}',";
+				`visible` = '{$this->site_data["visible"]}'";
 			
 			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-				$query_str .= "`guildjoin` = '{$this->_guild_join_in}'";
+				$query_str .= ",`guildjoin` = '{$this->_guild_join_in}'";
 				
 				$query_str .= "
 			WHERE 
@@ -251,6 +251,10 @@ class Player
 		}	
 			
 		$this->data = $query->fetchAssocArray();
+		
+		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
+		    $this->data["world_id"] = 0; //hack
+		
 		$this->temp_data = $this->data; //usaremos para posterioremente identificar valores modificados
 		
 		$query = $this->db->query("SELECT `creation`, `visible`, `comment` FROM `".\Core\Tools::getSiteTable("players")."` WHERE `player_id` = '{$this->data["id"]}'");
