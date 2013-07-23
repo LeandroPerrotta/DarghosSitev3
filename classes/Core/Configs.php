@@ -110,10 +110,10 @@ class Configs
 				case self::$e_Configs->ENABLE_ITEM_SHOP: self::Set($i, $__configs[$i], true); break;
 				case self::$e_Configs->ENABLE_STAMINA_REFILER: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->ENABLE_REMOVE_SKULLS: self::Set($i, $__configs[$i], true); break;
-				case self::$e_Configs->PREMCOST_CHANGENAME: self::Set($i, $__configs[$i], 15); break;
-				case self::$e_Configs->PREMCOST_CHANGESEX: self::Set($i, $__configs[$i], 10); break;
-				case self::$e_Configs->PREMCOST_REMOVE_RED_SKULL: self::Set($i, $__configs[$i], 4); break;
-				case self::$e_Configs->PREMCOST_REMOVE_BLACK_SKULL: self::Set($i, $__configs[$i], 10); break;
+				case self::$e_Configs->PREMCOST_CHANGENAME: self::Set($i, $__configs[$i], 350); break;
+				case self::$e_Configs->PREMCOST_CHANGESEX: self::Set($i, $__configs[$i], 200); break;
+				case self::$e_Configs->PREMCOST_REMOVE_RED_SKULL: self::Set($i, $__configs[$i], 250); break;
+				case self::$e_Configs->PREMCOST_REMOVE_BLACK_SKULL: self::Set($i, $__configs[$i], 400); break;
 				
 				case self::$e_Configs->ENABLE_PLAYERS_ONLINE: self::Set($i, $__configs[$i], true); break;
 				

@@ -69,9 +69,9 @@ if($_GET['name'])
 					{
 						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 					}			
-					elseif($account->getPremDays() < Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME))
+					elseif($account->getBalance() < Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME))
 					{
-						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_PREMDAYS_COST, Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME));
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGENAME_COST, number_format(Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME) / 100, 2));
 					}
 					else
 					{		
@@ -86,8 +86,8 @@ if($_GET['name'])
 						    $user->UpdatePlayerNameExternalForum($_POST["character_newname"]);
 						//end						
 								
-						//remove premdays da conta do jogador
-						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME), false /* false to decrement days */);						
+						//remove creditos do jogador
+						$account->addBalance(-Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME));					
 						$account->save();				
 						
 						\Core\Main::addChangeLog('name', $player->get("id"), $_POST["character_newname"]);
@@ -113,9 +113,9 @@ if($_GET['name'])
 					{
 						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 					}			
-					elseif($account->getPremDays() < Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX))
+					elseif($account->getBalance() < Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX))
 					{
-						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGESEX_COST, Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX));
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGESEX_COST, number_format(Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX) / 100, 2));
 					}
 					else
 					{		
@@ -123,9 +123,8 @@ if($_GET['name'])
 						$player->set("sex", $genre_id);
 						$player->save();
 						
-						//remove premdays da conta do jogador
-						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX), false /* false to decrement days */);	
-						
+						//remove creditos da conta do jogador
+						$account->addBalance(-Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX));	
 						$account->save();
 		
 						\Core\Main::addChangeLog('sex', $player->get("id"), $genre_id);
