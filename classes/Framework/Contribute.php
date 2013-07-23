@@ -314,7 +314,9 @@ class Contribute extends \Core\MySQL
 			$this->generated_in = $this->generated_in;
 			$this->status = $this->status;	 
 			$this->lastupdate_in = $this->lastupdate_in;	
-			$this->auth = $this->auth;			
+			$this->auth = $this->auth;	
+
+			$this->name = $this->db->escapeString($this->name);
 			
 			$this->db->query("UPDATE {$this->tableStr} SET 
 				`name` = '{$this->name}', `account_id` = '{$this->account_id}',
