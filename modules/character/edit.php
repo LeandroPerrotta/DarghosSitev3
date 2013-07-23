@@ -202,7 +202,7 @@ if($_GET['name'])
 						</p>
 						
 						<p>
-							<input name="confirm_changename" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificação de nome de meu personagem irá ser feita sob um custo na qual será descontado 15 dias de minha conta premium.						
+							<input name="confirm_changename" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificação de nome de meu personagem irá ser feita sob o custo de R$ ' .number_format(Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME) / 100, 2). ' creditos a serem descontados de minha conta.						
 						</p>	
 					</div>
 					
@@ -219,7 +219,7 @@ if($_GET['name'])
 						</p>
 						
 						<p>
-							<input name="confirm_changesex" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificação de sexo de meu personagem irá ser feita sob um custo na qual será descontado 10 dias de minha conta premium.
+							<input name="confirm_changesex" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificação de sexo de meu personagem irá ser feita sob o custo de R$ ' .number_format(Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX) / 100, 2). ' creditos a serem descontados de minha conta.
 						</p>	
 						
 						<p>
