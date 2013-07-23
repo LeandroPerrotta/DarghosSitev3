@@ -66,6 +66,11 @@ class Balance
         if(!$_POST){
             $data = array();
             new BalanceViews\PagSeguro($data);
+            
+            return true;
+        }
+        else{
+            exit();
         }
     }
 }
