@@ -327,10 +327,12 @@ if(isset($_GET["world"]))
 		
 		$_vocation = new t_Vocation($player->getVocation());
 		
+		$skull_img = Framework\Player::getSkullImg($player);
+		
 		$module .= "
 			<tr>
 				<td>{$n}.</td> 
-				<td class='name'><a style='font-size: 14px;' href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a> {$online} {$guild} </td> 
+				<td class='name'><a style='font-size: 14px;' href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a>{$skull_img} {$online} {$guild} </td> 
 				<td>{$_vocation->GetByName()}</td> 
 				<td>{$skill_value}</td> 
 				".(($skill == "experience") ? "<td>".number_format($player->getExperience())."</td>" : null)."

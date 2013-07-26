@@ -56,7 +56,8 @@ $infos = array();
 if($player->deletionStatus())
 	$infos[] = "<font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia ". \Core\Main::formatDate($player->deletionStatus()) . ".</font>";
 
-$infos[] = array("Nome", $player->getName());
+$skull_img = Framework\Player::getSkullImg($player);
+$infos[] = array("Nome", $player->getName() . " {$skull_img}");
 
 if($oldnames)
 {

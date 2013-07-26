@@ -48,7 +48,6 @@ class Player
 		, PH_ACHIEV_MISC_GOT_LEVEL_400 = 2003
 		, PH_ACHIEV_MISC_GOT_LEVEL_500 = 2004
 		;
-	
 		
 	static function listByBestRating()
 	{
@@ -926,5 +925,42 @@ class Player
 	function getBattlegroundRating() { return $this->data['battleground_rating']; }
 	function isPvpEnabled() { return (bool)$this->data['pvpEnabled']; }
 	function isDeleted(){ return (bool)$this->data['deleted']; }
+	
+	/**
+	 * Retorna uma string HTML do tipo img.
+	 * @param unknown_type $var Pode ser um objeto Player ou o skull type
+	 */
+	static function getSkullImg($var){
+	     
+	    if($var instanceof self){     
+	        $skull_type = $var->getSkull();
+	    }
+	    elseif(is_numeric($var)){
+	        $skull_type = $var;
+	    }
+	    
+		$skull = null;
+		switch($skull_type){
+		    
+		    case \t_Skulls::White:
+		        $skull = "white_skull.gif";
+		        break;
+		        
+		    case \t_Skulls::Red:
+		        $skull = "red_skull.gif";
+		        break;
+		        
+		    case \t_Skulls::Black:
+		        $skull = "black_skull.gif";
+		        break;		
+		}
+		
+		$skull_img = "";
+		
+		if($skull)
+		    $skull_img = "<img src='files/misc/{$skull}' />";
+	    
+	    return $skull_img;	    
+	}
 }
 ?>

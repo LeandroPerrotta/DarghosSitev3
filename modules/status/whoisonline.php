@@ -65,6 +65,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				afk
 				,`is_spoof`
 				,`pvpEnabled`
+				,`skull`
 			FROM 
 				`players`
 			WHERE
@@ -217,30 +218,8 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				
 				$_vocation = new t_Vocation($vocation_id);
 				
-				$skull = null;
-				switch($fetch->skull){
-				    
-				    case t_Skulls::White:
-				        $skull = "skull_white.gif";
-				        break;
-				        
-				    case t_Skulls::Red:
-				        $skull = "skull_red.gif";
-				        break;
-				        
-				    case t_Skulls::Black:
-				        $skull = "skull_black.gif";
-				        break;
-				        
-				    default:
-				        //notthing to do 
-				        break;
-				}
 				
-				$skull_img = "";
-				
-				if($skull)
-				    $skull_img = "<img src='files/misc/'.$skull.'/>";
+				$skull_img = Framework\Player::getSkullImg($fetch->skull);
 				
 				$players_list .= "
 				<tr>
