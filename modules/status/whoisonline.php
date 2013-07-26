@@ -217,6 +217,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				
 				$_vocation = new t_Vocation($vocation_id);
 				
+				$skull = null;
 				switch($fetch->skull){
 				    
 				    case t_Skulls::White:
@@ -232,7 +233,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				        break;
 				        
 				    default:
-				        $skull = null;
+				        //notthing to do 
 				        break;
 				}
 				
