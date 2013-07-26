@@ -72,7 +72,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				AND `world_id` = {$world_id}
 			ORDER BY name");
 		else
-			$query = \Core\Main::$DB->query("SELECT name, vocation, level, group_id, town_id, account_id FROM players WHERE online = '1' AND world_id = {$world_id} ORDER BY name");
+			$query = \Core\Main::$DB->query("SELECT name, vocation, level, group_id, town_id, account_id, skull FROM players WHERE online = '1' AND world_id = {$world_id} ORDER BY name");
 		
 		$_totalplayers = $stats_fetch->players + $stats_fetch->afk;
 		$_afkPlayers = $stats_fetch->afk;
@@ -217,9 +217,33 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				
 				$_vocation = new t_Vocation($vocation_id);
 				
+				switch($fetch->skull){
+				    
+				    case t_Skulls::White:
+				        $skull = "skull_white.gif";
+				        break;
+				        
+				    case t_Skulls::Red:
+				        $skull = "skull_red.gif";
+				        break;
+				        
+				    case t_Skulls::Black:
+				        $skull = "skull_black.gif";
+				        break;
+				        
+				    default:
+				        $skull = null;
+				        break;
+				}
+				
+				$skull_img = "";
+				
+				if($skull)
+				    $skull_img = "<img src='files/misc/'.$skull.'/>";
+				
 				$players_list .= "
 				<tr>
-					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a></td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> {$pvpStr}
+					<td><a {$spoofStyle} ".(($isAfk) ? "class='afkPlayer'" : null)." href='?ref=character.view&name={$fetch->name}'>{$fetch->name}</a> {$skull_img}</td> <td>{$_vocation->GetByName()}</td> <td>{$fetch->level}</td> {$pvpStr}
 				</tr>";		
 			}			
 		}
