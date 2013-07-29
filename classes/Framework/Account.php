@@ -825,10 +825,16 @@ class Account
 			
 		$fetch = $query->fetch();	
 		$this->setEmail($fetch->email);
+		$this->addPremiumTest();
 		$this->save();
 		$this->clearEmailCodes();
 		
 		return true;
+	}
+	
+	function addPremiumTest(){
+	    $this->db->query("INSERT INTO `".\Core\Tools::getSiteTable("premiumtest")."` VALUES ({$this->getId()}, UNIX_TIMESTAMP()) ");
+	    $this->updatePremDays(10);
 	}
 	
 	function clearEmailCodes()

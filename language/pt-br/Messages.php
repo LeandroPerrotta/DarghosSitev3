@@ -427,6 +427,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->VALIDATE_EMAIL_SUCCESSFULY] = "
 			<p>Caro usuario,</p>
 			<p>O endereço de e-mail <b>@v1@</b> foi validado com sucesso em sua conta!</p>
+			<p>Sua conta também recebeu 10 dias de premium account gratuitos para você explorar o Darghos ao maximo!</p>
 			<p>Tenha um bom jogo!</p>
 		";		
 		
