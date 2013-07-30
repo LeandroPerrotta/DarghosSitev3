@@ -448,6 +448,11 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "depot_merger":
 					$patch['file'] = $topic;
 					$needMinGroup = t_Group::Administrator;
+					break;			
+						
+				case "statistics":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
 					break;				
 				
 				default:

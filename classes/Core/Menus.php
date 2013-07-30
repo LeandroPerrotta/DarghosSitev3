@@ -58,7 +58,8 @@ class Menus
 			"items" => array(
 				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
 				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
-				,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
+				,array("name" => "Estatisticas", "url" => "?ref=adv.statistics", "min_group" => \t_Group::Administrator)		
+				//,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
 				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
 			)		
 		)
