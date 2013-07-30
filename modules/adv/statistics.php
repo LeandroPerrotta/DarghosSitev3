@@ -16,7 +16,7 @@ function getTimestampByDaysAgo($days = 1){
     if($days > 1)
         $end = $timestamps["today"] - (60 * 60 * 24 * ($days - 1));
     
-    return "`login` >= {$start} AND `login` < {$end}";
+    return array($start, $end);
 }
 
 $online_uniquePlayers = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE `online` = 1 AND `group_id` < 3 ORDER BY `lastip`")->numRows();
@@ -31,6 +31,26 @@ $uniquePlayers_five_day_ago = $db->query("SELECT DISTINCT `ip_address` FROM `pla
 $uniquePlayers_six_day_ago = $db->query("SELECT DISTINCT `ip_address` FROM `player_activities` WHERE " . getTimestampByDaysAgo(6))->numRows();
 $uniquePlayers_seven_day_ago = $db->query("SELECT DISTINCT `ip_address` FROM `player_activities` WHERE " . getTimestampByDaysAgo(7))->numRows();
 
+$rows = "";
+
+for($i = 1; $i < 30; $i++){
+    
+    list($start, $end) = getTimestampByDaysAgo($i);
+    $qtd = $db->query("SELECT DISTINCT `ip_address` FROM `player_activities` WHERE `login` >= {$start} AND `login` < {$end}");
+    
+    $start_str = date("d-m h:m:s", $start);
+    $end_str = date("d-m h:m:s", $end);
+    
+    $rows .= "
+    <tr>
+        <td>{$start_str}</td>
+        <td>{$end_str}</td>
+        <td>{$qtd}</td>
+    </tr>
+    ";
+}
+
+
 $module .= "
 
 <h2>Jogadores ativos</h2>
@@ -38,28 +58,12 @@ $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
 
     <tr>
-        <th>Agora</th>
-        <th>Hoje</th>
-        <th>Ontem</th>
-        <th>2 dias</th>
-        <th>3 dias</th>
-        <th>4 dias</th>
-        <th>5 dias</th>
-        <th>6 dias</th>
-        <th>7 dias</th>
+        <th>Inicio</th>
+        <th>Fim</th>
+        <th>Quantidade</th>
     </tr>
     
-    <tr>
-        <td>{$online_uniquePlayers}</td>
-        <td>{$uniquePlayers_today}</td>
-        <td>{$uniquePlayers_one_day_ago}</td>
-        <td>{$uniquePlayers_two_day_ago}</td>   
-        <td>{$uniquePlayers_three_day_ago}</td>   
-        <td>{$uniquePlayers_four_day_ago}</td>   
-        <td>{$uniquePlayers_five_day_ago}</td>   
-        <td>{$uniquePlayers_six_day_ago}</td>   
-        <td>{$uniquePlayers_seven_day_ago}</td>   
-    </tr>
+    {$rows}
 
 </table>
 
