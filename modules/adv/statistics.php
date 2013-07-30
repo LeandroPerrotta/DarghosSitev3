@@ -35,7 +35,10 @@ $rows = "";
 
 for($i = 1; $i < 30; $i++){
     
-    list($start, $end) = getTimestampByDaysAgo($i);
+    $r = getTimestampByDaysAgo($i);
+    $start = $r[0];
+    $end = $r[1];
+    
     $qtd = $db->query("SELECT DISTINCT `ip_address` FROM `player_activities` WHERE `login` >= {$start} AND `login` < {$end}");
     
     $start_str = date("d-m h:m:s", $start);
