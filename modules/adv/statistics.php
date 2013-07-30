@@ -23,13 +23,13 @@ $online_uniquePlayers = $db->query("SELECT DISTINCT `lastip` FROM `players` WHER
 
 
 $uniquePlayers_today = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE `lastlogin` >= {$timestamps["today"]} AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_one_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(1) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_two_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(2) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_three_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(3) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_four_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(4) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_five_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(5) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_six_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(6) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
-$uniquePlayers_seven_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(7) . "AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_one_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(1) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_two_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(2) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_three_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(3) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_four_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(4) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_five_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(5) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_six_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(6) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
+$uniquePlayers_seven_day_ago = $db->query("SELECT DISTINCT `lastip` FROM `players` WHERE " . getTimestampByDaysAgo(7) . " AND `group_id` < 3 ORDER BY `lastip`")->numRows();
 
 $module .= "
 
