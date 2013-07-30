@@ -8,6 +8,8 @@ $timestamps["today"] = mktime(0, 0, 0);
 $timestamps["yesterday"] = $timestamps["today"] - (60 * 60 * 24);
 
 function getTimestampByDaysAgo($days = 1){
+    global $timestamps;
+    
     $start = $timestamps["today"] - (60 * 60 * 24 * $days);
     $end = $timestamps["today"];
     
