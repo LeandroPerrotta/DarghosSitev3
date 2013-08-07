@@ -135,13 +135,15 @@ class View
 	    
 	    global $module;
 	    
-	    $select = "<select name='name'>";
+	    $select = new \Framework\HTML\SelectBox();
+	    $select->SetName("name");
+	    $select->onChangeSubmit();
+	    	
+	    $select->AddOption("", null, null, true);    
 	    
 	    foreach($account->getCharacterList() as $name){
-	        $select .= "<option value='{$name}'>{$name}</option>";
+	        $select->AddOption($name, $name);
 	    }
-	    
-	    $select .= "</select>";
 
 	    $hidden_inputs = "";
 	    	
@@ -160,17 +162,16 @@ class View
         $module .= "
         	<form action='".$_SERVER['REQUEST_URI']."' method='GET'>
         			<fieldset>
-        				
+
         			    {$hidden_inputs}
         			
-        				<h3>Selecione um personagem:</h3>
-        			
-        				{$select}
+				        <p>		
+						    <label for='world'>Selecione um personagem</label>
+                            {$select->Draw()}
+					    </p>		        			
+       			
         				
-        				
-        				<div class='line'></div>
-        				
-        				<p><input id='btNext' class='button' type='submit' value='Proximo' /><p>
+        				<p class='line'></p>
         			</fieldset>
         		</form>        
         ";	    
