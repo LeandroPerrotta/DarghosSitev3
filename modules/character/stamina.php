@@ -12,8 +12,10 @@ class View
 	
 	function View()
 	{		
-		if(!$_GET['name'])
-			return false;		
+		if(!$_GET['name']){
+			$this->DrawCharacterSelection();
+			return true;
+		}	
 		
 		if(!$this->Prepare())
 		{
@@ -53,7 +55,7 @@ class View
 		if(!$this->player->loadByName($_GET["name"]))
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
-			return false;
+			return true;
 		}
 		
 		if($this->player->getAccountId() != $this->loggedAcc->getId())
@@ -119,6 +121,60 @@ class View
 		\Core\Main::addChangeLog('stamina', $this->player->getId(), $cost);
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_SUCCESSFULY, $this->player->getName(), $_POST["stamina-value"]);		
 		return true;
+	}
+	
+	function DrawCharacterSelection()
+	{
+	    $account = \Framework\Account::loadLogged();
+	    
+	    if(!$account)
+	    {
+	        \Core\Main::requireLogin();
+	        return false;
+	    }	    
+	    
+	    global $module;
+	    
+	    $select = "<select name='name'>";
+	    
+	    foreach($account->getCharacterList() as $name){
+	        $select .= "<option value='{$name}'>{$name}</option>";
+	    }
+	    
+	    $select .= "</select>";
+
+	    $hidden_inputs = "";
+	    	
+	    foreach($_GET as $k => $v)
+	    {
+	        if($k == "world")
+	            continue;
+	        	
+	        $input = new \Framework\HTML\Input();
+	        $input->IsHidden();
+	        $input->SetName($k);
+	        $input->SetValue($v);
+	        $hidden_inputs .= $input->Draw();
+	    }	    
+	    
+        $module .= "
+        	<form action='".$_SERVER['REQUEST_URI']."' method='GET'>
+        			<fieldset>
+        				
+        			    {$hidden_inputs}
+        			
+        				<h3>Selecione um personagem:</h3>
+        			
+        				{$select}
+        				
+        				
+        				<div class='line'></div>
+        				
+        				<p><input id='btNext' class='button' type='submit' value='Proximo' /><p>
+        			</fieldset>
+        		</form>        
+        ";	    
+	    
 	}
 	
 	function Draw()
