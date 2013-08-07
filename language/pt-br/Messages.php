@@ -110,7 +110,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->FORUM_POLL_NEED_MIN_LEVEL] = "Desculpe, mas para votar nesta enquete é preciso possuir na sua conta ao menos um personagem com nivel @v1@ ou superior.";
 		self::$messages[$e_Msg->FORUM_POLL_TIME_EXPIRED] = "Desculpe, mas esta enquete já está encerrada.";
 		self::$messages[$e_Msg->FORUM_POST_TOO_LONG] = "Desculpe, mas o seu post não pode exceder 2048 caracteres.";
-		self::$messages[$e_Msg->STAMINA_NOT_HAVE_PREMDAYS] = "Você não possui tempo sulficiente em sua conta premium para recuperar esta quantidade de stamina.";
+		self::$messages[$e_Msg->STAMINA_NOT_HAVE_PREMDAYS] = "Você não possui saldo suficiente em sua conta para usar este serviço recuperando esta quantidade de stamina.";
 		self::$messages[$e_Msg->STAMINA_VALUE_WRONG] = "Você deve selecionar corretamente a quantidade de stamina que deseja recuperar.";
 		self::$messages[$e_Msg->DARGHOSPOINTS_NEED_ACCEPT_TERMS] = "Para adquirir seus Darghos Points é necessario concordar com nossos termos de uso.";
 		self::$messages[$e_Msg->MONSTER_NOT_FOUND] = "O monstro @v1@ não existe em nosso servidor.";
