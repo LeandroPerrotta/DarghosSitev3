@@ -8,7 +8,7 @@ use Views\Accounts as AccountViews;
 
 class Accounts
 {
-	function Premiumtransfer()
+	/*function Premiumtransfer()
 	{
 		$data = array();
 		$showView = true;
@@ -82,8 +82,9 @@ class Accounts
 		if($showView)
 			$view = new AccountViews\Premiumtransfer($data);
 		
-		return true;		
-	}
+		return true;	
+			
+	}*/
 	
 	function Checkname($isAjax = true, $name = NULL)
 	{
