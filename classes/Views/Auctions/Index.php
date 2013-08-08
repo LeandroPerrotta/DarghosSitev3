@@ -125,7 +125,7 @@ class Index extends \Core\Views
 					$timeleft_str = "menos de <strong>".ceil($diff / (60 * 60 * 24))."</strong> dias";
 		
 				$table_starting->AddField("<center><h3>{$auction->title}</h3>{$auction->description}</center>");
-				$table_starting->AddField("<center>R$ ".number_format($bid->min_bid / 100, 2)."</center>");
+				$table_starting->AddField("<center>R$ ".number_format($auction->min_bid / 100, 2)."</center>");
 				$table_starting->AddField("<center>" . \Core\Main::formatDate($auction->begin) . " ou<br>" .$timeleft_str . "</center>");
 				$table_starting->AddField("<center><a href='?ref=auctions.detail&id={$auction->id}'>Detalhes</a></center>");
 				$table_starting->AddRow();
