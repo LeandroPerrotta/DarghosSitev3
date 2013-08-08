@@ -29,7 +29,7 @@ function onSubmit()
 		return false;
 	}
 	
-	fogDialog("Você tem certeza que deseja efetuar este lançe de " + bid + " dias de conta premium de seu personagem " + player + "?", submit);
+	fogDialog("Você tem certeza que deseja efetuar este lançe de R$ " + bid + " de saldo de sua conta de seu personagem " + player + "?", submit);
 	return true;
 }
 

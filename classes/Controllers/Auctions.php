@@ -215,7 +215,7 @@ class Auctions
 		}
 		
 		$auction_id = (int)$_POST["bid_auction"];
-		$bid_value = (int)$_POST["bid_value"];
+		$bid_value = ((double)$_POST["bid_value"]) * 100;
 		$bid_player = $_POST["bid_player"];
 		
 		$auction = AuctionsModel\Auction::Load($auction_id);
@@ -258,10 +258,10 @@ class Auctions
 			return $ret;			
 		}
 		
-		if($logged->getPremDays() <= $bid_value)
+		if($logged->getBalance() < $bid_value)
 		{
 			$ret["error"] = true;
-			$ret["msg"] = "Você possui {$logged->getPremDays()} dias de conta premium, insulficientes para o lançe de {$bid_value}. Por favor, diminua seu lançe ou adquira mais dias de conta premium.";
+			$ret["msg"] = "Você possui R$ " . number_format($logged->getBalance() / 100, 2) . " de saldo disponivel em sua conta, insulficientes para o lançe de R$ " . number_format($bid_value / 100, 2) . ". Por favor, diminua seu lançe ou adicione mais saldo a sua conta.";
 			return $ret;
 		}
 		
@@ -276,7 +276,7 @@ class Auctions
 		$auction->Update();
 		
 		$newacc = $player->loadAccount();
-		$newacc->updatePremDays($newbid->bid, false);
+		$newacc->addBalance(-$newbid->bid);
 		$newacc->save();
 		
 		if($oldbid)
@@ -284,12 +284,12 @@ class Auctions
 			$oldplayer = new \Framework\Player();
 			$oldplayer->load($oldbid->player_id);
 			$oldacc = $oldplayer->loadAccount();
-			$oldacc->updatePremDays($oldbid->bid, true);
+			$oldacc->addBalance($oldbid->bid);
 			$oldacc->save();
 		}
 		
 		$ret["error"] = false;
-		$ret["msg"] = "Seu lançe foi efetuado com sucesso! Você vencerá o leilão se ninguem cobrir o seu lançe nos proximos dias!";
+		$ret["msg"] = "Seu lançe foi efetuado com sucesso! Você vencerá o leilão se ninguem cobrir o seu lançe até o fim do leilão!";
 		
 		return $ret;
 	}

@@ -46,7 +46,7 @@ class Index extends \Core\Views
 					
 					if($logged)
 					{
-						$bid_str .= "{$bid->bid} dias por<br>";
+						$bid_str .= "R$ " . number_format($bid->bid / 100, 2) . "<br>";
 					}
 					
 					$bid_str .= "<a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a></center>";
@@ -125,7 +125,7 @@ class Index extends \Core\Views
 					$timeleft_str = "menos de <strong>".ceil($diff / (60 * 60 * 24))."</strong> dias";
 		
 				$table_starting->AddField("<center><h3>{$auction->title}</h3>{$auction->description}</center>");
-				$table_starting->AddField("<center>{$auction->min_bid}</center>");
+				$table_starting->AddField("<center>R$ ".number_format($bid->min_bid / 100, 2)."</center>");
 				$table_starting->AddField("<center>" . \Core\Main::formatDate($auction->begin) . " ou<br>" .$timeleft_str . "</center>");
 				$table_starting->AddField("<center><a href='?ref=auctions.detail&id={$auction->id}'>Detalhes</a></center>");
 				$table_starting->AddRow();
@@ -172,7 +172,7 @@ class Index extends \Core\Views
 			
 					if($logged)
 					{
-						$bid_str .= "{$bid->bid} dias por<br>";
+						$bid_str .= "R$ " . number_format($bid->bid / 100, 2) . "<br>";
 					}
 		
 					$bid_str .= "<a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a></center>";
@@ -209,7 +209,7 @@ class Index extends \Core\Views
 		
 		global $module;
 		$module = "
-			<p>No sistema de leilões do Darghos você pode usar dias de premium de sua conta para adquirir items e outros beneficios extra. Se você é novo e não sabe como funciona o nosso leilão clique <a href='?ref=auctions.info'>aqui</a> e leia as instruções.</p>
+			<p>No sistema de leilões do Darghos você pode usar saldo disponivel em sua conta para dar lançes e disputar items e outros beneficios extra. Se você é novo e não sabe como funciona o nosso leilão clique <a href='?ref=auctions.info'>aqui</a> e leia as instruções.</p>
 			{$table_begun->Draw()}
 			{$admin_buttons}
 			{$table_starting->Draw()}
