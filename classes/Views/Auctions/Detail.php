@@ -135,7 +135,7 @@ class Detail extends \Core\Views
 		if($auction->GetStatus() == AuctionsModel\Auction::STATUS_BEGIN)
 			$bid_str = "<p>Ninguem até agora efetuou um lançe neste leilão. <br>Está interessado? O lançe inicial é de <strong>R$ " . number_format($auction->min_bid / 100, 2) . "</strong>.<p>";
 		elseif($auction->GetStatus() == AuctionsModel\Auction::STATUS_BEGUN)
-		$bid_str = "<p>Este Leilão irá iniciar em breve. Está interessado? Já garanta saldo em sua conta! O lançe inicial será de <strong>R$ " . number_format($auction->min_bid / 100, 2) . "</strong> dias.<p>";
+		$bid_str = "<p>Este Leilão irá iniciar em breve. Está interessado? Já garanta saldo em sua conta! O lançe inicial será de <strong>R$ " . number_format($auction->min_bid / 100, 2) . "</strong>.<p>";
 		else
 			$bid_str = "<p>Este leilão terminou sem nenhum interessado.</p>";
 		
