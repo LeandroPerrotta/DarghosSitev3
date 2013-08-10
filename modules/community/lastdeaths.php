@@ -29,7 +29,8 @@ if(isset($_GET["world"]))
 					
 			$date = \Core\Main::formatDate($death_values['date']);
 			
-			$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> foi morto no nivel {$death_values['level']} por ";
+			$skull_img = Framework\Player::getSkullImg($deathPlayer);
+			$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> {$skull_img} foi morto no nivel {$death_values['level']} por ";
 			
 			if(count($death_values['killers']) != 0)
 			{
@@ -80,8 +81,12 @@ if(isset($_GET["world"]))
 					{
 						$_killer = new \Framework\Player();	
 						$_killer->load($killer['killer']);	
-	
-						$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a>";
+						
+						if($deathPlayer->getId() == $_killer->getId())
+						    continue;
+	                    
+						$skull_img = Framework\Player::getSkullImg($_killer);
+						$death .= "<a href='?ref=character.view&name={$_killer->getName()}'>{$_killer->getName()}</a> {$skull_img}";
 					}
 				}
 			}	
