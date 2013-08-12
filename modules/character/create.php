@@ -1,9 +1,46 @@
 <?
+$account = \Framework\Account::loadLogged();
+
+function checkAvailableTows(\Framework\Account $account){
+    
+    $players_list = $account->getCharacterList(\Framework\Account::PLAYER_LIST_BY_ID);
+    
+    $towns_list = array();
+    
+    $towns_list[] = \t_Towns::IslandOfPeace;
+    
+    $was_leave_out_iop = false;
+    
+    foreach($players_list as $id){
+        $player = new \Framework\Player();
+        $player->load($id);
+        
+        if($player->getTownId() != \t_Towns::IslandOfPeace){
+            $was_leave_out_iop = true;
+            break;
+        }
+    }
+    
+    if($was_leave_out_iop){
+        $towns_list[] = \t_Towns::Quendor;
+        $towns_list[] = \t_Towns::Thorn;
+        
+        if($account->getPremDays() > 0){
+            $towns_list[] = \t_Towns::Aracura;
+            $towns_list[] = \t_Towns::Aaragon;
+            $towns_list[] = \t_Towns::Salazart;
+            $towns_list[] = \t_Towns::Northrend;
+            $towns_list[] = \t_Towns::Kashmir;
+        }
+    }
+    
+    return $towns_list;
+}
+
+$available_towns = checkAvailableTows($account);
+
 if($_POST)
-{	
-	$account = new \Framework\Account();
-	$account->load($_SESSION['login'][0]);		
-	
+{		
 	$player = new \Framework\Player();
 
 	$monsters = \Framework\Monsters::GetInstance();
@@ -50,6 +87,10 @@ if($_POST)
 		$_world_id = t_Worlds::Get($_POST["player_world"]);
 		
 		$town_id = t_Towns::Get($_POST["player_town"]);
+		
+		if(!in_array($town_id, $available_towns)){
+		    $town_id = $available_towns[0];
+		}
 		
 		$player->setName($_POST["player_name"]);
 		$player->setWorldId($_world_id);
@@ -126,9 +167,10 @@ $townsSelect = new \Framework\HTML\SelectBox();
 $townsSelect->SetName("player_town");
 
 $townsSelect->AddOption("");
-$townsSelect->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);
-$townsSelect->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);
-$townsSelect->AddOption(t_Towns::GetString(t_Towns::Thorn), t_Towns::Thorn);
+
+foreach($available_towns as $town){
+    $townsSelect->AddOption(t_Towns::GetString($town), $town);
+}
 
 \Core\Main::includeJavaScriptSource("views/character_create.js");
 

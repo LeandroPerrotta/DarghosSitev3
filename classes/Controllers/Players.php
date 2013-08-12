@@ -76,7 +76,7 @@ class Players
 		$world = $_POST["character_world"];
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
-		$town = $_POST["character_town"];
+		$town = \t_Towns::IslandOfPeace;
 		
 		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		

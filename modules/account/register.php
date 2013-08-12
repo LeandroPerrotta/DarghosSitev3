@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, $_char_town, $_char_genre, $_char_vocation;
+	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, /*$_char_town,*/ $_char_genre, $_char_vocation;
 	
 	//variables
 	private $_message;		
@@ -72,12 +72,14 @@ class View
 		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Ordon), t_Worlds::Ordon);
 		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Aaragon), t_Worlds::Aaragon);
 		
+		/*
 		$this->_char_town = new \Framework\HTML\SelectBox();
 		$this->_char_town->SetName("character_town");
 		$this->_char_town->AddOption("");
 		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::IslandOfPeace), t_Towns::IslandOfPeace);	
 		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Quendor), t_Towns::Quendor);
 		$this->_char_town->AddOption(t_Towns::GetString(t_Towns::Thorn), t_Towns::Thorn);
+		*/
 		
 		$this->_char_genre = new \Framework\HTML\SelectBox();
 		$this->_char_genre->SetName("character_genre");
@@ -100,9 +102,9 @@ class View
 			"title" => "Criar nova conta (passo a passo)",
 			"body" => "
 			<p>Seja bem vindo ao Darghos! Este formulario irá o ajudar a criar a sua primeira conta, seu primeiro personagem e também informções que você deve saber.</p>
-			<p class='long-margin-top'>Escreva no campo a baixo o <b>nome de sua conta</b> que você desejar, este é o principal dado de sua conta para você efetuar tanto o login no jogo como no website.</p>
+			<p class='long-margin-top'>Escreva no campo a baixo o <b>login</b> que você desejar, este é o principal dado de sua conta para você efetuar tanto o login no jogo como no website.</p>
 			<p> 
-				<label>Nome da conta:</label>
+				<label>Login:</label>
 				{$this->_account_name->Draw()}
 			</p>
 			<p class='long-margin-top'>Escreva no campo a baixo a <b>senha de acesso para sua conta</b> que você desejar, este dado não é menos importante que o nome de sua conta.</p>
@@ -148,12 +150,7 @@ class View
 			",
 		);
 		
-		$world_str = "
-		<p class='long-margin-top'>Selecione em qual cidade você deseja iniciar sua jornada. Note que Island of Peace é ideal para iniciantes aonde o PvP não é permitido e existem muitos respawns, quests e missões que auxiliaram você até o nivel 80. Já Quendor e Thorn são regiões de PvP permitido.</p>
-		<p>
-			<label>Cidade do personagem:</label>
-			{$this->_char_town->Draw()}
-		</p>";
+		$world_str = "";
 
 		if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world_str = "
@@ -169,21 +166,13 @@ class View
 								<p><b>Inauguração:</b><br> fev/2012.</p>
 								<p><b>Dificuldade & Rates:</b><br> Moderada.</p>
 							</p>
-							<p>
-								<label>Cidade natal do personagem:</label>
-								{$this->_char_town->Draw()}
-							</p>
 						</div>
 						<div class='0' style='display: none;'>
 							<p>
 								<p><b>Tipo PvP:</b><br> mudança permitida.</p>
 								<p><b>Inauguração:</b><br> fev/2011.</p>
 								<p><b>Dificuldade & Rates:</b><br> Facil.</p>
-							</p>
-							<p>
-								<label>Cidade natal do personagem:</label>
-								{$this->_char_town->Draw()}
-							</p>						
+							</p>					
 						</div>								
 					</div>
 				</p>		
@@ -261,7 +250,9 @@ class View
 			<p>O seu primeiro personagem, <b><span id='character_name'></span></b> foi criado com <b>sucesso</b>!</p>
 			<p>Você já pode se conectar ao Darghos e começar a se divertir! Se necessario, neste <a href='?ref=general.howplay'>link</a> você pode obter o download do cliente e instruções de como se conectar.</p>
 			<p><h3>Primeiros passos</h3></p>
-			<p>Você começa sua jornada em Island of Peace. Mas não se deixe enganar pelo nome do lugar, de inicio <b>Mereus</b> solicitará sua ajuda na batalha conta os inimigos! Boa sorte!</p>
+			<p>Você começará a sua jornada em Island of Peace, uma calma ilha ideal para iniciantes aonde o PvP não é permitido e existem muitos respawns, quests e missões que auxiliaram em tudo que você precisa para atingir o nivel 80. Você pode sair de Island of Peace usando o barco a qualquer momento (mesmo, antes de atingir level 80) mas saiba que uma vez que sair, não poderá voltar. Todo o restante do mapa do servidor são regiões de PvP permitido, podendo existir player killers e tudo mais, então pense bem antes de sair de Island of Peace!</p>
+			<p>Assim que você entrar no jogo o NPC Mereus, no templo de Island of Peace irá lhe chamar para o ajudar em uma série de missões e aventuras! Faça isto para obter expêriencia extra, skills e melhores itens!</p>
+			<p>Boa aventura!<br\>Se vemos no Darghos!</p>
 			",
 		);		
 		
