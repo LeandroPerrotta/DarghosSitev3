@@ -17,16 +17,15 @@ class UpdateExp
 	function NormalizeExp($exp)
 	{
 		$_expTable = array(
-			array("to" => 917800, "multipler" => 20) 			//level 0-39
-			,array("to" => 7915800, "multipler" => 15) 			//level 40-79
-			,array("to" => 15694800, "multipler" => 10) 		//level 80-99
-			,array("to" => 27393800, "multipler" => 8) 			//level 100-119
-			,array("to" => 43812800, "multipler" => 6) 			//level 120-139
-			,array("to" => 65751800, "multipler" => 4) 			//level 140-159
-			,array("to" => 94010800, "multipler" => 3) 			//level 160-179
-			,array("to" => 129389800, "multipler" => 2) 		//level 180-199
-			,array("to" => 224707800, "multipler" => 1.5) 		//level 200-239
-			,array("multipler" => 1) 							//level 240+
+			array("to" => 330400, "multipler" => 20) 			//level 29
+			,array("to" => 2347900, "multipler" => 15) 			//level 55
+			,array("to" => 7615400, "multipler" => 12) 		    //level 79
+			,array("to" => 34150400, "multipler" => 8) 			//level 129
+			,array("to" => 64511400, "multipler" => 5) 			//level 159
+			,array("to" => 92435400, "multipler" => 4) 			//level 179
+			,array("to" => 127439400, "multipler" => 3) 		//level 199
+			,array("to" => 317258400, "multipler" => 2) 		//level 269
+			,array("multipler" => 1) 							//level 270+
 		);
 		
 		/*
