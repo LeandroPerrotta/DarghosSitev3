@@ -17,14 +17,14 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 	$module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>
 		<tr>
-			<th colspan='4'>Server Status</th>
+			<th colspan='4'>".tr("Server Status")."</th>
 		</tr>";	
 	
 	if($stats_fetch->online == 0 || $stats_fetch->date < time - 60 * 5)
 	{
 		$module .= "
 		<tr>
-			<td colspan='4'>O nosso servidor se encontra neste momento <font color='#ec0404'><b>off-line</b></font>.</td>
+			<td colspan='4'>".tr("O nosso servidor se encontra neste momento <font color='#ec0404'><b>off-line</b>")."</font>.</td>
 		</tr>";
 		
 		
@@ -58,6 +58,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			SELECT 
 				name, 
 				vocation, 
+		        group_id,
 				level, 
 				town_id, 
 				account_id, 
@@ -97,25 +98,25 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 		
 		if($_totalplayers == 0)
 		{
-			$playersonmsg = "Infelizmente ninguem está conectado em nosso servidor neste momento.";
+			$playersonmsg = tr("Infelizmente ninguem está conectado em nosso servidor neste momento.");
 		}	
 		else	
 		{		
 			$players_list = "";
 			
 			if($_totalplayers == 1)
-				$playersonmsg = "Nós temos 1 jogador conectado em nosso servidor.";
+				$playersonmsg = tr("Nós temos 1 jogador conectado em nosso servidor.");
 			else	
-				$playersonmsg = "Nós temos {$_totalplayers} jogadores conectados em nosso servidor.";	
+				$playersonmsg = tr("Nós temos @v1@ jogadores conectados em nosso servidor.". $_totalplayers);	
 				
 			if(g_Configs::Get(g_Configs::eConf()->STATUS_IGNORE_AFK))
 			{
 				if($_afkPlayers == 1)
-					$playersonmsg .= " Destes, 1 está treinando.";
+					$playersonmsg .= tr(" Destes, 1 está treinando.");
 				elseif($_afkPlayers == 0)
-					$playersonmsg .= " Destes, nenhum está treinando.";
+					$playersonmsg .= tr(" Destes, nenhum está treinando.");
 				elseif($_afkPlayers > 1)
-					$playersonmsg .= " Destes, {$_afkPlayers} estão treinando.";
+					$playersonmsg .= tr(" Destes, @v1@ estão treinando.", $_afkPlayers);
 			}			
 	
 			while($fetch = $query->fetch())
@@ -210,10 +211,10 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					
 				if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
 				{
-					$pvpStr = "<td><span class='pvpEnabled'>Agressivo</span>";
+					$pvpStr = "<td><span class='pvpEnabled'>".tr("Agressivo")."</span>";
 					
 					if(!$fetch->pvpEnabled)
-						$pvpStr = "<td><span class='pvpDisabled'>Pacifico</span></td>";	
+						$pvpStr = "<td><span class='pvpDisabled'>".tr("Pacifico")."</span></td>";	
 				}
 				
 				$_vocation = new t_Vocation($vocation_id);
@@ -248,17 +249,17 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			
 			$days = $uptime % 365;
 				
-			$uptime = ($days >= 1) ? "{$days} dias {$hours} horas e {$minutes} minutos" : "{$hours} horas e {$minutes} minutos";			
+			$uptime = ($days >= 1) ? tr("@v1@ dias @v2@ horas e @v3@ minutos", $days, $hours, $minutes) : tr("@v1@ horas e @v2@ minutos", $hours, $minutes);			
 			
 			$module .= "
 			<tr>
 				<td colspan='4'>{$playersonmsg}</td>
 			</tr>
 			<tr>
-				<td colspan='4'><b>O servidor está ligado a:</b> {$uptime}</td>
+				<td colspan='4'><b>".tr("O servidor está ligado a:</b> @v1@", $uptime)."</td>
 			</tr>			
 			<tr>
-				<td colspan='4'><b>Destes, são das vocações:</b></td>
+				<td colspan='4'><b>".tr("Destes, são das vocações:")."</b></td>
 			</tr>
 			<tr>
 				<td>Sorcerer's:</td><td>".\Core\Tools::getPercentOf($_sorcerers, $_totalplayers)."%</td><td>Druid's:</td><td>".\Core\Tools::getPercentOf($_druids, $_totalplayers)."%</td>
@@ -270,7 +271,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			
 			$module .= "			
 			<tr>
-				<td colspan='4'><b>Destes, se localizam nas cidades:</b></td>
+				<td colspan='4'><b>".tr("Destes, se localizam nas cidades:")."</b></td>
 			</tr>
 			<tr>
 				<td>Island of Peace:</td><td>".\Core\Tools::getPercentOf($_islandofpeace, $_totalplayers)."%</td>
@@ -297,21 +298,21 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				{			
 					$pvpStr = "
 					<tr>
-						<td>Agressivos:</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>Pacificos:</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
+						<td>".tr("Agressivos").":</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>".tr("Pacificos").":</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
 					</tr>					
 					";					
 				}	
 				
 				$module .= "
 				<tr>
-					<td colspan='4'><b>Estatisticas:</b></td>
+					<td colspan='4'><b>".tr("Estátisticas").":</b></td>
 				</tr>
 				<tr>
-					<td>Free Account's:</td><td>".\Core\Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>Premium Account's:</td><td>".\Core\Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
+					<td>".tr("Conta Gratuitas").":</td><td>".\Core\Tools::getPercentOf($_totalplayers - $_premiums, $_totalplayers)."%</td><td>".tr("Conta Premiums").":</td><td>".\Core\Tools::getPercentOf($_premiums, $_totalplayers)."%</td>
 				</tr>
 				{$pvpStr}	
 				<tr>
-					<td colspan='2'>Level médio:</td><td colspan='2'>".(ceil($levelSum / $_totalplayers))."</td>
+					<td colspan='2'>".tr("Level médio").":</td><td colspan='2'>".(ceil($levelSum / $_totalplayers))."</td>
 				</tr>			
 				";
 			}
@@ -332,12 +333,12 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			$pvpStr = "";
 			
 			if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
-				$pvpStr = "<th>PvP</th>";
+				$pvpStr = "<th>".tr("JvJ")."</th>";
 			
 			$module .= "
 			<table cellspacing='0' cellpadding='0' id='table'>
 				<tr>
-					<th width='35%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> {$pvpStr}
+					<th width='35%'>".tr("Nome")."</th> <th width='25%'>".tr("Vocação")."</th> <th>".tr("Nível")."</th> {$pvpStr}
 				</tr>
 	
 				{$players_list}

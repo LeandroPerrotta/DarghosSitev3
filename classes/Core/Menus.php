@@ -226,16 +226,16 @@ class Menus
 		$div = $li->addChild("div");
 
 		$p = $div->addChild("p");
-		$p->addChild("em", "Status: ");	
+		$p->addChild("em", tr("Darghos está "));	
 		
 		if(count($status) == 0)
 		{
-			$span = $p->addChild("span", "offline");
+			$span = $p->addChild("span", tr("offline"));
 			$span->addAttribute("style", "color: #ec0404; font-weight: bold;");
 		}
 		else
 		{			
-			$span = $p->addChild("span", "online");
+			$span = $p->addChild("span", tr("online"));
 			if($allOnline)
 				$span->addAttribute("style", "color: #00ff00; font-weight: bold;");
 			else
@@ -243,7 +243,7 @@ class Menus
 
 			$p = $div->addChild("p");
 			$p->addChild("em");
-			$a = $p->addChild("a", "Cliente para Jogar!");
+			$a = $p->addChild("a", tr("Cliente para Jogar!"));
 			$a->addAttribute("href", "?ref=general.download&file=setup.exe");
 			$a->addAttribute("target", "_blank");			
 			
@@ -251,16 +251,16 @@ class Menus
 			{
 				$p = $div->addChild("p");
 				$em = $p->addChild("em");
-				$a = $em->addChild("a", "Players online:");
+				$a = $em->addChild("a", tr("Jogadores:"));
 				$a->addAttribute("href", "?ref=status.whoisonline");
 				$span = $p->addChild("span", " " . $fetch->players + $fetch->afk);		
 
 				$p = $div->addChild("p");
-				$p->addChild("em", "Playing: ");
+				$p->addChild("em", tr("Jogando: "));
 				$span = $p->addChild("span", $fetch->players);		
 						
 				$p = $div->addChild("p");
-				$p->addChild("em", "Training: ");
+				$p->addChild("em", tr("Treinando: "));
 				$span = $p->addChild("span", $fetch->afk);				
 
 			}
@@ -270,7 +270,7 @@ class Menus
 				{
 					$p = $div->addChild("p");
 					$em = $p->addChild("em");
-					$a = $em->addChild("a", "Players online:");
+					$a = $em->addChild("a", tr("Jogadores:"));
 					$a->addAttribute("href", "?ref=status.whoisonline");
 					$span = $p->addChild("span", " " . array_sum($status));
 				}
@@ -279,8 +279,8 @@ class Menus
 			if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))
 			{
 				$p = $div->addChild("p");
-				$p->addChild("em", "Ping: ");
-				$span = $p->addChild("span", "aguarde...");			
+				$p->addChild("em", tr("Ping: "));
+				$span = $p->addChild("span", tr("aguarde..."));			
 				$span->addAttribute("class", "ping");
 			}
 		}		

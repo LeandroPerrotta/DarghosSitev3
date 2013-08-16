@@ -49,7 +49,7 @@ $module .= "
 <table style='margin-bottom: 16px;' cellspacing='0' cellpadding='0' class='fastnews'>
 
 	<tr>
-		<th colspan='3'>Notícias Rápidas</th>
+		<th colspan='3'>".tr("Notícias Rápidas")."</th>
 	</tr>
 				
 	{$fastnews}
@@ -131,7 +131,7 @@ $xmlStr = "
 }
 else
 {
-	\Core\Main::sendMessageBox("Erro", "Não há mais noticias.");
+	\Core\Main::sendMessageBox("Erro", tr("Não há mais noticias."));
 }
 
 $module .= "
@@ -140,14 +140,14 @@ $module .= "
 if($page > 1)
 {
 	$module .= "
-	<a class='buttonstd' href='?ref=news.last&page=".($page - 1)."'><span>Anterior</span></a>
+	<a class='buttonstd' href='?ref=news.last&page=".($page - 1)."'><span>".tr("Anterior")."</span></a>
 	";	
 }
 
 if($page < $lastpage)
 {
 	$module .= "
-	<a class='buttonstd' style='float: right;' href='?ref=news.last&page=".($page + 1)."'><span>Proximas</span></a>
+	<a class='buttonstd' style='float: right;' href='?ref=news.last&page=".($page + 1)."'><span>".tr("Proxima")."</span></a>
 	";
 }
 

@@ -305,7 +305,7 @@ class Menu
 		$div->addAttribute("name", $this->name);
 		
 		if($this->description)
-			$div->addAttribute("title", $this->description);
+			$div->addAttribute("title", tr($this->description));
 		
 		if($this->color != \e_MenuColor::Green)
 			$div->addAttribute("class", $this->getColorClass($this->color));
