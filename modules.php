@@ -453,6 +453,17 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "statistics":
 					$patch['file'] = $topic;
 					$needMinGroup = t_Group::Administrator;
+					break;			
+
+					
+				case "monsterfactor":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;			
+						
+				case "translations":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
 					break;				
 				
 				default:

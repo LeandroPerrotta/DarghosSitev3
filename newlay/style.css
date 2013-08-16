@@ -394,6 +394,12 @@ ul li {
 	float: left;
 }
 
+#top-bar #language-box{
+	width: 274px;
+	display: block;
+	float: left;
+}
+
 #top-bar #ultraxsoft-box{
 	background: url(images/ultraxsoft_logo.png) no-repeat;
 	background-position: center center;

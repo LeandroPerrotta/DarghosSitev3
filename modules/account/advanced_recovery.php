@@ -19,31 +19,33 @@ if($_SESSION['recovery'])
 		
 			if(\Core\Main::getIpTries() >= 3)
 			{
-				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_ARE_BLOCKED);
+				$error = tr("Esta operação está bloqueada, por favor aguarde 24 horas após a ultima tentativa.");
 			}
 			elseif($postSecretKey != $secretkey['key'])
 			{
 				\Core\Main::increaseIpTries();
 				
 				if(\Core\Main::getIpTries() < 3)
-					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_WRONG_SECRET_KEY);
+					$error = tr("A chave secreta informada para mudança de e-mail de sua conta está incorreta. Por movitos de segurançaa você só poder efetuar 3 tentativas desta operação, após as 3 tentativas este recurso estará bloqueado por 24 horas.");
 				else
-					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_HAS_BLOCKED);
+					$error = tr("Você efetuou três tentativas erradas desta operação, por motivos de segurança este recurso estará bloqueado pelas proximas 24 horas.");
 			}
 			elseif($chkEmail->loadByEmail($postEmail))
 			{
-				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_EMAIL_ALREADY_USED);
+				$error = tr("O e-mail informado já está em uso por outra conta no Darghos.");
 			}
 			elseif(!\Core\Strings::validEmail($postEmail))
 			{
-				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_EMAIL);
+				$error = tr("Este não parece ser um formato de e-mail valido. Tente novamente.");
 			}
 			else
 			{
 				$account->setEmail($postEmail);
 				$account->save();
 				
-				$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_EMAIL_CHANGED);	
+		        $success = "<p>".tr("Caro jogador,")."</p>"; 
+		        $success .= "<p>".tr("O e-mail registrado em sua conta foi modificado ultilizando sua chave secreta com sucesso!")."</p>"; 
+		        $success .= "<p>".tr("Tenha um bom jogo!")."</p>"; 
 			}
 		}
 	
@@ -65,7 +67,7 @@ if($_SESSION['recovery'])
 				<fieldset>			
 			
 					<p>
-						<label for="recovery_name">'.$pages["ACCOUNT.ADVANCED_RECOVERY.CHARACTER_NAME"].'</label><br />
+						<label for="recovery_name">'.tr("Nome do personagem").'</label><br />
 						<input readonly="readonly" name="recovery_name" size="40" type="text" value="'.$_SESSION['recovery'].'" />
 					</p>		
 					
@@ -75,26 +77,36 @@ if($_SESSION['recovery'])
 					{
 						$module .= '
 						<p>
-							<label for="recovery_character">'.$pages["ACCOUNT.ADVANCED_RECOVERY.REMINDER"].'</label><br />
-							<input readonly="readonly" name="recovery_lembrete" size="40" type="text" value="'.$secretkey["lembrete"].'" /> <br><em>('.$pages["ACCOUNT.ADVANCED_RECOVERY.REMINDER_DESC"].')</em>
-						</p>';			
-					}			
+							<label for="recovery_character">'.tr("Pergunta secreta").'</label><br />
+							<input readonly="readonly" name="recovery_lembrete" size="40" type="text" value="'.$secretkey["lembrete"].'" /> <br><em>('.tr("dica de resposta deixada por você").')</em>
+						</p>';		
+
+						$module .= '
+						<p>
+    						<label for="recovery_secretkey">'.tr("Resposta").'</label><br />
+    						<input name="recovery_secretkey" size="40" type="password" value="" /> <br><em>('.tr("informe sua resposta secreta corretamente").')</em>
+						</p>		
+						';				
+					}
+					else{
+					    $module .= '
+					    <p>
+					        <label for="recovery_secretkey">'.tr("Chave Secreta").'</label><br />
+					        <input name="recovery_secretkey" size="40" type="password" value="" /> <br><em>('.tr("informe sua chave secreta corretamente").')</em>
+					    </p>
+					    ';					    
+					}	
 					
 					$module .= '
 					<p>
-						<label for="recovery_secretkey">'.$pages["ACCOUNT.ADVANCED_RECOVERY.SECRETKEY"].'</label><br />
-						<input name="recovery_secretkey" size="40" type="password" value="" /> <br><em>('.$pages["ACCOUNT.ADVANCED_RECOVERY.SECRETKEY_DESC"].')</em>
-					</p>
-					
-					<p>
-						<label for="recovery_email">'.$pages["ACCOUNT.ADVANCED_RECOVERY.NEW_EMAIL"].'</label><br />
-						<input name="recovery_email" size="40" type="text" value="" /> <br><em>('.$pages["ACCOUNT.ADVANCED_RECOVERY.NEW_EMAIL_DESC"].')</em>
+						<label for="recovery_email">'.tr("Novo e-mail").'</label><br />
+						<input name="recovery_email" size="40" type="text" value="" /> <br><em>('.tr("informe o novo e-mail que deverá ser registrado em sua conta").')</em>
 					</p>			
 					
 					<div id="line1"></div>				
 					
 					<p>
-						<input class="button" type="submit" value="'.$buttons['SUBMIT'].'" />					
+						<input class="button" type="submit" value="'.tr("Enviar").'" />					
 					</p>
 			</fieldset>
 		</form>';

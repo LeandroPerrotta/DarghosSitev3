@@ -310,7 +310,7 @@ class Menu
 		if($this->color != \e_MenuColor::Green)
 			$div->addAttribute("class", $this->getColorClass($this->color));
 		
-		$div->addChild("strong", $this->getTitle());
+		$div->addChild("strong", tr($this->getTitle()));
 		
 		if(!Configs::Get(Configs::eConf()->ENABLE_MANUTENTION) && $toogleButton)
 		{
@@ -328,7 +328,7 @@ class Menu
 				
 				foreach($this->items as $item)
 				{
-					$menuItem = new MenuItem($item["name"], $item["url"], $item["conditions"] | 0, $item["min_group"] | 0, $item["style"] | "");
+					$menuItem = new MenuItem(tr($item["name"]), $item["url"], $item["conditions"] | 0, $item["min_group"] | 0, $item["style"] | "");
 					$menuItem->__addToElement($ul);
 				}
 			}

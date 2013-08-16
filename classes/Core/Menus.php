@@ -7,7 +7,7 @@ class Menus
 			"title" => "Navegação",
 			"name" => "navigation",
 			"items" => array(
-				array("name" => "Ultimas Notícias", "url" => "?ref=news.last")
+				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
 				,array("name" => "Sobre o Darghos", "url" => "?ref=general.about")
 				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
 				,array("name" => "Downloads", "url" => "?ref=general.downloads")
@@ -59,6 +59,7 @@ class Menus
 				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
 				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
 				,array("name" => "Estatisticas", "url" => "?ref=adv.statistics", "min_group" => \t_Group::Administrator)		
+				,array("name" => "Idiomas", "url" => "?ref=adv.translations", "min_group" => \t_Group::Administrator)		
 				//,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
 				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
 			)		
@@ -477,9 +478,8 @@ class Menus
 	
 	static function drawTopBar()
 	{
-		$xml = new \SimpleXMLElement("
-				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-				<root>
+	    /*
+	     * 	            <!--
 					<div id=\"games-box\" style='visibility: hidden;'>
 						<form action=\"?ref=account.login\" method=\"post\" >
 							<fieldset>
@@ -492,6 +492,24 @@ class Menus
 							</fieldset>
 						</form>
 					</div>
+		            -->
+	     * */
+	    
+		$xml = new \SimpleXMLElement("
+				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+				<root>
+                    <div id=\"language-box\">
+						<form action=\"?ref=misc.language\" method=\"post\" >
+							<fieldset>
+								<label style='margin-top: 0px; line-height: 16px;'>" . tr("Seu idioma") . "</label>
+								<select name=\"language\" id=\"language\" style='width: 125px;' onchange='this.form.submit()'>
+									<option selected=\"selected\"></option>					
+									<option value=\"en\">". tr("Inglês") ."</option>
+	                                <option value=\"pt-br\">". tr("Português") ."</option>
+								</select>
+							</fieldset>
+						</form>
+					</div>		        
 					<div id=\"ultraxsoft-box\">
 					</div>				
 				</root>");
@@ -506,8 +524,8 @@ class Menus
 			$form->addAttribute("method", "post");
 			
 			$fieldset = $form->addChild("fieldset");
-			$label = $fieldset->addChild("label", "Acesse sua conta... Ou crie uma ");
-			$a = $label->addChild("a", "nova conta!");
+			$label = $fieldset->addChild("label", tr("Acesse sua conta... Ou crie uma "));
+			$a = $label->addChild("a", tr("nova conta!"));
 			$a->addAttribute("href", "?ref=account.register");
 			
 			$account_name = $fieldset->addChild("input");
@@ -522,18 +540,18 @@ class Menus
 			
 			$login = $fieldset->addChild("input");
 			$login->addAttribute("class", "button");
-			$login->addAttribute("value", "Entrar");
+			$login->addAttribute("value", tr("Entrar"));
 			$login->addAttribute("type", "submit");
 		}
 		else
 		{
-			$div->addChild("p", "Você está conectado! ");
+			$div->addChild("p", tr("Você está conectado!"));
 			$p = $div->addChild("p");
-			$a = $p->addChild("a", "Sua Conta");
+			$a = $p->addChild("a", tr("Sua Conta"));
 			$a->addAttribute("href", "?ref=account.main");	
 
 			$p = $div->addChild("p");
-			$a = $p->addChild("a", "Desconectar");
+			$a = $p->addChild("a", tr("Desconectar"));
 			$a->addAttribute("href", "?ref=account.logout");			
 		}
 		

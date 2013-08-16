@@ -62,7 +62,7 @@ class Configs
 				case self::$e_Configs->WEBSITE_URL: self::Set($i, $__configs[$i], "http://darghos.com.br"); break;
 				case self::$e_Configs->WEBSITE_NAME: self::Set($i, $__configs[$i], "Darghos Server"); break;
 				case self::$e_Configs->WEBSITE_TEAM: self::Set($i, $__configs[$i], "UltraxSoft Team"); break;
-				case self::$e_Configs->LANGUAGE: self::Set($i, $__configs[$i], Consts::LANGUAGE_PTBR); break;
+				case self::$e_Configs->LANGUAGE: self::Set($i, $__configs[$i], Consts::LANGUAGE_EN); break;
 				
 				case self::$e_Configs->SQL_HOST: self::Set($i, $__configs[$i], "72.8.150.73"); break;
 				case self::$e_Configs->SQL_USER: self::Set($i, $__configs[$i], "darghos"); break;

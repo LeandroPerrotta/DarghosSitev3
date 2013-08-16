@@ -6,12 +6,14 @@ class Main
 {
 	static public $DB, $FoundController = false, $isAjax = false;
 	
-	static private $m_XMLRoot;
+	static private $m_XMLRoot, $m_language, $m_defaultLanguage, $m_untranslatedStrings = false;
 	
 	static function Initialize($isCLI = false, $cliArgs = array())
 	{
 		//set_error_handler("Core\\Main::errorHandler", E_ALL^E_NOTICE);
 		spl_autoload_register("Core\\Main::autoLoad");
+		
+		self::$m_defaultLanguage = Consts::LANGUAGE_PTBR;
 		
 		//multiclass files
 		include_once "classes/Core/Enums.php";
@@ -165,7 +167,7 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 			}
 		}
 	}
-	
+
 	static function onEnd()
 	{						
 		//após tudo, se nao conseguimos achar nada para carregar a pagina, iremos tentar carregar uma pagina simples, ou então criar uma...
@@ -245,6 +247,18 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 			return false;
 
 		return true;
+	}
+	
+	static function onFinish(){
+	    //saving untranslated strings
+	    if(self::$m_untranslatedStrings){
+    	    $file = "language/" . Configs::Get(Configs::eConf()->LANGUAGE) . ".json";
+    	    $data = json_encode(self::$m_language[Configs::Get(Configs::eConf()->LANGUAGE)]);
+    	    file_put_contents($file, $data);
+	    }
+	    
+	    if(!Configs::Get(Configs::eConf()->ENABLE_MANUTENTION))
+	        self::$DB->close();
 	}
 	
 	static function errorHandler($errno, $errstr, $errfile, $errline)
@@ -440,17 +454,65 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 	
 	static function InitLanguage()
 	{		
-		if(Configs::Get(Configs::eConf()->LANGUAGE) == Consts::LANGUAGE_PTBR)
-		{	
-			include_once "language/".Consts::LANGUAGE_PTBR."/menu.php";
-			include_once "language/".Consts::LANGUAGE_PTBR."/pages.php";
-			include_once "language/".Consts::LANGUAGE_PTBR."/buttons.php";
-			include_once "language/".Consts::LANGUAGE_PTBR."/Messages.php";			
-		}		
+		include_once "language/".Configs::Get(Configs::eConf()->LANGUAGE)."/menu.php";
+		include_once "language/".Configs::Get(Configs::eConf()->LANGUAGE)."/pages.php";
+		include_once "language/".Configs::Get(Configs::eConf()->LANGUAGE)."/buttons.php";
+		include_once "language/".Configs::Get(Configs::eConf()->LANGUAGE)."/Messages.php";				
+		
+		//new method, based on string/json
+		if(Configs::Get(Configs::eConf()->LANGUAGE) != self::$m_defaultLanguage){
+    		$file = "language/" . Configs::Get(Configs::eConf()->LANGUAGE) . ".json";
+    		
+    		$temp = file_get_contents($file) ;
+    		if($temp){
+    		    self::$m_language[Configs::Get(Configs::eConf()->LANGUAGE)] = json_decode($temp);
+    		}
+    		else{
+    		    
+    		    self::$m_language[Configs::Get(Configs::eConf()->LANGUAGE)] = new \stdClass();
+    		}
+		}
 		
 		Lang::Init();
 		\Lang_Messages::Load(Lang::GetMsgs());
 	}
+	
+	static function translateString(){
+	     
+	    $args_num = func_num_args(); //numero de argumentos recebidos
+	    $args = func_get_args(); //array contendo os argumentos recebidos
+	    
+	    //o primeiro argumento (zero na array) sempre é a string
+	    $string = $args[0];    
+	    
+	    $tranl = $string;
+	    
+	    if(Configs::Get(Configs::eConf()->LANGUAGE) != self::$m_defaultLanguage){
+	       
+	        //translate found
+	        if(!empty(self::$m_language[Configs::Get(Configs::eConf()->LANGUAGE)]->{$string})){
+	            $tranl = self::$m_language[Configs::Get(Configs::eConf()->LANGUAGE)]->{$string};
+	        }
+	        else{
+	            //we need to create a new entry for this string to be transalated some day
+	            self::$m_language[Configs::Get(Configs::eConf()->LANGUAGE)]->{$string} = $string;
+	            self::$m_untranslatedStrings = true;	            
+	        }        
+	    }
+	    
+	    // os argumentos seguintes serão substituidos na mensagem pelo
+	    // seu valor correspondente, argumento 1 na array em diante por
+	    // @v1@ em diante... se não ouver mais de 1 argumento, nada é feito
+	    if($args_num > 1)
+	    {
+	        for($i = 1; $i < $args_num; $i++)
+	        {
+	            $tranl = str_replace("@v{$i}@", $args[$i], $tranl);
+	        }
+        }	    
+
+        return $tranl;
+	}	
 	
 	/* DEPRECATED FUNCTION */
 	static function extractPost()

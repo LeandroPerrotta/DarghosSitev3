@@ -22,6 +22,13 @@ class Misc
 		}
 	}
 	
+	function Language(){
+	    if(!empty($_POST["language"]))
+	        setcookie("language", $_POST["language"]);
+	    
+        \Core\Main::redirect("?ref=news.last");
+	}
+	
 	function Searchitembyname()
 	{
 		\Core\Main::$isAjax = true;

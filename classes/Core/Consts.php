@@ -9,7 +9,7 @@ class Consts
 		,SERVER_DISTRO_OPENTIBIA = "otserv"
 		
 		,LANGUAGE_PTBR = "pt-br"
-		,LANGUAGE_EN = "us"
+		,LANGUAGE_EN = "en"
 		
 		,ENCRYPT_TYPE_NONE = "plaintext"
 		,ENCRYPT_TYPE_MD5 = "md5"

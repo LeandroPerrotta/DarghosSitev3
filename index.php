@@ -29,13 +29,16 @@ spl_autoload_register("Core\\Main::autoLoad");
 
 Core\Main::Initialize();
 
+function tr($string){
+    return call_user_func_array("Core\Main::translateString", func_get_args());
+    //return Core\Main::translateString($string);
+}
+
 use \Core\Configs as g_Configs;
 
 if(!Core\Main::$FoundController)
 	include "modules.php";
 
 Core\Main::drawTemplate();
-
-if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))	
-	Core\Main::$DB->close();
+Core\Main::onFinish();
 ?>
