@@ -21,7 +21,7 @@ if(isset($_GET["world"]))
 	if($charactersActiveDays != 0 && !$filter_showInactivePlayers)
 	{
 		$module .= '
-		<p> <b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos ' .$charactersActiveDays. ' dias.';
+		<p> '.tr("<b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos @v1@ dias.");
 	}
 	
 	$validSkills = array("experience", "maglevel");
@@ -29,27 +29,27 @@ if(isset($_GET["world"]))
 	$select->SetName("skill");
 	
 	$selected = $skill == "experience" ? true : false;
-	$select->AddOption("Nível de Experiência", "experience", $selected);
+	$select->AddOption(tr("Nível de Experiência"), "experience", $selected);
 	
 	$selected = $skill == "maglevel" ? true : false;
-	$select->AddOption("Nível Mágico", "maglevel", $selected);
+	$select->AddOption(tr("Nível Mágico"), "maglevel", $selected);
 	
 	if(\Core\Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $world_id))
 	{
 		$selected = $skill == "bgrating" ? true : false;
-		$select->AddOption("Battlegrond Rating", "bgrating", $selected);
+		$select->AddOption(tr("Battlegrond Rating"), "bgrating", $selected);
 		$validSkills[] = "bgrating";
 	}
 	
 	$skillNames = array(
-		t_Skills::Fist => "Batalha com Mãos"
-		,t_Skills::Club => "Batalha com Martelo"
-		,t_Skills::Axe => "Batalha com Machado"
-		,t_Skills::Sword => "Batalha com Espada"
-		,t_Skills::Fist => "Batalha com Mãos"
-		,t_Skills::Distance => "Pontaria a Distancia"
-		,t_Skills::Shielding => "Habilidade com Escudo"
-		,t_Skills::Fishing => "Habilidade de Pesca"
+		t_Skills::Fist => tr("Batalha com Mãos")
+		,t_Skills::Club => tr("Batalha com Martelo")
+		,t_Skills::Axe => tr("Batalha com Machado")
+		,t_Skills::Sword => tr("Batalha com Espada")
+		,t_Skills::Fist => tr("Batalha com Mãos")
+		,t_Skills::Distance => tr("Pontaria a Distancia")
+		,t_Skills::Shielding => tr("Habilidade com Escudo")
+		,t_Skills::Fishing => tr("Habilidade de Pesca")
 	);
 	
 	while(t_Skills::ItValid())
@@ -77,7 +77,7 @@ if(isset($_GET["world"]))
 			'.($_GET["p"] ? '<input type="hidden" name="p" value="'.$_GET["p"].'"/>' : null).'
 		
 			<p>		
-				<label for="skill">Tipo de Habilidade</label>
+				<label for="skill">'.tr("Tipo de Habilidade").'</label>
 				'.$select->Draw().'
 			</p>';
 	
@@ -85,11 +85,11 @@ if(isset($_GET["world"]))
 			{
 				$module .= '
 				<p>		
-					<label for="skill">Tipo de PvP</label>
+					<label for="skill">'.tr("Tipo de PvP").'</label>
 					<select name="pvpType">
-						<option '.(($filter_pvp == "both") ? 'selected' : null).' value="both">Todos</option>
-						<option '.(($filter_pvp == "enabled") ? 'selected' : null).' value="enabled">Agressivos apénas</option>
-						<option '.(($filter_pvp == "disabled") ? 'selected' : null).' value="disabled">Pacificos apénas</option>
+						<option '.(($filter_pvp == "both") ? 'selected' : null).' value="both">'.tr("Todos").'</option>
+						<option '.(($filter_pvp == "enabled") ? 'selected' : null).' value="enabled">'.tr("Agressivos apénas").'</option>
+						<option '.(($filter_pvp == "disabled") ? 'selected' : null).' value="disabled">'.tr("Pacificos apénas").'</option>
 					</select>
 				</p>';	
 			}
@@ -97,13 +97,13 @@ if(isset($_GET["world"]))
 			$module .= '
 			<p>		
 				<label for="filter">Filtros</label>
-				'.((Configs::Get(Configs::eConf()->ENABLE_REBORN)) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hideReborned" type="checkbox" value="1" /> Ocultar personagens renascidos (somente para experience).' :  '');
+				'.((Configs::Get(Configs::eConf()->ENABLE_REBORN)) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hideReborned" type="checkbox" value="1" /> '.tr("Ocultar personagens renascidos (somente para experience).").'' :  '');
 				
 				if($charactersActiveDays > 0)
 				{
 					$check = ($filter_showInactivePlayers) ? 'checked="checked"' : '';
 					
-					$module .= '<input type="checkbox" name="showInactives" '.$check.' value="1" /> Exibir mesmo os personagens inativos.';
+					$module .= '<input type="checkbox" name="showInactives" '.$check.' value="1" /> '.tr("Exibir mesmo os personagens inativos.").'';
 				}
 				
 				$module .= '
@@ -112,7 +112,7 @@ if(isset($_GET["world"]))
 			<p class="line"></p>
 			
 			<p>
-				<input class="button" type="submit" value="Enviar" />
+				<input class="button" type="submit" value="'.tr("Enviar").' />
 			</p>
 		</fieldset>
 	</form>';
@@ -263,7 +263,7 @@ if(isset($_GET["world"]))
 	
 	if($now != $ultima)
 	{
-		$module .= "<a href='?{$regex_query}&p=".($now + 1)."'>Proximo</a>";
+		$module .= "<a href='?{$regex_query}&p=".($now + 1)."'>".tr("Proximo")."</a>";
 		$havenext = true;
 	}		
 	
@@ -274,7 +274,7 @@ if(isset($_GET["world"]))
 			$module .= " | ";
 		}			
 		
-		$module .= "<a href='?{$regex_query}&p={$ultima}'>Ultima</a>";
+		$module .= "<a href='?{$regex_query}&p={$ultima}'>".tr("Última")."</a>";
 	}
 	
 	$module .= "</span>";
@@ -283,7 +283,7 @@ if(isset($_GET["world"]))
 	$module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>
 		<tr>
-			<th width='5%'>&nbsp;</th> <th width='50%'>Nome</th> <th width='25%'>Vocação</th> <th>Nível</th> ".(($skill == "experience") ? "<th>Pontos</th>" : null)."
+			<th width='5%'>&nbsp;</th> <th width='50%'>".tr("Nome")."</th> <th width='25%'>".tr("Vocação")."</th> <th>".tr("Nível")."</th> ".(($skill == "experience") ? "<th>".tr("Pontos")."</th>" : null)."
 		</tr>	
 	";
 	
@@ -322,8 +322,8 @@ if(isset($_GET["world"]))
 			$skill_value = $player->getSkill($skillid);
 		}
 		
-		$online = ($player->getOnline() == 1) ? "[<span class='online'>Online</span>]" : "";
-		$guild = ($player->LoadGuild()) ? "<span style='font-size: 9px;'><br>Membro da guild <a href='?ref=guilds.details&name={$player->GetGuildName()}'>{$player->GetGuildName()}</a><span>" : "<span style='font-size: 9px;'><br>Não pertence a nenhuma guild.";
+		$online = ($player->getOnline() == 1) ? "[<span class='online'>".tr("Online")."</span>]" : "";
+		$guild = ($player->LoadGuild()) ? "<span style='font-size: 9px;'><br>".tr("Membro da guild")." <a href='?ref=guilds.details&name={$player->GetGuildName()}'>{$player->GetGuildName()}</a><span>" : "<span style='font-size: 9px;'><br>".tr("Não pertence a nenhuma guild.")."";
 		
 		$_vocation = new t_Vocation($player->getVocation());
 		
