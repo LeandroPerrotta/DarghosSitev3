@@ -58,8 +58,8 @@ else{
         $k = 0;
         foreach($data as $key => $value){
             
-            $value = htmlspecialchars($value);
-            $key = htmlspecialchars($key);
+            //$value = htmlspecialchars($value);
+            //$key = htmlspecialchars($key);
             
             if(strlen($value) <= 128){
                 $inputs .= "
