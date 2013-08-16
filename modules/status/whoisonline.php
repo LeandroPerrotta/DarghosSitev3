@@ -107,7 +107,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			if($_totalplayers == 1)
 				$playersonmsg = tr("Nós temos 1 jogador conectado em nosso servidor.");
 			else	
-				$playersonmsg = tr("Nós temos @v1@ jogadores conectados em nosso servidor.". $_totalplayers);	
+				$playersonmsg = tr("Nós temos @v1@ jogadores conectados em nosso servidor.", $_totalplayers);	
 				
 			if(g_Configs::Get(g_Configs::eConf()->STATUS_IGNORE_AFK))
 			{
