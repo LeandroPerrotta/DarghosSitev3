@@ -45,7 +45,7 @@ else{
             
             foreach($data as $key => $value){
                 
-                $data->{$key} = $_POST["key_{$k}"];
+                $data->{$key} = stripslashes($_POST["key_{$k}"]);
                 $k++;
             }
             

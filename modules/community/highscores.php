@@ -96,7 +96,7 @@ if(isset($_GET["world"]))
 	
 			$module .= '
 			<p>		
-				<label for="filter">Filtros</label>
+				<label for="filter">'.tr("Filtros").'</label>
 				'.((Configs::Get(Configs::eConf()->ENABLE_REBORN)) ? '<input '.(($filter_hideRebornPlayers) ? 'checked="checked"' : null).' name="hideReborned" type="checkbox" value="1" /> '.tr("Ocultar personagens renascidos (somente para experience).").'' :  '');
 				
 				if($charactersActiveDays > 0)
@@ -255,7 +255,7 @@ if(isset($_GET["world"]))
 	$module .= "<div>";
 	
 	if($now > 0)
-		$module .= "<span style='margin-top: 10px; float: left;'><a href='?{$regex_query}'>Primeira</a> | <a href='?{$regex_query}&p=".($now - 1)."'>Anterior</a></span>";
+		$module .= "<span style='margin-top: 10px; float: left;'><a href='?{$regex_query}'>".tr("Primeira")."</a> | <a href='?{$regex_query}&p=".($now - 1)."'>".tr("Voltar")."</a></span>";
 	
 	$module .= "<span style='margin-top: 10px; float: right;'>";	
 	
