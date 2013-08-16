@@ -103,7 +103,7 @@ if(isset($_GET["world"]))
 				{
 					$check = ($filter_showInactivePlayers) ? 'checked="checked"' : '';
 					
-					$module .= '<input type="checkbox" name="showInactives" '.$check.' value="1" /> '.tr("Exibir mesmo os personagens inativos.").'';
+					$module .= '<input type="checkbox" name="showInactives" '.$check.' value="1" /> '.tr("Exibir mesmo os personagens inativos.");
 				}
 				
 				$module .= '
@@ -112,7 +112,7 @@ if(isset($_GET["world"]))
 			<p class="line"></p>
 			
 			<p>
-				<input class="button" type="submit" value="'.tr("Enviar").' />
+				<input class="button" type="submit" value="'.tr("Enviar").'" />
 			</p>
 		</fieldset>
 	</form>';
