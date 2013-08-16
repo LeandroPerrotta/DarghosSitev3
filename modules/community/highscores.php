@@ -21,7 +21,7 @@ if(isset($_GET["world"]))
 	if($charactersActiveDays != 0 && !$filter_showInactivePlayers)
 	{
 		$module .= '
-		<p> '.tr("<b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos @v1@ dias.");
+		<p>'.tr("<b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos @v1@ dias.", $charactersActiveDays).'</p>';
 	}
 	
 	$validSkills = array("experience", "maglevel");
