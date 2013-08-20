@@ -121,8 +121,8 @@ class View
 			
 			if(!$item_id
 			        || !$item_count
-			        || !$item_action_id
-			        || !$item_is_stack
+			        || !$description
+			        || !$price
 			)
 			{
 			    $this->_message = "Preencha todos campos corretamente.";
