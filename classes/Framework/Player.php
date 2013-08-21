@@ -882,8 +882,11 @@ class Player
 	
 	function getOnlineTime($hourAgo = 24)
 	{
-		$query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) as `total` FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." AND login >= UNIX_TIMESTAMP() - (60 * 60 * {$hourAgo}) GROUP BY `player_id`");
-	
+	    if($hourAgo != 0)
+		    $query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) as `total` FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." AND login >= UNIX_TIMESTAMP() - (60 * 60 * {$hourAgo}) GROUP BY `player_id`");
+	    else
+	        $query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) as `total` FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." GROUP BY `player_id`");
+	    
 		if($query->numRows() == 0)
 			return 0;
 			

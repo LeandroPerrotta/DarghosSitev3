@@ -524,6 +524,7 @@ class t_Group extends \Core\Structs
 		,CommunityManager = 6
 		,Administrator = 7
 		,PlayerNonLogout = 8
+		,SuperAdministrator = 9
 	;	
 	
 	static protected

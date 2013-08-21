@@ -13,6 +13,7 @@ class Menus
 				,array("name" => "Downloads", "url" => "?ref=general.downloads")
 				,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
 				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
+				,array("name" => "Suporte", "url" => "?ref=general.support")	
 				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
 			)
 		)

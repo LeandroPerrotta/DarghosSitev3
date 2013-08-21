@@ -1,6 +1,28 @@
 <?php
 \Core\Main::requireWorldSelection();
 
+function getTimeString($minutes){
+	if($minutes <= 1)
+		return tr("A menos de um minuto.");
+		
+	if($minutes >= 60){
+		$hours = 0;
+		$mins = $minutes;
+	
+		do{
+			$mins -= 60;
+			$hours++;
+		}while($mins >= 60);
+		
+		$time = $mins > 0 ? tr("A @v1@ hora(s) e @v2@ minuto(s)", $hours, $mins) : tr("A @v1@ hora(s)", $hours);
+	}
+	else{
+		$time = tr("A @v1@ minuto(s)", $minutes);
+	}		
+	
+	return $time;
+}
+
 if(isset($_GET["world"]))
 {
 	$world_id = (int)$_GET["world"];
@@ -13,11 +35,15 @@ if(isset($_GET["world"]))
 	$module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>
 		<tr>
-			<th colspan='2'>".tr("Últimas Mortes")."</th>
+			<th>".tr("Últimas Mortes")."</th>
 		</tr>";		
 	
 	if($query->numRows() != 0)
 	{
+	    $current_minute = 0;
+	    
+		$changedMinute = true;
+		
 		while($fetch = $query->fetch())
 		{
 			$deaths = new \Framework\Deaths();
@@ -26,8 +52,24 @@ if(isset($_GET["world"]))
 			
 			$deathPlayer = new \Framework\Player();
 			$deathPlayer->load($fetch->player_id);		
-					
-			$date = \Core\Main::formatDate($death_values['date']);
+			
+			$minutes = floor((time() - $death_values['date']) / 60);
+			
+			if($minutes > $current_minute){
+			    
+				if($changedMinute){
+					$time = getTimeString($minutes);
+				
+					$module .= "
+					<tr>
+						<td heigth='35' style='opacity: 0.90; filter: alpha(opacity=90); background-color: #6a6a62;'><b>{$time}.</b></td>
+					</tr>
+					";			        
+				}
+				
+				$changedMinute = $current_minute == $minutes ? false : true;
+				$current_minute = $minutes;
+			}
 			
 			$skull_img = Framework\Player::getSkullImg($deathPlayer);
 			$death = "<a href='?ref=character.view&name={$deathPlayer->getName()}'>{$deathPlayer->getName()}</a> {$skull_img} ".tr("foi morto no nivel @v1@ por ", $death_values['level']);
@@ -51,27 +93,27 @@ if(isset($_GET["world"]))
 							{
 								if($killer["isEnv"] == 1)
 								{			
-									$death .= tr(" e por um(a) ");
+									$death .= " " . tr("e por um(a) ") . " ";
 								}	
 								else	
-									$death .= tr(" e por ");
+									$death .= " " . tr("e por")  . " ";
 							}
 						}
 						else
 						{
 							if($killer["isEnv"] == 1)
 							{			
-								$death .= tr(" e por um(a) ");
+								$death .= " " . tr("e por um(a)")  . " ";
 							}	
 							else	
-								$death .= tr(" e por ");
+								$death .= " " . tr("e por")  . " ";
 						}	
 					}		
 					
 					if($killer["isEnv"] == 1)
 					{
 						if($k == 1)
-							$death .= tr("um(a) ");
+							$death .= tr("um(a)") . " ";
 						
 						$explodeKiller = explode(" ", $killer['killer'], 2);
 						
@@ -95,7 +137,7 @@ if(isset($_GET["world"]))
 			
 			$module .= "
 				<tr>
-					<td witdh='30%'>{$date}</td> <td>{$death}</td>
+					<td>{$death}</td>
 				</tr>					
 			";			
 		}

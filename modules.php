@@ -499,6 +499,14 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			$patch['file'] = "notfound";
 		break;	
 	}
+	
+	if($patch['dir'] == "errors"){
+	    $file = "{$module}/{$topic}.php";
+	    if(file_exists("modules/{$file}")){
+	        $patch['dir'] = $module;
+	        $patch['file'] = $topic;        
+	    }
+	}
 
 	$module = null;
 	

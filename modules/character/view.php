@@ -28,9 +28,9 @@ if($_POST["player_name"] || $_GET['name'])
 		$lastlogin = ($player->getLastLogin()) ? \Core\Main::formatDate($player->getLastLogin()) : "Nunca entrou.";
 		$creation = \Core\Main::formatDate($player->getCreation());
 		
-		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>Conta Premium" : "Conta Gratuita";	
-		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : "não configurado";
-		$location = ($account->get("location") != "") ? $account->get("location") : "não configurado";
+		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>" . tr("Conta Premium") : tr("Conta Gratuita");	
+		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : tr("não configurado");
+		$location = ($account->get("location") != "") ? $account->get("location") : tr("não configurado");
 		$url = ($account->get("url") != "") ? $account->get("url") : "não configurado";
 		
 		$deathlist = $deaths->getDeathListOfPlayer($player->getId());
@@ -41,10 +41,10 @@ if($_POST["player_name"] || $_GET['name'])
 		<div id='horizontalSelector'>
 			<span name='left_corner'></span>
 			<ul>
-				<li name='profile' checked='checked'><span>Profile</span></li>
-				<li name='statistics'><span>Estatisticas</span></li>
-				<li name='achievements'><span>Façanhas</span></li>
-				<li name='accounts'><span>Conta</span></li>
+				<li name='profile' checked='checked'><span>".tr("Profile")."</span></li>
+				<li name='statistics'><span>".tr("Estatisticas")."</span></li>
+				<li name='achievements'><span>".tr("Façanhas")."</span></li>
+				<li name='accounts'><span>".tr("Conta")."</span></li>
 			</ul>
 			<span name='right_corner'></span>
 		</div>
@@ -54,10 +54,10 @@ if($_POST["player_name"] || $_GET['name'])
 $infos = array();
 
 if($player->deletionStatus())
-	$infos[] = "<font style='color: red; font-weight: bold;'>Este personagem esta agendado para ser deletado no dia ". \Core\Main::formatDate($player->deletionStatus()) . ".</font>";
+	$infos[] = "<font style='color: red; font-weight: bold;'>".tr("Este personagem esta agendado para ser deletado no dia @v1@.", \Core\Main::formatDate($player->deletionStatus()))."</font>";
 
 $skull_img = Framework\Player::getSkullImg($player);
-$infos[] = array("Nome", $player->getName() . " {$skull_img}");
+$infos[] = array(tr("Nome"), $player->getName() . " {$skull_img}");
 
 if($oldnames)
 {
@@ -72,33 +72,36 @@ if($oldnames)
 			$oldnames_string .= ", ";
 	}
 
-	$infos[] = array("Nomes Antigos", $oldnames_string);
+	$infos[] = array(tr("Nomes Antigos"), $oldnames_string);
 }
 
-$infos[] = array("Mundo", t_Worlds::GetString($player->getWorldId()));
-$infos[] = array("Level", $player->getLevel());
+$infos[] = array(tr("Mundo"), t_Worlds::GetString($player->getWorldId()));
+$infos[] = array(tr("Nível"), $player->getLevel());
 
 if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH, $player->getWorldId()))
 {
-	$pvp_str = $player->isPvpEnabled() ? "<span class='pvpEnabled'>Agressivo</span>" : "<span class='pvpDisabled'>Pacifico</span>";
-	$infos[] = array("PvP", $pvp_str);
+	$pvp_str = $player->isPvpEnabled() ? "<span class='pvpEnabled'>".tr("Agressivo")."</span>" : "<span class='pvpDisabled'>".tr("Pacivo")."</span>";
+	$infos[] = array(tr("JvJ"), $pvp_str);
 }
 
-$infos[] = array("Magic Level", $player->getMagLevel());
+$infos[] = array(tr("Nível mágico"), $player->getMagLevel());
 
 if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorldId()))
-	$infos[] = array("Battleground Rating", $player->getBattlegroundRating());
+	$infos[] = array(tr("Ranque em Campos de Batalhas"), $player->getBattlegroundRating());
 
 $onlineTicks = $player->getOnlineTime();
-$infos[] = array("Atividade Online", \Core\Tools::getPercentOf($onlineTicks, 60*60*24) . "% das últimas 24h.");
 
-$infos[] = array("Sexo", t_Genre::GetString($player->getSex()));
+$temp_date = new DateTime("@".(time() + $player->getOnlineTime(0)));
+$now_date = new DateTime();
+$diff = $temp_date->diff($now_date);
+
+$infos[] = array(tr("Sexo"), t_Genre::GetString($player->getSex()));
 
 $_vocation = new t_Vocation($player->getVocation());
-$infos[] = array("Vocação", $_vocation->GetByName($player->getVocation()));
+$infos[] = array(tr("Vocação"), $_vocation->GetByName($player->getVocation()));
 
 $town_str = t_Towns::GetString($player->getTownId());
-$infos[] = array("Residencia", $town_str);
+$infos[] = array(tr("Residencia"), $town_str);
 
 if($houseid)
 {
@@ -110,31 +113,33 @@ if($houseid)
 	$housemsg = "";
 	if($houses->get("warnings") == 0)
 	{
-		$housemsg = "{$houses->get("name")} ({$_house_town_str}) com pagamento no dia  ".\Core\Main::formatDate($houses->get("paid")).".";
+		$housemsg = "{$houses->get("name")} ({$_house_town_str}) ".tr("com pagamento no dia")."  ".\Core\Main::formatDate($houses->get("paid")).".";
 	}
 	else
 	{
-		$housemsg = "{$houses->get("name")} ({$_house_town_str}) está com {$houses->get("warnings")} pagamento(s) atrazado(s).";
+		$housemsg = "{$houses->get("name")} ({$_house_town_str}) ".tr("está com @v1@ pagamento(s) atrazado(s).", $houses->get("warnings"));
 	}	
 	
-	$infos[] = array("Casa", $housemsg);
+	$infos[] = array(tr("Casa"), $housemsg);
 }
 				
 if($player->LoadGuild())
-	$infos[] = array("Membro da Guild", "{$player->GetGuildRank()} da <a href='?ref=guilds.details&name={$player->GetGuildName()}'>{$player->GetGuildName()}");			
+	$infos[] = array(tr("Membro da Guild"), "{$player->GetGuildRank()} da <a href='?ref=guilds.details&name={$player->GetGuildName()}'>{$player->GetGuildName()}");			
 		
 if($player->getComment())
 {
 	$str = str_replace('\\r', "", $player->getComment());
 	$str = str_replace('\\n', "<br>", $str);
-	$infos[] = array("Comentario", nl2br($str));
+	$infos[] = array(tr("Comentario"), nl2br($str));
 }
 	
-$infos[] = array("Criado em", $creation);
-$infos[] = array("Último Login:", $lastlogin);
+$infos[] = array(tr("Atividade recente"), \Core\Tools::getPercentOf($onlineTicks, 60*60*24) . tr("% das últimas 24h."));
+$infos[] = array(tr("Tempo total"), tr("@v1@ dias conectado.", $diff->format("%a")));
+$infos[] = array(tr("Criado em"), $creation);
+$infos[] = array(tr("Último Login:"), $lastlogin);
 
 $table = new \Framework\HTML\Table();
-$table->AddField("Personagem", null, null, 2, true);
+$table->AddField(tr("Personagem"), null, null, 2, true);
 $table->AddRow();
 
 foreach($infos as $k => $v)
@@ -238,32 +243,32 @@ if($bans->isBannished($account->getId()))
 			
 		if($ban['type'] == 3)
 		{
-			$ban_str .= "Banido por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
-			Duração: Até ".\Core\Main::formatDate($ban['expires']).".";
+			$ban_str .= tr("Banido por").": <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
+			".tr("Duração: Até")." ".\Core\Main::formatDate($ban['expires']).".";
 		}
 		elseif($ban['type'] == 5)
 		{
-			$ban_str .= "Deletado por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
-			Duração: permanentemente.";
+			$ban_str .= tr("Deletado por").": <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
+			".tr("Duração: permanentemente.");
 		}
 			
 		$ban_str .= "</font>";
 	}
 	
-	$infos[] = array("Punição", $ban_str);
+	$infos[] = array(tr("Punição"), $ban_str);
 }
 
-$infos[] = array("Tipo de Conta", $premium);
-$infos[] = array("Nome Real", $realname);
-$infos[] = array("Localização", $location);
-$infos[] = array("Website", $url);
-$infos[] = array("Criação", \Core\Main::formatDate($account->getCreation()));
+$infos[] = array(tr("Tipo de Conta"), $premium);
+$infos[] = array(tr("Nome Real"), $realname);
+$infos[] = array(tr("Localização"), $location);
+$infos[] = array(tr("Website"), $url);
+$infos[] = array(tr("Criação"), \Core\Main::formatDate($account->getCreation()));
 
 $module .= "
 <div title='accounts' style='display: none; margin: 0px; padding: 0px;'>";
 
 $table = new \Framework\HTML\Table();
-$table->AddField("Informações da Conta", null, null, 2, true);
+$table->AddField(tr("Informações da Conta"), null, null, 2, true);
 $table->AddRow();
 
 foreach($infos as $k => $v)
@@ -317,22 +322,22 @@ if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorl
 }
 
 $table = new \Framework\HTML\Table();
-$table->AddField("Participação em Dungeons", null, null, null, true);
+$table->AddField(tr("Participação em Masmorras"), null, null, null, true);
 $table->AddRow();
 
-$table->AddField("Ariadne - Trolls Wing: {$player->getDungeonAriadneTrollsAttemps()} tentativas e {$player->getDungeonAriadneTrollsCompleted()} completadas.");
+$table->AddField(tr("Ariadne - Trolls Wing: @v1@ tentativas e @v2@ completadas.", $player->getDungeonAriadneTrollsAttemps(), $player->getDungeonAriadneTrollsCompleted()));
 $table->AddRow();
 
 $module .= $table->Draw();
 
 $table = new \Framework\HTML\Table();
-$table->AddField("Mortes Causadas", null, null, null, true);
+$table->AddField(tr("Mortes Causadas"), null, null, null, true);
 $table->AddRow();
 
-$table->AddField("Matou {$player->getTotalKills()} jogadores.");
+$table->AddField(tr("Matou @v1@ jogadores.", $player->getTotalKills()));
 $table->AddRow();
 
-$table->AddField("Participou da morte de {$player->getTotalAssists()} jogadores.");
+$table->AddField(tr("Participou da morte de @v1@ jogadores.", $player->getTotalAssists()));
 $table->AddRow();
 
 if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorldId()))
@@ -347,21 +352,21 @@ if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorl
 $module .= $table->Draw();
 	
 $table = new \Framework\HTML\Table();
-$table->AddField("Mortes Sofridas", null, null, null, true);
+$table->AddField(tr("Mortes Sofridas"), null, null, null, true);
 $table->AddRow();
 
-$table->AddField("Foi morto {$player->getTotalDeaths()} vezes (total).");
+$table->AddField(tr("Foi morto @v1@ vezes (total).", $player->getTotalDeaths()));
 $table->AddRow();
 
-$table->AddField("Foi morto {$player->getTotalDeathsPlayers()} vezes com participação de jogadores.");
+$table->AddField(tr("Foi morto @v1@ vezes com participação de jogadores.", $player->getTotalDeathsPlayers()));
 $table->AddRow();
 
-$table->AddField("Foi morto {$player->getTotalDeathsEnv()} vezes com participação de criaturas.");
+$table->AddField(tr("Foi morto @v1@ vezes com participação de criaturas.", $player->getTotalDeathsEnv()));
 $table->AddRow();
 
 if(Configs::Get(Configs::eConf()->ENABLE_BATTLEGROUND_FEATURES, $player->getWorldId()))
 {
-	$table->AddField("Foi morto {$player->getTotalBgDeaths()} vezes em battlegrounds.");
+	$table->AddField(tr("Foi morto @v1@ vezes em battlegrounds.", $player->getTotalBgDeaths()));
 	$table->AddRow();
 }
 
@@ -374,7 +379,7 @@ if(is_array($deathlist))
 							
 	<table cellspacing='0' cellpadding='0'>
 		<tr>
-			<th colspan='2'>Mortes Recentes</th>
+			<th colspan='2'>".tr("Mortes Recentes")."</th>
 		</tr>									
 	";
 	
@@ -384,7 +389,7 @@ if(is_array($deathlist))
 		
 		$date = \Core\Main::formatDate($death_values['date']);
 		
-		$death = "Morto no Nivel {$death_values['level']} por ";
+		$death = tr("Morto no Nivel @v1@ por ", $death_values['level']);
 		
 		if(count($death_values['killers']) != 0)
 		{
@@ -405,27 +410,27 @@ if(is_array($deathlist))
 						{
 							if($killer["isEnv"] == 1)
 							{			
-								$death .= " e por um(a) ";
+								$death .= " " . tr("e por um(a)"). " ";
 							}	
 							else	
-								$death .= " e por ";
+								$death .= " " . tr("e por"). " ";
 						}
 					}
 					else
 					{
 						if($killer["isEnv"] == 1)
 						{			
-							$death .= " e por um(a) ";
+							$death .= " " . tr("e por um(a)"). " ";
 						}	
 						else	
-							$death .= " e por ";
+							$death .= " " . tr("e por"). " ";
 					}	
 				}		
 				
 				if($killer["isEnv"] == 1)
 				{
-					if($k == 1)
-						$death .= "um(a) ";
+					if($k == 1)		    
+						$death .= tr("um(a) ");
 					
 					$explodeKiller = explode(" ", $killer['killer'], 2);
 					
@@ -463,7 +468,7 @@ if($logged_acc && ($account->getId() == $logged_acc->getId() || $logged_acc->get
 		$module .= "
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
-				<th colspan='3'>Assassinatos Recentes</th>
+				<th colspan='3'>".tr("Assassinatos Recentes")."</th>
 			</tr>					
 		";				
 		
@@ -473,11 +478,11 @@ if($logged_acc && ($account->getId() == $logged_acc->getId() || $logged_acc->get
 			$killed->load($kill["killed"]);
 			
 			$date = \Core\Main::formatDate($kill['date']);
-			$isInjust = ($kill["injust"] == 1) ? "<font color='#ec0404'><b>injustificada</b></font>" : "<font color='#00ff00'><b>justificada</b></font>";
+			$isInjust = ($kill["injust"] == 1) ? "<font color='#ec0404'><b>".tr("injustificada")."</b></font>" : "<font color='#00ff00'><b>".tr("justificada")."</b></font>";
 			
 			$module .= "
 				<tr>
-					<td width='25%'>{$date}</td> <td width='50%'>Matou <a href='?ref=character.view&name={$killed->getName()}'>{$killed->getName()}</a> no level {$kill["level"]}.</td> <td>{$isInjust}</td>
+					<td width='25%'>{$date}</td> <td width='50%'>".tr("Matou <a href='?ref=character.view&name=@v1@'>@v2@</a> no level @v3@", $killed->getName(), $killed->getName(), $kill["level"]).".</td> <td>{$isInjust}</td>
 				</tr>					
 			";					
 		}
@@ -490,11 +495,11 @@ if($logged_acc && ($account->getId() == $logged_acc->getId() || $logged_acc->get
 		$module .= "
 		<table cellspacing='0' cellpadding='0'>
 			<tr>
-				<th colspan='3'>Assassinatos Recentes</th>
+				<th colspan='3'>".tr("Assassinatos Recentes")."</th>
 			</tr>
 
 			<tr>
-				<td>Você não matou nenhum personagem recentemente.</td>
+				<td>".tr("Você não matou nenhum personagem recentemente").".</td>
 			</tr>					
 			
 		</table>	
@@ -563,19 +568,19 @@ $battleground_achievements = array(
 
 $dungeon_achievements = array(
 	array( "name" => "Ariadne: Trolls Wing", "list" => array(
-		array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_ALL_TOTEMS, text => "Obteve os 12 totems para acessar o lar do Ghazran." )
-		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_GHAZRAN_TONGUE, text => "Derrotou e obteve a lingua do Ghazran, o boss." )
-		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_WITHOUT_ANYONE_DIE, text => "Derrotou o Ghazran sem que ninguem do time morresse nesta tentativa inteira." )
-		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_IN_ONLY_ONE_ATTEMP, text => "Obteve os 12 totems e derrotou o Ghazran em apénas uma tentativa." )
+		array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_ALL_TOTEMS, text => tr("Obteve os 12 totems para acessar o lar do Ghazran.") )
+		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_GOT_GHAZRAN_TONGUE, text => tr("Derrotou e obteve a lingua do Ghazran, o boss.") )
+		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_WITHOUT_ANYONE_DIE, text => tr("Derrotou o Ghazran sem que ninguem do time morresse nesta tentativa inteira.") )
+		,array( "achiev" => Player::PH_ACHIEV_DUNGEON_ARIADNE_TROLLS_COMPLETE_IN_ONLY_ONE_ATTEMP, text => tr("Obteve os 12 totems e derrotou o Ghazran em apénas uma tentativa.") )
 	))	
 );
 
 $misc_achievements = array(
-	array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_100, text => "Atingiu level 100." )
-	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_200, text => "Atingiu level 200." )
-	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_300, text => "Atingiu level 300." )
-	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_400, text => "Atingiu level 400." )
-	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_500, text => "Atingiu level 500." )
+	array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_100, text => tr("Atingiu level 100.") )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_200, text => tr("Atingiu level 200.") )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_300, text => tr("Atingiu level 300.") )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_400, text => tr("Atingiu level 400.") )
+	,array( "achiev" => Player::PH_ACHIEV_MISC_GOT_LEVEL_500, text => tr("Atingiu level 500.") )
 );
 
 function showAchievement(&$table, &$player, $achiev)
@@ -590,7 +595,7 @@ function showAchievement(&$table, &$player, $achiev)
 	if($achievInfo["has"])
 	{
 		if($achievInfo["date"] > 0)
-			$string .= "<br><span class='gotAchiev'>Adquirido em ".\Core\Main::formatDate($achievInfo["date"])."</span>";
+			$string .= "<br><span class='gotAchiev'>".tr("Adquirido em @v1@.", \Core\Main::formatDate($achievInfo["date"]))."</span>";
 	}
 
 	$table->AddField($string);
@@ -598,7 +603,7 @@ function showAchievement(&$table, &$player, $achiev)
 }
 
 $table = new \Framework\HTML\Table();
-$table->AddField("Variados", null, null, null, true);
+$table->AddField(tr("Variados"), null, null, null, true);
 $table->AddRow();
 
 foreach($misc_achievements as $achiev)
@@ -644,7 +649,7 @@ $module .= "</div>";
 			<div title='accounts' style='display: none; margin: 0px; padding: 0px;'>
 			<table cellspacing='0' cellpadding='0'>
 				<tr>
-					<th colspan='4'>Outros Personagens</th>
+					<th colspan='4'>".tr("Outros Personagens")."</th>
 				</tr>					
 			";			
 			
@@ -655,7 +660,7 @@ $module .= "</div>";
 				
 				if($character_list->get("hide") == 0 || ($logged_acc && $logged_acc->getGroup() >= t_Group::GameMaster))
 				{
-					$character_status = ($character_list->getOnline() == 1) ? "<font style='color: green; font-weight: bold;'>On-line</font>" : "<font style='color: red; font-weight: bold;'>Off-line</font>";
+					$character_status = ($character_list->getOnline() == 1) ? "<font style='color: green; font-weight: bold;'>".tr("On-line")."</font>" : "<font style='color: red; font-weight: bold;'>".tr("Off-line")."</font>";
 					
 					$module .= "
 						<tr>
@@ -688,7 +693,7 @@ $module .= '
 	<fieldset>
 		
 		<p>
-			<label for="search_value">Nome</label><br />
+			<label for="search_value">'.tr("Nome").'</label><br />
 			<input id="search_value" name="player_name" size="40" type="text" value="" autocomplete="off" onkeyup="requestSearchBoxPlayer(this.value)" />
 
 			<div id="search_suggestions">
@@ -700,7 +705,7 @@ $module .= '
 		<div id="line1"></div>
 		
 		<p>
-			<input class="button" type="submit" value="Enviar" />
+			<input class="button" type="submit" value="'.tr("Enviar").'" />
 		</p>
 	</fieldset>
 </form>';
