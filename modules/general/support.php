@@ -43,7 +43,7 @@ $query = \Core\Main::$DB->query("SELECT `id` FROM `players` WHERE `group_id` IN 
 while($fetch = $query->fetch()){ $members_str .= getRowStr($fetch->id); }
 
 $query = \Core\Main::$DB->query("SELECT `id` FROM `players` WHERE `group_id` IN (".implode(",", $tutors_groups).")");
-while($fetch = $query->fetch()){ $tutors_groups .= getRowStr($fetch->id); }
+while($fetch = $query->fetch()){ $tutors_str .= getRowStr($fetch->id); }
 
 $module .= '
 
