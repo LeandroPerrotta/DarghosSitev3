@@ -1,0 +1,66 @@
+#map-viewer{
+	margin-top: 35px;
+	width: 570px;
+	height: 510px;
+	display: block;
+}
+
+#map-controls{
+	width: 570px;
+	height: 80px;
+	margin-top: -80px;
+	background-color: black;
+	display: block;
+	opacity: 0.40;
+	filter: alpha(opacity=40);
+}
+
+.control-button{
+	width: 20px;
+	height: 20px;	
+	background-color: black;
+	border: 1px solid red;
+	display: block;
+}
+
+#control-dir{
+	float: left;
+}
+
+#control-floor{
+	float: right;
+	margin-right: 10px;
+}
+
+#control-north{
+	margin-top: 20px;
+	margin-left: 50px;
+}
+
+#control-east{
+	margin-top: -10px;
+	margin-left: 74px;
+}
+
+#control-south{
+	margin-top: -10px;
+	margin-left: 50px;
+}
+
+#control-west{
+	margin-top: -35px;
+	margin-left: 26px;
+}
+
+#control-floorup{
+	margin-bottom: 2px;
+}
+
+#control-cords, #control-url{
+	text-align: center;
+	display: block;
+}
+
+#control-url{
+	font-size: 8pt;
+}
