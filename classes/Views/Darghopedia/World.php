@@ -23,11 +23,15 @@ class World extends \Core\Views
             <li><a href='{$url}&posx=801&posy=891&posz=7'>Kashmir</a></li>
             <li><a href='{$url}&posx=971&posy=1971&posz=7'>Island of Peace</a></li>
         </li>
-        <div id='map-viewer'>
+        <div id='map-viewer' >
+            <img id='map-image' usemap='#mapmarks'></img> 
             <input type='hidden' name='base_x' id='base_x' value='{$_GET["posx"]}'/>
             <input type='hidden' name='base_y' id='base_y' value='{$_GET["posy"]}'/>
             <input type='hidden' name='base_z' id='base_z' value='{$_GET["posz"]}'/>
         </div>
+        <map name='mapmarks'>
+            <area shape='circle' coords='1971,1835,10' href='#' title='Quendor'>
+        </map>        
         <div id='map-controls'>
             <div id='control-dir'>
                 <div id='control-north' class='control-button'></div>

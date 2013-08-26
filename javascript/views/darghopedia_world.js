@@ -20,13 +20,14 @@ function setFocus(x, y){
 	if(current_position.y != y)
 		current_position.y = y;
 	
-	$("#map-viewer").css("background-position", "-" + current_position.x + "px -" + current_position.y + "px");
+	$("#map-image").css("left", "-" + current_position.x + "px");
+	$("#map-image").css("top", "-" + current_position.y + "px");
 	onChangeCords();
 }
-
+	
 function setFloor(floor){
 	current_floor = floor;
-	$("#map-viewer").css("background", "url(" + map_path + current_floor + ".png)");
+	$("#map-image").attr("src", "" + map_path + current_floor + ".png");
 	
 	setFocus(current_position.x, current_position.y);	
 	
@@ -64,14 +65,20 @@ $(document).ready(function() {
 	else
 		setFloor(7);	
 	
-	$("#map-viewer").mousedown(function(e){
+	/*$("#map-image").mousedown(function(e){
 		dragging = true;
 		
 		drag_startpos.x = e.pageX;
 		drag_startpos.y = e.pageY;
+		
+		$("#map-image").css("pointer-event", "auto");
+		$("#map-image").css("cursor", "move");
 	});
-	$("#map-viewer").mousemove(function(e){
+	$("#map-image").mousemove(function(e){
 		if(dragging){
+			
+			$("#map-image").css("pointer-event", "auto");
+			$("#map-image").css("cursor", "move");
 			
 			if(e.pageX > drag_startpos.x + 10)
 				movePov(DIR_WEST);
@@ -84,12 +91,30 @@ $(document).ready(function() {
 				movePov(DIR_SOUTH);			
 		}
 	});
-	$("#map-viewer").mouseup(function(e){
+	$("#map-image").mouseup(function(e){
+		$("#map-image").css("pointer-event", "none");
+		$("#map-image").css("cursor", "default");
 		dragging = false;
 	});
-	$("#map-viewer").mouseleave(function(e){
+	$("#map-image").mouseleave(function(e){
+		$("#map-image").css("pointer-event", "none");
+		$("#map-image").css("cursor", "default");
 		dragging = false;
-	});	
+	});*/
+	
+	$("#map-image").draggable({cursor: "move", drag: function(event, ui){
+		
+		x = Math.abs(ui.position.left);
+		y = Math.abs(ui.position.top);
+		
+		if(current_position.x != x)
+			current_position.x = x;
+		
+		if(current_position.y != y)
+			current_position.y = y;
+			
+		onChangeCords();
+	}});
 	
 	$(".control-button").click(function(){
 		

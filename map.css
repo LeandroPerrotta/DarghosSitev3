@@ -3,6 +3,11 @@
 	width: 570px;
 	height: 510px;
 	display: block;
+	overflow: hidden;
+}
+
+#map-image{
+	position: relative;
 }
 
 #map-controls{
