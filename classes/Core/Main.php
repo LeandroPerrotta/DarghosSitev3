@@ -313,24 +313,9 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		$child->addAttribute("href", "favicon.ico");
 		$child->addAttribute("type", "image/x-icon");
 		
-		$child = $focus->addChild("link");
-		$child->addAttribute("href", "{$layoutDir}style.css");
-		$child->addAttribute("media", "screen");
-		$child->addAttribute("rel", "stylesheet");
-		$child->addAttribute("type", "text/css");
-		
-		$child = $focus->addChild("link");
-		$child->addAttribute("href", "default.css");
-		$child->addAttribute("media", "screen");
-		$child->addAttribute("rel", "stylesheet");
-		$child->addAttribute("type", "text/css");
-		
-		/* JQuery UI theme */
-		$child = $focus->addChild("link");
-		$child->addAttribute("href", "javascript/libs/jquery-ui.css");
-		$child->addAttribute("media", "screen");
-		$child->addAttribute("rel", "stylesheet");
-		$child->addAttribute("type", "text/css");		
+		self::includeStylecheestSource("style");
+		self::includeStylecheestSource("default");
+		self::includeStylecheestSource("javascript/libs/jquery-ui");
 		
 		self::includeJavaScriptSource("libs/jquery.js");
 		self::includeJavaScriptSource("libs/jquery-ui.js");
@@ -739,6 +724,34 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		$child->addAttribute("src", "javascript/{$file}");
 		$child->addAttribute("type", "text/javascript");			
 	}	
+	
+	static function includeStylecheestSource($file){
+
+	    $layoutDir = "newlay/";
+	    
+	    $patches = array(
+            "{$layoutDir}/{$file}.css"
+            ,$file.".css"
+        );
+	    
+	    $path = "";
+
+	    foreach($patches as $p){  
+    	    if(file_exists($p))
+    	        $path = $p;
+	    }
+	    
+	    if(empty($path))
+	        return;
+	    
+	    $focus = self::$m_XMLRoot->head[0];
+	    
+	    $child = $focus->addChild("link");
+	    $child->addAttribute("href", $path);
+	    $child->addAttribute("media", "screen");
+	    $child->addAttribute("rel", "stylesheet");
+	    $child->addAttribute("type", "text/css");	    
+	}
 	
 	static function readTempFile($file)
 	{
