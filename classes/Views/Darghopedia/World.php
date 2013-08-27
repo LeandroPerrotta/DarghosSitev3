@@ -15,23 +15,26 @@ class World extends \Core\Views
         <h3 style='margin-top: 20px;'>Cidades</h3>
         <ul>
             <li><a href='{$url}'>Quendor</a></li>
-            <li><a href='{$url}&posx=2121&posy=1601&posz=7'>Thorn</a></li>   
-            <li><a href='{$url}&posx=2691&posy=901&posz=7'>Aaragon</a></li>
-            <li><a href='{$url}&posx=3041&posy=1751&posz=7'>Aracura</a></li>
-            <li><a href='{$url}&posx=1901&posy=2451&posz=7'>Salazart</a></li>
-            <li><a href='{$url}&posx=1691&posy=1031&posz=7'>Northrend</a></li>
-            <li><a href='{$url}&posx=801&posy=891&posz=7'>Kashmir</a></li>
-            <li><a href='{$url}&posx=971&posy=1971&posz=7'>Island of Peace</a></li>
+            <li><a href='{$url}&posx=2362&posy=1815&posz=7'>Thorn</a></li>   
+            <li><a href='{$url}&posx=2904&posy=1144&posz=7'>Aaragon</a></li>
+            <li><a href='{$url}&posx=3323&posy=1980&posz=7'>Aracura</a></li>
+            <li><a href='{$url}&posx=2149&posy=2667&posz=7'>Salazart</a></li>
+            <li><a href='{$url}&posx=1948&posy=1251&posz=7'>Northrend</a></li>
+            <li><a href='{$url}&posx=1079&posy=1123&posz=7'>Kashmir</a></li>
+            <li><a href='{$url}&posx=1218&posy=2201&posz=7'>Island of Peace</a></li>
         </li>
         <div id='map-viewer' >
-            <img id='map-image' usemap='#mapmarks'></img> 
+            
+            <div id='map-image'>
+                
+            </div>
+                            
+            </img> 
             <input type='hidden' name='base_x' id='base_x' value='{$_GET["posx"]}'/>
             <input type='hidden' name='base_y' id='base_y' value='{$_GET["posy"]}'/>
             <input type='hidden' name='base_z' id='base_z' value='{$_GET["posz"]}'/>
-        </div>
-        <map name='mapmarks'>
-            <area shape='circle' coords='1971,1835,10' href='#' title='Quendor'>
-        </map>        
+        </div>      
+        <div id='map-mask'></div>        
         <div id='map-controls'>
             <div id='control-dir'>
                 <div id='control-north' class='control-button'></div>

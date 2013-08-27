@@ -84,6 +84,31 @@ class Misc
 			
 	}
 	
+	function mapMarks(){
+	    
+	    $floor = (int)$_POST["floor"];
+	    
+	    \Core\Main::$isAjax = true;
+	    
+	    $list = array();
+	    
+	    if($floor == 7){   
+    	    
+    	    $mark = new \stdClass();
+    	    $mark->x = 1982;
+    	    $mark->y = 1841;
+    	    $mark->z = 7;
+    	    $mark->type = "mark-correct";
+    	    
+    	    array_push($list, $mark);
+	    }
+	    	    
+	    if(count($list) >= 1)
+	        return json_encode($list);
+	    else
+	        return "";
+	}
+	
 	function Iteminfo()
 	{
 		\Core\Main::$isAjax = true;

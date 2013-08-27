@@ -27,7 +27,23 @@ function setFocus(x, y){
 	
 function setFloor(floor){
 	current_floor = floor;
-	$("#map-image").attr("src", "" + map_path + current_floor + ".png");
+	$("#map-image").css("background", "url(" + map_path + current_floor + ".png)");
+	
+	$.post("?ref=misc.mapmarks", {floor: floor}, function(data){
+		
+		if(data.length > 0){	
+			$.each(data, function(key, obj){
+				
+				var element = $("<div></div>")
+					.css("left", obj.x)
+					.css("top", obj.y)
+					.addClass("mark")
+					.addClass(obj.type);
+				
+				$("#map-image").append(element);
+			})
+		}
+	}, "json");
 	
 	setFocus(current_position.x, current_position.y);	
 	
@@ -35,8 +51,8 @@ function setFloor(floor){
 }
 
 function onChangeCords(){
-	$("#control-cords").text("X: " + current_position.x + ", Y: " + current_position.y + ", Z: " + current_floor);
-	$("#control-url").val("http://darghos.com.br/?ref=darghopedia.world&posx=" + current_position.x + "&posy=" + current_position.y + "&posz=" + current_floor);
+	$("#control-cords").text("X: " + (current_position.x +  offset_x) + ", Y: " + (current_position.y + offset_y) + ", Z: " + current_floor);
+	$("#control-url").val("http://darghos.com.br/?ref=darghopedia.world&posx=" + (current_position.x +  offset_x) + "&posy=" + (current_position.y + offset_y) + "&posz=" + current_floor);
 }
 
 function movePov(direction){
@@ -59,48 +75,11 @@ function movePov(direction){
 $(document).ready(function() {	
 	
 	if($("#base_x").val() != "" && $("#base_y").val() != "" && $("#base_z").val() != ""){
-		current_position = {x: (Number($("#base_x").val())), y: (Number($("#base_y").val()))};
+		current_position = {x: (Number($("#base_x").val())) - offset_x, y: (Number($("#base_y").val())) - offset_y};
 		setFloor(Number($("#base_z").val()));
 	}
 	else
 		setFloor(7);	
-	
-	/*$("#map-image").mousedown(function(e){
-		dragging = true;
-		
-		drag_startpos.x = e.pageX;
-		drag_startpos.y = e.pageY;
-		
-		$("#map-image").css("pointer-event", "auto");
-		$("#map-image").css("cursor", "move");
-	});
-	$("#map-image").mousemove(function(e){
-		if(dragging){
-			
-			$("#map-image").css("pointer-event", "auto");
-			$("#map-image").css("cursor", "move");
-			
-			if(e.pageX > drag_startpos.x + 10)
-				movePov(DIR_WEST);
-			else if(e.pageX < drag_startpos.x - 10)	
-				movePov(DIR_EAST);
-			
-			if(e.pageY > drag_startpos.y + 10)
-				movePov(DIR_NORTH);
-			else if(e.pageY < drag_startpos.y - 10)	
-				movePov(DIR_SOUTH);			
-		}
-	});
-	$("#map-image").mouseup(function(e){
-		$("#map-image").css("pointer-event", "none");
-		$("#map-image").css("cursor", "default");
-		dragging = false;
-	});
-	$("#map-image").mouseleave(function(e){
-		$("#map-image").css("pointer-event", "none");
-		$("#map-image").css("cursor", "default");
-		dragging = false;
-	});*/
 	
 	$("#map-image").draggable({cursor: "move", drag: function(event, ui){
 		

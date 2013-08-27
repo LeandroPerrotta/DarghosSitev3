@@ -6,18 +6,44 @@
 	overflow: hidden;
 }
 
+#map-mask{
+	background: urL(files/map/mask.png) no-repeat;
+	position: relative;
+	margin-top: -510px;
+	width: 570px;
+	height: 510px;
+	float: left;
+	z-index: 1001;
+	pointer-events: none;
+}
+
 #map-image{
 	position: relative;
+	width: 4526px;
+	height: 2945px;
+}
+
+.mark{
+	position: relative;
+	z-index: 1000;
+	width: 11px;
+	height: 11px;	
+}
+
+.mark:hover{
+	cursor: pointer;
+}
+
+.mark-correct{
+	background: url(files/map/marks.gif);
+	background-position: 0px 0px;
 }
 
 #map-controls{
 	width: 570px;
 	height: 80px;
-	margin-top: -80px;
 	background-color: black;
 	display: block;
-	opacity: 0.40;
-	filter: alpha(opacity=40);
 }
 
 .control-button{
