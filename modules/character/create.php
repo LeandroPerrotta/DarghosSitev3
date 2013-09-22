@@ -141,8 +141,8 @@ while(t_Genre::ItValid())
 
 $worlds_str = "";
 $worldNames = array(
-		t_Worlds::Ordon => "Frostwave (Open PvP, inaugurado mar/2013)"
-		,t_Worlds::Aaragon => "Chaostorm (Open PvP, novo, inaugurado jul/2013)"
+		t_Worlds::Darghos => "Darghos (Open PvP, inaugurado jul/2013)"
+		,t_Worlds::PvPServer => "PvP Beta (Hardcore PvP, novo, inaugurado set/2013)"
 );
 if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 {
@@ -186,7 +186,7 @@ $module .= '
 		'.$world_str.'
 
 		<p>
-			<label for="player_town">Cidade</label>
+			<label for="player_town">Cidade (somente para o mundo Darghos)</label>
 			'.$townsSelect->Draw().'
 		</p>		
 		

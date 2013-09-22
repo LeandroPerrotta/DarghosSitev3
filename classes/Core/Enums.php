@@ -360,20 +360,20 @@ class t_Servers extends \Core\Structs
 class t_Worlds extends \Core\Structs
 {
 	const
-		Ordon = 0
-		,Aaragon = 1
+		Darghos = 0
+		,PvPServer = 1
 		;
 		
 	static protected
 		$m_typeStrings = array(
-			self::Ordon => "Frostwave"
-			,self::Aaragon => "Chaostorm"
+			self::Darghos => "Darghos"
+			,self::PvPServer => "PvP Server"
 		);
 	
 	static public
 	    $m_worldPort = array(
-            self::Ordon => 7174
-            ,self::Aaragon => 7171
+            self::Darghos => 7174
+            ,self::PvPServer => 7171
         );
 }
 

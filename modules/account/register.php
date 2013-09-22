@@ -69,8 +69,8 @@ class View
 		$this->_char_world = new \Framework\HTML\SelectBox();
 		$this->_char_world->SetName("character_world");
 		$this->_char_world->AddOption("");
-		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Ordon), t_Worlds::Ordon);
-		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Aaragon), t_Worlds::Aaragon);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Darghos), t_Worlds::Darghos);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::PvPServer), t_Worlds::PvPServer);
 		
 		/*
 		$this->_char_town = new \Framework\HTML\SelectBox();
@@ -152,9 +152,11 @@ class View
 		
 		$world_str = "";
 
-		if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
+		/*
+        // Enquanto o mundo PvP for BETA não vamos exibir a opção multiworld aqui...
+        if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world_str = "
-				<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos, que apesar de possuirem o mesmo conteudo possuem caracteristicas diferentes, selecione de qual você deseja participar:</p>
+				<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos para você escolher, o primeiro (Darghos) é um mundo de PvP/RPG tradicional, e o segundo é um mundo focado em PvP e competição.</p>
 				<p>
 					<label>Mundo do personagem:</label>
 					{$this->_char_world->Draw()}
@@ -162,21 +164,20 @@ class View
 					<div class='character_world'>
 						<div class='1' style='display: none;'>
 							<p>
-								<p><b>Tipo PvP:</b><br> somente aberto.</p>
-								<p><b>Inauguração:</b><br> fev/2012.</p>
-								<p><b>Dificuldade & Rates:</b><br> Moderada.</p>
+								<p><b>Tipo:</b><br> Hardcore PvP.</p>
+								<p><b>Inauguração:</b><br> set/2013.</p>
 							</p>
 						</div>
 						<div class='0' style='display: none;'>
 							<p>
-								<p><b>Tipo PvP:</b><br> mudança permitida.</p>
-								<p><b>Inauguração:</b><br> fev/2011.</p>
-								<p><b>Dificuldade & Rates:</b><br> Facil.</p>
+								<p><b>Tipo:</b><br> RPG / Level Up.</p>
+								<p><b>Inauguração:</b><br> jul/2013.</p>
 							</p>					
 						</div>								
 					</div>
 				</p>		
 			";
+		*/
 							
 		$this->steps[] = array(
 			"step" => "3",
