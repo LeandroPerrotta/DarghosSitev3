@@ -823,6 +823,10 @@ class Player
 			$this->onDelete();
 	}
 	
+	function setLossExperience($loss){
+	    $this->data['loss_experience'] = $loss;
+	}
+	
 	function get($field)
 	{
 		switch($field)
