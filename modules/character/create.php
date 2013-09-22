@@ -1,4 +1,5 @@
 <?
+use Core\Tools;
 $account = \Framework\Account::loadLogged();
 
 function checkAvailableTows(\Framework\Account $account){
@@ -114,6 +115,28 @@ if($_POST)
 		if($player->getWorldId() == t_Worlds::PvPServer){
 		    $player->setTownId(1);              //pvp server has only aracura map
 		    $player->setLossExperience(10);     //pvp server uses old losses, this must be 10 then 100 (default)
+		    
+		    $player->setLevel(55);
+		    $player->setExperience(2485800);
+		    
+		    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+		        $player->setMagLevel(40);
+		        $player->setHealth(420);
+		        $player->setMana(1450);
+		        $player->setCap(940);
+		    }
+		    elseif(Tools::isPaladin($player->getVocation())){
+		        $player->setMagLevel(13);
+		        $player->setHealth(665);
+		        $player->setMana(745);
+		        $player->setCap(1410);	        
+		    }
+		    elseif(Tools::isKnight($player->getVocation())){
+		        $player->setMagLevel(5);
+		        $player->setHealth(890);
+		        $player->setMana(275);
+		        $player->setCap(1645);		    
+		    }
 		}
 		
 		$player->save();
