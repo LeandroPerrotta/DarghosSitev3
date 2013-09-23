@@ -140,6 +140,27 @@ if($_POST)
 		}
 		
 		$player->save();
+		
+		//more ugly hack
+		if($player->getWorldId() == t_Worlds::PvPServer){
+		    $player->loadSkills();
+		    
+		    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+		        $player->setSkill(t_Skills::Shielding, 20);
+		    }
+		    elseif(Tools::isPaladin($player->getVocation())){
+		        $player->setSkill(t_Skills::Shielding, 50);
+		        $player->setSkill(t_Skills::Distance, 75);
+		    }
+		    elseif(Tools::isKnight($player->getVocation())){
+		        $player->setSkill(t_Skills::Shielding, 70);
+		        $player->setSkill(t_Skills::Axe, 70);
+		        $player->setSkill(t_Skills::Sword, 70);
+		        $player->setSkill(t_Skills::Club, 70);
+		    }
+
+		    $player->saveSkills();
+		}
 	
 		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CREATED, $_POST["player_name"]);
 	}

@@ -358,9 +358,19 @@ class Player
 		}
 	}
 	
+	function saveSkills(){
+	    foreach($this->skills as $skillid => $value){
+	        $query = $this->db->query("UPDATE `player_skills` SET `value` = {$value} WHERE `skillid` = {$skillid} AND `player_id` = {$this->data['id']}");
+	    }
+	}
+	
 	function getSkill($skillid)
 	{
 		return $this->skills[$skillid];
+	}
+	
+	function setSkill($skillid, $value){
+	    $this->skills[$skillid] = $value;
 	}
 	
 	function loadByName($player_name)
