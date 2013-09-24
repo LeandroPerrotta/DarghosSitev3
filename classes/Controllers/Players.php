@@ -133,7 +133,7 @@ class Players
 		$player->setCreation(time());
 		
 		//ugly hack, must be better implemented latter...
-		if($player->getWorldId() == t_Worlds::PvPServer){
+		if($player->getWorldId() == \t_Worlds::PvPServer){
 		    $player->setTownId(1);              //pvp server has only aracura map
 		    $player->setLossExperience(10);     //pvp server uses old losses, this must be 10 then 100 (default)
 		}		
