@@ -205,7 +205,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				
 				if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion >= 1)
 				{
-					$vocation_id += \Core\Tools::transformToPromotion($fetch->promotion, $vocation_id);
+					$vocation_id = \Core\Tools::transformToPromotion($fetch->promotion, $vocation_id);
 				}
 				
 				$pvpStr = "";
