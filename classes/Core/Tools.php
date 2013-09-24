@@ -67,10 +67,19 @@ class Tools
 		return round(($value / $total) * 100, $precision);
 	}
 	
+	static function transformToPromotion($promotion_level, $vocation_id){
+	    
+	    $data = array(
+	        1 => array( 1 => 5, 2 => 6, 3 => 7, 4 => 8, 9 => 10)        
+        );
+	    
+	    return $data[$promotion_level][$vocation_id];
+	}
+	
 	static function isSorcerer($vocation)
 	{
-		$sorcerer = 1;
-		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+		$ids = array(1, 5);
+		if(in_array($vocation, $ids))
 			return true;
 			
 		return false;
@@ -78,8 +87,8 @@ class Tools
 	
 	static function isDruid($vocation)
 	{
-		$sorcerer = 2;
-		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+		$ids = array(2, 6);
+		if(in_array($vocation, $ids))
 			return true;
 			
 		return false;
@@ -87,8 +96,8 @@ class Tools
 	
 	static function isPaladin($vocation)
 	{
-		$sorcerer = 3;
-		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+		$ids = array(3, 7);
+		if(in_array($vocation, $ids))
 			return true;
 			
 		return false;
@@ -96,11 +105,20 @@ class Tools
 	
 	static function isKnight($vocation)
 	{
-		$sorcerer = 4;
-		if($vocation == $sorcerer or $vocation == $sorcerer + 4 or $vocation == $sorcerer + 8)
+		$ids = array(4, 8);
+		if(in_array($vocation, $ids))
 			return true;
 			
 		return false;
+	}
+	
+	static function isWarrior($vocation)
+	{
+	    $ids = array(9, 10);
+	    if(in_array($vocation, $ids))
+	        return true;
+	    	
+	    return false;	    
 	}
 	
 	static function ip_long2string($long)

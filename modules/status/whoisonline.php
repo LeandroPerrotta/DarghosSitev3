@@ -86,6 +86,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 		$_druids = 0;	
 		$_paladins = 0;	
 		$_knights = 0;	
+		$_warriors = 0;
 		
 		$_islandofpeace = 0;
 		$_quendor = 0;
@@ -165,9 +166,11 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 						elseif(\Core\Tools::isDruid($fetch->vocation))
 							$_druids++;				
 						elseif(\Core\Tools::isPaladin($fetch->vocation))
-							$_paladins++;				
+							$_paladins++;	
+						elseif(\Core\Tools::isKnight($fetch->vocation))
+						    $_knights++;
 						else
-							$_knights++;							
+							$_warriors++;							
 					}
 				}
 				else
@@ -178,8 +181,10 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 						$_druids++;				
 					elseif(\Core\Tools::isPaladin($fetch->vocation))
 						$_paladins++;				
+					elseif(\Core\Tools::isKnight($fetch->vocation))
+					    $_knights++;
 					else
-						$_knights++;	
+						$_warriors++;		
 	
 					switch($fetch->town_id)
 					{
@@ -198,13 +203,9 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				
 				$vocation_id = $fetch->vocation;
 				
-				if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion == 1)
+				if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion >= 1)
 				{
-					$vocation_id += 4;
-				}
-				elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $fetch->promotion == 2 && $_characc->getPremDays() > 0)
-				{
-					$vocation_id += 8;
+					$vocation_id += \Core\Tools::transformToPromotion($fetch->promotion, $vocation_id);
 				}
 				
 				$pvpStr = "";

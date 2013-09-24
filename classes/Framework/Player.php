@@ -883,13 +883,8 @@ class Player
 	{
 		$vocation = $this->data['vocation'];
 		
-		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-		{
-			if($this->data['promotion'] == 2 && $this->loadAccount()->getPremDays() > 0)
-				$vocation = $vocation + 8;
-			elseif($this->data['promotion'] == 1)
-				$vocation = $vocation + 4;
-		}
+		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $this->data['promotion'] >= 1)
+            $vocation = \Core\Tools::transformToPromotion($this->data['promotion'], $vocation);
 			
 		return $vocation;
 	}

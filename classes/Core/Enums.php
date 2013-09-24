@@ -579,10 +579,8 @@ class t_Vocation
 			6 => array("name" => "elder druid", "abrev" => "ed"),
 			7 => array("name" => "royal paladin", "abrev" => "rp"),
 			8 => array("name" => "elite knight", "abrev" => "ek"),
-			9 => array("name" => "warmaster sorcerer", "abrev" => "ws"),
-			10 => array("name" => "warden druid", "abrev" => "wd"),
-			11 => array("name" => "holy paladin", "abrev" => "hp"),
-			12 => array("name" => "berserk knight", "abrev" => "bk"),
+			9 => array("name" => "warrior", "abrev" => "w"),
+			10 => array("name" => "fury warrior", "abrev" => "fw")
 	);
 
 	function t_Vocation($vocation_id = null)

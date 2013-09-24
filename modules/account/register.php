@@ -94,6 +94,7 @@ class View
 		$this->_char_vocation->AddOption(tr("Paladin (Paladino)"), "paladin");		
 		$this->_char_vocation->AddOption(tr("Sorcerer (Feitiçeiro)"), "sorcerer");		
 		$this->_char_vocation->AddOption(tr("Druid (Druida)"), "druid");		
+		$this->_char_vocation->AddOption(tr("Warrior (Guerreiro)"), "guerreiro");
 		
 		$this->steps = array();
 		
@@ -208,7 +209,7 @@ class View
 					<div class='knight' style='display: none;'>
 						<p>
 							<p>".tr("<b>Especialidade:</b><br> Causar dano fisico com armas de curta distancia e proteção de sí proprio com escudo.")."</p>
-							<p>".tr("<b>Armas usada:</b><br> Espadas (swords), machados (axes), martelos (club).")."</p>
+							<p>".tr("<b>Armas usada:</b><br> Espadas (swords), machados (axes), martelos (club) geralmente de 1 mão junto a um escudo.")."</p>
 							<p>".tr("<b>Dominio magico:</b><br> Baixo.")."</p>
 							<p>".tr("<b>Outras caracteristicas:</b><br> Possuir muita vida, defesa e capacidade de regeneração fazem desta classe sua especialidade a sobrevivencia.")."</p>
 						</p>
@@ -218,7 +219,7 @@ class View
 							<p>".tr("<b>Especialidade:</b><br> Causar dano fisico com armas a longa e curta distancia.")."</p>
 							<p>".tr("<b>Armas usada:</b><br> Arcos (bows), bestas (crossbows), lanças (spears), estrelas (stars).")."</p>
 							<p>".tr("<b>Dominio magico:</b><br> Médio.")."</p>
-							<p>".tr("<b>Outras caracteristicas:</b><br> Possuir vida e defesa razoaveis, junto a uma boa capacidade de regeneração fazem classe sua especialidade causar danos fisicos e ter boas chances de sobrevivencia.")."</p>
+							<p>".tr("<b>Outras caracteristicas:</b><br> Possuir vida e defesa razoaveis, junto a uma mediana capacidade de regeneração fazem classe sua especialidade causar danos fisicos e ter boas chances de sobrevivencia.")."</p>
 						</p>
 					</div>		
 					<div class='sorcerer' style='display: none;'>
@@ -236,7 +237,15 @@ class View
 							<p>".tr("<b>Dominio magico:</b><br> Alto.")."</p>
 							<p>".tr("<b>Outras caracteristicas:</b> Grande arsenal com feitiços e encantamentos para ajudar e recuperar a si proprio e amigos fazem desta classe sua especialidade causar danos magicos e auxiliar em combate.")."</p>
 						</p>
-					</div>												
+					</div>
+					<div class='warrior' style='display: none;'>
+						<p>
+							<p>".tr("<b>Especialidade:</b><br> Causar grande quantidade de danos físicos com armas de curta distancia.")."</p>
+							<p>".tr("<b>Armas usada:</b><br> Espadas (swords), machados (axes), martelos (club) geralmente de 2 mãos abrindo mão do uso de um escudo.")."</p>
+							<p>".tr("<b>Dominio magico:</b><br> Baixo.")."</p>
+							<p>".tr("<b>Outras caracteristicas:</b> Em fúria e usando uma intimidadora arma de duas mãos é capaz de dizimar inimigos em instantes, mas possui capacidade de sobrevivência limitada.")."</p>
+						</p>
+					</div>																
 				</div>				
 			</p>			
 			

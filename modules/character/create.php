@@ -71,7 +71,13 @@ if($_POST)
 		$vocation = new t_Vocation();
 		$vocation->SetByName($_POST["player_vocation"]);
 		
-		if($vocation->Get() > 4)
+		$valid_vocations = array(1, 2, 3, 4);
+		
+		//warriors for now only creable in Darghos realm
+		if($player->getWorldId() == t_Worlds::Darghos)
+		    array_push($valid_vocations, 9);
+		
+		if(!in_array($vocation->Get(), $valid_vocations))
 			$vocation->Set(1);
 		
 		
@@ -251,6 +257,7 @@ $module .= '
 				<input type="radio" name="player_vocation" value="Druid" /> Druid<br>
 				<input type="radio" name="player_vocation" value="Paladin" /> Paladin<br>
 				<input type="radio" name="player_vocation" value="Knight" /> Knight<br>
+				<input type="radio" name="player_vocation" value="Warrior" /> Warrior (somente mundo Darghos)<br>
 		</p>			
 		
 		<div id="line1"></div>
