@@ -1029,6 +1029,19 @@ class Player
 	   return $query->fetch();
 	}
 	
+	function updateHealth(){
+	    
+	    //default is for mages and non-vocation
+	    $health = $this->getLevel() * 5 + 145;
+	    
+	    if($this->getLevel() > 8 && \Core\Tools::isKnight($this->getVocation()))
+	       $health = $this->getLevel() * 35 + 65 - 10;
+	    elseif($this->getLevel() > 8 && (\Core\Tools::isPaladin($this->getVocation()) || \Core\Tools::isWarrior($this->getVocation())))
+	       $health = $this->getLevel() * 15 + 105 - 5;
+	    
+	    $this->setHealth($health);
+	}
+	
 	function doChangeVocation($to_vocation){
 	    
 	    $voc = new \t_Vocation();
@@ -1036,6 +1049,8 @@ class Player
 	    
 	    $old_voc = $this->getVocation(false);
 	    $this->setVocation($voc->Get());
+
+	    $this->updateHealth();
 	    
 	    //log
 	    \Core\Main::$DB->ExecQuery("INSERT INTO `".\Core\Tools::getSiteTable("player_changeclass")."` VALUES ({$this->data["id"]}, {$old_voc}, {$voc->Get()}, UNIX_TIMESTAMP())");
