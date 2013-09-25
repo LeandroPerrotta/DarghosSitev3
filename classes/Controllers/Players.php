@@ -97,8 +97,10 @@ class Players
 		$voc_t = new \t_Vocation();
 		$voc_t->SetByName($vocation);
 	
-		if($voc_t->Get() > 4)
-			$voc_t->Set(1);
+		$valid_vocations = array(1, 2, 3, 4, 9);
+		
+		if(!in_array($voc_t->Get(), $valid_vocations))
+		    $voc_t->Set(1);		
 	
 		$_world_id = \t_Worlds::Get($world);
 		$_genre_id = \t_Genre::GetByString($genre);

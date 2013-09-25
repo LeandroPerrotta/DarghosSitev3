@@ -94,7 +94,7 @@ class View
 		$this->_char_vocation->AddOption(tr("Paladin (Paladino)"), "paladin");		
 		$this->_char_vocation->AddOption(tr("Sorcerer (Feitiçeiro)"), "sorcerer");		
 		$this->_char_vocation->AddOption(tr("Druid (Druida)"), "druid");		
-		$this->_char_vocation->AddOption(tr("Warrior (Guerreiro)"), "guerreiro");
+		$this->_char_vocation->AddOption(tr("Warrior (Guerreiro)"), "warrior");
 		
 		$this->steps = array();
 		
