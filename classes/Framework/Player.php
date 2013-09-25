@@ -1032,12 +1032,12 @@ class Player
 	function updateHealth(){
 	    
 	    //default is for mages and non-vocation
-	    $health = $this->getLevel() * 5 + 145;
+	    $health = (($this->getLevel() - 1) * 5) + 150;
 	    
 	    if($this->getLevel() > 8 && \Core\Tools::isKnight($this->getVocation()))
-	       $health = $this->getLevel() * 35 + 65 - 10;
+	       $health = (($this->getLevel() - 1) * 15) + 150;
 	    elseif($this->getLevel() > 8 && (\Core\Tools::isPaladin($this->getVocation()) || \Core\Tools::isWarrior($this->getVocation())))
-	       $health = $this->getLevel() * 15 + 105 - 5;
+	       $health = (($this->getLevel() - 1) * 10) + 150;
 	    
 	    $this->setHealth($health);
 	}
