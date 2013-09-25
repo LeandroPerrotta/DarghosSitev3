@@ -72,10 +72,7 @@ if($_GET['name'])
 					<p>
 						<label>Personagem:</label><br />
 						<input disabled="disabled" size="40" type="text" value="'.$_GET['name'].'" />
-					</p>
-						        
-			        <h3>Selecione o personagem a ter a vocação modificada</h3>						
-					</p>					
+					</p>		
 				
 					<p>
 						<select name="character_vocation">
