@@ -980,8 +980,9 @@ class Player
 	    if(\Core\Tools::isKnight($this->data["vocation"])){
 	        
 	        $now = getdate();
+	        $last_changeday = mktime(0,0,0,10,16,2013);
 	        
-	        if($now["year"] > 2013 || $now["mon"] > 10 || $now["mday"] > 15){
+	        if(time() >= $last_changeday){
 	           $error_msg = tr("Esta mudança so estava permitida até 15/10/2013.");
 	           return false;
 	        }
