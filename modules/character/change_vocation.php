@@ -74,14 +74,14 @@ if($_GET['name'])
 						<input disabled="disabled" size="40" type="text" value="'.$_GET['name'].'" />
 					</p>
 						        
-			        <h3>Transformar personagem em Warrior</h3>						
+			        <h3>Selecione o personagem a ter a vocação modificada</h3>						
 					</p>					
 				
 					<p>
 						<select name="character_vocation">
 							'.$vocation_options.'
 						</select><br />
-						<em>Escolha a vocação desejada.</em>							
+						<em>Escolha a nova vocação desejada.</em>							
 					</p>
 					
 					<p>
