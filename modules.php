@@ -173,6 +173,11 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 						$patch['file'] = $topic;
 					}
 				break;
+				
+				case "change_vocation":
+				    $needLogin = true;
+				    $patch['file'] = $topic;
+			    break;
 									
 				default:
 					$patch['dir'] = "errors";

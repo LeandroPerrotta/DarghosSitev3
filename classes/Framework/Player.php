@@ -879,11 +879,11 @@ class Player
 	function getLevel(){ return $this->data['level']; }
 	function getMagicLevel(){ return $this->data['maglevel']; }	
 	
-	function getVocation()
+	function getVocation($force_promotion = true)
 	{
 		$vocation = $this->data['vocation'];
 		
-		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $this->data['promotion'] >= 1)
+		if($force_promotion && g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $this->data['promotion'] >= 1)
             $vocation = \Core\Tools::transformToPromotion($this->data['promotion'], $vocation);
 			
 		return $vocation;
@@ -973,6 +973,63 @@ class Player
 		    $skull_img = "<img src='files/misc/{$skull}' />";
 	    
 	    return $skull_img;	    
+	}
+	
+	function canChangeVocation($to_vocation, &$error_msg){
+	    
+	    if(\Core\Tools::isKnight($this->data["vocation"])){
+	        
+	        $now = getdate();
+	        
+	        if($now["year"] > 2013 || $now["mon"] > 10 || $now["mday"] > 15){
+	           $error_msg = tr("Esta mudança so estava permitida até 15/10/2013.");
+	           return false;
+	        }
+	        
+	        return true;
+	    }
+	    elseif(\Core\Tools::isWarrior($this->data["vocation"])){
+	        
+	        $lastChange = $this->getLastChangeVocation();
+	        
+	        if(!$lastChange){
+	            $error_msg = tr("Esta mudança não é permitida para este personagem.");
+	            return false;
+	        }
+	        
+	        if(time() <= $lastChange->date + (60 * 60 * 24 * 2)){
+	            return true;
+	        }
+	        else{
+	            $error_msg = tr("Prazo de 48h para cancelar a mudança já expirados para este personagem...");
+	            return false;
+	        }
+	    }
+	    else{
+	        $error_msg = tr("A sua vocação não é permitida.");
+	        return false;	        
+	    }
+	}
+	
+	function getLastChangeVocation(){
+	    $query = \Core\Main::$DB->query("SELECT `player_id`, `from_vocation`, `to_vocation`, `date` FROM `".\Core\Tools::getSiteTable("player_changeclass")."` WHERE `player_id` = {$this->data["id"]} ORDER BY DATE DESC LIMIT 1");
+	
+	   if($query->numRows() == 0)
+	       return false;
+	   
+	   return $query->fetch();
+	}
+	
+	function doChangeVocation($to_vocation){
+	    
+	    $voc = new \t_Vocation();
+	    $voc->SetByName($to_vocation);
+	    
+	    $old_voc = $this->getVocation(false);
+	    $this->setVocation($voc->Get());
+	    
+	    //log
+	    \Core\Main::$DB->ExecQuery("INSERT INTO `".\Core\Tools::getSiteTable("player_changeclass")."` VALUES ({$this->data["id"]}, {$old_voc}, {$voc->Get()}, UNIX_TIMESTAMP())");
 	}
 }
 ?>

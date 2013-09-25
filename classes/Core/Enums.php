@@ -372,8 +372,8 @@ class t_Worlds extends \Core\Structs
 	
 	static public
 	    $m_worldPort = array(
-            self::Darghos => 7174
-            ,self::PvPServer => 7171
+            self::Darghos => 7171
+            ,self::PvPServer => 7174
         );
 }
 
@@ -568,19 +568,33 @@ class t_Genre extends \Core\Structs
 
 class t_Vocation
 {
+    const 
+        ID_NONE = 0
+        ,ID_SORCERER = 1
+        ,ID_DRUID = 2
+        ,ID_PALADIN = 3
+        ,ID_KNIGHT = 4
+        ,ID_MASTER_SORCERER = 5
+        ,ID_ELDER_DRUID = 6
+        ,ID_ROYAL_PALADIN = 7
+        ,ID_ELITE_KNIGHT = 8
+        ,ID_WARRIOR = 9
+        ,ID_FURY_WARRIOR = 10
+    ;
+    
 	private $_vocation_id;
 	private $_vocation_names = array(
-			0 => array("name" => "none", "abrev" => "n"),
-			1 => array("name" => "sorcerer", "abrev" => "s"),
-			2 => array("name" => "druid", "abrev" => "d"),
-			3 => array("name" => "paladin", "abrev" => "p"),
-			4 => array("name" => "knight", "abrev" => "k"),
-			5 => array("name" => "master sorcerer", "abrev" => "ms"),
-			6 => array("name" => "elder druid", "abrev" => "ed"),
-			7 => array("name" => "royal paladin", "abrev" => "rp"),
-			8 => array("name" => "elite knight", "abrev" => "ek"),
-			9 => array("name" => "warrior", "abrev" => "w"),
-			10 => array("name" => "fury warrior", "abrev" => "fw")
+			self::ID_NONE => array("name" => "none", "abrev" => "n"),
+			self::ID_SORCERER => array("name" => "sorcerer", "abrev" => "s"),
+			self::ID_DRUID => array("name" => "druid", "abrev" => "d"),
+			self::ID_PALADIN => array("name" => "paladin", "abrev" => "p"),
+			self::ID_KNIGHT => array("name" => "knight", "abrev" => "k"),
+			self::ID_MASTER_SORCERER=> array("name" => "master sorcerer", "abrev" => "ms"),
+			self::ID_ELDER_DRUID => array("name" => "elder druid", "abrev" => "ed"),
+			self::ID_ROYAL_PALADIN => array("name" => "royal paladin", "abrev" => "rp"),
+			self::ID_ELITE_KNIGHT => array("name" => "elite knight", "abrev" => "ek"),
+			self::ID_WARRIOR => array("name" => "warrior", "abrev" => "w"),
+			self::ID_FURY_WARRIOR => array("name" => "fury warrior", "abrev" => "fw")
 	);
 
 	function t_Vocation($vocation_id = null)
