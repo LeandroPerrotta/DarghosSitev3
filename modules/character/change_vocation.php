@@ -42,7 +42,7 @@ if($_GET['name'])
 			    
 			    if(!$error){
 			        
-			        $player->doChangeVocation($_POST["character_name"]);
+			        $player->doChangeVocation($_POST["character_vocation"]);
 			        $player->save();
 			        
 			        $success = tr("Vocação modificada com sucesso! Divirta-se agora com sua nova vocação!");

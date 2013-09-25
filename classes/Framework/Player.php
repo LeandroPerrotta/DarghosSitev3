@@ -987,7 +987,11 @@ class Player
 	           return false;
 	        }
 	        
-	        return true;
+	        if($to_vocation == "warrior")     
+	           return true;
+	        
+	        $error_msg = tr("Mudança para esta classe não permitida.");
+	        return false;	        
 	    }
 	    elseif(\Core\Tools::isWarrior($this->data["vocation"])){
 	        
@@ -999,7 +1003,11 @@ class Player
 	        }
 	        
 	        if(time() <= $lastChange->date + (60 * 60 * 24 * 2)){
-	            return true;
+	            if($to_vocation == "knight")
+	                return true;	
+	                        
+    	        $error_msg = tr("Mudança para esta classe não permitida.");
+    	        return false;	   
 	        }
 	        else{
 	            $error_msg = tr("Prazo de 48h para cancelar a mudança já expirados para este personagem...");
