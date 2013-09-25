@@ -3,7 +3,7 @@ use \Core\Configs;
 
 if(isset($_POST['character_name']))
 {
-	\Core\Main::redirect("?ref=character.edit&name={$_POST['character_name']}");
+	\Core\Main::redirect("?ref=character.change_vocation&name={$_POST['character_name']}");
 }
 
 $account = new \Framework\Account();

@@ -1042,6 +1042,20 @@ class Player
 	    $this->setHealth($health);
 	}
 	
+	function updateCapacity(){
+	    //default is for mages and non-vocation
+	    $cap = (($this->getLevel() - 1) * 5) + 400;
+	    
+	    if($this->getLevel() > 8 && \Core\Tools::isKnight($this->getVocation()))
+	        $cap = (($this->getLevel() - 1) * 25) + 400;
+	    elseif($this->getLevel() > 8 && (\Core\Tools::isPaladin($this->getVocation()) || \Core\Tools::isWarrior($this->getVocation())))
+	        $cap = (($this->getLevel() - 1) * 20) + 400;
+	    elseif($this->getLevel() > 8 && (\Core\Tools::isSorcerer($this->getVocation()) || \Core\Tools::isDruid($this->getVocation())))
+            $cap = (($this->getLevel() - 1) * 10) + 400;
+	    
+	    $this->setCap($cap);
+	}
+	
 	function doChangeVocation($to_vocation){
 	    
 	    $voc = new \t_Vocation();
@@ -1051,6 +1065,7 @@ class Player
 	    $this->setVocation($voc->Get());
 
 	    $this->updateHealth();
+	    $this->updateCapacity();
 	    
 	    //log
 	    \Core\Main::$DB->ExecQuery("INSERT INTO `".\Core\Tools::getSiteTable("player_changeclass")."` VALUES ({$this->data["id"]}, {$old_voc}, {$voc->Get()}, UNIX_TIMESTAMP())");
