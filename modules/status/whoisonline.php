@@ -268,6 +268,9 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 			<tr>
 				<td>Paladin's:</td><td>".\Core\Tools::getPercentOf($_paladins, $_totalplayers)."%</td><td>Knight's:</td><td>".\Core\Tools::getPercentOf($_knights, $_totalplayers)."%</td>
 			</tr>
+	        <tr>
+	            <td>Warrior's:</td><td colspan='3'>".\Core\Tools::getPercentOf($_warriors, $_totalplayers)."%</td>
+	        </td>
 			";
 			
 			$module .= "			
