@@ -55,9 +55,9 @@ class Account
 	function load($id, $fields = null)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings`, `vipend`, `expend`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings`, `vipend`, `lastexpbonus`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id`, `vipend`, `expend`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id`, `vipend`, `lastexpbonus`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 			
 		$query = $this->db->query($query_str);		
 		
@@ -271,7 +271,7 @@ class Account
 	
 	function getVIPEnd() { return $this->data['vipend']; }
 	
-	function getExpEnd() { return $this->data['expend']; }
+	function getLastExpBonus() { return $this->data['lastexpbonus']; }
 	
 	function getVIPDaysLeft() {
 	    
@@ -285,12 +285,15 @@ class Account
 	
 	function getExpDaysLeft() {
 	    
-	    if($this->data["expend"] == 0)
+	    if($this->data["lastexpbonus"] == 0)
 	        return 0;
 	    	
-	    $leftDays = $this->data["expend"] - time();
-	    $leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
-	    return $leftDays;	    
+	    $expEnd = $this->data["lastexpbonus"] + (60 * 60 * 24 * 2); //we really might improve this...
+	    
+	    if(time() > $expEnd)
+	        return 0;
+	    
+	    return ceil((time() - $expEnd) / 86400);	    
 	}
 
 
@@ -541,13 +544,13 @@ class Account
 	        $this->data['balance'] = 0;
 	}
 	
-	function addExpDays($expdays){
+	function addExpDays(){
 	    
-	    if($this->data['expend'] > 0){
-	        $this->data['expend'] += 60 * 60 * 24 * $expdays;
+	    if($this->getExpDaysLeft() == 0){
+	        $this->data['lastexpbonus'] = time();
 	    }
 	    else{
-	        $this->data['expend'] = time() + (60 * 60 * 24 * $expdays);
+	        trigger_error("Trying to add more exp days on a account that already has exp days.");
 	    }
 	}
 	

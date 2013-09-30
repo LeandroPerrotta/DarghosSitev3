@@ -373,11 +373,16 @@ class ItemShop
 	 * Callback functions for non ingame items
 	 * */
 	
-	static function onPurchaseExpBonus(Account $account, $days){
-	    $account->addExpDays($days);
+	static function onPurchaseExpBonus(Account $account){
+	    $lastExpBonus = $account->getLastExpBonus();
+	    if($lastExpBonus != 0 && $lastExpBonus + (60 * 60 * 24 * 10) >= time()){
+	        return array("success" => false, "msg" => tr("Este serviço so pode ser adquirido uma vez a cada 10 dias."));
+	    }
+	    
+	    $account->addExpDays();
 	    $account->save();
 	    
-	    return true;
+	    return array("success" => true);
 	}
 }
 ?>

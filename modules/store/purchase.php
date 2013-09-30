@@ -191,26 +191,31 @@ class View
 			return false;
 		}
 		
+		if($item->getType() == \Framework\ItemShop::TYPE_CALLBACK){
+		
+		    $params = $item->getParams();
+		
+		    $func_params = explode(",", $params[\Framework\ItemShop::PARAM_PARAMETERS]);
+		    array_unshift($func_params, $this->loggedAcc);
+		
+		    $callback = '\Framework\ItemShop::' . $params[\Framework\ItemShop::PARAM_FUNCTION];
+		    if(method_exists('\Framework\ItemShop', $params[\Framework\ItemShop::PARAM_FUNCTION])){
+		        $ret = call_user_func_array($callback, $func_params);
+		        
+		        if(!$ret["success"]){
+		            $this->_message = $ret["msg"];
+		            return false;
+		        }
+		    }
+		    else
+		        echo "\Framework\ItemShop {$params[\Framework\ItemShop::PARAM_FUNCTION]}";
+		}		
+		
 		$this->loggedAcc->addBalance(-$item->getPrice());
 		$this->loggedAcc->save();
 		
 		//$item->doPlayerGiveThing($player->getId());
 		$item->logItemPurchase($player->getId());
-		
-		if($item->getType() == \Framework\ItemShop::TYPE_CALLBACK){
-		    
-		    $params = $item->getParams();
-		    
-		    $func_params = explode(",", $params[\Framework\ItemShop::PARAM_PARAMETERS]);
-		    array_unshift($func_params, $this->loggedAcc);
-		    
-		    $callback = '\Framework\ItemShop::' . $params[\Framework\ItemShop::PARAM_FUNCTION];
-		    if(method_exists('\Framework\ItemShop', $params[\Framework\ItemShop::PARAM_FUNCTION])){
-		        call_user_func_array($callback, $func_params);
-		    }
-		    else
-		        echo "\Framework\ItemShop {$params[\Framework\ItemShop::PARAM_FUNCTION]}";
-		}
 		
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_PURCHASE_SUCCESS, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT], $item->getName(), number_format($item->getPrice() / 100, 2));
 		return true;		
