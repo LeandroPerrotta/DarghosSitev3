@@ -293,7 +293,7 @@ class Account
 	    if(time() > $expEnd)
 	        return 0;
 	    
-	    return ceil((time() - $expEnd) / 86400);	    
+	    return ceil(($expEnd - time()) / 86400);	    
 	}
 
 
