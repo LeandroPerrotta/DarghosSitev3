@@ -288,14 +288,17 @@ class Account
 	    if($this->data["lastexpbonus"] == 0)
 	        return 0;
 	    	
-	    $expEnd = $this->data["lastexpbonus"] + (60 * 60 * 24 * 2); //we really might improve this...
+	    $expEnd = $this->getExpEnd();
 	    
 	    if(time() > $expEnd)
 	        return 0;
 	    
 	    return ceil(($expEnd - time()) / 86400);	    
 	}
-
+	
+	function getExpEnd() {
+	    return $this->data["lastexpbonus"] + (60 * 60 * 24 * 2); //we really might improve this...
+	}
 
 	/* Personal Infos */ 
 	function getLocation() { return stripslashes($this->location); }
