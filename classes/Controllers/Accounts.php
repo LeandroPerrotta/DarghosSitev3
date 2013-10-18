@@ -320,8 +320,6 @@ class Accounts
 				$user = new \Framework\Forums\User();
 				if($user->LoadByAccount($logged->getId()))
 				    $user->UpdateLoginInfoExternalForum($logged, $_POST["account_password"]);
-				else
-				    throw new \Exception("Cant load forum user entry?");
 				//end				
 			
 				$_SESSION["login"] = array();
