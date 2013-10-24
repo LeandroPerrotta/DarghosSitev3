@@ -21,7 +21,7 @@ function drawChart(){
 			]
 		}
 			
-		var activePlayersChart = new Chart(chart).Line(data, { scaleLineColor : "#363636", scaleGridLineColor : "#363636", scaleFontColor : "#363636", pointDotRadius : 1 });		
+		var activePlayersChart = new Chart(chart).Line(data, { scaleLineColor : "#363636", scaleGridLineColor : "#363636", scaleFontColor : "#f3df00", pointDotRadius : 1 });		
 	}, "json");
 }
 
