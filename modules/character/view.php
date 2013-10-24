@@ -28,7 +28,9 @@ if($_POST["player_name"] || $_GET['name'])
 		$lastlogin = ($player->getLastLogin()) ? \Core\Main::formatDate($player->getLastLogin()) : "Nunca entrou.";
 		$creation = \Core\Main::formatDate($player->getCreation());
 		
-		$premium = ($account->getPremDays() != 0) ? "<font style='color: green; font-weight: bold;'>" . tr("Conta Premium") : tr("Conta Gratuita");	
+		$premium = ($account->getPremDays() != 0) ? "<font style='color: #00ff00; font-weight: bold;'>" . tr("Conta Premium") : tr("Conta Gratuita");	
+		$vip = ($account->getPremDays() != 0) ? "<font style='color: #e1dc48; font-weight: bold;'>" . tr(" [com VIP]") . "</font>" : null;	
+		$premium = empty($vip) ? $premium : $premium . $vip;
 		$realname = ($account->get("real_name") != "") ? $account->get("real_name") : tr("não configurado");
 		$location = ($account->get("location") != "") ? $account->get("location") : tr("não configurado");
 		$url = ($account->get("url") != "") ? $account->get("url") : "não configurado";
