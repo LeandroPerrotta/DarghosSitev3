@@ -26,12 +26,15 @@ function checkAvailableTows(\Framework\Account $account){
         $towns_list[] = \t_Towns::Quendor;
         $towns_list[] = \t_Towns::Thorn;
         
-        if($account->getPremDays() > 0){
-            $towns_list[] = \t_Towns::Aracura;
+        if($account->getPremDays() > 0){          
             $towns_list[] = \t_Towns::Aaragon;
             $towns_list[] = \t_Towns::Salazart;
             $towns_list[] = \t_Towns::Northrend;
             $towns_list[] = \t_Towns::Kashmir;
+        }
+        
+        if($account->getVIPDaysLeft() > 0){
+            $towns_list[] = \t_Towns::Aracura;
         }
     }
     
