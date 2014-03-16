@@ -82,7 +82,7 @@ $infos[] = array(tr("Nível"), $player->getLevel());
 
 if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH, $player->getWorldId()))
 {
-	$pvp_str = $player->isPvpEnabled() ? "<span class='pvpEnabled'>".tr("Agressivo")."</span>" : "<span class='pvpDisabled'>".tr("Pacivo")."</span>";
+	$pvp_str = $player->isPvpEnabled() ? "<span class='pvpEnabled'>".tr("PvP Ativo")."</span>" : "<span class='pvpDisabled'>".tr("PvP Desativo")."</span>";
 	$infos[] = array(tr("JvJ"), $pvp_str);
 }
 
