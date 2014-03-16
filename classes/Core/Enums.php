@@ -578,8 +578,8 @@ class t_Vocation
         ,ID_ELDER_DRUID = 6
         ,ID_ROYAL_PALADIN = 7
         ,ID_ELITE_KNIGHT = 8
-        ,ID_WARRIOR = 9
-        ,ID_FURY_WARRIOR = 10
+        //,ID_WARRIOR = 9
+        //,ID_FURY_WARRIOR = 10
     ;
     
 	private $_vocation_id;
@@ -593,8 +593,8 @@ class t_Vocation
 			self::ID_ELDER_DRUID => array("name" => "elder druid", "abrev" => "ed"),
 			self::ID_ROYAL_PALADIN => array("name" => "royal paladin", "abrev" => "rp"),
 			self::ID_ELITE_KNIGHT => array("name" => "elite knight", "abrev" => "ek"),
-			self::ID_WARRIOR => array("name" => "warrior", "abrev" => "w"),
-			self::ID_FURY_WARRIOR => array("name" => "fury warrior", "abrev" => "fw")
+			//self::ID_WARRIOR => array("name" => "warrior", "abrev" => "w"),
+			//self::ID_FURY_WARRIOR => array("name" => "fury warrior", "abrev" => "fw")
 	);
 
 	function t_Vocation($vocation_id = null)

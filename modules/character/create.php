@@ -245,7 +245,7 @@ $module .= '
 		'.$world_str.'
 
 		<p>
-			<label for="player_town">Cidade (somente para o mundo Darghos)</label>
+			<label for="player_town">Cidade</label>
 			'.$townsSelect->Draw().'
 		</p>		
 		
@@ -260,7 +260,6 @@ $module .= '
 				<input type="radio" name="player_vocation" value="Druid" /> Druid<br>
 				<input type="radio" name="player_vocation" value="Paladin" /> Paladin<br>
 				<input type="radio" name="player_vocation" value="Knight" /> Knight<br>
-				<input type="radio" name="player_vocation" value="Warrior" /> Warrior (somente mundo Darghos)<br>
 		</p>			
 		
 		<div id="line1"></div>
