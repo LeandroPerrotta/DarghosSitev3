@@ -376,10 +376,16 @@ class ItemShop
 	static function onPurschaseRoyalCoins(Account $account, Player $player){
 	    
 	    try{
+	        $royal = 1200;
+	        
     	    $query = \Core\Main::$DB->query("SELECT `value` FROM `player_storage` WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
     	    
-            $result = $query->fetch();
-            $royal = $result->value + 1200;
+    	    if($query->numRows() > 0){
+                $result = $query->fetch();
+                
+                if($result->value > 0)
+                    $royal += $result->value;
+    	    }
             
             \Core\Main::$DB->query("UPDATE `player_storage` SET `value` = '{$royal}' WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
         
