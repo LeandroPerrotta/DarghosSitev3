@@ -373,7 +373,23 @@ class ItemShop
 	 * Callback functions for non ingame items
 	 * */
 	
-	static function onPurchaseExpBonus(Account $account){
+	static function onPurschaseRoyalCoins(Account $account, Player $player){
+	    
+	    $query = \Core\Main::$DB->query("SELECT `value` FROM `player_storage` WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
+	    
+	    if($query->numRows() > 0){
+	        $result = $query->fetch();
+	        $royal = $result->value + 1200;
+	        
+	        \Core\Main::$DB->query("UPDATE `player_storage` SET `value` = '{$royal}' WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
+	    
+	        return array("success" => true);
+	    }
+	    
+	    return array("success" => false, "msg" => tr("Erro incomum, relatório gerado para o webmaster."));
+	}
+	
+	static function onPurchaseExpBonus(Account $account, Player $player){
 	    $lastExpBonus = $account->getLastExpBonus();
 	    if($lastExpBonus != 0 && $lastExpBonus + (60 * 60 * 24 * 10) >= time()){
 	        return array("success" => false, "msg" => tr("Este serviço so pode ser adquirido uma vez a cada 10 dias."));

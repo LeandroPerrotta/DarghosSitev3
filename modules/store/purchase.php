@@ -196,7 +196,7 @@ class View
 		    $params = $item->getParams();
 		
 		    $func_params = explode(",", $params[\Framework\ItemShop::PARAM_PARAMETERS]);
-		    array_unshift($func_params, $this->loggedAcc);
+		    array_unshift($func_params, $this->loggedAcc, $player);
 		
 		    $callback = '\Framework\ItemShop::' . $params[\Framework\ItemShop::PARAM_FUNCTION];
 		    if(method_exists('\Framework\ItemShop', $params[\Framework\ItemShop::PARAM_FUNCTION])){

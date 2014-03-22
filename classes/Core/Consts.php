@@ -16,6 +16,7 @@ class Consts
 		,ENCRYPT_TYPE_SHA1 = "sha1"
 
 		,PLAYER_STORAGE_REBORNS = 15300
+		,PLAYER_STORAGE_ROYAL_COINS = 12502
 		
 		,URLS_PAGSEGURO = "https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx"
 		,PAGSEGURO_EMAIL = "admin@darghos.com"
