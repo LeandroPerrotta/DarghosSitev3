@@ -13,6 +13,7 @@ class Item
 		,$skillShield
 		,$magicLevelPoints
 		,$criticalChance
+		,$resil
 
 		,$transformEquipTo
 		,$stopDuration

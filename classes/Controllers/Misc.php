@@ -242,6 +242,9 @@ class Misc
 		if($item->criticalChance)
 			$string .= "<p>Critico: <strong>+{$item->criticalChance}%</strong></p>";		
 		
+		if($item->resil)
+		    $string .= "<p>Resiliência PvP: <strong>+{$item->resil}%</strong></p>";		
+		
 		if($item->weight)
 			$string .= "<p>Peso: <strong>".round($item->weight / 100, 2)." oz</strong></p>";
 		
