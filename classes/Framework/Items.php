@@ -66,7 +66,7 @@ class Items
 	                        "Diminui o tempo de lançamento da magia hells core (exevo gran mas flam) de 3s para 2s."
 	                )
 	        ),
-	        array("items" => array(12751, 12752, 12753), "name" => "Ancient Nature Set (Sorcerer)"
+	        array("items" => array(12751, 12752, 12753), "name" => "Ancient Nature Set (Druid)"
 	                , "3pieces" => array(
 	                        "Ao usar a paralyze rune em um alvo, o mesmo fica impossibilitado de remover a paralisia por 2s."
 	                        ,"A magia summon creature (utevo res) irá invocar 2 monstros de uma vez e a um custo de mana reduzido em 80%."
