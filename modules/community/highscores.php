@@ -124,7 +124,7 @@ if(isset($_GET["world"]))
 		
 	$start = $page * 20;
 	
-	/*if($skill == "experience" or $skill == "maglevel")
+	if(/*$skill == "experience" or */$skill == "maglevel")
 	{	
 		$query_str = "
 		SELECT 
@@ -162,7 +162,7 @@ if(isset($_GET["world"]))
 			
 		$query = \Core\Main::$DB->query($query_str);
 	}
-	else*/if($skill == "bgrating")
+	elseif($skill == "bgrating")
 	{
 		$query_str = "
 		SELECT
@@ -304,11 +304,11 @@ if(isset($_GET["world"]))
 		if($player->getAccess() > t_Access::SeniorTutor)
 			continue;
 		
-		if($skill == "experience")
+		/*if($skill == "experience")
 		{
 			$skill_value = $player->getLevel();
 		}
-		elseif($skill == "maglevel")
+		else*/if($skill == "maglevel")
 		{
 			$skill_value = $player->getMagLevel();
 		}
