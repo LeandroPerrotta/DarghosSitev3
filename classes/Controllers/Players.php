@@ -122,23 +122,52 @@ class Players
 		$player->setGroup(\t_Group::Player);
 		$player->setSex($_genre_id);
 		$player->setVocation($voc_t->Get());
-		$player->setExperience(4200);
-		$player->setLevel(8);
-		$player->setMagLevel(0);
-		$player->setHealth(185);
-		$player->setMana(35);
-		$player->setCap(470);
+		$player->setExperience(129389800);
+		$player->setLevel(200);
 		$player->setTownId($town_id);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
 		
-		//ugly hack, must be better implemented latter...
-		if($player->getWorldId() == \t_Worlds::PvPServer){
-		    $player->setTownId(1);              //pvp server has only aracura map
-		    $player->setLossExperience(10);     //pvp server uses old losses, this must be 10 then 100 (default)
-		}		
+        if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+	        $player->setMagLevel(85);
+	        $player->setHealth(1145);
+	        $player->setMana(5800);
+	        $player->setCap(2390);
+	    }
+	    elseif(Tools::isPaladin($player->getVocation())){
+	        $player->setMagLevel(26);
+	        $player->setHealth(2105);
+	        $player->setMana(2920);
+	        $player->setCap(4310);  
+	    }
+	    elseif(Tools::isKnight($player->getVocation())){
+	        $player->setMagLevel(10);
+	        $player->setHealth(3065);
+	        $player->setMana(1000);
+	        $player->setCap(5270);  		    
+	    }
+		
+		$player->save();
+		
+	    $player->loadSkills();
+	    
+	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 30);
+	    }
+	    elseif(Tools::isPaladin($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 85);
+	        $player->setSkill(t_Skills::Distance, 105);
+	    }
+	    elseif(Tools::isKnight($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 95);
+	        $player->setSkill(t_Skills::Axe, 95);
+	        $player->setSkill(t_Skills::Sword, 95);
+	        $player->setSkill(t_Skills::Club, 95);
+	    }
+
+	    $player->saveSkills();	
 	
 		$player->save();
 	

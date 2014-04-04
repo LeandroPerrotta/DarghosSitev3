@@ -4,39 +4,8 @@ $account = \Framework\Account::loadLogged();
 
 function checkAvailableTows(\Framework\Account $account){
     
-    $players_list = $account->getCharacterList(\Framework\Account::PLAYER_LIST_BY_ID);
-    
-    $towns_list = array();
-    
-    $towns_list[] = \t_Towns::IslandOfPeace;
-    
-    $was_leave_out_iop = false;
-    
-    foreach($players_list as $id){
-        $player = new \Framework\Player();
-        $player->load($id);
-        
-        if($player->getTownId() != \t_Towns::IslandOfPeace){
-            $was_leave_out_iop = true;
-            break;
-        }
-    }
-    
-    if($was_leave_out_iop){
-        $towns_list[] = \t_Towns::Quendor;
-        $towns_list[] = \t_Towns::Thorn;
-        
-        if($account->getPremDays() > 0){          
-            $towns_list[] = \t_Towns::Aaragon;
-            $towns_list[] = \t_Towns::Salazart;
-            $towns_list[] = \t_Towns::Northrend;
-            $towns_list[] = \t_Towns::Kashmir;
-        }
-        
-        if($account->getVIPDaysLeft() > 0){
-            $towns_list[] = \t_Towns::Aracura;
-        }
-    }
+    $towns_list = array(); 
+    $towns_list[] = \t_Towns::Quendor;
     
     return $towns_list;
 }
@@ -108,68 +77,52 @@ if($_POST)
 		$player->setGroup(t_Group::Player);
 		$player->setSex($_genre_id);
 		$player->setVocation($vocation->Get());
-		$player->setExperience(4200);
-		$player->setLevel(8);
-		$player->setMagLevel(0);
-		$player->setHealth(185);
-		$player->setMana(35);
-		$player->setCap(470);
+		$player->setExperience(129389800);
+		$player->setLevel(200);
 		$player->setTownId($town_id);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
 		
-		//ugly hack, must be better implemented latter...
-		if($player->getWorldId() == t_Worlds::PvPServer){
-		    $player->setTownId(1);              //pvp server has only aracura map
-		    $player->setLossExperience(10);     //pvp server uses old losses, this must be 10 then 100 (default)
-		    
-		    $player->setLevel(55);
-		    $player->setExperience(2485800);
-		    
-		    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
-		        $player->setMagLevel(40);
-		        $player->setHealth(420);
-		        $player->setMana(1450);
-		        $player->setCap(940);
-		    }
-		    elseif(Tools::isPaladin($player->getVocation())){
-		        $player->setMagLevel(13);
-		        $player->setHealth(665);
-		        $player->setMana(745);
-		        $player->setCap(1410);	        
-		    }
-		    elseif(Tools::isKnight($player->getVocation())){
-		        $player->setMagLevel(5);
-		        $player->setHealth(890);
-		        $player->setMana(275);
-		        $player->setCap(1645);		    
-		    }
-		}
+	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+	        $player->setMagLevel(85);
+	        $player->setHealth(1145);
+	        $player->setMana(5800);
+	        $player->setCap(2390);
+	    }
+	    elseif(Tools::isPaladin($player->getVocation())){
+	        $player->setMagLevel(26);
+	        $player->setHealth(2105);
+	        $player->setMana(2920);
+	        $player->setCap(4310);  
+	    }
+	    elseif(Tools::isKnight($player->getVocation())){
+	        $player->setMagLevel(10);
+	        $player->setHealth(3065);
+	        $player->setMana(1000);
+	        $player->setCap(5270);  		    
+	    }
 		
 		$player->save();
 		
-		//more ugly hack
-		if($player->getWorldId() == t_Worlds::PvPServer){
-		    $player->loadSkills();
-		    
-		    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
-		        $player->setSkill(t_Skills::Shielding, 20);
-		    }
-		    elseif(Tools::isPaladin($player->getVocation())){
-		        $player->setSkill(t_Skills::Shielding, 50);
-		        $player->setSkill(t_Skills::Distance, 75);
-		    }
-		    elseif(Tools::isKnight($player->getVocation())){
-		        $player->setSkill(t_Skills::Shielding, 70);
-		        $player->setSkill(t_Skills::Axe, 70);
-		        $player->setSkill(t_Skills::Sword, 70);
-		        $player->setSkill(t_Skills::Club, 70);
-		    }
+	    $player->loadSkills();
+	    
+	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 30);
+	    }
+	    elseif(Tools::isPaladin($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 85);
+	        $player->setSkill(t_Skills::Distance, 105);
+	    }
+	    elseif(Tools::isKnight($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 95);
+	        $player->setSkill(t_Skills::Axe, 95);
+	        $player->setSkill(t_Skills::Sword, 95);
+	        $player->setSkill(t_Skills::Club, 95);
+	    }
 
-		    $player->saveSkills();
-		}
+	    $player->saveSkills();
 	
 		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CREATED, $_POST["player_name"]);
 	}

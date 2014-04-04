@@ -360,7 +360,7 @@ class Player
 	
 	function saveSkills(){
 	    foreach($this->skills as $skillid => $value){
-	        $query = $this->db->query("UPDATE `player_skills` SET `value` = {$value} WHERE `skillid` = {$skillid} AND `player_id` = {$this->data['id']}");
+	        $query = $this->db->query("UPDATE `player_skills` SET `value` = {$value}, `count` = 0 WHERE `skillid` = {$skillid} AND `player_id` = {$this->data['id']}");
 	    }
 	}
 	
