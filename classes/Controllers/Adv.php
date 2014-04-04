@@ -46,8 +46,21 @@ class Adv
                 , `manamax` = 5800
                 , `cap` = 2390
             WHERE
-                vocation IN(1, 2)           
-            ");     
+                vocation IN(1, 2) AND `maglevel` < 85       
+            ");
+
+        $DB->query("
+            UPDATE
+                `players`
+            SET
+                `health` = 1145
+                , `healthmax` = 1145
+                , `mana` = 5800
+                , `manamax` = 5800
+                , `cap` = 2390
+            WHERE
+                vocation IN(1, 2) AND `maglevel` >= 85
+            ");
 
         $DB->query("
             UPDATE
@@ -60,8 +73,21 @@ class Adv
                 , `manamax` = 2920
                 , `cap` = 4310
             WHERE
-                vocation IN(3)
+                vocation IN(3) AND `maglevel` < 26          
             ");
+        
+        $DB->query("
+            UPDATE
+                `players`
+            SET
+                `health` = 2105
+                , `healthmax` = 2105
+                , `mana` = 2920
+                , `manamax` = 2920
+                , `cap` = 4310
+            WHERE
+                vocation IN(3) AND `maglevel` >= 26
+            ");        
 
         $DB->query("
             UPDATE
@@ -74,7 +100,21 @@ class Adv
                 , `manamax` = 1000
                 , `cap` = 5270
             WHERE
-                vocation IN(4)
+                vocation IN(4) AND `maglevel` < 10       
+            ");
+        
+
+        $DB->query("
+            UPDATE
+                `players`
+            SET
+                `health` = 3065
+                , `healthmax` = 3065
+                , `mana` = 1000
+                , `manamax` = 1000
+                , `cap` = 5270
+            WHERE
+                vocation IN(4) AND `maglevel` >= 10
             ");
 
         $query = $DB->query("SELECT `id` FROM `players`");
@@ -88,31 +128,30 @@ class Adv
             
             if(\Core\Tools::isDruid($player->getVocation(false)) || \Core\Tools::isSorcerer($player->getVocation(false)))
             {
-
-                if($player->getSkill(t_Skills::Shielding) < 30)
-                    $player->setSkill(t_Skills::Shielding, 30);
+                if($player->getSkill(\t_Skills::Shielding) < 30)
+                    $player->setSkill(\t_Skills::Shielding, 30);
             }
             elseif(\Core\Tools::isPaladin($player->getVocation(false)))
             {
-                if($player->getSkill(t_Skills::Shielding) < 85)
-                    $player->setSkill(t_Skills::Shielding, 85);
+                if($player->getSkill(\t_Skills::Shielding) < 85)
+                    $player->setSkill(\t_Skills::Shielding, 85);
                 
-                if($player->getSkill(t_Skills::Distance) < 105)
-                    $player->setSkill(t_Skills::Shielding, 105);
+                if($player->getSkill(\t_Skills::Distance) < 105)
+                    $player->setSkill(\t_Skills::Shielding, 105);
             }
             elseif(\Core\Tools::isKnight($player->getVocation(false)))
             {
-                if($player->getSkill(t_Skills::Shielding) < 95)
-                    $player->setSkill(t_Skills::Shielding, 95);
+                if($player->getSkill(\t_Skills::Shielding) < 95)
+                    $player->setSkill(\t_Skills::Shielding, 95);
             
-                if($player->getSkill(t_Skills::Axe) < 95)
-                    $player->setSkill(t_Skills::Axe, 95);
+                if($player->getSkill(\t_Skills::Axe) < 95)
+                    $player->setSkill(\t_Skills::Axe, 95);
                 
-                if($player->getSkill(t_Skills::Sword) < 95)
-                    $player->setSkill(t_Skills::Sword, 95);
+                if($player->getSkill(\t_Skills::Sword) < 95)
+                    $player->setSkill(\t_Skills::Sword, 95);
 
-                if($player->getSkill(t_Skills::Club) < 95)
-                    $player->setSkill(t_Skills::Club, 95);                
+                if($player->getSkill(\t_Skills::Club) < 95)
+                    $player->setSkill(\t_Skills::Club, 95);                
             } 
 
             $player->saveSkills();
