@@ -180,7 +180,7 @@ class User
 				`".\Core\Tools::getSiteTable("forum_user_votes")."` AS `vote`, 
 				`".\Core\Tools::getSiteTable("forum_polls_opt")."` AS `polls_opt` 
 			WHERE 
-				`vote`.`user_id` = '{$this->_id}' AND 
+				`vote`.`user_id` = '{$this->_memberid}' AND 
 				`vote`.`opt_id` = `polls_opt`.`id` AND
 				`polls_opt`.`poll_id` = '{$poll_id}'");
 		
@@ -200,17 +200,17 @@ class User
 	
 	function SetPollVote($option_id, $public)
 	{
-		\Core\Main::$DB->query("INSERT INTO `".\Core\Tools::getSiteTable("forum_user_votes")."` values ('{$this->_id}', '{$option_id}', '".time()."', '{$public}')");		
+		\Core\Main::$DB->query("INSERT INTO `".\Core\Tools::getSiteTable("forum_user_votes")."` values ('{$this->_memberid}', '{$option_id}', '".time()."', '{$public}')");		
 	}
 	
 	function AddBan($type, $date, $reason, $author)
 	{
-		\Core\Main::$DB->query("INSERT INTO `".\Core\Tools::getSiteTable("forum_bans")."` (`user_id`, `date`, `type`, `author`, `reason`) values ('{$this->_id}', '{$date}', '{$type}', '{$author}', '{$reason}')");	
+		\Core\Main::$DB->query("INSERT INTO `".\Core\Tools::getSiteTable("forum_bans")."` (`user_id`, `date`, `type`, `author`, `reason`) values ('{$this->_memberid}', '{$date}', '{$type}', '{$author}', '{$reason}')");	
 	}
 	
 	function LoadBans()
 	{
-		$query = \Core\Main::$DB->query("SELECT `date`,`type`,`reason`,`author` FROM `".\Core\Tools::getSiteTable("forum_bans")."` WHERE `user_id` = '{$this->_id}' ORDER BY `date` DESC");
+		$query = \Core\Main::$DB->query("SELECT `date`,`type`,`reason`,`author` FROM `".\Core\Tools::getSiteTable("forum_bans")."` WHERE `user_id` = '{$this->_memberid}' ORDER BY `date` DESC");
 		if($query && $query->numRows() == 0)
 		{
 			return false;
