@@ -375,24 +375,22 @@ class ItemShop
 	
 	static function onPurschaseRoyalCoins(Account $account, Player $player){
 	    
-	    try{
-	        $royal = 1200;
-	        
-    	    $query = \Core\Main::$DB->query("SELECT `value` FROM `player_storage` WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
-    	    
-    	    if($query->numRows() > 0){
-                $result = $query->fetch();
-                
-                if($result->value > 0)
-                    $royal += $result->value;
-    	    }
+        $royal = 1200;
+        
+	    $query = \Core\Main::$DB->query("SELECT `value` FROM `player_storage` WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
+	    
+	    if($query->numRows() > 0){
+            $result = $query->fetch();
+            
+            if($result->value > 0)
+                $royal += $result->value;
             
             \Core\Main::$DB->query("UPDATE `player_storage` SET `value` = '{$royal}' WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
+	    }
+	    else
+	        \Core\Main::$DB->query("INSERT INTO `player_storage` VALUES ('{$player->getId()}', '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."', '{$royal}')");
         
-            return array("success" => true);
-	    } catch (Exception $e) {
-	        return array("success" => false, "msg" => tr("Erro incomum, relatório gerado para o webmaster."));
-	    }  
+        return array("success" => true);
 	}
 	
 	static function onPurchaseExpBonus(Account $account, Player $player){
