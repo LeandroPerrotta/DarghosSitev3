@@ -77,14 +77,19 @@ if($_POST)
 		$player->setGroup(t_Group::Player);
 		$player->setSex($_genre_id);
 		$player->setVocation($vocation->Get());
-		$player->setExperience(129389800);
-		$player->setLevel(200);
+        $player->setExperience(4200);
+        $player->setLevel(8);
+        $player->setMagLevel(0);
+        $player->setHealth(185);
+        $player->setMana(35);
+        $player->setCap(470);
 		$player->setTownId($town_id);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
 		
+        /*
 	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
 	        $player->setMagLevel(85);
 	        $player->setHealth(1145);
@@ -102,11 +107,12 @@ if($_POST)
 	        $player->setHealth(3065);
 	        $player->setMana(1000);
 	        $player->setCap(5270);  		    
-	    }
+	    }*/
 		
 		$player->save();
 		
-	    $player->loadSkills();
+	    /*
+        $player->loadSkills();
 	    
 	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
 	        $player->setSkill(t_Skills::Shielding, 30);
@@ -123,6 +129,7 @@ if($_POST)
 	    }
 
 	    $player->saveSkills();
+         */
 	
 		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CREATED, $_POST["player_name"]);
 	}
@@ -153,8 +160,8 @@ while(t_Genre::ItValid())
 
 $worlds_str = "";
 $worldNames = array(
-		t_Worlds::Darghos => "Darghos (Open PvP, inaugurado jul/2013)"
-		,t_Worlds::PvPServer => "PvP Beta (Hardcore PvP, novo, inaugurado set/2013)"
+		t_Worlds::Uniterian => "Open PvP, Progressão (sem resets), Inaugurado Ago/2014"
+		,t_Worlds::Tenerian => "Open PvP, Seasons, Inaugurado Ago/2014"
 );
 if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 {

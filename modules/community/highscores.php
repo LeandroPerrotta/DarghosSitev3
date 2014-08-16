@@ -16,7 +16,7 @@ if(isset($_GET["world"]))
 		
 	$charactersActiveDays = Configs::Get(Configs::eConf()->HIGHSCORE_ACTIVE_CHARACTER_DAYS);
 	
-	$skill = isset($_GET['skill']) ? $_GET['skill'] : "bgrating";
+	$skill = isset($_GET['skill']) ? $_GET['skill'] : "experience";
 	
 	if($charactersActiveDays != 0 && !$filter_showInactivePlayers)
 	{
@@ -24,12 +24,12 @@ if(isset($_GET["world"]))
 		<p>'.tr("<b>Obs:</b> Este highscores mostra apenas personagens <b>ativos</b> nos ultimos @v1@ dias.", $charactersActiveDays).'</p>';
 	}
 	
-	$validSkills = array(/*"experience",*/ "maglevel");
+	$validSkills = array("experience", "maglevel");
 	$select = new \Framework\HTML\SelectBox();
 	$select->SetName("skill");
 	
-	//$selected = $skill == "experience" ? true : false;
-	//$select->AddOption(tr("Nível de Experiência"), "experience", $selected);
+	$selected = $skill == "experience" ? true : false;
+	$select->AddOption(tr("Nível de Experiência"), "experience", $selected);
 	
 	$selected = $skill == "maglevel" ? true : false;
 	$select->AddOption(tr("Nível Mágico"), "maglevel", $selected);
@@ -65,7 +65,7 @@ if(isset($_GET["world"]))
 	 */
 	if(!in_array($skill, $validSkills))
 	{
-		$skill = "bgrating";
+		$skill = "experience";
 	}
 	
 	$module .= '
@@ -124,7 +124,7 @@ if(isset($_GET["world"]))
 		
 	$start = $page * 20;
 	
-	if(/*$skill == "experience" or */$skill == "maglevel")
+	if($skill == "experience" or $skill == "maglevel")
 	{	
 		$query_str = "
 		SELECT 
@@ -304,11 +304,11 @@ if(isset($_GET["world"]))
 		if($player->getAccess() > t_Access::SeniorTutor)
 			continue;
 		
-		/*if($skill == "experience")
+		if($skill == "experience")
 		{
 			$skill_value = $player->getLevel();
 		}
-		else*/if($skill == "maglevel")
+		elseif($skill == "maglevel")
 		{
 			$skill_value = $player->getMagLevel();
 		}

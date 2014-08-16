@@ -122,14 +122,19 @@ class Players
 		$player->setGroup(\t_Group::Player);
 		$player->setSex($_genre_id);
 		$player->setVocation($voc_t->Get());
-		$player->setExperience(129389800);
-		$player->setLevel(200);
+        $player->setExperience(4200);
+        $player->setLevel(8);
+        $player->setMagLevel(0);
+        $player->setHealth(185);
+        $player->setMana(35);
+        $player->setCap(470);
 		$player->setTownId($town_id);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
 		
+        /*
         if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
 	        $player->setMagLevel(85);
 	        $player->setHealth(1145);
@@ -148,10 +153,12 @@ class Players
 	        $player->setMana(1000);
 	        $player->setCap(5270);  		    
 	    }
+        */
 		
 		$player->save();
 		
-	    $player->loadSkills();
+	    /*
+        $player->loadSkills();
 	    
 	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
 	        $player->setSkill(t_Skills::Shielding, 30);
@@ -168,6 +175,7 @@ class Players
 	    }
 
 	    $player->saveSkills();	
+        */
 	
 		$player->save();
 	
