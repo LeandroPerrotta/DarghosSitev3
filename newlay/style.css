@@ -248,6 +248,47 @@ ul li {
 	margin: 0;
 }
 
+#left ul.social-media{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	width: auto;
+	border: none;
+}
+
+#left ul.social-media li{
+	display: inline-block;
+	width: 31px;
+	height: 31px;
+}
+
+#left ul.social-media li.facebook a{
+	background-position: -31px 0;
+	width: 31px;
+}
+
+#left ul.social-media li.facebook a:hover{
+	background-position: -31px -31px;
+	width: 31px;
+}
+
+#left ul.social-media li.twitter a{
+	background-position: -62px 0;
+	width: 31px;
+}
+
+#left ul.social-media li.twitter a:hover{
+	background-position: -62px -31px;
+	width: 31px;
+}
+
+#left ul.social-media li a, #left ul.social-media li a:hover{
+	width: 0px;
+	background: url(images/social.png) no-repeat;
+	width: 31px;
+	height: 31px;
+	padding: 0px;
+}
+
 
 
 #left ul li a, #left ul li div, #left ul li table, #right-menu ul > li > a, #right-menu ul li div, #right-menu ul li table{

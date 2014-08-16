@@ -96,9 +96,9 @@ class Menus
 			)		
 		)		
 		,array(
-			"title" => "Facebook",
-			"name" => "facebook",
-			"onDraw" => "drawFacebook"
+			"title" => "Redes Sociais",
+			"name" => "social-media",
+			"onDraw" => "drawMedia"
 		)		
 	);
 	
@@ -142,14 +142,14 @@ class Menus
 		)		
 	);
 	
-	static function drawFacebook(&$xml)
+	static function drawMedia(&$xml)
 	{
 		$ul = $xml->addChild("ul");
 		$ul->addAttribute("class", "always_viewable");	
 
 		$li = $ul->addChild("li");
 		
-		$li->addChild("facebooktag");
+		$li->addChild("mediatag");
 		
 		return true;
 	}
@@ -622,8 +622,15 @@ class Menus
 			$string .= $menu->__toXML();
 		}
 		
-		$facebooktag = '<a href="http://www.facebook.com/DarghosOT" target="_blank"><img srcsrc="http://profile.ak.fbcdn.net/hprofile-ak-prn2/187911_205124342834613_2503685_q.jpg" alt=""></a><iframe src="//www.facebook.com/plugins/like.php?href=http://facebook.com/DarghosOT&amp;send=false&amp;layout=standard&amp;width=180&amp;show_faces=false&amp;colorscheme=dark&amp;action=like&amp;height=75" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:180px; height:75px;" allowTransparency="true"></iframe>';
-		$string = str_replace("<facebooktag></facebooktag>", $facebooktag, $string);
+		$mediatag = '
+		<div>
+    		<ul class="social-media">
+    		  <li class="facebook"><a href="https://facebook.com/DarghosOT" title="Darghos no Facebook"></a></li>
+    		  <li class="twitter"><a href="https://twitter.com/darghos_server" title="Darghos no Twitter"></a></li>
+    		</ul>
+		</div>';
+        
+		$string = str_replace("<mediatag></mediatag>", $mediatag, $string);
 		
 		return $string;
 	}
