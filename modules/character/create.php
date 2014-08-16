@@ -46,7 +46,7 @@ if($_POST)
 		$valid_vocations = array(1, 2, 3, 4);
 		
 		//warriors for now only creable in Darghos realm
-		if($player->getWorldId() == t_Worlds::Darghos)
+		if($player->getWorldId() == t_Worlds::Uniterian)
 		    array_push($valid_vocations, 9);
 		
 		if(!in_array($vocation->Get(), $valid_vocations))

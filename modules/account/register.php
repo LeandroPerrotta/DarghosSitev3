@@ -69,8 +69,8 @@ class View
 		$this->_char_world = new \Framework\HTML\SelectBox();
 		$this->_char_world->SetName("character_world");
 		$this->_char_world->AddOption("");
-		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Darghos), t_Worlds::Darghos);
-		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::PvPServer), t_Worlds::PvPServer);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Uniterian), t_Worlds::Uniterian);
+		$this->_char_world->AddOption(t_Worlds::GetString(t_Worlds::Tenerian), t_Worlds::Tenerian);
 		
 		/*
 		$this->_char_town = new \Framework\HTML\SelectBox();
