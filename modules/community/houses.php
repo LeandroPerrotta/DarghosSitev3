@@ -9,7 +9,7 @@ if(isset($_GET["world"]))
 	$world_id = (int)$_GET["world"];
 	
 	if(!t_Worlds::Get($world_id))
-		$world_id = t_Worlds::Darghos;
+		$world_id = t_Worlds::Uniterian;
 	
 	$towns = array(
 		t_Towns::Quendor,

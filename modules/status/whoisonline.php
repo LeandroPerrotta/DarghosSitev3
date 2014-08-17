@@ -9,7 +9,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 	$world_id = (int)$_GET["world"];
 
 	if(!t_Worlds::Get($world_id))
-		$world_id = t_Worlds::Darghos;
+		$world_id = t_Worlds::Uniterian;
 
 	$status_query = \Core\Main::$DB->query("SELECT `players`, `online`, `uptime`, `afk`, `date` FROM `serverstatus` WHERE `server_id` = {$world_id} ORDER BY `date` DESC LIMIT 1");
 	$stats_fetch = $status_query->fetch();
