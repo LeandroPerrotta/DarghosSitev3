@@ -373,7 +373,7 @@ class t_Worlds extends \Core\Structs
 	static public
 	    $m_worldPort = array(
             self::Uniterian => 7171
-            ,self::Tenerian => 7174
+            ,self::Tenerian => 7173
         );
 }
 
