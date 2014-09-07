@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<data><content>&lt;h3&gt;&#xD;
+	Quanto minha conex&amp;atilde;o ficar&amp;aacute; melhor usando o Darghos Tunnel?&lt;/h3&gt;&#xD;
+&lt;p&gt;&#xD;
+	Esta resposta ir&amp;aacute; depender de v&amp;aacute;rios fatores. Mas &amp;eacute; esperado que haja na maioria dos casos uma melhoria que ir&amp;aacute; girar em torno de 10% a at&amp;eacute; 100%!&lt;br /&gt;&#xD;
+	&lt;br /&gt;&#xD;
+	Em meu caso em especifico, meu ping no depot de Quendor (lugar bastante movimentado) ficava em torno de 350~600 ms (ping alto, e bastante instavel) e usando o Tunnel o ping diminuiu, fica estabilizado entre 185 e 210 ms! Chega a ser 3x melhor!&lt;br /&gt;&#xD;
+	&amp;nbsp;&lt;/p&gt;&#xD;
+&lt;h3&gt;&#xD;
+	Estou conectando pelo Tunnel mas continuo com problemas na conex&amp;atilde;o, o que fazer?&lt;/h3&gt;&#xD;
+&lt;p&gt;&#xD;
+	Infelizmente, em alguns casos o nosso Tunnel pode n&amp;atilde;o resolver de forma totalmente eficiente o problema de lag. Ainda &amp;eacute; possivel contratar o servi&amp;ccedil;o de empresas especializadas que geralmente disponibiliza n&amp;atilde;o somente um servidor mas dezenas de servidores de Tunnel espalhados no mundo. N&amp;oacute;s recomendamos a &lt;a href="http://www.wtfast.com"&gt;WtFast&lt;/a&gt;.&lt;br /&gt;&#xD;
+	&amp;nbsp;&lt;/p&gt;&#xD;
+&lt;p&gt;&#xD;
+	&amp;nbsp;&lt;/p&gt;&#xD;
+&lt;h3&gt;&#xD;
+	O servidor de Tunnel do Darghos &amp;eacute; o mesmo que est&amp;aacute; rodando o jogo?&lt;/h3&gt;&#xD;
+&lt;p&gt;&#xD;
+	Sim, se trata do mesmo servidor.&lt;br /&gt;&#xD;
+	&amp;nbsp;&lt;/p&gt;&#xD;
+&lt;h3&gt;&#xD;
+	Se est&amp;aacute; no mesmo servidor, o que o Tunnel faz para melhorar a conex&amp;atilde;o?&lt;/h3&gt;&#xD;
+&lt;p&gt;&#xD;
+	Uma conex&amp;atilde;o em Tunnel possui prioridade de trafego na internet sobre outras conex&amp;otilde;es &amp;quot;comuns&amp;quot; e os provedores de acesso costumam oferecer rotas mais limpas e menos congestionadas do que as rotas comuns, causando uma diminui&amp;ccedil;&amp;atilde;o consideravel no ping/lat&amp;ecirc;ncia e melhor condi&amp;ccedil;&amp;otilde;es de jogo.&lt;/p&gt;&#xD;
+</content><changes/></data>

@@ -7,7 +7,7 @@ use Core\Configs;
 use Core\Consts;
 use Views\Balance as BalanceViews;
 
-if (!defined('TOKEN')) define ('TOKEN', 'F847E63CDFE54E188D06762D951FD689');
+if (!defined('TOKEN')) define ('TOKEN', '1CEFB088F1BA4EBAB7F163F2CC5F8A1E');
 
 class Balance
 {
@@ -65,7 +65,7 @@ class Balance
     }    
     
     function PagSeguro(){	
-        include_once('libs/pagseguro/retorno.class.php');		
+        include_once('libs/pagseguro/retorno.class.php');
 		
         if(!$_POST){
             $data = array();
