@@ -130,12 +130,6 @@ class View
 				return false;
 			}
 			
-			if($this->topic->IsNotice() && ((!$this->loggedAcc || $this->loggedAcc->getGroup() < t_Group::GameMaster)))
-			{
-				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
-				return false;
-			}
-			
 			if($this->loggedAcc && $_GET['edit'] && $_GET['edit'] == "1")
 			{
 				$this->_title = new \Framework\HTML\Input();
