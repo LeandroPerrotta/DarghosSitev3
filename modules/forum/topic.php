@@ -130,7 +130,7 @@ class View
 				return false;
 			}
 			
-			if($this->topic->IsNotice() && ((!$this->loggedAcc || $this->loggedAcc->getGroup() < t_Group::GameMaster) && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS)))
+			if($this->topic->IsNotice() && ((!$this->loggedAcc || $this->loggedAcc->getGroup() < t_Group::GameMaster)))
 			{
 				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 				return false;
@@ -196,7 +196,7 @@ class View
 			return $this->PollPost();
 		}
 		
-		if($_POST["user_post"])
+		if($_POST["user_post"] && Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS))
 		{
 			if(strlen($_POST["user_post"]) > 2048)
 			{
@@ -631,41 +631,44 @@ class View
 		$module .= "</div>";
 		$module .= "{$table->Draw()}";
 		
-		$post = new \Framework\HTML\Input();
-		$post->SetName("user_post");
-		$post->SetId("user_post");
-		$post->IsTextArea(7, 65);
-		$post->OnKeyPress("countCharacters(2048);");
-		
-		$button = new \Framework\HTML\Input();
-		$button->IsButton();
-		$button->SetValue("Enviar");
-		
-		$table = new \Framework\HTML\Table();
-		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
-		$table->IsDropDownHeader();
-		
-		$string = "			
-		
-			<div style='text-align: center;'>{$post->Draw()}
-			
-			<p>
-				{$button->Draw()}
-			</p>
-			
-			<p id='charactersLeft'>Restam 2048 caracteres.</p>
-			
-			</div>";
-		
-		$table->AddField($string);
-		$table->AddRow();
-		
-		$module .= "		
-		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
-			<fieldset>
-				{$table->Draw()}				
-			</fieldset>
-		</form>";
+        if(Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS)){
+        
+    		$post = new \Framework\HTML\Input();
+    		$post->SetName("user_post");
+    		$post->SetId("user_post");
+    		$post->IsTextArea(7, 65);
+    		$post->OnKeyPress("countCharacters(2048);");
+    		
+    		$button = new \Framework\HTML\Input();
+    		$button->IsButton();
+    		$button->SetValue("Enviar");
+    		
+    		$table = new \Framework\HTML\Table();
+    		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
+    		$table->IsDropDownHeader();
+    		
+    		$string = "			
+    		
+    			<div style='text-align: center;'>{$post->Draw()}
+    			
+    			<p>
+    				{$button->Draw()}
+    			</p>
+    			
+    			<p id='charactersLeft'>Restam 2048 caracteres.</p>
+    			
+    			</div>";
+    		
+    		$table->AddField($string);
+    		$table->AddRow();
+    		
+    		$module .= "		
+    		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
+    			<fieldset>
+    				{$table->Draw()}				
+    			</fieldset>
+    		</form>";
+		}
 	}
 }
 
