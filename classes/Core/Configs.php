@@ -72,7 +72,7 @@ class Configs
 				case self::$e_Configs->SQL_FORUM_SCHEMA: self::Set($i, $__configs[$i], "forum"); break;
 				case self::$e_Configs->SQL_ORDERS_DATABASE: self::Set($i, $__configs[$i], ""); break;
 				
-				case self::$e_Configs->STATUS_HOST: self::Set($i, $__configs[$i], "server.darghos.com.br"); break;
+				case self::$e_Configs->STATUS_HOST: self::Set($i, $__configs[$i], "server.darghos.com"); break;
 				case self::$e_Configs->STATUS_PORT: self::Set($i, $__configs[$i], "7171"); break;
 				case self::$e_Configs->STATUS_SHOW_PING: self::Set($i, $__configs[$i], false); break;
 				case self::$e_Configs->STATUS_IGNORE_AFK: self::Set($i, $__configs[$i], false); break;
