@@ -24,37 +24,37 @@ class Main
 		//external libs
 		include_once "libs/phpmailer/class.phpmailer.php";		
 		
-		if(!Configs::Get(Configs::eConf()->ENABLE_MANUTENTION) || $isCLI)
+		$manutention = Configs::Get(Configs::eConf()->ENABLE_MANUTENTION);
+
+		try
 		{
-			try
-			{
-				self::$DB = new MySQL();
-				self::$DB->connect(Configs::Get(Configs::eConf()->SQL_HOST), Configs::Get(Configs::eConf()->SQL_USER), Configs::Get(Configs::eConf()->SQL_PASSWORD), Configs::Get(Configs::eConf()->SQL_DATABASE));	
-			}
-			catch (\Exception $e)
-			{
-				echo "Impossivel se conectar ao banco de dados.";
-			}
-				
-			self::InitPOT();	
-				
-			if(!$isCLI)
-			{
-				self::InitLanguage();
-				Emails::init();		
-				
-				if(!$_SESSION["login_redirect"] && $_SESSION["login_post"])
-				{
-					$_POST = $_SESSION["login_post"];
-					unset($_SESSION["login_post"]);
-				}
-					
-				self::loadTemplate();
-				self::routeToController();				
-			}
-			else
-				self::runCLI($cliArgs);
+			self::$DB = new MySQL();
+			self::$DB->connect(Configs::Get(Configs::eConf()->SQL_HOST), Configs::Get(Configs::eConf()->SQL_USER), Configs::Get(Configs::eConf()->SQL_PASSWORD), Configs::Get(Configs::eConf()->SQL_DATABASE));	
 		}
+		catch (\Exception $e)
+		{
+			echo "Impossivel se conectar ao banco de dados.";
+		}
+				
+		self::InitPOT();
+		self::loadTemplate();	
+				
+		if(!$isCLI && !$manutention)
+		{
+			self::InitLanguage();
+			Emails::init();		
+			
+			if(!$_SESSION["login_redirect"] && $_SESSION["login_post"])
+			{
+				$_POST = $_SESSION["login_post"];
+				unset($_SESSION["login_post"]);
+			}
+				
+			
+			self::routeToController();				
+		}
+		elseif($isCLI)
+			self::runCLI($cliArgs);
 	}
 	
 	static function runCLI($cliArgs = array())

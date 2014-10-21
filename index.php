@@ -1,5 +1,5 @@
 <?
-ini_set("display_errors", "Off");
+ini_set("display_errors", "On");
 error_reporting(E_ERROR);
 /*$date = date("d-m-y");
 
