@@ -161,7 +161,7 @@ while(t_Genre::ItValid())
 $worlds_str = "";
 $worldNames = array(
 		t_Worlds::Uniterian => "[Uniterian] Open PvP, Progressão (sem resets), Inaugurado Ago/2014"
-		,t_Worlds::Tenerian => "[Tenerian] Open PvP, Seasons, Inaugurado Ago/2014"
+		,t_Worlds::Tenerian => "[Tenerian] Open PvP, Seasons, Inaugurado Out/2014"
 );
 if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 {
