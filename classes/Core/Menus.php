@@ -86,7 +86,6 @@ class Menus
 			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
 			"items" => array(
 				array("name" => "Buscar Personagem", "url" => "?ref=character.view")
-				,array("name" => "Forum", "url" => "http://darghos.com.br/forum")
 				,array("name" => "Highscores", "url" => "?ref=community.highscores")
 				,array("name" => "Guildas", "url" => "?ref=community.guilds")
 				,array("name" => "Casas", "url" => "?ref=community.houses")
@@ -94,15 +93,15 @@ class Menus
 				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
 				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline", "conditions" => Menu::CONDITION_SHOWING_PLAYERS_ONLINE)	
 			)		
-		)		
-		,array(
-			"title" => "Redes Sociais",
-			"name" => "social-media",
-			"onDraw" => "drawMedia"
-		)		
+		)	
 	);
 	
 	private static $rightMenu = array(
+        array(
+            "title" => "Redes Sociais",
+            "name" => "social-media",
+            "onDraw" => "drawMedia"
+        ),	
 		array(
 			"title" => "Server Status",
 			"name" => "serverstatus",
@@ -622,16 +621,6 @@ class Menus
 			$string .= $menu->__toXML();
 		}
 		
-		$mediatag = '
-		<div>
-    		<ul class="social-media">
-    		  <li class="facebook"><a href="https://facebook.com/DarghosOT" title="Darghos no Facebook"></a></li>
-    		  <li class="twitter"><a href="https://twitter.com/darghos_server" title="Darghos no Twitter"></a></li>
-    		</ul>
-		</div>';
-        
-		$string = str_replace("<mediatag></mediatag>", $mediatag, $string);
-		
 		return $string;
 	}
 	
@@ -644,6 +633,16 @@ class Menus
 			$menu = new Menu($node);
 			$string .= $menu->__toXML();
 		}
+        
+        $mediatag = '
+        <div>
+            <ul class="social-media">
+              <li class="facebook"><a href="https://facebook.com/DarghosOT" title="Darghos no Facebook"></a></li>
+              <li class="twitter"><a href="https://twitter.com/darghos_server" title="Darghos no Twitter"></a></li>
+            </ul>
+        </div>';
+        
+        $string = str_replace("<mediatag></mediatag>", $mediatag, $string);        
 		
 		return $string;
 	}	
