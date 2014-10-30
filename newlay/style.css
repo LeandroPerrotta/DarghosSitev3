@@ -281,7 +281,7 @@ ul li {
 	width: 31px;
 }
 
-#right-men ul.social-media li a, #right-menu ul.social-media li a:hover{
+#right-menu ul.social-media li a, #right-menu ul.social-media li a:hover{
 	width: 0px;
 	background: url(images/social.png) no-repeat;
 	width: 31px;
