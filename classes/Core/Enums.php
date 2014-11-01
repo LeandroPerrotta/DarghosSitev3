@@ -581,7 +581,7 @@ class t_Vocation
         ,ID_PREMIUM_MASTER_SORCERER = 9
         ,ID_PREMIUM_ELDER_DRUID = 10
         ,ID_PREMIUM_ROYAL_PALADIN = 11
-        ,ID_PREMIUM_ELITE_KNIGHT = 11
+        ,ID_PREMIUM_ELITE_KNIGHT = 12
     ;
     
 	private $_vocation_id;
