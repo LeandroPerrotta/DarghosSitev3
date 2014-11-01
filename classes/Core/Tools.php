@@ -71,7 +71,7 @@ class Tools
 	    
 	    $data = array(
 	        1 => array( 1 => 5, 2 => 6, 3 => 7, 4 => 8)
-            ,2 => array( 5 => 9, 6 => 10, 7 => 11, 8 => 12)   
+            ,2 => array( 1 => 9, 2 => 10, 3 => 11, 4 => 12)   
         );
 	    
 	    return $data[$promotion_level][$vocation_id];
