@@ -70,7 +70,8 @@ class Tools
 	static function transformToPromotion($promotion_level, $vocation_id){
 	    
 	    $data = array(
-	        1 => array( 1 => 5, 2 => 6, 3 => 7, 4 => 8, 9 => 10)        
+	        1 => array( 1 => 5, 2 => 6, 3 => 7, 4 => 8)
+            ,2 => array( 5 => 9, 6 => 10, 7 => 11, 8 => 12)   
         );
 	    
 	    return $data[$promotion_level][$vocation_id];
