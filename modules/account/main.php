@@ -212,7 +212,7 @@ $module .= "
 		</tr>
 		
 		<tr>
-			<td><b>".tr("Saldo (Loja Darghos)").":</b></td><td>{$balance}</td>
+			<td><b>".tr("Saldo (Loja ".getConf(confEnum()->WEBSITE_NAME).")").":</b></td><td>{$balance}</td>
 		</tr>
 		
 		<tr>

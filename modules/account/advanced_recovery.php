@@ -32,7 +32,7 @@ if($_SESSION['recovery'])
 			}
 			elseif($chkEmail->loadByEmail($postEmail))
 			{
-				$error = tr("O e-mail informado já está em uso por outra conta no Darghos.");
+				$error = tr("O e-mail informado já está em uso por outra conta no ".getConf(confEnum()->WEBSITE_NAME).".");
 			}
 			elseif(!\Core\Strings::validEmail($postEmail))
 			{

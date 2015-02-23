@@ -230,7 +230,7 @@ class View
 		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
 			<fieldset>
 	
-				<p>Bem vindo a Loja do Darghos!</p>				
+				<p>Bem vindo a Loja do ".getConf(confEnum()->WEBSITE_NAME)."!</p>				
 				<p>O saldo atual de sua conta é de: <big><b>R$ ".number_format($this->loggedAcc->getBalance() / 100, 2)."</b></big></p>				
 				
 				<p>

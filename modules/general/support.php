@@ -81,7 +81,7 @@ $module .= "
     <li><span style='font-size: 9px;'>".tr("Verificar nossa pagina de <a href='?ref=general.faq'>perguntas e respostas frequentes</a>.")."</span></li>
     <li><span style='font-size: 9px;'>".tr("Criar um post na seção de Suporte de nosso Fórum.")."</span></li>
     <li><span style='font-size: 9px;'>".tr("Curta e envie uma mensagem inbox em nosso <a href='https://www.facebook.com/DarghosOT'>Facebook</a> (atendimento leva minutos ou algumas horas).")."</span></li>
-    <li><span style='font-size: 9px;'>".tr("Contate-nos através do e-mail <a href='#'>suporte@darghos.com</a> (atendimento leva 1-5 dias).")."</span></li>
+    <li><span style='font-size: 9px;'>".tr("Contate-nos através do e-mail <a href='#'>".getConf(confEnum()->WEBSITE_EMAIL_SUPPORT)."</a> (atendimento leva 1-5 dias).")."</span></li>
 </ul>
 
 ";

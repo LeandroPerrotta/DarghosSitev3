@@ -2,144 +2,8 @@
 namespace Core;
 class Menus
 {	
-	private static $leftMenu = array(
-		array(
-			"title" => "Navegação",
-			"name" => "navigation",
-			"items" => array(
-				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
-				,array("name" => "Sobre o Darghos", "url" => "?ref=general.about")
-				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
-				,array("name" => "Downloads", "url" => "?ref=general.downloads")
-				,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
-				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
-				,array("name" => "Suporte", "url" => "?ref=general.support")	
-				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
-			)
-		)
-		,array(
-			"title" => "Contas",
-			"name" => "accounts",
-			"conditions" => Menu::CONDITION_CAN_NOT_LOGGED,
-			"items" => array(
-				array("name" => "Criar Conta", "style" => "font-weight: bold",  "url" => "?ref=account.register")
-				,array("name" => "Login", "url" => "?ref=account.login")
-				,array("name" => "Recuperar Conta", "url" => "?ref=account.recovery")
-				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
-				//,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
-			)		
-		)
-		,array(
-			"title" => "Minha Conta",
-			"name" => "myaccount",
-			"conditions" => Menu::CONDITION_MUST_LOGGED,
-			"items" => array(
-				array("name" => "Principal", "url" => "?ref=account.main")
-				,array("name" => "Logout", "url" => "?ref=account.logout")		
-			)		
-		)
-		,array(
-			"title" => "Loja Darghos",
-			"name" => "premium",
-			"conditions" => Menu::CONDITION_MUST_LOGGED,
-			"items" => array(
-				array("name" => "Vantagens VIP", "url" => "?ref=account.vip")
-				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
-				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
-				,array("name" => "Loja Darghos", "url" => "?ref=store.purchase")		
-				,array("name" => "Historico", "url" => "?ref=balance.history")
-			)		
-		)
-		,array(
-			"title" => "Admin Panel",
-			"name" => "adminpanel",
-			"conditions" => Menu::CONDITION_MUST_LOGGED,
-			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"min_group" => \t_Group::GameMaster,
-			"items" => array(
-				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
-				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
-				,array("name" => "Estatisticas", "url" => "?ref=adv.statistics", "min_group" => \t_Group::Administrator)		
-				,array("name" => "Idiomas", "url" => "?ref=adv.translations", "min_group" => \t_Group::Administrator)		
-				//,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
-				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
-			)		
-		)
-		,array(
-			"title" => "Darghopédia",
-			"name" => "darghopedia",
-			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"items" => array(
-				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
-				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
-				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
-				//,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
-				//,array("name" => "Agressivos e Pacificos", "url" => "?ref=darghopedia.change_pvp")
-				//,array("name" => "Battlegrounds", "url" => "http://pt-br.darghos.wikia.com/wiki/Battlegrounds")
-				//,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
-				//,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
-			)		
-		)		
-		,array(
-			"title" => "Comunidade",
-			"name" => "community",
-			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"items" => array(
-				array("name" => "Buscar Personagem", "url" => "?ref=character.view")
-				,array("name" => "Highscores", "url" => "?ref=community.highscores")
-				,array("name" => "Guildas", "url" => "?ref=community.guilds")
-				,array("name" => "Casas", "url" => "?ref=community.houses")
-				,array("name" => "Mortes Recentes", "url" => "?ref=community.lastdeaths")			
-				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
-				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline", "conditions" => Menu::CONDITION_SHOWING_PLAYERS_ONLINE)	
-			)		
-		)	
-	);
-	
-	private static $rightMenu = array(
-        array(
-            "title" => "Redes Sociais",
-            "name" => "social-media",
-            "onDraw" => "drawMedia"
-        ),	
-		array(
-			"title" => "Server Status",
-			"name" => "serverstatus",
-			"onDraw" => "drawStatus"
-		)
-		,array(
-			"title" => "Test Server Publico",
-			"name" => "testserverstatus",
-			"onDraw" => "drawTestServerStatus"
-		)
-        /*,array(
-                "title" => "Eventos",
-                "desc" => "Confira todos eventos que estão rolando no Darghos.",
-                "name" => "events",
-                "onDraw" => "drawEvents"
-        )*/
-		,array(
-			"title" => "Power Gammers",
-			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
-			"color" => \e_menuColor::Red,
-			"name" => "powergammers",
-			"onDraw" => "drawPowerGammers"
-		)
-		,array(
-				"title" => "Battlegrounds Semana",
-				"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
-				"color" => \e_menuColor::Red,
-				"name" => "bestbgplayers",
-				"onDraw" => "drawBgBest"
-		)					
-		,array(
-			"title" => "Top 5 Matadores",
-			"desc" => "Jogadores que mais mataram outros jogadores. Atualizado diariamente as 16:00.",
-			"color" => \e_menuColor::Red,
-			"name" => "topkillers",
-			"onDraw" => "drawTopKillers"
-		)		
-	);
+	private static $leftMenu;
+	private static $rightMenu;
 	
 	static function drawMedia(&$xml)
 	{
@@ -226,7 +90,7 @@ class Menus
 		$div = $li->addChild("div");
 
 		$p = $div->addChild("p");
-		$p->addChild("em", tr("Darghos está "));	
+		$p->addChild("em", tr("".getConf(confEnum()->WEBSITE_NAME)." está "));	
 		
 		if(count($status) == 0)
 		{
@@ -614,6 +478,100 @@ class Menus
 	{		
 		$string = "";
 		
+		self::$leftMenu = array(
+            array(
+    			"title" => "Navegação",
+    			"name" => "navigation",
+    			"items" => array(
+    				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
+    				,array("name" => "Sobre o ".getConf(confEnum()->WEBSITE_NAME), "url" => "?ref=general.about")
+    				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
+    				,array("name" => "Downloads", "url" => "?ref=general.downloads")
+    				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
+    				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
+    				,array("name" => "Suporte", "url" => "?ref=general.support")	
+    				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
+    			)
+    		)
+    		,array(
+    			"title" => "Contas",
+    			"name" => "accounts",
+    			"conditions" => Menu::CONDITION_CAN_NOT_LOGGED,
+    			"items" => array(
+    				array("name" => "Criar Conta", "style" => "font-weight: bold",  "url" => "?ref=account.register")
+    				,array("name" => "Login", "url" => "?ref=account.login")
+    				,array("name" => "Recuperar Conta", "url" => "?ref=account.recovery")
+    				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
+    				//,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
+    			)		
+    		)
+    		,array(
+    			"title" => "Minha Conta",
+    			"name" => "myaccount",
+    			"conditions" => Menu::CONDITION_MUST_LOGGED,
+    			"items" => array(
+    				array("name" => "Principal", "url" => "?ref=account.main")
+    				,array("name" => "Logout", "url" => "?ref=account.logout")		
+    			)		
+    		)
+    		,array(
+    			"title" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."",
+    			"name" => "premium",
+    			"conditions" => Menu::CONDITION_MUST_LOGGED,
+    			"items" => array(
+    				array("name" => "Vantagens VIP", "url" => "?ref=account.vip")
+    				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
+    				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
+    				,array("name" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=store.purchase")		
+    				,array("name" => "Historico", "url" => "?ref=balance.history")
+    			)		
+    		)
+    		,array(
+    			"title" => "Admin Panel",
+    			"name" => "adminpanel",
+    			"conditions" => Menu::CONDITION_MUST_LOGGED,
+    			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
+    			"min_group" => \t_Group::GameMaster,
+    			"items" => array(
+    				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
+    				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
+    				,array("name" => "Estatisticas", "url" => "?ref=adv.statistics", "min_group" => \t_Group::Administrator)		
+    				,array("name" => "Idiomas", "url" => "?ref=adv.translations", "min_group" => \t_Group::Administrator)		
+    				//,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
+    				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
+    			)		
+    		)
+    		,array(
+    			"title" => "Darghopédia",
+    			"name" => "darghopedia",
+    			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
+    			"items" => array(
+    				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
+    				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
+    				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
+    				//,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
+    				//,array("name" => "Agressivos e Pacificos", "url" => "?ref=darghopedia.change_pvp")
+    				//,array("name" => "Battlegrounds", "url" => "http://pt-br.darghos.wikia.com/wiki/Battlegrounds")
+    				//,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
+    				//,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
+    			)		
+    		)		
+    		,array(
+    			"title" => "Comunidade",
+    			"name" => "community",
+    			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
+    			"items" => array(
+    				array("name" => "Buscar Personagem", "url" => "?ref=character.view")
+    				,array("name" => "Highscores", "url" => "?ref=community.highscores")
+    				,array("name" => "Guildas", "url" => "?ref=community.guilds")
+    				,array("name" => "Casas", "url" => "?ref=community.houses")
+    				,array("name" => "Mortes Recentes", "url" => "?ref=community.lastdeaths")			
+    				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
+    				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline", "conditions" => Menu::CONDITION_SHOWING_PLAYERS_ONLINE)	
+    			)		
+    		)	
+		);
+		
 		foreach(self::$leftMenu as $node)
 		{
 			
@@ -627,6 +585,51 @@ class Menus
 	static function drawRightMenu()
 	{		
 		$string = "";
+		
+		self::$rightMenu = array(
+            array(
+                "title" => "Redes Sociais",
+                "name" => "social-media",
+                "onDraw" => "drawMedia"
+            ),	
+    		array(
+    			"title" => "Server Status",
+    			"name" => "serverstatus",
+    			"onDraw" => "drawStatus"
+    		)
+    		,array(
+    			"title" => "Test Server Publico",
+    			"name" => "testserverstatus",
+    			"onDraw" => "drawTestServerStatus"
+    		)
+            /*,array(
+                    "title" => "Eventos",
+                    "desc" => "Confira todos eventos que estão rolando no Darghos.",
+                    "name" => "events",
+                    "onDraw" => "drawEvents"
+            )*/
+    		,array(
+    			"title" => "Power Gammers",
+    			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
+    			"color" => \e_menuColor::Red,
+    			"name" => "powergammers",
+    			"onDraw" => "drawPowerGammers"
+    		)
+    		,array(
+    				"title" => "Battlegrounds Semana",
+    				"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
+    				"color" => \e_menuColor::Red,
+    				"name" => "bestbgplayers",
+    				"onDraw" => "drawBgBest"
+    		)					
+    		,array(
+    			"title" => "Top 5 Matadores",
+    			"desc" => "Jogadores que mais mataram outros jogadores. Atualizado diariamente as 16:00.",
+    			"color" => \e_menuColor::Red,
+    			"name" => "topkillers",
+    			"onDraw" => "drawTopKillers"
+    		)		
+    	);
 		
 		foreach(self::$rightMenu as $node)
 		{

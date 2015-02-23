@@ -47,6 +47,7 @@ class e_Configs extends \Core\Enumerators
 		,$WEBSITE_FOLDER_FILES
 		,$WEBSITE_FOLDER_GUILDS
 		,$WEBSITE_FOLDER_TEMP
+		,$WEBSITE_EMAIL_SUPPORT
 		
 		/*
 		 * Server related
@@ -352,8 +353,8 @@ class t_Servers extends \Core\Structs
 
 	static protected
 	$m_typeStrings = array(
-			self::Darghos => "Darghos"
-			,self::Ultrax => "UltraX"
+			self::Darghos => "Platinum"
+			,self::Ultrax => "Platinum 2"
 	);
 }
 

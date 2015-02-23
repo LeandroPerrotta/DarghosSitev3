@@ -101,7 +101,7 @@ class View
 			"step" => "1",
 			"title" => tr("Criar nova conta (passo a passo)"),
 			"body" => "
-			<p>".tr("Seja bem vindo ao Darghos! Este formulario irá o ajudar a criar a sua primeira conta, seu primeiro personagem e também informções que você deve saber.")."</p>
+			<p>".tr("Seja bem vindo ao ".getConf(confEnum()->WEBSITE_NAME)."! Este formulario irá o ajudar a criar a sua primeira conta, seu primeiro personagem e também informções que você deve saber.")."</p>
 			<p class='long-margin-top'>".tr("Escreva no campo a baixo o <b>login</b> que você desejar, este é o principal dado de sua conta para você efetuar tanto o login no jogo como no website.")."</p>
 			<p> 
 				<label>".tr("Login:")."</label>
@@ -156,7 +156,7 @@ class View
         // Enquanto o mundo PvP for BETA não vamos exibir a opção multiworld aqui...
         if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world_str = "
-				<p class='long-margin-top'>O Darghos oferece atualmente duas opções de mundos para você escolher, o primeiro (Darghos) é um mundo de PvP/RPG tradicional, e o segundo é um mundo focado em PvP e competição.</p>
+				<p class='long-margin-top'>O ".getConf(confEnum()->WEBSITE_NAME)." oferece atualmente duas opções de mundos para você escolher, o primeiro (Darghos) é um mundo de PvP/RPG tradicional, e o segundo é um mundo focado em PvP e competição.</p>
 				<p>
 					<label>Mundo do personagem:</label>
 					{$this->_char_world->Draw()}
@@ -184,7 +184,7 @@ class View
 			"title" => tr("Seu primeiro personagem"),
 			"body" => "
 			<p class='email_check long-margin-bottom' style='display: none;'>".tr("Foi enviado a seu endereço de e-mail <b><span id='account_email'></span></b> uma mensagem contendo um link para validação do e-mail informado, basta que você acesse-o para finalizar o cadastro do e-mail em sua conta garantindo sua segurança e liberando todos os recursos disponiveis para conta!")."</p>
-			<p>".tr("O proximo passo será a criação de seu primeiro personagem no Darghos. Preencha o campo abaixo com o nome que você deseja para seu personagem.")."</p>	
+			<p>".tr("O proximo passo será a criação de seu primeiro personagem no ".getConf(confEnum()->WEBSITE_NAME).". Preencha o campo abaixo com o nome que você deseja para seu personagem.")."</p>	
 			
 			<p>
 				<label>".tr("Nome do personagem:")."</label>
@@ -199,7 +199,7 @@ class View
 				{$this->_char_genre->Draw()}			
 			</p>
 			
-			<p class='long-margin-top'>".tr("Todo personagem no Darghos pertence a uma vocação. No total existem quatro vocações disponiveis, cada uma com suas proprias habilidades, estilo de jogo e caracteristicas, selecione abaixo a vocação que você deseja para o seu personagem.")."</p>
+			<p class='long-margin-top'>".tr("Todo personagem no ".getConf(confEnum()->WEBSITE_NAME)." pertence a uma vocação. No total existem quatro vocações disponiveis, cada uma com suas proprias habilidades, estilo de jogo e caracteristicas, selecione abaixo a vocação que você deseja para o seu personagem.")."</p>
 			<p>
 				<label>".tr("Vocação do personagem:")."</label>
 				{$this->_char_vocation->Draw()}			
@@ -249,11 +249,11 @@ class View
 			"body" => "
 			    <h3>".tr("Parabens!")."</h3>
 			    <p>".tr("O seu primeiro personagem, <b><span id='character_name'></span></b> foi criado com <b>sucesso</b>!")."</p>
-			    <p>".tr("Você já pode se conectar ao Darghos e começar a se divertir! Se necessario, neste <a href='?ref=general.howplay'>link</a> você pode obter o download do cliente e instruções de como se conectar.")."</p>
+			    <p>".tr("Você já pode se conectar ao ".getConf(confEnum()->WEBSITE_NAME)." e começar a se divertir! Se necessario, neste <a href='?ref=general.howplay'>link</a> você pode obter o download do cliente e instruções de como se conectar.")."</p>
 			    <p><h3>".tr("Primeiros passos")."</h3></p>
 			    <p>".tr("Você começará a sua jornada em Island of Peace, uma calma ilha ideal para iniciantes aonde o PvP não é permitido e existem muitos respawns, quests e missões que auxiliaram em tudo que você precisa para atingir o nivel 80. Você pode sair de Island of Peace usando o barco a qualquer momento (mesmo, antes de atingir level 80) mas saiba que uma vez que sair, não poderá voltar. Todo o restante do mapa do servidor são regiões de PvP permitido, podendo existir player killers e tudo mais, então pense bem antes de sair de Island of Peace!")."</p>
 			    <p>".tr("Assim que você entrar no jogo o NPC Mereus, no templo de Island of Peace irá lhe chamar para o ajudar em uma série de missões e aventuras! Faça isto para obter expêriencia extra, skills e melhores itens!")."</p>
-			    <p>".tr("Boa aventura!<br\>Se vemos no Darghos!")."</p>
+			    <p>".tr("Boa aventura!<br\>Se vemos no ".getConf(confEnum()->WEBSITE_NAME)."!")."</p>
 			",
 		);		
 		

@@ -72,9 +72,9 @@ $module .= '
 	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>			
 			
-			<p><h3>Adicionar saldo a sua conta no Darghos</h3></p>
+			<p><h3>Adicionar saldo a sua conta no '.getConf(confEnum()->WEBSITE_NAME).'</h3></p>
 			
-			<p>Para adicionar saldo a sua conta no Darghos, preencha o formulário a seguir. Lembre-se que todos os campos são obrigatórios. Ao final do processo você será direcionado a pagina de nosso parceiro para concluir o pagamento em uma pagina segura (HTTPS) e será confirmado o seu pedido.</p>
+			<p>Para adicionar saldo a sua conta no '.getConf(confEnum()->WEBSITE_NAME).', preencha o formulário a seguir. Lembre-se que todos os campos são obrigatórios. Ao final do processo você será direcionado a pagina de nosso parceiro para concluir o pagamento em uma pagina segura (HTTPS) e será confirmado o seu pedido.</p>
 		
 			<p><h3>Informações Pessoais</h3></p>
 			<div id="line1"></div>

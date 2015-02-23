@@ -1,5 +1,5 @@
 <?
-ini_set("display_errors", "On");
+ini_set("display_errors", "on");
 error_reporting(E_ERROR);
 /*$date = date("d-m-y");
 
@@ -35,6 +35,14 @@ function tr($string){
 }
 
 use \Core\Configs as g_Configs;
+
+function getConf($conf){
+    return \Core\Configs::Get($conf);
+}
+
+function confEnum(){
+    return \Core\Configs::eConf();
+}
 
 if(!Core\Main::$FoundController)
 	include "modules.php";

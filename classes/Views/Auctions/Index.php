@@ -209,7 +209,7 @@ class Index extends \Core\Views
 		
 		global $module;
 		$module = "
-			<p>No sistema de leilões do Darghos você pode usar saldo disponivel em sua conta para dar lançes e disputar items e outros beneficios extra. Se você é novo e não sabe como funciona o nosso leilão clique <a href='?ref=auctions.info'>aqui</a> e leia as instruções.</p>
+			<p>No sistema de leilões do ".getConf(confEnum()->WEBSITE_NAME)." você pode usar saldo disponivel em sua conta para dar lançes e disputar items e outros beneficios extra. Se você é novo e não sabe como funciona o nosso leilão clique <a href='?ref=auctions.info'>aqui</a> e leia as instruções.</p>
 			{$table_begun->Draw()}
 			{$admin_buttons}
 			{$table_starting->Draw()}

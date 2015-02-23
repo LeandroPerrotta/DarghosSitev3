@@ -111,7 +111,7 @@ class View
 		<form action='' method='post'>
 			<fieldset>
 				
-				<p>Atraves deste formulario você poderá registrar sua conta para ultilizar o Forum do Darghos, participando de topicos, respondendo enquetes e tudo mais. Você irá selecionar abaixo o personagem da sua conta que deverá ser usado como usuario no Forum.</p>
+				<p>Atraves deste formulario você poderá registrar sua conta para ultilizar o Forum do ".getConf(confEnum()->WEBSITE_NAME).", participando de topicos, respondendo enquetes e tudo mais. Você irá selecionar abaixo o personagem da sua conta que deverá ser usado como usuario no Forum.</p>
 				
 				<p>
 					<label for='character'>Selecionar personagem</label><br />

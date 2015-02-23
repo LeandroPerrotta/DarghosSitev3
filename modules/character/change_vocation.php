@@ -67,7 +67,7 @@ if($_GET['name'])
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset>
 					
-			        <p>Caso você seja um Knight você pode mudar sua vocação para Warrior, a nova vocação do Darghos, e a experimentar. Existe a opção de você cancelar a mudança a voltar a ser um Knight dentro de 48h do momento que você efetuou a mudança, apos isto, não poderá mais reverter a mudança.</p>
+			        <p>Caso você seja um Knight você pode mudar sua vocação para Warrior, a nova vocação do '.getConf(confEnum()->WEBSITE_NAME).', e a experimentar. Existe a opção de você cancelar a mudança a voltar a ser um Knight dentro de 48h do momento que você efetuou a mudança, apos isto, não poderá mais reverter a mudança.</p>
 			        
 					<p>
 						<label>Personagem:</label><br />

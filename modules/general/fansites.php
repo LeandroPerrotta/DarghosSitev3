@@ -152,9 +152,9 @@ class View
 		$table = new \Framework\HTML\Table();
 		$table->AddDataRow("Lista de Fansites oficiais");
 		
-		$string = "Esta é a lista de fansites oficialmente reconhecidos pelo Darghos. Atraves deste(s) fansites é possivel participar de comunidades ativas de fans de nosso trabalho, participar de artigos, obter informações sobre o Darghos e tudo mais.<br>
+		$string = "Esta é a lista de fansites oficialmente reconhecidos pelo ".getConf(confEnum()->WEBSITE_NAME).". Atraves deste(s) fansites é possivel participar de comunidades ativas de fans de nosso trabalho, participar de artigos, obter informações sobre o Darghos e tudo mais.<br>
 		<br>
-		<span style='color: red;'>Observações:</span> Nós não nos responsabilizamos por nenhum destes fansites, sendo eles completamente independentes do Darghos.";
+		<span style='color: red;'>Observações:</span> Nós não nos responsabilizamos por nenhum destes fansites, sendo eles completamente independentes do ".getConf(confEnum()->WEBSITE_NAME).".";
 		$style = "font-weight: bold;";
 		
 		$table->AddField($string, null, $style, 2);

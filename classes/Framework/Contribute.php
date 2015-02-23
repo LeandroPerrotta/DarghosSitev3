@@ -451,7 +451,7 @@ class Contribute extends \Core\MySQL
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="ref_transacao" value="'.$this->id.'">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="Adicionar '.$balance.' de saldo a conta Darghos">
+				<input type="hidden" name="item_descr_1" value="Adicionar '.$balance.' de saldo a conta '.getConf(confEnum()->WEBSITE_NAME).'.">
 				<input type="hidden" name="item_quant_1" value="1">
 				<input type="hidden" name="item_valor_1" value="'.$this->balance.'">
 				<input type="hidden" name="item_frete_1" value="000">

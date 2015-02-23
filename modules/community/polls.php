@@ -1,6 +1,6 @@
 <?php
 $module .= "
-<p>No Darghos costumamos sempre abrir enquetes sobre mudanças de certas caracteristicas do jogo, tornando o desenvolvimento do servidor mais democratico entre a equipe e os jogadores. Para votar em uma enquete é necessario apenas estar logado em sua conta e pessouir um char com level minimo (isto pode ser modificado de enquete para enquete).</p>";
+<p>No ".getConf(confEnum()->WEBSITE_NAME)." costumamos sempre abrir enquetes sobre mudanças de certas caracteristicas do jogo, tornando o desenvolvimento do servidor mais democratico entre a equipe e os jogadores. Para votar em uma enquete é necessario apenas estar logado em sua conta e pessouir um char com level minimo (isto pode ser modificado de enquete para enquete).</p>";
 
 $pollList = \Framework\Forums\Topics::ListPollTopics();
 

@@ -10,7 +10,7 @@ class World extends \Core\Views
         $url = "?ref=darghopedia.world";
         
         $module .= "
-        <p>Bem vindo ao Darghos Map Explorer. Alguma vez você já precisou ir em um lugar e não sabia como chegar? A localização de um NPC? Uma quest? Ou mesmo uma area de hunt? Através desta pagina você poderá de maneira facil explorar todo o nosso mapa, tornando a sua vida no Darghos mais prática.</p> 
+        <p>Bem vindo ao ".getConf(confEnum()->WEBSITE_NAME)." Map Explorer. Alguma vez você já precisou ir em um lugar e não sabia como chegar? A localização de um NPC? Uma quest? Ou mesmo uma area de hunt? Através desta pagina você poderá de maneira facil explorar todo o nosso mapa, tornando a sua vida no ".getConf(confEnum()->WEBSITE_NAME)." mais prática.</p> 
         <p style='font-weight: bold;'>Obs: Esta ferramenta ainda está em fase BETA portanto você pode encontrar erros.</p>
         <h3 style='margin-top: 20px;'>Cidades</h3>
         <ul>
