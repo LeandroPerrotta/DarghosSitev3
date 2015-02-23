@@ -9,7 +9,7 @@ $__configs [Core\Configs::eConf ()->FOLDER_DATA] = "data/";
 $__configs [Core\Configs::eConf ()->ENABLE_MULTIWORLD] = false;
 $__configs [Core\Configs::eConf ()->STATUS_SHOW_TEST_SERVER] = false;
 
-$__configs [Core\Configs::eConf ()->WEBSITE_URL] = "http://platinum.darghos.com/";
+$__configs [Core\Configs::eConf ()->WEBSITE_URL] = "http://platinum.darghos.com";
 $__configs [Core\Configs::eConf ()->WEBSITE_EMAIL_SUPPORT] = "platinum@darghos.com";
 $__configs [Core\Configs::eConf ()->WEBSITE_NAME] = "Platinum";
 $__configs [Core\Configs::eConf ()->WEBSITE_TEAM] = "Platinum Staff";
