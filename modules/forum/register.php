@@ -94,7 +94,7 @@ class View
 		
 		$user = new \Framework\Forums\User();
 		
-		$user->InsertExternalForum($this->loggedAcc, $player, $this->_password->GetPost());
+		//$user->InsertExternalForum($this->loggedAcc, $player, $this->_password->GetPost());
 		$user->SetAccountId($this->loggedAcc->getId());
 		$user->SetPlayerId($player->getId());
 		$user->Save();

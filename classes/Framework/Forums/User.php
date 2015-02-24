@@ -71,7 +71,7 @@ class User
 	    //From SFM engine @ Subs-Members.php
 	    //'passwd' => sha1(strtolower($regOptions['username']) . $regOptions['password']),
 	    //'password_salt' => substr(md5(mt_rand()), 0, 4) ,
-	    $passwd = sha1(strtolower($account->getName()) . $password);
+	    /*$passwd = sha1(strtolower($account->getName()) . $password);
 	    $password_salt = substr(md5(mt_rand()), 0, 4);
 	    
 	    \Core\Main::$DB->query("
@@ -100,7 +100,7 @@ class User
 	                `value` = '{$this->_memberid}'
                 WHERE
                     `variable` = 'latestMember'
-	       ");	    
+	       ");	    */
 	}
 	
 	function Load($member_id)
