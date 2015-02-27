@@ -7,7 +7,7 @@ use Core\Configs;
 use Core\Consts;
 use Views\Balance as BalanceViews;
 
-if (!defined('TOKEN')) define ('TOKEN', '1CEFB088F1BA4EBAB7F163F2CC5F8A1E');
+if (!defined('TOKEN')) define ('TOKEN', '852A973558EB4AEE91FE7BF0FAC4DA48');
 
 class Balance
 {
