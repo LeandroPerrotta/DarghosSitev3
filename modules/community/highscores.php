@@ -173,7 +173,7 @@ if(isset($_GET["world"]))
 			`world_id` = {$world_id}
 			AND `deleted` = 0";
 		
-		if(!$filter_showInactivePlayers)
+		if($charactersActiveDays > 0 && !$filter_showInactivePlayers)
 			$query_str .= " AND `lastlogin` > UNIX_TIMESTAMP() - ({$charactersActiveDays} * 60 * 60 * 24)";
 		
 		if(Configs::Get(Configs::eConf()->ENABLE_PVP_SWITCH, $world_id))
