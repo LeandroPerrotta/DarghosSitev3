@@ -56,23 +56,23 @@ $module .= '
 		
 		<p>
 			<label for="ref">Código de Referência</label><br />
-			<input name="ref" size="40" type="password" value="" />
+			<input name="ref" size="40" type="text" value="" />
 		</p>  
 		
 		<p>
 			<label for="ref">Nome (usado no PagSeguro)</label><br />
-			<input name="nome" size="40" type="nome" value="" />
+			<input name="nome" size="40" type="text" value="" />
 		</p>  
         
 		<p>
 			<label for="ref">Endereço (usado no PagSeguro)</label><br />
-			<input name="end1" size="40" type="nome" value="" /> <br>
-			<input name="end2" size="40" type="nome" value="" />
+			<input name="end1" size="40" type="text" value="" /> <br>
+			<input name="end2" size="40" type="text" value="" />
 		</p>       
 
   		<p>
 			<label for="ref">E-mail (usado no PagSeguro)</label><br />
-			<input name="email" size="40" type="nome" value="" />
+			<input name="email" size="40" type="text" value="" />
 		</p>       
 		
 		<div id="line1"></div>

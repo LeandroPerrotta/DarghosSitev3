@@ -88,6 +88,11 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$needLogin = true;
 					$patch['file'] = $topic;
 				break;					
+
+				case "requestbalance":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";
