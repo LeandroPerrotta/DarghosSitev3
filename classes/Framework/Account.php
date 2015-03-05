@@ -609,10 +609,10 @@ class Account
 		return true;
 	}
 	
-	function balanceRequest($auth, $ref, $value){
+	function balanceRequest($auth, $ref, $balance){
 	    $this->db->query("INSERT INTO ".\Core\Tools::getSiteTable("orders")." 
 	            (`id`, `account_id`, `type`, `balance`, `server`, `generated_in`, `status`, `lastupdate_in`, `auth`, `email_vendor`) values
-	            ('{$ref}', {$this->id}, 'PagSeguro', {$balance}, 1, UNIX_TIMESTAMP(), 2, 0, '{$auth}', 'platinum@darghos.com')");
+	            ('{$ref}', {$this->getId()}, 'PagSeguro', {$balance}, 1, UNIX_TIMESTAMP(), 2, 0, '{$auth}', 'platinum@darghos.com')");
 	}
 		
 	function addEmailToChange($email)
