@@ -53,11 +53,11 @@ $module .= '
 		
 		<p>
 			<label for="acc_name">Conta</label><br />
-			<input name="nome" size="40" type="text" value="" />
+			<input name="acc_name" size="40" type="text" value="" />
 		</p>  
         
 		<p>
-			<label for="value">Valor</label><br />
+			<label for="balance">Valor</label><br />
 			<select name="balance">
                 <option value="500">R$ 5,00</option>
                 <option value="1000" selected="selected">R$ 10,00</option>
