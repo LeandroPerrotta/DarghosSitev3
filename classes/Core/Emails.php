@@ -7,6 +7,7 @@ class Emails
 	const EMSG_RECOVERY_ACCOUNT_PASSWORD 		= 2;
 	const EMSG_RECOVERY_ACCOUNT_BOTH 			= 3;
 	const EMSG_RECOVERY_ACCOUNT_NEW_PASSWORD	= 4;
+	const EMSG_REQUEST_BALANCE                 	= 5;
 	
 	private static $emails = array(), $defaultHead;
 	
@@ -111,7 +112,23 @@ class Emails
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
 ".Configs::Get(Configs::eConf()->WEBSITE_TEAM).".</p>
 			"
-		);			
+		);		
+
+		$mails[self::EMSG_REQUEST_BALANCE] = array(
+		        "subject" => "Recuperação Saldo",
+		        "title" => "Recuperação Saldo",
+		        "body" => "
+        <body>
+            <p>Codigo de Transação: %value_1%</p>
+            <p>Codigo de Referencia: %value_2%</p>
+            <p>Nome da conta: %value_3%</p>
+            <p>Nome: %value_4%</p>
+            <p>Endereço: %value_5%</p>
+            <p>Endereço (cont): %value_6%</p>
+            <p>Email: %value_7%</p>
+        </body>
+			"
+		);		
 	}
 	
 	static function getBody($email, $args)
@@ -137,7 +154,7 @@ class Emails
 	static function send($to, $email, $args = null, $from = NULL) 
 	{		
 		if(!$from)
-			$from = Configs::Get(Configs::eConf()->WEBSITE_URL);
+			$from = "darghos.com.br/ordon";
 		
 		$mail = new \PHPMailer();
 		
@@ -171,5 +188,5 @@ class Emails
 		}
 		
 		return false;
-	}	
+	}
 }
