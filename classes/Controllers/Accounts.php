@@ -362,9 +362,9 @@ class Accounts
 			{
 				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			}
-			elseif($logged->getPremDays() < 15)
+			elseif($logged->getBalance() < 300)
 			{
-				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_NEED_PREMDAYS, 15);
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_NEED_PREMDAYS, "R$ 3,00");
 			}
 			elseif($checkName["error"])
 			{
@@ -373,7 +373,7 @@ class Accounts
 			else
 			{			    
 				$logged->setName($_POST["account_name"]);
-				$logged->updatePremDays(15, false);
+				$logged->addBalance(-300);
 				$logged->save();
 				
 				//integration SMF onchangepassword

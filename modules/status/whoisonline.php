@@ -65,7 +65,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				account_id, 
 				promotion,
 				afk
-				,`is_spoof`
+				,`spoof`
 				,`pvpEnabled`
 				,`skull`
 			FROM 
@@ -130,7 +130,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					
 				if($_isadmin)
 				{						
-					if($fetch->is_spoof == 1 || $fetch->group_id == t_Group::PlayerNonLogout)
+					if($fetch->spoof == 1 || $fetch->group_id == t_Group::PlayerNonLogout)
 					{
 						$spoofPlayers++;
 						$spoofStyle = "style='font-weight: normal;'";						
