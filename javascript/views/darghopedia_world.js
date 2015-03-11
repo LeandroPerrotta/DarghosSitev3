@@ -52,7 +52,7 @@ function setFloor(floor){
 
 function onChangeCords(){
 	$("#control-cords").text("X: " + (current_position.x +  offset_x) + ", Y: " + (current_position.y + offset_y) + ", Z: " + current_floor);
-	$("#control-url").val("http://darghos.com.br/?ref=darghopedia.world&posx=" + (current_position.x +  offset_x) + "&posy=" + (current_position.y + offset_y) + "&posz=" + current_floor);
+	$("#control-url").val("http://platinum.darghos.com.br/?ref=darghopedia.world&posx=" + (current_position.x +  offset_x) + "&posy=" + (current_position.y + offset_y) + "&posz=" + current_floor);
 }
 
 function movePov(direction){
