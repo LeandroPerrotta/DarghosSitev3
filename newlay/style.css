@@ -5,7 +5,7 @@
 }
 
 a {
-	color: #EFECCA;
+	color: #FFCB7C;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -15,8 +15,8 @@ a:hover {
 }
 
 body {
-	background: #000 url(images/body.jpg) repeat;
-	color: #FFF;
+	background: #000000 url(images/bg_tables.jpg) repeat;
+	color: #FFFEF7;
 	font-family: Verdana, Arial, Times New Roman, sans-serif;
 	font-size: 9pt;
 	padding: 20px 0;
@@ -91,6 +91,14 @@ ul li {
 	margin: 0;
 	text-align: center;
 	height: 40px;
+}
+
+#top-menu marquee{
+	line-height: 40px;
+	margin-top: 0px;
+	color: #FFD290;
+	font-weight: bolder;	
+	text-shadow: 0px 4px 2px #0C0B05;	
 }
 
 #top-menu ul
@@ -248,6 +256,27 @@ ul li {
 	margin: 0;
 }
 
+#right-menu ul.utils{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	width: auto;
+	border: none;	
+}
+
+#right-menu ul.utils li{
+	display: block;
+	text-align: center;
+}
+
+#right-menu ul.utils li img{
+	display: block;
+	margin: 0 auto;
+}
+
+#right-menu ul.utils li:not(:first-child){
+	margin-top: 24px;
+}
+
 #right-menu ul.social-media{
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -291,9 +320,9 @@ ul li {
 
 #left ul li a, #left ul li div, #left ul li table, #right-menu ul > li > a, #right-menu ul li div, #right-menu ul li table{
 	background: #333 url(images/subitem.jpg) repeat-x;
-	border: 1px solid #666;
-	border-bottom: 1px solid #000;
-	color: #FFF;
+	border: 1px solid #838383;
+	border-bottom: 1px solid #000000;
+	color: #FFFAE8;
 	display: block;
 	margin: 0;
 	padding: 6px;
@@ -309,6 +338,8 @@ ul li {
 	float: left;
 	cursor: default;
 	font-weight: bold;
+	color: #FFB341;
+	text-shadow: 0 0 1rem #FFB341;
 }
 
 #right-menu ul li div strong {
@@ -395,7 +426,7 @@ ul li {
 }*/
 
 #wrapper {
-	background: #333 url(images/wrapper.jpg) repeat;
+	background: url(images/wrapper.jpg) repeat;
 	height: 1%;
 	margin: 0 auto;
 	padding: 10px;
@@ -408,11 +439,11 @@ ul li {
 	height: 44px;
 	width: 100%;
 	position: fixed;
-	background-color:#3b3f3d;
-	border-bottom: 1px #79817c solid;
+	background-color: #3F3F3F;
+	border-bottom: 1px #888888 solid;
 	top: 0px;
-  	opacity:0.92;
-  	filter:alpha(opacity=92); /* For IE8 and earlier */
+  	opacity:0.80;
+  	filter:alpha(opacity=80); /* For IE8 and earlier */
 }
 
 #bar-wrapper{
@@ -456,7 +487,7 @@ ul li {
 #fog-alert{
 	width: 300px;
 	border: 2px solid black;
-	background: #333 url(images/wrapper_b.jpg) repeat;
+	background: url(images/wrapper_b.png) repeat;
 	top: 40%;
 	left: 50%;
 	margin-left: -100px;
@@ -515,7 +546,7 @@ ul li {
 }*/
 
 #wrapper_b {
-	background: #333 url(images/wrapper_b.jpg) repeat;
+	background: url(images/wrapper_b.jpg) repeat;
 	border: 1px solid #000;
 }
 

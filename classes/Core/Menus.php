@@ -106,10 +106,7 @@ class Menus
 				$span->addAttribute("style", "color: #e1dc48; font-weight: bold;");
 
 			$p = $div->addChild("p");
-			$p->addChild("em");
-			$a = $p->addChild("a", tr("Cliente para Jogar!"));
-			$a->addAttribute("href", "?ref=general.download&file=setup.exe");
-			$a->addAttribute("target", "_blank");			
+			$p->addChild("em");	
 			
 			if(Configs::Get(Configs::eConf()->STATUS_IGNORE_AFK))
 			{
@@ -424,6 +421,7 @@ class Menus
 	
 	static function drawTopMenu()
 	{
+		/*
 		$xml = new \SimpleXMLElement("
 				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 				<root>
@@ -472,6 +470,21 @@ class Menus
 		$link->addAttribute("href", "?ref=auctions.index");
 
 		return $xml->asXML();
+		*/
+	    return "";
+	}
+	
+	static function drawUtils(&$xml){
+	    $ul = $xml->addChild("ul");
+	    $ul->addAttribute("class", "always_viewable");
+	    
+	    $li = $ul->addChild("li");
+	    
+	    $li->addChild("utils");
+	    
+	    return true;	    
+	    
+	    return true;
 	}
 	
 	static function drawLeftMenu()
@@ -485,7 +498,6 @@ class Menus
     			"items" => array(
     				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
     				,array("name" => "Sobre o ".getConf(confEnum()->WEBSITE_NAME), "url" => "?ref=general.about")
-    				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
     				,array("name" => "Downloads", "url" => "?ref=general.downloads")
     				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
     				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
@@ -587,11 +599,11 @@ class Menus
 		$string = "";
 		
 		self::$rightMenu = array(
-            array(
+            /*array(
                 "title" => "Redes Sociais",
                 "name" => "social-media",
                 "onDraw" => "drawMedia"
-            ),	
+            ),*/	
     		array(
     			"title" => "Server Status",
     			"name" => "serverstatus",
@@ -608,6 +620,13 @@ class Menus
                     "name" => "events",
                     "onDraw" => "drawEvents"
             )*/
+	        ,array(
+                "title" => "Utéis",
+                "desc" => "Recursos úteis aos jogadores.",
+                "color" => \e_menuColor::Red,
+                "name" => "utils",
+                "onDraw" => "drawUtils"
+	        )		        
     		,array(
     			"title" => "Power Gammers",
     			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
@@ -645,7 +664,31 @@ class Menus
             </ul>
         </div>';
         
-        $string = str_replace("<mediatag></mediatag>", $mediatag, $string);        
+        $string = str_replace("<mediatag></mediatag>", $mediatag, $string);
+        
+        $utilstag = '
+        <div>
+            <ul class="utils">
+                <li>
+                    <img src="newlay/images/icon_client.png" width="60px"/>
+                    <span><a href="#">Magnum Client</a></span>
+                </li>
+                <li>
+                    <img src="newlay/images/icon_ts.png" width="60px"/>
+                    <span><a href="#">TeamSpeak 3</a></span>
+                </li>
+                <li>
+                    <img src="newlay/images/icon_elf.png" width="60px"/>
+                    <span><a href="#">Elfbot</a></span>
+                </li>
+                <li>
+                    <img src="newlay/images/icon_whats.png" width="60px"/>
+                    <span><a href="#">WhatsApp</a></span>
+                </li>
+            </ul>
+        </div>';
+        
+        $string = str_replace("<utils></utils>", $utilstag, $string);        
 		
 		return $string;
 	}	
