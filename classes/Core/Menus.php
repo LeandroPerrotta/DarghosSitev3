@@ -497,7 +497,8 @@ class Menus
     			"name" => "navigation",
     			"items" => array(
     				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
-    				,array("name" => "Sobre o ".getConf(confEnum()->WEBSITE_NAME), "url" => "?ref=general.about")
+    				,array("name" => "Serverinfo", "url" => "?ref=general.about", "icon" => "icon-exclamation")
+    				,array("name" => "Player vs Player", "url" => "?ref=general.pvp", "icon" => "icon-skull")
     				,array("name" => "Downloads", "url" => "?ref=general.downloads")
     				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
     				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
@@ -670,20 +671,27 @@ class Menus
         <div>
             <ul class="utils">
                 <li>
-                    <img src="newlay/images/icon_client.png" width="60px"/>
-                    <span><a href="#">Magnum Client</a></span>
+                    <a href="?ref=general.download&file=setup.exe" class="not-menu">
+                        <img src="newlay/images/icon_client.png" width="60px"/>
+                        <span>Magnum Client</span>
+                    </a>
                 </li>
                 <li>
-                    <img src="newlay/images/icon_ts.png" width="60px"/>
-                    <span><a href="#">TeamSpeak 3</a></span>
+                    <a href="?ref=general.teamspeak" class="not-menu">
+                        <img src="newlay/images/icon_ts.png" width="60px"/>
+                        <span>TeamSpeak 3</span>
                 </li>
                 <li>
-                    <img src="newlay/images/icon_elf.png" width="60px"/>
-                    <span><a href="#">Elfbot</a></span>
+                    <a href="?ref=general.elfbot" class="not-menu">
+                        <img src="newlay/images/icon_elf.png" width="60px"/>
+                        <span>Elfbot</span>
+                    </a>
                 </li>
                 <li>
-                    <img src="newlay/images/icon_whats.png" width="60px"/>
-                    <span><a href="#">WhatsApp</a></span>
+                    <a href="?ref=general.whatsapp" class="not-menu">
+                        <img src="newlay/images/icon_whats.png" width="60px"/>
+                        <span>WhatsApp</span>
+                    </a>
                 </li>
             </ul>
         </div>';

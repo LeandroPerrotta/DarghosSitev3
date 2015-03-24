@@ -318,7 +318,7 @@ ul li {
 	padding: 0px;
 }
 
-#left ul li a, #left ul li div, #left ul li table, #right-menu ul > li > a, #right-menu ul li div, #right-menu ul li table{
+#left ul li a:not(.not-mennu), #left ul li div, #left ul li table, #right-menu ul > li > a:not(.not-menu), #right-menu ul li div, #right-menu ul li table{
 	background: #333 url(images/subitem.jpg) repeat-x;
 	border: 1px solid #838383;
 	border-bottom: 1px solid #000000;
@@ -346,13 +346,35 @@ ul li {
 	
 }
 
+#left ul li a span.icon-skull{
+	background-image: url(../../files/misc/white_skull.gif);
+	display: inline-block;
+	width: 11px;
+	height: 11px;
+	margin-left: 6px;
+}
+
+#left ul li a span.icon-exclamation{
+	background-image: url(../../files/misc/exclamation.png);
+	background-size: 11px 11px;
+	display: inline-block;
+	width: 11px;
+	height: 11px;
+	margin-left: 6px;
+}
+
 #left tr td strong, #right-menu tr td strong{
 	cursor: pointer;
 }
 
-#left ul li a:hover, #right-menu ul > li > a:hover{
+#left ul li a:hover:not(.not-menu), #right-menu ul > li > a:hover:not(.not-menu){
 	background: #333 url(images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
+}
+
+#right-menu ul > li > a.not-menu > img:hover{
+	opacity: 0.7;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
 }
 
 #left td a:hover, #right-menu td a:hover{
