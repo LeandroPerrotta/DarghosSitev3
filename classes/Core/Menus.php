@@ -499,11 +499,13 @@ class Menus
     				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
     				,array("name" => "Serverinfo", "url" => "?ref=general.about", "icon" => "icon-exclamation")
     				,array("name" => "Player vs Player", "url" => "?ref=general.pvp", "icon" => "icon-skull")
-    				,array("name" => "Downloads", "url" => "?ref=general.downloads")
+    				//,array("name" => "Downloads", "url" => "?ref=general.downloads")
     				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
     				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
     				,array("name" => "Suporte", "url" => "?ref=general.support")	
     				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
+			        ,array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
+			        ,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")    			        
     			)
     		)
     		,array(
@@ -536,6 +538,7 @@ class Menus
     				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
     				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
     				,array("name" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=store.purchase")		
+    				,array("name" => "Leilão ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=auctions.index")		
     				,array("name" => "Historico", "url" => "?ref=balance.history")
     			)		
     		)
@@ -554,7 +557,7 @@ class Menus
     				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
     			)		
     		)
-    		,array(
+    		/*,array(
     			"title" => "Darghopédia",
     			"name" => "darghopedia",
     			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
@@ -568,7 +571,7 @@ class Menus
     				//,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
     				//,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
     			)		
-    		)		
+    		)		*/
     		,array(
     			"title" => "Comunidade",
     			"name" => "community",
@@ -671,7 +674,7 @@ class Menus
         <div>
             <ul class="utils">
                 <li>
-                    <a href="?ref=general.download&file=setup.exe" class="not-menu">
+                    <a href="?ref=general.client" class="not-menu">
                         <img src="newlay/images/icon_client.png" width="60px"/>
                         <span>Magnum Client</span>
                     </a>
