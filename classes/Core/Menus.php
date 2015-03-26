@@ -499,6 +499,7 @@ class Menus
     				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
     				,array("name" => "Serverinfo", "url" => "?ref=general.about", "icon" => "icon-exclamation")
     				,array("name" => "Player vs Player", "url" => "?ref=general.pvp", "icon" => "icon-skull")
+    				,array("name" => "Battleground", "url" => "?ref=general.battleground")
     				//,array("name" => "Downloads", "url" => "?ref=general.downloads")
     				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
     				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
@@ -534,7 +535,7 @@ class Menus
     			"name" => "premium",
     			"conditions" => Menu::CONDITION_MUST_LOGGED,
     			"items" => array(
-    				array("name" => "Vantagens VIP", "url" => "?ref=account.vip")
+    				array("name" => "Vantagens VIP", "url" => "?ref=account.vip", "icon" => "icon-star", "style" => "color: #FFF500; font-weight: bold;")
     				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
     				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
     				,array("name" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=store.purchase")		
@@ -691,9 +692,9 @@ class Menus
                     </a>
                 </li>
                 <li>
-                    <a href="?ref=general.whatsapp" class="not-menu">
-                        <img src="newlay/images/icon_whats.png" width="60px"/>
-                        <span>WhatsApp</span>
+                    <a href="?ref=general.skype" class="not-menu">
+                        <img src="newlay/images/icon_skype.png" width="60px"/>
+                        <span>Skype</span>
                     </a>
                 </li>
             </ul>

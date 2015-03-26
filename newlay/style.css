@@ -363,6 +363,15 @@ ul li {
 	margin-left: 6px;
 }
 
+#left ul li a span.icon-star{
+	background-image: url(../../files/misc/star.png);
+	background-size: 11px 11px;
+	display: inline-block;
+	width: 11px;
+	height: 11px;
+	margin-left: 6px;
+}
+
 #left tr td strong, #right-menu tr td strong{
 	cursor: pointer;
 }
