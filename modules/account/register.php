@@ -2,7 +2,7 @@
 class View
 {
 	//html fields
-	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, /*$_char_town,*/ $_char_genre, $_char_vocation;
+	private $_account_name, $_account_password, $_account_confirm_password, $_account_email, $_char_name, $_char_world, /*$_char_town,*/ $_char_genre, $_char_pvp, $_char_vocation;
 	
 	//variables
 	private $_message;		
@@ -85,6 +85,11 @@ class View
 		$this->_char_genre->SetName("character_genre");
 		$this->_char_genre->AddOption(tr("Masculino"), t_Genre::GetString(t_Genre::Male));
 		$this->_char_genre->AddOption(tr("Feminino"), t_Genre::GetString(t_Genre::Female));
+		
+		$this->_char_pvp = new \Framework\HTML\SelectBox();
+		$this->_char_pvp->SetName("character_pvp");
+		$this->_char_pvp->AddOption(tr("On"), 1);
+		$this->_char_pvp->AddOption(tr("Off"), 0);
 		
 		$this->_char_vocation = new \Framework\HTML\SelectBox();
 		$this->_char_vocation->SetName("character_vocation");
@@ -198,6 +203,12 @@ class View
 				<label>".tr("Genero do personagem:")."</label>
 				{$this->_char_genre->Draw()}			
 			</p>
+			
+			<p class='long-margin-top'>".tr("No Magnum você pode escolher seu modo de PvP entre On ou Off.")."</p>
+			<p>
+				<label>".tr("PvP On|Off:")."</label>
+				{$this->_char_pvp->Draw()}			
+			</p>			
 			
 			<p class='long-margin-top'>".tr("Todo personagem no ".getConf(confEnum()->WEBSITE_NAME)." pertence a uma vocação. No total existem quatro vocações disponiveis, cada uma com suas proprias habilidades, estilo de jogo e caracteristicas, selecione abaixo a vocação que você deseja para o seu personagem.")."</p>
 			<p>

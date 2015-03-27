@@ -88,6 +88,7 @@ if($_POST)
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
+		$player->setPvp((bool)$_POST["player_pvp"]);
 		
         /*
 	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
@@ -191,6 +192,11 @@ foreach($available_towns as $town){
     $townsSelect->AddOption(t_Towns::GetString($town), $town);
 }
 
+$pvpSelect = new \Framework\HTML\SelectBox();
+$pvpSelect->SetName("player_pvp");
+$pvpSelect->AddOption("On", "1");
+$pvpSelect->AddOption("Off", "0");
+
 \Core\Main::includeJavaScriptSource("views/character_create.js");
 
 $module .= '
@@ -212,7 +218,12 @@ $module .= '
 		<p>
 			<label for="player_sex">Sexo</label>		
 				'.$genre_str.'
-		</p>		
+		</p>	
+
+		<p>
+			<label for="player_pvp">PvP</label>		
+				'.$pvpSelect->Draw().'
+		</p>				        
 		
 		<p>
 			<label for="player_vocation">Vocação</label>	

@@ -837,6 +837,10 @@ class Player
 	    $this->data['loss_experience'] = $loss;
 	}
 	
+	function setPvp($bool){
+	    $this->data['pvpEnabled'] = $bool;
+	}
+	
 	function get($field)
 	{
 		switch($field)

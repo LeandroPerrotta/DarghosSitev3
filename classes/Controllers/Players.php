@@ -77,6 +77,7 @@ class Players
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
 		$town = \t_Towns::IslandOfPeace;
+		$pvp = (bool)$_POST["character_pvp"];
 		
 		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		
@@ -133,6 +134,7 @@ class Players
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
+		$player->setPvp($pvp);
 		
         /*
         if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
