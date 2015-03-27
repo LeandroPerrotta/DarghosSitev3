@@ -19,7 +19,7 @@ class Consts
 		,PLAYER_STORAGE_ROYAL_COINS = 12502
 		
 		,URLS_PAGSEGURO = "https://pagseguro.uol.com.br/security/webpagamentos/webpagto.aspx"
-		,PAGSEGURO_EMAIL = "platinum@darghos.com"
+		,PAGSEGURO_EMAIL = "suporte@darghos.com"
 		
 		,AJAX_RESPONSE_FIELD_VERIFY = 1
 		,AJAX_RESPONSE_NEXT_STEP = 2		
