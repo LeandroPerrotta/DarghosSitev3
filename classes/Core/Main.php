@@ -341,6 +341,8 @@ echo "Uso: {$cliArgs[0]} [args...]\n
 		$xml = str_replace("%LEFT_MENU%", Menus::drawLeftMenu(), $xml);
 		$xml = str_replace("%RIGHT_MENU%", Menus::drawRightMenu(), $xml);
 		
+		$xml = str_replace("%SERVER_STAFF%", Configs::Get(Configs::eConf()->WEBSITE_TEAM), $xml);
+		
 		global $module, $patch;
 		
 		$xml = str_replace("%MODULE%", $module, $xml);
