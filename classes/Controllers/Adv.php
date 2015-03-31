@@ -203,5 +203,47 @@ class Adv
 		
 		return $array;
     }
+    
+    function GetStatisticsPlayersOnData(){
+         
+        \Core\Main::$isAjax = true;
+         
+        $days = $_POST["days"] ? $_POST["days"] : 30;
+    
+        $today = getdate();
+    
+        $qtd_list = array();
+        $date_list = array();
+    
+        $target_end = mktime(3, 0, 0, $today["mon"], $today["mday"], $today["year"]);
+        $day_seconds = 60 * 60 * 24;
+        $target_start = $target_end - $day_seconds;
+        
+        $db = \Core\Main::$DB;
+    
+        $query = $db->query("SELECT AVG(`players`) as `avg_players` FROM `serverstatus` GROUP BY `server_id` WHERE `server_id` = 0 AND `date` > {$target_start} AND `date` < {$target_end}");
+        if($result = $query->fetchAssocArray())
+            array_push($qtd_list, $result["avg_players"]);
+    
+        for($i = 1; $i < ($days); $i++){
+            	
+            $target_end -= $day_seconds;
+            $target_start = $target_end - $day_seconds;
+            	
+            $date_str = date("d-m", $target_start);
+            array_push($date_list, $date_str);
+            	
+            $query = $db->query("SELECT AVG(`players`) as `avg_players` FROM `serverstatus` GROUP BY `server_id` WHERE `server_id` = 0 AND `date` > {$target_start} AND `date` < {$target_end}");
+            if($result = $query->fetchAssocArray())
+                array_push($qtd_list, $result["avg_players"]);
+        }
+    
+        $array = array();
+    
+        $array["data"] = array_reverse($qtd_list);
+        $array["labels"] = array_reverse($date_list);
+    
+        return $array;
+    }    
 }
 ?>

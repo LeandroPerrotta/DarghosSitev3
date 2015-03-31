@@ -27,6 +27,7 @@ class Statistics extends \Core\Views
         </form>
         		
         <canvas id='chart_activePlayers' style='margin-top: 25px;' width='600' height='400'></canvas>				
+        <canvas id='chart_onlinePlayers' style='margin-top: 25px;' width='600' height='400'></canvas>				
         ";
     }
 }
