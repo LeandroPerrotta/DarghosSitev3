@@ -679,3 +679,19 @@ ul li {
 	cursor: pointer;
 	background: #333 url(images/tileitem_over2.png) repeat-x;
 }
+
+ul.guild_list{
+	list-style-type: none;
+}
+
+ul.guild_list li{
+	display: inline-block;
+	width: 120px;
+	vertical-align: top;
+	text-align: center;
+}
+
+ul.guild_list li a{
+	display: block;
+	margin-bottom: 4px;
+}

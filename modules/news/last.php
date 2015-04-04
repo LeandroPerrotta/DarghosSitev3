@@ -55,6 +55,51 @@ $module .= "
 	{$fastnews}
 	
 </table>";
+	
+	
+$powerfullGuilds = \Framework\Guilds::BestKDGuildList(0);
+
+if(count($powerfullGuilds) > 0){
+
+    $powerfullguilds_str = "          
+<div>
+  <ul class='guild_list'>";
+    
+    foreach($powerfullGuilds as $guild){
+        $powerfullguilds_str .= "
+                <li>
+                    <a href='?ref=guilds.details&name={$guild->GetName()}'>
+                        <img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}' height='100' width='100'/>
+                    </a>
+                    <p>
+                        <a href='?ref=guilds.details&name={$guild->GetName()}'>{$guild->GetName()}</a>
+                        <span>{$guild->GetKD()} k/d</span>
+                    </p>
+                </li>";
+    }
+    
+    $powerfullguilds_str .= "
+    </ul>
+</div>";
+}
+else{
+    $powerfullguilds_str .= "Indisponível no momento.";
+}
+	
+	
+$module .= "
+<table style='margin-bottom: 16px;' cellspacing='0' cellpadding='0' class='fastnews'>
+	
+	<tr>
+		<th >".tr("Guilds mais poderosas")."</th>
+	</tr>
+	
+	<tr>
+	   <td>{$powerfullguilds_str}</td>
+    </tr>
+	
+	
+</table>";
 
 $page = 1;
 $lastpage = ceil(\Framework\Forums\Topics::TotalNoticeTopics() / Configs::Get(Configs::eConf()->NEWS_PER_PAGE));
