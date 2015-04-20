@@ -213,10 +213,10 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 					
 				if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_PVP_SWITCH))
 				{
-					$pvpStr = "<td><span class='pvpEnabled'>".tr("Agressivo")."</span>";
+					$pvpStr = "<td><span class='pvpEnabled'>".tr("PvP ON")."</span>";
 					
 					if(!$fetch->pvpEnabled)
-						$pvpStr = "<td><span class='pvpDisabled'>".tr("Pacifico")."</span></td>";	
+						$pvpStr = "<td><span class='pvpDisabled'>".tr("PvP OFF")."</span></td>";	
 				}
 				
 				$_vocation = new t_Vocation($vocation_id);
@@ -303,7 +303,7 @@ if(isset($_GET["world"]) || !g_Configs::Get(g_Configs::eConf()->ENABLE_MULTIWORL
 				{			
 					$pvpStr = "
 					<tr>
-						<td>".tr("Agressivos").":</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>".tr("Pacificos").":</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
+						<td>".tr("PvP ON").":</td><td>".\Core\Tools::getPercentOf($_pvp_enabled, $_totalplayers)."%</td><td>".tr("PvP OFF").":</td><td>".\Core\Tools::getPercentOf($_pvp_disabled, $_totalplayers)."%</td>
 					</tr>					
 					";					
 				}	
