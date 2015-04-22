@@ -88,8 +88,8 @@ class View
 		
 		$this->_char_pvp = new \Framework\HTML\SelectBox();
 		$this->_char_pvp->SetName("character_pvp");
-		$this->_char_pvp->AddOption(tr("On"), 1);
-		$this->_char_pvp->AddOption(tr("Off"), 0);
+		$this->_char_pvp->AddOption(tr("On (jornada inicia em Quendor)"), 1);
+		$this->_char_pvp->AddOption(tr("Off (jornada inicia em Island of Peace)"), 0);
 		
 		$this->_char_vocation = new \Framework\HTML\SelectBox();
 		$this->_char_vocation->SetName("character_vocation");

@@ -65,6 +65,13 @@ if($_POST)
 		
 		$_world_id = t_Worlds::Get($_POST["player_world"]);
 		
+		$pvp = (bool)$_POST["player_pvp"];
+		
+		$town = t_Towns::IslandOfPeace;
+		
+		if($pvp)
+		    $town = t_Towns::Quendor;
+		
 		$town_id = t_Towns::Get($_POST["player_town"]);
 		
 		if(!in_array($town_id, $available_towns)){
@@ -88,7 +95,7 @@ if($_POST)
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
-		$player->setPvp((bool)$_POST["player_pvp"]);
+		$player->setPvp($town);
 		
         /*
 	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
@@ -179,23 +186,11 @@ if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 	</p>	
 	';
 }
-	
-
-$townsGlobal_str = "";
-
-$townsSelect = new \Framework\HTML\SelectBox();
-$townsSelect->SetName("player_town");
-
-$townsSelect->AddOption("");
-
-foreach($available_towns as $town){
-    $townsSelect->AddOption(t_Towns::GetString($town), $town);
-}
 
 $pvpSelect = new \Framework\HTML\SelectBox();
 $pvpSelect->SetName("player_pvp");
-$pvpSelect->AddOption("On", "1");
-$pvpSelect->AddOption("Off", "0");
+$pvpSelect->AddOption("On (jornada inicia em Quendor)", "1");
+$pvpSelect->AddOption("Off (jornada inicia em Island of Peace)", "0");
 
 \Core\Main::includeJavaScriptSource("views/character_create.js");
 
@@ -208,12 +203,7 @@ $module .= '
 			<input name="player_name" size="40" type="text" value="" />
 		</p>
 		
-		'.$world_str.'
-
-		<p>
-			<label for="player_town">Cidade</label>
-			'.$townsSelect->Draw().'
-		</p>		
+		'.$world_str.'	
 		
 		<p>
 			<label for="player_sex">Sexo</label>		

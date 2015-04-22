@@ -79,6 +79,9 @@ class Players
 		$town = \t_Towns::IslandOfPeace;
 		$pvp = (bool)$_POST["character_pvp"];
 		
+		if($pvp)
+		    $town = \t_Towns::Quendor;
+		
 		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		
 	
