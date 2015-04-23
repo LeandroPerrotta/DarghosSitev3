@@ -14,7 +14,7 @@ a:hover {
 	text-decoration: underline;
 }
 
-body {
+body {	
 	background: #000 url(images/body.jpg) repeat;
 	color: #FFF;
 	font-family: Verdana, Arial, Times New Roman, sans-serif;
@@ -662,7 +662,7 @@ ul li {
 #horizontalSelector ul li{
 	background: #333 url(images/tileitem_2.png) repeat-x;
 	display: inline-block;
-	width: 90px;
+	min-width: 80px;
 	line-height: 24px;
 	margin: 0px;
 	margin-left: -3px;
@@ -670,7 +670,9 @@ ul li {
 
 #horizontalSelector ul li span{
 	text-align: center;
-	width: 90px;
+	min-width: 80px;
+	margin-left: 5px;
+	margin-right: 5px;
 	display: block;
 	font-weight: bold;
 }
