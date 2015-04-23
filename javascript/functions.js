@@ -233,13 +233,15 @@ function fogDialog(message, callback, args)
 {
 	showFogScreen();
 	
-	var _html = "<div id='fog-alert'> <div id='fog-alert-title-error'><span></span><h3>Atenção:</h3></div> <span id='fog-alert-content'>" + message + " </span> <p class='line'></p> <a class='buttonstd' style='float: right;' onclick='onFogConfirm(" + callback + ")'> <span>Sim</span></a> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Não</span></a></div>";
+	var _html = "<div id='fog-alert'> <div id=\"fog-alert-title-error\"><span></span><h3>Atenção:</h3></div> <span id=\"fog-alert-content\">" + message + " </span> <p class=\"line\"></p> <a class=\"buttonstd\" style=\"float: right;\" onclick=\"onFogConfirm('|CALLBACK|', '|ARGS|')\"> <span>Sim</span></a> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Não</span></a></div>";
+	_html = _html.replace("|CALLBACK|", callback);
+	_html = _html.replace("|ARGS|", args);
 	$("#fog-screen").html(_html);
 }
 
-function onFogConfirm(callback)
+function onFogConfirm(callback, args)
 {
-	callback();
+	window[callback](args);
 	onFogAlertClick();
 }
 

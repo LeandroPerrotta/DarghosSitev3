@@ -23,7 +23,13 @@ class ItemShop
 	const LIST_ORDER_PRICE_DESC = 4;
 	const LIST_ORDER_PRICE_ASC = 5;
 	
-	private $id, $name, $description, $params, $price, $added_in, $enabled, $type;
+	const CATEGORY_EQUIPMENTS = 0;
+	const CATEGORY_WEAPONS = 1;
+	const CATEGORY_ADDONS = 2;
+	const CATEGORY_VALUABLE = 3;
+	const CATEGORY_SERVICES = 4;
+	
+	private $id, $name, $description, $params, $price, $added_in, $enabled, $type, $category;
 
 	static function getItemShopList($orderBy = LIST_ORDER_RELEVANCE)
 	{
@@ -31,7 +37,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -44,7 +50,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`shop`.`id`, `shop`.`name`, `shop`.`description`, `shop`.`params`, `shop`.`price`, `shop`.`added_in`, `shop`.`enabled`, `shop`.`type` 
+					`shop`.`id`, `shop`.`name`, `shop`.`description`, `shop`.`params`, `shop`.`price`, `shop`.`added_in`, `shop`.`enabled`, `shop`.`type`, `shop`.`category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` `shop`
 				LEFT JOIN
@@ -64,7 +70,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -77,7 +83,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -90,7 +96,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -103,7 +109,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -142,7 +148,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE id = {$id}
@@ -161,6 +167,7 @@ class ItemShop
 		$this->price = $fetch->price;
 		$this->added_in = $fetch->added_in;
 		$this->type = $fetch->type;
+		$this->category = $fetch->category;
 		
 		return true;
 	}
@@ -177,7 +184,8 @@ class ItemShop
 					`description` = '{$this->description}',
 					`params` = '{$this->params}',
 					`price` = '{$this->price}',
-					`type` = '{$this->type}'
+					`type` = '{$this->type}',
+					`category` = '{$this->category}'
 				WHERE
 					`id` = '{$this->id}'
 					
@@ -188,7 +196,7 @@ class ItemShop
 			\Core\Main::$DB->query("
 				INSERT INTO
 					`".\Core\Tools::getSiteTable("itemshop")."`
-					(`name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`)
+					(`name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`)
 				VALUES
 					(
 						'{$this->name}',
@@ -197,12 +205,21 @@ class ItemShop
 						'{$this->price}',
 						'{$this->added_in}',
 						'{$this->enabled}',
-						'{$this->type}'
+						'{$this->type}',
+						'{$this->category}'
 					)
 			");
 			
 			$this->id = \Core\Main::$DB->lastInsertId();
 		}
+	}
+	
+	function delete(){
+		\Core\Main::$DB->query("
+			DELETE FROM
+				`".\Core\Tools::getSiteTable("itemshop")."`
+            WHERE `id` = {$this->id}
+		"); 
 	}
 	
 	function logItemPurchase($player_id)
@@ -358,6 +375,7 @@ class ItemShop
 	function getPriceStr() { return "R$ " . number_format($this->price / 100, 2); }
 	function getAddedIn() { return $this->added_in; }
 	function getType() { return $this->type; }
+	function getCategory() { return $this->category; }
 	function isEnabled() { return $this->enabled; }
 	
 	function setId($int) { $this->id = $int; }
@@ -368,6 +386,7 @@ class ItemShop
 	function setAddedIn($int) { $this->added_in = $int; }
 	function setType($int) { $this->type = $int; }
 	function setEnabled($bool) { $this->enabled = $bool; }
+	function setCategory($int) { $this->category = $int; }
 	
 	/*
 	 * Callback functions for non ingame items

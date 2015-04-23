@@ -69,6 +69,10 @@ class Table
 		$this->_subtable = true;
 	}
 	
+	function GetRowsCount(){
+	    return count($this->_dataRow);
+	}
+	
 	function Draw()
 	{
 		$args = "";

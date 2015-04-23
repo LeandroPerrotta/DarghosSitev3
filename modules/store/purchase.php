@@ -88,58 +88,88 @@ class View
 		
 		$this->_itemlist = \Framework\ItemShop::getItemShopList();
 		
-		$this->_itemlist_table = new \Framework\HTML\Table();
+		$this->_itemlist_table = array();
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS] = new \Framework\HTML\Table();
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS] = new \Framework\HTML\Table();
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS] = new \Framework\HTML\Table();
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE] = new \Framework\HTML\Table();
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES] = new \Framework\HTML\Table();
 
-		$this->_itemlist_table->AddField("Lista de Items");
-		$this->_itemlist_table->AddRow();	
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddField("Lista de Equipamentos");
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddRow();
+
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->AddField("Lista de Armas e Escudos");
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->AddRow();
+
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->AddField("Lista de Addons e Outfits");
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->AddRow();
 		
-		$this->_itemlist_table->AddField("", "10%", null, 2);
-		$this->_itemlist_table->AddField("<b>Nome</b>", "20%");
-		$this->_itemlist_table->AddField("<b>Descrição</b>", "50%");
-		$this->_itemlist_table->AddField("<b>Preço</b>", "15%");
-		$this->_itemlist_table->AddRow();		
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->AddField("Lista de Valiosos e Diversos");
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->AddRow();
 		
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->AddField("Lista de Serviços");
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->AddRow();
+		
+		foreach($this->_itemlist_table as $table){
+		    $table->AddField("", "10%", null, 2);
+		    $table->AddField("<b>Nome</b>", "20%");
+		    $table->AddField("<b>Descrição</b>", "50%");
+		    $table->AddField("<b>Preço</b>", "15%");
+		    $table->AddRow();		    
+		}
+	
 		if($this->_itemlist)
 		{
 			foreach($this->_itemlist as $item)
 			{
 				$item instanceof \Framework\ItemShop;
 				
-
+				$category = $item->getCategory();
 				$params = $item->getParams();
 				
+				$table = $this->_itemlist_table[$category];
+				
 				$this->_selected_item->SetValue($item->getId());
-				$this->_itemlist_table->AddField($this->_selected_item->Draw());
+				$table->AddField($this->_selected_item->Draw());
 				
 				$type = $item->getType();
 	
 			    if($type == \Framework\ItemShop::TYPE_CALLBACK){
 			        
-			        $this->_itemlist_table->AddField("<img src='{$params[\Framework\ItemShop::PARAM_IMAGE_URL]}'/>");
+			        $table->AddField("<img src='{$params[\Framework\ItemShop::PARAM_IMAGE_URL]}'/>");
 			        
-			        $this->_itemlist_table->AddField("1x " . $item->getName());
+			        $table->AddField("1x " . $item->getName());
 			    }
 			    elseif($type == \Framework\ItemShop::TYPE_ITEM){
 			        
                     if($params[\Framework\ItemShop::PARAM_ITEM_STACKABLE])
-			            $this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}_{$params[\Framework\ItemShop::PARAM_ITEM_COUNT]}.gif'/>");
+			            $table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}_{$params[\Framework\ItemShop::PARAM_ITEM_COUNT]}.gif'/>");
 			        else
-			            $this->_itemlist_table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}.gif'/>");
+			            $table->AddField("<img src='files/items/{$params[\Framework\ItemShop::PARAM_ITEM_ID]}.gif'/>");
 			        	
-			        $this->_itemlist_table->AddField($params[\Framework\ItemShop::PARAM_ITEM_COUNT]."x " . $item->getName());	
+			        $table->AddField($params[\Framework\ItemShop::PARAM_ITEM_COUNT]."x " . $item->getName());	
 			    }
 			
 				
-				$this->_itemlist_table->AddField($item->getDescription());
-				$this->_itemlist_table->AddField($item->getPriceStr());
+				$table->AddField($item->getDescription());
+				$table->AddField($item->getPriceStr());
 
-				$this->_itemlist_table->AddRow();
+				$table->AddRow();
 			}
+			
+			foreach($this->_itemlist_table as $table){
+			    if($table->GetRowsCount() <= 2){
+    			    $table->AddField("Nenhum item para esta categoria.", null, null, 5);
+    			    $table->AddRow();
+			    }
+			}			
 		}		
 		else
 		{		
-			$this->_itemlist_table->AddField("A nossa loja não possui nenhum item disponivel no momento.", null, null, 4);
-			$this->_itemlist_table->AddRow();	
+		    foreach($this->_itemlist_table as $table){
+    			$table->AddField("A nossa loja não possui nenhum item disponivel no momento.", null, null, 4);
+    			$table->AddRow();	
+		    }		    
 		}
 			
 		return true;
@@ -224,6 +254,9 @@ class View
 	function Draw()
 	{
 		global $module;		
+		
+		if($this->isAdmin)
+		  \Core\Main::includeJavaScriptSource("views/store_purchase.js");
 				
 		$module .= "		
 		<div style='margin-top: 5px; margin-bottom: 5px; display: block; width: 100%; text-align: right;'><a href='?ref=store.history'>Ver Historico</a></div>
@@ -237,23 +270,44 @@ class View
 					<label>Personagem</label>
 					{$this->_character->Draw()}
 					
-				</p>";
-				
-			/*		
-				<p>
-					<label>Ordenar por</label>
-					{$this->_order_by->Draw()}
-					
 				</p>
-			*/
+				
+                <div id='horizontalSelector'>
+        			<span name='left_corner'></span>
+        			<ul>
+        				<li name='equipments' checked='checked'><span>Equipamentos</span></li>
+        				<li name='weapons'><span>Armas e Escudos</span></li>
+        				<li name='addons'><span>Addons</span></li>
+        				<li name='valueable'><span>Valiosos e Diversos</span></li>
+        				<li name='services'><span>Serviços</span></li>
+        			</ul>
+        			<span name='right_corner'></span>
+        		</div>
 
-		$module .= "
-				{$this->_itemlist_table->Draw()}
+        		<div title='equipments' class='viewable' style='margin: 0px; padding: 0px;'>
+				    {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->Draw()}
+			    </div>
+			    
+			    <div title='weapons' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
+			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->Draw()}
+			    </div>
+			    
+			    <div title='addons' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
+			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->Draw()}
+			    </div>
+			    
+			    <div title='valueable' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
+			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->Draw()}
+			    </div>
+			    
+			    <div title='services' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
+			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->Draw()}
+			    </div>
 				
 				<p id='line'></p>
 				
 				<p>
-					<input class='button' type='submit' value='Enviar' /> ".(($this->isAdmin) ? "<a class='buttonstd' href='?ref=store.add'>Novo Item</a>" : null)."
+					<input class='button' type='submit' value='Enviar' /> ".(($this->isAdmin) ? "<a class='buttonstd' href='?ref=store.add'>Novo Item</a> <a class='buttonstd' id='edit_item' href='#'>Editar Item</a> <a class='buttonstd' id='delete_item' href='#'>Excluir Item</a>" : null)."
 				</p>
 			</fieldset>
 		</form>";					
