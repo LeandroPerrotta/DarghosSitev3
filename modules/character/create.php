@@ -72,11 +72,9 @@ if($_POST)
 		if($pvp)
 		    $town = t_Towns::Quendor;
 		
-		$town_id = t_Towns::Get($_POST["player_town"]);
-		
-		if(!in_array($town_id, $available_towns)){
+		/*if(!in_array($town_id, $available_towns)){
 		    $town_id = $available_towns[0];
-		}
+		}*/
 		
 		$player->setName($_POST["player_name"]);
 		$player->setWorldId($_world_id);
@@ -90,12 +88,12 @@ if($_POST)
         $player->setHealth(185);
         $player->setMana(35);
         $player->setCap(470);
-		$player->setTownId($town_id);
+		$player->setTownId($town);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
-		$player->setPvp($town);
+		$player->setPvp($pvp);
 		
         /*
 	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
