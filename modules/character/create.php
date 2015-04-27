@@ -67,10 +67,7 @@ if($_POST)
 		
 		$pvp = (bool)$_POST["player_pvp"];
 		
-		$town = t_Towns::IslandOfPeace;
-		
-		if($pvp)
-		    $town = t_Towns::Quendor;
+		$town = t_Towns::Quendor;
 		
 		/*if(!in_array($town_id, $available_towns)){
 		    $town_id = $available_towns[0];
@@ -187,8 +184,8 @@ if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 
 $pvpSelect = new \Framework\HTML\SelectBox();
 $pvpSelect->SetName("player_pvp");
-$pvpSelect->AddOption("On (jornada inicia em Quendor)", "1");
-$pvpSelect->AddOption("Off (jornada inicia em Island of Peace)", "0");
+$pvpSelect->AddOption("On", "1");
+$pvpSelect->AddOption("Off", "0");
 
 \Core\Main::includeJavaScriptSource("views/character_create.js");
 
