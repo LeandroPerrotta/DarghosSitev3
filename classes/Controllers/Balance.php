@@ -38,7 +38,12 @@ class Balance
     
                     $account = new Account();
                     $account->load($contr->account_id);
-                    $account->addBalance($contr->balance);
+                    
+                    if($contr->balance >= 2000)
+                        $account->addBalance($contr->balance * 1.5);
+                    else 
+                        $account->addBalance($contr->balance);
+                    
                     $account->save();
                 }
                 else{
