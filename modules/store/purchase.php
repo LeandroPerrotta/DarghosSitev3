@@ -93,6 +93,7 @@ class View
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS] = new \Framework\HTML\Table();
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS] = new \Framework\HTML\Table();
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE] = new \Framework\HTML\Table();
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_GUILDS] = new \Framework\HTML\Table();
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES] = new \Framework\HTML\Table();
 
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddField("Lista de Equipamentos");
@@ -106,6 +107,9 @@ class View
 		
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->AddField("Lista de Valiosos e Diversos");
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->AddRow();
+		
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_GUILDS]->AddField("Lista de Guild Items");
+		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_GUILDS]->AddRow();
 		
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->AddField("Lista de Serviços");
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->AddRow();
@@ -215,10 +219,19 @@ class View
 		
 		$item_prop = $item->getParams();
 		
-		if($item->getPrice() > $this->loggedAcc->getBalance())
-		{
-			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_COST, "R$ " . number_format($item->getPrice() / 100, 2));
-			return false;
+		if($item->getCategory() == \Framework\ItemShop::CATEGORY_GUILDS){
+		    if($item->getPrice() > $this->loggedAcc->getGuildPoints())
+		    {
+		        $this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_GUILDCOST, $item->getPrice());
+		        return false;
+		    }		    
+		}
+		else{
+    		if($item->getPrice() > $this->loggedAcc->getBalance())
+    		{
+    			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_COST, $item->getPriceStr());
+    			return false;
+    		}
 		}
 		
 		if($item->getType() == \Framework\ItemShop::TYPE_CALLBACK){
@@ -241,7 +254,11 @@ class View
 		        echo "\Framework\ItemShop {$params[\Framework\ItemShop::PARAM_FUNCTION]}";
 		}		
 		
-		$this->loggedAcc->addBalance(-$item->getPrice());
+		if($item->getCategory() == \Framework\ItemShop::CATEGORY_GUILDS)
+            $this->loggedAcc->addGuildPoints(-$item->getPrice());
+        else
+            $this->loggedAcc->addBalance(-$item->getPrice());
+        
 		$this->loggedAcc->save();
 		
 		//$item->doPlayerGiveThing($player->getId());
@@ -264,7 +281,7 @@ class View
 			<fieldset>
 	
 				<p>Bem vindo a Loja do ".getConf(confEnum()->WEBSITE_NAME)."!</p>				
-				<p>O saldo atual de sua conta é de: <big><b>R$ ".number_format($this->loggedAcc->getBalance() / 100, 2)."</b></big></p>				
+				<p>O saldo atual de sua conta é de: <big><b>R$ ".number_format($this->loggedAcc->getBalance() / 100, 2)."</b></big></p>
 				
 				<p>
 					<label>Personagem</label>
@@ -275,10 +292,11 @@ class View
                 <div id='horizontalSelector'>
         			<span name='left_corner'></span>
         			<ul>
-        				<li name='equipments' checked='checked'><span>Equipamentos</span></li>
-        				<li name='weapons'><span>Armas e Escudos</span></li>
+        				<li name='equipments' checked='checked'><span>Corpo</span></li>
+        				<li name='weapons'><span>Mãos</span></li>
         				<li name='addons'><span>Addons</span></li>
-        				<li name='valueable'><span>Valiosos e Diversos</span></li>
+        				<li name='valueable'><span>Valiosos</span></li>
+        				<li name='guilds'><span>Guilds</span></li>
         				<li name='services'><span>Serviços</span></li>
         			</ul>
         			<span name='right_corner'></span>
@@ -299,6 +317,12 @@ class View
 			    <div title='valueable' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->Draw()}
 			    </div>
+			    
+			    <div title='guilds' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
+			         <p style='margin-top: 20px;'><strong>Guild Shop:</strong> Para comprar os items desta categoria você usará Guild Points de sua conta (não Saldo). Clique <a href='?ref=general.guild_points'>aqui</a> para saber como adquirir Guild Points.</p>
+			         <p>O guild points atual de sua conta é de: <big><b>{$this->loggedAcc->getGuildPoints()}</b></big></p>
+			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_GUILDS]->Draw()}
+			    </div>			    
 			    
 			    <div title='services' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->Draw()}

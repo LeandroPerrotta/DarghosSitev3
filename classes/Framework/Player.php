@@ -433,6 +433,15 @@ class Player
 		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `date`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
 	}
 	
+	function canReceiveGuildPoints($bonus_id){
+	    $query = $this->db->query("SELECT `date` FROM `guild_points` WHERE `account_id` = {$this->data['account_id']} AND `bonus_id` = {$bonus_id}");
+        return $query->numRows() == 0;
+	}
+	
+	function onReceiveGuildPoints($bonus_id, $guild_id){
+	    $this->db->query("INSERT INTO guild_points (`guild_id`, `account_id`, `bonus_id`, `date`) VALUES('{$guild_id}', '{$this->data['account_id']}', {$bonus_id}, '".time()."')");
+	}
+	
 	function acceptInvite()
 	{
 		$invite = $this->getInvite();

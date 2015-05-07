@@ -1,9 +1,9 @@
 <?php
 
 $__configs [Core\Configs::eConf ()->SQL_HOST] = "127.0.0.1";
-$__configs [Core\Configs::eConf ()->SQL_USER] = "platinum";
-$__configs [Core\Configs::eConf ()->SQL_PASSWORD] = "K2p5CGY7xB6n4FHt";
-$__configs [Core\Configs::eConf ()->SQL_DATABASE] = "platinum";
+$__configs [Core\Configs::eConf ()->SQL_USER] = "root";
+$__configs [Core\Configs::eConf ()->SQL_PASSWORD] = "***REMOVED***";
+$__configs [Core\Configs::eConf ()->SQL_DATABASE] = "darghos_ot";
 $__configs [Core\Configs::eConf ()->PATCH_SERVER] = "/home/leandro/darghos/";
 $__configs [Core\Configs::eConf ()->FOLDER_DATA] = "data/";
 $__configs [Core\Configs::eConf ()->ENABLE_MULTIWORLD] = false;

@@ -129,6 +129,10 @@ class View
 		
 		$totalLevel = 0;
 		$membersCount = 0;
+		$members = array();
+		$members["50"] = 0;
+		$members["100"] = 0;
+		$members["200"] = 0;	
 		
 		foreach($this->guild->Ranks as $rank)
 		{			
@@ -149,6 +153,10 @@ class View
 				
 				$nick = "<a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick} {$online}";
 				
+				foreach($this->guild->GuildBonus as &$bonus){
+				    if($member->getLevel() >= $bonus["min-level"] && $member->canReceiveGuildPoints($bonus["id"])) $bonus["members"]++;
+				}
+				
 				$totalLevel += $member->getLevel();
 				$membersCount++;
 				
@@ -168,12 +176,42 @@ class View
 		$guildInfoTable->AddField("O nível médio dos personagens desta guilda é <b>". ceil($totalLevel / $membersCount) ."</b>.");
 		$guildInfoTable->AddRow();		
 		
+		function showAchievement(&$table, $achiev, $isLeader, $guild)
+		{		
+		    $hasAchiev = false;
+		
+		    if($achiev["members"] >= $achiev["min-members"] || $guild->HasAchiev($achiev["id"])) $hasAchiev = true;
+		
+		    $button = "";
+		    
+		    if($hasAchiev && $isLeader && !$guild->HasAchiev($achiev["id"])){
+                $button = "<a class='buttonstd' style='float: right;' href='?ref=guilds.activatebonus&name={$guild->GetName()}&id={$achiev["id"]}'>Ativar</a>";
+		    }		    
+		    
+		    $string = "<span class='".($hasAchiev ? "hasAchiev" : "notHasAchiev")."'><h3 class='achievTitle'>{$achiev["title"]}</h3>{$achiev["desc"]}<br><strong>Recompensa:</strong> {$achiev["reward"]} guild points para cada membro. {$button}</span>";
+		    
+		    $table->AddField($string);
+		    $table->AddRow();
+		}
+		
+		$guildBonusTable = new \Framework\HTML\Table();
+		$guildBonusTable->AddField("Bonus e Conquistas de Guild");
+		$guildBonusTable->AddRow();
+		
+		foreach($this->guild->GuildBonus as $achiev)
+		{
+		    showAchievement($guildBonusTable, $achiev, $this->loggedAcc && $this->memberLevel == \Framework\Guilds::RANK_LEADER, $this->guild);
+		}		
+		
 		$guildPage = "
 		<div title='guild_page' class='viewable' style='margin: 0px; padding: 0px;'>
 		
 		{$guildTable->Draw()}
 		
-		{$guildInfoTable->Draw()}";
+		{$guildInfoTable->Draw()}
+		
+		{$guildBonusTable->Draw()}";
+	
 		
 		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
 		{

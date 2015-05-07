@@ -345,6 +345,10 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "wardetail":
 					$patch['file'] = $topic;
 				break;
+				
+				case "activatebonus":
+					$patch['file'] = $topic;
+				break;
 								
 				default:
 					$patch['dir'] = "errors";

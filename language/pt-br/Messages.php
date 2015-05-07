@@ -69,6 +69,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_CHANGESEX_COST] = "Você não possui R$ @v1@ de creditos em sua conta necessários para modificar o sexo de seu personagem.";
 		self::$messages[$e_Msg->ITEMSHOP_OLD_PURCHASE] = "Você deve fazer um \"log-in\" no jogo para receber sua antiga compra em nosso item shop antes de efetuar uma nova compra.";
 		self::$messages[$e_Msg->ITEMSHOP_COST] = "Você não possui os @v1@ de saldo disponível necessarios para comprar isto.";
+		self::$messages[$e_Msg->ITEMSHOP_GUILDCOST] = "Você não possui os @v1@ de guild points disponível necessarios para comprar isto.";
 		self::$messages[$e_Msg->ITEMSHOP_REQUIRE_DAYS] = "Este item tem um custo de @v1@ dias de conta premium, no entanto, você precisa ter mais de @v2@ dias de conta premium para comprar-lo.";
 		self::$messages[$e_Msg->GUILD_NEED_NO_MEMBERS_DISBAND] = "A sua guilda ainda possui membros ativos. Para desmanchar uma guilda é necessario só existir o líder da guilda.";
 		self::$messages[$e_Msg->GUILD_COMMENT_SIZE] = "O comentário de sua guilda não deve exceder 500 caracteres.";
@@ -103,6 +104,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->GUILD_IS_ON_WAR] = "A guilda @v1@ esta em guerra com outra(s) guildas, portanto, certas operações na guilda não estão disponiveis, como abandonar guilda, convidar novos membros, aceitar convites, remover membros. Tente novamente quando a guerra estiver encerrada.";
 		self::$messages[$e_Msg->GUILD_BALANCE_TOO_LOW] = "O balanço no banco de sua guilda está muito baixo.";
 		self::$messages[$e_Msg->GUILD_WAR_ALREADY] = "A sua guilda já declarou ou está em guerra contra a guilda @v1@. Você poderá declarar guerra contra esta guilda quando a guerra atual estiver terminada.";
+		self::$messages[$e_Msg->GUILD_RECEIVED_BONUS] = "Os guild points foram entregues com sucesso aos personagens listados.";		
 		self::$messages[$e_Msg->FORUM_ACCOUNT_NOT_HAVE_USER] = "Caro jogador, sua conta ainda não efetuou o cadastro para poder usar o forum do Darghos para poder ler topicos, responder enquetes e etc. Para criar o seu usuario, clique <a href='?ref=forum.register'>aqui</a>.";
 		self::$messages[$e_Msg->FORUM_ACCOUNT_NOT_HAVE_CHARACTERS] = "Caro jogador, para ultilizar os recursos de nosso Forum é necessário possui um personagem na conta ao menos com level 20 ou superior.";
 		self::$messages[$e_Msg->FORUM_POLL_ALREADY_VOTED] = "Desculpe, você já votou para está enquete e somente é permitido um voto por úsuario.";
