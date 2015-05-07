@@ -96,7 +96,7 @@ class View
 		    }
 		}
 		
-		if($this->bonus["members"] <= $this->bonus["min-members"]){
+		if($this->bonus["members"] < $this->bonus["min-members"]){
 		    $this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 		    return false;		    
 		}
