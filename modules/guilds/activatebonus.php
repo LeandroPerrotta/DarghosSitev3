@@ -89,14 +89,14 @@ class View
 		    foreach($rank->Members as $member)
 		    {
 		        if($member->getLevel() >= $this->bonus["min-level"] && $member->canReceiveGuildPoints($this->bonus["id"])){
-		            $bonus["members"]++;
+		            $this->bonus["members"]++;
 		            $this->charlist .= "{$member->getName()}\n";
 		            array_push($this->playerlist, $member);
 		        }
 		    }
 		}
 		
-		if($bonus["members"] <= $bonus["min-members"]){
+		if($this->bonus["members"] <= $this->bonus["min-members"]){
 		    $this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 		    return false;		    
 		}
