@@ -423,5 +423,9 @@ class ItemShop
 	    
 	    return array("success" => true);
 	}
+	
+	static function onPurchaseNonBuyableItem(Account $account, Player $player){
+	    return array("success" => false, "msg" => tr("Este não é um serviço compravel. Leia a descrição com atenção!"));
+	}
 }
 ?>
