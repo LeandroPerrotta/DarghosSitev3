@@ -65,7 +65,7 @@ if($_POST)
 		
 		$_world_id = t_Worlds::Get($_POST["player_world"]);
 		
-		$pvp = (bool)$_POST["player_pvp"];
+		$pvp = true;
 		
 		$town = t_Towns::Quendor;
 		
@@ -203,11 +203,6 @@ $module .= '
 		<p>
 			<label for="player_sex">Sexo</label>		
 				'.$genre_str.'
-		</p>	
-
-		<p>
-			<label for="player_pvp">PvP</label>		
-				'.$pvpSelect->Draw().'
 		</p>				        
 		
 		<p>

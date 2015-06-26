@@ -77,7 +77,7 @@ class Players
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
 		$town = \t_Towns::Quendor;
-		$pvp = (bool)$_POST["character_pvp"];
+		$pvp = true;
 		
 		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		

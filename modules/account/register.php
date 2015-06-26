@@ -202,13 +202,7 @@ class View
 			<p>
 				<label>".tr("Genero do personagem:")."</label>
 				{$this->_char_genre->Draw()}			
-			</p>
-			
-			<p class='long-margin-top'>".tr("No Magnum você pode escolher seu modo de PvP entre On ou Off.")."</p>
-			<p>
-				<label>".tr("PvP On|Off:")."</label>
-				{$this->_char_pvp->Draw()}			
-			</p>			
+			</p>		
 			
 			<p class='long-margin-top'>".tr("Todo personagem no ".getConf(confEnum()->WEBSITE_NAME)." pertence a uma vocação. No total existem quatro vocações disponiveis, cada uma com suas proprias habilidades, estilo de jogo e caracteristicas, selecione abaixo a vocação que você deseja para o seu personagem.")."</p>
 			<p>
