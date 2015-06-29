@@ -552,6 +552,7 @@ class Menus
     			"items" => array(
     				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
     				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
+    				,array("name" => "Liberar Saldo", "url" => "?ref=adv.add_balance", "min_group" => \t_Group::Administrator)		
     				,array("name" => "Estatisticas", "url" => "?ref=adv.statistics", "min_group" => \t_Group::Administrator)		
     				,array("name" => "Idiomas", "url" => "?ref=adv.translations", "min_group" => \t_Group::Administrator)		
     				//,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		

@@ -470,6 +470,11 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$patch['file'] = $topic;
 					$needMinGroup = t_Group::Administrator;
 					break;				
+						
+				case "add_balance":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;				
 				
 				default:
 					$patch['dir'] = "errors";
