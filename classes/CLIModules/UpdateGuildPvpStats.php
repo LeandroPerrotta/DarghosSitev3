@@ -28,7 +28,7 @@ class UpdateGuildPvpStats
 	    if(!$this->guilds[$guild_id])
 	        $this->guilds[$guild_id] = array("kills" => 0, "deaths" => 0);
 	     
-	    $this->guilds[$guild_id]["kills"]++;
+	    $this->guilds[$guild_id]["kill"]++;
 	}	
 	
 	function Run()
@@ -85,10 +85,8 @@ class UpdateGuildPvpStats
 
 								$this->addGuildKill($killer->getGuildId());
 								
-								if($guild_id != 0){
-    								$this->db->ExecQuery("INSERT INTO `guild_pvp_kills` (`guild_id`, `guild_pvp_death_id`) VALUES ({$killer->getGuildId()}, {$guild_pvp_death_id})");
-    								$guildKillers[] = $killer->getGuildId();
-								}
+								$this->db->ExecQuery("INSERT INTO `guild_pvp_kills` (`guild_id`, `guild_pvp_death_id`) VALUES ({$killer->getGuildId()}, {$guild_pvp_death_id})");
+								$guildKillers[] = $killer->getGuildId();
 							}
 						}
 					}
@@ -96,12 +94,11 @@ class UpdateGuildPvpStats
 			}
 		}
 		
-		
-		foreach($this->guilds as $guild_id => $stats){
-		    $this->db->query("UPDATE `guilds` SET `kills` = `kills` + {$stats["kills"]}, `deaths` = `deaths` + {$stats["deaths"]} WHERE `id` = {$guild_id}");
+		foreach($this->guilds as $guild_id => $stats){	    
+		    $this->db->query("UPDATE `guilds` SET `kills` = `kills` + {$stats["kills"]} AND `deaths` = `deaths` + {$stats["deaths"]} WHERE `id` = {$guild_id}");
 		}
 		
-		$values = array("lastUpdateGuildPvpStats" => time());
+		$values->lastUpdateGuildPvpStats = time();
 		$json = json_encode ($values);
 		
 		Main::writeTempFile ("values.json", $json);		

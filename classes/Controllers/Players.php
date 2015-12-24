@@ -76,7 +76,8 @@ class Players
 		$world = $_POST["character_world"];
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
-		$town = \t_Towns::IslandOfPeace;
+		$town = \t_Towns::Quendor;
+		$pvp = true;
 		
 		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		
@@ -109,10 +110,6 @@ class Players
 			$outfitType = 128;
 		else
 			$outfitType = 136;
-	
-		$town_id = null;
-	
-		$town_id =\ t_Towns::Get($town);
 			
 		$player = new PlayerModel();
 			
@@ -128,11 +125,12 @@ class Players
         $player->setHealth(185);
         $player->setMana(35);
         $player->setCap(470);
-		$player->setTownId($town_id);
+		$player->setTownId($town);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
+		$player->setPvp($pvp);
 		
         /*
         if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){

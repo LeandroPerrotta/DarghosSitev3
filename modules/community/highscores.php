@@ -88,8 +88,8 @@ if(isset($_GET["world"]))
 					<label for="skill">'.tr("Tipo de PvP").'</label>
 					<select name="pvpType">
 						<option '.(($filter_pvp == "both") ? 'selected' : null).' value="both">'.tr("Todos").'</option>
-						<option '.(($filter_pvp == "enabled") ? 'selected' : null).' value="enabled">'.tr("Agressivos apénas").'</option>
-						<option '.(($filter_pvp == "disabled") ? 'selected' : null).' value="disabled">'.tr("Pacificos apénas").'</option>
+						<option '.(($filter_pvp == "enabled") ? 'selected' : null).' value="enabled">'.tr("PvP ON apénas").'</option>
+						<option '.(($filter_pvp == "disabled") ? 'selected' : null).' value="disabled">'.tr("PvP OFF apénas").'</option>
 					</select>
 				</p>';	
 			}

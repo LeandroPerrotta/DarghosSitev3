@@ -116,7 +116,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->STAMINA_VALUE_WRONG] = "Você deve selecionar corretamente a quantidade de stamina que deseja recuperar.";
 		self::$messages[$e_Msg->DARGHOSPOINTS_NEED_ACCEPT_TERMS] = "Para adquirir seus Darghos Points é necessario concordar com nossos termos de uso.";
 		self::$messages[$e_Msg->MONSTER_NOT_FOUND] = "O monstro @v1@ não existe em nosso servidor.";
-		self::$messages[$e_Msg->OPERATION_NEED_PREMDAYS] = "A sua conta não possui os @v1@ premdays disponiveis necessarios para concluir esta operação.";
+		self::$messages[$e_Msg->OPERATION_NEED_PREMDAYS] = "A sua conta não possui @v1@ de saldo disponiveis necessarios para concluir esta operação.";
 		self::$messages[$e_Msg->ACCOUNT_CHANGENAME_SUCCESS] = "O nome da sua conta foi modificado para @v1@ com sucesso!";
 	
 		self::$messages[$e_Msg->ACCOUNT_REGISTERED] = "

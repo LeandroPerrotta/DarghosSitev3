@@ -29,24 +29,12 @@ class Guilds
 	private static $LOG_LEVEL = self::LOG_LEVEL_NORMAL;
 		
 	private $_id, $_worldId, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_kills, $_deaths, $_formationTime, $_guildPoints, $_guildBetterPoints;
-	public $Ranks = array(), $Invites = array(), $Wars = array(), $GuildBonus;
+	public $Ranks = array(), $Invites = array(), $Wars = array();
 	private $_trash_ranks = array();
 	
 	function __construct()
 	{
-	    $this->GuildBonus = array(
-	            array("min-members" => 5, "members" => 0, "min-level" => 50, "id" => 1,
-	                    "title" => "Guild novata", "desc" => "Recrutar ao menos 5 membros level 50 ou mais.", "reward" => 800)
-	    
-	            ,array("min-members" => 15, "members" => 0, "min-level" => 100, "id" => 2,
-	                    "title" => "Guild média", "desc" => "Recrutar ao menos 15 membros level 100 ou mais.", "reward" => 1500)
-	    
-	            ,array("min-members" => 30, "members" => 0, "min-level" => 100, "id" => 3,
-	                    "title" => "Guild grande", "desc" => "Recrutar ao menos 30 membros level 100 ou mais.", "reward" => 3500)
-	    
-	            ,array("min-members" => 30, "members" => 0, "min-level" => 200, "id" => 4,
-	                    "title" => "Guild top", "desc" => "Recrutar ao menos 30 membros level 200 ou mais.", "reward" => 5000)
-	    );
+
 	}
 	
 	static function LogMessage($message, $level = self::LOG_LEVEL_NORMAL)
@@ -644,11 +632,6 @@ class Guilds
 	{		
 		$query = \Core\Main::$DB->query("SELECT COUNT(*) as `count` FROM `guild_pvp_deaths` `d` LEFT JOIN `guild_pvp_kills` `k` ON `k`.`guild_pvp_death_id` = `d`.`id` LEFT JOIN `player_deaths` `pd` ON `pd`.`id` = `d`.`death_id` WHERE `d`.`guild_id` = {$guild_id} AND `k`.`guild_id` = {$this->_id} AND `pd`.`date` >= {$timestamp}");
 		return $query->fetch()->count;
-	}
-	
-	function HasAchiev($bonus_id){
-	    $query = \Core\Main::$DB->query("SELECT `date` FROM `guild_points` WHERE `guild_id` = {$this->_id} AND `bonus_id` = {$bonus_id}");
-	    return $query->numRows() != 0;	    
 	}
 	
 	//setter & getters

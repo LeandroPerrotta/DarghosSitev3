@@ -7,7 +7,7 @@ use Core\Configs;
 use Core\Consts;
 use Views\Balance as BalanceViews;
 
-if (!defined('TOKEN')) define ('TOKEN', '852A973558EB4AEE91FE7BF0FAC4DA48');
+if (!defined('TOKEN')) define ('TOKEN', '930706B292F94B46B8C06DDA5E8EF2B5');
 
 class Balance
 {
@@ -38,7 +38,12 @@ class Balance
     
                     $account = new Account();
                     $account->load($contr->account_id);
-                    $account->addBalance($contr->balance);
+                    
+                    if($contr->balance >= 2000)
+                        $account->addBalance($contr->balance * 1.5);
+                    else 
+                        $account->addBalance($contr->balance);
+                    
                     $account->save();
                 }
                 else{

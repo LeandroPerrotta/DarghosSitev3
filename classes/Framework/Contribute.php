@@ -444,6 +444,10 @@ class Contribute extends \Core\MySQL
 		{			
 			$balance = "R$ " . number_format($this->balance / 100, 2);
 			
+			if($this->balance >= 2000){
+			    $balance = "R$ " . number_format(($this->balance * 1.5) / 100, 2);
+			}
+			
 			$form = '
 				<form target="pagseguro" action="'.Consts::URLS_PAGSEGURO.'" method="post">
 				<input type="hidden" name="email_cobranca" value="'.Consts::PAGSEGURO_EMAIL.'">

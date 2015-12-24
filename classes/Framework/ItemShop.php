@@ -28,7 +28,6 @@ class ItemShop
 	const CATEGORY_ADDONS = 2;
 	const CATEGORY_VALUABLE = 3;
 	const CATEGORY_SERVICES = 4;
-	const CATEGORY_GUILDS = 5;
 	
 	private $id, $name, $description, $params, $price, $added_in, $enabled, $type, $category;
 
@@ -373,12 +372,7 @@ class ItemShop
 	function getDescription() { return $this->description; }
 	function getParams() { return json_decode($this->params, true); }
 	function getPrice() { return $this->price; }
-	function getPriceStr() { 
-	    if($this->category == self::CATEGORY_GUILDS)
-	        return $this->price;
-	        
-	    return "R$ " . number_format($this->price / 100, 2); 
-	}
+	function getPriceStr() { return "R$ " . number_format($this->price / 100, 2); }
 	function getAddedIn() { return $this->added_in; }
 	function getType() { return $this->type; }
 	function getCategory() { return $this->category; }
@@ -428,6 +422,10 @@ class ItemShop
 	    $account->save();
 	    
 	    return array("success" => true);
+	}
+	
+	static function onPurchaseNonBuyableItem(Account $account, Player $player){
+	    return array("success" => false, "msg" => tr("Este não é um serviço compravel. Leia a descrição com atenção!"));
 	}
 }
 ?>

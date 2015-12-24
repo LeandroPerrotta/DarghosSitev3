@@ -221,11 +221,9 @@ class Adv
         
         $db = \Core\Main::$DB;
     
-        $query = $db->query("SELECT AVG(`players`) as `avg_players` FROM `serverstatus` WHERE `server_id` = 0 AND `date` BETWEEN {$target_start} AND {$target_end} GROUP BY `server_id`");
+        $query = $db->query("SELECT AVG(`players`) as `avg_players` FROM `serverstatus` GROUP BY `server_id` WHERE `server_id` = 0 AND `date` > {$target_start} AND `date` < {$target_end}");
         if($result = $query->fetchAssocArray())
-            array_push($qtd_list, intval($result["avg_players"]));
-	else
-	    array_push($qtd_list, 0);
+            array_push($qtd_list, $result["avg_players"]);
     
         for($i = 1; $i < ($days); $i++){
             	
@@ -235,11 +233,9 @@ class Adv
             $date_str = date("d-m", $target_start);
             array_push($date_list, $date_str);
             	
-            $query = $db->query("SELECT AVG(`players`) as `avg_players` FROM `serverstatus` WHERE `server_id` = 0 AND `date` BETWEEN {$target_start} AND {$target_end} GROUP BY `server_id`");
+            $query = $db->query("SELECT AVG(`players`) as `avg_players` FROM `serverstatus` GROUP BY `server_id` WHERE `server_id` = 0 AND `date` > {$target_start} AND `date` < {$target_end}");
             if($result = $query->fetchAssocArray())
-                array_push($qtd_list, intval($result["avg_players"]));
-	    else
-	    	array_push($qtd_list, 0);
+                array_push($qtd_list, $result["avg_players"]);
         }
     
         $array = array();

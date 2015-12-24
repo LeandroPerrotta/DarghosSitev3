@@ -57,7 +57,6 @@ class View
 		$isweapon = $item ? (($item->getCategory() == \Framework\ItemShop::CATEGORY_WEAPONS) ? true : false) : false;
 		$isaddons = $item ? (($item->getCategory() == \Framework\ItemShop::CATEGORY_ADDONS) ? true : false) : false;
 		$isvaluable = $item ? (($item->getCategory() == \Framework\ItemShop::CATEGORY_VALUABLE) ? true : false) : false;
-		$isguild = $item ? (($item->getCategory() == \Framework\ItemShop::CATEGORY_GUILDS) ? true : false) : false;
 		$isservice = $item ? (($item->getCategory() == \Framework\ItemShop::CATEGORY_SERVICES) ? true : false) : false;
 		
 		$this->_item_type = new \Framework\HTML\SelectBox();
@@ -72,7 +71,6 @@ class View
 		$this->_item_category->AddOption("Armas e Escudos", \Framework\ItemShop::CATEGORY_WEAPONS, $isweapon);		
 		$this->_item_category->AddOption("Addons e Outfits", \Framework\ItemShop::CATEGORY_ADDONS, $isaddons);		
 		$this->_item_category->AddOption("Valiosos e Diversos", \Framework\ItemShop::CATEGORY_VALUABLE, $isvaluable);		
-		$this->_item_category->AddOption("Guilds", \Framework\ItemShop::CATEGORY_GUILDS, $isguild);		
 		$this->_item_category->AddOption("Serviços", \Framework\ItemShop::CATEGORY_SERVICES, $isservice);		
 		
 		$this->_item_name = new \Framework\HTML\Input();

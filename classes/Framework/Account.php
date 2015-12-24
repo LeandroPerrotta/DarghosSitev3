@@ -55,9 +55,9 @@ class Account
 	function load($id, $fields = null)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings`, `vipend`, `lastexpbonus`, `balance`, `guildpoints` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings`, `vipend`, `lastexpbonus`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id`, `vipend`, `lastexpbonus`, `balance`, `guildpoints` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id`, `vipend`, `lastexpbonus`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 			
 		$query = $this->db->query($query_str);		
 		
@@ -268,8 +268,6 @@ class Account
 	function getWarnings() { return $this->data['warnings']; }
 	
 	function getBalance() { return $this->data['balance']; }
-	
-	function getGuildPoints() { return $this->data['guildpoints']; }
 	
 	function getVIPEnd() { return $this->data['vipend']; }
 	
@@ -549,13 +547,6 @@ class Account
 	        $this->data['balance'] = 0;
 	}
 	
-	function addGuildPoints($points){
-	    $this->data['guildpoints'] += $points;
-	    
-	    if($this->data['guildpoints'] < 0)
-	        $this->data['guildpoints'] = 0;
-	}
-	
 	function addExpDays(){
 	    
 	    if($this->getExpDaysLeft() == 0){
@@ -618,10 +609,10 @@ class Account
 		return true;
 	}
 	
-	function balanceRequest($auth, $ref, $balance){
+	function balanceRequest($auth, $ref, $value){
 	    $this->db->query("INSERT INTO ".\Core\Tools::getSiteTable("orders")." 
 	            (`id`, `account_id`, `type`, `balance`, `server`, `generated_in`, `status`, `lastupdate_in`, `auth`, `email_vendor`) values
-	            ('{$ref}', {$this->getId()}, 'PagSeguro', {$balance}, 1, UNIX_TIMESTAMP(), 2, 0, '{$auth}', 'platinum@darghos.com')");
+	            ('{$ref}', {$this->id}, 'PagSeguro', {$balance}, 1, UNIX_TIMESTAMP(), 2, 0, '{$auth}', 'platinum@darghos.com')");
 	}
 		
 	function addEmailToChange($email)

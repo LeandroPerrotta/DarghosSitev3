@@ -328,7 +328,7 @@ class Menu
 				
 				foreach($this->items as $item)
 				{
-					$menuItem = new MenuItem(tr($item["name"]), $item["url"], $item["conditions"] | 0, $item["min_group"] | 0, $item["style"] | "");
+					$menuItem = new MenuItem(tr($item["name"]), $item["url"], $item["conditions"] | 0, $item["min_group"] | 0, $item["style"] | "", $item["icon"] | "");
 					$menuItem->__addToElement($ul);
 				}
 			}
