@@ -165,7 +165,7 @@ $xmlStr = "
 				{$topic->GetTitle()}
 			</h3>
 			<div id='infos-line'>
-			por <a href='?ref=character.view&name={$author->getName()}'>{$author->getName()}</a>, <span>".\Core\Main::formatDate($topic->GetDate())."</span> {$comment}
+			postado em <span>".\Core\Main::formatDate($topic->GetDate())."</span> {$comment}
 			</div>	
 		</div>
 		<div id='new-summary'>{$summary}</div>

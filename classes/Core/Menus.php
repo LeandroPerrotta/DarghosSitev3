@@ -480,9 +480,7 @@ class Menus
 	    
 	    $li = $ul->addChild("li");
 	    
-	    $li->addChild("utils");
-	    
-	    return true;	    
+	    $li->addChild("utils"); 
 	    
 	    return true;
 	}
@@ -497,14 +495,12 @@ class Menus
     			"name" => "navigation",
     			"items" => array(
     				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
-    				,array("name" => "Serverinfo", "url" => "?ref=general.about", "icon" => "icon-exclamation")
-    				,array("name" => "Player vs Player", "url" => "?ref=general.pvp", "icon" => "icon-skull")
-    				,array("name" => "Battleground", "url" => "?ref=general.battleground")
+    				,array("name" => "Serverinfo", "url" => "?ref=general.about")
+    				,array("name" => "Battleground", "url" => "?ref=general.battleground", "icon" => "icon-exclamation")
     				//,array("name" => "Downloads", "url" => "?ref=general.downloads")
     				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
     				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
     				,array("name" => "Suporte", "url" => "?ref=general.support")	
-    				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
 			        ,array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
 			        ,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")    			        
     			)
@@ -605,11 +601,11 @@ class Menus
 		$string = "";
 		
 		self::$rightMenu = array(
-            /*array(
+            array(
                 "title" => "Redes Sociais",
                 "name" => "social-media",
                 "onDraw" => "drawMedia"
-            ),*/	
+            ),
     		array(
     			"title" => "Server Status",
     			"name" => "serverstatus",
@@ -666,7 +662,6 @@ class Menus
         <div>
             <ul class="social-media">
               <li class="facebook"><a href="https://facebook.com/DarghosOT" title="Darghos no Facebook"></a></li>
-              <li class="twitter"><a href="https://twitter.com/darghos_server" title="Darghos no Twitter"></a></li>
             </ul>
         </div>';
         
@@ -678,24 +673,13 @@ class Menus
                 <li>
                     <a href="?ref=general.client" class="not-menu">
                         <img src="newlay/images/icon_client.png" width="60px"/>
-                        <span>Magnum Client</span>
+                        <span>Cliente Darghos</span>
                     </a>
                 </li>
                 <li>
                     <a href="?ref=general.teamspeak" class="not-menu">
                         <img src="newlay/images/icon_ts.png" width="60px"/>
                         <span>TeamSpeak 3</span>
-                </li>
-                <li>
-                    <a href="?ref=general.elfbot" class="not-menu">
-                        <img src="newlay/images/icon_elf.png" width="60px"/>
-                        <span>Elfbot</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="?ref=general.skype" class="not-menu">
-                        <img src="newlay/images/icon_skype.png" width="60px"/>
-                        <span>Skype</span>
                     </a>
                 </li>
             </ul>

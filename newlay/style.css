@@ -277,47 +277,6 @@ ul li {
 	margin-top: 24px;
 }
 
-#right-menu ul.social-media{
-	padding-top: 2px;
-	padding-bottom: 2px;
-	width: auto;
-	border: none;
-}
-
-#right-menu ul.social-media li{
-	display: inline-block;
-	width: 31px;
-	height: 31px;
-}
-
-#right-menu ul.social-media li.facebook a{
-	background-position: -31px 0;
-	width: 31px;
-}
-
-#right-menu ul.social-media li.facebook a:hover{
-	background-position: -31px -31px;
-	width: 31px;
-}
-
-#right-menu ul.social-media li.twitter a{
-	background-position: -62px 0;
-	width: 31px;
-}
-
-#right-menu ul.social-media li.twitter a:hover{
-	background-position: -62px -31px;
-	width: 31px;
-}
-
-#right-menu ul.social-media li a, #right-menu ul.social-media li a:hover{
-	width: 0px;
-	background: url(images/social.png) no-repeat;
-	width: 31px;
-	height: 31px;
-	padding: 0px;
-}
-
 #left ul li a:not(.not-mennu), #left ul li div, #left ul li table, #right-menu ul > li > a:not(.not-menu), #right-menu ul li div, #right-menu ul li table{
 	background: #333 url(images/subitem.jpg) repeat-x;
 	border: 1px solid #838383;
@@ -455,6 +414,47 @@ ul li {
 	display: block;
 	float: right;
 }*/
+
+#right-menu ul.social-media{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	width: auto;
+	border: none;
+}
+
+#right-menu ul.social-media li{
+	display: inline-block;
+	width: 31px;
+	height: 31px;
+}
+
+#right-menu ul.social-media li.facebook a{
+	background-position: -31px 0;
+	width: 31px;
+}
+
+#right-menu ul.social-media li.facebook a:hover{
+	background-position: -31px -31px;
+	width: 31px;
+}
+
+#right-menu ul.social-media li.twitter a{
+	background-position: -62px 0;
+	width: 31px;
+}
+
+#right-menu ul.social-media li.twitter a:hover{
+	background-position: -62px -31px;
+	width: 31px;
+}
+
+#right-menu ul.social-media li a, #right-menu ul.social-media li a:hover{
+	width: 0px;
+	background: url(images/social.png) no-repeat;
+	width: 31px;
+	height: 31px;
+	padding: 0px;
+}
 
 #wrapper {
 	background: url(images/wrapper.jpg) repeat;

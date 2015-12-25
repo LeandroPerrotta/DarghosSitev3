@@ -18,6 +18,11 @@ class View
 			return;
 		}
 		
+		if(!$_GET["pass"]){
+		    \Core\Main::sendMessageBox("Indisponível", "A criação de contas estará liberada em breve!");
+		    return false;
+		}
+		
 		if(!$this->Prepare())
 		{
 			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
