@@ -216,23 +216,11 @@ $module .= "
 		</tr>
 		
 		<tr>
-			<td><b>".tr("VIP restante").":</b></td><td>{$vip}</td>
-		</tr>
-		
-		<tr>
-			<td><b>".tr("Exp bônus restante").":</b></td><td>{$exp}</td>
-		</tr>
-		
-		<tr>
 			<td><b>".tr("Alertas").":</b></td><td>{$warns}</td>
 		</tr>
 		
 		<tr>
 			<td><b>".tr("Criação").":</b></td><td>".$creation."</td>
-		</tr>
-
-		<tr>
-			<td><b>".tr("Conta no Forum").":</b></td><td>{$forum}</td>
 		</tr>";
 		
 		if($bans->isBannished($account->getId()))

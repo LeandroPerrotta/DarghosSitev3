@@ -24,9 +24,6 @@ if($_POST)
 	
 		$qtd_str = 'R$ '.number_format($form_AddBalance / 100, 2);
 		
-		if($form_AddBalance >= 2000)
-		    $qtd_str .= ' (com promoção 50%+ receberá R$ '.number_format(($form_AddBalance * 1.5) / 100, 2).')';
-		
 		$module .= '	
 			<form action="?ref=balance.confirm" method="post">
 				<fieldset>			
@@ -109,21 +106,21 @@ $module .= '
 					<li style="margin-left: 0px;">	
 						<label style="margin-left: 6px; display: inline; line-height: 30px;">					
 							<input style="margin-top: 0px;" name="add_balance" type="radio" value="2000">
-							<span style="font-size: 12px;">R$ 20,00 <b>(com promoção 50%+ receberá R$ 30,00)</b></span>
+							<span style="font-size: 12px;">R$ 20,00</span>
 						</label>							
 					</li>	
 
 					<li style="margin-left: 0px;">	
 						<label style="margin-left: 6px; display: inline; line-height: 30px;">					
 							<input style="margin-top: 0px;" name="add_balance" type="radio" value="3000">
-							<span style="font-size: 12px;">R$ 30,00 <b>(com promoção 50%+ receberá R$ 45,00)</b></span>
+							<span style="font-size: 12px;">R$ 30,00</span>
 						</label>							
 					</li>	
 
 					<li style="margin-left: 0px;">	
 						<label style="margin-left: 6px; display: inline; line-height: 30px;">					
 							<input style="margin-top: 0px;" name="add_balance" type="radio" value="5000">
-							<span style="font-size: 12px;">R$ 50,00 <b>(com promoção 50%+ receberá R$ 75,00)</b></span>
+							<span style="font-size: 12px;">R$ 50,00</span>
 						</label>							
 					</li>						
 				</ul>	
@@ -131,7 +128,6 @@ $module .= '
 			
 			<h3>Observações IMPORTANTES:</h3>
 			<ul>
-				<li>A promoção ganhe 50% mais saldo adicionado é valida para pedidos gerados até o fim do dia 05 de maio.</li>
 				<li>Saldos adicionados via PagSeguro/Boleto Bancário são liberados apénas após compensar o documento (de 1 a 3 dias úteis).</li>
 				<li>Saldos adicionados via PagSeguro/Transferencia Eletronica são liberados em um prazo de 6 horas.</li>
 				<li><font color="red">Muito importante! -> Não efetuar depósito na conta informada no boleto, isto invalida o pagamento. O boleto deve ser quitado junto ao caixa de um banco credenciado.</font></li>

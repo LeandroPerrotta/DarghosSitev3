@@ -531,7 +531,7 @@ class Menus
     			"name" => "premium",
     			"conditions" => Menu::CONDITION_MUST_LOGGED,
     			"items" => array(
-    				array("name" => "Vantagens VIP", "url" => "?ref=account.vip", "icon" => "icon-star", "style" => "color: #FFF500; font-weight: bold;")
+    				array("name" => "Premium Account", "url" => "?ref=account.premium", "icon" => "icon-star", "style" => "color: #FFF500; font-weight: bold;")
     				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
     				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
     				,array("name" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=store.purchase")		
