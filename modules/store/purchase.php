@@ -89,17 +89,17 @@ class View
 		$this->_itemlist = \Framework\ItemShop::getItemShopList();
 		
 		$this->_itemlist_table = array();
-		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS] = new \Framework\HTML\Table();
-		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS] = new \Framework\HTML\Table();
+		//$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS] = new \Framework\HTML\Table();
+		//$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS] = new \Framework\HTML\Table();
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS] = new \Framework\HTML\Table();
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE] = new \Framework\HTML\Table();
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES] = new \Framework\HTML\Table();
 
-		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddField("Lista de Equipamentos");
-		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddRow();
+		//$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddField("Lista de Equipamentos");
+		//$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->AddRow();
 
-		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->AddField("Lista de Armas e Escudos");
-		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->AddRow();
+		//$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->AddField("Lista de Armas e Escudos");
+		//$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->AddRow();
 
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->AddField("Lista de Addons e Outfits");
 		$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->AddRow();
@@ -275,22 +275,26 @@ class View
                 <div id='horizontalSelector'>
         			<span name='left_corner'></span>
         			<ul>
-        				<li name='equipments' checked='checked'><span>Equipamentos</span></li>
+        			     <!--
+        				<li name='equipments'><span>Equipamentos</span></li>
         				<li name='weapons'><span>Armas e Escudos</span></li>
+        				-->
         				<li name='addons'><span>Addons</span></li>
         				<li name='valueable'><span>Valiosos e Diversos</span></li>
-        				<li name='services'><span>Serviços</span></li>
+        				<li name='services' checked='checked'><span>Serviços</span></li>
         			</ul>
         			<span name='right_corner'></span>
         		</div>
 
-        		<div title='equipments' class='viewable' style='margin: 0px; padding: 0px;'>
+        		<!--
+        		<div title='equipments' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
 				    {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->Draw()}
 			    </div>
 			    
 			    <div title='weapons' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->Draw()}
 			    </div>
+			     -->
 			    
 			    <div title='addons' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->Draw()}
@@ -300,7 +304,7 @@ class View
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_VALUABLE]->Draw()}
 			    </div>
 			    
-			    <div title='services' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
+			    <div title='services' class='viewable' style='margin: 0px; padding: 0px;'>
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_SERVICES]->Draw()}
 			    </div>
 				

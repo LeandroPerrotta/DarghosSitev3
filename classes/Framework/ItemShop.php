@@ -427,5 +427,12 @@ class ItemShop
 	static function onPurchaseNonBuyableItem(Account $account, Player $player){
 	    return array("success" => false, "msg" => tr("Este não é um serviço compravel. Leia a descrição com atenção!"));
 	}
+	
+	static function onPurchasePremium(Account $account, Player $player){
+	    $account->updatePremDays(30);
+	    $account->save();
+	    
+	    return array("success" => true);
+	}
 }
 ?>
