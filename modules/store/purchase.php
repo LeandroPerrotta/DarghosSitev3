@@ -285,16 +285,6 @@ class View
         			</ul>
         			<span name='right_corner'></span>
         		</div>
-
-        		<!--
-        		<div title='equipments' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
-				    {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_EQUIPMENTS]->Draw()}
-			    </div>
-			    
-			    <div title='weapons' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
-			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_WEAPONS]->Draw()}
-			    </div>
-			     -->
 			    
 			    <div title='addons' class='viewable' style='display: none; margin: 0px; padding: 0px;'>
 			         {$this->_itemlist_table[\Framework\ItemShop::CATEGORY_ADDONS]->Draw()}
