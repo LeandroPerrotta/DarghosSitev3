@@ -837,7 +837,7 @@ class Account
 			
 		$fetch = $query->fetch();	
 		$this->setEmail($fetch->email);
-		$this->addPremiumTest();
+		//$this->addPremiumTest();
 		$this->save();
 		$this->clearEmailCodes();
 		
