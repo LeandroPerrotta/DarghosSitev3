@@ -222,7 +222,7 @@ class ItemShop
 		"); 
 	}
 	
-	function logItemPurchase($player_id)
+	function logItemPurchase($player_id, $received = 0)
 	{
 		\Core\Main::$DB->query("
 			INSERT INTO 
@@ -230,7 +230,7 @@ class ItemShop
 				(`shop_id`, `date`, `player_id`, `received`) 
 			VALUES 
 				(
-					'{$this->id}', '".time()."', '{$player_id}', '0'
+					'{$this->id}', '".time()."', '{$player_id}', '{$received}'
 				)");	
 
 		return \Core\Main::$DB->lastInsertId();

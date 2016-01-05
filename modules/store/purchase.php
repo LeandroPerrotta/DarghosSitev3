@@ -221,6 +221,8 @@ class View
 			return false;
 		}
 		
+		$received = 0;
+		
 		if($item->getType() == \Framework\ItemShop::TYPE_CALLBACK){
 		
 		    $params = $item->getParams();
@@ -236,6 +238,9 @@ class View
 		            $this->_message = $ret["msg"];
 		            return false;
 		        }
+		        
+		        if($item->getCategory() == \Framework\ItemShop::CATEGORY_SERVICES)
+		          $received = 1;
 		    }
 		    else
 		        echo "\Framework\ItemShop {$params[\Framework\ItemShop::PARAM_FUNCTION]}";
@@ -245,7 +250,7 @@ class View
 		$this->loggedAcc->save();
 		
 		//$item->doPlayerGiveThing($player->getId());
-		$item->logItemPurchase($player->getId());
+		$item->logItemPurchase($player->getId(), $received);
 		
 		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->ITEMSHOP_PURCHASE_SUCCESS, $item_prop[\Framework\ItemShop::PARAM_ITEM_COUNT], $item->getName(), number_format($item->getPrice() / 100, 2));
 		return true;		
