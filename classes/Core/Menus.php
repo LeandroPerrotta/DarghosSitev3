@@ -496,13 +496,10 @@ class Menus
     			"items" => array(
     				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
     				,array("name" => "Serverinfo", "url" => "?ref=general.about")
-    				,array("name" => "Battleground", "url" => "?ref=general.battleground", "icon" => "icon-exclamation")
     				//,array("name" => "Downloads", "url" => "?ref=general.downloads")
     				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
     				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
-    				,array("name" => "Suporte", "url" => "?ref=general.support")	
-			        ,array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
-			        ,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")    			        
+    				,array("name" => "Suporte", "url" => "?ref=general.support")			        
     			)
     		)
     		,array(
@@ -555,21 +552,22 @@ class Menus
     				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
     			)		
     		)
-    		/*,array(
+    		,array(
     			"title" => "Darghopédia",
     			"name" => "darghopedia",
     			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
     			"items" => array(
     				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
     				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
+			        ,array("name" => "Darghos Suporte (Fanpage)", "url" => "http://suporte-darghos.webnode.com/")
     				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
+			        ,array("name" => "Battleground", "url" => "?ref=general.battleground", "icon" => "icon-exclamation")
     				//,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
     				//,array("name" => "Agressivos e Pacificos", "url" => "?ref=darghopedia.change_pvp")
-    				//,array("name" => "Battlegrounds", "url" => "http://pt-br.darghos.wikia.com/wiki/Battlegrounds")
     				//,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
     				//,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
     			)		
-    		)		*/
+    		)
     		,array(
     			"title" => "Comunidade",
     			"name" => "community",
