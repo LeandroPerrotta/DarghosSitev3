@@ -559,7 +559,7 @@ class Menus
     			"items" => array(
     				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
     				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
-			        ,array("name" => "Darghos Suporte (Fanpage)", "url" => "http://suporte-darghos.webnode.com/")
+			        ,array("name" => "Darghos Suporte", "url" => "http://suporte-darghos.webnode.com/")
     				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
 			        ,array("name" => "Battleground", "url" => "?ref=general.battleground", "icon" => "icon-exclamation")
     				//,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
