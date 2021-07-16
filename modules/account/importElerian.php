@@ -1,6 +1,6 @@
 <?
 $db_elerian = new MySQL();
-$db_elerian->connect("localhost", "other", "***REMOVED***", "eleriannew");
+$db_elerian->connect("localhost", "other", "SECRETPASS", "eleriannew");
 
 $post = $core->extractPost();
 

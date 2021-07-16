@@ -23,7 +23,7 @@ define('CLICKS_ENDHOUR_1', 23);
 define('SMTP_HOST', "smtp-auth.no-ip.com");
 define('SMTP_PORT', 3325);
 define('SMTP_USER', "darghos.net@noip-smtp");
-define('SMTP_PASS', "***REMOVED***");
+define('SMTP_PASS', "SECRETPASS");
 
 /* CONFIGURAES PARA STATUS */
 define('STATUS_ADDRESS', 'darghos.com.br');
