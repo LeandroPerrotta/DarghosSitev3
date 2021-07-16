@@ -3,27 +3,27 @@ if($_POST)
 {
 	if(!$_POST["fastnews_post"])
 	{
-		$error = "Preencha todos campos do formulario corretamente.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 	}
 	else
 	{
-		$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."fastnews (`author`, `post`, `post_data`, `post_update`) VALUES ('{$_SESSION['login'][0]}', '{$_POST['fastnews_post']}', '".time()."', '".time()."')");
+		\Core\Main::$DB->query("INSERT INTO ".\Core\Tools::getSiteTable("fastnews")." (`author`, `post`, `post_data`, `post_update`) VALUES ('{$_SESSION['login'][0]}', '{$_POST['fastnews_post']}', '".time()."', '".time()."')");
 		
 		$success = "
-		<p>A notícia rapida foi postada com sucesso!</p>
+		<p>A notÃ­cia rapida foi postada com sucesso!</p>
 		";		
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox("Sucesso!", $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox("Erro!", $error);
 	}
 	
 	$module .=	'

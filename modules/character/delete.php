@@ -1,60 +1,70 @@
 <?php
-$post = $core->extractPost();
-
-$account = $core->loadClass("Account");
-$account->load($_SESSION['login'][0], "password");
+use \Core\Configs;
+$account = new \Framework\Account();
+$account->load($_SESSION['login'][0]);
 
 $list = $account->getCharacterList();
 
-if($post)
+if($_POST)
 {
-	$character = $core->loadClass("Character");
-	$character->loadByName($post[0]);
+	$player = new \Framework\Player();
+	$player->loadByName($_POST["player_name"]);
 	
-	if($account->get("password") != $strings->encrypt($post[1]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = "ConfirmaÁ„o da senha falhou.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}	
-	elseif($character->deletionStatus())
+	elseif(!(bool)$_POST["deletion_aware"])
 	{
-		$error = "Este personagem j· est· agendado para ser deletado em sua conta.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_MUST_AWARE_INSTANT_DELETION);
 	}
-	elseif(!in_array($post[0], $list))
+	elseif($player->deletionStatus())
+	{
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_ALREADY_TO_DELETE);
+	}
+	elseif(!in_array($_POST["player_name"], $list))
 	{	
-		$error = "Este personagem n„o pertence a sua conta.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
 	else
 	{
-		$character->addToDeletion();
-		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>Foi agendado com sucesso a exclus„o de seu personagem {$post[0]} para o dia {$core->formatDate($character->deletionStatus())}!</p>
-		<p>Tenha um bom jogo!</p>
-		";		
+		if($player->getLevel() <= Configs::Get(Configs::eConf()->INSTANT_DELETION_MAX_LEVEL))
+		{
+			$player->setDeleted(true);
+			$player->save();
+			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_DELETED, $_POST["player_name"]);
+		}
+		else 
+		{
+			$player->addToDeletion();
+			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_DELETION_SCHEDULED, $_POST["player_name"], \Core\Main::formatDate($player->deletionStatus()));
+		}			
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .=	'
 	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
 			
-			<p>Selecione abaixo qual personagem de sua conta vocÍ deseja agendar uma exclus„o. Este agendamento leva 30 dias e pode ser cancelado a qualquer momento dentro deste periodo. Note que apÛs passado o periodo de 30 dias È impossivel cancelar a exclus„o, recuperar o personagem ou qualquer um de seus pertences.</p>		
+			<p>
+				Selecione abaixo qual personagem de sua conta voc√™ deseja excluir. Para persoangens com level '.Configs::Get(Configs::eConf()->INSTANT_DELETION_MAX_LEVEL).' ou inferior esta opera√ß√£o √© instantanea, j√° para personagens maiores que este level √© feito um agendamento para 30 dias que pode ser cancelado a 
+				qualquer momento dentro deste periodo. Note que ap√≥s passado o periodo de 30 dias √© impossivel cancelar a exclus√£o, recuperar o personagem ou qualquer um de seus pertences.
+			</p>		
 		
 			<p>
 				<label for="account_email">Personagem</label><br />
-				<select name="character_name">
+				<select name="player_name">
 					';
 
 if(is_array($list))
@@ -68,13 +78,17 @@ if(is_array($list))
 			$module .=	'
 				</select>
 			</p>
-
+			
 			<p>
 				<label for="account_password">Senha</label><br />
 				<input name="account_password" size="40" type="password" value="" />
-			</p>				
+			</p>
 			
-			<div id="line1"></div>
+			<p>
+				<input name="deletion_aware" type="checkbox" value="true"/> Eu estou ciente que personagens level inferior a 50 s√£o inst√¢ntaneamente deletados.
+			<p/>
+			
+			<p id="line"></p>
 			
 			<p>
 				<input class="button" type="submit" value="Enviar" />

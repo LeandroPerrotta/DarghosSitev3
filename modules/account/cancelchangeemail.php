@@ -1,39 +1,34 @@
 <?
-$post = $core->extractPost();
-if($post)
+if($_POST)
 {
-	$account = $core->loadClass("Account");
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != $strings->encrypt($post[0]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}		
 	elseif(!is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = "Está conta não possui nenhuma mudança de email a ser cancelada.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_NOTHING);
 	}
 	else
 	{		
 		$account->cancelEmailToChange();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>As mudanças de e-mail agendadas para sua conta foram canceladas com exito! Nenhuma mudança de e-mail ocorrera em sua conta.</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_CANCELED);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .= '

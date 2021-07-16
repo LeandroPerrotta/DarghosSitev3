@@ -1,43 +1,38 @@
 <?
-$account = $core->loadClass("Account");
-$account->load($_SESSION['login'][0], "password, real_name, location, url");
+$account = new \Framework\Account();
+$account->load($_SESSION['login'][0]);
 
-$post = $core->extractPost();
-if($post)
+if($_POST)
 {
-	if($account->get("password") != $strings->encrypt($post[3]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}			
-	elseif(strlen($post[0]) > 25 or strlen($post[1]) > 25 or strlen($post[2]) > 50)
+	elseif(strlen($_POST["account_realname"]) > 25 or strlen($_POST["account_location"]) > 25 or strlen($_POST["account_url"]) > 50)
 	{
-		$error = "Os campos Nome Real e Localidade devem possuir no maximo 25 caracteres enquanto Website deve conter no maximo 50 caracteres.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEINFOS_WRONG_SIZE);
 	}
 	else
 	{		
-		$account->set("real_name", $post[0]);
-		$account->set("location", $post[1]);
-		$account->set("url", $post[2]);
+		$account->setRealName($_POST["account_realname"]);
+		$account->setLocation($_POST["account_location"]);
+		$account->setUrl($_POST["account_url"]);
 		
 		$account->save();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A mudança das informações de sua conta foram efetuadas com sucesso!</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEINFOS_SUCCESS);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .= '

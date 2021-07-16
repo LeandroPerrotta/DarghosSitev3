@@ -1,145 +1,114 @@
 <?php
-$post = $core->extractPost();
-
 if($_GET['key'])
 {
-	$account = $core->loadClass("Account");
+	$account = new \Framework\Account();
 	
 	if(!$account->checkChangePasswordKey($_GET['key']))
 	{
-		$error = $boxMessage['CHANGE_PASSWORD_KEY_NOT_FOUND'];
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_WRONG_KEY);
 	}
 	else
 	{
-		$password = $strings->randKey(8, 1, "lower+number");
-
-		//argumentos para e-mail
-		$_arg = array();
-		$_arg[] = $password;		
-		
-		if(!$core->mail(EMAIL_RECOVERY_PASSWORD, $account->getEmail(), $_arg))
+		$password = \Core\Strings::randKey(8, 1, "lower+number");		
+		if(!\Core\Emails::send($account->getEmail(), \Core\Emails::EMSG_RECOVERY_ACCOUNT_NEW_PASSWORD, array($password)))
 		{
-			$error = $boxMessage['FAIL_SEND_EMAIL'];
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_SEND_EMAIL);
 		}		
 		else	
 		{		
-			$account->setPassword($strings->encrypt($password));
+			$account->setPassword(\Core\Strings::encrypt($password));
 			$account->save();
 			
-			$success = $boxMessage['SUCCESS.RECOVERY_PASSWORD'];				
+			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_NEWPASS_SEND);				
 		}	
 	}
 	
 	if($success)	
 	{
-		$core->sendMessageBox($boxMessage['SUCCESS'], $success);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 	}
 	else
 	{
-		$core->sendMessageBox($boxMessage['ERROR'], $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}	
 }
 else
 {
-	if($post)
+	if($_POST)
 	{	
-		$account = $core->loadClass("Account");
-		$character = $core->loadClass("Character");
+		$account = new \Framework\Account();
+		$player = new \Framework\Player();
 		
-		$loadEmail = $account->loadByEmail($_POST['recovery_email']);
-		$characterList = $account->getCharacterList();
-		
-		if(!is_array($characterList))
-		{
-			$characterList[] = "";
-		}
+		$accCharacter = $account->loadByCharacterName($_POST['recovery_name']);
 		
 		if($_POST['recovery_information'] != 4 and (!$_POST['recovery_name'] or !$_POST['recovery_email']))
 		{
-			$error = $boxMessage['INCOMPLETE_FORM'];
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 		}	
-		elseif($_POST['recovery_information'] != 4 and !$loadEmail)
+		elseif($_POST['recovery_information'] != 4 and (!$accCharacter or $account->getEmail() != $_POST['recovery_email']))
 		{
-			$error = $boxMessage['NONE_ACCOUNT_FOR_THIS_EMAIL'];
-		}
-		elseif($_POST['recovery_information'] != 4 and !in_array($_POST['recovery_name'], $characterList))
-		{
-			//echo print_r($characterList);
-			$error = $boxMessage['CHARACTER_NOT_FROM_EMAIL'];
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_UNKNOWN_CHARACTER);
 		}
 		else
 		{		
-			/* RECUPERAÇÃO DO NUMERO DA CONTA */
+			/* RECUPERAÃ‡ÃƒO DO NUMERO DA CONTA */
 			if($_POST['recovery_information'] == 1)
-			{
-				//argumentos para e-mail
-				$_arg = array();
-				$_arg[] = $account->getName();
-				
-				if(!$core->mail(EMAIL_RECOVERY_ACCOUNT, $account->getEmail(), $_arg))
+			{				
+				if(!\Core\Emails::send($account->getEmail(), \Core\Emails::EMSG_RECOVERY_ACCOUNT_NAME, array($account->getName())))
 				{
-					$error = $boxMessage['FAIL_SEND_EMAIL'];
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_SEND_EMAIL);
 				}		
 				else	
 				{				
-					$success = $boxMessage['SUCCESS.ACCOUNT_NAME_SENDED'];		
+					$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_ACCOUNT_NAME_SEND);		
 				}
 			}
-			/* RECUPERAÇÃO DA SENHA DA CONTA */
+			/* RECUPERAÃ‡ÃƒO DA SENHA DA CONTA */
 			elseif($_POST['recovery_information'] == 2)
 			{
-				$key = $strings->randKey(8, 1, "number");
+				$key = \Core\Strings::randKey(8, 1, "number");		
 				
-				//argumentos para e-mail
-				$_arg = array();
-				$_arg[] = $key;			
-				
-				if(!$core->mail(EMAIL_RECOVERY_PASSWORDKEY, $account->getEmail(), $_arg))
+				if(!\Core\Emails::send($account->getEmail(), \Core\Emails::EMSG_RECOVERY_ACCOUNT_PASSWORD, array($key)))
 				{
-					$error = $boxMessage['FAIL_SEND_EMAIL'];
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_SEND_EMAIL);
 				}		
 				else	
 				{
 					$account->setPasswordKey($key);
 					
-					$success = $boxMessage['SUCCESS.PASSWORD_SENDED'];			
+					$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_PASSWORD_SEND);			
 				}			
 			}
-			/* RECUPERAÇÃO DO NUMERO E SENHA DA CONTA */
+			/* RECUPERAÃ‡ÃƒO DO NUMERO E SENHA DA CONTA */
 			elseif($_POST['recovery_information'] == 3)
 			{
-				$key = $strings->randKey(8, 1, "number");
+				$key = \Core\Strings::randKey(8, 1, "number");		
 				
-				//argumentos para e-mail
-				$_arg = array();
-				$_arg[] = $account->getName();
-				$_arg[] = $key;			
-				
-				if(!$core->mail(EMAIL_RECOVERY_BOTH, $account->getEmail(), $_arg))
+				if(!\Core\Emails::send($account->getEmail(), \Core\Emails::EMSG_RECOVERY_ACCOUNT_BOTH, array($account->getName(), $key)))
 				{
-					$error = $boxMessage['FAIL_SEND_EMAIL'];
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_SEND_EMAIL);
 				}		
 				else	
 				{
 					$account->setPasswordKey($key);
 					
-					$success = $boxMessage['SUCCESS.BOTH_SENDED'];		
+					$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_BOTH_SEND);		
 				}			
 			}	
 			elseif($_POST['recovery_information'] == 4)
 			{
 				if(!$_POST['recovery_name'])
 				{
-					$error = $boxMessage['CHARACTER_NAME_NEEDED'];
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_FILL_CHARACTER_NAME);
 				}					
-				elseif(!$character->loadByName($_POST['recovery_name']))
+				elseif(!$player->loadByName($_POST['recovery_name']))
 				{
-					$error = $boxMessage['CHARACTER_NOT_FOUND'];
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
 				}
 				else
 				{
-					$_SESSION['recovery'][] = $_POST['recovery_name'];
-					$core->redirect("index.php?ref=account.advanced_recovery");	
+					$_SESSION['recovery'] = $_POST['recovery_name'];
+					\Core\Main::redirect("index.php?ref=account.advanced_recovery");	
 				}		
 			}
 		}
@@ -147,15 +116,16 @@ else
 	
 	if($success)	
 	{
-		$core->sendMessageBox("Sucesso!", $success);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			$core->sendMessageBox("Erro!", $error);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 		}
 		
+	global $pages, $buttons;	
 	$module .= '	
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset>			

@@ -1,31 +1,19 @@
 <?
+use \Core\Configs as g_Configs;
 list($module, $topic) = explode(".", $_GET['ref']);
 
-/*$noInjection = false;
-
-if(!in_array($_GET['ref'], $_inputsWhiteList))
+if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 {
-	if($strings->filterInputs(true))
-	{
-		$noInjection = true;
-	}	
-}
-else
-{
-	$noInjection = true;
-}*/
-
-/*if($noInjection)
-{*/
-	$strings->filterInputs(true);
-
+	Core\Strings::filterInputs(true);
+	
 	$needLogin = false;
 	$needPremium = false;
+	$patch = array();
 
 	switch($module)
 	{
 		case "account":
-		
+					
 			$patch['dir'] = $module;
 		
 			switch($topic)
@@ -43,19 +31,10 @@ else
 					$patch['file'] = $topic;
 				break;		
 
-				case "changepassword":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;		
-
 				case "logout":
 					$needLogin = true;
 					$patch['file'] = $topic;
-				break;		
-
-				case "premium":
-					$patch['file'] = $topic;
-				break;		
+				break;			
 
 				case "changeemail":
 					$needLogin = true;
@@ -85,14 +64,6 @@ else
 					$patch['file'] = $topic;
 				break;
 
-				case "itemshop_log":
-					if(SHOW_SHOPFEATURES != 0)
-					{
-						$needLogin = true;	
-						$patch['file'] = $topic;					
-					}		
-				break;	
-
 				case "setname":
 					$needLogin = true;	
 					$patch['file'] = $topic;
@@ -112,6 +83,11 @@ else
 					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;				
+
+				case "validateEmail":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";
@@ -120,6 +96,28 @@ else
 			}
 			
 		break;
+		
+		case "darghopedia":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "monsterlist":
+					$patch['file'] = $topic;
+				break;						
+				
+				case "monster":
+					$patch['file'] = $topic;
+				break;	
+	
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;			
 		
 		case "character":
 		
@@ -149,16 +147,33 @@ else
 				case "undelete":
 					$needLogin = true;		
 					$patch['file'] = $topic;
-				break;		
-
-				case "itemshop":
-					if(SHOW_SHOPFEATURES != 0)
-					{
-						$needLogin = true;		
-						$patch['file'] = $topic;
-					}	
 				break;				
-	
+				
+				case "reborn":
+					$needPremium = true;
+					$needLogin = true;		
+					$patch['file'] = $topic;	
+				break;				
+				
+
+				case "stamina":
+						if(g_Configs::Get(g_Configs::eConf()->ENABLE_STAMINA_REFILER))
+						{						
+							$needPremium = true;
+							$needLogin = true;		
+							$patch['file'] = $topic;	
+						}
+				break;
+								
+				case "removeSkull":
+					if(g_Configs::Get(g_Configs::eConf()->ENABLE_REMOVE_SKULLS))
+					{
+						$needPremium = true;
+						$needLogin = true;
+						$patch['file'] = $topic;
+					}
+				break;
+									
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -203,7 +218,7 @@ else
 				break;					
 			}
 			
-		break;		
+		break;	
 		
 		case "news":
 		
@@ -244,6 +259,10 @@ else
 				case "guilds":
 					$patch['file'] = $topic;
 				break;				
+
+				case "polls":
+					$patch['file'] = $topic;
+				break;				
 								
 				default:
 					$patch['dir'] = "errors";
@@ -264,55 +283,58 @@ else
 				break;
 				
 				case "create":
-					$needPremium = true;
+					$needPremium = g_Configs::Get(g_Configs::eConf()->GUILD_LEADERS_MUST_BE_PREMIUM);
 					$patch['file'] = $topic;
 				break;		
 
 				case "edit":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;			
 
 				case "ranks":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;		
 
 				case "invite":
-					$needPremium = true;
 					$patch['file'] = $topic;
 				break;	
 
-				case "acceptInvite":
+				case "invitereply":
 					$patch['file'] = $topic;
 				break;		
 
 				case "members":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;				
 
 				case "passleadership":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;				
 				
 				case "disband":
-					$needPremium = true;
+					//$needPremium = true;
 					$patch['file'] = $topic;
 				break;	
 
 				case "leave":
 					$patch['file'] = $topic;
-				break;		
-				/*
-				case "joinwar":
+				break;	
+					
+				case "declarewar":
 					$patch['file'] = $topic;
 				break;		
 				
-				case "leavewar":
+				case "replywar":
 					$patch['file'] = $topic;
-				break;*/
+				break;
+				
+				case "wardetail":
+					$patch['file'] = $topic;
+				break;
 								
 				default:
 					$patch['dir'] = "errors";
@@ -329,6 +351,7 @@ else
 			switch($topic)
 			{
 				case "whoisonline":
+					$needMinGroup = g_Configs::Get(g_Configs::eConf()->ENABLE_PLAYERS_ONLINE) ? null : t_Group::GameMaster;
 					$patch['file'] = $topic;
 				break;
 
@@ -339,47 +362,26 @@ else
 			}
 			
 		break;			
-
-		case "tickets":
+		
+		case "forum":
 		
 			$patch['dir'] = $module;
 		
 			switch($topic)
 			{
-				case "send":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-
-				case "tickets":
-					$needLogin = true;
+				case "topic":
 					$patch['file'] = $topic;
 				break;
 				
-				case "view":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-				
-				case "close":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;		
-
-				case "open":
-					$needLogin = true;
-					$patch['file'] = $topic;
-				break;
-				
-				case "super_view":
+				case "register":
 					$needLogin = true;
 					$patch['file'] = $topic;
 				break;		
 				
-				case "super_list":
-					$needLogin = true;
+				case "newtopic":
 					$patch['file'] = $topic;
-				break;		
+					$needMinGroup = t_Group::CommunityManager;			
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";
@@ -387,7 +389,7 @@ else
 				break;
 			}
 			
-		break;
+		break;		
 		
 		case "general":
 		
@@ -395,15 +397,11 @@ else
 		
 			switch($topic)
 			{
-				case "howplay":
+				case "fansites":
 					$patch['file'] = $topic;
-				break;	
-				
-				case "about":
-					$patch['file'] = $topic;
-				break;	
-
-				case "emailmarketing":
+				break;			
+						
+				case "download":
 					$patch['file'] = $topic;
 				break;					
 				
@@ -424,18 +422,33 @@ else
 			{
 				case "fastnews":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
+					$needMinGroup = t_Group::CommunityManager;			
 				break;			
 
-				case "tutortest":
+				case "gold_check":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
+					$needMinGroup = t_Group::CommunityManager;			
+				break;	
+				
+				case "bg_matches":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::CommunityManager;			
 				break;	
 
 				case "addprize":
 					$patch['file'] = $topic;
-					$needMinGroup = 5;			
-				break;						
+					$needMinGroup = t_Group::Administrator;			
+				break;				
+						
+				case "emailcampaign":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;			
+				break;			
+
+				case "depot_merger":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;				
 				
 				default:
 					$patch['dir'] = "errors";
@@ -443,7 +456,27 @@ else
 				break;					
 			}
 			
-		break;		
+		break;	
+
+	
+		case "itemshop":
+		{
+			$patch['dir'] = $module;		
+			
+			if(g_Configs::Get(g_Configs::eConf()->ENABLE_ITEM_SHOP) && !g_Configs::Get(g_Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
+			{
+				if(file_exists("modules/{$module}/{$topic}.php"))
+				{
+					$patch['file'] = $topic;
+					break;
+				}
+			}
+			
+			$patch['dir'] = "errors";
+			$patch['file'] = "notfound";
+			break;
+		}
+		
 		
 		default:
 			$patch['dir'] = "errors";
@@ -456,24 +489,19 @@ else
 	if($_GET)
 	{	
 		$_isPremium = false;
-		$_groupId = 1;
+		$_groupId = t_Group::Player;
 		
-		if($_SESSION['login'])
-		{
-			include_once('classes/account.php');
-			$checkAccount = new Account;	
-			$checkAccount->load($_SESSION["login"][0], "premdays");
-			
+		$checkAccount = \Framework\Account::loadLogged();
+		
+		if($checkAccount)
+		{			
 			if($checkAccount->get("premdays") != 0)
 			{
 				$_isPremium = true;
 			}
 			
 			$_groupId = $checkAccount->getGroup();
-			$_maxCharLevel = $checkAccount->getCharMinLevel();
 		}
-		
-		$ClickPageRandom = rand(0, 100000);
 		
 		if(($needLogin and !$_SESSION['login']) or ($needPremium and !$_SESSION['login']))
 		{
@@ -487,31 +515,42 @@ else
 		{
 			include("modules/errors/notfound.php");
 		}	
-		elseif($_SESSION['login'] and /*$core->getHour() >= CLICKS_STARTHOUR_1 and $core->getHour() <= CLICKS_ENDHOUR_1 and*/  $_maxCharLevel >= 50 and $checkAccount->canClickAdPage() and ($core->getLastAdClick() + CLICKS_INTERVAL_1) < time() and $ClickPageRandom < 20000)
-		{
-			$_SESSION["to_page"] = $_GET['ref'];
-			
-			include("modules/ad.php");
-		}
-		elseif($_SESSION["to_page"])
-		{
-			include("modules/ad.php");
-		}
 		else
-		{
-			if($patch['dir'] != "errors")
+		{			
+			if($patch['dir'] == "errors")
+			{
+				if(!\Core\Main::onEnd())
+				{
+					if(!$checkAccount || ($checkAccount && $checkAccount->getAccess() < t_Access::Administrator))
+					{
+						include("modules/".$patch['dir']."/".$patch['file'].".php");
+					}
+				}
+			}
+			else
+			{
 				$patch['urlnavigation'] = "/ ".$patch['dir']." / <a href='?ref=".$patch['dir'].".".$patch['file']."'>".$patch['file']."</a>";
-				
-			include("modules/".$patch['dir']."/".$patch['file'].".php");			
+				include("modules/".$patch['dir']."/".$patch['file'].".php");
+				\Core\Main::$FoundController = true;				
+			}
 		}
 	}	
 	else	
 		include("modules/news/last.php");
-/*}	
+}
 else
 {
-	$module = null;
-	include("modules/errors/sqlinjection.php");	
-}*/
+		$patch['urlnavigation'] = "/manutenção";
+	
+		$module .= "
+		<div style='margin-top: 16px;' id='new-title-bar'>
+			<h3 id='new-title'>
+				".g_Configs::Get(g_Configs::eConf()->MENUTENTION_TITLE)."
+			</h3>
+			<div id='infos-line'>
+			</div>	
+		</div>
+		<div id='new-summary'>".g_Configs::Get(g_Configs::eConf()->MANUTENTION_BODY)."</div>";
+}
 
 ?>

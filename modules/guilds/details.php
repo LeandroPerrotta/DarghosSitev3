@@ -1,209 +1,606 @@
 <?php
-if($_GET['name'])
+use \Core\Configs;
+class View
 {
-	$guild = $core->loadClass("guilds");
+	//variables
+	private $_message;	
 	
-	if(!$guild->loadByName($_GET['name']))
-	{		
-		$core->sendMessageBox("Erro!", "Esta guilda n„o existe em nosso banco de dados.");
-	}
-	else
+	//custom variables
+	private $loggedAcc, $guild, $memberLevel;	
+	
+	function View()
 	{
-		$character_list = array();
+		if(!$_GET['name'])
+		{
+			return;
+		}
+		
+		if(!$this->Prepare())
+		{
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
+			return false;			
+		}
 		
 		if($_SESSION['login'])
 		{
-			$account = $core->loadClass("Account");
-			$account->load($_SESSION['login'][0], "password");
+			$this->loggedAcc = new \Framework\Account();
+			$this->loggedAcc->load($_SESSION['login'][0]);
 			
-			$character_list = $account->getCharacterList(true);
-			$character_listByName = $account->getCharacterList();
-			
-			$accountLevel = $account->getGuildLevel($guild->get("name"));
+			$this->memberLevel = \Framework\Guilds::GetAccountLevel($this->loggedAcc, $this->guild->GetId());
+		}		
+		
+		$this->Draw();
+		return true;		
+	}
+	
+	function Prepare()
+	{
+		$this->guild = new \Framework\Guilds();
+		
+		if(!$this->guild->LoadByName($_GET['name']))
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
+			return false;
 		}
 		
-		$guild->loadRanks();
-		$guild->loadMembersList();
-		$guild->loadInvitesList();
+		return true;
+	}
+	
+	function Draw()
+	{
+		global $module;
 		
-		$members = $guild->getMembersList();
-		$invites = $guild->getInvites();
-		$ranks = $guild->getRanks();
 		
-		if($guild->isOnWar())
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
 		{
-			$str = "<td>Esta guilda <b>esta em modo de guerra!</b> <p>Desde <i>".$core->formatDate($guild->getWarStart())."</i> atÈ <i>".$core->formatDate($guild->getWarEnd())."</i></td>";
+			if($this->guild->OnWar())
+				$warStatus = "<span style='color: red;'>Esta guilda est√° em guerra com outra(s) guilda(s).</span>";
+			else
+				$warStatus = "Esta guilda n√£o est√° em guerra.";
 		}
-		else 
+		
+		//guild info header
+		$guildTable = new \Framework\HTML\Table();
+		$guildTable->AddField("Logotipo", null, null, 3);
+		$guildTable->AddRow();
+		
+		$guildDesc = "
+			<p><h3>{$this->guild->GetName()}</h3></p>
+			<p>{$this->guild->GetMotd()}</p>";
+		
+		$guildTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$this->guild->GetImage()}' height='100' width='100' />");
+		$guildTable->AddField($guildDesc, 90);
+		$guildTable->AddField("<img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$this->guild->GetImage()}' height='100' width='100' />");
+		$guildTable->AddRow();
+		
+		$guildInfoTable = new \Framework\HTML\Table();
+		$guildInfoTable->AddField("Informa√ß√µes da Guilda");
+		$guildInfoTable->AddRow();
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_IN_FORMATION))
 		{
-			$str = "<td>Esta guilda <b>n„o esta em modo de guerra</b>.";			
+			$guildFormStatus = ($this->guild->GetStatus() == \Framework\Guilds::STATUS_FORMED) ? "Esta guilda esta em <b>atividade</b>." : "Esta guilda esta em processo de forma√ß√£o e ser√° disbandada se n√£o possuir <b>".Configs::Get(Configs::eConf()->GUILDS_VICES_TO_FORMATION)." vice-lideres</b> at√© <b>".\Core\Main::formatDate($this->guild->GetFormationTime())."</b>.";
+			$guildInfoTable->AddField($guildFormStatus);
+			$guildInfoTable->AddRow();
 		}
 		
-		$module .=	"
-		<table cellspacing='0' cellpadding='0' id='table'>
-			<tr>
-				<th colspan='3' style='text-align: center;'>Logotipo</th>
-			</tr>		
-			<tr>
-				<td><img src='".GUILD_IMAGE_DIR."{$guild->get("image")}' height='100' width='100' /></td> <td width='90%'><div style='text-align: center; font: normal 30px Verdana, sans-serif;'>{$guild->get("name")}</div>{$guild->get("motd")}</td> <td><img src='".GUILD_IMAGE_DIR."{$guild->get("image")}'/></td>
-			</tr>
-		</table>
+		if(Configs::Get(Configs::eConf()->ENABLE_MULTIWORLD))
+		{
+			$guildInfoTable->AddField("Esta guilda pertence ao mundo de <b>".\t_Worlds::GetString($this->guild->GetWorldId())."</b>.");
+			$guildInfoTable->AddRow();
+		}
 		
-		<table cellspacing='0' cellpadding='0' id='table'>
-			<tr>
-				<th>InformaÁıes da Guilda</th>
-			</tr>
-			<tr>
-				<td>".(($guild->get("status") == 1) ? "Esta guilda est· em <b>atividade</b>." : "Esta guilda est· em processo de formaÁ„o e ser· disbandada se n„o possuir <b>".GUILDS_VICELEADERS_NEEDED." vice-lideres</b> atÈ <b>".$core->formatDate($guild->get("formationTime"))."</b>.")."</td>
-			</tr>
+		$guildInfoTable->AddField("Esta guilda foi criada em <b>".\Core\Main::formatDate($this->guild->GetCreationDate())."</b>.");
+		$guildInfoTable->AddRow();
+		
+		$owner = new \Framework\Player();
+		$owner->load($this->guild->GetOwnerId());
+		
+		$guildInfoTable->AddField("O personagem <b>{$owner->getName()}</b> √© o atual dono desta guild.");
+		$guildInfoTable->AddRow();		
+		
+		if($this->loggedAcc and $this->memberLevel > \Framework\Guilds::RANK_NO_MEMBER)
+		{	
+			$guildInfoTable->AddField("Saldo do banco: <b>{$this->guild->GetBalance()} moedas de ouro.</b>");
+			$guildInfoTable->AddRow();			
+		}	
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_POINTS))
+		{
+			$guildInfoTable->AddField("Pontos da guilda (for√ßa / total): <b>{$this->guild->GetBetterPoints()}/{$this->guild->GetPoints()}</b>");
+			$guildInfoTable->AddRow();	
+		}
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
+		{
+			$guildInfoTable->AddField("Estado de Guerra: <b>{$warStatus}</b>");
+			$guildInfoTable->AddRow();	
+		}				
+		
+		//loading guild members and preparing table to draw
+		$membersTable = new \Framework\HTML\Table();
+		$membersTable->AddField("Rank", 25);
+		$membersTable->AddField("Nome e apelido");
+		$membersTable->AddField("Membro desde");
+		$membersTable->AddRow();
+		
+		$lastRankName = "";
+		$first = true;
+		
+		$totalLevel = 0;
+		$membersCount = 0;
+		
+		foreach($this->guild->Ranks as $rank)
+		{			
+			if($first || $lastRankName != $rank->GetName())	
+				$showRank = true;		
+				
+			$guildMembersCount += $rank->MemberCount();
 			
-			<tr>
-				<td>Esta guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
-			</tr>
-										
-		</table>";				
-
-		if($_SESSION['login'] and $accountLevel == 1)
-		{
-			/*if($guild->isOnWar())
+			foreach($rank->Members as $member)
 			{
-				$button = "<a class='buttonstd' href='?ref=guilds.leavewar&name={$guild->get("name")}'>Desativar modo de Guerra</a>";
+				$member->LoadGuild();
+				
+				$online = ($member->getOnline() == 1) ? "[<span class='online'>Online</span>]" : "";
+				$rankToWrite = ($showRank) ? "<b>{$rank->GetName()}</b>" : "";
+				$memberNick = ($member->getGuildNick()) ? "(<i>{$member->getGuildNick()}</i>)" : "";
+				
+				$showRank = false;
+				
+				$nick = "<a href='?ref=character.view&name={$member->getName()}'>{$member->getName()}</a> {$memberNick} {$online}";
+				
+				$totalLevel += $member->getLevel();
+				$membersCount++;
+				
+				$membersTable->AddField($rankToWrite);
+				$membersTable->AddField($nick);
+				$membersTable->AddField(\Core\Main::formatDate($member->getGuildJoinIn()));
+				$membersTable->AddRow();		
 			}
-			else 
-			{
-				$button = "<a class='buttonstd' href='?ref=guilds.joinwar&name={$guild->get("name")}'>Ativar modo de Guerra</a>";				
-			} */
 			
-			$module .= "
-				<p>
-					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar DescriÁıes</a>
-				    <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
-				    {$button}
-				</p>				
-			";
-			
+			$lastRankName = $rank->GetName();
+			$first = false;
 		}			
 		
-		$module .= "					
-				
-		<p><h3>Lista de Membros</h3></p>
+		$guildInfoTable->AddField("Esta guilda possui <b>{$membersCount} membros</b> no total.");
+		$guildInfoTable->AddRow();		
 		
-		<table cellspacing='0' cellpadding='0' id='table'>
-			<tr>
-				<th>PosiÁ„o</th> <th>Nome e Titulo</th> <th>Membro Desde</th>
-			</tr>		
-		";			
-				
-		foreach($ranks as $value)
-		{		
-			$show_rank[$value['name']] = true;
-		}
-				
-		foreach($members as $player_name => $guild_value)
+		$guildInfoTable->AddField("O n√≠vel m√©dio dos personagens desta guilda √© <b>". ceil($totalLevel / $membersCount) ."</b>.");
+		$guildInfoTable->AddRow();		
+		
+		$guildPage = "
+		<div title='guild_page' class='viewable' style='margin: 0px; padding: 0px;'>
+		
+		{$guildTable->Draw()}
+		
+		{$guildInfoTable->Draw()}";
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel == \Framework\Guilds::RANK_LEADER)
 		{
-			
-			$module .= "
-				<tr>
-					<td width='25%'><b>".(($show_rank[$guild_value['rank']]) ? $guild_value['rank'] : "&nbsp")."</b></td> 
-					<td><a href='?ref=character.view&name=".$player_name."'>".$player_name."</a> ".(($guild_value['nick']) ? "(<i>{$guild_value['nick']}</i>)" : null)."</i></td> 
-					<td>{$core->formatDate($guild_value['joinDate'])}</td>
-				</tr>	
-			";	
-
-			$show_rank[$guild_value['rank']] = false;	
-		}
+		$guildPage .= "
+		<p>
+			<a class='buttonstd' href='?ref=guilds.edit&name={$this->guild->GetName()}'>Editar Descri√ß√µes</a>
+			<a class='buttonstd' href='?ref=guilds.disband&name={$this->guild->GetName()}'>Desmanchar Guild</a>
+			</p>
+			";
+			}	
 		
-		$module .= "
-		</table>";
+		$guildPage .= "					
+				
+		<div style='margin-top: 32px;'><h3>Lista de Membros</h3></div>
 		
-		if($_SESSION['login'] and $accountLevel)
+		{$membersTable->Draw()}	
+		";
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc && $this->memberLevel > \Framework\Guilds::RANK_NO_MEMBER)
 		{
-			$module .= "<p>";
+			$guildPage .= "<p>";
 			
-			if($_SESSION['login'] and $accountLevel <= 2)
-			$module .= "
-					<a class='buttonstd' href='?ref=guilds.members&name={$guild->get("name")}'>Editar Membros</a>				
+			if($this->memberLevel >= \Framework\Guilds::RANK_VICE)
+			$guildPage .= "
+					<a class='buttonstd' href='?ref=guilds.members&name={$this->guild->GetName()}'>Editar Membros</a>				
 			";
 				
-			if($_SESSION['login'] and $accountLevel == 1)
+			if($this->memberLevel == \Framework\Guilds::RANK_LEADER)
 			{	
-				$module .= "
-					<a class='buttonstd' href='?ref=guilds.ranks&name={$guild->get("name")}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$guild->get("name")}'>Passar LideranÁa</a>				
+				$guildPage .= "
+					<a class='buttonstd' href='?ref=guilds.ranks&name={$this->guild->GetName()}'>Editar Ranks</a> <a class='buttonstd' href='?ref=guilds.passleadership&name={$this->guild->GetName()}'>Passar Lideran√ßa</a>				
 				";	
 			}
 			
-			if($_SESSION['login'] and $accountLevel > 1)
+			if($this->memberLevel >= \Framework\Guilds::RANK_MEMBER_OPT_3)
 			{	
-				$module .= "
-					<a class='buttonstd' href='?ref=guilds.leave&name={$guild->get("name")}'>Sair da Guild</a>				
+				$guildPage .= "
+					<a class='buttonstd' href='?ref=guilds.leave&name={$this->guild->GetName()}'>Sair da Guild</a>				
 				";	
 			}			
 			
-			$module .= "</p>";
+			$guildPage .= "</p>";
 		}		
 		
-		$module .= "	
-		<p><h3>Personagens Convidados</h3></p>
+
+		$guildPage .= "	
+		<div style='margin-top: 32px;'><h3>Personagens Convidados</h3></div>
 		
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
 				<th>Nome</th> <th>Data que foi Convidado</th>
 			</tr>			
-		";
+		";	
 		
-		if(count($invites) != 0)
-		{
-			$wasInvite = 0;
-			
-			foreach($invites as $player_name => $invite_date)
+		if($this->guild->InvitesCount() != 0)
+		{						
+			foreach($this->guild->Invites as $invite)
 			{
+				list($player, $date) = $invite;
 				
-				$module .= "
+				$cancelInvite = ($this->memberLevel == \Framework\Guilds::RANK_LEADER) ? " [<a href='?ref=guilds.invite&name={$player->getName()}&c=t'>Cancelar convite</a>]" : "";
+				
+				$guildPage .= "
 					<tr>
-						<td><a href='?ref=character.view&name=".$player_name."'>".$player_name."</a></td> <td>{$core->formatDate($invite_date)}</td>
+						<td><a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a> {$cancelInvite}</td> <td>".\Core\Main::formatDate($date)."</td>
 					</tr>	
 				";	
-
-				if($_SESSION['login'] and in_array($player_name, $character_listByName))
-				{
-					$wasInvite++;
-				}
 			}	
 		}
 		else
 		{
-			$module .= "
+			$guildPage .= "
 				<tr>
-					<td>Nenhum personagem est· convidado para esta guilda.</td> <td>&nbsp;</td>
+					<td colspan='2'>Nenhum jogador foi convidado por esta guilda.</td>
 				</tr>	
 			";				
 		}
 		
-		$module .= "
+		$guildPage .= "
 		</table>
-		";
+		";			
 		
-		if($_SESSION['login'] and $accountLevel and $accountLevel <= 2)
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT) && $this->loggedAcc and $this->memberLevel >= \Framework\Guilds::RANK_VICE)
 		{
-			$module .= "
+			$guildPage .= "
 				<p>
-					<a class='buttonstd' href='?ref=guilds.invite&name={$guild->get("name")}'>Convidar Jogador</a>
+					<a class='buttonstd' href='?ref=guilds.invite&name={$this->guild->GetName()}'>Convidar Jogador</a>
 				</p>				
 			";
 		}
-		
-		if($wasInvite != 0)
-		{
-			$module .= "
-				<p>
-					<a class='buttonstd' href='?ref=guilds.acceptInvite&name={$guild->get("name")}'>Aceitar Convite</a>
-				</p>				
-			";			
-		}
 
-		$module .= "
-		<br>
+		
+		/*
+		 * GUILD PAGE
+		 */
+		
+		
+		$guildPage .= "
+		<br>		
+		
+		</div>
+		";
+		
+		/*
+		 * WARS
+		 */
+		$warPage = "";
+		
+		if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
+		{
+			$warPage = "
+			<div title='guild_wars' style='margin: 0px; padding: 0px;'>";
+			
+			$this->guild->LoadWars();
+			
+			$warPage .= "
+			<p><h3>Guerras em andamento</h3></p>
+			
+			<table cellspacing='0' cellpadding='0' id='table'>
+				<tr>
+					<th>Oponente</th> <th>Iniciada em</th> <th>Termina em</th> <th>Ou ap√≥s</th> <th></th>
+				</tr>						
+			";		
+			
+			$warsList = $this->guild->SearchWarsByStatus(\Framework\Guilds::WAR_STARTED);
+			$warsWaitingList = $this->guild->SearchWarsByStatus(GUILD_WAR_WAITING);
+			
+			if(count($warsList) != 0)
+			{			
+				foreach($warsList as $guild_war)
+				{
+					$opponent = new \Framework\Guilds();
+					
+					if($guild_war->GetGuildId() == $this->guild->GetId())
+						$opponent->Load($guild_war->GetOpponentId());
+					elseif($guild_war->GetOpponentId() == $this->guild->GetId())
+						$opponent->Load($guild_war->GetGuildId());
+					
+					$endWar = round(($guild_war->GetEndDate() - time()) / (60 * 60 * 24));	
+						
+					$warPage .= "
+					<tr>
+						<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+					</tr>";
+				}
+			}			
+			else
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='5'>Esta guilda n√£o est√° em guerra com nenhuma outra guilda.</td>
+				</tr>";			
+			}
+			
+			if(count($warsWaitingList) != 0)
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='5'><span style='font-weight: bold;'>Guerras que est√£o para se iniciar no proximo server save.</span></td>
+				</tr>";			
+	
+				foreach($warsWaitingList as $guild_war)
+				{
+					$opponent = new \Framework\Guilds();
+					
+					if($guild_war->GetGuildId() == $this->guild->GetId())
+						$opponent->Load($guild_war->GetOpponentId());
+					elseif($guild_war->GetOpponentId() == $this->guild->GetId())
+						$opponent->Load($guild_war->GetGuildId());
+					
+					$endWar = round(($guild_war->GetEndDate() - time()) / (60 * 60 * 24));		
+						
+					$warPage .= "
+					<tr>
+						<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$endWar} dias</td> <td>{$guild_war->GetFragLimit()} mortes</td> <td><a href='?ref=guilds.wardetail&value={$guild_war->GetId()}'>ver</a></td>
+					</tr>";				
+				}
+			}
+			
+			$warPage .= "
+			</table>
+			";		
+			
+			
+			if($this->loggedAcc and $this->memberLevel == \Framework\Guilds::RANK_LEADER)
+			{			
+				$warPage .= "
+				<p>
+				    <a class='buttonstd' href='?ref=guilds.declarewar&name={$this->guild->GetName()}'>Declarar Guerra</a>				
+				</p>		
+				";				
+			}		
+			
+			$declarationsList = $this->guild->SearchWarsByStatus(\Framework\Guilds::WAR_DISABLED);
+			
+			$warPage .= "
+			<p><h3>Guerras declaradas</h3></p>
+			
+			<table cellspacing='0' cellpadding='0' id='table'>
+				<tr>
+					<th>Oponente</th> <th>Declarada em</th> <th>Status</th>
+				</tr>						
+			";	
+			
+			if(count($declarationsList) != 0)
+			{	
+				$byGuild = null;
+				$againstGuild = null;
+				
+				foreach($declarationsList as $guild_war)
+				{			
+					if($guild_war->GetReply() != -1)
+					{					
+						$opponent = new \Framework\Guilds();				
+						
+						if($guild_war->GetGuildId() == $this->guild->GetId())
+						{
+							if($guild_war->GetReply() == 0)
+								$status = "Aguardando resposta...";
+							if($guild_war->GetReply() == 1)	
+								$status = "<a href='?ref=guilds.replywar&value={$guild_war->GetId()}'>Responder proposta de guerra.</a>";							
+							
+							$opponent->Load($guild_war->GetOpponentId());
+							
+							$byGuild .= "
+							<tr>
+								<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
+							</tr>";	
+						}
+						elseif($guild_war->GetOpponentId() == $this->guild->GetId())
+						{
+							if($guild_war->GetReply() == 1)
+								$status = "Aguardando resposta...";
+							if($guild_war->GetReply() == 0)	
+								$status = "<a href='?ref=guilds.replywar&value={$guild_war->GetId()}'>Responder proposta de guerra.</a>";							
+							
+							$opponent->Load($guild_war->GetGuildId());
+							
+							$againstGuild .= "
+							<tr>
+								<td>{$opponent->GetName()}</td> <td>".\Core\Main::formatDate($guild_war->GetDeclarationDate())."</td> <td>{$status}</td>
+							</tr>";							
+						}
+					}
+				}		
+			}
+	
+			$warPage .= "
+			<tr>
+				<td colspan='3'><span style='font-weight: bold;'>Guerras declaradas por esta guilda:</span></td>
+			</tr>";			
+			
+			if($byGuild)
+			{
+				$warPage .= $byGuild;
+			}
+			else
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='3'>Esta guilda n√£o declarou nenhuma guerra contra outra guilda.</td>
+				</tr>";					
+			}
+			
+			$warPage .= "
+			<tr>
+				<td colspan='3'><span style='font-weight: bold;'>Guerras declaradas contra esta guilda:</span></td>
+			</tr>";				
+			
+			if($againstGuild)
+			{
+				$warPage .= $againstGuild;
+			}
+			else
+			{
+				$warPage .= "
+				<tr>
+					<td colspan='3'>Nenhuma guerra foi declarada contra esta guilda.</td>
+				</tr>";					
+			}		
+			
+			$warPage .= "
+			</table>
+			";			
+			
+			$warPage .= "
+			</div>
+			";
+		}
+		
+		/*
+		 * FIGHTS
+		*/
+		
+		//guild info header
+		$fightTodayTable = new \Framework\HTML\Table();
+		$fightTodayTable->AddField("Ultimas 24h", null, null, 3);
+		$fightTodayTable->AddRow();
+		
+		$fightWeekTable = new \Framework\HTML\Table();
+		$fightWeekTable->AddField("Ultimos 7 dias", null, null, 3);
+		$fightWeekTable->AddRow();		
+		
+		$fightMontlyTable = new \Framework\HTML\Table();
+		$fightMontlyTable->AddField("Ultimos 30 dias", null, null, 3);
+		$fightMontlyTable->AddRow();	
+			
+		$fightTable = new \Framework\HTML\Table();
+		$fightTable->AddField("Geral", null, null, 3);
+		$fightTable->AddRow();		
+		
+		$fightData = array(
+				
+				array("timestamp" => time() - (60 * 60 * 24), "table" => &$fightTodayTable)
+				,array("timestamp" => time() - (60 * 60 * 24 * 7), "table" => &$fightWeekTable)
+				,array("timestamp" => time() - (60 * 60 * 24 * 30), "table" => &$fightMontlyTable)
+				,array("timestamp" => 0, "table" => &$fightTable)
+		);
+		
+				
+		$guilds = \Framework\Guilds::ActivedGuildsList($this->guild->GetWorldId());
+		
+		foreach($guilds as $g)
+		{
+			$g instanceof \Framework\Guilds;
+			
+			if($g->GetId() == $this->guild->GetId())
+				continue;
+			
+			foreach($fightData as $f)
+			{
+				$frags = $this->guild->KillsCountAgainst($g->GetId(), $f["timestamp"]);
+				$enemyFrags = $g->KillsCountAgainst($this->guild->GetId(), $f["timestamp"]);
+				
+				if($frags == 0 && $enemyFrags == 0)
+				{
+					continue;
+				}
+				
+				$winning = $frags > $enemyFrags ? $this->guild : $g;			
+				$loosing = $winning == $this->guild ? $g : $this->guild;
+				
+				$winningPoints = $frags;
+				$loosingPoints = $enemyFrags;
+				
+				if($enemyFrags > $frags){
+					$winningPoints = $enemyFrags;
+					$loosingPoints = $frags;
+				}
+				
+				$guild_result = "
+				<div>
+				<div style='display: inline-block; width: 157px; text-align: right;'>
+				<a style='line-height: 22px;' href='?ref=guilds.details&name={$winning->GetName()}'>{$winning->GetName()}</a>
+				</div>
+				
+				<div style='display: inline-block;'>
+				<span style='font-weight: bold; font-size: 18px; margin-left: 5px; margin-right: 5px;'>vs</span>
+				</div>
+				
+				<div style='display: inline-block;  width: 157px;'>
+				<a style='line-height: 22px;' href='?ref=guilds.details&name={$loosing->GetName()}'>{$loosing->GetName()}</a>
+				</div>
+				</div>
+				<div style='text-align: center;'>
+				<div style='float: left; width: 165px; text-align: right;'>
+				<h3 style='font-size: 40px;'>{$winningPoints}</h3>
+				</div>
+				
+				<div style='display: inline-block;'>
+				<span style='display: table-cell; font-weight: bold; height: 50px; width: 15px; font-size: 14px; vertical-align: middle; text-align: center;'>X</span>
+				</div>
+				
+				<div style='float: right; width: 165px;  text-align: left;'>
+				<h3 style='font-size: 40px;'>{$loosingPoints}</h3>
+				</div>
+				</div>
+				";		
+	
+				$f["table"]->AddField("<a href='?ref=guilds.details&name={$winning->GetName()}'><img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$winning->GetImage()}' height='100' width='100' /></a>");
+				$f["table"]->AddField($guild_result, 90);
+				$f["table"]->AddField("<a href='?ref=guilds.details&name={$loosing->GetName()}'><img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$loosing->GetImage()}' height='100' width='100' /></a>");
+				$f["table"]->AddRow();	
+			}		
+		}	
+		
+		$fightPage = "
+		<div title='guild_fights' style='margin: 0px; padding: 0px;'>";
+			
+		$fightPage .= "
+		<p>Confrontos ocorrem quando um personagem de uma guilda √© morto por um ou mais jogadores de outra guilda. Os confrontos s√£o rastreados automaticamente, sem necessitar por exemplo que as guilds em quest√£o estejam em guerra.</p>
+		<p><h3>Confrontos</h3></p>
+			
+		{$fightTodayTable->Draw()}
+		{$fightWeekTable->Draw()}
+		{$fightMontlyTable->Draw()}
+		{$fightTable->Draw()}
+		
+		</div>
 		";		
+		
+		$module .= "
+		<fieldset>
+			<div id='horizontalSelector'>
+				<span name='left_corner'></span>
+				<ul>
+					<li name='guild_page' checked='checked'><span>Profile</span></li>
+					<li name='guild_fights'><span>Confrontos</span></li>";
+				
+					if(Configs::Get(Configs::eConf()->ENABLE_GUILD_WARS))
+					{
+						$module .= "
+						<li name='guild_wars'><span>Guerras</span></li>";
+					}				
+				
+					$module .= "
+				</ul>
+				<span name='right_corner'></span>
+			</div>			
+			
+			{$guildPage}
+			{$warPage}
+			{$fightPage}
+		</fieldset>	
+		";
 	}
 }
+
+$view = new View();
 ?>

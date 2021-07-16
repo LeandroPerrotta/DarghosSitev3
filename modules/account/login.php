@@ -1,40 +1,59 @@
 <?
-//echo ;
-$post = $core->extractPost();
-if($post)
+if($_POST)
 {
-	$account = $core->loadClass("Account");
+	$account = new \Framework\Account();
 	
-	if(($account->loadByName($post[0], "password")) and ($account->getPassword() == $strings->encrypt($post[1])))
+	if(($account->loadByName($_POST["login_name"])) and ($account->getPassword() == \Core\Strings::encrypt($_POST["login_password"])))
 	{
 		$_SESSION['login'][] = $account->getId();
-		$_SESSION['login'][] = $strings->encrypt($post[1]);
+		$_SESSION['login'][] = \Core\Strings::encrypt($_POST["login_password"]);
 		
-		$core->redirect("index.php?ref=account.main");	
+		if(!$_SESSION["login_redirect"])
+			\Core\Main::redirect("index.php?ref=account.main");	
+		else
+		{
+			$url = trim($_SESSION["login_redirect"], "/");
+			unset($_SESSION["login_redirect"]);
+			\Core\Main::redirect($url);
+		}
 	}
 	else
 	{
-		$error = $boxMessage['INCORRECT_ACCOUNT_NAME_OR_PASSWORD'];
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_LOGIN);
 	}
 }
 
 if($error)	
 {
-	$core->sendMessageBox($boxMessage['ERROR'], $error);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 }
 
+$require_login_str = "";
+
+if($_SESSION["login_redirect"] != "")
+{
+	$require_login_str = "
+	<p>
+		A pagina que você está tentando acessar requer que você esteja logado em sua conta.
+	</p>
+	";
+}
+
+global $pages, $buttons;
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
+		'.$require_login_str.'
+	
 		<p>
 			<label for="account_name">'.$pages["ACCOUNT.LOGIN.ACCOUNT_NAME"].'</label><br />
-			<input name="account_name" size="40" type="password" value="" />
+			<input name="login_name" size="40" type="password" value="" />
 		</p>
 		
 		<p>
 			<label for="account_password">'.$pages["ACCOUNT.LOGIN.PASSWORD"].'</label><br />
-			<input name="account_password" size="40" type="password" value="" />
+			<input name="login_password" size="40" type="password" value="" />
 		</p>		
 		
 		<div id="line1"></div>

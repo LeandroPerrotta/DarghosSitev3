@@ -1,91 +1,108 @@
 <?
-$contribute = $core->loadClass("Contribute");
-$post = $core->extractPost();
+use \Core\Configs;
+$contribute = new \Framework\Contribute();
 
-if($strings->SQLInjection($_GET['id']) and $contribute->load($_GET['id'], "id, target, period, target_account, status") and $contribute->get("target_account") == $_SESSION['login'][0] and $contribute->get("status") == 1)
+if(\Core\Strings::SQLInjection($_GET['id']) and $contribute->load($_GET['id']) and $contribute->target_account == $_SESSION['login'][0] and $contribute->status == 1)
 {
-	if($post)
+	if($_POST)
 	{
-		$chkAccount = $core->loadClass("Account");
+		$chkAccount = new \Framework\Account();
 		$chkAccount->load($_SESSION['login'][0]);		
 		
-		if($strings->encrypt($post[0]) != $_SESSION['login'][1])
+		$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->period, $contribute->generated_in);
+		
+		$error = NULL;
+		$callbackFunc = "\Framework\Contribute::{$premium["onAccept"]}";
+		
+		if(\Core\Strings::encrypt($_POST["account_password"]) != $_SESSION['login'][1])
 		{
-			$error = "A confirmação da senha está invalida.";
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 		}
-		elseif($post[1] != "1")
+		elseif($_POST["accept_terms"] != "1")
 		{
-			$error = "Para aceitar uma contribuição é necessario estar de acordo com todas clausulas e termos de nosso contrato de serviço.";
+			$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_TERMS);
+		}
+		elseif($premium["onAccept"] && !call_user_func_array($callbackFunc, array($contribute, &$error)))
+		{
+			//
 		}
 		else
 		{
-			$account = $core->loadClass("Account");
-			$account->load($contribute->get("target_account"));
+			$account = new \Framework\Account();
+			$account->load($contribute->target_account);
 			
-			$account->updatePremDays($contribute->get("period"));
+			$premdays = $contribute->period;			   
+			$account->updatePremDays($premdays);
 			
 			$account->save();
 			
-			$contribute->set("status", 2);
-			$contribute->set("lastupdate_in", time());
+			$contribute->status = 2;
+			$contribute->lastupdate_in = time();
 			$contribute->save();
 		
-			$success = "
-			<p>Caro jogador,</p>
-			<p>A sua contribuição foi ativada com sucesso!</p>
-			<p>Agora sua conta já possui status de Contra Premium, o que lhe permitirá muitas novas possibilidades dentro do ".CONFIG_SITENAME."!</p>
-			<p>Agradeçemos a preferencia e obrigado por contribuir conosco!</p>
-			<p>Tenha um bom jogo!<br>Equipe UltraxSoft.</p>
-			";
+			$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CONTR_ACTIVATED, Configs::Get(Configs::eConf()->WEBSITE_NAME));
 		}
 	}
 
 	if($success)	
 	{
-		$core->sendMessageBox("Sucesso!", $success);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 	}
 	else
 	{
 		if($error)	
 		{
-			$core->sendMessageBox("Erro!", $error);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 		}
 
-	$contrato['premium'] = "Este é um documento informativo das clausulas e regras referente ao funcionamento, deveres e limitações entre outros referente aos jogadores contribuintes com o ".CONFIG_SITENAME.". Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribuições.\" e assim dar continuidade ao sistema de contribuição.
+	$contrato['premium'] = "Este Ã© um documento informativo das clausulas e regras referente ao funcionamento, deveres e limitaÃ§Ãµes entre outros referente aos jogadores contribuintes com o ".Configs::Get(Configs::eConf()->WEBSITE_NAME).". Leia abaixo todas clausulas e regras atentamente e, somente no caso de aceitar e seguir respeitando todos os termos, assinalar a caixa \"Eu li, e aceito as clausulas e regras de contribuiÃ§Ãµes.\" e assim dar continuidade ao sistema de contribuiÃ§Ã£o.
 
 1. A estabilidade e mantimento do servidor no ar.
-• A UltraxSoft e(ou) ".CONFIG_SITENAME." não tem a obrigação de manter o servidor sempre ligado, podendo o mesmo ser desligado a qualquer momento e por qualquer motivo, sem prévio aviso, devolução de quantias em dinheiro ou danos morais.
+- A UltraxSoft e(ou) ".Configs::Get(Configs::eConf()->WEBSITE_NAME)." nÃ£o tem a obrigaÃ§Ã£o de manter o servidor sempre ligado, podendo o mesmo ser desligado a qualquer momento e por qualquer motivo, sem prÃ©vio aviso, devoluÃ§Ã£o de quantias em dinheiro ou danos morais.
 
 2. Conectividade.
-• A UltraxSoft e(ou) ".CONFIG_SITENAME." não são responsáveis por qualquer problema de conectividade entre o jogador e o \"game-server\", tanto por parte do jogador, provedor de internet ou \"datacenter\" (empresa que hospeda o nosso game-server).
+- A UltraxSoft e(ou) ".Configs::Get(Configs::eConf()->WEBSITE_NAME)." nÃ£o sÃ£o responsÃ¡veis por qualquer problema de conectividade entre o jogador e o \"game-server\", tanto por parte do jogador, provedor de internet ou \"datacenter\" (empresa que hospeda o nosso game-server).
 
-3. Seguir regras sem exceções.
-• Caso você contribua com o serviço você estará sujeito a todas as regras do jogo, não possuindo nenhum direito ou vantagem extra dentro ou fora do jogo.
+3. Seguir regras sem exceÃ§Ãµes.
+- Caso vocÃª contribua com o serviÃ§o vocÃª estarÃ¡ sujeito a todas as regras do jogo, nÃ£o possuindo nenhum direito ou vantagem extra dentro ou fora do jogo.
 
-4. Vantagens da contribuição.
-• Caso você contribua com o serviço, cabe a nós decidirmos sobre as vantagens recebidas, podendo as mesmas serem retiradas a qualquer momento sem prévio aviso nem devolução em dinheiro.
+4. Vantagens da contribuiÃ§Ã£o.
+- Caso vocÃª contribua com o serviÃ§o, cabe a nÃ³s decidirmos sobre as vantagens recebidas, podendo as mesmas serem retiradas a qualquer momento sem prÃ©vio aviso nem devoluÃ§Ã£o em dinheiro.
 
 5. Direitos autorais.
-• O ".CONFIG_SITENAME." não apóia a modificação de \"softwares\" sem autorização dos fabricantes, e não cobre nenhum tipo de dano a seu computador que os programas podem causar.
+- O ".Configs::Get(Configs::eConf()->WEBSITE_NAME)." nÃ£o apÃ³ia a modificaÃ§Ãµes de \"softwares\" sem autorizaÃ§Ã£o dos fabricantes ou desenvolvedores, e nÃ£o cobre nenhum tipo de dano a seu computador que os programas podem causar.
 
 6. Recompensas dentro do jogo.
-• Perdas de itens, contas, ou características de personagens somente serão devolvidos se o problema foi de causa interna em nossos \"game-servers\" e em forma de ponto de restauração (ação que efetua uma volta no tempo todo o servidor para um momento ou dia aonde a problemática não havia acontecido), e somente caso a UltraxSoft assim julgue necessário, perdas causadas por qualqueis outras causas (como problemas de conexão, desastres naturais, cuidados não eficientes com a sua conta (Hacking), entre outros) não são recompensados de maneira alguma.
+- Perdas de itens, contas, ou caracterÃ­sticas de personagens somente serÃ£o devolvidos se o problema foi de causa interna em nossos \"game-servers\" e em forma de ponto de restauraÃ§Ã£o (efetuamos uma volta no tempo todo o servidor para um momento ou dia aonde a problemÃ¡tica nÃ£o havia acontecido), e somente caso a UltraxSoft assim julgue necessÃ¡rio, perdas causadas por qualqueis outras causas (como problemas de conexÃ£o, desastres naturais, cuidados nÃ£o eficientes com a sua conta (Hacking), entre outros) nÃ£o sÃ£o recompensados de maneira alguma.
 
-7. Devoluções e troca de destino de contribuições.
-• A devolução do dinheiro, ou mudança da conta na qual o contribuinte irá receber os benefícios, só é ocorrida enquanto o contribuinte não aceita a liberação do serviço. Caso algum dos recursos seja solicitado pelo contribuinte, a mudança de conta para contribuição tem um prazo de 5 a 30 dias após solicitada para ser concluída e a devolução do dinheiro em um prazo de 30 a 90 dias após solicitado. 
+7. DevoluÃ§Ãµes e troca de destino de contribuiÃ§Ãµes.
+- A devoluÃ§Ã£o do dinheiro, ou mudanÃ§a da conta na qual o contribuinte irÃ¡ receber os benefÃ©cios, sÃ³ Ã© permitida enquanto o contribuinte nÃ£o aceita a liberaÃ§Ã£o do serviÃ§o. Caso algum dos recursos seja solicitado pelo contribuinte, a mudanÃ§aa de conta para contribuiÃ§Ã£o tem um prazo de 5 a 30 dias apÃ³s solicitada para ser concluÃ­da e a devoluÃ§Ã£o do dinheiro em um prazo de 30 a 90 dias apÃ³s solicitado. 
 
-IMPORTANTE: Após aceitar o serviço, receber e começar a desfrutar dos beneficio em sua conta os recursos de mudança de conta e devolução do dinheiro não são mais possíveis em hipótese alguma.
+IMPORTANTE: ApÃ³s aceitar o serviÃ§o, receber e comeÃ§ar a desfrutar dos beneficio em sua conta os recursos de mudanÃ§a de conta e devoluÃ§Ã£o do dinheiro nÃ£o sÃ£o mais possÃ­veis em hipÃ³tese alguma.
 
-A mudança deste documento pode ser efetuada sem aviso, ou prévio aviso, cabendo a você se manter atualizado às regras e ao contrato.";
+A mudanÃ§a deste documento pode ser efetuada sem aviso, ou prÃ©vio aviso, cabendo a vocÃª se manter atualizado as regras e ao contrato.";
+
+$premium = \Framework\Contribute::getPremiumInfoByPeriod($contribute->get("period"), $contribute->get("generated_in"));
+
+$character_name = "";
+
+if(is_numeric($contribute->target))
+{
+	$player = new \Framework\Player();
+	$player->load($contribute->target);
+	$character_name = $player->getName();
+}
+else
+	$character_name = $contribute->target;
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 	
 		<ul id="charactersview">
-			<p>Pedido Numero: '.$contribute->get("id").'</p>
-			<li><b>Personagem: </b> '.$contribute->get("target").'.</li>
-			<li><b>Periodo: </b> Contribuição de '.$contribute->get("period").' dias de Conta Premium.</li>
+			<p>Pedido Numero: '.$contribute->id.'</p>
+			<li><b>Personagem: </b> '.$character_name.'.</li>
+			<li><b>DescriÃ§Ã£o: </b> '.$premium["text"].'.</li>
 			
 		</ul>	
 		
@@ -95,12 +112,12 @@ $module .= '
 		</p>		
 		
 		<p>
-			<label for="accept_terms">Clausulas e Termos de aceitação de Contribuições</label><br />
+			<label for="accept_terms">Clausulas e Termos de aceitaÃ§Ã£o de ContribuiÃ§Ãµes</label><br />
 			<textarea rows="10" wrap="physical" cols="55" readonly="true">'.$contrato['premium'].'</textarea>
 		</p>	
 
 		<p>
-			<input name="accept_terms" type="checkbox" value="1" /> Eu aceito com as clausulas e termos de contrato de contribuições do '.CONFIG_SITENAME.'.
+			<input name="accept_terms" type="checkbox" value="1" /> Eu aceito com as clausulas e termos de contrato de contribuiÃ§Ãµes do '.Configs::Get(Configs::eConf()->WEBSITE_NAME).'.
 		</p>			
 		
 		<div id="line1"></div>

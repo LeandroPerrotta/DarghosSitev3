@@ -1,3 +1,3 @@
 <?
-$core->sendMessageBox("Erro!", "Está pagina não existe ou está em fase de construção.");
+\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->PAGE_NOT_FOUND));
 ?>

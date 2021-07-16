@@ -1,75 +1,41 @@
 <?
-ini_set("display_errors", 0 );
-error_reporting(0); 
+ini_set("display_errors", "1");
+error_reporting(E_ERROR);
+/*$date = date("d-m-y");
 
-list($t, $date) = explode(" ", microtime());
+$patch = "/var/log/php/darghos_{$date}.log";
+
+if(!file_exists($patch))
+{
+	$handle = fopen($patch, "x+");
+	fwrite($handle, "Error file log generated.\n");
+}
+
+ini_set ("error_log", $patch);*/
 
 setlocale(LC_ALL, "pt_BR");
 date_default_timezone_set("America/Sao_Paulo");
 
 session_start();
 
-include "configs/index.php";
+$module = "";
 
-if(GLOBAL_LANGUAGE == "pt")
-{
-	include("language/pt/menu.php");
-	include("language/pt/pages.php");
-	include("language/pt/buttons.php");
-	include("language/pt/messageBox.php");
-}
+$menu = array();
+$buttons = array();
+$pages = array();
 
-$layoutDir = "newlay/";
+include "classes/Core/Main.php";
+spl_autoload_register("Core\\Main::autoLoad");
 
-if(MANUTENTION == 1)
-{
-	$module .= "
-	<p>
-	<h3>Estamos desligados para manutenção de rotina no servidor. Voltaremos em algumas horas.</h3>
-	</p>
-	";
-	
-	include "{$layoutDir}indexsimple.php";
-}
-else
-{		
-	include "classes/mysql.php";
-	include "classes/core.php";
-	
-	try
-	{
-		$db = new MySQL();
-		$db->connect(DB_HOST, DB_USER, DB_PASS, DB_SCHEMA);	
-	
-		$core = new Core();
-		$core->InitPOT();
-	}
-	catch (Exception $e)
-	{
-		echo "Impossivel se conectar ao banco de dados.";
-	}
-	
-	if(defined('SITE_ROOT_DIR'))
-	{	
-		if("http://".$_SERVER["HTTP_HOST"].SITE_ROOT_DIR != CONFIG_SITEEMAIL)
-		{
-			$core->redirect(CONFIG_SITEEMAIL, false); 
-		}	
-	}
-	else
-	{		
-		if("http://".$_SERVER["HTTP_HOST"] != CONFIG_SITEEMAIL)
-		{
-			$core->redirect(CONFIG_SITEEMAIL, false); 
-		}		
-	}	
-	
-	$strings = $core->loadClass("strings");
-	$tools = $core->loadClass("tools");
-	
+Core\Main::Initialize();
+
+use \Core\Configs as g_Configs;
+
+if(!Core\Main::$FoundController)
 	include "modules.php";
-	include "{$layoutDir}index.php";
-	
-	$db->close();
-}
+
+Core\Main::drawTemplate();
+
+if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))	
+	Core\Main::$DB->close();
 ?>

@@ -1,3 +1,3 @@
 <?
-$core->sendMessageBox("Erro!", "Para visualizar esta pagina é necessario possuir uma Conta Premium. Adquira já a sua!");
+\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->NEED_PREMIUM));
 ?>

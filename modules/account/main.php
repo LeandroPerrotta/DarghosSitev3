@@ -1,65 +1,96 @@
 <?
-$account = $core->loadClass("Account");
+use \Core\Configs;
+
+$account = new \Framework\Account();
 $account->load($_SESSION['login'][0]);
 $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
-$character = $core->loadClass("Character");
 
-$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes" : "Você não possui dias de conta premium.";	
-$warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
-$email = $account->getEmail();	
-$creation = ($account->getCreation() != 0) ? $core->formatDate($account->getCreation()) : "Indisponível";	
+$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes (expira em ".\Core\Main::formatDate($account->getPremEnd()).")" : "VocÃª nÃ£o possui dias de conta premium.";	
+$warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta nÃ£o possui warnings.";	
+$email = ($account->getEmail()) ? $account->getEmail() : "<span style='color: red; font-weight: bold'>Nenhum e-mail registrado!</span>";	
+$creation = ($account->getCreation() != 0) ? \Core\Main::formatDate($account->getCreation()) : "IndisponÃ­vel";	
 $realname = ($account->getRealName()) ?	$account->getRealName() : "<i>Sem Nome</i>";
 $location = ($account->getLocation()) ?	$account->getLocation() : "<i>Sem Localidade</i>";
-$url = ($account->getUrl()) ?	$account->getUrl() : "<i>Sem Endereço</i>";
+$url = ($account->getUrl()) ?	$account->getUrl() : "<i>Sem EndereÃ§o</i>";
 
-$contribute = $core->loadClass("Contribute");
+$playerDeletionList = array();
+
+$contribute = new \Framework\Contribute();
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
 
-$bans = $core->loadClass('bans');
+$bans = new \Framework\Bans();
 
+$invitesList = "";
+
+$confirmed = 0;
 if(is_array($oders))
 {
 	foreach($oders as $orderId);
 	{
-		$contribute->load($orderId, "status");
+		$contribute->load($orderId);
 		
-		if($contribute->get("status") == 1)
+		if($contribute->status == 1)
 			$confirmed++;
 	}
 }
 
 if(is_array($player_list))
 {
-	foreach($player_list as $player)
+	foreach($player_list as $player_name)
 	{
-		$character->loadByName($player);
+		$player = new \Framework\Player();
+		$player->loadByName($player_name);
 		
 		unset($charStatus);
 		unset($statusString);
 		unset($charOptions);
+		unset($npcOptions);
+		
+		$invite = $player->getInvite();
+		
+		if($invite)
+		{
+			list($guild_id, $invite_date) = $invite;
+			
+			$guild = new \Framework\Guilds();
+			$guild->Load($guild_id);
+			
+			$invitesList .= "
+				<p><font style='font-weight: bold;'>Convite de Guild:</font> O seu personagem {$player->getName()} foi convidado em ".\Core\Main::formatDate($invite_date)." para se tornar membro da guilda {$guild->GetName()}! Clique <a href='?ref=guilds.invitereply&name={$player->getName()}'>aqui</a> para responder este convite. Obs: Esta mensagem desaparecerÃ¡ automaticamente quando o convite for respondido.</p>
+			";
+		}
 		
 		$charStatus = array();
-		$charOptions = "<a href='?ref=character.edit&name={$character->getName()}'>Editar</a>";
+		$charOptions = "<a href='?ref=character.edit&name={$player->getName()}'>Editar</a>";
 		
-		if(SHOW_SHOPFEATURES == 1)
+		if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 		{
-			$charOptions .= " - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
+			$charOptions .= " - <a href='?ref=itemshop.purchase&name={$player->getName()}'>Item Shop</a>";
+			if(Configs::Get(Configs::eConf()->ENABLE_STAMINA_REFILER)) $charOptions .= " - <a href='?ref=character.stamina&name={$player->getName()}'>Regenerar Stamina</a>";
+			if(Configs::Get(Configs::eConf()->ENABLE_REMOVE_SKULLS) && in_array($player->getSkull(), array(t_Skulls::Red, t_Skulls::Black))) $charOptions .= " - <a href='?ref=character.removeSkull&name={$player->getName()}'>Remover Skulls</a>";
 		}
 		
-		if($character->deletionStatus())
+		if(Configs::Get(Configs::eConf()->ENABLE_REBORN))
 		{
-			$charStatus[] = "<font color='red'>será deletado em: {$core->formatDate($character->deletionStatus())}</font>";
-			$charOptions .= " - <a href='?ref=character.undelete&name={$character->getName()}'>Cancelar Exclusão</a>";
+			$npcOptions .= "<a href='?ref=character.reborn&name={$player->getName()}'>Baron Samedi</a>";
 		}
 		
-		if($character->get("hide") == 1)
+		$playerDeletionStatus = $player->deletionStatus();
+		if($playerDeletionStatus)
+		{
+			$playerDeletionList[$player->getName()] = $playerDeletionStatus;
+			$charStatus[] = "<font color='red'>serÃ¡ deletado em: ".\Core\Main::formatDate($player->deletionStatus())."</font>";
+			$charOptions .= " - <a href='?ref=character.undelete&name={$player->getName()}'>Cancelar ExclusÃ£o</a>";
+		}
+		
+		if($player->get("hide") == 1)
 		{
 			$charStatus[] = "escondido";
 		}
 		
-		if($bans->isNameLocked($character->getid()))
+		if($bans->isNameLocked($player->getid()))
 		{
 			$charStatus[] = "<font color='red'>nome bloqueado</font>";
 		}
@@ -79,12 +110,16 @@ if(is_array($player_list))
 		}
 		else
 			$statusString = "nenhum";
-			
+		
+		$worldString = "";
+		
+		if(\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
+			$worldString = "<span style='size: 9px; font-style: italic; margin-left: 5px;'>(".t_Worlds::GetString($player->getWorldId()).")</span>";
 			
 		$charList .= "
 		<tr>
 			<td>
-				<a style='float: left' href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> <span class='tooglePlus'></span>
+				<a style='float: left' href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a>{$worldString} <span class='tooglePlus'></span>
 				<br />
 				<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>
 					<table cellspacing='0' cellpadding='0'>
@@ -92,8 +127,11 @@ if(is_array($player_list))
 							<td width='20%'><b>Status</b></td> <td>{$statusString}</td>
 						</tr>
 						<tr>	
-							<td><b>Ações</b></td> <td>{$charOptions}</td>
+							<td><b>AÃ§Ãµes</b></td> <td>{$charOptions}</td>
 						</tr>
+						<tr>	
+							<td><b>NPCs</b></td> <td>{$npcOptions}</td>
+						</tr>						
 					</table>
 				</div>
 			</td>
@@ -104,33 +142,50 @@ if(is_array($player_list))
 
 
 $module .= "
-<p>Seja bem vindo a sua conta, {$realname}. Você pode efetuar muitas operações como criar um personagem, mudar sua senha ou obter a conta premium atravez do menu minha conta ao lado esquerdo.";
+<p>Seja bem vindo a sua conta, {$realname}. VocÃª pode efetuar muitas operaÃ§Ãµes como criar um personagem, mudar sua senha ou obter a conta premium atravez do menu minha conta ao lado esquerdo.";
 
 if(is_array($newemail = $account->getEmailToChange()))
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Existe uma mudança de email registrado em sua conta para o endereço '.$newemail['email'].' que foi agendada para o dia '.$core->formatDate($newemail['date']).'. Você pode cancelar está mudança a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
+	<p><span id="notify">AtenÃ§Ã£o:</span> Existe uma mudanÃ§a de email registrado em sua conta para o endereÃ§o '.$newemail['email'].' que foi agendada para o dia '.\Core\Main::formatDate($newemail['date']).'. VocÃª pode cancelar esta mudanÃ§a a qualquer momento clicando <a href="?ref=account.cancelchangeemail">aqui</a>.</p>';
 }
 
 if($confirmed and $confirmed >= 1)
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, um pedido efetuado por sua conta foi confirmado com sucesso! Você já pode aceitar este pagamento ou visualizar maiores informações deste pedindo na categoria Conta Premium, na seção Meus Pedidos. Tenha um bom jogo!</p>';
+	<p><span id="notify">AtenÃ§Ã£o:</span> Caro jogador, um pedido efetuado por sua conta foi confirmado com sucesso! VocÃª jÃ¡ pode aceitar este pagamento ou visualizar maiores informaÃ§Ãµes deste pedindo na categoria Conta Premium, na seÃ§Ãµes Meus Pedidos. Tenha um bom jogo!</p>';
 }
 
-if(!$secretkey)
+if($account->getEmail() && !$secretkey)
 {
 	$module .= '
-	<p><font style="color: red; font-weight: bold;">Atenção:</font> Caro jogador, sua conta ainda não possui uma chave secreta configurada, esta chave é necessaria em situações criticas para recuperar sua conta. Recomendamos que você gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
+	<p><span id="notify">AtenÃ§Ã£o:</span> Caro jogador, sua conta ainda nÃ£o possui uma chave secreta configurada, esta chave Ã© necessaria em situaÃ§Ãµes criticas para recuperar sua conta. Recomendamos que vocÃª gere a sua chave secreta agora mesmo clicando <a href="?ref=account.secretkey">aqui</a>.</p>';
 }
 
-if(isset($charDel))
+if($account->getPremDays() > 0)
 {
-	foreach($charDel as $name => $deletion)
-	{
-		$module .= '
-		<p><font style="color: red; font-weight: bold;">Atenção:</font> O seu personagem <b>'.$name.'</b> está agendado para ser deletado do jogo no dia '.$core->formatDate($deletion).'. Para cancelar este operação clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
-	}
+	$module .= '
+	<p><span id="notify">Leia!</span> Caro jogador, se vocÃª deseja transferir os dias de Conta Premium desta conta para uma conta sua no UltraX clique <a href="?ref=accounts.premiumtransfer">aqui</a>. Lembre-se de fazer isto o mais rapido possivel, pois este recurso estarÃ¡ disponivel somente atÃ© o dia 15 de julho!</p>';	
+}
+
+if(!$account->getEmail())
+{
+	$module .= '
+	<script type="text/javascript">
+	fogAlert("VocÃª ainda nÃ£o possui um e-mail registrado em sua conta. VocÃª deve registrar um e-mail valido em sua conta para aumentar a seguranÃ§a de sua conta. Note que enquanto vocÃª nÃ£o o fizer, caso vocÃª perda seus dados de login, <b>vocÃª nÃ£o conseguirÃ¡ recuperar sua conta</b>.");
+	</script>
+	<p><span id="notify">AtenÃ§Ã£o:</span> Caro jogador, sua conta ainda nÃ£o possui um e-mail registrado e por isto nÃ£o estÃ¡ segura. Recomendamos que vocÃª registre um e-mail clicando <a href="?ref=account.validateEmail">aqui</a>. Ao registrar um e-mail em sua conta tambÃ©m serÃ¡ liberado alguns recursos como possibilidade de gerar uma chave secreta e obter uma conta premium.</p>';	
+}
+
+if($invitesList)
+{
+	$module .= $invitesList;
+}
+
+foreach($playerDeletionList as $name => $deletion)
+{
+	$module .= '
+	<p><span id="notify">AtenÃ§Ã£o:</span> O seu personagem <b>'.$name.'</b> estÃ¡ agendado para ser deletado do jogo no dia '.\Core\Main::formatDate($deletion).'. Para cancelar este operaÃ§Ã£o clique <a href="?ref=character.undelete&name='.$name.'">aqui</a>.</p>';
 }		
 
 $module .= "
@@ -138,11 +193,11 @@ $module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>
 	
 		<tr>
-			<th colspan='2'>Informações da Conta</th>
+			<th colspan='2'>InformaÃ§Ãµes da Conta</th>
 		</tr>
 		
 		<tr>
-			<td width='30%'><b>Endereço de E-mail:</b></td><td>{$email}</td>
+			<td width='30%'><b>EndereÃ§o de E-mail:</b></td><td>{$email}</td>
 		</tr>
 					
 		<tr>
@@ -154,7 +209,7 @@ $module .= "
 		</tr>
 		
 		<tr>
-			<td><b>Criação:</b></td><td>".$creation."</td>
+			<td><b>CriaÃ§Ã£o:</b></td><td>".$creation."</td>
 		</tr>";
 		
 		if($bans->isBannished($account->getId()))
@@ -167,20 +222,20 @@ $module .= "
 				
 				if($ban['type'] == 3)
 				{
-					$banstring .= "Banido por: <b>{$tools->getBanReason($ban['reason'])}</b><br>
-							   	   Duração: Até {$core->formatDate($ban['expires'])}.";
+					$banstring .= "Banido por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
+							   	   DuraÃ§Ã£o: AtÃ© ".\Core\Main::formatDate($ban['expires']).".";
 				}
 				elseif($ban['type'] == 5)	
 				{
-					$banstring .= "Deletado por: <b>{$tools->getBanReason($ban['reason'])}</b><br>
-							   	   Duração: permanentemente.";		
+					$banstring .= "Deletado por: <b>".\Core\Tools::getBanReason($ban['reason'])."</b><br>
+							   	   DuraÃ§Ã£o: permanentemente.";		
 				}			   	   				   	   
 							   
 				$banstring .= "</font>";
 				
 				$module .= "
 				<tr>
-					<td><b>Punição:</b></td> <td>{$banstring}</td>
+					<td><b>PuniÃ§Ã£o:</b></td> <td>{$banstring}</td>
 				</tr>";			
 			}
 		}	
@@ -195,18 +250,38 @@ if($account->getName() == $account->getId())
 	if($account->getPremDays() == 0)
 	{
 		$module .= "
-		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a>";	
+		<a class='buttonstd' href='?ref=accounts.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a>";	
 	}
 	else
 	{
 		$module .= "
-		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a> <!-- <a class='buttonstd' href='?ref=account.tutortest'>Tutor Test</a> -->";	
+		<a class='buttonstd' href='?ref=accounts.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a> <!-- <a class='buttonstd' href='?ref=account.tutortest'>Tutor Test</a> -->";	
 	}
 }
 else
 {			
 	$module .= "
-	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>";
+	<a class='buttonstd' href='?ref=accounts.changepassword'>Mudar Senha</a> 
+	";
+	
+	if(!$account->getEmail())
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.validateEmail'>Registrar E-mail</a>
+		";		
+	}
+	else
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>
+		";		
+	}
+	
+	$module .= "
+	<a class='buttonstd' href='?ref=accounts.changename'>Renomear</a>
+	";
+	
+	
 }
 
 $module .= "
@@ -216,7 +291,7 @@ $module .= "
 	<table cellspacing='0' cellpadding='0' id='table'>
 	
 		<tr>
-			<th colspan='2'>Informações Personalizadas</th>
+			<th colspan='2'>InformaÃ§Ãµes Personalizadas</th>
 		</tr>
 		
 		<tr>
@@ -224,7 +299,7 @@ $module .= "
 		</tr>
 					
 		<tr>
-			<td><b>Localização:</b></td><td>{$location}</td>
+			<td><b>LocalizaÃ§Ã£o:</b></td><td>{$location}</td>
 		</tr>
 		
 		<tr>
@@ -235,14 +310,14 @@ $module .= "
 </p>
 
 <p>
-	<a class='buttonstd' href='?ref=account.changeinfos'>Mudar Informações</a>
+	<a class='buttonstd' href='?ref=account.changeinfos'>Mudar InformaÃ§Ãµes</a>
 </p>
 
 <p>
 	<table cellspacing='0' cellpadding='0' class='dropdowntable'>
 	
 		<tr>
-			<th colspan='3'>Meus Personagens</th>
+			<th colspan='2'>Meus Personagens</th>
 		</tr>
 					
 		$charList

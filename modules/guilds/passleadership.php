@@ -1,105 +1,107 @@
 <?php
-if($_GET['name'])
+use \Core\Configs;
+use \Framework\Guilds;
+if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 {
-	$account = $core->loadClass("Account");
-	$account->load($_SESSION['login'][0], "password");
-	
-	$character_list = $account->getCharacterList(true);	
-	
-	$guild = $core->loadClass("guilds");
-	
-	if(!$guild->loadByName($_GET['name']))
+	$result = false;
+	$message = "";	
+
+	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
 	{
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
+		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
+		{
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
+			return false;
+		}			
+
+		$member = $guild->SearchMemberByName($_POST["member_candidate"]);
+		
+		if(!$member)
+		{
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_NOT_MEMBER, $_POST["guild_member"], $_GET['name']);
+			return false;			
+		}
+		
+		$member->LoadGuild();
+		
+		$level = $member->GetGuildLevel();
+		if($level != Guilds::RANK_VICE && $level != Guilds::RANK_LEADER)
+		{
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PERMISSION);
+			return false;
+		}
+		
+		$leader_rank = $guild->SearchRankByLevel(Guilds::RANK_LEADER);
+		$vice_rank = $guild->SearchRankByLevel(Guilds::RANK_VICE);
+		
+		$member->setGuildRankId($leader_rank->GetId());
+		$member->save();		
+		
+		$old_owner = new \Framework\Player();
+		$old_owner->load($guild->GetOwnerId());
+		$old_owner->LoadGuild();
+		$old_owner->setGuildRankId($vice_rank->GetId());
+		$old_owner->save();
+		
+		Guilds::LogMessage("The owner {$old_owner->getName()} ({$old_owner->getId()}) has transfered the guild leadership of {$guild->GetName()} ({$guild->GetId()}) to {$member->getName()} ({$member->getId()}) by account id {$account->getId()}.");
+		
+		$guild->SetOwnerId($member->getId());
+		$guild->Save();		
+		
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_PASSLEADERSHIP, $_GET['name'], $old_owner->getName(), $_POST["member_candidate"]);
+		return true;
 	}
-	elseif($account->getGuildLevel($guild->get("name")) > 1)
+	
+	$account = new \Framework\Account();
+	$account->load($_SESSION['login'][0]);
+	
+	$guild = new \Framework\Guilds();
+	
+	if(!$guild->LoadByName($_GET['name']))
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
+	}
+	elseif(\Framework\Guilds::GetAccountLevel($account, $guild->GetId()) != \Framework\Guilds::RANK_LEADER)
+	{
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
 	}	
 	else
 	{		
-		$guild->loadRanks();
-		$guild->loadMembersList();
-		
-		$members = $guild->getMembersList();		
-		
-		$post = $core->extractPost();
-		if($post)
-		{						
-			$ranks = $guild->getRanks();
-			$members = $guild->getMembersList();
-			
-			foreach($members as $member_name => $member_values)
-			{
-				$members_list[] = $member_name;
-			}
-			
-			if($account->get("password") != $strings->encrypt($post[1]))
-			{
-				$error = "Confirmação da senha falhou.";
-			}		
-			elseif(!in_array($post[0], $members_list))
-			{
-				$error = "Falha fatal.";				
-			}
-			else
-			{			
-				$leader_id = 0;
-				$vice_id = 0;
-				
-				foreach($ranks as $rank_id => $rank_values)
-				{
-					if($rank_values['level'] == 1)
-						$leader_id = $rank_id;
-						
-					if($rank_values['level'] == 2)
-						$vice_id = $rank_id;
-				}
-				
-				$newLeader_char = $core->loadClass("Character");
-				$newLeader_char->loadByName($post[0], "name, rank_id");
-				$newLeader_char->set("rank_id", $leader_id);
-				$newLeader_id = $newLeader_char->get("id");
-				$newLeader_char->save();
-				
-				$oldLeader_char = $core->loadClass("Character");
-				$oldLeader_char->load($guild->get("ownerid"), "name, rank_id");
-				$oldLeader_char->set("rank_id", $vice_id);
-				$oldLeader_name = $oldLeader_char->get("name");
-				$oldLeader_char->save();
-				
-				$guild->set("ownerid", $newLeader_id);
-				$guild->save();
-				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>A guilda {$_GET['name']} teve a liderança transferida de {$oldLeader_name} para {$post[0]} com sucesso!</p>
-				<p>Tenha um bom jogo!</p>
-				";
-			}
-		}
-		
-		if($success)	
+		if($_POST)
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
+		}
+			
+		if($result)	
+		{
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
 		}
 		else
 		{
-			if($error)	
+			if($_POST)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
+			}			
+						
+			
+			
+			$options = "";
+			
+			$leaders = $guild->SearchRankByLevel(\Framework\Guilds::RANK_LEADER);
+			foreach($leaders->Members as $member)
+			{
+				if($guild->GetOwnerId() == $member->getId())
+					continue;
+				
+				$options .= "<option value='{$member->getName()}'>{$member->getName()}</option>";
+			}			
+			
+			$vices = $guild->SearchRankByLevel(\Framework\Guilds::RANK_VICE);
+			foreach($vices->Members as $member)
+			{
+				$options .= "<option value='{$member->getName()}'>{$member->getName()}</option>";
 			}
 			
-			$vices = 0;
-			
-			foreach($members as $member_name => $member_values)
-			{
-				if($member_values['level'] == 2)
-				{
-					$options .= "<option value='{$member_name}'>{$member_name}</option>";
-					$vices++;
-				}
-			}
 			
 			
 			$module .=	'
@@ -108,37 +110,37 @@ if($_GET['name'])
 
 			';
 
-				if($vices > 0)
-				{
-					$module .=	'
-					<p>
-						<label for="member_candidate">Membros Cadidatos</label><br />		
-						<select name="member_candidate">'.$options.'</select>
-					</p>	
-
-					<p>
-						<label for="account_password">Senha</label><br />
-						<input name="account_password" size="40" type="password" value="" />
-					</p>						
-					
-					<div id="line1"></div>
-					
-					<p>
-						<input class="button" type="submit" value="Enviar" />
-					</p>					
-					';
-				}
-				else
-				{
-					$module .=	'
-					<p>
-						É necessario possuir ao menos 1 vice lider disponivel para que seja possivel a  transferencia a liderança de uma guilda.
-					</p>	
-					';			
-				}
-				
+			if(count($vices->Members) + count($leaders->Members) > 1)
+			{
 				$module .=	'
-				</fieldset>
+				<p>
+					<label for="member_candidate">Membros Cadidatos</label><br />		
+					<select name="member_candidate">'.$options.'</select>
+				</p>	
+
+				<p>
+					<label for="account_password">Senha</label><br />
+					<input name="account_password" size="40" type="password" value="" />
+				</p>						
+				
+				<div id="line1"></div>
+				
+				<p>
+					<input class="button" type="submit" value="Enviar" />
+				</p>					
+				';
+			}
+			else
+			{
+				$module .=	'
+				<p>
+					Ã‰ necessario possuir ao menos 1 lider ou vice lider disponivel para que seja possivel a  transferencia de propriedade de uma guilda.
+				</p>	
+				';			
+			}
+			
+			$module .=	'
+			</fieldset>
 			</form>';	
 		}	
 	}

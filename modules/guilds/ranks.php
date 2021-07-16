@@ -1,147 +1,270 @@
 <?php
-if($_GET['name'])
-{
-	$account = $core->loadClass("Account");
-	$account->load($_SESSION['login'][0], "password");
+use \Core\Configs;
+use \Framework\Guilds;
+if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
+{	
+	$result = false;
+	$message = "";	
 	
-	$character_list = $account->getCharacterList(true);	
-	
-	$guild = $core->loadClass("guilds");
-	
-	if(!$guild->loadByName($_GET['name']))
-	{
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");
-	}
-	elseif($account->getGuildLevel($guild->get("name")) > 1)
-	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");
-	}	
-	else
-	{		
-		$guild->loadRanks();
-		$ranks = $guild->getRanks();
-		
-		$post = $core->extractPost();
-		if($post)
+	function proccessPost(&$message, \Framework\Account $account, Guilds $guild)
+	{			
+		if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 		{
-			$haveLongRank = 0;
-			$ranklist = array();
-			$$rankToRemove = array();
-			$isFirstNull = false;
-			$orderOut = false;
-			
-			foreach($_POST as $field => $value)
-			{
-				if($field != "account_password")
-				{
-					if(strlen($value) > 35)
-					{
-						$haveLongRank++;
-					}
-					
-					$separator = explode("_", $field);
-					
-					if($value)
-					{
-						if($isFirstNull)
-						{
-							$orderOut = true;
-							break;
-						}	
-							
-						$ranklist[$separator[1]] = $value;	
-					}			
-					else		
-					{
-						if(count($rankToRemove) == 0)
-							$isFirstNull = true;
-							
-						$rankToRemove[] = $separator[1];	
-					}	
-				}
-			}			
-			
-			if($account->get("password") != $strings->encrypt($post[6]))
-			{
-				$error = "Confirmação da senha falhou.";
-			}			
-			elseif($orderOut)
-			{
-				$error = "Os ranks estão em sequencia fora de ordem.";	
-			}			
-			elseif($haveLongRank != 0)
-			{
-				$error = "Os ranks devem possuir no maximo 35 caracteres.";	
-			}
-			elseif(count($ranklist) < 3)
-			{
-				$error = "É obrigatorio existir ao menos 3 ranks em sua guild.";	
-			}			
-			else
-			{		
-				$rankHaveCharacter = 0;
-				
-				foreach($rankToRemove as $ranklvl)
-				{
-					if($guild->ereaseRank($ranklvl) == 1)
-						$rankHaveCharacter++;	
-				}				
-				
-				if($rankHaveCharacter == 0)
-				{
-					foreach($ranklist as $ranklvl => $rankname)
-					{
-						$guild->setRank($rankname, $ranklvl);
-					}					
-					
-					$success = "
-					<p>Caro jogador,</p>
-					<p>As alterações nos Ranks de sua guild foi efetuado com sucesso!</p>
-					<p>Tenha um bom jogo!</p>
-					";
-				}
-				else
-				{
-					$error = "Um ou mais ranks removidos de sua guilda está em uso por um ou mais membros. Só é permitido remover um ranks que nenhum membro está a ultilizar.";	
-				}
-			}
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
+			return false;
+		}		
+		
+		//faremos as verificaÃ§Ãµes primarias de todos os ranks do formulario
+		
+		if(!$_POST["leader"] || !$_POST["vice"] || !$_POST["member_1"])
+		{
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_MIMINUM_NEEDED);
+			return false;
+		}		
+		
+		if(strlen($_POST["leader"]) > 35 || strlen($_POST["vice"]) > 35 || strlen($_POST["member_1"]) > 35 )
+		{
+			$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
+			return false;
 		}
 		
-		if($success)	
+		$rank_opt_3 = $guild->SearchRankByLevel(Guilds::RANK_MEMBER_OPT_3);
+		if($_POST["member_2"])
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			if(strlen($_POST["member_2"]) > 35)
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
+				return false;			
+			}
+			
+			if(!$rank_opt_3)
+			{
+				$rank_opt_3 = new \Framework\Guilds\Rank();
+				$rank_opt_3->SetGuildId($guild->GetId());			
+			}			
+			
+			$rank_opt_3->SetName($_POST["member_2"]);
+			$rank_opt_3->SetLevel(Guilds::RANK_MEMBER_OPT_3);
+		}
+		else
+		{			
+			if($rank_opt_3)
+			{
+				if($rank_opt_3->MemberCount() > 0)
+				{
+					$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_IN_USE);
+					return false;
+				}
+				
+				$guild->AddRankToDelete($rank_opt_3);
+			}		
+		}
+		
+		$rank_opt_2 = $guild->SearchRankByLevel(Guilds::RANK_MEMBER_OPT_2);
+		if($_POST["member_3"])
+		{
+			if(strlen($_POST["member_3"]) > 35)
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
+				return false;					
+			}
+			
+			if(!$_POST["member_2"])
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_ORDER);
+				return false;					
+			}
+			
+			if(!$rank_opt_2)
+			{
+				$rank_opt_2 = new \Framework\Guilds\Rank();
+				$rank_opt_2->SetGuildId($guild->GetId());			
+			}			
+			
+			$rank_opt_2->SetName($_POST["member_3"]);
+			$rank_opt_2->SetLevel(Guilds::RANK_MEMBER_OPT_2);
 		}
 		else
 		{
-			if($error)	
+			if($rank_opt_2)
 			{
-				$core->sendMessageBox("Erro!", $error);
+				if($rank_opt_2->MemberCount() > 0)
+				{
+					$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_IN_USE);
+					return false;
+				}
+				
+				$guild->AddRankToDelete($rank_opt_2);
+			}			
+		}
+		
+		$rank_opt_1 = $guild->SearchRankByLevel(Guilds::RANK_MEMBER_OPT_1);
+		if($_POST["member_4"])
+		{
+			if(strlen($_POST["member_4"]) > 35)
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_SIZE);
+				return false;					
+			}
+			
+			if(!$_POST["member_2"] || !$_POST["member_3"])
+			{
+				$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_WRONG_ORDER);
+				return false;					
+			}
+			
+			if(!$rank_opt_1)
+			{
+				$rank_opt_1 = new \Framework\Guilds\Rank();
+				$rank_opt_1->SetGuildId($guild->GetId());			
+			}
+			
+			$rank_opt_1->SetName($_POST["member_4"]);
+			$rank_opt_1->SetLevel(Guilds::RANK_MEMBER_OPT_1);				
+		}
+		else
+		{		
+			if($rank_opt_1)
+			{
+				if($rank_opt_1->MemberCount() > 0)
+				{
+					$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANK_IN_USE);
+					return false;
+				}
+				
+				$guild->AddRankToDelete($rank_opt_1);
+			}			
+		}
+		
+		//tudo verificado aqui, iniciando as operaÃ§Ãµes
+		
+		//deletamos os ranks marcados para serem deletados (que nÃ£o foram preenchidos)
+		$guild->DeleteRanks();
+		
+		$logStr = "The guild {$guild->GetName()} ({$guild->GetId()}) has following ranks changed by account id {$account->getId()}:\n";
+		
+		//alteramos os nomes dos ranks primarios
+		$rank = $guild->SearchRankByLevel(Guilds::RANK_LEADER);
+		$logStr .= "{$rank->GetName()} ({$rank->GetId()}) to {$_POST["leader"]}\n";
+		$rank->SetName($_POST["leader"]);
+		$rank->Save();
+		
+		$rank = $guild->SearchRankByLevel(Guilds::RANK_VICE);
+		$logStr .= "{$rank->GetName()} ({$rank->GetId()}) to {$_POST["vice"]}\n";
+		$rank->SetName($_POST["vice"]);	
+		$rank->Save();	
+		
+		$rank = $guild->SearchRankByLevel(Guilds::RANK_MEMBER);
+		$logStr .= "{$rank->GetName()} ({$rank->GetId()}) to {$_POST["member_1"]}\n";
+		$rank->SetName($_POST["member_1"]);	
+		$rank->Save();
+
+		if($_POST["member_2"])
+			$rank_opt_3->Save();
+		
+		if($_POST["member_3"])
+			$rank_opt_2->Save();
+		
+		if($_POST["member_4"])
+			$rank_opt_1->Save();
+		
+		Guilds::LogMessage($logStr);
+		$message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_RANKS_EDITED);
+		return true;	
+	}
+	
+	
+	$account = new \Framework\Account();
+	$account->load($_SESSION['login'][0]);
+	
+	$guild = new Guilds();
+	
+	if(!$guild->LoadByName($_GET['name']))
+	{
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));	
+	}
+	elseif(Guilds::GetAccountLevel($account, $guild->GetId()) < Guilds::RANK_VICE)
+	{
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));
+	}	
+	else
+	{		
+		if($_POST)
+		{
+			$result = (proccessPost($message, $account, $guild)) ? true : false;		
+		}
+			
+		if($result)	
+		{
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $message);
+		}
+		else
+		{
+			if($_POST)	
+			{
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $message);
 			}
 				
+			$rank_pos = 3;
 			$rank_n = 0;
-				
-			foreach($ranks as $rank_id => $values)
-			{
+			$member_n = 0;
+			
+			$memberLevel = Guilds::GetAccountLevel($account, $guild->GetId());
+			
+			//pegamos os ranks existentes na guilda e montamos o view
+			foreach($guild->Ranks as $rank)
+			{				
 				$rank_n++;
+				
+				$readOnly = "";
+				
+				if($rank_pos == 3)
+				{
+					$rank_name = "leader";
+					$rank_pos--;
+					
+					if(!Guilds::IsAccountGuildOwner($account, $guild))
+						$readOnly = "readonly='readonly'";
+				}
+				elseif($rank_pos == 2)
+				{
+					$rank_name = "vice";
+					$rank_pos--;
+					
+					if($memberLevel == Guilds::RANK_VICE)
+						$readOnly = "readonly='readonly'";				
+				}
+				elseif($rank_pos == 1)
+				{
+					$member_n++;
+					
+					$rank_name = "member_{$member_n}";
+				}	
 				
 				$ranks_show .= "
 					<p>
-						{$rank_n} <input name='rank_{$rank_n}' size='40' type='text' value='{$values['name']}' />
+						{$rank_n} <input name='{$rank_name}' {$readOnly} size='40' type='text' value='{$rank->GetName()}' />
 					</p>				
 				";
 			}
 			
+			//verificamos se sobra slots (hÃ¡ um limite de 6 ranks por guilda)
 			$rank_dif = 6 - $rank_n;
 			
 			if($rank_dif > 0)
 			{
+				//hÃ¡ sobra de slots, entÃ£o preenchemos os novos views vazio para o jogador preencher (se ele quiser)
 				for($i = 0; $i < $rank_dif; $i++)
 				{		
 					$rank_n++;
 					
+					$member_n++;
+					
+					$rank_name = "member_{$member_n}";					
+					
 					$ranks_show .= "
 						<p>
-							{$rank_n} <input name='rank_{$rank_n}' size='40' type='text' value='' />
+							{$rank_n} <input name='{$rank_name}' size='40' type='text' value='' />
 						</p>				
 					";
 				}				
@@ -151,7 +274,7 @@ if($_GET['name'])
 			<form action="" method="post">
 				<fieldset>			
 					
-					'.$ranks_show.'
+					'.$ranks_show.'					
 					
 					<p>
 						<label for="account_password">Senha</label><br />
@@ -167,6 +290,5 @@ if($_GET['name'])
 			</form>';	
 		}	
 	}
-
-}		
+}	
 ?>

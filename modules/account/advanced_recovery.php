@@ -1,64 +1,64 @@
 <?php
 if($_SESSION['recovery'])
-{
-	$post = $core->extractPost();
+{	
+	$player = new \Framework\Player();
+	$player->loadByName($_SESSION['recovery']); 
 	
-	$character = $core->loadClass("Character");
-	$character->loadByName($_SESSION['recovery'][0], "account_id"); 
+	$chkEmail = new \Framework\Account();
 	
-	$chkEmail = $core->loadClass("Account");
-	
-	$account = $core->loadClass("Account");
-	$account->load($character->get("account_id"), "password, email");
+	$account = new \Framework\Account();
+	$account->load($player->get("account_id"));
 	$secretkey = $account->getSecretKey();
 	
 	if($secretkey)
 	{
-		if($post)
+		if($_POST)
 		{	
 			$postSecretKey = $_POST['recovery_secretkey'];
 			$postEmail = $_POST['recovery_email'];
 		
-			if($core->getIpTries() >= 3)
+			if(\Core\Main::getIpTries() >= 3)
 			{
-				$error = $boxMessage['OPERATION_BLOCKED_STATE'] ;
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_ARE_BLOCKED);
 			}
 			elseif($postSecretKey != $secretkey['key'])
 			{
-				$core->increaseIpTries();
+				\Core\Main::increaseIpTries();
 				
-				if($core->getIpTries() < 3)
-					$error = $boxMessage['INCORRECT_SECRET_KEY'];
+				if(\Core\Main::getIpTries() < 3)
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_WRONG_SECRET_KEY);
 				else
-					$error = $boxMessage['MANY_ATTEMPS_OPERATION_BLOCKED'];
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_HAS_BLOCKED);
 			}
 			elseif($chkEmail->loadByEmail($postEmail))
 			{
-				$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_EMAIL_ALREADY_USED);
 			}
-			elseif(!$strings->validEmail($postEmail))
+			elseif(!\Core\Strings::validEmail($postEmail))
 			{
-				$error = $boxMessage['INVALID_EMAIL'];
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_EMAIL);
 			}
 			else
 			{
 				$account->setEmail($postEmail);
 				$account->save();
 				
-				$success = $boxMessage['SUCCESS.CHANGE_EMAIL_USING_RECOVERY_KEY'];	
+				$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_EMAIL_CHANGED);	
 			}
 		}
 	
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 			}
+			
+		global $pages, $buttons;	
 			
 		$module .= '	
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
@@ -66,7 +66,7 @@ if($_SESSION['recovery'])
 			
 					<p>
 						<label for="recovery_name">'.$pages["ACCOUNT.ADVANCED_RECOVERY.CHARACTER_NAME"].'</label><br />
-						<input readonly="readonly" name="recovery_name" size="40" type="text" value="'.$_SESSION['recovery'][0].'" />
+						<input readonly="readonly" name="recovery_name" size="40" type="text" value="'.$_SESSION['recovery'].'" />
 					</p>		
 					
 					';
@@ -102,7 +102,7 @@ if($_SESSION['recovery'])
 	}
 	else
 	{
-		$core->sendMessageBox("Erro!", $boxMessage['ACCOUNT_NOT_HAVE_SECRET_KEY']);		
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->RECOVERY_DISABLED));		
 	}		
 }
 ?>

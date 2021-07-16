@@ -1,44 +1,45 @@
 <?
-$post = $core->extractPost();
-if($post)
+if($_POST)
 {
-	$account = $core->loadClass("Account");
-	$account->load($_SESSION['login'][0], "password");
+	$account = new \Framework\Account();
+	$account->load($_SESSION['login'][0]);
 	
-	if($account->get("password") != $strings->encrypt($post[1]))
+	if($account->get("password") != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = $boxMessage['CONFIRMATION_PASSWORD_FAIL'];
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}
-	elseif($account->loadByEmail($post[0]))
+	elseif($account->loadByEmail($_POST["account_newemail"]))
 	{
-		$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_EMAIL_ALREADY_USED);
 	}			
-	elseif(!$strings->validEmail($post[0]))
+	elseif(!\Core\Strings::validEmail($_POST["account_newemail"]))
 	{
-		$error = $boxMessage['INVALID_EMAIL'];
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_EMAIL);
 	}
 	elseif(is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = $boxMessage['ACCOUNT_ALREADY_HAVE_CHANGE_EMAIL_REQUEST'];
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_ALREADY_HAVE_REQUEST);
 	}
 	else
 	{		
-		$account->addEmailToChange($post[0]);
+		$account->addEmailToChange($_POST["account_newemail"]);
 		$newemail = $account->getEmailToChange();
-		$success = $boxMessage['SUCCESS.CHANGE_EMAIL'];
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHANGEEMAIL_SCHEDULED);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
+
+global $pages, $buttons;
 
 $module .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post">

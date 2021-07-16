@@ -1,6 +1,3 @@
 <?
-$module .= "
-<div id='error'>
-	<h2>Detectada tentativa de inserção de codigo malicioso não autorizado. A tentativa ilegal do USER_IP: ".$_SERVER['REMOTE_ADDR']." foi reportado aos Administradores para investigação.</h2>
-</div>";
+\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->SQL_INJECTION, $_SERVER['REMOTE_ADDR']));
 ?>

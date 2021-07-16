@@ -1,49 +1,43 @@
 <?php
-$post = $core->extractPost();
-
-if($post)
+if($_POST)
 {
-	$account = $core->loadClass("Account");
-	$account->load($_SESSION['login'][0], "password");
+	$account = new \Framework\Account();
+	$account->load($_SESSION['login'][0]);
 	
 	$list = $account->getCharacterList();	
 	
-	$character = $core->loadClass("Character");
-	$character->loadByName($post[0]);
+	$player = new \Framework\Player();
+	$player->loadByName($_POST["player_name"]);
 	
-	if($account->get("password") != $strings->encrypt($post[1]))
+	if($account->getPassword() != \Core\Strings::encrypt($_POST["account_password"]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}	
-	elseif(!$character->deletionStatus())
+	elseif(!$player->deletionStatus())
 	{
-		$error = "Este personagem não está agendado para ser excluido.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_TO_DELETION);
 	}
-	elseif(!in_array($post[0], $list))
+	elseif(!in_array($_POST["player_name"], $list))
 	{	
-		$error = "Este personagem não pertence a sua conta.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NOT_FROM_YOUR_ACCOUNT);
 	}
 	else
 	{
-		$character->cancelDeletion();
+		$player->cancelDeletion();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A exclusão do seu personagem {$post[0]} foi cancelada!</p>
-		<p>Tenha um bom jogo!</p>
-		";		
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NO_MORE_DELETED, $_POST["player_name"]);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .=	'
@@ -52,7 +46,7 @@ $module .=	'
 
 			<p>
 				<label for="character_name">Personagem</label><br />
-				<input readonly="readonly" name="character_name" size="40" type="text" value="'.$_GET['name'].'" />
+				<input readonly="readonly" name="player_name" size="40" type="text" value="'.$_GET['name'].'" />
 			</p>		
 		
 			<p>

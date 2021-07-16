@@ -1,48 +1,41 @@
 <?
-$post = $core->extractPost();
-if($post)
+if($_POST)
 {
-	$account = $core->loadClass("Account");
+	$account = new \Framework\Account();
 	$account->load($_SESSION['login'][0]);
 	
-	if($account->getPassword() != $strings->encrypt($_POST['account_password']))
+	$checkName = \Framework\Account::checkName();
+	
+	if($account->getPassword() != \Core\Strings::encrypt($_POST['account_password']))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 	}
-	elseif(strlen($_POST['account_name']) < 5 or strlen($_POST['account_name']) > 25)
+	elseif($checkName["error"])
 	{
-		$error = "O nome de sua conta deve possuir entre 5 e 25 caracteres.";
+		$error = $checkName["text"];
 	}	
 	elseif($account->getName() == $_POST['account_name'])
 	{
-		$error = "O nome de sua conta deve ser diferente do seu antigo numero.";
-	}
-	elseif($account->loadByName($_POST['account_name']))
-	{
-		$error = "Este nome já esta em uso por outra conta em nosso banco de dados.";
-	}			
+		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_SETNAME_SAME_ID);
+	}	
 	else
 	{		
 		$account->setName($_POST['account_name']);
 		$account->save();
 		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A sua conta agora possui um Nome configurado corretamente!</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->ACCOUNT_SETNAME_SUCCESS);
 	}
 }
 
 if($success)	
 {
-	$core->sendMessageBox("Sucesso!", $success);
+	\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 }
 else
 {
 	if($error)	
 	{
-		$core->sendMessageBox("Erro!", $error);
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 	}
 
 $module .= '

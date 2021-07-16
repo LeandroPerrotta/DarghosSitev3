@@ -1,109 +1,151 @@
 <?php
-if($_GET['name'])
+use \Core\Configs;
+use \Framework\Guilds;
+class View
 {
-	$account = $core->loadClass("Account");
-	$account->load($_SESSION['login'][0], "password");
+	//html fields
+	private $_password, $_character;
 	
-	$character_list = $account->getCharacterList();	
+	//variables
+	private $_message;		
 	
-	$guild = $core->loadClass("guilds");
+	//custom variables
+	private $loggedAcc, $guild;		
 	
-	if(!$guild->loadByName($_GET['name']))
-	{	
-		$core->sendMessageBox("Erro!", "Esta guilda não existe em nosso banco de dados.");	
-	}
-	elseif(!$account->getGuildLevel($guild->get("name")))
+	function View()
 	{
-		$core->sendMessageBox("Erro!", "Você não tem permissão para acessar está pagina.");		
-	}	
-	else
-	{		
-		$guild->loadRanks();
-		$guild->loadMembersList();
+		if(!$_GET['name'] || !Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
+		{
+			return;
+		}
 		
-		$members = $guild->getMembersList();		
+		if(!$this->Prepare())
+		{
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
+			return false;			
+		}
 		
-		$post = $core->extractPost();
-		if($post)
-		{									
-			foreach($members as $member_name => $member_values)
+		$this->_character = new \Framework\HTML\SelectBox();
+		$this->_character->SetName("character_name");
+		
+		$char_list = $this->loggedAcc->getCharacterList(\Framework\Account::PLAYER_LIST_BY_ID);
+		
+		//listing all account characters and adding to options box the guild members
+		foreach($char_list as $player_id)
+		{
+			if($this->guild->IsMember($player_id))
 			{
-				$members_list[] = $member_name;
+				$player = new \Framework\Player();
+				$player->load($player_id);
+				
+				$this->_character->AddOption($player->getName());
 			}
-			
-			if($account->get("password") != $strings->encrypt($post[1]))
+		}	
+
+		$this->_character->SelectedIndex(0);
+		
+		$this->_password = new \Framework\HTML\Input();
+		$this->_password->SetName("account_password");
+		$this->_password->IsPassword();		
+		
+		if($_POST)
+		{
+			if(!$this->Post())
 			{
-				$error = "Confirmação da senha falhou.";
-			}
-			elseif ($guild->isOnWar())
-			{
-				$error = "Sua guilda está em war, você só poderá sair da mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
-			}
-			elseif(!in_array($post[0], $members_list) or $members[$post[0]]['level'] == 1)
-			{
-				$error = "Falha fatal.";				
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $this->_message);
 			}
 			else
-			{						
-				$character = $core->loadClass("Character");
-				$character->loadByName($post[0], "name, rank_id, guildnick, guild_join_date");
-				$character->set("rank_id", 0);
-				$character->set("guildnick", "");
-				$character->set("guild_join_date", 0);
-				$character->save();
-				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>O personagem {$post[0]} não mais pertence a guilda {$_GET['name']}.</p>
-				<p>Tenha um bom jogo!</p>
-				";
+			{
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $this->_message);
+				return true;
 			}
 		}
 		
-		if($success)	
-		{
-			$core->sendMessageBox("Sucesso!", $success);
-		}
-		else
-		{
-			if($error)	
-			{
-				$core->sendMessageBox("Erro!", $error);
-			}
-			
-			foreach($members as $member_name => $member_values)
-			{
-				if(in_array($member_name, $character_list) and $member_values['level'] > 1)
-				{
-					$options .= "<option value='{$member_name}'>{$member_name}</option>";
-				}
-			}
-			
-			
-			$module .=	'
-			<form action="" method="post">
-				<fieldset>
-
-					<p>
-						<label for="member_candidate">Selecione o Personagem</label><br />		
-						<select name="member_candidate">'.$options.'</select>
-					</p>	
-
-					<p>
-						<label for="account_password">Senha</label><br />
-						<input name="account_password" size="40" type="password" value="" />
-					</p>						
-					
-					<div id="line1"></div>
-					
-					<p>
-						<input class="button" type="submit" value="Enviar" />
-					</p>					
-
-				</fieldset>
-			</form>';	
-		}	
+		$this->Draw();
+		return true;			
 	}
+	
+	function Prepare()
+	{
+		$this->loggedAcc = new \Framework\Account();
+		$this->loggedAcc->load($_SESSION['login'][0]);		
 
-}		
+		$this->guild = new Guilds();
+		
+		if(!$this->guild->LoadByName($_GET['name']))
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']);
+			return false;
+		}	
+
+		if($this->guild->OnWar())
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_IS_ON_WAR, $_GET['name']);
+			return false;			
+		}
+		
+		return true;
+	}
+	
+	function Post()
+	{
+		if($this->loggedAcc->getPassword() != \Core\Strings::encrypt($this->_password->GetPost()))
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
+			return false;
+		}
+		
+		$player = new \Framework\Player();
+		$player->loadByName($this->_character->GetPost());
+		
+		if(!$this->guild->IsMember($player->getId()))
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
+			return false;
+		}
+		
+		if($this->guild->GetOwnerId() == $player->getId())
+		{
+			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_CANNOT_LEAVE, $_GET['name']);	
+			return false;			
+		}
+						
+		Guilds::LogMessage("The player {$player->getName()} ({$player->getId()}) has left from guild {$this->guild->GetName()} ({$this->guild->GetId()}).");
+		$player->setGuildRankId( Guilds::RANK_NO_MEMBER );
+		$player->save();
+		
+		$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_LEAVE, $this->_character->GetPost(), $_GET['name']);		
+		return true;		
+	}
+	
+	function Draw()
+	{
+		global $module;		
+		
+		$module .= "
+		<form action='' method='post'>
+			<fieldset>
+
+				<p>
+					<label for='character_name'>Selecione o Personagem</label><br />		
+					{$this->_character->Draw()}
+				</p>	
+
+				<p>
+					<label for='account_password'>Senha</label><br />
+					{$this->_password->Draw()}
+				</p>						
+				
+				<p id='line'></p>
+				
+				<p>
+					<input class='button' type='submit' value='Enviar' />
+				</p>					
+
+			</fieldset>
+		</form>";		
+	}
+}	
+
+$view = new View();
 ?>

@@ -1,0 +1,2 @@
+RewriteEngine off
+RewriteRule ^(\d+)\.gif$ ?type=$1

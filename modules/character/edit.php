@@ -1,11 +1,13 @@
 <?php
+use \Core\Configs;
+
 if(isset($_POST['character_name']))
 {
-	$core->redirect("?ref=character.edit&name={$_POST['character_name']}");
+	\Core\Main::redirect("?ref=character.edit&name={$_POST['character_name']}");
 }
 
-$account = $core->loadClass("Account");
-$account->load($_SESSION['login'][0], "password");
+$account = new \Framework\Account();
+$account->load($_SESSION['login'][0]);
 
 $list = $account->getCharacterList();
 
@@ -13,127 +15,115 @@ if($_GET['name'])
 {
 	if(in_array($_GET['name'], $list))
 	{
-		$character = $core->loadClass("character");
-		$character->loadByName($_GET['name'], "name, comment, hide, online, sex, account_id");
+		$player = new \Framework\Player();
+		$player->loadByName($_GET['name']);
 
 		if($_POST)
 		{			
-			if($account->get("password") != $strings->encrypt($_POST["account_password"]))
+			if($account->get("password") != \Core\Strings::encrypt($_POST["account_password"]))
 			{
-				$error = "Confirmação da senha falhou.";
+				$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			}			
 			elseif($_POST["edit_action"] == "edit_information")
 			{			
 				if(strlen($_POST["character_comment"]) > 500)
 				{
-					$error = "O campo comentario deve possuir no maximo 500 caracteres.";
+					$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_COMMENT_WRONG_SIZE);
 				}
 				else
 				{		
 					$hide = ($_POST["character_hide"] == 1) ? "1" : "0";
-					$character->set("comment", $_POST["character_comment"]);
-					$character->set("hide", $hide);
+					$player->setComment(strip_tags($_POST["character_comment"]));
+					$player->setHidden($hide);
 					
-					$character->save();
+					$player->save();
 					
-					$success = "
-					<p>Caro jogador,</p>
-					<p>A mudança das informações de seu personagem foi efetuada com exito!</p>
-					<p>Tenha um bom jogo!</p>
-					";
+					$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_COMMENT_CHANGED);
 				}
 			}
 			elseif($_POST["edit_action"] == "edit_name")
 			{	
-				if(SHOW_SHOPFEATURES != 0)
+				if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 				{
-					$account = $character->loadAccount("premdays, lastday, type");
+					$account = $player->loadAccount();
 					
-					$newname_character = $core->loadClass("character");
+					$newname_character = new \Framework\Player();
 					
 					if(!$_POST["character_newname"])
 					{
-						$error = "Preencha todos campos do formulario corretamente.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FILL_FORM);
 					}			
 					elseif(!$_POST["confirm_changename"])
 					{
-						$error = "Para modificar o nome de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGE_THING_CONFIRM);
 					}			
-					elseif(!$strings->canUseName($_POST["character_newname"]))
+					elseif(!\Core\Strings::canUseName($_POST["character_newname"]))
 					{
-						$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_NAME);
 					}
 					elseif($newname_character->loadByName($_POST["character_newname"]))
 					{
-						$error = "Este nome já está em uso em nosso banco de dados. Tente novamente com outro nome.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NAME_ALREADY_USED);
 					}	
-					elseif($character->getOnline() == 1)	
+					elseif($player->getOnline() == 1)	
 					{
-						$error = "É nessario estar off-line no jogo para efetuar este recurso.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 					}			
-					elseif($account->getPremDays() < PREMDAYS_TO_CHANGENAME)
+					elseif($account->getPremDays() < Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME))
 					{
-						$error = "Você não possui os ".PREMDAYS_TO_CHANGENAME." dias de conta premium necessarios para modificar o nome de seu personagem.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_PREMDAYS_COST, Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME));
 					}
 					else
 					{		
-						$character->set("name", $_POST["character_newname"]);
-						$character->save();
+						$oldName = $player->getName();
+						
+						$player->setName($_POST["character_newname"]);
+						$player->save();
 								
-						//removeção dos premdays da conta do jogador
-						$account->updatePremDays(PREMDAYS_TO_CHANGENAME, false /* false to decrement days */);						
+						//remove premdays da conta do jogador
+						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGENAME), false /* false to decrement days */);						
 						$account->save();				
 						
-						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('name','{$character->get("id")}','{$_POST["character_newname"]}','".time()."')");
-						
-						$success = "
-						<p>Caro jogador,</p>
-						<p>A mudança de nome de seu personagem foi efetuada com exito!</p>
-						<p>Tenha um bom jogo!</p>
-						";
+						\Core\Main::addChangeLog('name', $player->get("id"), $_POST["character_newname"]);
+						$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NAME_CHANGED, $oldName, $_POST["character_newname"]);
 					}
 				}			
 			}
 			elseif($_POST["edit_action"] == "edit_sex")
 			{	
-				if(SHOW_SHOPFEATURES != 0)
+				if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 				{				
-					$account = $character->loadAccount("premdays, lastday, type");	
+					$account = $player->loadAccount();	
 					
 					if(!$_POST["confirm_changesex"])
 					{
-						$error = "Para modificar o sexo de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGE_THING_CONFIRM);
 					}	
 					elseif($account->get("type") > 2 AND $account->get("type") < 5)
 					{
-						$error = "Esta conta não possui permissão para acessar este recurso.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
 					}						
-					elseif($character->getOnline() == 1)
+					elseif($player->getOnline() == 1)
 					{
-						$error = "É nessario estar off-line no jogo para efetuar este recurso.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_NEED_OFFLINE);
 					}			
-					elseif($account->getPremDays() < PREMDAYS_TO_CHANGESEX)
+					elseif($account->getPremDays() < Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX))
 					{
-						$error = "Você não possui os ".PREMDAYS_TO_CHANGESEX." dias de conta premium necessarios para modificar o sexo de seu personagem.";
+						$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_CHANGESEX_COST, Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX));
 					}
 					else
 					{		
-						$sexo = $_sex[$_POST['character_sex']];
-						$character->set("sex", $sexo);
-						$character->save();
+						$genre_id = t_Genre::GetByString($_POST['character_sex']);
+						$player->set("sex", $genre_id);
+						$player->save();
 						
-						//removeção dos premdays da conta do jogador
-						$account->updatePremDays(PREMDAYS_TO_CHANGESEX, false /* false to decrement days */);	
+						//remove premdays da conta do jogador
+						$account->updatePremDays(Configs::Get(Configs::eConf()->PREMCOST_CHANGESEX), false /* false to decrement days */);	
 						
-						$account->save();		
+						$account->save();
 		
-						$db->query("INSERT INTO ".DB_WEBSITE_PREFIX."changelog (`type`,`player_id`,`value`,`time`) values ('sex','{$character->get("id")}','{$sexo}','".time()."')");
-						
-						$success = "
-						<p>Caro jogador,</p>
-						<p>A mudança de sexo de seu personagem foi efetuada com exito!</p>
-						<p>Tenha um bom jogo!</p>
-						";
+						\Core\Main::addChangeLog('sex', $player->get("id"), $genre_id);
+						$success = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_SEX_CHANGED, $player->getName());
 					}		
 				}		
 			}
@@ -141,20 +131,20 @@ if($_GET['name'])
 		
 		if($success)	
 		{
-			$core->sendMessageBox("Sucesso!", $success);
+			\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->SUCCESS), $success);
 		}
 		else
 		{
 			if($error)	
 			{
-				$core->sendMessageBox("Erro!", $error);
+				\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);
 			}
 			
-			$sex_option = ($character->get("sex") == 1) ? '<option value="female">Feminino</option>' : '<option value="male">Masculino</option>';
+			$sex_option = ($player->get("sex") == t_Genre::Male) ? '<option value="'.t_Genre::GetString(t_Genre::Female).'">Feminino</option>' : '<option value="'.t_Genre::GetString(t_Genre::Male).'">Masculino</option>';
 			
-			$editOptions .= '<option value="edit_information">Modificar Informações</option>';
+			$editOptions .= '<option value="edit_information">Modificar InformaÃ§Ãµes</option>';
 			
-			if(SHOW_SHOPFEATURES != 0)
+			if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 			{
 				$editOptions .= '<option value="edit_name">Modificar Nome</option>';
 				$editOptions .= '<option value="edit_sex">Modificar Sexo</option>';
@@ -171,7 +161,7 @@ if($_GET['name'])
 
 					<div class="autoaction" style="margin: 0px; padding: 0px;">
 						<p>
-							<label for="edit_action">Ação</label><br />
+							<label for="edit_action">AÃ§Ã£o</label><br />
 							<select name="edit_action">
 								'.$editOptions.'
 							</select>
@@ -181,18 +171,18 @@ if($_GET['name'])
 					<div title="edit_information" class="viewable" style="margin: 0px; padding: 0px;">
 						<p>
 							<label for="character_comment">Comentario</label><br />
-							<textarea name="character_comment" rows="10" wrap="physical" cols="55">'.$character->get("comment").'</textarea>
+							<textarea name="character_comment" rows="10" wrap="physical" cols="55">'.$player->get("comment").'</textarea>
 							<em><br>Limpe para deletar.</em>
 						</p>	
 	
 						<p>
-							<input '.(($character->get("hide") == "1") ? "checked=\"checked\"" : null).' name="character_hide" type="checkbox" value="1" /> Marque está opção para esconder este personagem.
+							<input '.(($player->get("hide") == "1") ? "checked=\"checked\"" : null).' name="character_hide" type="checkbox" value="1" /> Marque esta opÃ§Ã£o para esconder este personagem.
 						</p>
 					</div>		
 
 					';
 			
-				if(SHOW_SHOPFEATURES != 0)
+				if(!Configs::Get(Configs::eConf()->DISABLE_ALL_PREMDAYS_FEATURES))
 				{
 					
 					$module .=	'
@@ -207,7 +197,7 @@ if($_GET['name'])
 						</p>
 						
 						<p>
-							<input name="confirm_changename" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificação de nome de meu personagem irá ser feita sob um custo na qual será descontado 15 dias de minha conta premium.						
+							<input name="confirm_changename" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificaÃ§Ã£o de nome de meu personagem irÃ¡ ser feita sob um custo na qual serÃ¡ descontado 15 dias de minha conta premium.						
 						</p>	
 					</div>
 					
@@ -224,11 +214,11 @@ if($_GET['name'])
 						</p>
 						
 						<p>
-							<input name="confirm_changesex" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificação de sexo de meu personagem irá ser feita sob um custo na qual será descontado 10 dias de minha conta premium.
+							<input name="confirm_changesex" type="checkbox" value="1" /> Eu estou ciente e aceito que a modificaÃ§Ã£o de sexo de meu personagem irÃ¡ ser feita sob um custo na qual serÃ¡ descontado 10 dias de minha conta premium.
 						</p>	
 						
 						<p>
-							<font color="red"><b>Atenção: </b></font>A mudança de sexo não transfere addons ou outfits que o personagem possua de um sexo para o outro, sendo necessario então conseguir novamente os addons no novo sexo.
+							<font color="red"><b>AtenÃ§Ã£o: </b></font>A mudanÃ§a de sexo nÃ£o transfere addons ou outfits que o personagem possua de um sexo para o outro, sendo necessario entÃ£o conseguir novamente os addons no novo sexo.
 						</p>						
 					</div>';	
 				}				
@@ -250,7 +240,7 @@ if($_GET['name'])
 	}
 	else
 	{			
-		$core->sendMessageBox("Erro!", $error);	
+		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), $error);	
 	}
 }
 else

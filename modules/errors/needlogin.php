@@ -1,3 +1,4 @@
 <?
-$core->sendMessageBox("Erro!", "Para visualizar está pagina é requerido estar logado em sua conta.");
+//\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->NEED_LOGIN));
+\Core\Main::requireLogin();
 ?>

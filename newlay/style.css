@@ -1,7 +1,7 @@
 * {
 	border: none;
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 }
 
 a {
@@ -17,32 +17,54 @@ a:hover {
 body {
 	background: #000 url(images/body.jpg) repeat;
 	color: #FFF;
-	font: normal 11px Verdana, sans-serif;
+	font-family: Verdana, Arial, Times New Roman, sans-serif;
+	font-size: 9pt;
 	padding: 20px 0;
 }	
 
-h1 {
-	background: #333 url(images/header.jpg) no-repeat;
+h1.header{
+	background: #333 url(images/header.gif) no-repeat;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	height: 120px;
 }
 
-h1 span {
+h1.header span {
 	display: none;
 }
 
-h2 {
+iframe{
+	background-color: black;
+}
+
+#nav-bar {
 	background: #333 url(images/item.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	font: bold 11px Verdana, sans-serif;
-	padding: 6px;
+	height: 25px;
 }
 
-h2 span {
-	font-weight: normal;
+#nav-bar span {
+	display: block;
+	line-height: 25px;
+	margin-left: 6px;
 }
+
+h3 {
+	font: bold 14px Verdana, sans-serif;
+	padding-bottom: 4px;
+	padding-top: 4px;
+}
+
+h2 {
+	font: bold 17px Verdana, sans-serif;
+}
+
+h1 {
+	font: bold 20px Verdana, sans-serif;
+}
+
 
 p {
 	margin-top: 10px;
@@ -62,13 +84,113 @@ ul li {
 	padding: 10px;
 }
 
-#announcement, #footer {
+#top-menu, #footer {
 	background: #333 url(images/announcement.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
 	margin: 0;
-	padding: 13px;
 	text-align: center;
+	height: 40px;
+}
+
+#top-menu ul
+{
+	margin: 0px;
+	paddin: 0px;
+}
+
+#top-menu ul li
+{
+	margin: 0px;
+	paddin: 0px;
+	display: inline-block;
+	list-style-type: none;
+	width: 194px;
+	height: 40px;
+}
+
+#top-menu ul li a
+{
+	display: block;
+	width: 194px;
+	height: 40px;
+}
+
+#top-menu #lastnews:hover
+{
+	background: url(images/bt_lastnews.png);
+}
+
+#top-menu #lastnews
+{
+	background: url(images/bt_lastnews.png);
+	background-position: -192px 0px;
+}
+
+#top-menu #login:hover
+{
+	background: url(images/bt_login.png);
+}
+
+#top-menu #login
+{
+	background: url(images/bt_login.png);
+	background-position: -192px 0px;
+}
+
+#top-menu #logout:hover
+{
+	background: url(images/bt_logout.png);
+}
+
+#top-menu #logout
+{
+	background: url(images/bt_logout.png);
+	background-position: -192px 0px;
+}
+
+#top-menu #register:hover
+{
+	background: url(images/bt_register.png);
+}
+
+#top-menu #register
+{
+	background: url(images/bt_register.png);
+	background-position: -192px 0px;
+}
+
+#top-menu #account:hover
+{
+	background: url(images/bt_account.png);
+}
+
+#top-menu #account
+{
+	background: url(images/bt_account.png);
+	background-position: -192px 0px;
+}
+
+#top-menu #highscores:hover
+{
+	background: url(images/bt_highscores.png);
+}
+
+#top-menu #highscores
+{
+	background: url(images/bt_highscores.png);
+	background-position: -192px 0px;
+}
+
+#top-menu #auctions:hover
+{
+	background: url(images/bt_auctions.png);
+}
+
+#top-menu #auctions
+{
+	background: url(images/bt_auctions.png);
+	background-position: -192px 0px;
 }
 
 #content_wrapper {
@@ -88,36 +210,47 @@ ul li {
 	width: 581px;
 }
 
-#left {
+#left, #right-menu {
 	border-right: 1px solid #000;
-	background: #333 url(images/metal_bar.jpg) -3px bottom repeat-y;
 	float: left;
 	padding-bottom: 6px;
 	width: 186px;
 }
 
-#left ul {
+#left {
+	background: #333 url(images/metal_bar.jpg) -3px bottom repeat-y;
+}
+
+#right-menu {
+	background: #333 url(images/metal_bar_right.jpg) 0.5px bottom repeat-y;
+}
+
+#left ul, #right-menu ul {
 	border-right: 1px solid #000;
 	list-style: none;
 	margin: 0;
 	width: 180px;
 }
 
-#left tr {
+#right-menu ul{
+	margin-left: 3.9px;
+}
+
+#left tr, #right-menu tr {
 	border-right: 1px solid #000;
 	list-style: none;
 	margin: 0;
 	width: 180px;
 }
 
-#left ul li{
+#left ul li, #right-menu ul li{
 	display: inline;
 	margin: 0;
 }
 
 
 
-#left ul li a, #left ul li div, #left ul li table {
+#left ul li a, #left ul li div, #left ul li table, #right-menu ul > li > a, #right-menu ul li div, #right-menu ul li table{
 	background: #333 url(images/subitem.jpg) repeat-x;
 	border: 1px solid #666;
 	border-bottom: 1px solid #000;
@@ -129,66 +262,98 @@ ul li {
 	font-weight: normal;
 }
 
-#left ul li div strong{
+#right-menu > ul > li > div {
+	margin-left: 4px;
+}
+
+#left ul li div strong,  #right-menu ul li div strong{
 	float: left;
 	cursor: default;
 	font-weight: bold;
 }
 
-#left tr td strong {
+#right-menu ul li div strong {
+	
+}
+
+#left tr td strong, #right-menu tr td strong{
 	cursor: pointer;
 }
 
-#left ul li a:hover {
+#left ul li a:hover, #right-menu ul > li > a:hover{
 	background: #333 url(images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
 }
 
-#left td a:hover {
+#left td a:hover, #right-menu td a:hover{
 	background: #333 url(images/subitem_over.jpg) repeat-x;
 	text-decoration: none;
 }
 
-#left tr td table {
+#left tr td table, #right-menu tr td table{
 	background: #333 url(images/subitem.jpg) repeat;
 	padding: 0 6px 6px 6px;
 }
 
-#left ul li div {
+#left ul li div, #right-menu ul li div{
 	background: #333 url(images/item.jpg) repeat-x;
 	height: 15px;
 }
 
-#left td strong {
+#left td strong, #right-menu td strong{
 	background: #333 url(images/item.jpg) repeat-x;
 }
 
-#left li ul li div {
+#left ul li div.red, #right-menu ul li div.red{
+	background: #333 url(images/item_red.jpg) repeat-x;
+	height: 15px;
+}
+
+#left td strong.red, #right-menu td strong.red{
+	background: #333 url(images/item_red.jpg) repeat-x;
+}
+
+#left li ul li div, #right-menu li ul li div{
 	background: #333 url(images/subitem.jpg) repeat;
 	height: auto;
 }
 
-#left ul li div p {
+#left ul li div p, #right-menu ul li div p{
 	margin-top: 6px;
 }
 
-#left ul li div p em {
+#left ul li div p em, #right-menu ul li div p em{
 	font-style: normal;
 	font-weight: bold;
 }
 
-#right {
-	float: right;
-	width: 591px;
+#right-menu ul li div p em a{
+	color: white;
 }
 
-#right div {
-	padding: 0 10px 10px 10px;
+#right {
+	float: right;
+	width: 815px;
+}
+
+#right > div > div {
+	padding: 0 15px 10px 15px;
 }
 
 #right div.last {
 	border: none;
 }
+
+#content {
+	width: 627px;
+	float: left;
+}
+
+/*#right-menu {
+	width: 187px;
+	display: block;
+	float: right;
+}*/
 
 #wrapper {
 	background: #333 url(images/wrapper.jpg) repeat;
@@ -196,8 +361,115 @@ ul li {
 	margin: 0 auto;
 	padding: 10px;
 	overflow: hidden;
-	width: 780px;
+	width: 1004px;
+	margin-top: 45px;
 }
+
+#top-bar{
+	height: 44px;
+	width: 100%;
+	position: fixed;
+	background-color:#3b3f3d;
+	border-bottom: 1px #79817c solid;
+	top: 0px;
+  	opacity:0.92;
+  	filter:alpha(opacity=92); /* For IE8 and earlier */
+}
+
+#bar-wrapper{
+	height: 1%;
+	width: 1002px;
+	margin: 0 auto;
+}
+
+#top-bar #login{
+	width: 274px;
+	display: block;
+	float: right;
+}
+
+#top-bar #games-box{
+	width: 274px;
+	display: block;
+	float: left;
+}
+
+#top-bar #ultraxsoft-box{
+	background: url(images/ultraxsoft_logo.png) no-repeat;
+	background-position: center center;
+	width: 454px;
+	height: 42px;
+	display: block;
+	float: left;
+}
+
+#fog-screen {
+	z-index: 100;
+	position: absolute;
+	display: none;
+	background: url(images/trans_background.png) repeat;
+}
+
+#fog-alert{
+	width: 300px;
+	border: 2px solid black;
+	background: #333 url(images/wrapper_b.jpg) repeat;
+	top: 40%;
+	left: 50%;
+	margin-left: -100px;
+	position: fixed;
+	padding: 6px;
+}
+
+#fog-alert a.buttonstd{
+	
+	margin-right: 5px;
+}
+
+#fog-loading{
+	width: 16px;
+	height: 16px;
+	border: 2px solid black;
+	background: #333 url(images/icon_loading.gif) repeat;
+	top: 40%;
+	left: 50%;
+	margin-left: -8px;
+	position: fixed;
+}
+
+#fog-alert-title-error, #fog-alert-title-success{
+	font-size: 16px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+#fog-alert-title-error span, #fog-alert-title-success span{
+	background: url(images/icon_right.png) no-repeat;
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#fog-alert-title-error span {
+	background-position: -15px 0;
+}
+
+#fog-alert-title-error h3, #fog-alert-title-success h3{
+	margin-left: 5px;
+	display: inline-block;
+	line-height: 20px;
+}
+
+#fog-alert-content{
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+/*#fog-alert span{
+	display: block;
+}*/
 
 #wrapper_b {
 	background: #333 url(images/wrapper_b.jpg) repeat;
@@ -228,8 +500,139 @@ ul li {
 	margin-bottom: 6px;
 }
 
+.line_1{
+	border-bottom: 1px solid #cbc9c8;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+
 .online{
 	font-size: 8px;
 	color: #00ff00;
 	font-weight: bold;
+}
+
+#search_suggestions {
+	display: none;
+	position: relative;
+	left: 30px;
+	margin: 10px 0px 0px 0px;
+	width: 200px;
+	background-color: #202427;
+	border: 2px solid #000;
+	color: #FFF000;
+}
+
+#search_suggestions_list {
+	margin: 0px;
+	padding: 0px;
+}
+
+#search_suggestions_list li {
+	margin: 0px 0px 3px 0px;
+	padding: 3px;
+	cursor: pointer;
+}
+
+#search_suggestions_list li:hover {
+	background-color: #659CD8;
+}
+
+#search_suggestions_list span {
+	display: block;
+}
+
+#tileList{
+	padding: 1px;
+	background: #333;
+	border-top: 1px solid #666;
+	border-left: 1px solid #666;
+	border-bottom: 1px solid #666;
+	
+}
+
+#tileItem{
+	
+	background: #000 url(images/tileitem.png) repeat-y;
+	display: inline-block;
+	text-align: center;
+	vertical-align: top;
+	width: 137px;
+	margin-right: -3px;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+
+#tileItem:hover{
+	
+	background: #000 url(images/tileitem_over.png) repeat-y;
+	cursor: pointer;
+}
+
+#tileItem h3{
+	
+	border: none;
+	text-decoration: none;
+	font-size: 12px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+#tileItem img{
+
+	margin: 2px;
+}
+
+#tileItem p{
+	
+	margin-bottom: 5px;
+}
+
+#horizontalSelector {
+	margin-top: 25px;
+}
+
+#horizontalSelector span[name='left_corner']{
+	
+	display: inline-block;
+	background: url(images/left_corner.png) repeat-x;
+	width: 17px;
+	height: 24px;
+}
+
+#horizontalSelector span[name='right_corner']{
+	display: inline-block;
+	background: url(images/right_corner.png) repeat-x;
+	width: 17px;
+	height: 24px;
+	margin-left: -3px;
+}
+
+#horizontalSelector ul{
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#horizontalSelector ul li{
+	background: #333 url(images/tileitem_2.png) repeat-x;
+	display: inline-block;
+	width: 90px;
+	line-height: 24px;
+	margin: 0px;
+	margin-left: -3px;
+}
+
+#horizontalSelector ul li span{
+	text-align: center;
+	width: 90px;
+	display: block;
+	font-weight: bold;
+}
+
+#horizontalSelector ul li span:hover, #horizontalSelector ul li[checked="checked"]{
+	cursor: pointer;
+	background: #333 url(images/tileitem_over2.png) repeat-x;
 }
