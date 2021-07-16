@@ -5,13 +5,21 @@ class Contribute extends MySQL
 
 	function __construct()
 	{
-		$this->db = new MySQL();
-		$this->db->connect(DB_ULTRAXSOFT_HOST, DB_ULTRAXSOFT_USER, DB_ULTRAXSOFT_PASS, DB_ULTRAXSOFT_SCHEMA);
+		if(USEREMOTECONNECTIONS == 1)
+		{
+			$this->db = new MySQL();
+			$this->db->connect(DB_ULTRAXSOFT_HOST, DB_ULTRAXSOFT_USER, DB_ULTRAXSOFT_PASS, DB_ULTRAXSOFT_SCHEMA);
+		}
+		else
+		{
+			global $db;
+			$this->db = $db;	
+		}
 	}	
 	
 	function getOrdersListByAccount($account_id)
 	{
-		$query = $this->db->query("SELECT id FROM orders WHERE target_account = '".$account_id."' and status < 3 and server = '".SERVER_ID."' ORDER BY generated_in DESC");
+		$query = $this->db->query("SELECT id FROM ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')." WHERE target_account = '".$account_id."' and status < 3 and server = '".SERVER_ID."' ORDER BY generated_in DESC");
 		
 		if($query->numRows() != 0)
 		{
@@ -31,9 +39,9 @@ class Contribute extends MySQL
 	function load($id, $fields = null)
 	{
 		if($fields)
-			$query = $this->db->query("SELECT id, $fields FROM orders WHERE id = '".$id."'");
+			$query = $this->db->query("SELECT id, $fields FROM ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')." WHERE id = '".$id."'");
 		else
-			$query = $this->db->query("SELECT id FROM orders WHERE id = '".$id."'");		
+			$query = $this->db->query("SELECT id FROM ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')." WHERE id = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
@@ -59,7 +67,7 @@ class Contribute extends MySQL
 	
 	function getNewOrderNumber()
 	{
-		$query = $this->db->query("SELECT id FROM orders");
+		$query = $this->db->query("SELECT id FROM ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')."");
 		
 		$usedOrders = array();
 		
@@ -99,7 +107,7 @@ class Contribute extends MySQL
 	{
 		$i = 0;
 	
-		$query = $this->db->query("SELECT id FROM orders WHERE id = '".$this->data['id']."'");
+		$query = $this->db->query("SELECT id FROM ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')." WHERE id = '".$this->data['id']."'");
 		
 		//update
 		if($query->numRows() == 1)
@@ -118,7 +126,7 @@ class Contribute extends MySQL
 				}			
 			}
 			
-			$this->db->query("UPDATE orders SET $update WHERE id = '".$this->data['id']."'");
+			$this->db->query("UPDATE ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')." SET $update WHERE id = '".$this->data['id']."'");
 		}
 		//new account
 		elseif($query->numRows() == 0)
@@ -139,7 +147,7 @@ class Contribute extends MySQL
 				}			
 			}
 
-			$this->db->query("INSERT INTO orders ($insert_fields) values($insert_values)");			
+			$this->db->query("INSERT INTO ".((USEREMOTECONNECTIONS == 1) ? 'orders' : DB_WEBSITE_PREFIX.'orders')." ($insert_fields) values($insert_values)");			
 		}		
 	}
 	
@@ -153,7 +161,7 @@ class Contribute extends MySQL
 		return $this->data[$field];
 	}	
 	
-	function importPayments()
+	/*function importPayments()
 	{
 		$query = $this->db->query("SELECT * FROM siteo.payments");
 		$periodoquepode = array(30, 60, 90, 180, 360);
@@ -196,7 +204,7 @@ class Contribute extends MySQL
 				}				
 			}
 		}
-	}
+	}*/
 	
 	function erease()
 	{
@@ -207,7 +215,7 @@ class Contribute extends MySQL
 	{
 		global $_contribution;
 	
-		if($this->data['type'] == "PayPal")
+		/*if($this->data['type'] == "PayPal")
 		{
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_coin = $price[0];
@@ -228,7 +236,8 @@ class Contribute extends MySQL
 				</form>
 			';	
 		}
-		elseif($this->data['type'] == "PagSeguro")
+		elseif($this->data['type'] == "PagSeguro")*/
+		if($this->data['type'] == "PagSeguro")
 		{
 			$price = explode(" ", $_contribution[$this->data['type']][$this->data['period']]);
 			$price_value = str_replace(",", ".", $price[1]);			
@@ -239,11 +248,10 @@ class Contribute extends MySQL
 				<input type="hidden" name="tipo" value="CP">
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium.">
+				<input type="hidden" name="item_descr_1" value="Contribuição para '.$this->data['period'].' dias de Conta Premium. (ref: '.$this->data['id'].')">
 				<input type="hidden" name="item_quant_1" value="1">
 				<input type="hidden" name="item_valor_1" value="'.$price_value.'">
 				<input type="hidden" name="item_frete_1" value="000">
-				<input type="hidden" name="ref_transacao" value="REF#'.$this->data['id'].'">
 				
 				<input class="button" type="submit" value="Finalizar" />	
 				</form>			

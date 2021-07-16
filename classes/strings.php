@@ -5,8 +5,8 @@ class Strings
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}
 
 	function filterInputs($checkGets = false)
@@ -15,20 +15,15 @@ class Strings
 		{
 			foreach($_POST as $post => $value)
 			{
-				if(($post != "password" and $post != "account_password") and !$this->SQLInjection($value))
-					return false;
+				$_POST[$post] = $this->SQLInjection($value);
 			}
 		}
 	
 		if($checkGets)
 		{
-			foreach($_GET as $post => $value)
+			foreach($_GET as $get => $value)
 			{
-				if($post != "ref")
-				{
-					if(!$this->SQLInjection($value))
-						return false;
-				}	
+				$_GET[$get] = $this->SQLInjection($value);	
 			}		
 		}
 
@@ -37,10 +32,14 @@ class Strings
 	
 	function SQLInjection($string)
 	{
-		if(preg_match("/(from|select|insert|delete|where|drop table|show tables|#|\*|--|\\\\)/i", $string))
-			return false;
-		else
-			return true;		
+		//$string = nl2br($string);
+	    //$string = get_magic_quotes_gpc() ? stripslashes($string) : $string;
+	    
+		$string = !get_magic_quotes_gpc() ? addslashes($string) : $string;
+	 
+	    //$string = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($string) : mysql_escape_string($string);
+	 
+	    return $string;		
 	}
 	
 	function randKey($tamanho, $separadores, $randTypeElement = "default") 
@@ -102,11 +101,13 @@ class Strings
 	            return true; 
 	        } 
 	    } 
+	    
+    	return false;
 	}
 	
 	function isFromBlackList($string)
 	{
-		$query = $this->db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blacklistStrings");
+		$query = $this->db->query("SELECT string FROM ".DB_WEBSITE_PREFIX."blackliststrings");
 		
 		while($fetch = $query->fetch())
 		{
@@ -172,7 +173,7 @@ class Strings
 	
 		for($a = 0; $a != count($palavras); $a++)
 		{	
-			foreach(count_chars($palavras[$a], 1) as $letra => $quantidade)
+			foreach(count_chars($palavras[$a], 1) as $quantidade)
 			{
 				if($quantidade > 4)
 					return false;				

@@ -1,5 +1,5 @@
 <?php
-$query = $db_tenerian->query("SELECT * FROM houses");
+$query = $db->query("SELECT * FROM houses");
 
 $module .= "
 <table cellspacing='0' cellpadding='0' id='table'>
@@ -26,7 +26,7 @@ while($fetch = $query->fetch())
 	{
 		$module .= "
 		<tr>
-			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]}</td> <td><font style='color: green; font-weight: bold;'>Vazia</font></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
+			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]["name"]}</td> <td><font style='color: green; font-weight: bold;'>Vazia</font></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
 		</tr>";		
 	}	
 	else
@@ -36,7 +36,7 @@ while($fetch = $query->fetch())
 		
 		$module .= "
 		<tr>
-			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]}</td> <td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
+			<td>{$houses->get("name")}</td> <td>{$_townid[$houses->get("townid")]["name"]}</td> <td><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$houses->get("rent")}</td> <td>{$houses->get("size")} sqm</td>
 		</tr>";			
 	}
 }

@@ -18,12 +18,15 @@ $_vocationid[6] = "Elder Druid";
 $_vocationid[7] = "Royal Paladin";
 $_vocationid[8] = "Elite Knight";	
 
-$_townid[1] = "Quendor";
-$_townid[2] = "Aracura";
-$_townid[3] = "Rookgaard";
-$_townid[4] = "Thorn";
-$_townid[5] = "Salazart";
-$_townid[7] = "Northrend";
+$_townid = array(
+	1 => array("name" => "Quendor", 			"canCreate" => 0, 		"premium" => 0),
+	2 => array("name" => "Aracura", 			"canCreate" => 0, 		"premium" => 1),
+	3 => array("name" => "Rookgaard", 			"canCreate" => 0, 		"premium" => 0),
+	4 => array("name" => "Thorn", 				"canCreate" => 0, 		"premium" => 0),
+	5 => array("name" => "Salazart", 			"canCreate" => 0, 		"premium" => 1),
+	6 => array("name" => "Island of Peace", 	"canCreate" => 1, 		"premium" => 0),
+	7 => array("name" => "Northrend", 			"canCreate" => 0, 		"premium" => 1)
+);
 
 $_skill['fist'] = 0;
 $_skill['club'] = 1;
@@ -59,40 +62,7 @@ $_contribution['PayPal']["180"] = "USD 24.90";
 $_contribution['status'][0] = "Aguardando Pagamento.";
 $_contribution['status'][1] = "Confirmado";
 $_contribution['status'][2] = "Concluido";
-$_contribution['status'][3] = "Cancelado";
-
-$_banreasonid[0] = "Nome ofensivo";
-$_banreasonid[1] = "Nome contendo parte de uma frase";	
-$_banreasonid[2] = "Nome com palavra sem sentido";
-$_banreasonid[3] = "Nome com formato invalido";	
-$_banreasonid[4] = "Nome não descrevendo um personagem";
-$_banreasonid[5] = "Nome de uma celebridade";	
-$_banreasonid[6] = "Nome referente a uma cidade";	
-$_banreasonid[7] = "Nome para falsificar a identidade de um player";	
-$_banreasonid[8] = "Nome para falsificar a posição de alguém";	
-$_banreasonid[9] = "Declaração Ofensiva";	
-$_banreasonid[10] = "Cometer spam";	
-$_banreasonid[11] = "Propaganda não relacionada ao jogo";	
-$_banreasonid[12] = "Propaganda de dinheiro reais";	
-$_banreasonid[13] = "Publicação de algo em lingua não oficializada";	
-$_banreasonid[14] = "Declaração pública de coisas sem relação ao jogo";	
-$_banreasonid[15] = "Incentivando a violação de regras";	
-$_banreasonid[16] = "Abusando de bug";	
-$_banreasonid[17] = "Abusando de fraquezas do jogo";	
-$_banreasonid[18] = "Usando Macro";	
-$_banreasonid[19] = "Usando Software ilegal para jogar";	
-$_banreasonid[20] = "Hackear";	
-$_banreasonid[21] = "Usando multi-clients";	
-$_banreasonid[22] = "Negociar sua conta";	
-$_banreasonid[23] = "Dividir sua conta";	
-$_banreasonid[24] = "Ameaçar um gamemaster";	
-$_banreasonid[25] = "Pretenção de ter uma posição oficial";	
-$_banreasonid[26] = "Prentenção de ter influência em um gamemaster";	
-$_banreasonid[27] = "Falso report para um gamemaster";	
-$_banreasonid[28] = "Excesso de mortes infustificadas";	
-$_banreasonid[29] = "Comportamento destrutivo";	
-$_banreasonid[30] = "Leiloando algo";	
-$_banreasonid[31] = "Pagamento invalido";	
+$_contribution['status'][3] = "Cancelado";	
 
 $_banactionid[0] = "Notificado";
 $_banactionid[1] = "Nome denunciado";
@@ -100,7 +70,7 @@ $_banactionid[2] = "Banido";
 $_banactionid[3] = "Nome denunciado + Banido";
 $_banactionid[4] = "Aviso final com banimento";
 $_banactionid[5] = "Nome denunciado com Banido com Aviso final";
-$_banactionid[6] = "Relatório declarado";
+$_banactionid[6] = "Relatrio declarado";
 $_banactionid[7] = "Deletado";
 
 $_bantypeid[1] = "IP banido";

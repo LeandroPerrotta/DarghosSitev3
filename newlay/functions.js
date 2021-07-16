@@ -1,5 +1,6 @@
-var xmlhttp = false;
-	
+xmlhttp = false;
+avgPing = 0;
+
 function init()
 {
 	try
@@ -20,28 +21,15 @@ function init()
 	
 	if(!xmlhttp && typeof XMLHttpRequest != "undefined")
 	{
-		xmlhttp = new XMLHttpRequest();
+        try
+        {
+        	xmlhttp = new XMLHttpRequest();
+        }
+        catch (e)
+        {
+        	xmlhttp = false;
+        }
 	}	
-}
-
-function transmitGet(page)
-{
-	if(xmlhttp == null)
-	{
-		alert("Este navegador não suporta tecnologia Ajax.");
-	}	
-	
-	var response;	
-	
-	xmlhttp.open("GET", "ajax.php?" + page, true);
-	xmlhttp.onreadystatechange = function()
-	{
-		if(xmlhttp.readystate == 4 && xmlhttp.status == 200)
-			response = xmlhttp.responseText;
-	}
-	
-	xmlhttp.send(null);
-	return response;
 }
 	
 //COOKIES
@@ -51,6 +39,20 @@ function createCookie(name,value,days)
 	{
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else 
+		var expires = "";
+	
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function createCookieSec(name,value,seconds) 
+{
+	if (seconds) 
+	{
+		var date = new Date();
+		date.setTime(date.getTime()+(seconds*1000));
 		var expires = "; expires="+date.toGMTString();
 	}
 	else 
@@ -95,4 +97,19 @@ function setMenuCookie(menu)
 		else
 			createCookie("menudropdown_" + menu, "true", 7);
 	}
+}
+
+function usleep(microseconds) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Brett Zamir (http://brettz9.blogspot.com)
+    // %        note 1: For study purposes. Current implementation could lock up the user's browser.
+    // %        note 1: Consider using setTimeout() instead.
+    // %        note 2: Note that this function's argument, contrary to the PHP name, does not
+    // %        note 2: start being significant until 1,000 microseconds (1 millisecond)
+    // *     example 1: usleep(2000000); // delays for 2 seconds
+    // *     returns 1: true
+ 
+    var start = new Date().getTime();
+    while (new Date() < (start + microseconds/1000)) {}
+    return true;
 }

@@ -16,46 +16,36 @@ if($_SESSION['recovery'])
 	{
 		if($post)
 		{	
-			$postSecretKey = $post[2];
-			$postEmail = $post[3];
-				
-			if($secretkey["lembrete"] == "default")
-			{
-				$postSecretKey = $post[1];
-				$postEmail = $post[2];				
-			}
+			$postSecretKey = $_POST['recovery_secretkey'];
+			$postEmail = $_POST['recovery_email'];
 		
 			if($core->getIpTries() >= 3)
 			{
-				$error = "Está operação está bloqueada, por favor aguarde 24 horas após a ultima tentativa.";
+				$error = $boxMessage['OPERATION_BLOCKED_STATE'] ;
 			}
 			elseif($postSecretKey != $secretkey['key'])
 			{
 				$core->increaseIpTries();
 				
 				if($core->getIpTries() < 3)
-					$error = "A chave secreta informada para mudança de e-mail de sua conta está incorreta. Por movitos de segurança você só poderá efetuar 3 tentativas desta operação, após as 3 tentativas este recurso estará bloqueado por 24 horas.";
+					$error = $boxMessage['INCORRECT_SECRET_KEY'];
 				else
-					$error = "Você efetuou três tentativas erradas desta operação, por motivos de segurança este recurso estará bloqueado pelas proximas 24 horas.";
+					$error = $boxMessage['MANY_ATTEMPS_OPERATION_BLOCKED'];
 			}
 			elseif($chkEmail->loadByEmail($postEmail))
 			{
-				$error = "Este e-mail já esta em uso por outra conta em nosso banco de dados.";
+				$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
 			}
 			elseif(!$strings->validEmail($postEmail))
 			{
-				$error = "Este não é um e-mail valido.";
+				$error = $boxMessage['INVALID_EMAIL'];
 			}
 			else
 			{
-				$account->set("email", $postEmail);
+				$account->setEmail($postEmail);
 				$account->save();
 				
-				$success = "
-				<p>Caro jogador,</p>
-				<p>O e-mail registrado em sua conta foi modificado para {$postEmail} ultilizando sua chave secreta com sucesso!</p>
-				<p>Tenha um bom jogo!</p>
-				";		
+				$success = $boxMessage['SUCCESS.CHANGE_EMAIL_USING_RECOVERY_KEY'];	
 			}
 		}
 	
@@ -71,11 +61,11 @@ if($_SESSION['recovery'])
 			}
 			
 		$module .= '	
-			<form action="" method="post">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset>			
 			
 					<p>
-						<label for="recovery_name">Nome do Personagem</label><br />
+						<label for="recovery_name">'.$pages["ACCOUNT.ADVANCED_RECOVERY.CHARACTER_NAME"].'</label><br />
 						<input readonly="readonly" name="recovery_name" size="40" type="text" value="'.$_SESSION['recovery'][0].'" />
 					</p>		
 					
@@ -85,26 +75,26 @@ if($_SESSION['recovery'])
 					{
 						$module .= '
 						<p>
-							<label for="recovery_character">Lembrete</label><br />
-							<input readonly="readonly" name="recovery_lembrete" size="40" type="text" value="'.$secretkey["lembrete"].'" /> <br><em>(lembrete de sua chave secreta configurado por você)</em>
+							<label for="recovery_character">'.$pages["ACCOUNT.ADVANCED_RECOVERY.REMINDER"].'</label><br />
+							<input readonly="readonly" name="recovery_lembrete" size="40" type="text" value="'.$secretkey["lembrete"].'" /> <br><em>('.$pages["ACCOUNT.ADVANCED_RECOVERY.REMINDER_DESC"].')</em>
 						</p>';			
 					}			
 					
 					$module .= '
 					<p>
-						<label for="recovery_secretkey">Chave Secreta</label><br />
-						<input name="recovery_secretkey" size="40" type="password" value="" /> <br><em>(informe sua chave secreta corretamente)</em>
+						<label for="recovery_secretkey">'.$pages["ACCOUNT.ADVANCED_RECOVERY.SECRETKEY"].'</label><br />
+						<input name="recovery_secretkey" size="40" type="password" value="" /> <br><em>('.$pages["ACCOUNT.ADVANCED_RECOVERY.SECRETKEY_DESC"].')</em>
 					</p>
 					
 					<p>
-						<label for="recovery_email">Novo e-mail</label><br />
-						<input name="recovery_email" size="40" type="text" value="" /> <br><em>(informe o novo endereço de e-mail que você deseja configurar em sua conta)</em>
+						<label for="recovery_email">'.$pages["ACCOUNT.ADVANCED_RECOVERY.NEW_EMAIL"].'</label><br />
+						<input name="recovery_email" size="40" type="text" value="" /> <br><em>('.$pages["ACCOUNT.ADVANCED_RECOVERY.NEW_EMAIL_DESC"].')</em>
 					</p>			
 					
 					<div id="line1"></div>				
 					
 					<p>
-						<input class="button" type="submit" value="Proximo" />					
+						<input class="button" type="submit" value="'.$buttons['SUBMIT'].'" />					
 					</p>
 			</fieldset>
 		</form>';
@@ -112,7 +102,7 @@ if($_SESSION['recovery'])
 	}
 	else
 	{
-		$core->sendMessageBox("Erro!", "Esta conta não possui uma chave secreta configurada.");		
+		$core->sendMessageBox("Erro!", $boxMessage['ACCOUNT_NOT_HAVE_SECRET_KEY']);		
 	}		
 }
 ?>

@@ -5,30 +5,67 @@ class Character
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}
 
+	
+	
 	function load($player_id, $fields = null)
 	{
-		if($fields)
-			$query = $this->db->query("SELECT id, $fields FROM players WHERE id = '".$player_id."'");
-		else
-			$query = $this->db->query("SELECT id FROM players WHERE id = '".$player_id."'");		
+		$query = $this->db->query("SELECT id, name, group_id, account_id, level, vocation, maglevel, health, healthmax, experience, lookbody, lookfeet, lookhead, looklegs, looktype, lookaddons, maglevel, mana, manamax, manaspent, soul, town_id, posx, posy, posz, conditions, cap, sex, lastlogin, lastip, save, skull_type, rank_id, guildnick, lastlogout, balance, stamina, direction, loss_experience, loss_mana, loss_skills, loss_items, description, guild_join_date, created, hidden, online, skull_time FROM players WHERE id = '".$player_id."'");		
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
-			$this->data['id'] = $fetch->id;	
-					
-			if($fields)	
-			{	
-				$e = explode(", ", $fields);
-				foreach($e as $field)
-				{
-					$this->data[$field] = $fetch->$field;
-				}
-			}
+			
+			$this->data['id'] = $fetch->id;				
+			$this->data['name'] = $fetch->name;
+			$this->data['group_id'] = $fetch->group_id;
+			$this->data['account_id'] = $fetch->account_id;
+			$this->data['level'] = $fetch->level;
+			$this->data['vocation'] = $fetch->vocation;
+			$this->data['health'] = $fetch->health;
+			$this->data['healthmax'] = $fetch->healthmax;
+			$this->data['experience'] = $fetch->experience;
+			$this->data['lookbody'] = $fetch->lookfeet;
+			$this->data['lookfeet'] = $fetch->lookfeet;
+			$this->data['lookhead'] = $fetch->lookhead;
+			$this->data['looklegs'] = $fetch->looklegs;
+			$this->data['looktype'] = $fetch->looktype;
+			$this->data['lookaddons'] = $fetch->lookaddons;
+			$this->data['maglevel'] = $fetch->maglevel;
+			$this->data['mana'] = $fetch->mana;
+			$this->data['manamax'] = $fetch->manamax;
+			$this->data['manaspent'] = $fetch->manaspent;
+			$this->data['soul'] = $fetch->soul;
+			$this->data['town_id'] = $fetch->town_id;
+			$this->data['posx'] = $fetch->posx;
+			$this->data['posy'] = $fetch->posy;
+			$this->data['posz'] = $fetch->posz;
+			$this->data['conditions'] = $fetch->conditions;
+			$this->data['cap'] = $fetch->cap;
+			$this->data['sex'] = $fetch->sex;
+			$this->data['lastlogin'] = $fetch->lastlogin;
+			$this->data['lastip'] = $fetch->lastip;
+			$this->data['save'] = $fetch->save;
+			$this->data['skull_type'] = $fetch->skull_type;
+			$this->data['rank_id'] = $fetch->rank_id;
+			$this->data['guildnick'] = $fetch->guildnick;
+			$this->data['lastlogout'] = $fetch->lastlogout;
+			$this->data['balance'] = $fetch->balance;
+			$this->data['stamina'] = $fetch->stamina;
+			$this->data['direction'] = $fetch->direction;
+			$this->data['loss_experience'] = $fetch->loss_experience;
+			$this->data['loss_mana'] = $fetch->loss_mana;
+			$this->data['loss_skills'] = $fetch->loss_skills;
+			$this->data['loss_items'] = $fetch->loss_items;
+			$this->data['description'] = addslashes($fetch->description);
+			$this->data['guild_join_date'] = $fetch->guild_join_date;
+			$this->data['created'] = $fetch->created;
+			$this->data['hidden'] = $fetch->hidden;
+			$this->data['online'] = $fetch->online;
+			$this->data['skull_time'] = $fetch->skull_time;
 
 			return true;	
 		}
@@ -38,21 +75,333 @@ class Character
 		}			
 	}
 	
+	
+	
+	function set($field, $value)
+	{
+		switch($field)
+		{
+			case "id"; 					$this->setId($value); 				break;	
+			case "name"; 				$this->setName($value); 			break;	
+			case "group_id"; 			$this->setGroup($value);			break;	
+			case "account_id"; 			$this->setAccountId($value); 		break;	
+			case "level"; 				$this->setLevel($value); 			break;	
+			case "vocation"; 			$this->setVocation($value); 		break;	
+			case "health"; 				$this->setHealth($value); 			break;	
+			case "healthmax"; 			$this->setHealth($value); 			break;	
+			case "experience";			$this->setExperience($value); 		break;	
+			case "maglevel";			$this->setMagLevel($value); 		break;	
+			case "mana";				$this->setMana($value); 			break;	
+			case "manamax";				$this->setMana($value); 			break;	
+			case "town_id";				$this->setTownId($value); 			break;	
+			case "cap";					$this->setCap($value); 				break;	
+			case "sex";					$this->setSex($value); 				break;	
+			case "rank_id";				$this->setRankId($value); 			break;	
+			case "guildnick";			$this->setGuildNick($value); 		break;	
+			case "comment";				$this->setDescription($value); 		break;	
+			case "description";			$this->setDescription($value); 		break;	
+			case "guild_join_date";		$this->setGuildJoindate($value); 	break;	
+			case "creation";			$this->setCreation($value); 		break;	
+			case "created";				$this->setCreation($value); 		break;	
+			case "hide";				$this->setHidden($value); 			break;	
+			case "hidden";				$this->setHidden($value); 			break;	
+		}
+	}
+	
+	
+	
+	function setId($value)
+	{
+		$this->data['id'] = $value;
+	}
+	
+	function setName($value)
+	{
+		$this->data['name'] = $value;
+	}
+	
+	function setGroup($value)
+	{
+		$this->data['group_id'] = $value;
+	}
+	
+	function setAccountId($value)
+	{
+		$this->data['account_id'] = $value;
+	}
+	
+	function setLevel($value)
+	{
+		$this->data['level'] = $value;
+	}
+	
+	function setVocation($value)
+	{
+		$this->data['vocation'] = $value;
+	}
+	
+	function setHealth($value)
+	{
+		$this->data['health'] = $value;
+		$this->data['healthmax'] = $value;
+	}
+	
+	function setExperience($value)
+	{
+		$this->data['experience'] = $value;
+	}
+
+	function setLookType($value)
+	{
+		$this->data['looktype'] = $value;
+	}	
+	
+	function setMagLevel($value)
+	{
+		$this->data['maglevel'] = $value;
+	}
+	
+	function setMana($value)
+	{
+		$this->data['mana'] = $value;
+		$this->data['manamax'] = $value;
+	}
+	
+	function setTownId($value)
+	{
+		$this->data['town_id'] = $value;
+	}
+	
+	function setConditions($value)
+	{
+		$this->data['conditions'] = $value;
+	}	
+	
+	function setCap($value)
+	{
+		$this->data['cap'] = $value;
+	}
+	
+	function setSex($value)
+	{
+		$this->data['sex'] = $value;
+	}
+	
+	function setRankId($value)
+	{
+		$this->data['rank_id'] = $value;
+	}
+	
+	function setGuildNick($value)
+	{
+		global $strings;
+		$this->data['guildnick'] = $strings->SQLInjection($value);
+	}
+	
+	function setDescription($value)
+	{
+		global $strings;
+		$this->data['description'] = $strings->SQLInjection($value);
+	}
+	
+	function setGuildJoinDate($value)
+	{
+		$this->data['guild_join_date'] = $value;
+	}
+	
+	function setCreation($value)
+	{
+		$this->data['created'] = $value;
+	}
+	
+	function setHidden($value)
+	{
+		$this->data['hidden'] = $value;
+	}
+	
+	
+	
+	function get($field)
+	{
+		switch($field)
+		{
+			case "id":					return $this->getId();					break;
+			case "name":				return $this->getName();				break;
+			case "group":				return $this->getGroup();				break;
+			case "account_id":			return $this->getAccountId();			break;
+			case "level":				return $this->getLevel();				break;
+			case "vocation":			return $this->getVocation();			break;
+			case "experience":			return $this->getExperience();			break;
+			case "town_id":				return $this->getTownId();				break;
+			case "sex":					return $this->getSex();					break;
+			case "rank_id":				return $this->getRankId();				break;
+			case "guildnick":			return $this->getGuildNick();			break;
+			case "online":				return $this->getOnline();				break;
+			case "description":			return $this->getDescription();			break;
+			case "comment":				return $this->getDescription();			break;
+			case "guild_join_date":		return $this->getGuildJoinDate();		break;
+			case "created":				return $this->getCreation();			break;
+			case "hide":				return $this->getHidden();				break;
+		}
+		
+		return true;
+	}		
+	
+	
+	
+	function getId()
+	{
+		return $this->data['id'];
+	}
+	
+	function getName()
+	{
+		return $this->data['name'];
+	}
+	
+	function getGroup()
+	{
+		return $this->data['group_id'];
+	}
+	
+	function getAccountId()
+	{
+		return $this->data['account_id'];
+	}
+	
+	function getLevel()
+	{
+		return $this->data['level'];
+	}
+	
+	function getMagicLevel()
+	{
+		return $this->data['maglevel'];
+	}	
+	
+	function getVocation()
+	{
+		return $this->data['vocation'];
+	}
+	
+	function getExperience()
+	{
+		return $this->data['experience'];
+	}
+	
+	function getMagLevel()
+	{
+		return $this->data['maglevel'];
+	}
+	
+	function getTownId()
+	{
+		return $this->data['town_id'];
+	}
+	
+	function getSex()
+	{
+		return $this->data['sex'];
+	}
+	
+	function getRankId()
+	{
+		return $this->data['rank_id'];
+	}
+	
+	function getGuildNick()
+	{
+		return stripslashes($this->data['guildnick']);
+	}
+	
+	function getOnline()
+	{
+		return $this->data['online'];
+	}
+	
+	function getDescription()
+	{
+		return stripslashes($this->data['description']);
+	}
+	
+	function getGuildJoinDate()
+	{
+		return $this->data['guild_join_date'];
+	}
+	
+	function getCreation()
+	{
+		return $this->data['created'];
+	}
+	
+	function getHidden()
+	{
+		return $this->data['hidden'];
+	}
+	
+	function getLastLogin()
+	{
+		return $this->data['lastlogin'];
+	}	
+	
+	function getPosX()
+	{
+		return $this->data['posx'];
+	}
+	
+	function getPosY()
+	{
+		return $this->data['posy'];
+	}
+
+	function getPosZ()
+	{
+		return $this->data['posz'];
+	}
+
+
+	
 	function loadLastDeaths()
 	{
-		$query = $this->db->query("SELECT time, level, killed_by, is_player FROM player_deaths WHERE player_id = '".$this->data['id']."' AND time + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY time DESC");	
+		$query = $this->db->query("SELECT id, player_id, date, level FROM player_deaths WHERE player_id = '".$this->data['id']."' AND date + ".(60 * 60 * 24 * SHOW_DEATHS_DAYS_AGO)." > ".time()." ORDER BY date DESC");	
 		
 		if($query->numRows() != 0)
 		{	
 			$deathlist = array();
-			while($fetch = $query->fetch())
-			{	
+			while($death_fetch = $query->fetch())
+			{		
+				$_killer = NULL;
+				$_altkiller = NULL;
+				
+				$killers_query = $this->db->query("SELECT id, death_id, lasthit FROM killers WHERE death_id = '{$death_fetch->id}'");
+				while($killers_fetch = $killers_query->fetch())
+				{
+					$player_killers_query = $this->db->query("SELECT kill_id, player_id WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
+					if($player_killers_query->numRows() != 0)
+					{
+						if($killers_fetch->lasthit == 1)
+							$_killer = $player_killers_query->fetch()->player_id;
+						else
+							$_altkiller = $player_killers_query->fetch()->player_id;
+					}
+					
+					$env_killers_query = $this->db->query("SELECT kill_id, name FROM environment_killers WHERE kill_id = '{$killers_fetch->id}' ORDER BY kill_id LIMIT 1");
+					if($env_killers_query->numRows() != 0)
+					{
+						if($killers_fetch->lasthit == 1)
+							$_killer = $env_killers_query->fetch()->name;
+						else
+							$_altkiller = $env_killers_query->fetch()->name;
+					}
+					
+				}
+				
 				$deathlist[] = array
 				(
-					"time" => $fetch->time,
-					"level" => $fetch->level,
-					"killed_by" => $fetch->killed_by,
-					"is_player" => $fetch->is_player
+					"time" => $death_fetch->date,
+					"level" => $death_fetch->level,
+					"killed_by" => $_killer,
+					"altkilled_by" => $_altkiller
 				);	
 			}
 			
@@ -106,12 +455,10 @@ class Character
 	}
 	
 	function save()
-	{
-		$query = $this->db->query("SELECT id FROM players WHERE name = '".$this->data['name']."' OR id = '".$this->data['id']."'");
-		
+	{		
 		$i = 0;
 		
-		if($query->numRows() != 0)
+		if(isset($this->data['id']))
 		{
 			foreach($this->data as $field => $value)
 			{
@@ -130,7 +477,7 @@ class Character
 			$this->db->query("UPDATE players SET $update WHERE id = '".$this->data['id']."'");		
 		}
 		//criação de novos personagens!!
-		elseif($query->numRows() == 0)
+		else
 		{
 			foreach($this->data as $field => $value)
 			{
@@ -148,23 +495,16 @@ class Character
 				}			
 			}
 
-			$this->db->query("INSERT INTO players ($insert_fields) values($insert_values)");						
+			$this->db->query("INSERT INTO players ($insert_fields) values($insert_values)");
+
+			$this->data['id'] = $this->db->lastInsertId();
 		}
 	}
-	
-	function set($field, $value)
-	{
-		$this->data[$field] = $value;
-	}
-	
-	function get($field)
-	{
-		return $this->data[$field];
-	}	
 
 	function addItem($slot, $slot_pid, $itemid, $count) 
 	{	
-		$this->db->query("INSERT INTO `player_items` VALUES ('".$this->data['id']."', '".$slot_pid."', '".$slot."', '".$itemid."', '".$count."', '', '', '0')");
+		//echo "{$this->data['id']}<br>";
+		$this->db->query("INSERT INTO `player_items` VALUES ('".$this->data['id']."', '".$slot_pid."', '".$slot."', '".$itemid."', '".$count."', '')");
 	}	
 	
 	function deletionStatus()
@@ -234,7 +574,7 @@ class Character
 	
 	function inviteToGuild($guild_id)
 	{
-		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `time`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
+		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `date`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
 	}
 	
 	function acceptInvite()

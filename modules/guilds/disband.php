@@ -29,7 +29,11 @@ if($_GET['name'])
 			if($account->get("password") != $strings->encrypt($post[0]))
 			{
 				$error = "Confirmação da senha falhou.";
-			}		
+			}	
+			elseif ($guild->isOnWar())
+			{
+				$error = "Sua guilda está em war, você só poderá desmanchar a mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
+			}	
 			elseif(count($members) > 1)
 			{
 				$error = "A sua guild ainda possui membros ativos, por favor expulse todos membros primeiramente antes de ultilizar esta função.";				

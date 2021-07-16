@@ -67,7 +67,6 @@ if($_GET['name'])
 				if($post[1] == "accept")		
 				{			
 					$character->acceptInvite();
-					$character->set("guild_join_date", time());
 					$character->save();
 					
 					$success = "

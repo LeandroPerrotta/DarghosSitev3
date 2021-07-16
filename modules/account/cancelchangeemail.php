@@ -3,9 +3,9 @@ $post = $core->extractPost();
 if($post)
 {
 	$account = $core->loadClass("Account");
-	$account->load($_SESSION['login'][0], "password");
+	$account->load($_SESSION['login'][0]);
 	
-	if($account->get("password") != $strings->encrypt($post[0]))
+	if($account->getPassword() != $strings->encrypt($post[0]))
 	{
 		$error = "Confirmação da senha falhou.";
 	}		
@@ -37,7 +37,7 @@ else
 	}
 
 $module .= '
-<form action="" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
 		<p>

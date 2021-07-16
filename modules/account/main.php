@@ -1,21 +1,23 @@
 <?
 $account = $core->loadClass("Account");
-$account->load($_SESSION['login'][0], "password, premdays, warnings, email, creation, real_name, location, url");
+$account->load($_SESSION['login'][0]);
 $secretkey = $account->getSecretKey();
 
 $player_list = $account->getCharacterList();
 $character = $core->loadClass("Character");
 
-$premium = ($account->get("premdays") > 1) ? $account->get("premdays")." dias restantes" : "Você não possui dias de conta premium.";	
-$warns = ($account->get("warnings") > 1) ? "Sua conta possui".$account->get("warnings")." warnings." : "Sua conta não possui warnings.";	
-$email = $account->get("email");	
-$creation = ($account->get("creation") != 0) ? $core->formatDate($account->get("creation")) : "Indisponível";	
-$realname = ($account->get("real_name")) ?	$account->get("real_name") : "<i>Sem Nome</i>";
-$location = ($account->get("location")) ?	$account->get("location") : "<i>Sem Localidade</i>";
-$url = ($account->get("url")) ?	$account->get("url") : "<i>Sem Endereço</i>";
+$premium = ($account->getPremDays() > 0) ? $account->getPremDays()." dias restantes" : "Você não possui dias de conta premium.";	
+$warns = ($account->getWarnings() > 1) ? "Sua conta possui".$account->getWarnings()." warnings." : "Sua conta não possui warnings.";	
+$email = $account->getEmail();	
+$creation = ($account->getCreation() != 0) ? $core->formatDate($account->getCreation()) : "Indisponível";	
+$realname = ($account->getRealName()) ?	$account->getRealName() : "<i>Sem Nome</i>";
+$location = ($account->getLocation()) ?	$account->getLocation() : "<i>Sem Localidade</i>";
+$url = ($account->getUrl()) ?	$account->getUrl() : "<i>Sem Endereço</i>";
 
 $contribute = $core->loadClass("Contribute");
 $oders = $contribute->getOrdersListByAccount($_SESSION['login'][0]);
+
+$bans = $core->loadClass('bans');
 
 if(is_array($oders))
 {
@@ -32,24 +34,34 @@ if(is_array($player_list))
 {
 	foreach($player_list as $player)
 	{
-		$character->loadByName($player, "name, hide");
+		$character->loadByName($player);
 		
 		unset($charStatus);
 		unset($statusString);
 		unset($charOptions);
 		
 		$charStatus = array();
-		$charOptions = "<a href='?ref=character.edit&name={$character->get("name")}'>Editar</a> - <a href='?ref=character.itemshop&name={$character->get("name")}'>Item Shop</a>";
+		$charOptions = "<a href='?ref=character.edit&name={$character->getName()}'>Editar</a>";
+		
+		if(SHOW_SHOPFEATURES == 1)
+		{
+			$charOptions .= " - <a href='?ref=character.itemshop&name={$character->getName()}'>Item Shop</a>";
+		}
 		
 		if($character->deletionStatus())
 		{
 			$charStatus[] = "<font color='red'>será deletado em: {$core->formatDate($character->deletionStatus())}</font>";
-			$charOptions .= " - <a href='?ref=character.undelete&name={$character->get("name")}'>Cancelar Exclusão</a>";
+			$charOptions .= " - <a href='?ref=character.undelete&name={$character->getName()}'>Cancelar Exclusão</a>";
 		}
 		
 		if($character->get("hide") == 1)
 		{
 			$charStatus[] = "escondido";
+		}
+		
+		if($bans->isNameLocked($character->getid()))
+		{
+			$charStatus[] = "<font color='red'>nome bloqueado</font>";
 		}
 		
 		if(count($charStatus) != 0)
@@ -72,7 +84,7 @@ if(is_array($player_list))
 		$charList .= "
 		<tr>
 			<td>
-				<a style='float: left' href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a> <span class='tooglePlus'></span>
+				<a style='float: left' href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> <span class='tooglePlus'></span>
 				<br />
 				<div style='float: left; width: 100%; padding: 0px; margin: 0px; position: relative;'>
 					<table cellspacing='0' cellpadding='0'>
@@ -143,13 +155,61 @@ $module .= "
 		
 		<tr>
 			<td><b>Criação:</b></td><td>".$creation."</td>
-		</tr>
+		</tr>";
 		
-	</table>
+		if($bans->isBannished($account->getId()))
+		{
+			$ban = $bans->getBannishment($account->getId());
+					
+			if($ban['type'] == 3 OR $ban['type'] == 5)
+			{
+				$banstring .= "<font color='red'>";
+				
+				if($ban['type'] == 3)
+				{
+					$banstring .= "Banido por: <b>{$tools->getBanReason($ban['reason'])}</b><br>
+							   	   Duração: Até {$core->formatDate($ban['expires'])}.";
+				}
+				elseif($ban['type'] == 5)	
+				{
+					$banstring .= "Deletado por: <b>{$tools->getBanReason($ban['reason'])}</b><br>
+							   	   Duração: permanentemente.";		
+				}			   	   				   	   
+							   
+				$banstring .= "</font>";
+				
+				$module .= "
+				<tr>
+					<td><b>Punição:</b></td> <td>{$banstring}</td>
+				</tr>";			
+			}
+		}	
+		
+	$module .= "</table>
 </p>
 
-<p>
-	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>
+<p>";
+			
+if($account->getName() == $account->getId())
+{
+	if($account->getPremDays() == 0)
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a>";	
+	}
+	else
+	{
+		$module .= "
+		<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a> <a class='buttonstd' href='?ref=account.setname'>Configurar Nome</a> <!-- <a class='buttonstd' href='?ref=account.tutortest'>Tutor Test</a> -->";	
+	}
+}
+else
+{			
+	$module .= "
+	<a class='buttonstd' href='?ref=account.changepassword'>Mudar Senha</a> <a class='buttonstd' href='?ref=account.changeemail'>Mudar E-mail</a>";
+}
+
+$module .= "
 </p>
 
 <p>

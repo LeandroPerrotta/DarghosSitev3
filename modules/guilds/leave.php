@@ -34,7 +34,11 @@ if($_GET['name'])
 			if($account->get("password") != $strings->encrypt($post[1]))
 			{
 				$error = "Confirmação da senha falhou.";
-			}		
+			}
+			elseif ($guild->isOnWar())
+			{
+				$error = "Sua guilda está em war, você só poderá sair da mesma, no dia <b>".$core->formatDate($guild->getWarEnd())."</b>.";
+			}
 			elseif(!in_array($post[0], $members_list) or $members[$post[0]]['level'] == 1)
 			{
 				$error = "Falha fatal.";				

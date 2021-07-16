@@ -2,12 +2,42 @@
 class Core
 {
 	private $db;
+	private $alreadyShowBanner = false;
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}	
+	
+	function FCKEditor($instance)
+	{
+		include "libs/fckeditor/fckeditor.php";
+		return new FCKeditor($instance);
+	}
+	
+	function InitPOT()
+	{
+		// includes POT main file
+		include_once('classes/pot/OTS.php');
+		
+		list($ip, $port) = explode(":", DB_HOST);
+		
+		// database configuration - can be simply moved to external file, eg. config.php
+		$config = array(
+		    'driver' => POT::DB_MYSQL,
+		    'host' => $ip,
+		    'port' => $port,
+		    'user' => DB_USER,
+		    'password' => DB_PASS,
+		    'database' => DB_SCHEMA
+		);
+		
+		// creates POT instance (or get existing one)
+		// dont use POT::getInstance() anymore
+		POT::connect(null, $config);
+		// could be: POT::connect(POT::DB_MYSQL, $config);		
+	}
 	
 	function mail($emailid, $to, $arg = null, $from = CONFIG_SITEEMAIL) 
 	{
@@ -62,12 +92,14 @@ class Core
 	
 	function loadClass($class)
 	{
-		include_once "classes/".$class.".php";
+		include_once "classes/".strtolower($class).".php";
 		return new $class();
 	}
 	
 	function extractPost()
 	{
+		$strings = $this->loadClass("strings");
+		
 		if($_POST)
 		{
 			$post = array();
@@ -88,7 +120,12 @@ class Core
 		return date("d/m/y - H:i", $date);
 	}
 	
-	function redirect($url, $local = true, $delay = false) 
+	function getHour()
+	{
+		return date("H", time());
+	}
+	
+	function redirect($url, $local = true/*, $delay = false*/) 
 	{		
 		if($local)
 			$url = CONFIG_SITEEMAIL."/".$url;
@@ -105,7 +142,7 @@ class Core
 			return $query->fetch()->tries;
 		}
 		else
-			false;
+			return false;
 	}
 	
 	function getGlobalValue($field)
@@ -144,7 +181,16 @@ class Core
 			$this->db->query("INSERT INTO ".DB_WEBSITE_PREFIX."iptries (ip_addr, tries, last_trie) values('".$_SERVER['REMOTE_ADDR']."', '1', '".time()."')");
 	}	
 	
-	function sendMessageBox($title, $msg)
+	function getLastAdClick()
+	{
+		$query = $this->db->query("SELECT date FROM ".DB_WEBSITE_PREFIX."adpage ORDER BY date DESC LIMIT 1");
+		
+		$fetch = $query->fetch();
+		
+		return $fetch->date;
+	}
+	
+	function sendMessageBox($title, $msg, $adbanner = false, $showbannerChanceFactor = 50000)
 	{
 		global $module;
 		
@@ -152,11 +198,56 @@ class Core
 			<table cellspacing="0" cellpadding="0">
 				<tr>
 					<th>'.$title.'</th>
-				</tr>
-
+				</tr>';		
+		
+		if(!$adbanner)
+		{
+			$module .= '
 				<tr>
 					<td>'.$msg.'</td>
-				</tr>	
+				</tr>';
+		}
+		elseif($adbanner)
+		{
+			$showBannerChance = rand(0, 100000);
+		
+			if(!$this->alreadyShowBanner and $showBannerChance < $showbannerChanceFactor)
+			{
+				$this->alreadyShowBanner = true;
+			
+				$module .= '
+					<tr>
+						<td>									
+							<div style="float: right; width: 300px; top: 10px;">
+								<script type="text/javascript"><!--
+								google_ad_client = "pub-1678394806564868";
+								/* 300x250, criado 09/10/09 */
+								google_ad_slot = "7656234698";
+								google_ad_width = 300;
+								google_ad_height = 250;
+								//-->
+								</script>
+								<script type="text/javascript"
+								src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+								</script>						
+							</div>
+							
+							'.$msg.'							
+						</td>
+					</tr>';	
+			}	
+			else
+			{
+				$module .= '
+					<tr>
+						<td>'.$msg.'</td>
+					</tr>';			
+			}			
+		}
+		
+
+
+		$module .= '
 			</table>		
 		';
 	}

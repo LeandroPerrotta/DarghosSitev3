@@ -1,25 +1,35 @@
 <?
 if(isset($_POST['skill']))
 {
-	$core->redirect("?ref=community.highscores&skill={$_POST['skill']}");
+	($_POST['show_onlyPeacers'] == 1) ? $core->redirect("?ref=community.highscores&skill={$_POST['skill']}&filter=1") : $core->redirect("?ref=community.highscores&skill={$_POST['skill']}");
 }
 
 if(isset($_GET['skill']))
 {
+	if(isset($_GET['filter']))
+	{
+		$filter = $_GET['filter'];	
+	}
+	
 	$skill = $_GET['skill'];
+	
 }
 else
 {
 	$skill = "experience";
 }
 
+if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
+{
+	$module .= '
+	<p> Este highscores mostra apenas personagens <b>ativos</b> no jogo (Apenas os que não estão inativos a menos de 7 dias atrás).
+	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
+}
+
 $module .= '
-<p> Este highscores mostra apenas personagens <b>ativos</b> no jogo (Apenas os que não estão inativos a menos de 7 dias atrás).
-<form action="" method="post">
-	
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
-		<p>
-		
+		<p>		
 			<label for="skill">Tipo de Habilidade</label><br />
 			<select name="skill">
 				<option '.(($skill == "experience") ? 'selected' : null).' value="experience">Nível de Expêriencia</option>
@@ -32,6 +42,11 @@ $module .= '
 				<option '.(($skill == "distance") ? 'selected' : null).' value="distance">Pontaria à Distancia</option>
 				<option '.(($skill == "fishing") ? 'selected' : null).' value="fishing">Habilidade de Pesca</option>
 			</select>
+		</p>	
+
+		<p>		
+			<label for="filter">Filtros</label><br />
+			<input '.((isset($filter) ? 'checked="checked"' : null)).' name="show_onlyPeacers" type="checkbox" value="1" /> Exibir apénas personagens em Island of Peace.
 		</p>		
 		
 		<div id="line1"></div>
@@ -44,12 +59,18 @@ $module .= '
 
 if($skill == "experience" or $skill == "maglevel")
 {
-	$query = $db_tenerian->query("SELECT id FROM players WHERE group_id < 3 AND lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." ORDER BY {$skill} DESC LIMIT 100");
+	if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
+		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 AND lastlogin + (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS.") > ".time()." ORDER BY {$skill} DESC LIMIT 100");
+	else
+		$query = $db->query("SELECT id FROM players WHERE ".((isset($filter)) ? "town_id = 6 AND" : null)." group_id < 3 ORDER BY {$skill} DESC LIMIT 100");
 }
 else
 {
 	$skillid = $_skill[$skill];
-	$query = $db_tenerian->query("SELECT player.id FROM players as player, player_skills as skill WHERE player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 AND player.lastlogin < '".(time() - (60 * 60 * 24 * ".HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS."))."' ORDER BY skill.value DESC LIMIT 100");
+	if(HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS != 0)
+		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 AND player.lastlogin < '".(time() - (60 * 60 * 24 * HIGHSCORES_IGNORE_INACTIVE_CHARS_DAYS))."' ORDER BY skill.value DESC LIMIT 100");
+	else
+		$query = $db->query("SELECT player.id FROM players as player, player_skills as skill WHERE ".((isset($filter)) ? "player.town_id = 6 AND" : null)." player.id = skill.player_id AND skill.skillid = {$skillid} AND player.group_id < 3 ORDER BY skill.value DESC LIMIT 100");
 }
 
 $character = $core->loadClass("Character");
@@ -64,15 +85,15 @@ $module .= "
 while($fetch = $query->fetch())
 {
 	$n++;	
-	$character->load($fetch->id, "name, level, vocation, experience, maglevel");
+	$character->load($fetch->id);
 	
 	if($skill == "experience")
 	{
-		$skill_value = $character->get("level");
+		$skill_value = $character->getLevel();
 	}
 	elseif($skill == "maglevel")
 	{
-		$skill_value = $character->get("maglevel");
+		$skill_value = $character->getMagLevel();
 	}
 	else
 	{
@@ -80,9 +101,11 @@ while($fetch = $query->fetch())
 		$skill_value = $character->getSkill($skillid);
 	}
 	
+	$online = ($character->getOnline() == 1) ? "[<span class='online'>Online</span>]" : "";
+	
 	$module .= "
 		<tr>
-			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->get("name")}'>{$character->get("name")}</a></td> <td>{$_vocationid[$character->get("vocation")]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->get("experience"))."</td>" : null)."
+			<td>{$n}.</td> <td class='name'><a href='?ref=character.view&name={$character->getName()}'>{$character->getName()}</a> $online</td> <td>{$_vocationid[$character->getVocation()]}</td> <td>{$skill_value}</td> ".(($skill == "experience") ? "<td>".number_format($character->getExperience())."</td>" : null)."
 		</tr>
 	";
 }

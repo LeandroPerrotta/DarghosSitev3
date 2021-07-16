@@ -1,7 +1,7 @@
 <?
 list($module, $topic) = explode(".", $_GET['ref']);
 
-$noInjection = false;
+/*$noInjection = false;
 
 if(!in_array($_GET['ref'], $_inputsWhiteList))
 {
@@ -13,10 +13,12 @@ if(!in_array($_GET['ref'], $_inputsWhiteList))
 else
 {
 	$noInjection = true;
-}
+}*/
 
-if($noInjection)
-{
+/*if($noInjection)
+{*/
+	$strings->filterInputs(true);
+
 	$needLogin = false;
 	$needPremium = false;
 
@@ -84,6 +86,29 @@ if($noInjection)
 				break;
 
 				case "itemshop_log":
+					if(SHOW_SHOPFEATURES != 0)
+					{
+						$needLogin = true;	
+						$patch['file'] = $topic;					
+					}		
+				break;	
+
+				case "setname":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;					
+
+				case "premiumtest":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;					
+
+				case "importElerian":
+					$needLogin = true;	
+					$patch['file'] = $topic;
+				break;		
+
+				case "prize":
 					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;				
@@ -127,10 +152,13 @@ if($noInjection)
 				break;		
 
 				case "itemshop":
-					$needLogin = true;		
-					$patch['file'] = $topic;
-				break;					
-
+					if(SHOW_SHOPFEATURES != 0)
+					{
+						$needLogin = true;		
+						$patch['file'] = $topic;
+					}	
+				break;				
+	
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -216,7 +244,7 @@ if($noInjection)
 				case "guilds":
 					$patch['file'] = $topic;
 				break;				
-				
+								
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -276,8 +304,16 @@ if($noInjection)
 
 				case "leave":
 					$patch['file'] = $topic;
-				break;				
+				break;		
+				/*
+				case "joinwar":
+					$patch['file'] = $topic;
+				break;		
 				
+				case "leavewar":
+					$patch['file'] = $topic;
+				break;*/
+								
 				default:
 					$patch['dir'] = "errors";
 					$patch['file'] = "notfound";
@@ -303,6 +339,55 @@ if($noInjection)
 			}
 			
 		break;			
+
+		case "tickets":
+		
+			$patch['dir'] = $module;
+		
+			switch($topic)
+			{
+				case "send":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+
+				case "tickets":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "view":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "close":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+
+				case "open":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;
+				
+				case "super_view":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+				
+				case "super_list":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;		
+				
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;
+			}
+			
+		break;
 		
 		case "general":
 		
@@ -311,6 +396,10 @@ if($noInjection)
 			switch($topic)
 			{
 				case "howplay":
+					$patch['file'] = $topic;
+				break;	
+				
+				case "about":
 					$patch['file'] = $topic;
 				break;	
 
@@ -326,6 +415,36 @@ if($noInjection)
 			
 		break;
 		
+		case "adv":
+		
+			$patch['dir'] = $module;
+			$needLogin = true;
+			
+			switch($topic)
+			{
+				case "fastnews":
+					$patch['file'] = $topic;
+					$needMinGroup = 5;			
+				break;			
+
+				case "tutortest":
+					$patch['file'] = $topic;
+					$needMinGroup = 5;			
+				break;	
+
+				case "addprize":
+					$patch['file'] = $topic;
+					$needMinGroup = 5;			
+				break;						
+				
+				default:
+					$patch['dir'] = "errors";
+					$patch['file'] = "notfound";
+				break;					
+			}
+			
+		break;		
+		
 		default:
 			$patch['dir'] = "errors";
 			$patch['file'] = "notfound";
@@ -337,18 +456,24 @@ if($noInjection)
 	if($_GET)
 	{	
 		$_isPremium = false;
+		$_groupId = 1;
 		
 		if($_SESSION['login'])
 		{
-			$accIsPremium = $core->loadClass("Account");	
-			$accIsPremium->load($_SESSION["login"][0], "premdays");
+			include_once('classes/account.php');
+			$checkAccount = new Account;	
+			$checkAccount->load($_SESSION["login"][0], "premdays");
 			
-			if($accIsPremium->get("premdays") != 0)
+			if($checkAccount->get("premdays") != 0)
 			{
 				$_isPremium = true;
 			}
+			
+			$_groupId = $checkAccount->getGroup();
+			$_maxCharLevel = $checkAccount->getCharMinLevel();
 		}
 		
+		$ClickPageRandom = rand(0, 100000);
 		
 		if(($needLogin and !$_SESSION['login']) or ($needPremium and !$_SESSION['login']))
 		{
@@ -357,6 +482,20 @@ if($noInjection)
 		elseif($needPremium and !$_isPremium)
 		{
 			include("modules/errors/needpremium.php");
+		}
+		elseif($_groupId < $needMinGroup)
+		{
+			include("modules/errors/notfound.php");
+		}	
+		elseif($_SESSION['login'] and /*$core->getHour() >= CLICKS_STARTHOUR_1 and $core->getHour() <= CLICKS_ENDHOUR_1 and*/  $_maxCharLevel >= 50 and $checkAccount->canClickAdPage() and ($core->getLastAdClick() + CLICKS_INTERVAL_1) < time() and $ClickPageRandom < 20000)
+		{
+			$_SESSION["to_page"] = $_GET['ref'];
+			
+			include("modules/ad.php");
+		}
+		elseif($_SESSION["to_page"])
+		{
+			include("modules/ad.php");
 		}
 		else
 		{
@@ -368,12 +507,11 @@ if($noInjection)
 	}	
 	else	
 		include("modules/news/last.php");
-}	
+/*}	
 else
 {
 	$module = null;
 	include("modules/errors/sqlinjection.php");	
-}
-	
+}*/
 
 ?>

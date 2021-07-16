@@ -30,6 +30,15 @@ if($_GET['name'])
 		$invites = $guild->getInvites();
 		$ranks = $guild->getRanks();
 		
+		if($guild->isOnWar())
+		{
+			$str = "<td>Esta guilda <b>esta em modo de guerra!</b> <p>Desde <i>".$core->formatDate($guild->getWarStart())."</i> até <i>".$core->formatDate($guild->getWarEnd())."</i></td>";
+		}
+		else 
+		{
+			$str = "<td>Esta guilda <b>não esta em modo de guerra</b>.";			
+		}
+		
 		$module .=	"
 		<table cellspacing='0' cellpadding='0' id='table'>
 			<tr>
@@ -49,17 +58,30 @@ if($_GET['name'])
 			</tr>
 			
 			<tr>
-				<td>Está guilda foi criada em <b>".$core->formatDate($guild->get("creation"))."</b>.</td>
-			</tr>			
+				<td>Esta guilda foi criada em <b>".$core->formatDate($guild->get("creationdata"))."</b>.</td>
+			</tr>
+										
 		</table>";				
 
 		if($_SESSION['login'] and $accountLevel == 1)
 		{
+			/*if($guild->isOnWar())
+			{
+				$button = "<a class='buttonstd' href='?ref=guilds.leavewar&name={$guild->get("name")}'>Desativar modo de Guerra</a>";
+			}
+			else 
+			{
+				$button = "<a class='buttonstd' href='?ref=guilds.joinwar&name={$guild->get("name")}'>Ativar modo de Guerra</a>";				
+			} */
+			
 			$module .= "
 				<p>
-					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a> <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
+					<a class='buttonstd' href='?ref=guilds.edit&name={$guild->get("name")}'>Editar Descrições</a>
+				    <a class='buttonstd' href='?ref=guilds.disband&name={$guild->get("name")}'>Desmanchar Guild</a>
+				    {$button}
 				</p>				
 			";
+			
 		}			
 		
 		$module .= "					

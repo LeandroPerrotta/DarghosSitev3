@@ -5,8 +5,8 @@ class Guilds
 
 	function __construct()
 	{
-		global $db_tenerian;
-		$this->db = $db_tenerian;
+		global $db;
+		$this->db = $db;
 	}
 	
 	function loadByRank($rank_id)
@@ -76,16 +76,20 @@ class Guilds
 	
 	function load($id)
 	{
-		$query = $this->db->query("SELECT * FROM guilds WHERE id = '{$id}'");
+		$query = $this->db->query("SELECT id, name, ownerid, creationdata, motd, image, status, formationTime  FROM guilds WHERE id = '{$id}'");
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
 			
-			foreach($fetch as $field => $value)
-			{
-				$this->data[$field] = $value;
-			}
+			$this->data["id"] = $fetch->id;
+			$this->data["name"] = $fetch->name;
+			$this->data["ownerid"] = $fetch->ownerid;
+			$this->data["creationdata"] = $fetch->creationdata;
+			$this->data["motd"] = addslashes($fetch->motd);
+			$this->data["image"] = $fetch->image;
+			$this->data["status"] = $fetch->status;
+			$this->data["formationTime"] = $fetch->formationTime;
 			
 			return true;
 		}
@@ -124,7 +128,7 @@ class Guilds
 	
 	function loadInvitesList()
 	{
-		$invites_query = $this->db->query("SELECT player_id, time FROM guild_invites WHERE guild_id = '{$this->data['id']}'");
+		$invites_query = $this->db->query("SELECT player_id, date FROM guild_invites WHERE guild_id = '{$this->data['id']}'");
 		
 		if($invites_query->numRows() != 0)
 		{
@@ -133,7 +137,7 @@ class Guilds
 				$name_query = $this->db->query("SELECT name FROM players WHERE id = '{$invites_fetch->player_id}'");
 				$name_fetch = $name_query->fetch();
 				
-				$this->invites[$name_fetch->name] = $invites_fetch->time;
+				$this->invites[$name_fetch->name] = $invites_fetch->date;
 			}
 		}		
 	}
@@ -173,15 +177,25 @@ class Guilds
 	function getInvites()
 	{
 		return $this->invites;
-	}		
+	}
 	
-	function get($value)
+	function get($field)
 	{
-		return $this->data[$value];
+		if($field == "motd")
+		{
+			return stripslashes($this->data["motd"]);
+		}
+		else	
+			return $this->data[$field];
 	}
 	
 	function set($field, $value)
 	{
+		global $strings;
+		
+		if($field == "motd")
+			$value = $strings->SQLInjection($value);
+		
 		$this->data[$field] = $value;
 	}
 	
@@ -234,6 +248,58 @@ class Guilds
 		}
 
 		return $lastRank;
+	}
+	
+	function joinWar()
+	{
+		$timeNow = time();
+		$endTime = time()+ (30 * 24 * 60 * 60);
+		$this->db->query("INSERT INTO war_system (id, guild_id, start_date, end_date) values(0,'{$this->data['id']}','{$timeNow}','{$endTime}')");		
+	}
+	
+	
+	function leaveWar()
+	{
+		$this->db->query("DELETE FROM war_system WHERE guild_id = {$this->data['id']}");
+	}
+	
+	function getWarStart()
+	{
+		$query = $this->db->query("SELECT `start_date` FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		$result = $query->fetch();
+		
+		$date = $result->start_date;
+		
+		return $date;
+	}
+	
+	function getWarEnd()
+	{
+		$query = $this->db->query("SELECT `end_date` FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		$result = $query->fetch();
+		
+		$date = $result->end_date;
+		
+		return $date;
+	}	
+	
+	function isOnWar()
+	{
+		$query = $this->db->query("SELECT * FROM war_system WHERE guild_id = {$this->data['id']}");
+		
+		$timeNow = time();
+		
+		if($query->numRows() != 0)
+			if($this->getWarEnd() > $timeNow)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 	}
 }
 ?>

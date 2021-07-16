@@ -7,17 +7,18 @@ $list = $account->getCharacterList();
 if($_POST)
 {	
 	$guild = $core->loadClass("guilds");
-	
-	$post = $core->extractPost();
-	if(!in_array($post[1], $list))
+	$character = $core->loadClass("Character");
+	$character->loadByName($_POST["guild_owner"], "rank_id, guild_join_date");
+		
+	if(!in_array($_POST["guild_owner"], $list))
 	{
 		$error = "Este personagem não pertence a sua conta.";
 	}
-	elseif($account->get("password") != $strings->encrypt($post[2]))
+	elseif($account->get("password") != $strings->encrypt($_POST["account_password"]))
 	{
 		$error = "Confirmação da senha falhou.";
 	}	
-	elseif($guild->loadByName($post[0]))
+	elseif($guild->loadByName($_POST["guild_name"]))
 	{
 		$error = "Já existe uma guilda em nosso banco de dados registrada com este nome.";
 	}	
@@ -25,19 +26,22 @@ if($_POST)
 	{
 		$error = "Só é permitido possuir 1 lider ou vice-lider por conta.";
 	}	
-	elseif(!$strings->canUseName($post[0]))
+	elseif(!$strings->canUseName($_POST["guild_name"]))
 	{
 		$error = "Este nome possui formatação ilegal. Tente novamente com outro nome.";
-	}	
+	}
+	elseif($character->loadGuild())
+	{
+		$error = "Seu personagem ja possui guild, é nescessario sair da mesma para criar outra.";
+	}
 	else
 	{
-		$character = $core->loadClass("Character");
-		$character->loadByName($post[1], "rank_id, guild_join_date");
 		
-		$guild->set("name", $post[0]);
+		$guild->set("name", $_POST["guild_name"]);
 		$guild->set("ownerid", $character->get("id"));
+		$guild->set("motd", "");
 		$guild->set("image", "default_logo.gif");
-		$guild->set("creation", time());
+		$guild->set("creationdata", time());
 		$guild->set("formationTime", time() + 60 * 60 * 24 * GUILDS_FORMATION_DAYS);
 		
 		$guild->save();
@@ -60,7 +64,7 @@ if($_POST)
 		$character->save();
 		
 		$success = "
-		<p>A guilda ".$post[0]." foi criada com sucesso!</p>
+		<p>A guilda ".$_POST["guild_name"]." foi criada com sucesso!</p>
 		<p>Inicialmente a sua guilda está em estagio de formação, e você deve nomear ao minimo ".GUILDS_VICELEADERS_NEEDED." vice-lideres em ".GUILDS_FORMATION_DAYS." dias para que sua guilda seja formada! Caso contrario a guilda será automaticamente desbandada.</p>
 		<p>Tenha uma boa jornada!</p>
 		";

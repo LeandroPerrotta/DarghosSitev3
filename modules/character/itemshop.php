@@ -20,7 +20,7 @@ if($_GET['name'])
 		if($post)
 		{
 			$itemshop_list = $core->loadClass("itemshop_list");
-			$query = $db_tenerian->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
+			$query = $db->query("SELECT id FROM ".DB_WEBSITE_PREFIX."itemshop WHERE player_id = '{$character->get("id")}' AND received = '0'");
 			
 			if($account->get("password") != $strings->encrypt($post[1]))
 			{
@@ -30,7 +30,7 @@ if($_GET['name'])
 			{
 				$error = "Você deve efetuar um login no jogo para receber o item de sua ultima compra antes de efetuar uma nova compra.";
 			}
-			elseif($character->get("online") != 0)		
+			elseif($character->getOnline() == 1)		
 			{
 				$error = "É nessario estar off-line no jogo para efetuar a compra de um item.";
 			}			
@@ -38,7 +38,7 @@ if($_GET['name'])
 			{
 				$error = "Este item não existe.";
 			}
-			elseif($itemshop_list->get("cost") > $account->get("premdays"))
+			elseif($itemshop_list->get("cost") > $account->getPremDays())
 			{
 				$error = "Você não possui os {$itemshop_list->get("cost")} dias de conta premium necessarios para obter este item.";
 			}
@@ -57,12 +57,14 @@ if($_GET['name'])
 				
 				$itemshop->save();
 				
-				$db_tenerian->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db_tenerian->lastInsertId()}')");
+				$storage_query = $db->query("SELECT `key` FROM `player_storage` WHERE `player_id` = '{$character->getId()}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
 				
-				$newpremdays = $account->get("premdays") - $itemshop_list->get("cost");
-				
-				$account->set("premdays", $newpremdays);
-				$account->set("lastday", time());
+				if($storage_query->numRows() == 0)
+					$db->query("INSERT INTO player_storage (`player_id`, `key`, `value`) values('{$character->get("id")}', '".STORAGE_ID_ITEMSHOP."', '{$db->lastInsertId()}')");
+				else
+					$db->query("UPDATE `player_storage` SET `value` = '{$db->lastInsertId()}' WHERE `player_id` = '{$character->get("id")}' AND `key` = '".STORAGE_ID_ITEMSHOP."'");
+					
+				$account->updatePremDays($itemshop_list->get("cost"), false /* false to decrement days */);
 				
 				$account->save();
 				
@@ -86,14 +88,14 @@ if($_GET['name'])
 				$core->sendMessageBox("Erro!", $error);
 			}
 		
-		$query = $db_tenerian->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
+		$query = $db->query("SELECT * FROM ".DB_WEBSITE_PREFIX."itemshop_list WHERE actived = '1' ORDER BY time DESC");	
 			
 		$module .=	'
-			<form action="" method="post">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset>
 
 					<p>
-						Seja bem vindo ao Darghos Item Shop. Aqui você pode obter um item no jogo em troca de dias de sua conta premium. Após concluir a compra o item será criado na sua backpack principal no proximo log-in dentro do jogo, em um processo completamente automatico. Tenha um bom jogo!
+						Seja bem vindo ao '.CONFIG_SITENAME.' Item Shop. Aqui você pode obter um item no jogo em troca de dias de sua conta premium. Após concluir a compra o item será criado na sua backpack principal no proximo log-in dentro do jogo, em um processo completamente automatico. Tenha um bom jogo!
 					</p>				
 				
 					<p>
@@ -146,7 +148,7 @@ else
 {
 
 $module .=	'
-	<form action="" method="post">
+	<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
 			
 			<p>

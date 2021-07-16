@@ -7,30 +7,25 @@ if($post)
 	
 	if($account->get("password") != $strings->encrypt($post[1]))
 	{
-		$error = "Confirmação da senha falhou.";
+		$error = $boxMessage['CONFIRMATION_PASSWORD_FAIL'];
 	}
 	elseif($account->loadByEmail($post[0]))
 	{
-		$error = "Este e-mail já esta em uso por outra conta em nosso banco de dados.";
+		$error = $boxMessage['EMAIL_ALREADY_IN_USE'];
 	}			
 	elseif(!$strings->validEmail($post[0]))
 	{
-		$error = "Este não é um e-mail valido.";
+		$error = $boxMessage['INVALID_EMAIL'];
 	}
 	elseif(is_array($newemail = $account->getEmailToChange()))
 	{
-		$error = "Está conta já possui uma mudança de e-mail agendada.";
+		$error = $boxMessage['ACCOUNT_ALREADY_HAVE_CHANGE_EMAIL_REQUEST'];
 	}
 	else
 	{		
 		$account->addEmailToChange($post[0]);
 		$newemail = $account->getEmailToChange();
-		
-		$success = "
-		<p>Caro jogador,</p>
-		<p>A mudança de email de sua conta foi agendada com sucesso para {$core->formatDate($newemail['date'])}.</p>
-		<p>Tenha um bom jogo!</p>
-		";
+		$success = $boxMessage['SUCCESS.CHANGE_EMAIL'];
 	}
 }
 
@@ -46,23 +41,23 @@ else
 	}
 
 $module .= '
-<form action="" method="post">
+<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 	<fieldset>
 		
 		<p>
-			<label for="account_newemail">Novo e-mail</label><br />
+			<label for="account_newemail">'.$pages["ACCOUNT.CHANGE_EMAIL.NEW_EMAIL"].'</label><br />
 			<input name="account_newemail" size="40" type="text" value="" />
 		</p>
 		
 		<p>
-			<label for="account_password">Senha</label><br />
+			<label for="account_password">'.$pages["ACCOUNT.CHANGE_EMAIL.PASSWORD"].'</label><br />
 			<input name="account_password" size="40" type="password" value="" />
 		</p>			
 		
 		<div id="line1"></div>
 		
 		<p>
-			<input class="button" type="submit" value="Enviar" />
+			<input class="button" type="submit" value="'.$buttons['SUBMIT'].'" />
 		</p>
 	</fieldset>
 </form>';
