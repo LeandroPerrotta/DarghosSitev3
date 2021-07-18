@@ -96,7 +96,7 @@ class Configs
 				case self::$e_Configs->SMTP_PORT: self::Set($i, $__configs[$i], 25); break;
 				case self::$e_Configs->SMTP_USER: self::Set($i, $__configs[$i], "webadmin@darghos.com.br"); break;
 				case self::$e_Configs->SMTP_USE_SSL: self::Set($i, $__configs[$i], false); break;
-				case self::$e_Configs->SMTP_PASSWORD: self::Set($i, $__configs[$i], "***REMOVED***"); break;
+				case self::$e_Configs->SMTP_PASSWORD: self::Set($i, $__configs[$i], "SECRETPASS"); break;
 				
 				case self::$e_Configs->CHANGEEMAIL_WAIT_DAYS: self::Set($i, $__configs[$i], 15); break;
 				case self::$e_Configs->CHARACTER_DELETION_WAIT_DAYS: self::Set($i, $__configs[$i], 30); break;
