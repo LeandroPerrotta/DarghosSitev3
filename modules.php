@@ -88,6 +88,11 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$needLogin = true;
 					$patch['file'] = $topic;
 				break;					
+
+				case "requestbalance":
+					$needLogin = true;
+					$patch['file'] = $topic;
+				break;					
 				
 				default:
 					$patch['dir'] = "errors";
@@ -173,6 +178,11 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 						$patch['file'] = $topic;
 					}
 				break;
+				
+				case "change_vocation":
+				    $needLogin = true;
+				    $patch['file'] = $topic;
+			    break;
 									
 				default:
 					$patch['dir'] = "errors";
@@ -182,13 +192,13 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			
 		break;		
 
-		case "contribute":
+		case "balance":
 		
 			$patch['dir'] = $module;
 		
 			switch($topic)
 			{
-				case "order":
+				case "purchase":
 					$needLogin = true;	
 					$patch['file'] = $topic;
 				break;		
@@ -198,7 +208,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 					$patch['file'] = $topic;
 				break;				
 
-				case "myorders":
+				case "history":
 					$needLogin = true;
 					$patch['file'] = $topic;
 				break;		
@@ -335,6 +345,10 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "wardetail":
 					$patch['file'] = $topic;
 				break;
+				
+				case "activatebonus":
+					$patch['file'] = $topic;
+				break;
 								
 				default:
 					$patch['dir'] = "errors";
@@ -448,6 +462,27 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 				case "depot_merger":
 					$patch['file'] = $topic;
 					$needMinGroup = t_Group::Administrator;
+					break;			
+						
+				case "statistics":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;			
+
+					
+				case "monsterfactor":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;			
+						
+				case "translations":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
+					break;				
+						
+				case "add_balance":
+					$patch['file'] = $topic;
+					$needMinGroup = t_Group::Administrator;
 					break;				
 				
 				default:
@@ -459,7 +494,7 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 		break;	
 
 	
-		case "itemshop":
+		case "store":
 		{
 			$patch['dir'] = $module;		
 			
@@ -482,6 +517,14 @@ if(!g_Configs::Get(g_Configs::eConf()->ENABLE_MANUTENTION))
 			$patch['dir'] = "errors";
 			$patch['file'] = "notfound";
 		break;	
+	}
+	
+	if($patch['dir'] == "errors"){
+	    $file = "{$module}/{$topic}.php";
+	    if(file_exists("modules/{$file}")){
+	        $patch['dir'] = $module;
+	        $patch['file'] = $topic;        
+	    }
 	}
 
 	$module = null;

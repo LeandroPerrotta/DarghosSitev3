@@ -65,10 +65,11 @@ class Lang_Messages
 		self::$messages[$e_Msg->CHARACTER_CHANGE_THING_CONFIRM] = "Para modificar o nome ou sexo de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
 		self::$messages[$e_Msg->CHARACTER_REMOVE_SKILLS_CONFIRM] = "Para a skull de seu personagem é necessario aceitar e estar ciente destas mudanças e os seus custos.";
 		self::$messages[$e_Msg->CHARACTER_NEED_OFFLINE] = "Para efetuar esta operação é necessario que você faça um \"log-out\" no jogo.";
-		self::$messages[$e_Msg->CHARACTER_CHANGENAME_COST] = "Você não possui os @v1@ dias de conta premium necessarios para modificar o nome de seu personagem.";
-		self::$messages[$e_Msg->CHARACTER_CHANGESEX_COST] = "Você não possui os @v1@ dias de conta premium necessarios para modificar o sexo de seu personagem.";
+		self::$messages[$e_Msg->CHARACTER_CHANGENAME_COST] = "Você não possui R$ @v1@ de creditos em sua conta necessarios para modificar o nome de seu personagem.";
+		self::$messages[$e_Msg->CHARACTER_CHANGESEX_COST] = "Você não possui R$ @v1@ de creditos em sua conta necessários para modificar o sexo de seu personagem.";
 		self::$messages[$e_Msg->ITEMSHOP_OLD_PURCHASE] = "Você deve fazer um \"log-in\" no jogo para receber sua antiga compra em nosso item shop antes de efetuar uma nova compra.";
-		self::$messages[$e_Msg->ITEMSHOP_COST] = "Você não possui os @v1@ dias de conta premium necessarios para obter este item.";
+		self::$messages[$e_Msg->ITEMSHOP_COST] = "Você não possui os @v1@ de saldo disponível necessarios para comprar isto.";
+		self::$messages[$e_Msg->ITEMSHOP_GUILDCOST] = "Você não possui os @v1@ de guild points disponível necessarios para comprar isto.";
 		self::$messages[$e_Msg->ITEMSHOP_REQUIRE_DAYS] = "Este item tem um custo de @v1@ dias de conta premium, no entanto, você precisa ter mais de @v2@ dias de conta premium para comprar-lo.";
 		self::$messages[$e_Msg->GUILD_NEED_NO_MEMBERS_DISBAND] = "A sua guilda ainda possui membros ativos. Para desmanchar uma guilda é necessario só existir o líder da guilda.";
 		self::$messages[$e_Msg->GUILD_COMMENT_SIZE] = "O comentário de sua guilda não deve exceder 500 caracteres.";
@@ -103,6 +104,7 @@ class Lang_Messages
 		self::$messages[$e_Msg->GUILD_IS_ON_WAR] = "A guilda @v1@ esta em guerra com outra(s) guildas, portanto, certas operações na guilda não estão disponiveis, como abandonar guilda, convidar novos membros, aceitar convites, remover membros. Tente novamente quando a guerra estiver encerrada.";
 		self::$messages[$e_Msg->GUILD_BALANCE_TOO_LOW] = "O balanço no banco de sua guilda está muito baixo.";
 		self::$messages[$e_Msg->GUILD_WAR_ALREADY] = "A sua guilda já declarou ou está em guerra contra a guilda @v1@. Você poderá declarar guerra contra esta guilda quando a guerra atual estiver terminada.";
+		self::$messages[$e_Msg->GUILD_RECEIVED_BONUS] = "Os guild points foram entregues com sucesso aos personagens listados.";		
 		self::$messages[$e_Msg->FORUM_ACCOUNT_NOT_HAVE_USER] = "Caro jogador, sua conta ainda não efetuou o cadastro para poder usar o forum do Darghos para poder ler topicos, responder enquetes e etc. Para criar o seu usuario, clique <a href='?ref=forum.register'>aqui</a>.";
 		self::$messages[$e_Msg->FORUM_ACCOUNT_NOT_HAVE_CHARACTERS] = "Caro jogador, para ultilizar os recursos de nosso Forum é necessário possui um personagem na conta ao menos com level 20 ou superior.";
 		self::$messages[$e_Msg->FORUM_POLL_ALREADY_VOTED] = "Desculpe, você já votou para está enquete e somente é permitido um voto por úsuario.";
@@ -110,11 +112,11 @@ class Lang_Messages
 		self::$messages[$e_Msg->FORUM_POLL_NEED_MIN_LEVEL] = "Desculpe, mas para votar nesta enquete é preciso possuir na sua conta ao menos um personagem com nivel @v1@ ou superior.";
 		self::$messages[$e_Msg->FORUM_POLL_TIME_EXPIRED] = "Desculpe, mas esta enquete já está encerrada.";
 		self::$messages[$e_Msg->FORUM_POST_TOO_LONG] = "Desculpe, mas o seu post não pode exceder 2048 caracteres.";
-		self::$messages[$e_Msg->STAMINA_NOT_HAVE_PREMDAYS] = "Você não possui tempo sulficiente em sua conta premium para recuperar esta quantidade de stamina.";
+		self::$messages[$e_Msg->STAMINA_NOT_HAVE_PREMDAYS] = "Você não possui saldo suficiente em sua conta para usar este serviço recuperando esta quantidade de stamina.";
 		self::$messages[$e_Msg->STAMINA_VALUE_WRONG] = "Você deve selecionar corretamente a quantidade de stamina que deseja recuperar.";
 		self::$messages[$e_Msg->DARGHOSPOINTS_NEED_ACCEPT_TERMS] = "Para adquirir seus Darghos Points é necessario concordar com nossos termos de uso.";
 		self::$messages[$e_Msg->MONSTER_NOT_FOUND] = "O monstro @v1@ não existe em nosso servidor.";
-		self::$messages[$e_Msg->OPERATION_NEED_PREMDAYS] = "A sua conta não possui os @v1@ premdays disponiveis necessarios para concluir esta operação.";
+		self::$messages[$e_Msg->OPERATION_NEED_PREMDAYS] = "A sua conta não possui @v1@ de saldo disponiveis necessarios para concluir esta operação.";
 		self::$messages[$e_Msg->ACCOUNT_CHANGENAME_SUCCESS] = "O nome da sua conta foi modificado para @v1@ com sucesso!";
 	
 		self::$messages[$e_Msg->ACCOUNT_REGISTERED] = "
@@ -309,7 +311,7 @@ class Lang_Messages
 			
 		self::$messages[$e_Msg->ITEMSHOP_PURCHASE_SUCCESS] = "
 			<p>Caro jogador,</p>
-			<p>A compra de @v1@x @v2@ por @v3@ dias de sua conta premium foi efetuada com sucesso!</p>
+			<p>A compra de @v1@x @v2@ por R$ @v3@ de seus creditos foi efetuada com sucesso!</p>
 			<p>Você o receberá dentro de um present box em seu proximo log-in no jogo.</p>
 			<p>Tenha um bom jogo!</p>
 		";				
@@ -388,8 +390,9 @@ class Lang_Messages
 		
 		self::$messages[$e_Msg->FORUM_ACCOUNT_REGISTERED] = "
 			<p>Caro jogador,</p>
-			<p>Sua conta foi registrada no forum com sucesso!</p>
-			<p>Agora você já pode participar de nossos topicos e enquetes! Lembre-se de seguir as regras de uso do Forum.</p>
+			<p>Sua conta foi registrada no forum com sucesso! Para acessar use os mesmos dados de login do site principal!</p>
+			<p>Agora você já pode participar de topicos e enquetes! Lembre-se de seguir as regras de uso do Forum.</p>
+			<p><a href='http://darghos.com.br/forum/'>http://darghos.com.br/forum/</a></p>
 		";				
 		
 		self::$messages[$e_Msg->FORUM_POLL_VOTE_DONE] = "

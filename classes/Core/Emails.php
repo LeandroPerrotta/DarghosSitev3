@@ -7,6 +7,7 @@ class Emails
 	const EMSG_RECOVERY_ACCOUNT_PASSWORD 		= 2;
 	const EMSG_RECOVERY_ACCOUNT_BOTH 			= 3;
 	const EMSG_RECOVERY_ACCOUNT_NEW_PASSWORD	= 4;
+	const EMSG_REQUEST_BALANCE                 	= 5;
 	
 	private static $emails = array(), $defaultHead;
 	
@@ -55,7 +56,7 @@ class Emails
 	Nome da Conta: <b>%value_1%</b>.<br>
 </p>
 
-<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.login'><b>aqui</b></a>.</p>
+<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.login'><b>aqui</b></a>.</p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
 ".Configs::Get(Configs::eConf()->WEBSITE_TEAM).".</p>	
@@ -70,7 +71,7 @@ class Emails
 <p>O processo do pedido para gerar uma nova senha para sua conta foi efetuado com sucesso. Clique no link abaixo para receber o e-mail com a sua nova senha.</p>
 
 <p>
-	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_1%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.recovery&key=%value_1%</a><br>
+	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_1%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.recovery&key=%value_1%</a><br>
 </p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
@@ -87,7 +88,7 @@ class Emails
 
 <p>
 	Nome da Conta: <b>%value_1%</b>.<br>
-	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_2%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.recovery&key=%value_2%</a><br>
+	<a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."?ref=account.recovery&key=%value_2%'>".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.recovery&key=%value_2%</a><br>
 </p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
@@ -106,12 +107,28 @@ class Emails
 	Nova Senha: <b>%value_1%</b>.<br>
 </p>
 
-<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/index.php?ref=account.login'><b>aqui</b></a>.</p>
+<p>Para acessar sua conta clique <a href='".Configs::Get(Configs::eConf()->WEBSITE_URL)."/?ref=account.login'><b>aqui</b></a>.</p>
 
 <p>Nos vemos no ".Configs::Get(Configs::eConf()->WEBSITE_NAME)."!<br>
 ".Configs::Get(Configs::eConf()->WEBSITE_TEAM).".</p>
 			"
-		);			
+		);		
+
+		$mails[self::EMSG_REQUEST_BALANCE] = array(
+		        "subject" => "Recuperação Saldo",
+		        "title" => "Recuperação Saldo",
+		        "body" => "
+        <body>
+            <p>Codigo de Transação: %value_1%</p>
+            <p>Codigo de Referencia: %value_2%</p>
+            <p>Nome da conta: %value_3%</p>
+            <p>Nome: %value_4%</p>
+            <p>Endereço: %value_5%</p>
+            <p>Endereço (cont): %value_6%</p>
+            <p>Email: %value_7%</p>
+        </body>
+			"
+		);		
 	}
 	
 	static function getBody($email, $args)
@@ -137,7 +154,7 @@ class Emails
 	static function send($to, $email, $args = null, $from = NULL) 
 	{		
 		if(!$from)
-			$from = Configs::Get(Configs::eConf()->WEBSITE_URL);
+			$from = "darghos.com.br/ordon";
 		
 		$mail = new \PHPMailer();
 		
@@ -146,6 +163,10 @@ class Emails
 		//$mail->SMTPDebug = true;
 
 		$mail->SMTPAuth   = true;
+		
+		if(Configs::Get(Configs::eConf()->SMTP_USE_SSL))
+		    $mail->SMTPSecure = 'ssl';
+		    
 		$mail->Host       = Configs::Get(Configs::eConf()->SMTP_HOST);
 		$mail->Port       = Configs::Get(Configs::eConf()->SMTP_PORT);
 
@@ -167,5 +188,5 @@ class Emails
 		}
 		
 		return false;
-	}	
+	}
 }

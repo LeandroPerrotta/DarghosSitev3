@@ -45,7 +45,33 @@ class Items
 							"Aumenta a quantidade máxima de pontos de vida em 330."
 							,"Buff: A cada dano sofrido existe 2% de chance de durante os proximos 8 segundos reduzir todos os danos sofridos em 75%."
 					)
-			),			
+			),
+	        array("items" => array(12724, 12725, 12726), "name" => "Gladiator's Set (Knight Dano)"
+	                , "3pieces" => array(
+	                        "Aumenta a chance de seus fierce berserk (exori gran) causarem dano critico em 50%."
+	                )
+	        ),
+	        array("items" => array(12732, 12733, 12734), "name" => "Sacred Set (Knight Defesa)"
+	                , "3pieces" => array(
+	                        "Seus protector (utamo tempo) também aumentaram em 10% a sua resiliência durante a duração do efeito."
+	                )
+	        ),
+	        array("items" => array(12741, 12742, 12743), "name" => "Demonhunter Set (Paladin)"
+	                , "3pieces" => array(
+	                        "Suas ethereal spears (exori con) possuem dano e custo de mana aumentados em 450% contra alvos que estiverem com mais de 80% de vida."
+	                )
+	        ),
+	        array("items" => array(12747, 12748, 12749), "name" => "Arcanist Set (Sorcerer)"
+	                , "3pieces" => array(
+	                        "Diminui o tempo de lançamento da magia hells core (exevo gran mas flam) de 3s para 2s."
+	                )
+	        ),
+	        array("items" => array(12751, 12752, 12753), "name" => "Ancient Nature Set (Druid)"
+	                , "3pieces" => array(
+	                        "Ao usar a paralyze rune em um alvo, o mesmo fica impossibilitado de remover a paralisia por 2s."
+	                        ,"A magia summon creature (utevo res) irá invocar 2 monstros de uma vez e a um custo de mana reduzido em 80%."
+	                )
+	        ),	                                 	
 	);
 	
 	

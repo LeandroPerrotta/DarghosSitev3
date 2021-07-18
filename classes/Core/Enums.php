@@ -28,6 +28,7 @@ class e_Configs extends \Core\Enumerators
 		,$SQL_PASSWORD
 		,$SQL_DATABASE
 		,$SQL_WEBSITE_TABLES_PREFIX
+		,$SQL_FORUM_SCHEMA
 		
 		,$SQL_ORDERS_DATABASE
 		
@@ -46,6 +47,7 @@ class e_Configs extends \Core\Enumerators
 		,$WEBSITE_FOLDER_FILES
 		,$WEBSITE_FOLDER_GUILDS
 		,$WEBSITE_FOLDER_TEMP
+		,$WEBSITE_EMAIL_SUPPORT
 		
 		/*
 		 * Server related
@@ -66,6 +68,7 @@ class e_Configs extends \Core\Enumerators
 		,$SMTP_PORT
 		,$SMTP_USER
 		,$SMTP_PASSWORD	
+		,$SMTP_USE_SSL
 		
 		/*
 		 * Days related
@@ -124,6 +127,7 @@ class e_Configs extends \Core\Enumerators
 		,$ENABLE_MULTIWORLD
 		,$DEFAULT_WORLD
 		,$ENABLE_PLAYERS_ONLINE
+		,$INTEGRATED_FORUM
 	;
 	
 	function __construct(){
@@ -221,6 +225,7 @@ class e_LangMsg extends \Core\Enumerators
 	,$CHARACTER_SEX_CHANGED
 	,$ITEMSHOP_OLD_PURCHASE
 	,$ITEMSHOP_COST
+	,$ITEMSHOP_GUILDCOST
 	,$ITEMSHOP_REQUIRE_DAYS
 	,$ITEMSHOP_PURCHASE_SUCCESS
 	,$GUILD_NEED_NO_MEMBERS_DISBAND
@@ -236,6 +241,7 @@ class e_LangMsg extends \Core\Enumerators
 	,$GUILD_INVITE_ALREADY_INVITED
 	,$GUILD_INVITE_CHARACTER_NOT_FOUNDS
 	,$GUILD_INVITEDS
+	,$GUILD_RECEIVED_BONUS
 	,$GUILD_LEAVE
 	,$GUILD_IS_NOT_MEMBER
 	,$GUILD_RANK_ONLY_PREMIUM
@@ -349,23 +355,29 @@ class t_Servers extends \Core\Structs
 
 	static protected
 	$m_typeStrings = array(
-			self::Darghos => "Darghos"
-			,self::Ultrax => "UltraX"
+			self::Darghos => "Platinum"
+			,self::Ultrax => "Platinum 2"
 	);
 }
 
 class t_Worlds extends \Core\Structs
 {
 	const
-		Ordon = 0
-		,Aaragon = 1
+		Uniterian = 0
+		,Tenerian = 1
 		;
 		
 	static protected
 		$m_typeStrings = array(
-			self::Ordon => "Ordon"
-			,self::Aaragon => "Aaragon"
+			self::Uniterian => "Uniterian"
+			,self::Tenerian => "Tenerian"
 		);
+	
+	static public
+	    $m_worldPort = array(
+            self::Uniterian => 7171
+            ,self::Tenerian => 7174
+        );
 }
 
 class t_PremdaysServices extends \Core\Structs
@@ -389,6 +401,7 @@ class t_PaymentStatus extends \Core\Structs
 		,Confirmed = 1
 		,Finished = 2
 		,Canceled = 3
+		,Analysis = 4
 	;	
 	
 	static protected
@@ -397,6 +410,7 @@ class t_PaymentStatus extends \Core\Structs
 			,self::Confirmed => "Confirmado"
 			,self::Finished => "Concluido"
 			,self::Canceled => "Cancelado"				
+			,self::Analysis => "Em análise"				
 		);
 }
 
@@ -513,6 +527,7 @@ class t_Group extends \Core\Structs
 		,CommunityManager = 6
 		,Administrator = 7
 		,PlayerNonLogout = 8
+		,SuperAdministrator = 9
 	;	
 	
 	static protected
@@ -556,21 +571,37 @@ class t_Genre extends \Core\Structs
 
 class t_Vocation
 {
+    const 
+        ID_NONE = 0
+        ,ID_SORCERER = 1
+        ,ID_DRUID = 2
+        ,ID_PALADIN = 3
+        ,ID_KNIGHT = 4
+        ,ID_MASTER_SORCERER = 5
+        ,ID_ELDER_DRUID = 6
+        ,ID_ROYAL_PALADIN = 7
+        ,ID_ELITE_KNIGHT = 8
+        ,ID_PREMIUM_MASTER_SORCERER = 9
+        ,ID_PREMIUM_ELDER_DRUID = 10
+        ,ID_PREMIUM_ROYAL_PALADIN = 11
+        ,ID_PREMIUM_ELITE_KNIGHT = 12
+    ;
+    
 	private $_vocation_id;
 	private $_vocation_names = array(
-			0 => array("name" => "none", "abrev" => "n"),
-			1 => array("name" => "sorcerer", "abrev" => "s"),
-			2 => array("name" => "druid", "abrev" => "d"),
-			3 => array("name" => "paladin", "abrev" => "p"),
-			4 => array("name" => "knight", "abrev" => "k"),
-			5 => array("name" => "master sorcerer", "abrev" => "ms"),
-			6 => array("name" => "elder druid", "abrev" => "ed"),
-			7 => array("name" => "royal paladin", "abrev" => "rp"),
-			8 => array("name" => "elite knight", "abrev" => "ek"),
-			9 => array("name" => "warmaster sorcerer", "abrev" => "ws"),
-			10 => array("name" => "warden druid", "abrev" => "wd"),
-			11 => array("name" => "holy paladin", "abrev" => "hp"),
-			12 => array("name" => "berserk knight", "abrev" => "bk"),
+			self::ID_NONE => array("name" => "none", "abrev" => "n"),
+			self::ID_SORCERER => array("name" => "sorcerer", "abrev" => "s"),
+			self::ID_DRUID => array("name" => "druid", "abrev" => "d"),
+			self::ID_PALADIN => array("name" => "paladin", "abrev" => "p"),
+			self::ID_KNIGHT => array("name" => "knight", "abrev" => "k"),
+			self::ID_MASTER_SORCERER=> array("name" => "master sorcerer", "abrev" => "ms"),
+			self::ID_ELDER_DRUID => array("name" => "elder druid", "abrev" => "ed"),
+			self::ID_ROYAL_PALADIN => array("name" => "royal paladin", "abrev" => "rp"),
+			self::ID_ELITE_KNIGHT => array("name" => "elite knight", "abrev" => "ek"),
+            self::ID_PREMIUM_MASTER_SORCERER=> array("name" => "master sorcerer²", "abrev" => "ms"),
+            self::ID_PREMIUM_ELDER_DRUID => array("name" => "elder druid²", "abrev" => "ed"),
+            self::ID_PREMIUM_ROYAL_PALADIN => array("name" => "royal paladin²", "abrev" => "rp"),
+            self::ID_PREMIUM_ELITE_KNIGHT => array("name" => "elite knight²", "abrev" => "ek"),
 	);
 
 	function t_Vocation($vocation_id = null)

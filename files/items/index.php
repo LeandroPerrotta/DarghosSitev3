@@ -36,9 +36,9 @@
 	if ( $myid >= 100 )
 	{		
 		$files = array(
-			'otb' => '/home/leandro/otserv/tfs/data/items/items.otb',
-			'spr' => '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia870/Tibia.spr',
-			'dat' => '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia870/Tibia.dat'
+			'otb' => '/home/leandro/darghos/data/items/items.otb',
+			'spr' => '/home/leandro/www/files/Tibia.spr',
+			'dat' => '/home/leandro/www/files/Tibia.dat'
 		);
 		
 		if($mycount > 1)

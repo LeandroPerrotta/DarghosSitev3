@@ -131,7 +131,7 @@ function requestSearchBox(url, value, minlength)
 	if(value.length < minlength){
 		$("#search_suggestions").hide("slow");
 	} else {
-		$.post("index.php?ref=" + url, {value: value},
+		$.post("?ref=" + url, {value: value},
 			function(info){
 				if(info.length > 0){
 					$("#search_suggestions_list").html(info);
@@ -154,7 +154,7 @@ function fillSearchBox(value)
 
 function requestItemInfo(e, itemtype)
 {	
-	$.post("index.php?ref=misc.iteminfo", {itemtype: $(this).attr("id")},
+	$.post("?ref=misc.iteminfo", {itemtype: $(this).attr("id")},
 		function(info){
 			if($("#iteminfo").length == 0)
 			{
@@ -176,7 +176,7 @@ function ereaseItemInfo()
 
 function requestRebornPlayer(value)
 {	
-	$.post("index.php?ref=players.reborn", {inputValue: value},
+	$.post("?ref=players.reborn", {inputValue: value},
 		function(info){
 		
 			if(Number(info) == 1){
@@ -233,13 +233,15 @@ function fogDialog(message, callback, args)
 {
 	showFogScreen();
 	
-	var _html = "<div id='fog-alert'> <div id='fog-alert-title-error'><span></span><h3>Atenção:</h3></div> <span id='fog-alert-content'>" + message + " </span> <p class='line'></p> <a class='buttonstd' style='float: right;' onclick='onFogConfirm(" + callback + ")'> <span>Sim</span></a> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Não</span></a></div>";
+	var _html = "<div id='fog-alert'> <div id=\"fog-alert-title-error\"><span></span><h3>Atenção:</h3></div> <span id=\"fog-alert-content\">" + message + " </span> <p class=\"line\"></p> <a class=\"buttonstd\" style=\"float: right;\" onclick=\"onFogConfirm('|CALLBACK|', '|ARGS|')\"> <span>Sim</span></a> <a class='buttonstd' style='float: right;' onclick='onFogAlertClick()'> <span>Não</span></a></div>";
+	_html = _html.replace("|CALLBACK|", callback);
+	_html = _html.replace("|ARGS|", args);
 	$("#fog-screen").html(_html);
 }
 
-function onFogConfirm(callback)
+function onFogConfirm(callback, args)
 {
-	callback();
+	window[callback](args);
 	onFogAlertClick();
 }
 

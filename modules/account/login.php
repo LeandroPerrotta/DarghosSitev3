@@ -9,7 +9,7 @@ if($_POST)
 		$_SESSION['login'][] = \Core\Strings::encrypt($_POST["login_password"]);
 		
 		if(!$_SESSION["login_redirect"])
-			\Core\Main::redirect("index.php?ref=account.main");	
+			\Core\Main::redirect("?ref=account.main");	
 		else
 		{
 			$url = trim($_SESSION["login_redirect"], "/");
@@ -19,7 +19,7 @@ if($_POST)
 	}
 	else
 	{
-		$error = \Core\Lang::Message(\Core\Lang::$e_Msgs->FAIL_LOGIN);
+		$error = tr("O nome de conta ou senha informados estão incorretos.");
 	}
 }
 
@@ -34,7 +34,7 @@ if($_SESSION["login_redirect"] != "")
 {
 	$require_login_str = "
 	<p>
-		A pagina que você está tentando acessar requer que você esteja logado em sua conta.
+		".tr("A pagina que você está tentando acessar requer que você esteja logado em sua conta.")."
 	</p>
 	";
 }
@@ -47,19 +47,19 @@ $module .= '
 		'.$require_login_str.'
 	
 		<p>
-			<label for="account_name">'.$pages["ACCOUNT.LOGIN.ACCOUNT_NAME"].'</label><br />
+			<label for="account_name">'.tr("Login").'</label><br />
 			<input name="login_name" size="40" type="password" value="" />
 		</p>
 		
 		<p>
-			<label for="account_password">'.$pages["ACCOUNT.LOGIN.PASSWORD"].'</label><br />
+			<label for="account_password">'.tr("Senha").'</label><br />
 			<input name="login_password" size="40" type="password" value="" />
 		</p>		
 		
 		<div id="line1"></div>
 		
 		<p>
-			<input class="button" type="submit" value="'.$buttons['LOGIN'].'" />
+			<input class="button" type="submit" value="'.tr("Enviar").'" />
 		</p>
 	</fieldset>
 </form>';

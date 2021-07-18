@@ -22,6 +22,13 @@ class Misc
 		}
 	}
 	
+	function Language(){
+	    if(!empty($_POST["language"]))
+	        setcookie("language", $_POST["language"]);
+	    
+        \Core\Main::redirect("?ref=news.last");
+	}
+	
 	function Searchitembyname()
 	{
 		\Core\Main::$isAjax = true;
@@ -75,6 +82,31 @@ class Misc
 		
 		return $string;
 			
+	}
+	
+	function mapMarks(){
+	    
+	    $floor = (int)$_POST["floor"];
+	    
+	    \Core\Main::$isAjax = true;
+	    
+	    $list = array();
+	    
+	    if($floor == 7){   
+    	    
+    	    $mark = new \stdClass();
+    	    $mark->x = 1982;
+    	    $mark->y = 1841;
+    	    $mark->z = 7;
+    	    $mark->type = "mark-correct";
+    	    
+    	    array_push($list, $mark);
+	    }
+	    	    
+	    if(count($list) >= 1)
+	        return json_encode($list);
+	    else
+	        return "";
 	}
 	
 	function Iteminfo()
@@ -209,6 +241,9 @@ class Misc
 		
 		if($item->criticalChance)
 			$string .= "<p>Critico: <strong>+{$item->criticalChance}%</strong></p>";		
+		
+		if($item->resil)
+		    $string .= "<p>Resiliência PvP: <strong>+{$item->resil}%</strong></p>";		
 		
 		if($item->weight)
 			$string .= "<p>Peso: <strong>".round($item->weight / 100, 2)." oz</strong></p>";

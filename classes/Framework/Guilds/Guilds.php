@@ -28,7 +28,7 @@ class Guilds
 		
 	private static $LOG_LEVEL = self::LOG_LEVEL_NORMAL;
 		
-	private $_id, $_worldId, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_formationTime, $_guildPoints, $_guildBetterPoints;
+	private $_id, $_worldId, $_name, $_ownerid, $_creationdate, $_motd, $_balance, $_image, $_status, $_kills, $_deaths, $_formationTime, $_guildPoints, $_guildBetterPoints;
 	public $Ranks = array(), $Invites = array(), $Wars = array();
 	private $_trash_ranks = array();
 	
@@ -116,6 +116,34 @@ class Guilds
 		return false;
 	}
 	
+	static function BestKDGuildList($world_id){
+	    if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
+	        $query_str = "SELECT `id`, (`kills` - `deaths`) as `kd` FROM `guilds`, `".\Core\Tools::getSiteTable("guilds")."` ORDER BY `kd` DESC LIMIT 4;";
+	    elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
+	    $query_str = "SELECT `id`, (`kills` - `deaths`) as `kd` FROM `guilds` WHERE `world_id` = {$world_id} ORDER BY `kd` DESC LIMIT 4;";
+
+	    $query = \Core\Main::$DB->query($query_str);
+	    
+	    if($query->numRows() == 0)
+	    {
+	        return false;
+	    }
+	    
+	    $guildList = array();
+	    
+	    for($i = 0; $i < $query->numRows(); ++$i)
+	    {
+	        $fetch = $query->fetch();
+	        	
+	        $guild = new Guilds();
+	        $guild->Load($fetch->id);
+	        	
+	        $guildList[] = $guild;
+	    }
+	    
+	    return $guildList;	    
+	}
+	
 	static function ActivedGuildsList($world_id)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
@@ -185,6 +213,8 @@ class Guilds
 				`guilds`.`creationdate`, 
 				`guilds`.`motd`, 
 				`guilds`.`status`, 
+				`guilds`.`kills`, 
+				`guilds`.`deaths`, 
 				`guilds_site`.`image`, 
 				`guilds_site`.`guilds`.`formationTime`, 
 				`guilds_site`.`guild_points`, 
@@ -208,6 +238,8 @@ class Guilds
 				`guilds`.`motd`, 
 				`guilds`.`balance`, 
 				`guilds`.`status`, 
+				`guilds`.`kills`, 
+				`guilds`.`deaths`, 			        
 				`guilds_site`.`image`, 
 				`guilds_site`.`formationTime`, 
 				`guilds_site`.`guild_points`, 
@@ -235,6 +267,8 @@ class Guilds
 		$this->_motd = $fetch->motd;
 		$this->_image = $fetch->image;
 		$this->_status = $fetch->status;
+		$this->_kills = $fetch->kills;
+		$this->_deaths = $fetch->deaths;
 		$this->_formationTime = $fetch->formationTime;
 		$this->_guildPoints = $fetch->guild_points;
 		$this->_guildBetterPoints = $fetch->guild_better_points;
@@ -711,6 +745,10 @@ class Guilds
 	{
 		return $this->_guildBetterPoints;
 	}		
+	
+	function GetKD(){
+	    return $this->_kills - $this->_deaths;
+	}
 }
 
 ?>

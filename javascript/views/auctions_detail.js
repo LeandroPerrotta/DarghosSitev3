@@ -29,7 +29,7 @@ function onSubmit()
 		return false;
 	}
 	
-	fogDialog("Você tem certeza que deseja efetuar este lançe de " + bid + " dias de conta premium de seu personagem " + player + "?", submit);
+	fogDialog("Você tem certeza que deseja efetuar este lançe de R$ " + bid + " de saldo de sua conta de seu personagem " + player + "?", submit);
 	return true;
 }
 
@@ -53,12 +53,12 @@ function deleteCallback()
 			id: auction
 	};	
 	
-	sendPost("index.php?ref=auctions.delete", data);
+	sendPost("?ref=auctions.delete", data);
 }
 
 function deleteItemCallback()
 {	
-	sendPost("index.php?ref=auctions.deleteitem", params);
+	sendPost("?ref=auctions.deleteitem", params);
 }
 
 function submit()
@@ -73,7 +73,7 @@ function submit()
 		,bid_auction: auction
 	};
 	
-	sendPost("index.php?ref=auctions.makebid", data);
+	sendPost("?ref=auctions.makebid", data);
 }
 
 function sendPost(url, data, handler)

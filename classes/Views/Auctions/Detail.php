@@ -133,9 +133,9 @@ class Detail extends \Core\Views
 				
 		
 		if($auction->GetStatus() == AuctionsModel\Auction::STATUS_BEGIN)
-			$bid_str = "<p>Ninguem até agora efetuou um lançe neste leilão. Está interessado? O lançe inicial é de <strong>{$auction->min_bid}</strong>.<p>";
+			$bid_str = "<p>Ninguem até agora efetuou um lançe neste leilão. <br>Está interessado? O lançe inicial é de <strong>R$ " . number_format($auction->min_bid / 100, 2) . "</strong>.<p>";
 		elseif($auction->GetStatus() == AuctionsModel\Auction::STATUS_BEGUN)
-		$bid_str = "<p>Este Leilão irá iniciar em breve. Está interessado? Já garanta seus dias de conta premium! O lançe inicial será de <strong>{$auction->min_bid}</strong> dias.<p>";
+		$bid_str = "<p>Este Leilão irá iniciar em breve. Está interessado? Já garanta saldo em sua conta! O lançe inicial será de <strong>R$ " . number_format($auction->min_bid / 100, 2) . "</strong>.<p>";
 		else
 			$bid_str = "<p>Este leilão terminou sem nenhum interessado.</p>";
 		
@@ -148,14 +148,14 @@ class Detail extends \Core\Views
 				$bid_str = "
 					<p>
 						<h3>Maior lançe até o momento:</h3> 
-						<br>► <strong>{$bid->bid}</strong> dias de conta premium dado pelo jogador <a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a>.
+						<br>► <strong>R$ " . number_format($bid->bid / 100, 2) . "</strong> oferecidos pelo jogador <a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a>.
 						<br><em><small>Efetuado em ".\Core\Main::formatDate($bid->date).".</small></em>
 					</p>";
 			else
 				$bid_str = "
 				<p>
 				<h3>Lançe vencedor do leilão (terminado):</h3>
-				<br>► <strong>{$bid->bid}</strong> dias de conta premium dado pelo jogador <a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a>.
+				<br>► <strong>R$ " . number_format($bid->bid / 100, 2) . "</strong> pago pelo jogador <a href='?ref=character.view&name={$player->getName()}'>{$player->getName()}</a>.
 				<br><em><small>Efetuado em ".\Core\Main::formatDate($bid->date).".</small></em>
 				</p>";				
 		}
@@ -167,12 +167,13 @@ class Detail extends \Core\Views
 		{
 			$makebid = new \Framework\HTML\Table();
 			
-			$currentBid = ($bid) ? $bid->bid : $auction->min_bid - 1;
+			$currentBid = ($bid) ? $bid->bid : $auction->min_bid;
+			$currentBid = number_format($currentBid / 100, 2);
 			
 			$makebid->AddDataRow("Fazer um lançe <span class='tooglePlus'></span>");
 			$makebid->IsDropDownHeader();
 	
-			if($logged->getPremDays() > 0)
+			if($logged->getBalance() > 0)
 			{
 				$bid_player_label = new UI\Label($this, "Personagem: ");
 				
@@ -213,7 +214,8 @@ class Detail extends \Core\Views
 					
 				<p>
 				{$this->saveHTML($bid_value_label)}
-				<p><small>Obs: O seu lançe deve ser maior que {$currentBid}.</small></p>
+				<p>Saldo disponível em sua conta: <strong>R$ " . number_format($logged->getBalance() / 100, 2) . "</strong></p>
+				<p><small>Obs: O seu lançe deve ser pelo menos de R$ {$currentBid}.</small></p>
 				{$this->saveHTML($bid_value)}
 				</p>
 				
@@ -230,7 +232,7 @@ class Detail extends \Core\Views
 				<div style='text-align: center;'>
 					
 					<p>
-						Você ainda não possui uma <a href='?ref=contribute.order'>Conta Premium</a>. Adquira agora mesmo a sua e você poderá disputar itens em nosso leilão além de adquirir uma série de exclusividades no jogo!
+						Você ainda não possui nenhum saldo em sua conta. <a href='?ref=balance.purchase'>Adicione saldo</a> a sua conta agora mesmo a sua e você poderá dar lançes em itens no leilão além de adquirir uma série de exclusividades no jogo!
 					</p>
 					
 				</div>";	

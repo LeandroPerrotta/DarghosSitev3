@@ -9,12 +9,27 @@ use \Core\Configs;
 
 class UpdateGuildPvpStats
 {
-	private $db;
+	private $db, $guilds;
 	
 	function __construct()
 	{
 		$this->db = &Main::$DB;
+		$this->guilds = array();
 	}
+	
+	function addGuildDeath($guild_id){
+	    if(!$this->guilds[$guild_id])
+	        $this->guilds[$guild_id] = array("kills" => 0, "deaths" => 0);
+	    
+	    $this->guilds[$guild_id]["deaths"]++;
+	}
+	
+	function addGuildKill($guild_id){
+	    if(!$this->guilds[$guild_id])
+	        $this->guilds[$guild_id] = array("kills" => 0, "deaths" => 0);
+	     
+	    $this->guilds[$guild_id]["kills"]++;
+	}	
 	
 	function Run()
 	{
@@ -33,17 +48,12 @@ class UpdateGuildPvpStats
 		echo "Running UpdateGuildPvpStats...\n";
 		echo "LastUpdateDate: {$lastUpdateDate}\n";
 		
-		$query = $this->db->query("SELECT `d`.`id`, `d`.`player_id`, `p`.`rank_id` FROM `player_deaths` `d` LEFT JOIN `players` `p` ON `p`.`id` = `d`.`player_id` WHERE `d`.`date` > {$lastUpdateDate} AND `p`.`rank_id` != 0");
-
+		$query = $this->db->query("SELECT `d`.`id`, `d`.`player_id`, `p`.`rank_id` FROM `player_deaths` `d` LEFT JOIN `players` `p` ON `p`.`id` = `d`.`player_id` WHERE `d`.`date` > {$lastUpdateDate}"); 
+		
 		echo "Checking for {$query->numRows()} player deaths entries...\n";
 		if($query->numRows() > 0){
 			while ($fetch = $query->fetch()) {
-				$guild_id = Guilds::GetGuildIdByRankId($fetch->rank_id);
-				
-				if(!$guild_id){
-					echo "Guild id for rank {$fetch->rank_id} of player {$fetch->player_id} not found!\n";
-					continue;
-				}
+				$guild_id = Guilds::GetGuildIdByRankId($fetch->rank_id);		
 				
 				$guild_pvp_death_id = 0;
 				
@@ -66,19 +76,28 @@ class UpdateGuildPvpStats
 									continue;
 								else
 								{
-									if($guild_pvp_death_id == 0){
+									if($guild_pvp_death_id == 0 && $guild_id != 0){
 										$this->db->ExecQuery("INSERT INTO `guild_pvp_deaths` (`guild_id`, `death_id`) VALUES ({$guild_id}, {$fetch->id})");
 										$guild_pvp_death_id = $this->db->lastInsertId();
+										$this->addGuildDeath($guild_id);
 									}									
-								}									
+								}
+
+								$this->addGuildKill($killer->getGuildId());
 								
-								$this->db->ExecQuery("INSERT INTO `guild_pvp_kills` (`guild_id`, `guild_pvp_death_id`) VALUES ({$killer->getGuildId()}, {$guild_pvp_death_id})");
-								$guildKillers[] = $killer->getGuildId();
+								if($guild_id != 0){
+								    $this->db->ExecQuery("INSERT INTO `guild_pvp_kills` (`guild_id`, `guild_pvp_death_id`) VALUES ({$killer->getGuildId()}, {$guild_pvp_death_id})");
+								    $guildKillers[] = $killer->getGuildId();
+								}
 							}
 						}
 					}
 				}			
 			}
+		}
+		
+		foreach($this->guilds as $guild_id => $stats){	    
+		    $this->db->query("UPDATE `guilds` SET `kills` = `kills` + {$stats["kills"]}, `deaths` = `deaths` + {$stats["deaths"]} WHERE `id` = {$guild_id}");
 		}
 		
 		$values->lastUpdateGuildPvpStats = time();

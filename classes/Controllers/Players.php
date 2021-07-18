@@ -76,7 +76,8 @@ class Players
 		$world = $_POST["character_world"];
 		$genre = $_POST["character_genre"];
 		$vocation = $_POST["character_vocation"];
-		$town = $_POST["character_town"];
+		$town = \t_Towns::Quendor;
+		$pvp = true;
 		
 		if(!\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_MULTIWORLD))
 			$world = \Core\Configs::Get(\Core\Configs::eConf()->DEFAULT_WORLD);		
@@ -97,8 +98,10 @@ class Players
 		$voc_t = new \t_Vocation();
 		$voc_t->SetByName($vocation);
 	
-		if($voc_t->Get() > 4)
-			$voc_t->Set(1);
+		$valid_vocations = array(1, 2, 3, 4, 9);
+		
+		if(!in_array($voc_t->Get(), $valid_vocations))
+		    $voc_t->Set(1);		
 	
 		$_world_id = \t_Worlds::Get($world);
 		$_genre_id = \t_Genre::GetByString($genre);
@@ -107,10 +110,6 @@ class Players
 			$outfitType = 128;
 		else
 			$outfitType = 136;
-	
-		$town_id = null;
-	
-		$town_id =\ t_Towns::Get($town);
 			
 		$player = new PlayerModel();
 			
@@ -120,17 +119,61 @@ class Players
 		$player->setGroup(\t_Group::Player);
 		$player->setSex($_genre_id);
 		$player->setVocation($voc_t->Get());
-		$player->setExperience(4200);
-		$player->setLevel(8);
-		$player->setMagLevel(0);
-		$player->setHealth(185);
-		$player->setMana(35);
-		$player->setCap(470);
-		$player->setTownId($town_id);
+        $player->setExperience(4200);
+        $player->setLevel(8);
+        $player->setMagLevel(0);
+        $player->setHealth(185);
+        $player->setMana(35);
+        $player->setCap(470);
+		$player->setTownId($town);
 		$player->setLookType($outfitType);
 		$player->setConditions(null);
 		$player->setComment("");
 		$player->setCreation(time());
+		$player->setPvp($pvp);
+		
+        /*
+        if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+	        $player->setMagLevel(85);
+	        $player->setHealth(1145);
+	        $player->setMana(5800);
+	        $player->setCap(2390);
+	    }
+	    elseif(Tools::isPaladin($player->getVocation())){
+	        $player->setMagLevel(26);
+	        $player->setHealth(2105);
+	        $player->setMana(2920);
+	        $player->setCap(4310);  
+	    }
+	    elseif(Tools::isKnight($player->getVocation())){
+	        $player->setMagLevel(10);
+	        $player->setHealth(3065);
+	        $player->setMana(1000);
+	        $player->setCap(5270);  		    
+	    }
+        */
+		
+		$player->save();
+		
+	    /*
+        $player->loadSkills();
+	    
+	    if(Tools::isDruid($player->getVocation()) || Tools::isSorcerer($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 30);
+	    }
+	    elseif(Tools::isPaladin($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 85);
+	        $player->setSkill(t_Skills::Distance, 105);
+	    }
+	    elseif(Tools::isKnight($player->getVocation())){
+	        $player->setSkill(t_Skills::Shielding, 95);
+	        $player->setSkill(t_Skills::Axe, 95);
+	        $player->setSkill(t_Skills::Sword, 95);
+	        $player->setSkill(t_Skills::Club, 95);
+	    }
+
+	    $player->saveSkills();	
+        */
 	
 		$player->save();
 	

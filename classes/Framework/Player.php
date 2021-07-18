@@ -48,7 +48,6 @@ class Player
 		, PH_ACHIEV_MISC_GOT_LEVEL_400 = 2003
 		, PH_ACHIEV_MISC_GOT_LEVEL_500 = 2004
 		;
-	
 		
 	static function listByBestRating()
 	{
@@ -143,10 +142,10 @@ class Player
 			SET 
 				`creation` = '{$this->site_data["creation"]}',
 				`comment` = '" . \Core\Main::$DB->escapeString($this->site_data["comment"]) . "',
-				`visible` = '{$this->site_data["visible"]}',";
+				`visible` = '{$this->site_data["visible"]}'";
 			
 			if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-				$query_str .= "`guildjoin` = '{$this->_guild_join_in}'";
+				$query_str .= ",`guildjoin` = '{$this->_guild_join_in}'";
 				
 				$query_str .= "
 			WHERE 
@@ -251,6 +250,10 @@ class Player
 		}	
 			
 		$this->data = $query->fetchAssocArray();
+		
+		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
+		    $this->data["world_id"] = 0; //hack
+		
 		$this->temp_data = $this->data; //usaremos para posterioremente identificar valores modificados
 		
 		$query = $this->db->query("SELECT `creation`, `visible`, `comment` FROM `".\Core\Tools::getSiteTable("players")."` WHERE `player_id` = '{$this->data["id"]}'");
@@ -355,9 +358,19 @@ class Player
 		}
 	}
 	
+	function saveSkills(){
+	    foreach($this->skills as $skillid => $value){
+	        $query = $this->db->query("UPDATE `player_skills` SET `value` = {$value}, `count` = 0 WHERE `skillid` = {$skillid} AND `player_id` = {$this->data['id']}");
+	    }
+	}
+	
 	function getSkill($skillid)
 	{
 		return $this->skills[$skillid];
+	}
+	
+	function setSkill($skillid, $value){
+	    $this->skills[$skillid] = $value;
 	}
 	
 	function loadByName($player_name)
@@ -418,6 +431,15 @@ class Player
 	function inviteToGuild($guild_id)
 	{
 		$this->db->query("INSERT INTO guild_invites (`player_id`, `guild_id`, `date`) values('{$this->data['id']}', '{$guild_id}', '".time()."')");
+	}
+	
+	function canReceiveGuildPoints($bonus_id){
+	    $query = $this->db->query("SELECT `date` FROM `guild_points` WHERE `account_id` = {$this->data['account_id']} AND `bonus_id` = {$bonus_id}");
+        return $query->numRows() == 0;
+	}
+	
+	function onReceiveGuildPoints($bonus_id, $guild_id){
+	    $this->db->query("INSERT INTO guild_points (`guild_id`, `account_id`, `bonus_id`, `date`) VALUES('{$guild_id}', '{$this->data['account_id']}', {$bonus_id}, '".time()."')");
 	}
 	
 	function acceptInvite()
@@ -820,6 +842,14 @@ class Player
 			$this->onDelete();
 	}
 	
+	function setLossExperience($loss){
+	    $this->data['loss_experience'] = $loss;
+	}
+	
+	function setPvp($bool){
+	    $this->data['pvpEnabled'] = $bool;
+	}
+	
 	function get($field)
 	{
 		switch($field)
@@ -862,25 +892,23 @@ class Player
 	function getLevel(){ return $this->data['level']; }
 	function getMagicLevel(){ return $this->data['maglevel']; }	
 	
-	function getVocation()
+	function getVocation($force_promotion = true)
 	{
 		$vocation = $this->data['vocation'];
 		
-		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-		{
-			if($this->data['promotion'] == 2 && $this->loadAccount()->getPremDays() > 0)
-				$vocation = $vocation + 8;
-			elseif($this->data['promotion'] == 1)
-				$vocation = $vocation + 4;
-		}
+		if($force_promotion && g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS && $this->data['promotion'] >= 1)
+            $vocation = \Core\Tools::transformToPromotion($this->data['promotion'], $vocation);
 			
 		return $vocation;
 	}
 	
 	function getOnlineTime($hourAgo = 24)
 	{
-		$query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) as `total` FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." AND login >= UNIX_TIMESTAMP() - (60 * 60 * {$hourAgo}) GROUP BY `player_id`");
-	
+	    if($hourAgo != 0)
+		    $query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) as `total` FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." AND login >= UNIX_TIMESTAMP() - (60 * 60 * {$hourAgo}) GROUP BY `player_id`");
+	    else
+	        $query = \Core\Main::$DB->query("SELECT SUM(`online_ticks`) as `total` FROM `player_activities` WHERE `player_id` = ".$this->data["id"]." GROUP BY `player_id`");
+	    
 		if($query->numRows() == 0)
 			return 0;
 			
@@ -915,11 +943,145 @@ class Player
 	function getPosX(){ return $this->data['posx']; }
 	function getPosY(){ return $this->data['posy']; }
 	function getPosZ(){	return $this->data['posz'];	}	
+	function getIpAddress(){ return \Core\Tools::ip_long2string($this->data['lastip']); }	
 	function getStamina(){ return $this->data['stamina']; }	
 	function getSkull(){ return $this->data['skull']; }	
 	function getSkullTime(){ return $this->data['skulltime']; }	
 	function getBattlegroundRating() { return $this->data['battleground_rating']; }
 	function isPvpEnabled() { return (bool)$this->data['pvpEnabled']; }
 	function isDeleted(){ return (bool)$this->data['deleted']; }
+	
+	/**
+	 * Retorna uma string HTML do tipo img.
+	 * @param unknown_type $var Pode ser um objeto Player ou o skull type
+	 */
+	static function getSkullImg($var){
+	     
+	    if($var instanceof self){     
+	        $skull_type = $var->getSkull();
+	    }
+	    elseif(is_numeric($var)){
+	        $skull_type = $var;
+	    }
+	    
+		$skull = null;
+		switch($skull_type){
+		    
+		    case \t_Skulls::White:
+		        $skull = "white_skull.gif";
+		        break;
+		        
+		    case \t_Skulls::Red:
+		        $skull = "red_skull.gif";
+		        break;
+		        
+		    case \t_Skulls::Black:
+		        $skull = "black_skull.gif";
+		        break;		
+		}
+		
+		$skull_img = "";
+		
+		if($skull)
+		    $skull_img = "<img src='files/misc/{$skull}' />";
+	    
+	    return $skull_img;	    
+	}
+	
+	function canChangeVocation($to_vocation, &$error_msg){
+	    
+	    if(\Core\Tools::isKnight($this->data["vocation"])){
+	        
+	        $now = getdate();
+	        $last_changeday = mktime(0,0,0,10,16,2013);
+	        
+	        if(time() >= $last_changeday){
+	           $error_msg = tr("Esta mudança so estava permitida até 15/10/2013.");
+	           return false;
+	        }
+	        
+	        if($to_vocation == "warrior")     
+	           return true;
+	        
+	        $error_msg = tr("Mudança para esta classe não permitida.");
+	        return false;	        
+	    }
+	    elseif(\Core\Tools::isWarrior($this->data["vocation"])){
+	        
+	        $lastChange = $this->getLastChangeVocation();
+	        
+	        if(!$lastChange){
+	            $error_msg = tr("Esta mudança não é permitida para este personagem.");
+	            return false;
+	        }
+	        
+	        if(time() <= $lastChange->date + (60 * 60 * 24 * 2)){
+	            if($to_vocation == "knight")
+	                return true;	
+	                        
+    	        $error_msg = tr("Mudança para esta classe não permitida.");
+    	        return false;	   
+	        }
+	        else{
+	            $error_msg = tr("Prazo de 48h para cancelar a mudança já expirados para este personagem...");
+	            return false;
+	        }
+	    }
+	    else{
+	        $error_msg = tr("A sua vocação não é permitida.");
+	        return false;	        
+	    }
+	}
+	
+	function getLastChangeVocation(){
+	    $query = \Core\Main::$DB->query("SELECT `player_id`, `from_vocation`, `to_vocation`, `date` FROM `".\Core\Tools::getSiteTable("player_changeclass")."` WHERE `player_id` = {$this->data["id"]} ORDER BY DATE DESC LIMIT 1");
+	
+	   if($query->numRows() == 0)
+	       return false;
+	   
+	   return $query->fetch();
+	}
+	
+	function updateHealth(){
+	    
+	    //default is for mages and non-vocation
+	    $health = (($this->getLevel() - 1) * 5) + 150;
+	    
+	    if($this->getLevel() > 8 && \Core\Tools::isKnight($this->getVocation()))
+	       $health = (($this->getLevel() - 1) * 15) + 150;
+	    elseif($this->getLevel() > 8 && (\Core\Tools::isPaladin($this->getVocation()) || \Core\Tools::isWarrior($this->getVocation())))
+	       $health = (($this->getLevel() - 1) * 10) + 150;
+	    
+	    $this->setHealth($health);
+	}
+	
+	function updateCapacity(){
+	    //default is for mages and non-vocation
+	    $cap = (($this->getLevel() - 1) * 5) + 400;
+	    
+	    if($this->getLevel() > 8 && \Core\Tools::isKnight($this->getVocation()))
+	        $cap = (($this->getLevel() - 1) * 25) + 400;
+	    elseif($this->getLevel() > 8 && (\Core\Tools::isPaladin($this->getVocation()) || \Core\Tools::isWarrior($this->getVocation())))
+	        $cap = (($this->getLevel() - 1) * 20) + 400;
+	    elseif($this->getLevel() > 8 && (\Core\Tools::isSorcerer($this->getVocation()) || \Core\Tools::isDruid($this->getVocation())))
+            $cap = (($this->getLevel() - 1) * 10) + 400;
+	    
+	    $this->setCap($cap);
+	}
+	
+	function doChangeVocation($to_vocation){
+	    
+	    $voc = new \t_Vocation();
+	    $voc->SetByName($to_vocation);
+	    
+	    $old_voc = $this->getVocation(false);
+	    $this->setVocation($voc->Get());
+
+	    $this->updateHealth();
+	    $this->updateCapacity();
+	    
+	    //log
+	    \Core\Main::$DB->ExecQuery("INSERT INTO `".\Core\Tools::getSiteTable("player_changeclass")."` VALUES ({$this->data["id"]}, {$old_voc}, {$voc->Get()}, UNIX_TIMESTAMP())");
+	}
 }
 ?>

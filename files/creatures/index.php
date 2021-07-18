@@ -57,9 +57,9 @@
 		}		
 	}
 
-	$spr_path = '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia/Tibia.spr';
-	$dat_path = '/home/leandro/.wine/drive_c/Arquivos de programas/Tibia/Tibia.dat';
-	$otb_path = '/home/leandro/otserv/DarghosData/items/items.otb';
+	$spr_path = '/home/leandro/www/files/Tibia.spr';
+	$dat_path = '/home/leandro/www/files/Tibia.dat';
+	$otb_path = '/home/leandro/darghos/data/items/items.otb';
 	$caching = false;
 	
 	define('HEX_PREFIX', '0x');

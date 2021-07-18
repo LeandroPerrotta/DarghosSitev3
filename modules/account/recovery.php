@@ -108,7 +108,7 @@ else
 				else
 				{
 					$_SESSION['recovery'] = $_POST['recovery_name'];
-					\Core\Main::redirect("index.php?ref=account.advanced_recovery");	
+					\Core\Main::redirect("?ref=account.advanced_recovery");	
 				}		
 			}
 		}

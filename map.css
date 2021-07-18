@@ -1,0 +1,97 @@
+#map-viewer{
+	margin-top: 35px;
+	width: 570px;
+	height: 510px;
+	display: block;
+	overflow: hidden;
+}
+
+#map-mask{
+	background: urL(files/map/mask.png) no-repeat;
+	position: relative;
+	margin-top: -510px;
+	width: 570px;
+	height: 510px;
+	float: left;
+	z-index: 1001;
+	pointer-events: none;
+}
+
+#map-image{
+	position: relative;
+	width: 4526px;
+	height: 2945px;
+}
+
+.mark{
+	position: relative;
+	z-index: 1000;
+	width: 11px;
+	height: 11px;	
+}
+
+.mark:hover{
+	cursor: pointer;
+}
+
+.mark-correct{
+	background: url(files/map/marks.gif);
+	background-position: 0px 0px;
+}
+
+#map-controls{
+	width: 570px;
+	height: 80px;
+	background-color: black;
+	display: block;
+}
+
+.control-button{
+	width: 20px;
+	height: 20px;	
+	background-color: black;
+	border: 1px solid red;
+	display: block;
+}
+
+#control-dir{
+	float: left;
+}
+
+#control-floor{
+	float: right;
+	margin-right: 10px;
+}
+
+#control-north{
+	margin-top: 20px;
+	margin-left: 50px;
+}
+
+#control-east{
+	margin-top: -10px;
+	margin-left: 74px;
+}
+
+#control-south{
+	margin-top: -10px;
+	margin-left: 50px;
+}
+
+#control-west{
+	margin-top: -35px;
+	margin-left: 26px;
+}
+
+#control-floorup{
+	margin-bottom: 2px;
+}
+
+#control-cords, #control-url{
+	text-align: center;
+	display: block;
+}
+
+#control-url{
+	font-size: 8pt;
+}

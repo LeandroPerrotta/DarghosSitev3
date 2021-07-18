@@ -2,15 +2,16 @@
 namespace Core;
 class MenuItem
 {
-	private $menu_id, $item, $url, $conditions, $min_group, $style;
+	private $menu_id, $item, $url, $conditions, $min_group, $style, $icon;
 	
-	function __construct($item, $url, $conditions, $min_group = 0, $style = "")
+	function __construct($item, $url, $conditions, $min_group = 0, $style = "", $icon = "")
 	{
 		$this->item = $item;
 		$this->url = $url;
 		$this->conditions = $conditions;
 		$this->min_group = $min_group;
 		$this->style = $style;
+		$this->icon = $icon;
 	}
 	
 	function getMenuId() { return $this->menu_id; }
@@ -31,9 +32,18 @@ class MenuItem
 			return "";
 		
 		$li = $xml->addChild("li");
+		
+
+		
 		$a = $li->addChild("a");
+		
 		$span = $a->addChild("span", $this->getItem());
 		$span->addAttribute("style", $this->style);
+		
+		if($this->icon){
+		    $icon = $a->addChild("span");
+		    $icon->addAttribute("class", $this->icon);
+		}		
 		
 		$a->addAttribute("href", $this->getUrl());
 	}

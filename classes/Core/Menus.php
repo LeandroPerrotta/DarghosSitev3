@@ -2,142 +2,17 @@
 namespace Core;
 class Menus
 {	
-	private static $leftMenu = array(
-		array(
-			"title" => "Navegação",
-			"name" => "navigation",
-			"items" => array(
-				array("name" => "Ultimas Notícias", "url" => "?ref=news.last")
-				,array("name" => "Sobre o Darghos", "url" => "?ref=general.about")
-				,array("name" => "Como jogar?", "url" => "?ref=general.howplay")
-				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
-				,array("name" => "Fansites", "url" => "?ref=general.fansites")	
-			)
-		)
-		,array(
-			"title" => "Contas",
-			"name" => "accounts",
-			"conditions" => Menu::CONDITION_CAN_NOT_LOGGED,
-			"items" => array(
-				array("name" => "Criar Conta", "style" => "font-weight: bold",  "url" => "?ref=account.register")
-				,array("name" => "Login", "url" => "?ref=account.login")
-				,array("name" => "Recuperar Conta", "url" => "?ref=account.recovery")
-				,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
-				,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
-			)		
-		)
-		,array(
-			"title" => "Minha Conta",
-			"name" => "myaccount",
-			"conditions" => Menu::CONDITION_MUST_LOGGED,
-			"items" => array(
-				array("name" => "Principal", "url" => "?ref=account.main")
-				,array("name" => "Logout", "url" => "?ref=account.logout")		
-			)		
-		)
-		,array(
-			"title" => "Conta Premium",
-			"name" => "premium",
-			"conditions" => Menu::CONDITION_MUST_LOGGED,
-			"items" => array(
-				array("name" => "Vantagens", "url" => "?ref=account.premium")
-				,array("name" => "Comprar!", "style" => "font-weight: bold", "url" => "?ref=contribute.order")		
-				,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
-				,array("name" => "Item Shop", "url" => "?ref=itemshop.purchase")		
-				,array("name" => "Minhas Compras", "url" => "?ref=contribute.myorders")
-			)		
-		)
-		,array(
-			"title" => "Admin Panel",
-			"name" => "adminpanel",
-			"conditions" => Menu::CONDITION_MUST_LOGGED,
-			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"min_group" => \t_Group::GameMaster,
-			"items" => array(
-				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
-				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
-				,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
-				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
-			)		
-		)
-		,array(
-			"title" => "Darghopédia",
-			"name" => "darghopedia",
-			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"items" => array(
-				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
-				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
-				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
-				//,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
-				//,array("name" => "Agressivos e Pacificos", "url" => "?ref=darghopedia.change_pvp")
-				//,array("name" => "Battlegrounds", "url" => "http://pt-br.darghos.wikia.com/wiki/Battlegrounds")
-				//,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
-				//,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
-			)		
-		)		
-		,array(
-			"title" => "Comunidade",
-			"name" => "community",
-			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
-			"items" => array(
-				array("name" => "Buscar Personagem", "url" => "?ref=character.view")
-				,array("name" => "Highscores", "url" => "?ref=community.highscores")
-				,array("name" => "Guildas", "url" => "?ref=community.guilds")
-				,array("name" => "Casas", "url" => "?ref=community.houses")
-				,array("name" => "Mortes Recentes", "url" => "?ref=community.lastdeaths")			
-				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
-				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline", "conditions" => Menu::CONDITION_SHOWING_PLAYERS_ONLINE)	
-			)		
-		)		
-		,array(
-			"title" => "Facebook",
-			"name" => "facebook",
-			"onDraw" => "drawFacebook"
-		)		
-	);
+	private static $leftMenu;
+	private static $rightMenu;
 	
-	private static $rightMenu = array(
-		array(
-			"title" => "Server Status",
-			"name" => "serverstatus",
-			"onDraw" => "drawStatus"
-		)
-		,array(
-			"title" => "Test Server Publico",
-			"name" => "testserverstatus",
-			"onDraw" => "drawTestServerStatus"
-		)
-		,array(
-			"title" => "Power Gammers",
-			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
-			"color" => \e_menuColor::Red,
-			"name" => "powergammers",
-			"onDraw" => "drawPowerGammers"
-		)
-		,array(
-				"title" => "Battlegrounds Semana",
-				"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
-				"color" => \e_menuColor::Red,
-				"name" => "bestbgplayers",
-				"onDraw" => "drawBgBest"
-		)					
-		,array(
-			"title" => "Top 5 Matadores",
-			"desc" => "Jogadores que mais mataram outros jogadores. Atualizado diariamente as 16:00.",
-			"color" => \e_menuColor::Red,
-			"name" => "topkillers",
-			"onDraw" => "drawTopKillers"
-		)		
-	);
-	
-	static function drawFacebook(&$xml)
+	static function drawMedia(&$xml)
 	{
 		$ul = $xml->addChild("ul");
 		$ul->addAttribute("class", "always_viewable");	
 
 		$li = $ul->addChild("li");
 		
-		$li->addChild("facebooktag");
+		$li->addChild("mediatag");
 		
 		return true;
 	}
@@ -215,41 +90,38 @@ class Menus
 		$div = $li->addChild("div");
 
 		$p = $div->addChild("p");
-		$p->addChild("em", "Status: ");	
+		$p->addChild("em", tr("".getConf(confEnum()->WEBSITE_NAME)." está "));	
 		
 		if(count($status) == 0)
 		{
-			$span = $p->addChild("span", "offline");
+			$span = $p->addChild("span", tr("offline"));
 			$span->addAttribute("style", "color: #ec0404; font-weight: bold;");
 		}
 		else
 		{			
-			$span = $p->addChild("span", "online");
+			$span = $p->addChild("span", tr("online"));
 			if($allOnline)
 				$span->addAttribute("style", "color: #00ff00; font-weight: bold;");
 			else
 				$span->addAttribute("style", "color: #e1dc48; font-weight: bold;");
 
 			$p = $div->addChild("p");
-			$p->addChild("em");
-			$a = $p->addChild("a", "Cliente para Jogar!");
-			$a->addAttribute("href", "?ref=general.download&file=setup.exe");
-			$a->addAttribute("target", "_blank");			
+			$p->addChild("em");	
 			
 			if(Configs::Get(Configs::eConf()->STATUS_IGNORE_AFK))
 			{
 				$p = $div->addChild("p");
 				$em = $p->addChild("em");
-				$a = $em->addChild("a", "Players online:");
+				$a = $em->addChild("a", tr("Jogadores:"));
 				$a->addAttribute("href", "?ref=status.whoisonline");
 				$span = $p->addChild("span", " " . $fetch->players + $fetch->afk);		
 
 				$p = $div->addChild("p");
-				$p->addChild("em", "Playing: ");
+				$p->addChild("em", tr("Jogando: "));
 				$span = $p->addChild("span", $fetch->players);		
 						
 				$p = $div->addChild("p");
-				$p->addChild("em", "Training: ");
+				$p->addChild("em", tr("Treinando: "));
 				$span = $p->addChild("span", $fetch->afk);				
 
 			}
@@ -259,7 +131,7 @@ class Menus
 				{
 					$p = $div->addChild("p");
 					$em = $p->addChild("em");
-					$a = $em->addChild("a", "Players online:");
+					$a = $em->addChild("a", tr("Jogadores:"));
 					$a->addAttribute("href", "?ref=status.whoisonline");
 					$span = $p->addChild("span", " " . array_sum($status));
 				}
@@ -268,13 +140,36 @@ class Menus
 			if(Configs::Get(Configs::eConf()->STATUS_SHOW_PING))
 			{
 				$p = $div->addChild("p");
-				$p->addChild("em", "Ping: ");
-				$span = $p->addChild("span", "aguarde...");			
+				$p->addChild("em", tr("Ping: "));
+				$span = $p->addChild("span", tr("aguarde..."));			
 				$span->addAttribute("class", "ping");
 			}
 		}		
 		
 		return true;
+	}
+	
+	static function drawEvents(\SimpleXMLElement &$xml){
+	    
+	    $today = \Framework\Events::getToday();
+	    
+	    $ul = $xml->addChild("ul");
+	    $ul->addAttribute("class", "always_viewable");
+	    
+	    $li = $ul->addChild("li"); 
+	    
+	    $div = $li->addChild("div");
+	    $div->addAttribute("class", "events");
+	    $div->addChild("h3", "Hoje");
+	    
+	    if($today->numRows() > 0){
+
+	    }
+	    else{
+	        $div->addChild("p", "Nenhum evento programado :(");
+	    }
+	    
+	    return true;
 	}
 	
 	static function drawPowerGammers(&$xml)
@@ -444,10 +339,9 @@ class Menus
 	
 	static function drawTopBar()
 	{
-		$xml = new \SimpleXMLElement("
-				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-				<root>
-					<div id=\"games-box\">
+	    /*
+	     * 	            <!--
+					<div id=\"games-box\" style='visibility: hidden;'>
 						<form action=\"?ref=account.login\" method=\"post\" >
 							<fieldset>
 								<label>Conheça também...</label>
@@ -459,6 +353,24 @@ class Menus
 							</fieldset>
 						</form>
 					</div>
+		            -->
+	     * */
+	    
+		$xml = new \SimpleXMLElement("
+				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+				<root>
+                    <div id=\"language-box\">
+						<form action=\"?ref=misc.language\" method=\"post\" >
+							<fieldset>
+								<label style='margin-top: 0px; line-height: 16px;'>" . tr("Seu idioma") . "</label>
+								<select name=\"language\" id=\"language\" style='width: 125px;' onchange='this.form.submit()'>
+									<option selected=\"selected\"></option>					
+									<option value=\"en\">". tr("Inglês") ."</option>
+	                                <option value=\"pt-br\">". tr("Português") ."</option>
+								</select>
+							</fieldset>
+						</form>
+					</div>		        
 					<div id=\"ultraxsoft-box\">
 					</div>				
 				</root>");
@@ -473,8 +385,8 @@ class Menus
 			$form->addAttribute("method", "post");
 			
 			$fieldset = $form->addChild("fieldset");
-			$label = $fieldset->addChild("label", "Acesse sua conta... Ou crie uma ");
-			$a = $label->addChild("a", "nova conta!");
+			$label = $fieldset->addChild("label", tr("Acesse sua conta... Ou crie uma "));
+			$a = $label->addChild("a", tr("nova conta!"));
 			$a->addAttribute("href", "?ref=account.register");
 			
 			$account_name = $fieldset->addChild("input");
@@ -489,18 +401,18 @@ class Menus
 			
 			$login = $fieldset->addChild("input");
 			$login->addAttribute("class", "button");
-			$login->addAttribute("value", "Entrar");
+			$login->addAttribute("value", tr("Entrar"));
 			$login->addAttribute("type", "submit");
 		}
 		else
 		{
-			$div->addChild("p", "Você está conectado! ");
+			$div->addChild("p", tr("Você está conectado!"));
 			$p = $div->addChild("p");
-			$a = $p->addChild("a", "Sua Conta");
+			$a = $p->addChild("a", tr("Sua Conta"));
 			$a->addAttribute("href", "?ref=account.main");	
 
 			$p = $div->addChild("p");
-			$a = $p->addChild("a", "Desconectar");
+			$a = $p->addChild("a", tr("Desconectar"));
 			$a->addAttribute("href", "?ref=account.logout");			
 		}
 		
@@ -509,6 +421,7 @@ class Menus
 	
 	static function drawTopMenu()
 	{
+		/*
 		$xml = new \SimpleXMLElement("
 				<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 				<root>
@@ -557,11 +470,119 @@ class Menus
 		$link->addAttribute("href", "?ref=auctions.index");
 
 		return $xml->asXML();
+		*/
+	    return "";
+	}
+	
+	static function drawUtils(&$xml){
+	    $ul = $xml->addChild("ul");
+	    $ul->addAttribute("class", "always_viewable");
+	    
+	    $li = $ul->addChild("li");
+	    
+	    $li->addChild("utils"); 
+	    
+	    return true;
 	}
 	
 	static function drawLeftMenu()
 	{		
 		$string = "";
+		
+		self::$leftMenu = array(
+            array(
+    			"title" => "Navegação",
+    			"name" => "navigation",
+    			"items" => array(
+    				array("name" => 'Ultimas Notícias', "url" => "?ref=news.last")
+    				,array("name" => "Serverinfo", "url" => "?ref=general.about")
+    				//,array("name" => "Downloads", "url" => "?ref=general.downloads")
+    				//,array("name" => "Darghos Tunnel", "url" => "?ref=tunnel.about")
+    				,array("name" => "Perguntas Frequentes", "url" => "?ref=general.faq")
+    				,array("name" => "Suporte", "url" => "?ref=general.support")			        
+    			)
+    		)
+    		,array(
+    			"title" => "Contas",
+    			"name" => "accounts",
+    			"conditions" => Menu::CONDITION_CAN_NOT_LOGGED,
+    			"items" => array(
+    				array("name" => "Criar Conta", "style" => "font-weight: bold",  "url" => "?ref=account.register")
+    				,array("name" => "Login", "url" => "?ref=account.login")
+    				,array("name" => "Recuperar Conta", "url" => "?ref=account.recovery")
+    				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
+    				//,array("name" => "Conta Premium", "url" => "?ref=account.premium")			
+    			)		
+    		)
+    		,array(
+    			"title" => "Minha Conta",
+    			"name" => "myaccount",
+    			"conditions" => Menu::CONDITION_MUST_LOGGED,
+    			"items" => array(
+    				array("name" => "Principal", "url" => "?ref=account.main")
+    				,array("name" => "Logout", "url" => "?ref=account.logout")		
+    			)		
+    		)
+    		,array(
+    			"title" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."",
+    			"name" => "premium",
+    			"conditions" => Menu::CONDITION_MUST_LOGGED,
+    			"items" => array(
+    				array("name" => "Premium Account", "url" => "?ref=account.premium", "icon" => "icon-star", "style" => "color: #FFF500; font-weight: bold;")
+    				,array("name" => "+Saldo", "style" => "font-weight: bold", "url" => "?ref=balance.purchase")		
+    				//,array("name" => "Leilão de Items", "style" => "font-weight: bold", "url" => "?ref=auctions.index")
+    				,array("name" => "Loja ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=store.purchase")		
+    				,array("name" => "Leilão ".getConf(confEnum()->WEBSITE_NAME)."", "url" => "?ref=auctions.index")		
+    				,array("name" => "Historico", "url" => "?ref=balance.history")
+    			)		
+    		)
+    		,array(
+    			"title" => "Admin Panel",
+    			"name" => "adminpanel",
+    			"conditions" => Menu::CONDITION_MUST_LOGGED,
+    			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
+    			"min_group" => \t_Group::GameMaster,
+    			"items" => array(
+    				array("name" => "Notícia Rapida", "url" => "?ref=adv.fastnews")
+    				,array("name" => "Novo Tópico", "url" => "?ref=forum.newtopic", "min_group" => \t_Group::CommunityManager)		
+    				,array("name" => "Liberar Saldo", "url" => "?ref=adv.add_balance", "min_group" => \t_Group::Administrator)		
+    				,array("name" => "Estatisticas", "url" => "?ref=adv.statistics", "min_group" => \t_Group::Administrator)		
+    				,array("name" => "Idiomas", "url" => "?ref=adv.translations", "min_group" => \t_Group::Administrator)		
+    				//,array("name" => "Partidas BG", "url" => "?ref=adv.bg_matches", "min_group" => \t_Group::CommunityManager)		
+    				//,array("name" => "Campanha de E-mail", "url" => "?ref=adv.emailcampaign" => \t_Group::Administrator)		
+    			)		
+    		)
+    		,array(
+    			"title" => "Darghopédia",
+    			"name" => "darghopedia",
+    			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
+    			"items" => array(
+    				array("name" => "O Mapa", "url" => "?ref=darghopedia.world")
+    				,array("name" => "Darghos Wikia", "url" => "http://pt-br.darghos.wikia.com/wiki/Wiki_Darghos")
+			        ,array("name" => "Darghos Suporte", "url" => "http://suporte-darghos.webnode.com/")
+    				,array("name" => "Criaturas", "url" => "?ref=darghopedia.monsterlist")
+			        ,array("name" => "Battleground", "url" => "?ref=general.battleground", "icon" => "icon-exclamation")
+    				//,array("name" => "Quests e Dungeons", "url" => "?ref=darghopedia.quests")
+    				//,array("name" => "Agressivos e Pacificos", "url" => "?ref=darghopedia.change_pvp")
+    				//,array("name" => "PvP Arenas", "url" => "?ref=darghopedia.pvp_arenas")
+    				//,array("name" => "Eventos Semanais", "url" => "?ref=darghopedia.week_events")			
+    			)		
+    		)
+    		,array(
+    			"title" => "Comunidade",
+    			"name" => "community",
+    			"visibility_style" => \e_MenuVisibilityStyle::DropDown,
+    			"items" => array(
+    				array("name" => "Buscar Personagem", "url" => "?ref=character.view")
+    				,array("name" => "Highscores", "url" => "?ref=community.highscores")
+    				,array("name" => "Guildas", "url" => "?ref=community.guilds")
+    				,array("name" => "Casas", "url" => "?ref=community.houses")
+    				,array("name" => "Mortes Recentes", "url" => "?ref=community.lastdeaths")			
+    				,array("name" => "Enquetes", "url" => "?ref=community.polls")			
+    				,array("name" => "Quem está online?", "url" => "?ref=status.whoisonline", "conditions" => Menu::CONDITION_SHOWING_PLAYERS_ONLINE)	
+    			)		
+    		)	
+		);
 		
 		foreach(self::$leftMenu as $node)
 		{
@@ -570,9 +591,6 @@ class Menus
 			$string .= $menu->__toXML();
 		}
 		
-		$facebooktag = '<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Darghos/205124342834613" width="180" height="345" style="margin-top: 0px; border: none;" colorscheme="dark" show_faces="true" border_color="" stream="false" header="false"></fb:like-box>';
-		$string = str_replace("<facebooktag></facebooktag>", $facebooktag, $string);
-		
 		return $string;
 	}
 	
@@ -580,11 +598,92 @@ class Menus
 	{		
 		$string = "";
 		
+		self::$rightMenu = array(
+            array(
+                "title" => "Redes Sociais",
+                "name" => "social-media",
+                "onDraw" => "drawMedia"
+            ),
+    		array(
+    			"title" => "Server Status",
+    			"name" => "serverstatus",
+    			"onDraw" => "drawStatus"
+    		)
+    		,array(
+    			"title" => "Test Server Publico",
+    			"name" => "testserverstatus",
+    			"onDraw" => "drawTestServerStatus"
+    		)
+            /*,array(
+                    "title" => "Eventos",
+                    "desc" => "Confira todos eventos que estão rolando no Darghos.",
+                    "name" => "events",
+                    "onDraw" => "drawEvents"
+            )*/
+	        ,array(
+                "title" => "Utéis",
+                "desc" => "Recursos úteis aos jogadores.",
+                "color" => \e_menuColor::Red,
+                "name" => "utils",
+                "onDraw" => "drawUtils"
+	        )		        
+    		,array(
+    			"title" => "Power Gammers",
+    			"desc" => "Jogadores que mais obtiveram expêriencia. Atualizado diariamente as 10:00.",
+    			"color" => \e_menuColor::Red,
+    			"name" => "powergammers",
+    			"onDraw" => "drawPowerGammers"
+    		)
+    		,array(
+    				"title" => "Battlegrounds Semana",
+    				"desc" => "Jogadores com melhor desempenho em Battlegrounds na ultima semana (vitorias / derrotas). Atualizado toda terça feira as 10:00.",
+    				"color" => \e_menuColor::Red,
+    				"name" => "bestbgplayers",
+    				"onDraw" => "drawBgBest"
+    		)					
+    		,array(
+    			"title" => "Top 5 Matadores",
+    			"desc" => "Jogadores que mais mataram outros jogadores. Atualizado diariamente as 16:00.",
+    			"color" => \e_menuColor::Red,
+    			"name" => "topkillers",
+    			"onDraw" => "drawTopKillers"
+    		)		
+    	);
+		
 		foreach(self::$rightMenu as $node)
 		{
 			$menu = new Menu($node);
 			$string .= $menu->__toXML();
 		}
+        
+        $mediatag = '
+        <div>
+            <ul class="social-media">
+              <li class="facebook"><a href="https://facebook.com/DarghosOT" title="Darghos no Facebook"></a></li>
+            </ul>
+        </div>';
+        
+        $string = str_replace("<mediatag></mediatag>", $mediatag, $string);
+        
+        $utilstag = '
+        <div>
+            <ul class="utils">
+                <li>
+                    <a href="?ref=general.client" class="not-menu">
+                        <img src="newlay/images/icon_client.png" width="60px"/>
+                        <span>Cliente Darghos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="?ref=general.teamspeak" class="not-menu">
+                        <img src="newlay/images/icon_ts.png" width="60px"/>
+                        <span>TeamSpeak 3</span>
+                    </a>
+                </li>
+            </ul>
+        </div>';
+        
+        $string = str_replace("<utils></utils>", $utilstag, $string);        
 		
 		return $string;
 	}	

@@ -57,7 +57,7 @@ if(Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 		$guild->SetOwnerId($player->getId());
 		$guild->SetCreationDate(time());
 		$guild->SetMotd("Esta é uma guilda recem criada!");
-		$guild->SetStatus(\Framework\Guilds::STATUS_FORMATION);
+		$guild->SetStatus((\Core\Configs::Get(\Core\Configs::eConf()->ENABLE_GUILD_IN_FORMATION) ? \Framework\Guilds::STATUS_FORMATION : \Framework\Guilds::STATUS_FORMED ));
 		$guild->SetFormationTime(time() + 60 * 60 * 24 * Configs::Get(Configs::eConf()->GUILDS_FORMATION_WAIT_DAYS));
 		$guild->SetImage(\Framework\Guilds::DEFAULT_IMAGE);
 		

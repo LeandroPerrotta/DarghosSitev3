@@ -8,7 +8,7 @@ use Views\Accounts as AccountViews;
 
 class Accounts
 {
-	function Premiumtransfer()
+	/*function Premiumtransfer()
 	{
 		$data = array();
 		$showView = true;
@@ -82,8 +82,9 @@ class Accounts
 		if($showView)
 			$view = new AccountViews\Premiumtransfer($data);
 		
-		return true;		
-	}
+		return true;	
+			
+	}*/
 	
 	function Checkname($isAjax = true, $name = NULL)
 	{
@@ -312,8 +313,14 @@ class Accounts
 			}
 			else
 			{
-				$logged->setPassword(\Core\Strings::encrypt($_POST["account_password"]));
+				$logged->setPassword(\Core\Strings::encrypt($_POST["account_password"]));				
 				$logged->save();
+				
+				//integration SMF onchangepassword
+				$user = new \Framework\Forums\User();
+				if($user->LoadByAccount($logged->getId()))
+				    $user->UpdateLoginInfoExternalForum($logged, $_POST["account_password"]);
+				//end				
 			
 				$_SESSION["login"] = array();
 			
@@ -355,20 +362,25 @@ class Accounts
 			{
 				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->WRONG_PASSWORD);
 			}
-			elseif($logged->getPremDays() < 15)
+			elseif($logged->getBalance() < 300)
 			{
-				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_NEED_PREMDAYS, 15);
+				$data["message"]["body"] = \Core\Lang::Message(\Core\Lang::$e_Msgs->OPERATION_NEED_PREMDAYS, "R$ 3,00");
 			}
 			elseif($checkName["error"])
 			{
 				$data["message"]["body"] = $checkName["text"];
 			}
 			else
-			{
-		
+			{			    
 				$logged->setName($_POST["account_name"]);
-				$logged->updatePremDays(15, false);
+				$logged->addBalance(-300);
 				$logged->save();
+				
+				//integration SMF onchangepassword
+				$user = new \Framework\Forums\User();
+				if($user->LoadByAccount($logged->getId()))
+				    $user->UpdateLoginInfoExternalForum($logged, $_POST["account_password"]);
+				//end				
 				
 				\Core\Main::addChangeLog('acc_rename', $logged->getId(), $_POST["account_name"]);
 					

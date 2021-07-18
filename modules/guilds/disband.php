@@ -36,7 +36,7 @@ if($_GET['name'] && Configs::Get(Configs::eConf()->ENABLE_GUILD_MANAGEMENT))
 	{	
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->GUILD_NOT_FOUND, $_GET['name']));		
 	}
-	elseif(\Framework\Guilds::IsAccountGuildOwner($account, $guild))
+	elseif(!\Framework\Guilds::IsAccountGuildOwner($account, $guild))
 	{
 		\Core\Main::sendMessageBox(\Core\Lang::Message(\Core\Lang::$e_Msgs->ERROR), \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT));	
 	}	

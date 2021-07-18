@@ -130,12 +130,6 @@ class View
 				return false;
 			}
 			
-			if($this->topic->IsNotice() && !Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS))
-			{
-				$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->REPORT);
-				return false;
-			}
-			
 			if($this->loggedAcc && $_GET['edit'] && $_GET['edit'] == "1")
 			{
 				$this->_title = new \Framework\HTML\Input();
@@ -196,7 +190,7 @@ class View
 			return $this->PollPost();
 		}
 		
-		if($_POST["user_post"])
+		if($_POST["user_post"] && Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS))
 		{
 			if(strlen($_POST["user_post"]) > 2048)
 			{
@@ -219,7 +213,7 @@ class View
 				return false;					
 			}
 			
-			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetId());
+			$this->topic->SendPost(strip_tags($_POST["user_post"]), $this->user->GetMemberId());
 			
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->FORUM_POST_SENT);
 			return true;
@@ -281,7 +275,7 @@ class View
 			return false;
 		}
 		
-		$user->AddBan($_POST['bantype'], time(), $_POST['banreason'], $this->user->GetId());
+		$user->AddBan($_POST['bantype'], time(), $_POST['banreason'], $this->user->GetMemberId());
 		$this->_message = "Punição aplicada ao usuario com sucesso!";
 
 		return true;
@@ -572,7 +566,7 @@ class View
 				if($this->loggedAcc && $this->loggedAcc->getGroup() >= t_Group::CommunityManager)
 				{
 					$string .= "					
-					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a> - <a href='?ref=forum.topic&banuser={$user_post->GetId()}'>Punir</a></div>";
+					<div style='margin: 0px; padding: 0px; text-align: right;'><a onclick='return confirm(\"Você tem certeza que deseja deletar o post com id #{$post["id"]} de {$user_character->getName()}?\")' href='?ref=forum.topic&removemsg={$post["id"]}'>Deletar</a> - <a href='?ref=forum.topic&banuser={$user_post->GetMemberId()}'>Punir</a></div>";
 				}
 				
 				$string .= "
@@ -631,41 +625,44 @@ class View
 		$module .= "</div>";
 		$module .= "{$table->Draw()}";
 		
-		$post = new \Framework\HTML\Input();
-		$post->SetName("user_post");
-		$post->SetId("user_post");
-		$post->IsTextArea(7, 65);
-		$post->OnKeyPress("countCharacters(2048);");
-		
-		$button = new \Framework\HTML\Input();
-		$button->IsButton();
-		$button->SetValue("Enviar");
-		
-		$table = new \Framework\HTML\Table();
-		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
-		$table->IsDropDownHeader();
-		
-		$string = "			
-		
-			<div style='text-align: center;'>{$post->Draw()}
-			
-			<p>
-				{$button->Draw()}
-			</p>
-			
-			<p id='charactersLeft'>Restam 2048 caracteres.</p>
-			
-			</div>";
-		
-		$table->AddField($string);
-		$table->AddRow();
-		
-		$module .= "		
-		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
-			<fieldset>
-				{$table->Draw()}				
-			</fieldset>
-		</form>";
+        if(Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS)){
+        
+    		$post = new \Framework\HTML\Input();
+    		$post->SetName("user_post");
+    		$post->SetId("user_post");
+    		$post->IsTextArea(7, 65);
+    		$post->OnKeyPress("countCharacters(2048);");
+    		
+    		$button = new \Framework\HTML\Input();
+    		$button->IsButton();
+    		$button->SetValue("Enviar");
+    		
+    		$table = new \Framework\HTML\Table();
+    		$table->AddDataRow("Postar comentario <span class='tooglePlus'></span>");
+    		$table->IsDropDownHeader();
+    		
+    		$string = "			
+    		
+    			<div style='text-align: center;'>{$post->Draw()}
+    			
+    			<p>
+    				{$button->Draw()}
+    			</p>
+    			
+    			<p id='charactersLeft'>Restam 2048 caracteres.</p>
+    			
+    			</div>";
+    		
+    		$table->AddField($string);
+    		$table->AddRow();
+    		
+    		$module .= "		
+    		<form action='{$_SERVER['REQUEST_URI']}' method='post'>
+    			<fieldset>
+    				{$table->Draw()}				
+    			</fieldset>
+    		</form>";
+		}
 	}
 }
 

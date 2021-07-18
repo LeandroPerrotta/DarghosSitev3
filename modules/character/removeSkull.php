@@ -71,11 +71,11 @@ class View
 		switch($this->player->getSkull())
 		{
 			case t_Skulls::Red:
-				$this->_html_action->SetLabel("Desejo remover a red skull do personagem <b>{$this->player->getName()}</b> ao custo de ".Configs::Get(Configs::eConf()->PREMCOST_REMOVE_RED_SKULL)." dos dias de minha conta premium.");
+				$this->_html_action->SetLabel("Desejo remover a red skull do personagem <b>{$this->player->getName()}</b> por R$ ".number_format(Configs::Get(Configs::eConf()->PREMCOST_REMOVE_RED_SKULL) / 100, 2)." de creditos em minha conta.");
 				break;
 				
 			case t_Skulls::Black:
-				$this->_html_action->SetLabel("Desejo remover a black skull do personagem <b>{$this->player->getName()}</b> ao custo de ".Configs::Get(Configs::eConf()->PREMCOST_REMOVE_BLACK_SKULL)." dos dias de minha conta premium.");
+				$this->_html_action->SetLabel("Desejo remover a black skull do personagem <b>{$this->player->getName()}</b> por R$ ".number_format(Configs::Get(Configs::eConf()->PREMCOST_REMOVE_BLACK_SKULL) / 100, 2)." de creditos em minha conta.");
 				break;
 				
 			default:
@@ -134,13 +134,13 @@ class View
 				break;
 		}		
 		
-		if($this->loggedAcc->getPremDays() == 0 || $this->loggedAcc->getPremDays() < $cost)
+		if($this->loggedAcc->getBalance() == 0 || $this->loggedAcc->getBalance() < $cost)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_NOT_HAVE_PREMDAYS);
 			return false;			
 		}
 	
-		$this->loggedAcc->updatePremDays($cost, false);
+		$this->loggedAcc->addBalance(-$cost);
 		$this->loggedAcc->save();
 		
 		$this->player->setSkull(t_Skulls::None);

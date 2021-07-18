@@ -49,10 +49,55 @@ $module .= "
 <table style='margin-bottom: 16px;' cellspacing='0' cellpadding='0' class='fastnews'>
 
 	<tr>
-		<th colspan='3'>Notícias Rápidas</th>
+		<th colspan='3'>".tr("Notícias Rápidas")."</th>
 	</tr>
 				
 	{$fastnews}
+	
+</table>";
+	
+	
+$powerfullGuilds = \Framework\Guilds::BestKDGuildList(0);
+
+if(count($powerfullGuilds) > 0){
+
+    $powerfullguilds_str = "          
+<div>
+  <ul class='guild_list'>";
+    
+    foreach($powerfullGuilds as $guild){
+        $powerfullguilds_str .= "
+                <li>
+                    <a href='?ref=guilds.details&name={$guild->GetName()}'>
+                        <img src='".Configs::Get(Configs::eConf()->WEBSITE_FOLDER_GUILDS)."{$guild->GetImage()}' height='100' width='100'/>
+                    </a>
+                    <p>
+                        <a href='?ref=guilds.details&name={$guild->GetName()}'>{$guild->GetName()}</a>
+                        <span>{$guild->GetKD()} k/d</span>
+                    </p>
+                </li>";
+    }
+    
+    $powerfullguilds_str .= "
+    </ul>
+</div>";
+}
+else{
+    $powerfullguilds_str .= "Indisponível no momento.";
+}
+	
+	
+$module .= "
+<table style='margin-bottom: 16px;' cellspacing='0' cellpadding='0' class='fastnews'>
+	
+	<tr>
+		<th >".tr("Guilds mais poderosas")."</th>
+	</tr>
+	
+	<tr>
+	   <td>{$powerfullguilds_str}</td>
+    </tr>
+	
 	
 </table>";
 
@@ -105,7 +150,8 @@ $xmlStr = "
 			$summary = $topic->GetTopic();
 		}
 		
-		$comment = Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS) ? '<a id="new-comments" href="?ref=forum.topic&v='.$topic->GetId().'">'.$topic->GetPostCount().'</a>' : null;
+		$logged_acc = Framework\Account::loadLogged();
+		$comment = (($logged_acc && $logged_acc->getGroup() >= t_Group::GameMaster) || Configs::Get(Configs::eConf()->ENABLE_PLAYERS_COMMENT_NEWS)) ? '<a id="new-comments" href="?ref=forum.topic&v='.$topic->GetId().'">'.$topic->GetPostCount().'</a>' : null;
 		
 		$user = new \Framework\Forums\User();
 		$user->Load($topic->GetAuthorId());
@@ -119,7 +165,7 @@ $xmlStr = "
 				{$topic->GetTitle()}
 			</h3>
 			<div id='infos-line'>
-			por <a href='?ref=character.view&name={$author->getName()}'>{$author->getName()}</a>, <span>".\Core\Main::formatDate($topic->GetDate())."</span> {$comment}
+			postado em <span>".\Core\Main::formatDate($topic->GetDate())."</span> {$comment}
 			</div>	
 		</div>
 		<div id='new-summary'>{$summary}</div>
@@ -130,7 +176,7 @@ $xmlStr = "
 }
 else
 {
-	\Core\Main::sendMessageBox("Erro", "Não há mais noticias.");
+	\Core\Main::sendMessageBox("Erro", tr("Não há mais noticias."));
 }
 
 $module .= "
@@ -139,14 +185,14 @@ $module .= "
 if($page > 1)
 {
 	$module .= "
-	<a class='buttonstd' href='?ref=news.last&page=".($page - 1)."'><span>Anterior</span></a>
+	<a class='buttonstd' href='?ref=news.last&page=".($page - 1)."'><span>".tr("Anterior")."</span></a>
 	";	
 }
 
 if($page < $lastpage)
 {
 	$module .= "
-	<a class='buttonstd' style='float: right;' href='?ref=news.last&page=".($page + 1)."'><span>Proximas</span></a>
+	<a class='buttonstd' style='float: right;' href='?ref=news.last&page=".($page + 1)."'><span>".tr("Proxima")."</span></a>
 	";
 }
 

@@ -55,9 +55,9 @@ class Account
 	function load($id, $fields = null)
 	{
 		if(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_OPENTIBIA)
-			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `premend`, `email`, `blocked`, `warnings`, `vipend`, `lastexpbonus`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 		elseif(g_Configs::Get(g_Configs::eConf()->USE_DISTRO) == Consts::SERVER_DISTRO_TFS)
-			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id` FROM `accounts` WHERE `id` = '{$id}'";
+			$query_str = "SELECT `id`, `name`, `password`, `salt`, `premdays`, `lastday`, `email`, `blocked`, `warnings`, `group_id`, `vipend`, `lastexpbonus`, `balance` FROM `accounts` WHERE `id` = '{$id}'";
 			
 		$query = $this->db->query($query_str);		
 		
@@ -266,7 +266,39 @@ class Account
 	function getBlocked() { return $this->data['blocked']; }
 
 	function getWarnings() { return $this->data['warnings']; }
-
+	
+	function getBalance() { return $this->data['balance']; }
+	
+	function getVIPEnd() { return $this->data['vipend']; }
+	
+	function getLastExpBonus() { return $this->data['lastexpbonus']; }
+	
+	function getVIPDaysLeft() {
+	    
+	    if($this->data["vipend"] == 0)
+	        return 0;
+	    	
+	    $leftDays = $this->data["vipend"] - time();
+	    $leftDays = ($leftDays > 0) ? ceil($leftDays / 86400) : 0;
+	    return $leftDays;	    
+	}
+	
+	function getExpDaysLeft() {
+	    
+	    if($this->data["lastexpbonus"] == 0)
+	        return 0;
+	    	
+	    $expEnd = $this->getExpEnd();
+	    
+	    if(time() > $expEnd)
+	        return 0;
+	    
+	    return ceil(($expEnd - time()) / 86400);	    
+	}
+	
+	function getExpEnd() {
+	    return $this->data["lastexpbonus"] + (60 * 60 * 24 * 2); //we really might improve this...
+	}
 
 	/* Personal Infos */ 
 	function getLocation() { return stripslashes($this->location); }
@@ -508,6 +540,23 @@ class Account
 		$this->creation = $creation;
 	}	
 		
+	function addBalance($balance){
+	    $this->data['balance'] += $balance;
+	    
+	    if($this->data['balance'] < 0)
+	        $this->data['balance'] = 0;
+	}
+	
+	function addExpDays(){
+	    
+	    if($this->getExpDaysLeft() == 0){
+	        $this->data['lastexpbonus'] = time();
+	    }
+	    else{
+	        trigger_error("Trying to add more exp days on a account that already has exp days.");
+	    }
+	}
+	
 	function updatePremDays($premdays, $increment = true)
 	{
 		if($increment)
@@ -558,6 +607,12 @@ class Account
 		}
 		
 		return true;
+	}
+	
+	function balanceRequest($auth, $ref, $value){
+	    $this->db->query("INSERT INTO ".\Core\Tools::getSiteTable("orders")." 
+	            (`id`, `account_id`, `type`, `balance`, `server`, `generated_in`, `status`, `lastupdate_in`, `auth`, `email_vendor`) values
+	            ('{$ref}', {$this->id}, 'PagSeguro', {$balance}, 1, UNIX_TIMESTAMP(), 2, 0, '{$auth}', 'platinum@darghos.com')");
 	}
 		
 	function addEmailToChange($email)
@@ -782,10 +837,16 @@ class Account
 			
 		$fetch = $query->fetch();	
 		$this->setEmail($fetch->email);
+		//$this->addPremiumTest();
 		$this->save();
 		$this->clearEmailCodes();
 		
 		return true;
+	}
+	
+	function addPremiumTest(){
+	    $this->db->query("INSERT INTO `".\Core\Tools::getSiteTable("premiumtest")."` VALUES ({$this->getId()}, UNIX_TIMESTAMP()) ");
+	    $this->updatePremDays(10);
 	}
 	
 	function clearEmailCodes()

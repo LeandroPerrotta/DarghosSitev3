@@ -4,11 +4,11 @@ use \Core\Consts;
 class Contribute extends \Core\MySQL
 {		
 	static public $premiums = array(
-		array("period" => 10, "product" => "Contribuicao para 10 dias de Conta Premium", "text" => "10 dias.", "cost" => 4.50),
-		array("period" => 30, "product" => "Contribuicao para 30 dias de Conta Premium", "text" => "30 dias.", "cost" => 11.90),
-		array("period" => 60, "product" => "Contribuicao para 60 dias de Conta Premium", "text" => "60 dias (2 meses).", "cost" => 22.50),
-		array("period" => 90, "product" => "Contribuicao para 90 dias de Conta Premium", "text" => "90 dias (3 meses).", "cost" => 31.90),
-		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium", "text" => "180 dias (6 meses).", "cost" => 59.90)
+		array("period" => 10, "product" => "Contribuicao para 10 dias de Conta Premium", "text" => "10 dias.", "cost" => 3.50),
+		array("period" => 30, "product" => "Contribuicao para 30 dias de Conta Premium", "text" => "30 dias.", "cost" => 9.00),
+		array("period" => 60, "product" => "Contribuicao para 60 dias de Conta Premium", "text" => "60 dias (2 meses).", "cost" => 17.00),
+		array("period" => 90, "product" => "Contribuicao para 90 dias de Conta Premium", "text" => "90 dias (3 meses).", "cost" => 24.50),
+		array("period" => 180, "product" => "Contribuicao para 180 dias de Conta Premium", "text" => "180 dias (6 meses).", "cost" => 45.00)
 	);
 	
 	static public $premiumsPromotions = array(
@@ -196,17 +196,13 @@ class Contribute extends \Core\MySQL
 	public	
 		$id
 		,$name
-		,$email
-		,$target
+		,$account_id
 		,$type
-		,$period
-		,$cost
+		,$balance
 		,$server
-		,$generated_by
 		,$generated_in
 		,$status
 		,$lastupdate_in
-		,$target_account
 		,$auth
 		,$email_vendor
 		;
@@ -223,7 +219,7 @@ class Contribute extends \Core\MySQL
 	
 	function getOrdersListByAccount($account_id)
 	{
-		$query = $this->db->query("SELECT `id` FROM {$this->tableStr} WHERE `target_account` = '".$account_id."' and `status` < 3 and `server` = '".\Core\Configs::Get(\Core\Configs::eConf()->SERVER_ID)."' ORDER BY `generated_in` DESC");
+		$query = $this->db->query("SELECT `id` FROM {$this->tableStr} WHERE `account_id` = '".$account_id."' and `status` < 3 and `server` = '".\Core\Configs::Get(\Core\Configs::eConf()->SERVER_ID)."' ORDER BY `generated_in` DESC");
 		
 		if($query->numRows() != 0)
 		{
@@ -243,16 +239,16 @@ class Contribute extends \Core\MySQL
 	function load($id, $fields = null)
 	{	
 			
-		$query = $this->db->query("SELECT `id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`, `lastupdate_in`, `target_account`, `auth`, `email_vendor` FROM {$this->tableStr} WHERE `id` = '".$id."'");		
+		$query = $this->db->query("SELECT `id`, `name`, `account_id`, `type`, `balance`, `server`, `generated_in`, `status`, `lastupdate_in`, `auth`, `email_vendor` FROM {$this->tableStr} WHERE `id` = '".$id."'");		
 		
 		if($query->numRows() != 0)
 		{
 			$fetch = $query->fetch();
 			$this->id = $fetch->id;
-			$this->name = $fetch->name;	$this->email = $fetch->email; $this->target = $fetch->target;
-			$this->type = $fetch->type;	$this->period = $fetch->period;	$this->cost = $fetch->cost;	
-			$this->server = $fetch->server;	$this->generated_by = $fetch->generated_by;	$this->generated_in = $fetch->generated_in;	
-			$this->status = $fetch->status;	 $this->lastupdate_in = $fetch->lastupdate_in;	$this->target_account = $fetch->target_account;	
+			$this->name = $fetch->name;	$this->account_id = $fetch->account_id;
+			$this->type = $fetch->type;	$this->balance = $fetch->balance; 	
+			$this->server = $fetch->server;	$this->generated_in = $fetch->generated_in;	
+			$this->status = $fetch->status;	 $this->lastupdate_in = $fetch->lastupdate_in;	
 			$this->auth = $fetch->auth; $this->email_vendor = $fetch->email_vendor;	
 
 			return true;	
@@ -310,17 +306,23 @@ class Contribute extends \Core\MySQL
 		if($query->numRows() == 1)
 		{
 			$this->id = $this->id;
-			$this->name = $this->name;	$this->email = $this->email; $this->target = $this->target;
-			$this->type = $this->type;	$this->period = $this->period;	$this->cost = $this->cost;
-			$this->server = $this->server;	$this->generated_by = $this->generated_by;	$this->generated_in = $this->generated_in;
-			$this->status = $this->status;	 $this->lastupdate_in = $this->lastupdate_in;	$this->target_account = $this->target_account;
-			$this->auth = $this->auth;			
+			$this->name = $this->name;	
+			$this->account_id = $this->account_id;
+			$this->type = $this->type;	
+			$this->balance = $this->balance;	
+			$this->server = $this->server;	
+			$this->generated_in = $this->generated_in;
+			$this->status = $this->status;	 
+			$this->lastupdate_in = $this->lastupdate_in;	
+			$this->auth = $this->auth;	
+
+			$this->name = $this->db->escapeString($this->name);
 			
 			$this->db->query("UPDATE {$this->tableStr} SET 
-				`name` = '{$this->name}', `email` = '{$this->email}', `target` = '{$this->target}',
-				`type` = '{$this->type}', `period` = '{$this->period}', `cost` = '{$this->cost}', `server` = '{$this->server}',
-				`generated_by` = '{$this->generated_by}', `generated_in` = '{$this->generated_in}', `status` = '{$this->status}', `lastupdate_in` = '{$this->lastupdate_in}',
-				`target_account` = '{$this->target_account}', `auth` = '{$this->auth}', `email_vendor` = '{$this->email_vendor}'
+				`name` = '{$this->name}', `account_id` = '{$this->account_id}',
+				`type` = '{$this->type}', `balance` = '{$this->balance}', `server` = '{$this->server}',
+				`generated_in` = '{$this->generated_in}', `status` = '{$this->status}', `lastupdate_in` = '{$this->lastupdate_in}',
+				`auth` = '{$this->auth}', `email_vendor` = '{$this->email_vendor}'
 				WHERE `id` = '".$this->id."'");
 		}
 		//new account
@@ -341,12 +343,12 @@ class Contribute extends \Core\MySQL
 			}
 
 			$this->db->query("INSERT INTO {$this->tableStr} (
-				`id`, `name`, `email`, `target`, `type`, `period`, `cost`, `server`, `generated_by`, `generated_in`, `status`,
-				`lastupdate_in`, `target_account`, `auth`, `email_vendor`
+				`id`, `name`, `account_id`, `type`, `balance`, `server`, `generated_in`, `status`,
+				`lastupdate_in`, `auth`, `email_vendor`
 			) 
 			VALUES(
-				'{$this->id}', '{$this->name}', '{$this->email}', '{$this->target}', '{$this->type}', '{$this->period}', '{$this->cost}', '{$this->server}', 
-				'{$this->generated_by}', '{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->target_account}', '{$this->auth}', '{$this->email_vendor}'
+				'{$this->id}', '{$this->name}', '{$this->account_id}', '{$this->type}', '{$this->balance}', '{$this->server}', 
+				'{$this->generated_in}', '{$this->status}', '{$this->lastupdate_in}', '{$this->auth}', '{$this->email_vendor}'
 			)");			
 		}		
 	}
@@ -440,7 +442,11 @@ class Contribute extends \Core\MySQL
 		elseif($this->data['type'] == "PagSeguro")*/
 		if($this->type == "PagSeguro")
 		{			
-			$premium = self::getPremiumInfoByPeriod($this->period);
+			$balance = "R$ " . number_format($this->balance / 100, 2);
+			
+			if($this->balance >= 2000){
+			    $balance = "R$ " . number_format(($this->balance * 1.5) / 100, 2);
+			}
 			
 			$form = '
 				<form target="pagseguro" action="'.Consts::URLS_PAGSEGURO.'" method="post">
@@ -449,9 +455,9 @@ class Contribute extends \Core\MySQL
 				<input type="hidden" name="moeda" value="BRL">
 				<input type="hidden" name="ref_transacao" value="'.$this->id.'">
 				<input type="hidden" name="item_id_1" value="1">
-				<input type="hidden" name="item_descr_1" value="'.$premium["product"].'. (ref: '.$this->id.')">
+				<input type="hidden" name="item_descr_1" value="Adicionar '.$balance.' de saldo a conta '.getConf(confEnum()->WEBSITE_NAME).'.">
 				<input type="hidden" name="item_quant_1" value="1">
-				<input type="hidden" name="item_valor_1" value="'.self::formatCost($premium["cost"], false).'">
+				<input type="hidden" name="item_valor_1" value="'.$this->balance.'">
 				<input type="hidden" name="item_frete_1" value="000">
 				
 				<input class="button" type="submit" value="Finalizar" />	

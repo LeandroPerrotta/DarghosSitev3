@@ -3,11 +3,18 @@ namespace Framework;
 class ItemShop
 {
 	const TYPE_ITEM = 0;
+	const TYPE_CALLBACK = 1;
 	
+	//for type "item"
 	const PARAM_ITEM_ID = "item_id";
 	const PARAM_ITEM_STACKABLE = "item_stackable";
 	const PARAM_ITEM_COUNT = "item_count";
 	const PARAM_ITEM_ACTION_ID = "item_action_id";
+	
+	//for type "callback"
+	const PARAM_FUNCTION = "function";
+	const PARAM_PARAMETERS = "parameters";
+	const PARAM_IMAGE_URL = "image";
 	
 	const LIST_ORDER_NAME = 0;
 	const LIST_ORDER_RELEVANCE = 1;
@@ -16,7 +23,13 @@ class ItemShop
 	const LIST_ORDER_PRICE_DESC = 4;
 	const LIST_ORDER_PRICE_ASC = 5;
 	
-	private $id, $name, $description, $params, $price, $require_days = 0, $added_in, $enabled, $type;
+	const CATEGORY_EQUIPMENTS = 0;
+	const CATEGORY_WEAPONS = 1;
+	const CATEGORY_ADDONS = 2;
+	const CATEGORY_VALUABLE = 3;
+	const CATEGORY_SERVICES = 4;
+	
+	private $id, $name, $description, $params, $price, $added_in, $enabled, $type, $category;
 
 	static function getItemShopList($orderBy = LIST_ORDER_RELEVANCE)
 	{
@@ -24,7 +37,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -37,7 +50,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`shop`.`id`, `shop`.`name`, `shop`.`description`, `shop`.`params`, `shop`.`price`, `shop`.`require_days`, `shop`.`added_in`, `shop`.`enabled`, `shop`.`type` 
+					`shop`.`id`, `shop`.`name`, `shop`.`description`, `shop`.`params`, `shop`.`price`, `shop`.`added_in`, `shop`.`enabled`, `shop`.`type`, `shop`.`category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` `shop`
 				LEFT JOIN
@@ -57,7 +70,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -70,7 +83,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -83,7 +96,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -96,7 +109,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE 
@@ -135,7 +148,7 @@ class ItemShop
 		{
 			$query = \Core\Main::$DB->query("
 				SELECT 
-					`id`, `name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type` 
+					`id`, `name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`
 				FROM 
 					`".\Core\Tools::getSiteTable("itemshop")."` 
 				WHERE id = {$id}
@@ -152,9 +165,9 @@ class ItemShop
 		$this->description = $fetch->description;
 		$this->params = $fetch->params;
 		$this->price = $fetch->price;
-		$this->require_days = $fetch->require_days;
 		$this->added_in = $fetch->added_in;
 		$this->type = $fetch->type;
+		$this->category = $fetch->category;
 		
 		return true;
 	}
@@ -171,8 +184,8 @@ class ItemShop
 					`description` = '{$this->description}',
 					`params` = '{$this->params}',
 					`price` = '{$this->price}',
-					`require_days` = '{$this->require_days}',
-					`type` = '{$this->type}'
+					`type` = '{$this->type}',
+					`category` = '{$this->category}'
 				WHERE
 					`id` = '{$this->id}'
 					
@@ -183,17 +196,17 @@ class ItemShop
 			\Core\Main::$DB->query("
 				INSERT INTO
 					`".\Core\Tools::getSiteTable("itemshop")."`
-					(`name`, `description`, `params`, `price`, `require_days`, `added_in`, `enabled`, `type`)
+					(`name`, `description`, `params`, `price`, `added_in`, `enabled`, `type`, `category`)
 				VALUES
 					(
 						'{$this->name}',
 						'{$this->description}',
 						'{$this->params}',
 						'{$this->price}',
-						'{$this->require_days}',
 						'{$this->added_in}',
 						'{$this->enabled}',
-						'{$this->type}'
+						'{$this->type}',
+						'{$this->category}'
 					)
 			");
 			
@@ -201,7 +214,15 @@ class ItemShop
 		}
 	}
 	
-	function logItemPurchase($player_id)
+	function delete(){
+		\Core\Main::$DB->query("
+			DELETE FROM
+				`".\Core\Tools::getSiteTable("itemshop")."`
+            WHERE `id` = {$this->id}
+		"); 
+	}
+	
+	function logItemPurchase($player_id, $received = 0)
 	{
 		\Core\Main::$DB->query("
 			INSERT INTO 
@@ -209,7 +230,7 @@ class ItemShop
 				(`shop_id`, `date`, `player_id`, `received`) 
 			VALUES 
 				(
-					'{$this->id}', '".time()."', '{$player_id}', '0'
+					'{$this->id}', '".time()."', '{$player_id}', '{$received}'
 				)");	
 
 		return \Core\Main::$DB->lastInsertId();
@@ -351,9 +372,10 @@ class ItemShop
 	function getDescription() { return $this->description; }
 	function getParams() { return json_decode($this->params, true); }
 	function getPrice() { return $this->price; }
-	function getRequireDays() { return $this->require_days; }
+	function getPriceStr() { return "R$ " . number_format($this->price / 100, 2); }
 	function getAddedIn() { return $this->added_in; }
 	function getType() { return $this->type; }
+	function getCategory() { return $this->category; }
 	function isEnabled() { return $this->enabled; }
 	
 	function setId($int) { $this->id = $int; }
@@ -361,9 +383,56 @@ class ItemShop
 	function setDescription($str) { $this->description = $str; }
 	function setParams($array) { $this->params = json_encode($array); }
 	function setPrice($int) { $this->price = $int; }
-	function setRequireDays($int) { $this->require_days = $int; }
 	function setAddedIn($int) { $this->added_in = $int; }
 	function setType($int) { $this->type = $int; }
 	function setEnabled($bool) { $this->enabled = $bool; }
+	function setCategory($int) { $this->category = $int; }
+	
+	/*
+	 * Callback functions for non ingame items
+	 * */
+	
+	static function onPurschaseRoyalCoins(Account $account, Player $player){
+	    
+        $royal = 1200;
+        
+	    $query = \Core\Main::$DB->query("SELECT `value` FROM `player_storage` WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
+	    
+	    if($query->numRows() > 0){
+            $result = $query->fetch();
+            
+            if($result->value > 0)
+                $royal += $result->value;
+            
+            \Core\Main::$DB->query("UPDATE `player_storage` SET `value` = '{$royal}' WHERE `key` = '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."' AND `player_id` = '{$player->getId()}'");
+	    }
+	    else
+	        \Core\Main::$DB->query("INSERT INTO `player_storage` VALUES ('{$player->getId()}', '".\Core\Consts::PLAYER_STORAGE_ROYAL_COINS."', '{$royal}')");
+        
+        return array("success" => true);
+	}
+	
+	static function onPurchaseExpBonus(Account $account, Player $player){
+	    $lastExpBonus = $account->getLastExpBonus();
+	    if($lastExpBonus != 0 && $lastExpBonus + (60 * 60 * 24 * 10) >= time()){
+	        return array("success" => false, "msg" => tr("Este serviço so pode ser adquirido uma vez a cada 10 dias."));
+	    }
+	    
+	    $account->addExpDays();
+	    $account->save();
+	    
+	    return array("success" => true);
+	}
+	
+	static function onPurchaseNonBuyableItem(Account $account, Player $player){
+	    return array("success" => false, "msg" => tr("Este não é um serviço compravel. Leia a descrição com atenção!"));
+	}
+	
+	static function onPurchasePremium(Account $account, Player $player){
+	    $account->updatePremDays(30);
+	    $account->save();
+	    
+	    return array("success" => true);
+	}
 }
 ?>

@@ -139,7 +139,7 @@ function createCharacter()
 
 function sendPost(get, data, handler)
 {	
-	$.post("index.php?ref=" + get, data, 
+	$.post("?ref=" + get, data, 
 		function(info){
 				
 			if(info.response == RESPONSE_FIELD_VERIFY)

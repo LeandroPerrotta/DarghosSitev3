@@ -309,9 +309,9 @@ table tr th, table tr .header {
 	background: #333 url(newlay/images/item_silver.jpg) repeat-x;
 	padding: 6px;
 	
-	border: 1px solid #666;
-	border-bottom: 1px solid #000;
-	border-right: 1px solid #000;
+	border: 1px solid #6F6F6F;
+	border-bottom: 1px solid #000000;
+	border-right: 1px solid #000000;
 	
 	text-align: left;	
 }
@@ -319,9 +319,9 @@ table tr th, table tr .header {
 table tr td {
 	padding: 6px;
 	
-	border: 1px solid #000;
-	border-bottom: 1px solid #666;
-	border-right: 1px solid #666;
+	border: 1px solid #8D8D8D;
+	border-bottom: 1px solid #000000;
+	border-right: 1px solid #000000;
 	
 	text-align: left;	
 }

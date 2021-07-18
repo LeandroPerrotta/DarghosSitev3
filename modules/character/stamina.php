@@ -12,8 +12,10 @@ class View
 	
 	function View()
 	{		
-		if(!$_GET['name'])
-			return false;		
+		if(!$_GET['name']){
+			$this->DrawCharacterSelection();
+			return true;
+		}	
 		
 		if(!$this->Prepare())
 		{
@@ -53,7 +55,7 @@ class View
 		if(!$this->player->loadByName($_GET["name"]))
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->CHARACTER_WRONG);
-			return false;
+			return true;
 		}
 		
 		if($this->player->getAccountId() != $this->loggedAcc->getId())
@@ -99,18 +101,18 @@ class View
 			$newstamina++;
 			
 			if($newstamina >= 39)
-				$cost += 12;
+				$cost += 400;
 			else
-				$cost += 4;
+				$cost += 30;
 		}
 		
-		if($this->loggedAcc->getPremEnd() == 0 || $this->loggedAcc->getPremEnd() <= time() || floor($this->loggedAcc->getPremEnd() - time()) / 60 / 60 < $cost)
+		if($this->loggedAcc->getBalance() == 0 || $this->loggedAcc->getBalance() < $cost)
 		{
 			$this->_message = \Core\Lang::Message(\Core\Lang::$e_Msgs->STAMINA_NOT_HAVE_PREMDAYS);
 			return false;			
 		}
 	
-		$this->loggedAcc->setPremEnd($this->loggedAcc->getPremEnd() - ($cost * 60 * 60));
+		$this->loggedAcc->addBalance(-$cost);
 		$this->loggedAcc->save();
 		
 		$this->player->setStamina($_POST["stamina-value"] * 60 * 60 * 1000);
@@ -121,19 +123,75 @@ class View
 		return true;
 	}
 	
+	function DrawCharacterSelection()
+	{
+	    $account = \Framework\Account::loadLogged();
+	    
+	    if(!$account)
+	    {
+	        \Core\Main::requireLogin();
+	        return false;
+	    }	    
+	    
+	    global $module;
+	    
+	    $select = new \Framework\HTML\SelectBox();
+	    $select->SetName("name");
+	    $select->onChangeSubmit();
+	    	
+	    $select->AddOption("", null, null, true);    
+	    
+	    foreach($account->getCharacterList() as $name){
+	        $select->AddOption($name, $name);
+	    }
+
+	    $hidden_inputs = "";
+	    	
+	    foreach($_GET as $k => $v)
+	    {
+	        if($k == "world")
+	            continue;
+	        	
+	        $input = new \Framework\HTML\Input();
+	        $input->IsHidden();
+	        $input->SetName($k);
+	        $input->SetValue($v);
+	        $hidden_inputs .= $input->Draw();
+	    }	    
+	    
+        $module .= "
+        	<form action='".$_SERVER['REQUEST_URI']."' method='GET'>
+        			<fieldset>
+
+        			    {$hidden_inputs}
+        			
+				        <p>		
+						    <label for='world'>Selecione um personagem</label>
+                            {$select->Draw()}
+					    </p>		        			
+       			
+        				
+        				<p class='line'></p>
+        			</fieldset>
+        		</form>        
+        ";	    
+	    
+	}
+	
 	function Draw()
 	{
 		global $module;
 
-		$premleft = ($this->loggedAcc->getPremEnd() > 0 && $this->loggedAcc->getPremEnd() > time()) ? floor(($this->loggedAcc->getPremEnd() - time()) / 60 / 60) : 0;
+		$balance = $this->loggedAcc->getBalance();
+		$balance_str = "R$ " . number_format($balance / 100, 2);
 		
 		$module .= "		
 		<script type='text/javascript'>
-		var hourPrice = 4;
+		var hourPrice = 30;
 		price = 0;
-		var bonusPrice = 12;
+		var bonusPrice = 400;
 		var bonusStart = 39;
-		var premleft = {$premleft};
+		var balance = {$balance};
 		
 		function updateStaminaBar(value)
 		{
@@ -201,50 +259,12 @@ class View
 				return;
 			}
 			
-			if(price > premleft)
+			if(price > balance)
 				$('#stamina-price').css('color', 'red');
 			else
 				$('#stamina-price').css('color', 'green');			
 			
-			if(price < 24)
-			{
-				$('#stamina-price').val(price + ' horas');	
-				return;
-			}
-			
-			if(price == 24)
-			{
-				$('#stamina-price').val('1 dia');	
-				return;
-			}			
-			
-			var days = 0;
-			var rest = 0;
-			
-			var x = price;
-			var result = true;
-			
-			while(result)
-			{
-				x -= 24;
-				
-				if(x >= 0)
-				{
-					days++;
-					rest = x;
-				}
-				
-				if(x < 0) { result = false; }
-			}
-			
-			if(rest > 0)
-			{
-				$('#stamina-price').val(days + ' dias e ' + rest + ' horas');	
-			}
-			else
-			{
-				$('#stamina-price').val(days + ' dias');
-			}
+		    $('#stamina-price').val('R$ ' + (price / 100).toFixed(2));	
 		}
 		
 		function getStaminaValue()
@@ -300,7 +320,7 @@ class View
 			height: 10px;
 		}
 		
-		#stamina-value, #stamina-min, #stamina-price{
+		#stamina-value, #stamina-min, #stamina-price, #account-balance{
 			background-color: transparent;
 			color: white;
 			font-weight: bold;
@@ -311,7 +331,7 @@ class View
 			margin-right: 5px;
 		}
 		
-		#stamina-price{
+		#stamina-price, #account-balance{
 			width: 150px;
 		}
 		
@@ -325,7 +345,7 @@ class View
 		<form action='".$_SERVER['REQUEST_URI']."' method='POST'>
 			<fieldset>
 				
-				<span>Quantidade de stamina (em horas) que o personagem <b>{$this->player->getName()}</b> possui agora:</span> <input type='text' readonly value='".floor($this->character->getStamina() / 1000 / 60 / 60)."' id='stamina-min'/>
+				<span>Quantidade de stamina (em horas) que o personagem <b>{$this->player->getName()}</b> possui agora:</span> <input type='text' readonly value='".floor($this->player->getStamina() / 1000 / 60 / 60)."' id='stamina-min'/>
 			
 				<div style='height: 25px; width: 490px; margin: 10px auto;'>
 					<input id='stamina-minus' class='button' type='button' value='-'/>
@@ -336,7 +356,8 @@ class View
 				</div>
 				
 				<span>Total de stamina (em horas) que o personagem ficará:</span> <input type='text' readonly value='3' id='stamina-value' name='stamina-value'/><br/>
-				<span>Custo em premium time da operação:</span> <input type='text' readonly value='0' id='stamina-price'/>
+				<span>Saldo disponível em sua conta:</span> <input type='text' readonly value='{$balance_str}' id='account-balance'/><br/>
+				<span>Custo em saldo da conta deste serviço:</span> <input type='text' readonly value='0' id='stamina-price'/>
 				<p>{$this->_password->Draw()}</p>
 				
 				
